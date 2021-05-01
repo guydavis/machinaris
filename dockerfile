@@ -14,6 +14,9 @@ ENV farmer_port="null"
 ENV testnet="false"
 ENV full_node_port="null"
 
+# Set default Plotman config location to /root/.chia/plotman in container
+ENV XDG_CONFIG_HOME=/root/.chia
+
 # Execute Plotman install via pip3
 # https://github.com/ericaltendorf/plotman
 RUN /chia-blockchain/venv/bin/pip3 install --force-reinstall git+https://github.com/ericaltendorf/plotman@main 

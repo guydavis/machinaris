@@ -1,7 +1,9 @@
 name: ci
 
 on:
-  [push]
+  push:
+    branches:
+      - 'integration'
 
 jobs:
   docker:
