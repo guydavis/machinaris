@@ -19,7 +19,7 @@ ENV XDG_CONFIG_HOME=/root/.chia
 
 # Execute Plotman install via pip3 and use a customized config
 # https://github.com/ericaltendorf/plotman
-RUN /chia-blockchain/venv/bin/pip3 install --force-reinstall git+https://github.com/ericaltendorf/plotman@main && mkdir /root/.chia/plotman/
+RUN /chia-blockchain/venv/bin/pip3 install --force-reinstall git+https://github.com/ericaltendorf/plotman@main && mkdir -p /root/.chia/plotman/
 ADD ./plotman.yaml /root/.chia/plotman/plotman.yaml
 
 # Use entrypoint from official Chia docker image
