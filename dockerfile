@@ -17,9 +17,10 @@ ENV full_node_port="null"
 # Set default Plotman config location to /root/.chia/plotman in container
 ENV XDG_CONFIG_HOME=/root/.chia
 
-# Execute Plotman install via pip3
+# Execute Plotman install via pip3 and use a customized config
 # https://github.com/ericaltendorf/plotman
-RUN /chia-blockchain/venv/bin/pip3 install --force-reinstall git+https://github.com/ericaltendorf/plotman@main 
+RUN /chia-blockchain/venv/bin/pip3 install --force-reinstall git+https://github.com/ericaltendorf/plotman@main && mkdir /root/.chia/plotman/
+ADD ./plotman.yaml /root/.chia/plotman/plotman.yaml
 
 # Use entrypoint from official Chia docker image
 ENTRYPOINT ["bash", "./entrypoint.sh"]
