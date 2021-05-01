@@ -16,9 +16,7 @@ ENV full_node_port="null"
 
 # Execute Plotman install via pip3
 # https://github.com/ericaltendorf/plotman
-WORKDIR /chia-blockchain/venv/bin/
-RUN pip3 install --force-reinstall git+https://github.com/ericaltendorf/plotman@main 
+RUN /chia-blockchain/venv/bin/pip3 install --force-reinstall git+https://github.com/ericaltendorf/plotman@main 
 
 # Use entrypoint from official Chia docker image
-WORKDIR /chia-blockchain
 ENTRYPOINT ["bash", "./entrypoint.sh"]
