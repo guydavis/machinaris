@@ -25,7 +25,8 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Checkout swar plot mananger
+      - 
+        name: Checkout swar plot mananger
         uses: actions/checkout@master
         with:
           repository: swar/Swar-Chia-Plot-Manager
