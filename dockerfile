@@ -14,9 +14,9 @@ ENV farmer_port="null"
 ENV testnet="false"
 ENV full_node_port="null"
 
-COPY ./swar /root/swar
+COPY ./swar /root/swar/
 
-RUN /chia-blockchain/venv/bin/pip3 install /root/swar/requirements.txt
+RUN ls -al /root/ && ls -al /root/swar/ && /chia-blockchain/venv/bin/pip3 install /root/swar/requirements.txt
 
 # Use entrypoint from official Chia docker image
 ENTRYPOINT ["bash", "./entrypoint.sh"]
