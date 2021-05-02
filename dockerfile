@@ -14,12 +14,9 @@ ENV farmer_port="null"
 ENV testnet="false"
 ENV full_node_port="null"
 
-# Set default Plotman config location to /root/.chia/plotman in container
-ENV XDG_CONFIG_HOME=/root/.chia
+COPY ./swar /root/
 
-# Execute Plotman install via pip3 and use a customized config
-# https://github.com/ericaltendorf/plotman
-RUN /chia-blockchain/venv/bin/pip3 install --force-reinstall git+https://github.com/ericaltendorf/plotman@main
+RUN /chia-blockchain/venv/bin/pip3 install /root/swar/requirements.txt
 
 # Use entrypoint from official Chia docker image
 ENTRYPOINT ["bash", "./entrypoint.sh"]

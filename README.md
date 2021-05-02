@@ -1,3 +1,3 @@
 # machinaris
 
-Chia plotting and farming for Unraid.  Bundles the 'plotman' utility with the official Chia image to allow better parallel plotting.  Not yet ready for release.
+Chia plotting and farming for Unraid.
