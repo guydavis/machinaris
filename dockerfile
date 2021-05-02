@@ -14,9 +14,7 @@ ENV farmer_port="null"
 ENV testnet="false"
 ENV full_node_port="null"
 
-COPY ./swar /root/swar/
+# Run Machinaris web frontend instead of final wait loop in parent image.
+RUN "sed -i -e 's/while true.*/python3 -m http.server/g' entrypoint.sh"
 
-RUN /chia-blockchain/venv/bin/pip3 install -r /root/swar/requirements.txt
-
-# Use entrypoint from official Chia docker image
 ENTRYPOINT ["bash", "./entrypoint.sh"]
