@@ -26,6 +26,7 @@ RUN /chia-blockchain/venv/bin/pip3 install --force-reinstall git+https://github.
 
 COPY . /machinaris/
 RUN venv/bin/pip3 install -r /machinaris/requirements.txt && \
+    chmod 755 /machinaris/start.sh && \
     sed -i -e "s/while true.*/\/machinaris\/start.sh/g" entrypoint.sh
 
 ENTRYPOINT ["bash", "./entrypoint.sh"]
