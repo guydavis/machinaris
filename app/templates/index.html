@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="pb-3 mb-4 border-bottom">
+  <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+    <span class="fs-4">Overview</span>
+  </a>
+</header>
+
+<div class="row align-items-md-stretch">
+  <div class="col-md-6">
+    <div class="h-100 p-5 text-white bg-dark rounded-3">
+      <h1 class="display-1 text-center text-success">26</h1>
+      <h6 class="display-6 text-center">Total Plots</h6>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="h-100 p-5 text-white bg-dark rounded-3">
+      <h1 class="display-1 text-center text-success">0.0</h1>
+      <h6 class="display-6 text-center">Total Chia</h6>
+    </div>
+  </div>
+</div>
+
+<br />
+
+<div class="row align-items-md-stretch">
+  <div class="col-md-6">
+    <div class="h-100 p-5 text-white bg-dark rounded-3">
+      <h4 class="display-4 text-center text-success">2.574 TiB</h4>
+      <h6 class="display-6 text-center">Total Plots Size</h6>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="h-100 p-5 text-white bg-dark rounded-3">
+      <h4 class="display-4 text-center text-success">2786.296 PiB</h4>
+      <h6 class="display-6 text-center">Estimated Netspace Size</h6>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
