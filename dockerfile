@@ -22,7 +22,7 @@ ENV FLASK_ENV=development
 ENV FLASK_APP=/machinaris/main.py
 
 ENV XDG_CONFIG_HOME=/root/.chia
-RUN /chia-blockchain/venv/bin/pip3 install --force-reinstall git+https://github.com/ericaltendorf/plotman@main
+RUN /chia-blockchain/venv/bin/pip3 install git+https://github.com/ericaltendorf/plotman@main
 
 COPY . /machinaris/
 RUN venv/bin/pip3 install -r /machinaris/requirements.txt && \
