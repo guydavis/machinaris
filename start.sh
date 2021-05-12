@@ -13,8 +13,6 @@ mkdir -p /root/.chia/logs
 cp -n /machinaris/plotman.sample.yaml /root/.chia/plotman/plotman.yaml
 
 echo 'Starting Machinaris...'
-export FLASK_ENV=development
-export FLASK_APP=/machinaris-dev/main.py
 if [ $FLASK_ENV == "development" ];
 then
     /chia-blockchain/venv/bin/python3 -m flask run --host=0.0.0.0 > /root/.chia/logs/webui.log 2>&1 &

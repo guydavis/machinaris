@@ -4,7 +4,7 @@
 A huge thank-you to the great teams/devs behind these projects, being used by Machinaris:
 
 ## Core Components
-* [Chia](https://www.chia.net/): the distributed cryptocurrency project offering a green money alternative. 
+* [Chia™](https://www.chia.net/): the distributed cryptocurrency project offering a green money alternative. 
 * [Plotman](https://github.com/ericaltendorf/plotman): the outstanding parallel plotting manager
 
 ## Web Application
