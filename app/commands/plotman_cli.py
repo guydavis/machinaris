@@ -23,7 +23,7 @@ def load_plotting_summary():
             (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
         return last_plotting_summary
 
-    proc = Popen("{0} status < /dev/tty".format(PLOTMAN_SCRIPT), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen([PLOTMAN_SCRIPT,'status'], stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=10)
     except TimeoutExpired:

@@ -41,16 +41,16 @@
                                     <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">Settings</span> </a>
                                     <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
                                     <li class="w-100">
-                                        <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Plotting</span> </a>
+                                        <a href="/settings/plotting" class="nav-link px-0"> <span class="d-none d-sm-inline text-white">Plotting</span> </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Farming</span> </a>
+                                        <a href="/settings/farming" class="nav-link px-0"> <span class="d-none d-sm-inline text-white">Farming</span> </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Alerts</span> </a>
+                                        <a href="/settings/alerts" class="nav-link px-0"> <span class="d-none d-sm-inline text-white">Alerts</span> </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Keys</span> </a>
+                                        <a href="/settings/keys" class="nav-link px-0"> <span class="d-none d-sm-inline text-white">Keys</span> </a>
                                     </li>
                                 </ul>
                             </li>
@@ -75,9 +75,11 @@
                         <div class="position-absolute top-0 end-0"><i class="fs-4 bi-circle-half"></i></div>
                     </div-->
                     {% block content %}{% endblock %}
+                    {% if reload_seconds %}
                     <footer class="pt-3 mt-4 text-muted border-top ">
                         <small><i>Page refreshed at {{ now }}</i></small>
                     </footer>
+                    {% endif %}
                 </div>
             </div>
         </div>

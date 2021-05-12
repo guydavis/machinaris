@@ -1,13 +1,15 @@
 #
-#
+# CLI interactions with the chia binary.
 #
 
 import datetime
+import os.path
 
 from flask import Flask, jsonify, abort, request
 from subprocess import Popen, TimeoutExpired, PIPE
-from app.models import chia
+from os import path
 
+from app.models import chia
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 
@@ -35,3 +37,7 @@ def load_farm_summary():
     last_farm_summary = chia.FarmSummary(outs.decode('utf-8').splitlines())
     last_farm_summary_load_time = datetime.datetime.now()
     return last_farm_summary
+
+def is_setup():
+    # See https://github.com/Chia-Network/chia-docker/blob/main/entrypoint.sh#L7
+    return "keys" in os.environ and path.exists(os.environ['keys'])
