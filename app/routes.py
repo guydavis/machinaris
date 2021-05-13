@@ -21,6 +21,11 @@ def index():
 def setup():
     return render_template('setup.html')
 
+@app.route('/plotting')
+def plotting():
+    plotting = plotman_cli.load_plotting_summary()
+    return render_template('plotting.html', columns=plotting.header)
+
 @app.route('/settings/plotting')
 def settings_plotting():
     return render_template('settings/plotting.html')

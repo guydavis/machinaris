@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="pb-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+        <span class="fs-4">Plotman</span>
+    </a>
+</header>
+
+<div class="table-responsive">
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                {% for column in columns %}
+                <th scope="col">{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                {% for plot in plots 
+                     for value in plot 
+                %}
+                <th scope="row">{{ plot['plot_id' }}</th>
+                <td>Mark</td>
+                <td>Otto</td>
+                <td>@mdo</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

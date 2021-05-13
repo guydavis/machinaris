@@ -23,16 +23,18 @@ def load_plotting_summary():
             (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
         return last_plotting_summary
 
-    proc = Popen([PLOTMAN_SCRIPT,'status'], stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} {1} < /dev/tty".format(PLOTMAN_SCRIPT,'status'), stdout=PIPE, stderr=PIPE, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=10)
+        outs, errs = proc.communicate(timeout=15)
     except TimeoutExpired:
         proc.kill()
         abort(500, description="The timeout is expired!")
     if errs:
-        app.logger.info(errs.decode('utf-8'))
+        app.logger.error(errs.decode('utf-8'))
         abort(500, description=errs.decode('utf-8'))
     
-    last_plotting_summary = plotman.PlottingSummary(outs.decode('utf-8').splitlines())
+    cli_stdout = outs.decode('utf-8')
+    app.logger.info("Here is: {0}".format(cli_stdout))
+    last_plotting_summary = plotman.PlottingSummary(cli_stdout.splitlines())
     last_plotting_summary_load_time = datetime.datetime.now()
     return last_plotting_summary
