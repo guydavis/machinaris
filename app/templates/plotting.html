@@ -13,20 +13,18 @@
         <thead>
             <tr>
                 {% for column in columns %}
-                <th scope="col">{{ column }}</th>
+                <th scope="col" class="text-success">{{ column }}</th>
                 {% endfor %}
             </tr>
         </thead>
         <tbody>
+            {% for row in rows %}
             <tr>
-                {% for plot in plots 
-                     for value in plot 
-                %}
-                <th scope="row">{{ plot['plot_id' }}</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
+                {% for column in columns %}
+                    <td>{{ row[column] }}</td>
+                {% endfor %}
             </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>

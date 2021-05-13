@@ -27,7 +27,7 @@ def load_farm_summary():
 
     proc = Popen("{0} farm summary".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=15)
+        outs, errs = proc.communicate(timeout=25)
     except TimeoutExpired:
         proc.kill()
         abort(500, description="The timeout is expired!")

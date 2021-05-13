@@ -14,7 +14,7 @@ def index():
     farming = chia_cli.load_farm_summary()
     plotting = plotman_cli.load_plotting_summary()
     now = datetime.now(tz=None)
-    return render_template('index.html', reload_seconds=30, now=now, title="Machinaris", 
+    return render_template('index.html', reload_seconds=30, now=now,
         farming=farming.__dict__, plotting=plotting.__dict__)
 
 @app.route('/setup')
@@ -24,7 +24,9 @@ def setup():
 @app.route('/plotting')
 def plotting():
     plotting = plotman_cli.load_plotting_summary()
-    return render_template('plotting.html', columns=plotting.header)
+    now = datetime.now(tz=None)
+    return render_template('plotting.html', reload_seconds=30, now=now, 
+        columns=plotting.columns, rows=plotting.rows)
 
 @app.route('/settings/plotting')
 def settings_plotting():
