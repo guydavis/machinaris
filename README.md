@@ -1,10 +1,10 @@
 # machinaris
 
-A pure-Docker solution for plotting and farming the Chia™ cryptocurrency.
+A pure-Docker solution for plotting and farming the Chia™ cryptocurrency.  Currently in early *beta*!
 
 ![Home](./docs/img/machinaris_home.png)
 
-To get started with Machinaris, follow an install guide for your platform Windows, Linux, Macintosh, and Unraid.
+To get started with Machinaris, follow an install guide for your platform [Windows](https://github.com/guydavis/machinaris/wiki/Windows), [Linux](https://github.com/guydavis/machinaris/wiki/Linux), [Macintosh](https://github.com/guydavis/machinaris/wiki/MacOS), [Unraid](https://github.com/guydavis/machinaris/wiki/Unraid), and [others](https://github.com/guydavis/machinaris/wiki/Generic).
 
 ## Plotting View
 
