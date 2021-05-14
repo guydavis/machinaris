@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app import app
 
 class FarmSummary:
@@ -39,4 +41,16 @@ class FarmSummary:
     def __str__(self): 
         return "%s plots with %s chia taking up %s of total netspace: %s" % \
             (self.plot_count, self.total_chia, self.plot_size, self.network_size)
+
+
+
+class FarmPlots:
+
+     def __init__(self, entries):
+        self.columns = ['dir', 'plot', 'create_date']
+        self.rows = []
+        for stat, path in entries:
+            self.rows.append({ 'dir': '/plots',  \
+                'plot': path[len('/plots/'): ],  \
+                'create_date': datetime.utcfromtimestamp(int(stat)).strftime('%Y-%m-%d %H:%M:%S') })
         

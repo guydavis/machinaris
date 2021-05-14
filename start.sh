@@ -5,7 +5,7 @@
 
 echo 'Configuring Chia...'
 #sed -i 's/log_stdout: false/log_stdout: true/g' /root/.chia/mainnet/config/config.yaml
-sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/config.yaml
+#sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/config.yaml
 
 echo 'Configuring Plotman...'
 mkdir -p /root/.chia/plotman
