@@ -2,7 +2,7 @@ import pytz
 import os
 
 from datetime import datetime
-from flask import render_template, redirect, url_for
+from flask import Flask, flash, redirect, render_template, request, url_for
 
 from app import app
 from app.commands import chia_cli, plotman_cli
@@ -21,19 +21,23 @@ def index():
 def setup():
     return render_template('setup.html')
 
-@app.route('/plotting')
+@app.route('/plotting', methods=['GET', 'POST'])
 def plotting():
+    if request.method == 'POST':
+        if request.form.get('action') == 'plot_on':
+            plotman_cli.start_plot_run()
+        else:
+            app.logger.info("Plotting form submitted: {0}".format(request.form))
     plotting = plotman_cli.load_plotting_summary()
     now = datetime.now(tz=None)
-    return render_template('plotting.html', reload_seconds=60, now=now, 
-        columns=plotting.columns, rows=plotting.rows)
+    return render_template('plotting.html', reload_seconds=60, now=now, plotting=plotting)
 
 @app.route('/farming')
 def farming():
+    farming = chia_cli.load_farm_summary()
     plots = chia_cli.load_plots_farming()
     now = datetime.now(tz=None)
-    return render_template('farming.html', now=now, 
-        columns=plots.columns, rows=plots.rows)
+    return render_template('farming.html', now=now, farming=farming, plots=plots)
 
 @app.route('/alerts')
 def alerts():

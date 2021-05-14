@@ -3,8 +3,11 @@
 #
 
 import datetime
+import os
+import time
+import traceback
 
-from flask import Flask, jsonify, abort, request
+from flask import Flask, jsonify, abort, request, flash
 from subprocess import Popen, TimeoutExpired, PIPE
 from app.models import plotman
 from app import app
@@ -35,7 +38,26 @@ def load_plotting_summary():
         abort(500, description=errs.decode('utf-8'))
     
     cli_stdout = outs.decode('utf-8')
-    app.logger.info("Here is: {0}".format(cli_stdout))
+    #app.logger.info("Here is: {0}".format(cli_stdout))
     last_plotting_summary = plotman.PlottingSummary(cli_stdout.splitlines())
     last_plotting_summary_load_time = datetime.datetime.now()
     return last_plotting_summary
+
+def start_plot_run():
+    global last_plotting_summary
+    app.logger.info("Starting Plotman run....")
+    try:
+        logfile = "/root/.chia/logs/plotman.log"
+        log_fd = os.open(logfile, os.O_RDWR|os.O_CREAT)
+        log_fo = os.fdopen(log_fd, "w+")
+        proc = Popen("{0} {1} </dev/tty".format(PLOTMAN_SCRIPT,'plot'), \
+            shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
+    except:
+        traceback.print_exc()
+        flash('Failed to start Plotman plotting run!', 'danger')
+        flash('Please look in plotman log: {0}'.format(logfile), 'warning')
+    else:
+        last_plotting_summary = None # Force a refresh on next load
+        flash('Plotman started successfully.', 'success')
+        time.sleep(5) # Wait for Plotman to start a plot running for display in table
+    

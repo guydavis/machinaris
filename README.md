@@ -8,14 +8,15 @@ To get started with Machinaris, follow an install guide for your platform [Windo
 
 ## Plotting View
 
-The [plotman](https://github.com/ericaltendorf/plotman) commandline plotting manager is used manage parallel operations, also exposed via the Machinaris web interface:
+The [plotman](https://github.com/ericaltendorf/plotman) CLI is used manage staggered/parallel plotting jobs, also exposed via the Machinaris web interface:
 
 ![Plotting](./docs/img/machinaris_plotting.png)
 
 ## Farming View
+
 [chia-docker](https://github.com/orgs/Chia-Network/packages/container/package/chia): Machinaris builds upon the offical docker image, so all Farming is done via the official binaries.
 
-TODO: Put farming screenshot here.
+![Farming](./docs/img/machinaris_farming.png)
 
 ## Alerts
 

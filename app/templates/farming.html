@@ -4,7 +4,7 @@
 
 <header class="pb-3 mb-4 border-bottom">
     <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-        <span class="fs-4">Plots Farming</span>
+        <span class="fs-4">Farming Status: {{ farming.display_status }}</span>
     </a>
 </header>
 
@@ -12,15 +12,15 @@
     <table class="table table-dark">
         <thead>
             <tr>
-                {% for column in columns %}
+                {% for column in plots.columns %}
                 <th scope="col" class="text-success">{{ column }}</th>
                 {% endfor %}
             </tr>
         </thead>
         <tbody>
-            {% for row in rows %}
+            {% for row in plots.rows %}
             <tr>
-                {% for column in columns %}
+                {% for column in plots.columns %}
                     <td>{{ row[column] }}</td>
                 {% endfor %}
             </tr>
