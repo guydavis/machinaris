@@ -12,12 +12,15 @@
 <p>This is likely mapped to a folder on your Docker host like this example on Unraid:</p>
 
 <ul>
-    <b>/mnt/user/appdata/machinaris/plotman/plotman.yaml</b>
-    <b>/mnt/user/appdata/machinaris/mainnet/config/config.yaml</b>
+    <li><b>/mnt/user/appdata/machinaris/plotman/plotman.yaml</b></li>
+    </li><b>/mnt/user/appdata/machinaris/mainnet/config/config.yaml</b></li>
 </ul>
 
 <p>To get into the container, you can execute this or similar:</p>
 
 <b>docker exec -it machinaris bash</b>
+<br />
 
 <p>More details <a href="https://github.com/orgs/Chia-Network/packages/container/package/chia">here</a>...</p>
+
+<p>Once you've generated or imported your keys, ensuring you have a file at /root/.chia/mnemonic.txt, then restart this container and reload your server without "/setup"/.</p>

@@ -35,6 +35,10 @@ def farming():
     return render_template('farming.html', now=now, 
         columns=plots.columns, rows=plots.rows)
 
+@app.route('/alerts')
+def settings_plotting():
+    return render_template('alerts.html')
+
 @app.route('/settings/plotting')
 def settings_plotting():
     return render_template('settings/plotting.html')
