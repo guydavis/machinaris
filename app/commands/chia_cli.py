@@ -4,13 +4,15 @@
 
 import datetime
 import os
+import shutil
+import time
+import traceback
+import yaml
 
-from flask import Flask, jsonify, abort, request
+from flask import Flask, jsonify, abort, request, flash
+from stat import S_ISREG, ST_CTIME, ST_MODE
 from subprocess import Popen, TimeoutExpired, PIPE
 from os import path
-
-
-from stat import S_ISREG, ST_CTIME, ST_MODE
 
 from app.models import chia
 
@@ -63,3 +65,47 @@ def is_setup():
     # If farming, then need 'keys' variable set to a mnemonic.txt file or similar
     # See https://github.com/Chia-Network/chia-docker/blob/main/entrypoint.sh#L7
     return "keys" in os.environ and path.exists(os.environ['keys'])
+
+def save_config(config):
+    try:
+        # Validate the YAML first
+        yaml.safe_load(config)
+        # Save a copy of the old config file
+        src="/root/.chia/mainnet/config/config.yaml"
+        dst="/root/.chia/mainnet/config/config."+time.strftime("%Y%m%d-%H%M%S")+".yaml"
+        shutil.copy(src,dst)
+        # Now save the new contents to main config file
+        with open(src, 'w') as writer:
+            writer.write(config)
+    except Exception as ex:
+        traceback.print_exc()
+        flash('Updated config.yaml failed validation! Fix and save or refresh page.', 'danger')
+        flash(str(ex), 'warning')
+    else:
+        flash('Nice! config.yaml validated and saved successfully.', 'success')
+        flash('NOTE: Currently requires restarting the container to pickup changes.', 'info')
+
+
+last_wallet_show = None 
+last_wallet_show_load_time = None 
+
+def load_wallet_show():
+    global last_wallet_show
+    global last_wallet_show_load_time
+    if last_wallet_show and last_wallet_show_load_time >= \
+            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
+        return last_wallet_show
+
+    proc = Popen("{0} wallet show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        abort(500, description="The timeout is expired!")
+    if errs:
+        abort(500, description=errs.decode('utf-8'))
+    
+    last_wallet_show = chia.Wallet(outs.decode('utf-8').splitlines())
+    last_wallet_show_load_time = datetime.datetime.now()
+    return last_wallet_show

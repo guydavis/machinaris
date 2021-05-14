@@ -1,11 +1,13 @@
 #
-#
+# CLI interactions with the plotman script.
 #
 
 import datetime
 import os
+import shutil
 import time
 import traceback
+import yaml
 
 from flask import Flask, jsonify, abort, request, flash
 from subprocess import Popen, TimeoutExpired, PIPE
@@ -60,4 +62,22 @@ def start_plot_run():
         last_plotting_summary = None # Force a refresh on next load
         flash('Plotman started successfully.', 'success')
         time.sleep(5) # Wait for Plotman to start a plot running for display in table
-    
+
+def save_config(config):
+    try:
+        # Validate the YAML first
+        yaml.safe_load(config)
+        # Save a copy of the old config file
+        src="/root/.chia/plotman/plotman.yaml"
+        dst="/root/.chia/plotman/plotman."+time.strftime("%Y%m%d-%H%M%S")+".yaml"
+        shutil.copy(src,dst)
+        # Now save the new contents to main config file
+        with open(src, 'w') as writer:
+            writer.write(config)
+    except Exception as ex:
+        traceback.print_exc()
+        flash('Updated plotman.yaml failed validation! Fix and save or refresh page.', 'danger')
+        flash(str(ex), 'warning')
+    else:
+        flash('Nice! plotman.yaml validated and saved successfully.', 'success')
+        flash('NOTE: Currently requires restarting plotman to pickup changes via Docker exec or Container restart.', 'info')

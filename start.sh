@@ -10,7 +10,7 @@ sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/confi
 echo 'Configuring Plotman...'
 mkdir -p /root/.chia/plotman
 mkdir -p /root/.chia/logs
-cp -n /machinaris/plotman.sample.yaml /root/.chia/plotman/plotman.yaml
+cp -n /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.yaml
 
 echo 'Starting Machinaris...'
 if [ $FLASK_ENV == "development" ];

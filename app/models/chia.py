@@ -26,6 +26,8 @@ class FarmSummary:
         self.status = status
         if self.status == "Farming":
             self.display_status = "Active"
+        #elif self.status == "Not synced or not connected to peers":
+        #    self.display_status = "<span style='font-size:.6em'>" + self.status + '</span>'
         else:
             self.display_status = self.status
 
@@ -42,8 +44,6 @@ class FarmSummary:
         return "%s plots with %s chia taking up %s of total netspace: %s" % \
             (self.plot_count, self.total_chia, self.plot_size, self.network_size)
 
-
-
 class FarmPlots:
 
      def __init__(self, entries):
@@ -53,4 +53,10 @@ class FarmPlots:
             self.rows.append({ 'dir': '/plots',  \
                 'plot': path[len('/plots/'): ],  \
                 'create_date': datetime.utcfromtimestamp(int(stat)).strftime('%Y-%m-%d %H:%M:%S') })
-        
+
+class Wallet:
+
+    def __init__(self, cli_stdout):
+        self.text = ""
+        for line in cli_stdout:
+            self.text += line + '\n'

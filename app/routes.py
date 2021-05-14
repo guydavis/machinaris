@@ -43,13 +43,23 @@ def farming():
 def alerts():
     return render_template('alerts.html')
 
-@app.route('/settings/plotting')
+@app.route('/settings/plotting', methods=['GET', 'POST'])
 def settings_plotting():
-    return render_template('settings/plotting.html')
+    if request.method == 'POST':
+        config = request.form.get("plotman")
+        plotman_cli.save_config(config)
+    else: # Load config fresh from disk
+        config = open('/root/.chia/plotman/plotman.yaml','r').read()
+    return render_template('settings/plotting.html', config=config)
 
-@app.route('/settings/farming')
+@app.route('/settings/farming', methods=['GET', 'POST'])
 def settings_farming():
-    return render_template('settings/farming.html')
+    if request.method == 'POST':
+        config = request.form.get("config")
+        chia_cli.save_config(config)
+    else: # Load config fresh from disk
+        config = open('/root/.chia/mainnet/config/config.yaml','r').read()
+    return render_template('settings/farming.html', config=config)
 
 @app.route('/settings/alerts')
 def settings_alerts():
@@ -57,4 +67,5 @@ def settings_alerts():
 
 @app.route('/settings/keys')    
 def settings_keys():
-    return render_template('settings/keys.html')
+    wallet = chia_cli.load_wallet_show()
+    return render_template('settings/keys.html', wallet=wallet.text)

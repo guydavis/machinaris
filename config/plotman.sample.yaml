@@ -14,7 +14,7 @@ directories:
         # One directory in which to store all plot job logs (the STDOUT/
         # STDERR of all plot jobs).  In order to monitor progress, plotman
         # reads these logs on a regular basis, so using a fast drive is
-        # recommended.
+        # recommended.  DON'T CHANGE THIS IN-CONTAINER PATH
         log: /root/.chia/logs
 
         # One or more directories to use as tmp dirs for plotting.  The
@@ -24,6 +24,7 @@ directories:
         #
         # If multiple directories share a common prefix, reports will
         # abbreviate and show just the uniquely identifying suffix.
+        # REMEMBER ALL PATHS ARE IN-CONTAINER, THEY MAP TO HOST PATHS
         tmp:
                 - /plotting
 
@@ -48,6 +49,7 @@ directories:
         # These again are presumed to be on independent physical devices,
         # so writes (plot jobs) and reads (archivals) can be scheduled
         # to minimize IO contention.
+        # REMEMBER ALL PATHS ARE IN-CONTAINER, THEY MAP TO HOST PATHS
         dst:
                 - /plots
 
