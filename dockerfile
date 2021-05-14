@@ -5,7 +5,7 @@ FROM ghcr.io/chia-network/chia:latest
 
 EXPOSE 8555
 EXPOSE 8444
-EXPOSE 5000
+EXPOSE 8926
 
 ENV keys="generate"
 ENV harvester="false"
