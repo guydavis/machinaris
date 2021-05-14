@@ -14,7 +14,7 @@ def index():
     farming = chia_cli.load_farm_summary()
     plotting = plotman_cli.load_plotting_summary()
     now = datetime.now(tz=None)
-    return render_template('index.html', reload_seconds=30, now=now,
+    return render_template('index.html', reload_seconds=60, now=now,
         farming=farming.__dict__, plotting=plotting.__dict__)
 
 @app.route('/setup')
@@ -25,8 +25,15 @@ def setup():
 def plotting():
     plotting = plotman_cli.load_plotting_summary()
     now = datetime.now(tz=None)
-    return render_template('plotting.html', reload_seconds=30, now=now, 
+    return render_template('plotting.html', reload_seconds=60, now=now, 
         columns=plotting.columns, rows=plotting.rows)
+
+@app.route('/farming')
+def farming():
+    plots = chia_cli.load_plots_farming()
+    now = datetime.now(tz=None)
+    return render_template('farming.html', now=now, 
+        columns=plots.columns, rows=plots.rows)
 
 @app.route('/settings/plotting')
 def settings_plotting():
