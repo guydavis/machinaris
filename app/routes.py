@@ -36,7 +36,7 @@ def farming():
         columns=plots.columns, rows=plots.rows)
 
 @app.route('/alerts')
-def settings_plotting():
+def alerts():
     return render_template('alerts.html')
 
 @app.route('/settings/plotting')
