@@ -33,11 +33,15 @@ class FarmSummary:
 
     def calc_network_size(self, network_size):
         self.network_size = network_size
-        size_value, size_unit = network_size.split(' ')
-        app.logger.info("{0}: {1}".format(size_value, size_unit))
-        if float(size_value) > 1000 and size_unit == 'PiB':
-            self.display_network_size = "{:0.3f} EiB".format(float(size_value) / 1000)
-        else:
+        try:
+            size_value, size_unit = network_size.split(' ')
+            app.logger.info("{0}: {1}".format(size_value, size_unit))
+            if float(size_value) > 1000 and size_unit == 'PiB':
+                self.display_network_size = "{:0.3f} EiB".format(float(size_value) / 1000)
+            else:
+                self.display_network_size = self.network_size
+        except:
+            app.logger.info("Unable to split network size value: {0}".format(network_size))
             self.display_network_size = self.network_size
         
     def __str__(self): 
