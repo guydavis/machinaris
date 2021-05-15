@@ -26,23 +26,27 @@ class FarmSummary:
         self.status = status
         if self.status == "Farming":
             self.display_status = "Active"
+        #elif self.status == "Not synced or not connected to peers":
+        #    self.display_status = "<span style='font-size:.6em'>" + self.status + '</span>'
         else:
             self.display_status = self.status
 
     def calc_network_size(self, network_size):
         self.network_size = network_size
-        size_value, size_unit = network_size.split(' ')
-        app.logger.info("{0}: {1}".format(size_value, size_unit))
-        if float(size_value) > 1000 and size_unit == 'PiB':
-            self.display_network_size = "{:0.3f} EiB".format(float(size_value) / 1000)
-        else:
+        try:
+            size_value, size_unit = network_size.split(' ')
+            app.logger.info("{0}: {1}".format(size_value, size_unit))
+            if float(size_value) > 1000 and size_unit == 'PiB':
+                self.display_network_size = "{:0.3f} EiB".format(float(size_value) / 1000)
+            else:
+                self.display_network_size = self.network_size
+        except:
+            app.logger.info("Unable to split network size value: {0}".format(network_size))
             self.display_network_size = self.network_size
         
     def __str__(self): 
         return "%s plots with %s chia taking up %s of total netspace: %s" % \
             (self.plot_count, self.total_chia, self.plot_size, self.network_size)
-
-
 
 class FarmPlots:
 
@@ -53,4 +57,10 @@ class FarmPlots:
             self.rows.append({ 'dir': '/plots',  \
                 'plot': path[len('/plots/'): ],  \
                 'create_date': datetime.utcfromtimestamp(int(stat)).strftime('%Y-%m-%d %H:%M:%S') })
-        
+
+class Wallet:
+
+    def __init__(self, cli_stdout):
+        self.text = ""
+        for line in cli_stdout:
+            self.text += line + '\n'

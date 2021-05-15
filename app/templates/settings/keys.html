@@ -1,17 +1,23 @@
 {% extends "base.html" %}
 
 {% block content %}
-    
-<h1>Keys</h1>
 
-<i>Coming soon...</i>
+<header class="pb-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+        <span class="fs-4">Keys - chia wallet show </span>
+    </a>
+</header>
 
-<p>For now, please execute command in the container, such as this or similar:</p>
+<div class="p-5 mb-4 bg-light border rounded-3">
+    <div class="container-fluid py-5">
+        <pre class="fs-5">{{ wallet }}</pre>
+    </div>
+</div>
 
-<b>docker exec -it machinaris bash</b>
-
-<br/>
-
-<p>More details <a href="https://github.com/orgs/Chia-Network/packages/container/package/chia">here</a>...</p>
+<p>
+<b>NOTE</b>:<br/>
+For security, Machinaris will NEVER read from your <a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">mnemonic.txt file</a> or display it in any way through the WebUI. <br/>
+You must view/edit it via your filesystem mounts or through a <code>docker exec -it</code> into the container.
+</p>
 
 {% endblock %}
