@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="pb-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+        <span class="fs-4">Network - chia show</span>
+    </a>
+</header>
+
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+        {% else %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {% endif %}
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <nav class="navbar navbar-light" style="padding-bottom: 0px;">
+        <div class="container-fluid">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{{ url_for('network_blockchain') }}">Blockchain</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('network_connections') }}">Connections</a>
+                </li>
+            </ul>
+            <form class="d-flex" method="POST">
+                <input class="form-control me-2" id="connection" name="connection" type="text"
+                    placeholder="chiadb.net:8444" aria-label="Add">
+                <button class="btn btn-outline-success" type="submit">Add</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="p-5 mb-4 bg-light border rounded-3">
+        <div class="container-fluid">
+            <pre>{{ connections }}</pre>
+        </div>
+    </div>
+
+    {% endblock %}

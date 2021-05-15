@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="pb-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+        <span class="fs-4">Network - chia show</span>
+    </a>
+</header>
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" href="{{ url_for('network_blockchain') }}">Blockchain</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('network_connections') }}">Connections</a>
+    </li>
+</ul>
+
+<div class="p-5 mb-4 bg-light border rounded-3">
+    <div class="container-fluid">
+        <pre>{{ blockchain }}</pre>
+    </div>
+</div>
+
+{% endblock %}

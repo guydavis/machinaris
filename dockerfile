@@ -10,6 +10,7 @@ EXPOSE 8926
 ENV keys="generate"
 ENV harvester="false"
 ENV farmer="false"
+ENV plotter="false"
 ENV plots_dir="/plots"
 ENV farmer_address="null"
 ENV farmer_port="null"
@@ -26,7 +27,7 @@ COPY . /machinaris/
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata && \
    /chia-blockchain/venv/bin/pip3 install git+https://github.com/ericaltendorf/plotman@main && \
    venv/bin/pip3 install -r /machinaris/requirements.txt && \
-   chmod 755 /machinaris/start.sh && \
-   sed -i -e "s/while true/\/machinaris\/start.sh; while true/g" entrypoint.sh
+   cp -f /machinaris/entrypoint.sh /chia-blockchain/ && \
+   chmod 755 /machinaris/start.sh /chia-blockchain/entrypoint.sh 
 
 ENTRYPOINT ["bash", "./entrypoint.sh"]

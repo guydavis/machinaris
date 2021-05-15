@@ -35,7 +35,6 @@ class FarmSummary:
         self.network_size = network_size
         try:
             size_value, size_unit = network_size.split(' ')
-            app.logger.info("{0}: {1}".format(size_value, size_unit))
             if float(size_value) > 1000 and size_unit == 'PiB':
                 self.display_network_size = "{:0.3f} EiB".format(float(size_value) / 1000)
             else:
@@ -59,6 +58,20 @@ class FarmPlots:
                 'create_date': datetime.utcfromtimestamp(int(stat)).strftime('%Y-%m-%d %H:%M:%S') })
 
 class Wallet:
+
+    def __init__(self, cli_stdout):
+        self.text = ""
+        for line in cli_stdout:
+            self.text += line + '\n'
+
+class Blockchain:
+
+    def __init__(self, cli_stdout):
+        self.text = ""
+        for line in cli_stdout:
+            self.text += line + '\n'
+
+class Connections:
 
     def __init__(self, cli_stdout):
         self.text = ""

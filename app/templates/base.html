@@ -11,6 +11,7 @@
     {% if reload_seconds %}
     <meta http-equiv="refresh" content="{{ reload_seconds }}">
     {% endif %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 
 <body>
@@ -25,22 +26,30 @@
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                         id="menu">
                         <li class="nav-item">
-                            <a href="/" class="nav-link px-0 align-middle text-success">
+                            <a href="{{ url_for('index') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline ">Home</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/plotting" class="nav-link px-0 align-middle text-success">
+                            <a href="{{ url_for('plotting') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-speedometer"></i> <span
                                     class="ms-1 d-none d-sm-inline">Plotting</span> </a>
                         </li>
                         <li>
-                            <a href="/farming" class="nav-link px-0 align-middle text-success">
+                            <a href="{{ url_for('farming') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-tree"></i> <span class="ms-1 d-none d-sm-inline">Farming</span></a>
                         </li>
                         <li>
-                            <a href="/alerts" class="nav-link px-0 align-middle text-success">
+                            <a href="{{ url_for('wallet') }}" class="nav-link px-0 align-middle text-success">
+                                <i class="fs-4 bi-wallet"></i> <span class="ms-1 d-none d-sm-inline">Wallet</span></a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('alerts') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-bell"></i> <span class="ms-1 d-none d-sm-inline">Alerts</span></a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('network_blockchain') }}" class="nav-link px-0 align-middle text-success">
+                                <i class="fs-4 bi-globe"></i> <span class="ms-1 d-none d-sm-inline">Network</span></a>
                         </li>
                         <li>
                             <a href="#submenu3" data-bs-toggle="collapse"
@@ -48,20 +57,16 @@
                                 <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">Settings</span> </a>
                             <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
                                 <li class="w-100">
-                                    <a href="/settings/plotting" class="nav-link px-0"> <span
+                                    <a href="{{ url_for('settings_plotting') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Plotting</span> </a>
                                 </li>
                                 <li>
-                                    <a href="/settings/farming" class="nav-link px-0"> <span
+                                    <a href="{{ url_for('settings_farming') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Farming</span> </a>
                                 </li>
                                 <li>
-                                    <a href="/settings/alerts" class="nav-link px-0"> <span
+                                    <a href="{{ url_for('settings_alerts') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Alerts</span> </a>
-                                </li>
-                                <li>
-                                    <a href="/settings/keys" class="nav-link px-0"> <span
-                                            class="d-none d-sm-inline text-white">Keys</span> </a>
                                 </li>
                             </ul>
                         </li>
