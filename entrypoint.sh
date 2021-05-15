@@ -17,7 +17,7 @@ if [[ ${keys} == "generate" ]]; then
 elif [[ ! -f ${keys} ]]; then
   echo "no such keys file yet, so probably first launch, generating keys and storing mnemonic now..."
   chia keys generate
-  chia keys show --show-mnemonic-seed | tail -n 1 > /root/.chia/mnemonic.txt
+  chia keys show --show-mnemonic-seed | tail -n 1 > ${keys}
 else
   chia keys add -f ${keys}
 fi

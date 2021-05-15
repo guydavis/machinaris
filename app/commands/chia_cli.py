@@ -64,8 +64,6 @@ def load_plots_farming():
     return last_plots_farming
 
 def is_setup():
-    # If farming, then need 'keys' variable set to a mnemonic.txt file or similar
-    # See https://github.com/Chia-Network/chia-docker/blob/main/entrypoint.sh#L7
     return "keys" in os.environ and path.exists(os.environ['keys'])
 
 def save_config(config):
