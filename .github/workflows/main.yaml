@@ -3,7 +3,7 @@ name: ci
 on:
   push:
     branches:
-      - 'integration'
+      - 'master'
 
 jobs:
   docker:
@@ -40,4 +40,7 @@ jobs:
           push: true
           tags: |
             guydavis/machinaris:latest
+            guydavis/machinaris:v0.1
             ghcr.io/guydavis/machinaris:latest
+            ghcr.io/guydavis/machinaris:v0.1
+            tag_with_ref: true
