@@ -64,7 +64,9 @@ def load_plots_farming():
     return last_plots_farming
 
 def is_setup():
-    return "keys" in os.environ and path.exists(os.environ['keys'])
+    # TODO Disable until I understand why some users with this file return false
+    #return "keys" in os.environ and path.exists(os.environ['keys'])
+    return True
 
 def save_config(config):
     try:
