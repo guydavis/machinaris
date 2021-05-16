@@ -1,6 +1,6 @@
 # machinaris
 
-A pure-Docker solution for plotting and farming the Chia™ cryptocurrency.  Currently in early *beta*!
+A pure-Docker solution for plotting and farming the Chia™ cryptocurrency.  Currently in early *beta* with [v0.1](https://github.com/users/guydavis/packages/container/package/machinaris)!
 
 ![Home](./docs/img/machinaris_home.png)
 
@@ -24,7 +24,13 @@ The [plotman](https://github.com/ericaltendorf/plotman) CLI is used manage stagg
 
 ## Setup
 
-TODO: Screenshots of setup.  Links to wiki.
+Configuration updates for Chia and Plotman are available in the WebUI.  
+
+![Connections](./docs/img/machinaris_settings.png)
+
+Details on Blockchain and Connection status as well:
+
+![Connections](./docs/img/machinaris_network.png)
 
 ## Trademark Notice
 CHIA NETWORK INC, CHIA™, the CHIA BLOCKCHAIN™, the CHIA PROTOCOL™, CHIALISP™ and the “leaf Logo” (including the leaf logo alone when it refers to or indicates Chia), are trademarks or registered trademarks of Chia Network, Inc., a Delaware corporation.  
