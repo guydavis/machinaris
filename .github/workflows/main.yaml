@@ -1,9 +1,10 @@
 name: ci
 
-on:
-  push:
-    branches:
-      - 'master'
+on: 
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Release Version' 
 
 jobs:
   docker:
