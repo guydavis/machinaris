@@ -5,6 +5,7 @@
 import datetime
 import os
 import shutil
+import socket
 import time
 import traceback
 import yaml
@@ -14,6 +15,7 @@ from stat import S_ISREG, ST_CTIME, ST_MODE
 from subprocess import Popen, TimeoutExpired, PIPE
 from os import path
 
+from app import app
 from app.models import chia
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
@@ -62,8 +64,6 @@ def load_plots_farming():
     return last_plots_farming
 
 def is_setup():
-    # If farming, then need 'keys' variable set to a mnemonic.txt file or similar
-    # See https://github.com/Chia-Network/chia-docker/blob/main/entrypoint.sh#L7
     return "keys" in os.environ and path.exists(os.environ['keys'])
 
 def save_config(config):
@@ -109,3 +109,76 @@ def load_wallet_show():
     last_wallet_show = chia.Wallet(outs.decode('utf-8').splitlines())
     last_wallet_show_load_time = datetime.datetime.now()
     return last_wallet_show
+
+last_blockchain_show = None 
+last_blockchain_show_load_time = None 
+
+def load_blockchain_show():
+    global last_blockchain_show
+    global last_blockchain_show_load_time
+    if last_blockchain_show and last_blockchain_show_load_time >= \
+            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
+        return last_blockchain_show
+
+    proc = Popen("{0} show --state".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        abort(500, description="The timeout is expired!")
+    if errs:
+        abort(500, description=errs.decode('utf-8'))
+    
+    last_blockchain_show = chia.Blockchain(outs.decode('utf-8').splitlines())
+    last_blockchain_show_load_time = datetime.datetime.now()
+    return last_blockchain_show
+
+last_connections_show = None 
+last_connections_show_load_time = None 
+
+def load_connections_show():
+    global last_connections_show
+    global last_connections_show_load_time
+    if last_connections_show and last_connections_show_load_time >= \
+            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
+        return last_connections_show
+
+    proc = Popen("{0} show --connections".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        abort(500, description="The timeout is expired!")
+    if errs:
+        abort(500, description=errs.decode('utf-8'))
+    
+    last_connections_show = chia.Connections(outs.decode('utf-8').splitlines())
+    last_connections_show_load_time = datetime.datetime.now()
+    return last_connections_show
+
+def add_connection(connection):
+    try:
+        hostname,port = connection.split(':')
+        if socket.gethostbyname(hostname) == hostname:
+            app.logger.info('{} is a valid IP address'.format(hostname))
+        elif socket.gethostbyname(hostname) != hostname:
+            app.logger.info('{} is a valid hostname'.format(hostname))
+        proc = Popen("{0} show --add-connection {1}".format(CHIA_BINARY, connection), stdout=PIPE, stderr=PIPE, shell=True)
+        try:
+            outs, errs = proc.communicate(timeout=60)
+        except TimeoutExpired:
+            proc.kill()
+            proc.communicate()
+            abort(500, description="The timeout is expired!")
+        if errs:
+            abort(500, description=errs.decode('utf-8'))
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+        flash('Invalid connection "{0}" provided.  Must be HOST:PORT.'.format(connection), 'danger')
+        flash(str(ex), 'warning')
+    else:
+        app.logger.info("{0}".format(outs.decode('utf-8')))
+        flash('Nice! Connection added to Chia and sync engaging!', 'success')
+ 

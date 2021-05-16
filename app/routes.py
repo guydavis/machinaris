@@ -2,7 +2,7 @@ import pytz
 import os
 
 from datetime import datetime
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 
 from app import app
 from app.commands import chia_cli, plotman_cli
@@ -43,6 +43,24 @@ def farming():
 def alerts():
     return render_template('alerts.html')
 
+@app.route('/wallet')    
+def wallet():
+    wallet = chia_cli.load_wallet_show()
+    return render_template('wallet.html', wallet=wallet.text)
+
+@app.route('/network/blockchain')
+def network_blockchain():
+    blockchain = chia_cli.load_blockchain_show()
+    return render_template('network/blockchain.html', blockchain=blockchain.text)
+
+@app.route('/network/connections', methods=['GET', 'POST'])
+def network_connections():
+    if request.method == 'POST':
+        connection = request.form.get("connection")
+        chia_cli.add_connection(connection)
+    connections = chia_cli.load_connections_show()
+    return render_template('network/connections.html', connections=connections.text)
+
 @app.route('/settings/plotting', methods=['GET', 'POST'])
 def settings_plotting():
     if request.method == 'POST':
@@ -65,7 +83,7 @@ def settings_farming():
 def settings_alerts():
     return render_template('settings/alerts.html')
 
-@app.route('/settings/keys')    
-def settings_keys():
-    wallet = chia_cli.load_wallet_show()
-    return render_template('settings/keys.html', wallet=wallet.text)
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+            'favicon.ico', mimetype='image/vnd.microsoft.icon')

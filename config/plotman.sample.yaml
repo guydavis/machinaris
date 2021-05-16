@@ -90,10 +90,10 @@ scheduling:
         tmpdir_stagger_phase_limit: 2
 
         # Don't run more than this many jobs at a time on a single temp dir.
-        tmpdir_max_jobs: 4
+        tmpdir_max_jobs: 2
 
         # Don't run more than this many jobs at a time in total.
-        global_max_jobs: 4
+        global_max_jobs: 2
 
         # Don't run any jobs (across all temp dirs) more often than this, in minutes.
         global_stagger_m: 30
