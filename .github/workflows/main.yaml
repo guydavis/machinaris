@@ -3,7 +3,7 @@ name: ci
 on: 
   workflow_dispatch:
     inputs:
-      tags:
+      version:
         description: 'Release Version' 
 
 jobs:
@@ -41,7 +41,7 @@ jobs:
           push: true
           tags: |
             guydavis/machinaris:latest
-            guydavis/machinaris:v0.1
+            guydavis/machinaris:v${{ github.event.inputs.version }}
             ghcr.io/guydavis/machinaris:latest
-            ghcr.io/guydavis/machinaris:v0.1
+            ghcr.io/guydavis/machinaris:v${{ github.event.inputs.version }}
             tag_with_ref: true
