@@ -1,4 +1,4 @@
-name: ci
+name: release
 
 on: 
   workflow_dispatch:
@@ -44,4 +44,3 @@ jobs:
             guydavis/machinaris:v${{ github.event.inputs.version }}
             ghcr.io/guydavis/machinaris:latest
             ghcr.io/guydavis/machinaris:v${{ github.event.inputs.version }}
-            tag_with_ref: true
