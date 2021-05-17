@@ -166,7 +166,7 @@ def add_connection(connection):
             app.logger.info('{} is a valid hostname'.format(hostname))
         proc = Popen("{0} show --add-connection {1}".format(CHIA_BINARY, connection), stdout=PIPE, stderr=PIPE, shell=True)
         try:
-            outs, errs = proc.communicate(timeout=60)
+            outs, errs = proc.communicate(timeout=90)
         except TimeoutExpired:
             proc.kill()
             proc.communicate()
@@ -209,7 +209,7 @@ def generate_key(key_path):
     # TODO Assert file does not exist and is empty
     proc = Popen("{0} keys generate".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=30)
+        outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
@@ -222,7 +222,7 @@ def generate_key(key_path):
         flash(str(ex), 'warning')
     proc = Popen("{0} chia keys show --show-mnemonic-seed | tail -n 1 > {0}".format(CHIA_BINARY, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=30)
+        outs, errs = proc.communicate(timeout=90)
         # TODO Verify single line of 24 words in file now.
     except TimeoutExpired:
         proc.kill()

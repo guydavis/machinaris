@@ -24,7 +24,7 @@ def is_setup():
             foundKey = True
         else:
             app.logger.info("No such keys file: {0}".format(key))
-    return True
+    return foundKey
 
 def get_key_paths():
     if "keys" not in os.environ:
