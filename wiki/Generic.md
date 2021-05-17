@@ -1,0 +1,1 @@
+The project is still in beta, join the [Discord](https://discord.gg/mX4AtMTt87) for support and to help out.
