@@ -22,15 +22,15 @@ class FarmSummary:
                     self.time_to_win = line.split(':')[1].strip()
                 elif "User transaction fees" in line:
                     self.transaction_fees = line.split(':')[1].strip()
-                # TODO Handle Connection error lines from Harvestor etc
-        elif farm_plots.rows:
+                # TODO Handle Connection error lines from Harvester etc
+        elif farm_plots:
             self.plot_count = len(farm_plots.rows)
             bytes_size = 0
             for plot in farm_plots.rows:
                 bytes_size += int(plot['size'])
             self.plot_size = utils.sizeof_fmt(bytes_size)
         else:
-            raise Exeption("Not provided either chia stdout lines or a list of plots.")
+            raise Exception("Not provided either chia stdout lines or a list of plots.")
 
     def calc_status(self, status):
         self.status = status
