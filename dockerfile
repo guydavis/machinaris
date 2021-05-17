@@ -7,8 +7,7 @@ EXPOSE 8555
 EXPOSE 8444
 EXPOSE 8926
 
-ENV keys="generate"
-
+ENV keys=""
 ENV harvester="false" 
 ENV farmer="false"
 ENV plotter="false"

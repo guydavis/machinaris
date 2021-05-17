@@ -63,7 +63,8 @@ class FarmPlots:
         self.columns = ['dir', 'plot', 'mod_date', 'size']
         self.rows = []
         for st_mtime, st_size, path in entries:
-            if not path.endswith("*.plot"):
+            if not path.endswith(".plot"):
+                app.logger.info("Skipping non-plot file named: {0}".format(path))
                 continue
             self.rows.append({ 'dir': '/plots',  \
                 'plot': path[len('/plots/'): ],  \

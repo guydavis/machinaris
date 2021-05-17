@@ -11,7 +11,10 @@ def load():
     return cfg
 
 def is_setup():
-    return "keys" in os.environ and os.path.exists(os.environ['keys'])
+    # TODO One very first load, check that wallet has at least one key, else send here to create one
+    # chia keys generate
+    # chia keys show --show-mnemonic-seed | tail -n 1 > ${keys}
+    return True
 
 def plotting_only():
     return "plotter" in os.environ and os.environ['plotter'] == "true"

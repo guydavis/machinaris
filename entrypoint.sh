@@ -12,14 +12,11 @@ cd /chia-blockchain
 chia init
 
 if [[ ${keys} == "generate" ]]; then
-  echo "to use your own keys pass them as a text file -v /path/to/keyfile:/path/in/container and -e keys=\"/path/in/container\""
-  chia keys generate
-elif [[ ! -f ${keys} ]]; then
-  echo "no such keys file yet, so probably first launch, generating keys and storing mnemonic now..."
-  chia keys generate
-  chia keys show --show-mnemonic-seed | tail -n 1 > ${keys}
+  echo 'No keys yet, so will send to /setup page to generate and restart container after.'
 else
-  chia keys add -f ${keys}
+  for k in ${keys//:/ }; do
+    chia keys add -f ${k}
+  done
 fi
 
 if [[ ! "$(ls -A /plots)" ]]; then
