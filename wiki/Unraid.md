@@ -15,6 +15,14 @@ You can install Machinaris all by itself, but if you're already running the [off
 ```
 cp -r /mnt/user/appdata/chia /mnt/user/appdata/machinaris
 ```
+## Unraid template repo
+
+The template repository can be found at [github.com/guydavis/machinaris-unraid](https://github.com/guydavis/machinaris-unraid).
+
+To add this directly to your server go to the `"Template repositories"` section at the bottom of Unraid's docker tab, and add:
+```
+https://github.com/guydavis/machinaris-unraid
+```
 
 ## Manual Docker Creation on Unraid
 
