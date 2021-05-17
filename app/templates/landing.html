@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Machinaris</title>
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    div {
+      position: relative;
+      height: 100%;
+      width: 100%;
+    }
+
+    div img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+    }
+  </style>
+  <meta http-equiv="refresh" content="0;url={{ url_for('index') }}">
+</head>
+
+<body>
+  <div>
+    <img src="{{ url_for('static', filename='landing.gif') }}" />
+  </div>
+
+</body>
+
+</html>

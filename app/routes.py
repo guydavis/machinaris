@@ -8,6 +8,13 @@ from app import app
 from app.commands import chia_cli, plotman_cli, global_config
 
 @app.route('/')
+def landing():
+    gc = global_config.load()
+    if not global_config.is_setup():
+        return redirect(url_for('setup'))
+    return render_template('landing.html')
+
+@app.route('/index')
 def index():
     gc = global_config.load()
     if not global_config.is_setup():
@@ -19,9 +26,13 @@ def index():
         farming=farming.__dict__, plotting=plotting.__dict__, 
         global_config=gc)
 
-@app.route('/setup')
+@app.route('/setup', methods=['GET', 'POST'])
 def setup():
-    return render_template('setup.html')
+    key_paths = global_config.get_key_paths()
+    if request.method == 'POST':
+        chia_cli.generate_key(key_paths[0])
+    app.logger.info("Setup found these key paths: {0}".format(key_paths))
+    return render_template('setup.html', key_paths = key_paths)
 
 @app.route('/plotting', methods=['GET', 'POST'])
 def plotting():
@@ -62,8 +73,9 @@ def wallet():
 def network_blockchain():
     gc = global_config.load()
     blockchain = chia_cli.load_blockchain_show()
-    return render_template('network/blockchain.html', reload_seconds=60, blockchain=blockchain.text, 
-        global_config=gc)
+    now = datetime.now(tz=None)
+    return render_template('network/blockchain.html', reload_seconds=60, 
+        blockchain=blockchain.text, global_config=gc, now=now)
 
 @app.route('/network/connections', methods=['GET', 'POST'])
 def network_connections():
@@ -72,8 +84,9 @@ def network_connections():
         connection = request.form.get("connection")
         chia_cli.add_connection(connection)
     connections = chia_cli.load_connections_show()
-    return render_template('network/connections.html', reload_seconds=60, connections=connections.text, 
-        global_config=gc)
+    now = datetime.now(tz=None)
+    return render_template('network/connections.html', reload_seconds=60, 
+        connections=connections.text, global_config=gc, now=now)
 
 @app.route('/settings/plotting', methods=['GET', 'POST'])
 def settings_plotting():

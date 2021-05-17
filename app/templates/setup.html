@@ -20,18 +20,53 @@
                 <div class="container-fluid py-5">
                     <h1 class="display-4">
                         <img src="{{ url_for('static', filename='screen_on_fire.png') }}" />
-                        <span style="margin-left: 50px;">Oops!</span>
+                        <span>Uh-oh! No Keys Found</span>
                     </h1>
                     <hr class="my-4">
-                    <p>No keys were found. Check out the <a target="_blank"
-                            href="https://github.com/guydavis/machinaris/wiki/Keys">Machinaris wiki</a>
-                        for assistance.</p>
+
+                    <div>
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    {% if category == 'message' %}
+                                        <div class="alert alert-warning" role="alert">
+                                    {% else %}
+                                        <div class="alert alert-{{ category }}" role="alert">
+                                    {% endif %}
+                                            {{ message }}
+                                        </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                        </div>
+
+                    <p>No valid keys were found at these path(s) in-container: </p>
+                    <ul>
+                        {% for key_path in key_paths: %}
+                        <li>{{ key_path }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p>To correct this, either add your existing key mnemonic(s)
+                        into the file(s) above, where mapped to your host filesystem.<br/>
+                        Then restart the Machinaris container.</p>
+
+                    <h3>OR</h3>
+
+                    <p>You can generate a brand-new mnemonic key that will be written to:
+                        <b>{{ key_paths[0] }}</b>
+                    </p>
+
+                    <form method="POST">
+                        <button class="btn btn-outline-success" type="submit">Generate New Key</button>
+                    </form>
                 </div>
             </div>
+        </div>
+    </main>
 
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
-                integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
-                crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+        crossorigin="anonymous"></script>
 </body>
 
 </html>

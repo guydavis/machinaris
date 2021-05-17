@@ -204,3 +204,33 @@ def load_keys_show():
     last_keys_show = chia.Wallet(outs.decode('utf-8').splitlines())
     last_keys_show_load_time = datetime.datetime.now()
     return last_keys_show 
+
+def generate_key(key_path):
+    # TODO Assert file does not exist and is empty
+    proc = Popen("{0} keys generate".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=30)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        app.logger.info(traceback.format_exc())
+        flash('Timed out while generating keys!', 'danger')
+        flash(str(ex), 'warning')
+    if errs:
+        app.logger.info(traceback.format_exc())
+        flash('Unable to generate keys!', 'danger')
+        flash(str(ex), 'warning')
+    proc = Popen("{0} chia keys show --show-mnemonic-seed | tail -n 1 > {0}".format(CHIA_BINARY, key_path), stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=30)
+        # TODO Verify single line of 24 words in file now.
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        app.logger.info(traceback.format_exc())
+        flash('Timed out while generating keys!', 'danger')
+        flash(str(ex), 'warning')
+    if errs:
+        app.logger.info("{0}".format(outs.decode('utf-8')))
+        flash('Nice! New key has been generated.', 'success')
+        flash('For security, you may view it on your filesystem at {0}'.format(key_path), 'success')
