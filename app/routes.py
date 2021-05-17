@@ -25,7 +25,7 @@ def setup():
 
 @app.route('/plotting', methods=['GET', 'POST'])
 def plotting():
-    gc = global_config.load()()
+    gc = global_config.load()
     if request.method == 'POST':
         if request.form.get('action') == 'plot_on':
             plotman_cli.start_plot_run()
@@ -38,7 +38,7 @@ def plotting():
 
 @app.route('/farming')
 def farming():
-    gc = global_config.load()()
+    gc = global_config.load()
     farming = chia_cli.load_farm_summary()
     plots = chia_cli.load_plots_farming()
     now = datetime.now(tz=None)
@@ -47,27 +47,27 @@ def farming():
 
 @app.route('/alerts')
 def alerts():
-    gc = global_config.load()()
+    gc = global_config.load()
     return render_template('alerts.html', 
         global_config=gc)
 
 @app.route('/wallet')    
 def wallet():
-    gc = global_config.load()()
+    gc = global_config.load()
     wallet = chia_cli.load_wallet_show()
     return render_template('wallet.html', wallet=wallet.text, 
         global_config=gc)
 
 @app.route('/network/blockchain')
 def network_blockchain():
-    gc = global_config.load()()
+    gc = global_config.load()
     blockchain = chia_cli.load_blockchain_show()
     return render_template('network/blockchain.html', blockchain=blockchain.text, 
         global_config=gc)
 
 @app.route('/network/connections', methods=['GET', 'POST'])
 def network_connections():
-    gc = global_config.load()()
+    gc = global_config.load()
     if request.method == 'POST':
         connection = request.form.get("connection")
         chia_cli.add_connection(connection)
@@ -77,7 +77,7 @@ def network_connections():
 
 @app.route('/settings/plotting', methods=['GET', 'POST'])
 def settings_plotting():
-    gc = global_config.load()()
+    gc = global_config.load()
     if request.method == 'POST':
         config = request.form.get("plotman")
         plotman_cli.save_config(config)
@@ -88,7 +88,7 @@ def settings_plotting():
 
 @app.route('/settings/farming', methods=['GET', 'POST'])
 def settings_farming():
-    gc = global_config.load()()
+    gc = global_config.load()
     if request.method == 'POST':
         config = request.form.get("config")
         chia_cli.save_config(config)
@@ -99,7 +99,7 @@ def settings_farming():
 
 @app.route('/settings/keys')
 def settings_keys():
-    gc = global_config.load()()
+    gc = global_config.load()
     keys = chia_cli.load_keys_show()
     keys_file = 'Not set'
     if 'keys' in os.environ:
@@ -109,7 +109,7 @@ def settings_keys():
 
 @app.route('/settings/alerts')
 def settings_alerts():
-    gc = global_config.load()()
+    gc = global_config.load()
     return render_template('settings/alerts.html', 
         global_config=gc)
 
