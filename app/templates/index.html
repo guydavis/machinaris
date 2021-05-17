@@ -9,16 +9,20 @@
 </header-->
 
 <div class="row align-items-md-stretch">
+  {% if not global_config.farming_only %}
   <div class="col-md-6">  
     <div class="h-20 p-1 bg-light border rounded-3">
       <h6 class="display-6 text-center">Plotting: {{ plotting.display_status }}</h6>
     </div>
   </div>
+  {% endif %}
+  {% if not global_config.plotting_only %}
   <div class="col-md-6">
     <div class="h-20 p-1 bg-light border rounded-3">
       <h6 class="display-6 text-center">Farming: {{ farming.display_status }}</h6>
     </div>
   </div>
+  {% endif %}
 </div>
 
 <br/>
@@ -30,12 +34,14 @@
       <h6 class="display-6 text-center">Total Plots</h6>
     </div>
   </div>
+  {% if not global_config.plotting_only %}
   <div class="col-md-6">
     <div class="h-100 p-5 text-white bg-dark rounded-3">
       <h1 class="display-1 text-center text-success">{{ farming.total_chia }}</h1>
       <h6 class="display-6 text-center">Total Chia</h6>
     </div>
   </div>
+  {% endif %}
 </div>
 
 <br />
@@ -47,12 +53,14 @@
       <h6 class="display-6 text-center">Total Plots Size</h6>
     </div>
   </div>
+  {% if not global_config.plotting_only %}
   <div class="col-md-6">
     <div class="h-100 p-5 text-white bg-dark rounded-3">
       <h4 class="display-4 text-center text-success">{{ farming.display_network_size }}</h4>
       <h6 class="display-6 text-center">Estimated Netspace Size</h6>
     </div>
   </div>
+  {% endif %}
 </div>
 
 {% endblock %}

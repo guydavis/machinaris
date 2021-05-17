@@ -7,8 +7,9 @@ EXPOSE 8555
 EXPOSE 8444
 EXPOSE 8926
 
-ENV keys="/root/.chia/mnemonic.txt"
-ENV harvester="false"
+ENV keys="generate"
+
+ENV harvester="false" 
 ENV farmer="false"
 ENV plotter="false"
 ENV plots_dir="/plots"

@@ -11,12 +11,13 @@ import traceback
 import yaml
 
 from flask import Flask, jsonify, abort, request, flash
-from stat import S_ISREG, ST_CTIME, ST_MODE
+from stat import S_ISREG, ST_CTIME, ST_MODE, ST_SIZE
 from subprocess import Popen, TimeoutExpired, PIPE
 from os import path
 
 from app import app
 from app.models import chia
+from app.commands import global_config
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 
@@ -32,17 +33,19 @@ def load_farm_summary():
             (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
         return last_farm_summary
 
-    proc = Popen("{0} farm summary".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
-    try:
-        outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-        abort(500, description="The timeout is expired!")
-    if errs:
-        abort(500, description=errs.decode('utf-8'))
-    
-    last_farm_summary = chia.FarmSummary(outs.decode('utf-8').splitlines())
+    if global_config.plotting_only():  # Just get plot count and size
+        last_farm_summary = chia.FarmSummary(farm_plots=load_plots_farming())
+    else: # Load from chia farm summary
+        proc = Popen("{0} farm summary".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+        try:
+            outs, errs = proc.communicate(timeout=90)
+        except TimeoutExpired:
+            proc.kill()
+            proc.communicate()
+            abort(500, description="The timeout is expired!")
+        if errs:
+            abort(500, description=errs.decode('utf-8'))
+        last_farm_summary = chia.FarmSummary(cli_stdout=outs.decode('utf-8').splitlines())
     last_farm_summary_load_time = datetime.datetime.now()
     return last_farm_summary
 
@@ -58,13 +61,10 @@ def load_plots_farming():
     dir_path = '/plots' # TODO Pull list from 'chia plots show'
     entries = (os.path.join(dir_path, file_name) for file_name in os.listdir(dir_path))
     entries = ((os.stat(path), path) for path in entries)
-    entries = ((stat[ST_CTIME], path) for stat, path in entries if S_ISREG(stat[ST_MODE]))
+    entries = ((stat[ST_CTIME], stat[ST_SIZE], path) for stat, path in entries if S_ISREG(stat[ST_MODE]))
     last_plots_farming = chia.FarmPlots(entries)
     last_plots_farming_load_time = datetime.datetime.now()
     return last_plots_farming
-
-def is_setup():
-    return "keys" in os.environ and path.exists(os.environ['keys'])
 
 def save_config(config):
     try:
@@ -84,7 +84,6 @@ def save_config(config):
     else:
         flash('Nice! config.yaml validated and saved successfully.', 'success')
         flash('NOTE: Currently requires restarting the container to pickup changes.', 'info')
-
 
 last_wallet_show = None 
 last_wallet_show_load_time = None 
@@ -106,7 +105,7 @@ def load_wallet_show():
     if errs:
         abort(500, description=errs.decode('utf-8'))
     
-    last_wallet_show = chia.Wallet(outs.decode('utf-8').splitlines())
+    last_wallet_show = chia.Keys(outs.decode('utf-8').splitlines())
     last_wallet_show_load_time = datetime.datetime.now()
     return last_wallet_show
 
@@ -181,4 +180,27 @@ def add_connection(connection):
     else:
         app.logger.info("{0}".format(outs.decode('utf-8')))
         flash('Nice! Connection added to Chia and sync engaging!', 'success')
- 
+
+last_keys_show = None 
+last_keys_show_load_time = None 
+
+def load_keys_show():
+    global last_keys_show
+    global last_keys_show_load_time
+    if last_keys_show and last_keys_show_load_time >= \
+            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
+        return last_keys_show
+
+    proc = Popen("{0} keys show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        abort(500, description="The timeout is expired!")
+    if errs:
+        abort(500, description=errs.decode('utf-8'))
+    
+    last_keys_show = chia.Wallet(outs.decode('utf-8').splitlines())
+    last_keys_show_load_time = datetime.datetime.now()
+    return last_keys_show 

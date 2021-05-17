@@ -15,8 +15,9 @@ cp -n /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.yaml
 echo 'Starting Machinaris...'
 if [ $FLASK_ENV == "development" ];
 then
-    /chia-blockchain/venv/bin/python3 -m flask run --host=0.0.0.0 --port=8926 > /root/.chia/logs/machinaris.log 2>&1 &
+    /chia-blockchain/venv/bin/gunicorn --reload --bind 0.0.0.0:8926 app:app > /root/.chia/logs/machinaris.log 2>&1 &
+    #/chia-blockchain/venv/bin/python3 -m flask run --host=0.0.0.0 --port=8926 > /root/.chia/logs/machinaris.log 2>&1 &
 else
-    /chia-blockchain/venv/bin/gunicorn --bind 0.0.0.0:8926 run:app > /root/.chia/logs/machinaris.log 2>&1 &
+    /chia-blockchain/venv/bin/gunicorn --bind 0.0.0.0:8926 app:app > /root/.chia/logs/machinaris.log 2>&1 &
 fi
-echo 'Completed container startup.  Browse to port 8926.'
+echo 'Completed startup.  Browse to port 8926.'

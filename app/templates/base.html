@@ -30,11 +30,14 @@
                                 <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline ">Home</span>
                             </a>
                         </li>
+                        {% if not global_config.farming_only %}
                         <li>
                             <a href="{{ url_for('plotting') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-speedometer"></i> <span
                                     class="ms-1 d-none d-sm-inline">Plotting</span> </a>
                         </li>
+                        {% endif %}
+                        {% if not global_config.plotting_only %}
                         <li>
                             <a href="{{ url_for('farming') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-tree"></i> <span class="ms-1 d-none d-sm-inline">Farming</span></a>
@@ -43,6 +46,7 @@
                             <a href="{{ url_for('wallet') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-wallet"></i> <span class="ms-1 d-none d-sm-inline">Wallet</span></a>
                         </li>
+                        {% endif %}
                         <li>
                             <a href="{{ url_for('alerts') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-bell"></i> <span class="ms-1 d-none d-sm-inline">Alerts</span></a>
@@ -56,13 +60,21 @@
                                 class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">Settings</span> </a>
                             <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                                {% if not global_config.farming_only %}
                                 <li class="w-100">
                                     <a href="{{ url_for('settings_plotting') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Plotting</span> </a>
                                 </li>
+                                {% endif %}
+                                {% if not global_config.plotting_only %}
                                 <li>
                                     <a href="{{ url_for('settings_farming') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Farming</span> </a>
+                                </li>
+                                {% endif %}
+                                <li>
+                                    <a href="{{ url_for('settings_keys') }}" class="nav-link px-0"> <span
+                                            class="d-none d-sm-inline text-white">Keys</span> </a>
                                 </li>
                                 <li>
                                     <a href="{{ url_for('settings_alerts') }}" class="nav-link px-0"> <span

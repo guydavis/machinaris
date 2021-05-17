@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="pb-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+        <span class="fs-4">Wallet - chia keys show </span>
+    </a>
+</header>
+
+<div class="p-1 mb-4 bg-light border rounded-3">
+    <div class="container-fluid">
+        <pre>{{ keys }}</pre>
+    </div>
+</div>
+
+<p><b>NOTE: Machinaris will never display your private key here.</b></p>
+
+<p>However, you may view it yourself by executing this from within the Docker container.
+    <code>chia keys show --show-mnemonic-seed</code>
+</p>
+
+<p>Also, you may view the file you mounted here as the 'keys' varible from within the Docker container:
+    <code>{{ keys_file }}<code>
+</p>
+
+{% endblock %}
