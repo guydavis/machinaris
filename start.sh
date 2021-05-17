@@ -13,6 +13,7 @@ mkdir -p /root/.chia/logs
 cp -n /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.yaml
 
 echo 'Starting Machinaris...'
+cd /machinaris
 if [ $FLASK_ENV == "development" ];
 then
     /chia-blockchain/venv/bin/gunicorn --reload --bind 0.0.0.0:8926 app:app > /root/.chia/logs/machinaris.log 2>&1 &
