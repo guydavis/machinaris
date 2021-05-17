@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>machinaris</Name>
+  <Repository>ghcr.io/guydavis/machinaris</Repository>
+  <Registry>https://hub.docker.com/repository/docker/guydavis/machinaris</Registry>
+  <Network>host</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://hub.docker.com/r/guydavis/machinaris/</Support>
+  <Project/>
+  <Overview>Building upon the official docker image, this adds concurrent plotting and a web ui.   Converted By Community Applications   Always verify this template (and values) against the dockerhub support page for the container</Overview>
+  <Category/>
+  <WebUI>http://[IP]:[PORT:8926]/</WebUI>
+  <TemplateURL/>
+  <Icon>https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/machinaris.png</Icon>
+  <ExtraParams>-t</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled>1621240860</DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Description>Building upon the official docker image, this adds concurrent plotting and a web ui.   Converted By Community Applications   Always verify this template (and values) against the dockerhub support page for the container</Description>
+  <Networking>
+    <Mode>host</Mode>
+    <Publish>
+      <Port>
+        <HostPort>8555</HostPort>
+        <ContainerPort>8555</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>8444</HostPort>
+        <ContainerPort>8444</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+      <Port>
+        <HostPort>8926</HostPort>
+        <ContainerPort>8926</ContainerPort>
+        <Protocol>tcp</Protocol>
+      </Port>
+    </Publish>
+  </Networking>
+  <Data>
+    <Volume>
+      <HostDir>/mnt/user/appdata/machinaris</HostDir>
+      <ContainerDir>/root/.chia</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/user/plots</HostDir>
+      <ContainerDir>/plots</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+    <Volume>
+      <HostDir>/mnt/cache/plotting</HostDir>
+      <ContainerDir>/plotting</ContainerDir>
+      <Mode>rw</Mode>
+    </Volume>
+  </Data>
+  <Environment>
+    <Variable>
+      <Value>/root/.chia/mnemonic.txt</Value>
+      <Name>keys</Name>
+      <Mode/>
+    </Variable>
+  </Environment>
+  <Labels/>
+  <Config Name="appdata" Target="/root/.chia" Default="" Mode="rw" Description="Container Path: /root/.chia" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/appdata/machinaris</Config>
+  <Config Name="plots" Target="/plots" Default="" Mode="rw" Description="Container Path:  /plots" Type="Path" Display="always" Required="false" Mask="false">/mnt/user/plots</Config>
+  <Config Name="plotting" Target="/plotting" Default="" Mode="rw" Description="Container Path: /plotting" Type="Path" Display="always" Required="false" Mask="false">/mnt/cache/plotting</Config>
+  <Config Name="chia_rpc" Target="8555" Default="" Mode="tcp" Description="Container Port: 8555" Type="Port" Display="always" Required="false" Mask="false">8555</Config>
+  <Config Name="chia_protocol" Target="8444" Default="8444" Mode="tcp" Description="Container Port: 8444" Type="Port" Display="always" Required="false" Mask="false">8444</Config>
+  <Config Name="web_ui" Target="8926" Default="8926" Mode="tcp" Description="Container Port: 8926" Type="Port" Display="always" Required="false" Mask="false">8926</Config>
+  <Config Name="keys" Target="keys" Default="" Mode="" Description="Container Variable: keys" Type="Variable" Display="always" Required="false" Mask="false">/root/.chia/mnemonic.txt</Config>
+</Container>
