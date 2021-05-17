@@ -49,7 +49,7 @@ Host Port: 8555
 Connection Type: TCP
 
 Create a Port named: chia_protocol
-Host Port: 8555
+Host Port: 8444
 Connection Type: TCP  
 
 Create a Port named: web_ui
