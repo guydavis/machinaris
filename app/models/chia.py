@@ -60,12 +60,14 @@ class FarmSummary:
 class FarmPlots:
 
      def __init__(self, entries):
-        self.columns = ['dir', 'plot', 'create_date', 'size']
+        self.columns = ['dir', 'plot', 'mod_date', 'size']
         self.rows = []
-        for st_ctime, st_size, path in entries:
+        for st_mtime, st_size, path in entries:
+            if not path.endswith("*.plot"):
+                continue
             self.rows.append({ 'dir': '/plots',  \
                 'plot': path[len('/plots/'): ],  \
-                'create_date': datetime.utcfromtimestamp(int(st_ctime)).strftime('%Y-%m-%d %H:%M:%S'), \
+                'mod_date': datetime.utcfromtimestamp(int(st_mtime)).strftime('%Y-%m-%d %H:%M:%S'), \
                 'size': int(st_size) }) 
 
 class Wallet:

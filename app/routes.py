@@ -62,7 +62,7 @@ def wallet():
 def network_blockchain():
     gc = global_config.load()
     blockchain = chia_cli.load_blockchain_show()
-    return render_template('network/blockchain.html', blockchain=blockchain.text, 
+    return render_template('network/blockchain.html', reload_seconds=60, blockchain=blockchain.text, 
         global_config=gc)
 
 @app.route('/network/connections', methods=['GET', 'POST'])
@@ -72,7 +72,7 @@ def network_connections():
         connection = request.form.get("connection")
         chia_cli.add_connection(connection)
     connections = chia_cli.load_connections_show()
-    return render_template('network/connections.html', connections=connections.text, 
+    return render_template('network/connections.html', reload_seconds=60, connections=connections.text, 
         global_config=gc)
 
 @app.route('/settings/plotting', methods=['GET', 'POST'])
