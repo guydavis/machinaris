@@ -29,10 +29,14 @@ def index():
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
     key_paths = global_config.get_key_paths()
-    if request.method == 'POST':
-        chia_cli.generate_key(key_paths[0])
     app.logger.info("Setup found these key paths: {0}".format(key_paths))
-    return render_template('setup.html', key_paths = key_paths)
+    show_setup = True
+    if request.method == 'POST':
+        show_setup = not chia_cli.generate_key(key_paths[0])
+    if show_setup:
+        return render_template('setup.html', key_paths = key_paths)
+    else:
+        return redirect(url_for('index'))
 
 @app.route('/plotting', methods=['GET', 'POST'])
 def plotting():

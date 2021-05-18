@@ -206,7 +206,11 @@ def load_keys_show():
     return last_keys_show 
 
 def generate_key(key_path):
-    # TODO Assert file does not exist and is empty
+    if os.exists(key_path) and os.stat(key_path).st_size > 0:
+        app.logger.info('Skipping key generation as file exists and is NOT empty! {0}'.format(key_path))
+        flash('Skipping key generation as file exists and is NOT empty!', 'danger')
+        flash('key_path={0}'.format(key_path), 'warning')
+        return False
     proc = Popen("{0} keys generate".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -216,21 +220,50 @@ def generate_key(key_path):
         app.logger.info(traceback.format_exc())
         flash('Timed out while generating keys!', 'danger')
         flash(str(ex), 'warning')
+        return False
     if errs:
-        app.logger.info(traceback.format_exc())
+        app.logger.info("{0}".format(errs.decode('utf-8')))
         flash('Unable to generate keys!', 'danger')
-        flash(str(ex), 'warning')
-    proc = Popen("{0} chia keys show --show-mnemonic-seed | tail -n 1 > {0}".format(CHIA_BINARY, key_path), stdout=PIPE, stderr=PIPE, shell=True)
+        return False
+    proc = Popen("{0} keys show --show-mnemonic-seed | tail -n 1 > {1}".format(CHIA_BINARY, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
-        # TODO Verify single line of 24 words in file now.
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
         flash('Timed out while generating keys!', 'danger')
         flash(str(ex), 'warning')
+        return False
     if errs:
+        app.logger.info("{0}".format(errs.decode('utf-8')))
+        flash('Unable to save mnemonic to {0}'.format(key_path), 'danger')
+        return False
+    else:
         app.logger.info("{0}".format(outs.decode('utf-8')))
-        flash('Nice! New key has been generated.', 'success')
-        flash('For security, you may view it on your filesystem at {0}'.format(key_path), 'success')
+        try:
+            mnemonic_words = open(key_path,'r').read().split()
+            if len(mnemonic_words) != 24:
+                flash('{0} does not contain a 24-word mnemonic!'.format(key_path), 'danger')
+                return False
+        except:
+                flash('{0} was unreadable or not found.'.format(key_path), 'danger')
+                return False
+        flash('Nice! New key has been generated. Restarting farmer service now...', 'success')
+        flash('For security, your keys may be found on your filesystem at {0}'.format(key_path), 'info')
+    proc = Popen("{0} start farmer".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        app.logger.info(traceback.format_exc())
+        flash('Timed out while starting farmer! Try restarting the Machinaris container.', 'danger')
+        flash(str(ex), 'warning')
+        return False
+    if errs:
+        app.logger.info("{0}".format(errs.decode('utf-8')))
+        flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
+        flash(str(ex), 'warning')
+        return False
+    return True
