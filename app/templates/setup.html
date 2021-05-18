@@ -57,7 +57,7 @@
                             <b>{{ key_paths[0] }}</b>
                         </p>
 
-                        <form method="POST">
+                        <form method="POST" id="main-form">
                             <button class="btn btn-outline-success" type="submit" id="btnFetch">Generate New
                                 Key</button>
                         </form>
@@ -75,8 +75,9 @@
             $("#btnFetch").click(function () {
                 $(this).prop("disabled", true);
                 $(this).html(
-                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Generating...`
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...`
                 );
+                $("#main-form").submit();
             });
         })
     </script>

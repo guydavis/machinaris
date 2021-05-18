@@ -45,7 +45,7 @@
         </table>
     </div>
 
-    <form method="POST">
+    <form method="POST" id="main-form">
         <fieldset {% if plotting.display_status=="Active" %} disabled {% endif %}>
             <input type="hidden" id="action" name="action" value="plot_on" />
             <button type="submit" class="btn btn-outline-success" id="btnFetch">Plot On!</button>
@@ -59,6 +59,7 @@
                 $(this).html(
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Starting...`
                 );
+                $("#main-form").submit();
             });
         })
     </script>
