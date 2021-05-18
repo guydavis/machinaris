@@ -206,7 +206,7 @@ def load_keys_show():
     return last_keys_show 
 
 def generate_key(key_path):
-    if os.exists(key_path) and os.stat(key_path).st_size > 0:
+    if os.path.exists(key_path) and os.stat(key_path).st_size > 0:
         app.logger.info('Skipping key generation as file exists and is NOT empty! {0}'.format(key_path))
         flash('Skipping key generation as file exists and is NOT empty!', 'danger')
         flash('key_path={0}'.format(key_path), 'warning')
@@ -240,7 +240,7 @@ def generate_key(key_path):
         flash('Unable to save mnemonic to {0}'.format(key_path), 'danger')
         return False
     else:
-        app.logger.info("{0}".format(outs.decode('utf-8')))
+        app.logger.info("Store mnemonic output: {0}".format(outs.decode('utf-8')))
         try:
             mnemonic_words = open(key_path,'r').read().split()
             if len(mnemonic_words) != 24:
@@ -250,8 +250,8 @@ def generate_key(key_path):
                 flash('{0} was unreadable or not found.'.format(key_path), 'danger')
                 return False
         flash('Nice! New key has been generated. Restarting farmer service now...', 'success')
-        flash('For security, your keys may be found on your filesystem at {0}'.format(key_path), 'info')
-    proc = Popen("{0} start farmer".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+        flash('For security, your key may be found on your filesystem at {0}'.format(key_path), 'info')
+    proc = Popen("{0} start farmer && echo 'S' | chia wallet show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
