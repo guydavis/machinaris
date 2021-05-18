@@ -45,6 +45,13 @@
         </table>
     </div>
 
+    <form method="POST">
+        <fieldset {% if plotting.display_status=="Active" %} disabled {% endif %}>
+            <input type="hidden" id="action" name="action" value="plot_on" />
+            <button type="submit" class="btn btn-outline-success" id="btnFetch">Plot On!</button>
+        </fieldset>
+    </form>
+
     <script>
         $(document).ready(function () {
             $("#btnFetch").click(function () {
@@ -55,12 +62,5 @@
             });
         })
     </script>
-
-    <form method="POST">
-        <fieldset {% if plotting.display_status=="Active" %} disabled {% endif %}>
-            <input type="hidden" id="action" name="action" value="plot_on" />
-            <button type="submit" class="btn btn-outline-success" id="btnFetch">Plot On!</button>
-        </fieldset>
-    </form>
 
     {% endblock %}
