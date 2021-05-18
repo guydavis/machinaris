@@ -15,7 +15,7 @@ directories:
         # STDERR of all plot jobs).  In order to monitor progress, plotman
         # reads these logs on a regular basis, so using a fast drive is
         # recommended.  DON'T CHANGE THIS IN-CONTAINER PATH
-        log: /root/.chia/logs
+        log: /root/.chia/plotman/logs
 
         # One or more directories to use as tmp dirs for plotting.  The
         # scheduler will use all of them and distribute jobs among them.

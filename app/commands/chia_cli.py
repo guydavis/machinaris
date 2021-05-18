@@ -250,7 +250,7 @@ def generate_key(key_path):
                 flash('{0} was unreadable or not found.'.format(key_path), 'danger')
                 return False
         flash('Nice! A new key has been generated at {0}'.format(key_path), 'success')
-        flash('Mnemonic: {0}'.format(mnemonic_words.join()), 'info')
+        flash('Mnemonic: {0}'.format(" ".join(mnemonic_words)), 'info')
     proc = Popen("{0} start farmer && echo 'S' | chia wallet show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
