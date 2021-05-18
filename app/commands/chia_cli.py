@@ -267,5 +267,5 @@ def generate_key(key_path):
         flash(str(ex), 'warning')
         return False
     # Finally send a 'S' to chia wallet show to get past backup prompt on first check
-    os.system("echo 'S' | chia wallet show")
+    os.system("echo 'S' | chia wallet show &")
     return True
