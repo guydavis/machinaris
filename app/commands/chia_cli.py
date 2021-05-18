@@ -251,7 +251,7 @@ def generate_key(key_path):
                 return False
         flash('Nice! A new key has been generated at {0}'.format(key_path), 'success')
         flash('Mnemonic: {0}'.format(" ".join(mnemonic_words)), 'info')
-    proc = Popen("{0} start farmer && echo 'S' | chia wallet show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} start farmer".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -266,4 +266,6 @@ def generate_key(key_path):
         flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
         flash(str(ex), 'warning')
         return False
+    # Finally send a 'S' to chia wallet show to get past backup prompt on first check
+    os.system("echo 'S' | chia wallet show")
     return True
