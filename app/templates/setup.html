@@ -19,7 +19,7 @@
             <div class="p-5 mb-4 bg-light rounded-3">
                 <div class="container-fluid py-5">
                     <h1 class="display-4">
-                        <img src="{{ url_for('static', filename='screen_on_fire.png') }}" />
+                        <img src="{{ url_for('static', filename='error.png') }}" style= />
                         <span>Uh-oh! No Keys Found</span>
                     </h1>
                     <hr class="my-4">
@@ -57,7 +57,10 @@
                     </p>
 
                     <form method="POST">
-                        <button class="btn btn-outline-success" type="submit">Generate New Key</button>
+                        <button class="btn btn-outline-success" type="submit"
+                        onclick="var e=this;setTimeout(function(){e.disabled=true;},0);this.value='Generating…';return true;">
+                            Generate New Key
+                        </button>
                     </form>
                 </div>
             </div>
