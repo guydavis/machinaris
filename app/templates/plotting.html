@@ -45,12 +45,21 @@
         </table>
     </div>
 
+    <script>
+        $(document).ready(function () {
+            $("#btnFetch").click(function () {
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Starting...`
+                );
+            });
+        })
+    </script>
+
     <form method="POST">
         <fieldset {% if plotting.display_status=="Active" %} disabled {% endif %}>
             <input type="hidden" id="action" name="action" value="plot_on" />
-            <button type="submit" class="btn btn-outline-success"
-                onclick="var e=this;setTimeout(function(){e.disabled=true;},0);this.value='Starting...';return true;">Plot
-                On!</button>
+            <button type="submit" class="btn btn-outline-success" id="btnFetch">Plot On!</button>
         </fieldset>
     </form>
 

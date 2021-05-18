@@ -56,11 +56,19 @@
                         <b>{{ key_paths[0] }}</b>
                     </p>
 
+                    <script>
+                        $(document).ready(function () {
+                            $("#btnFetch").click(function () {
+                                $(this).prop("disabled", true);
+                                $(this).html(
+                                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Generating...`
+                                );
+                            });
+                        })
+                    </script>
+
                     <form method="POST">
-                        <button class="btn btn-outline-success" type="submit"
-                        onclick="var e=this;setTimeout(function(){e.disabled=true;},0);this.value='Generating…';return true;">
-                            Generate New Key
-                        </button>
+                        <button class="btn btn-outline-success" type="submit" id="btnFetch">Generate New Key</button>
                     </form>
                 </div>
             </div>
