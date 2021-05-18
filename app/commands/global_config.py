@@ -33,8 +33,7 @@ def get_key_paths():
     return os.environ['keys'].split(':')
 
 def plotting_only():
-    return "plotter" in os.environ and os.environ['plotter'] == "true"
+    return "mode" in os.environ and os.environ['mode'] == "plotter"
 
 def farming_only():
-    return ("harvester" in os.environ and os.environ['harvester'] == "true") \
-        or ("farmer" in os.environ and os.environ['farmer'] == "true")
+    return "mode" in os.environ and os.environ['mode'] in ["harvester", "farmer"]

@@ -15,7 +15,8 @@ if [[ ${keys} == "generate" ]]; then
   echo 'No keys yet, so will send to /setup page to generate and restart container after.'
 else
   for k in ${keys//:/ }; do
-    chia keys add -f ${k}
+    echo "Adding key at path: {$k}"
+    chia keys add -f ${k} > /dev/null
   done
 fi
 
@@ -29,9 +30,9 @@ done
 
 sed -i 's/localhost/127.0.0.1/g' ~/.chia/mainnet/config/config.yaml
 
-if [[ ${farmer} == 'true' ]]; then
+if [[ ${mode} == 'farmer' ]]; then
   chia start farmer-only
-elif [[ ${harvester} == 'true' ]]; then
+elif [[ ${mode} == 'harvester' ]]; then
   if [[ -z ${farmer_address} || -z ${farmer_port} ]]; then
     echo "A farmer peer address and port are required."
     exit
@@ -39,9 +40,9 @@ elif [[ ${harvester} == 'true' ]]; then
     chia configure --set-farmer-peer ${farmer_address}:${farmer_port}
     chia start harvester
   fi
-elif [[ ${plotter} == 'true' ]]; then
+elif [[ ${mode} == 'plotter' ]]; then
     echo "Starting in Plotter-only mode.  Run Plotman from either CLI or WebUI."
-else
+else # Default mode is 'fullnode'
   chia start farmer
 fi
 
