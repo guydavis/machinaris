@@ -2,16 +2,6 @@
 
 {% block content %}
 
-<form method="POST">
-    <fieldset {% if plotting.display_status == "Active" %} disabled {% endif %}>
-        <div class="position-relative">
-            <div class="position-absolute top-0 end-0">
-                <input type="hidden" id="action" name="action" value="plot_on" />
-                <button type="submit" class="btn btn-outline-success">Plot On!</button>
-            </div>
-    </fieldset>
-</form>
-
 <header class="pb-3 mb-4 border-bottom">
     <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
         <span class="fs-4">Plotting Status: {{ plotting.display_status }}</span>
@@ -19,20 +9,20 @@
 </header>
 
 <div>
-{% with messages = get_flashed_messages(with_categories=true) %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-        {% for category, message in messages %}
-            {% if category == 'message' %}
-                <div class="alert alert-warning" role="alert">
-            {% else %}
-                <div class="alert alert-{{ category }}" role="alert">
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+        {% else %}
+        <div class="alert alert-{{ category }}" role="alert">
             {% endif %}
-                    {{ message }}
-                </div>
+            {{ message }}
+        </div>
         {% endfor %}
-    {% endif %}
-{% endwith %}
-</div>
+        {% endif %}
+        {% endwith %}
+    </div>
 
     <div class="table-responsive">
         <table class="table table-dark">
@@ -54,5 +44,24 @@
             </tbody>
         </table>
     </div>
+
+    <form method="POST" id="main-form">
+        <fieldset {% if plotting.display_status=="Active" %} disabled {% endif %}>
+            <input type="hidden" id="action" name="action" value="plot_on" />
+            <button type="submit" class="btn btn-outline-success" id="btnFetch">Plot On!</button>
+        </fieldset>
+    </form>
+
+    <script>
+        $(document).ready(function () {
+            $("#btnFetch").click(function () {
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>Starting...`
+                );
+                $("#main-form").submit();
+            });
+        })
+    </script>
 
     {% endblock %}

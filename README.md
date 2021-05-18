@@ -1,10 +1,10 @@
 # machinaris
 
-A pure-Docker solution for plotting and farming the Chia™ cryptocurrency.  Currently in early *beta* with [v0.1](https://github.com/users/guydavis/packages/container/package/machinaris)!
+A pure-Docker solution for plotting and farming the Chia™ cryptocurrency.  Currently in [*beta*](https://github.com/users/guydavis/packages/container/package/machinaris)!
 
 ![Home](./docs/img/machinaris_home.png)
 
-To get started with Machinaris, follow an install guide for your platform [Windows](https://github.com/guydavis/machinaris/wiki/Windows), [Linux](https://github.com/guydavis/machinaris/wiki/Linux), [Macintosh](https://github.com/guydavis/machinaris/wiki/MacOS), [Unraid](https://github.com/guydavis/machinaris/wiki/Unraid), and [others](https://github.com/guydavis/machinaris/wiki/Generic).
+To get started with Machinaris, follow an install guide for your platform: [Windows](https://github.com/guydavis/machinaris/wiki/Windows), [Linux](https://github.com/guydavis/machinaris/wiki/Linux), [Macintosh](https://github.com/guydavis/machinaris/wiki/MacOS), [Unraid](https://github.com/guydavis/machinaris/wiki/Unraid), and [others](https://github.com/guydavis/machinaris/wiki/Generic).
 
 ## Plotting View
 
@@ -14,7 +14,7 @@ The [plotman](https://github.com/ericaltendorf/plotman) CLI is used manage stagg
 
 ## Farming View
 
-[chia-docker](https://github.com/orgs/Chia-Network/packages/container/package/chia): Machinaris builds upon the offical docker image, so all Farming is done via the official binaries.
+Machinaris builds upon the [offical docker image](https://github.com/orgs/Chia-Network/packages/container/package/chia), so all Farming is done via the official binaries.
 
 ![Farming](./docs/img/machinaris_farming.png)
 
@@ -23,6 +23,12 @@ The [plotman](https://github.com/ericaltendorf/plotman) CLI is used manage stagg
 *Coming Soon...*
 
 ## Setup
+
+Simplified setup allows you to either import your existing key mnemonic or generate a new one directly in the Machinaris WebUI on first launch:
+
+![Setup](./docs/img/machinaris_setup.png)
+
+## Configuration
 
 Configuration updates for Chia and Plotman are available in the WebUI.  
 

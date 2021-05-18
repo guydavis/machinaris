@@ -15,7 +15,7 @@ directories:
         # STDERR of all plot jobs).  In order to monitor progress, plotman
         # reads these logs on a regular basis, so using a fast drive is
         # recommended.  DON'T CHANGE THIS IN-CONTAINER PATH
-        log: /root/.chia/logs
+        log: /root/.chia/plotman/logs
 
         # One or more directories to use as tmp dirs for plotting.  The
         # scheduler will use all of them and distribute jobs among them.
@@ -110,7 +110,7 @@ plotting:
         e: False              # Use -e plotting option
         n_threads: 4          # Threads per job
         n_buckets: 128        # Number of buckets to split data into
-        job_buffer: 6750      # Per job memory
+        job_buffer: 3389      # Per job memory - Chia default
         # If specified, pass through to the -f and -p options.  See CLI reference.
         #   farmer_pk: ...
         #   pool_pk: ...

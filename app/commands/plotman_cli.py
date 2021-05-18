@@ -49,7 +49,7 @@ def start_plot_run():
     global last_plotting_summary
     app.logger.info("Starting Plotman run....")
     try:
-        logfile = "/root/.chia/logs/plotman.log"
+        logfile = "/root/.chia/plotman/logs/plotman.log"
         log_fd = os.open(logfile, os.O_RDWR|os.O_CREAT)
         log_fo = os.fdopen(log_fd, "w+")
         proc = Popen("{0} {1} </dev/tty".format(PLOTMAN_SCRIPT,'plot'), \
@@ -57,7 +57,7 @@ def start_plot_run():
     except:
         traceback.print_exc()
         flash('Failed to start Plotman plotting run!', 'danger')
-        flash('Please look in plotman log: {0}'.format(logfile), 'warning')
+        flash('Please look in: {0}'.format(logfile), 'warning')
     else:
         last_plotting_summary = None # Force a refresh on next load
         flash('Plotman started successfully.', 'success')

@@ -2,57 +2,75 @@
 
 {% block content %}
 
-<!--header class="pb-3 mb-4 border-bottom">
-  <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-    <span class="fs-4">Overview</span>
-  </a>
-</header-->
-
-<div class="row align-items-md-stretch">
-  <div class="col-md-6">  
-    <div class="h-20 p-1 bg-light border rounded-3">
-      <h6 class="display-6 text-center">Plotting: {{ plotting.display_status }}</h6>
+<div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  {% if category == 'message' %}
+  <div class="alert alert-warning" role="alert">
+    {% else %}
+    <div class="alert alert-{{ category }}" role="alert">
+      {% endif %}
+      {{ message }}
     </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
   </div>
-  <div class="col-md-6">
-    <div class="h-20 p-1 bg-light border rounded-3">
-      <h6 class="display-6 text-center">Farming: {{ farming.display_status }}</h6>
-    </div>
-  </div>
-</div>
 
-<br/>
-
-<div class="row align-items-md-stretch">
-  <div class="col-md-6">
-    <div class="h-100 p-5 text-white bg-dark rounded-3">
-      <h1 class="display-1 text-center text-success">{{ farming.plot_count }}</h1>
-      <h6 class="display-6 text-center">Total Plots</h6>
+  <div class="row align-items-md-stretch">
+    {% if not global_config.farming_only %}
+    <div class="col-md-6">
+      <div class="h-20 p-1 bg-light border rounded-3">
+        <h6 class="display-6 text-center">Plotting: {{ plotting.display_status }}</h6>
+      </div>
     </div>
-  </div>
-  <div class="col-md-6">
-    <div class="h-100 p-5 text-white bg-dark rounded-3">
-      <h1 class="display-1 text-center text-success">{{ farming.total_chia }}</h1>
-      <h6 class="display-6 text-center">Total Chia</h6>
+    {% endif %}
+    {% if not global_config.plotting_only %}
+    <div class="col-md-6">
+      <div class="h-20 p-1 bg-light border rounded-3">
+        <h6 class="display-6 text-center">Farming: {{ farming.display_status }}</h6>
+      </div>
     </div>
+    {% endif %}
   </div>
-</div>
 
-<br />
+  <br />
 
-<div class="row align-items-md-stretch">
-  <div class="col-md-6">
-    <div class="h-100 p-5 text-white bg-dark rounded-3">
-      <h4 class="display-4 text-center text-success">{{ farming.plot_size }}</h4>
-      <h6 class="display-6 text-center">Total Plots Size</h6>
+  <div class="row align-items-md-stretch">
+    <div class="col-md-6">
+      <div class="h-100 p-5 text-white bg-dark rounded-3">
+        <h1 class="display-1 text-center text-success">{{ farming.plot_count }}</h1>
+        <h6 class="display-6 text-center">Total Plots</h6>
+      </div>
     </div>
-  </div>
-  <div class="col-md-6">
-    <div class="h-100 p-5 text-white bg-dark rounded-3">
-      <h4 class="display-4 text-center text-success">{{ farming.display_network_size }}</h4>
-      <h6 class="display-6 text-center">Estimated Netspace Size</h6>
+    {% if not global_config.plotting_only %}
+    <div class="col-md-6">
+      <div class="h-100 p-5 text-white bg-dark rounded-3">
+        <h1 class="display-1 text-center text-success">{{ farming.total_chia }}</h1>
+        <h6 class="display-6 text-center">Total Chia</h6>
+      </div>
     </div>
+    {% endif %}
   </div>
-</div>
 
-{% endblock %}
+  <br />
+
+  <div class="row align-items-md-stretch">
+    <div class="col-md-6">
+      <div class="h-100 p-5 text-white bg-dark rounded-3">
+        <h4 class="display-4 text-center text-success">{{ farming.plot_size }}</h4>
+        <h6 class="display-6 text-center">Total Plots Size</h6>
+      </div>
+    </div>
+    {% if not global_config.plotting_only %}
+    <div class="col-md-6">
+      <div class="h-100 p-5 text-white bg-dark rounded-3">
+        <h4 class="display-4 text-center text-success">{{ farming.display_network_size }}</h4>
+        <h6 class="display-6 text-center">Estimated Netspace Size</h6>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  {% endblock %}
