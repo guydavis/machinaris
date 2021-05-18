@@ -20,8 +20,12 @@
     <code>chia keys show --show-mnemonic-seed</code>
 </p>
 
-<p>Also, you may view the file you mounted here as the 'keys' varible from within the Docker container:
-    <code>{{ keys_file }}<code>
-</p>
+<p>Also, you may view the key file(s) on the host, which you mounted within the Docker container:</p>
+
+<ul>
+    {% for key_path in key_paths: %}
+    <li>{{ key_path }}</li>
+    {% endfor %}
+</ul>
 
 {% endblock %}

@@ -17,7 +17,6 @@ def is_setup():
         app.logger.info("No 'keys' environment variable set for this run. Set an in-container path to mnemonic.txt.")
         return False
     keys = os.environ['keys'].split(':')
-    app.logger.info("Entire 'keys' env-var is: {0}".format(keys))
     foundKey = False
     for key in keys:
         if os.path.exists(key):

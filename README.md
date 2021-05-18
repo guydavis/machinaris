@@ -1,6 +1,6 @@
 # machinaris
 
-A pure-Docker solution for plotting and farming the Chia™ cryptocurrency.  Currently in an [early *beta*](https://github.com/users/guydavis/packages/container/package/machinaris)!
+A pure-Docker solution for plotting and farming the Chia™ cryptocurrency.  Currently in [*beta*](https://github.com/users/guydavis/packages/container/package/machinaris)!
 
 ![Home](./docs/img/machinaris_home.png)
 

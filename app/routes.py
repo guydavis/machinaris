@@ -118,11 +118,9 @@ def settings_farming():
 def settings_keys():
     gc = global_config.load()
     keys = chia_cli.load_keys_show()
-    keys_file = 'Not set'
-    if 'keys' in os.environ:
-        keys_file = os.environ['keys']
-    return render_template('settings/keys.html', keys=keys.text, keys_file=keys_file, 
-        global_config=gc)
+    key_paths = global_config.get_key_paths()
+    return render_template('settings/keys.html', keys=keys.text, 
+        key_paths=key_paths, global_config=gc)
 
 @app.route('/settings/alerts')
 def settings_alerts():
