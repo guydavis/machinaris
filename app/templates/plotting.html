@@ -3,9 +3,7 @@
 {% block content %}
 
 <header class="pb-3 mb-4 border-bottom">
-    <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-        <span class="fs-4">Plotting Status: {{ plotting.display_status }}</span>
-    </a>
+    <span class="fs-4">Plotting Status: {{ plotting.display_status }}</span>
 </header>
 
 <div>
@@ -46,18 +44,32 @@
     </div>
 
     <form method="POST" id="main-form">
-        <fieldset {% if plotting.display_status=="Active" %} disabled {% endif %}>
-            <input type="hidden" id="action" name="action" value="plot_on" />
-            <button type="submit" class="btn btn-outline-success" id="btnFetch">Plot On!</button>
+        {% if not plotting.plotman_running %}
+        <fieldset>
+            <input type="hidden" id="action" name="action" value="start" />
+            <button type="submit" class="btn btn-outline-success" id="btnStart" title="Plotman is currently stopped.">Plot On!</button>
         </fieldset>
+        {% else %} 
+        <fieldset>
+            <input type="hidden" id="action" name="action" value="stop" />
+            <button type="submit" class="btn btn-outline-success" id="btnStop" title="Plotman is currently running.">Stop Plotman</button>
+        </fieldset>
+        {% endif %}
     </form>
 
     <script>
         $(document).ready(function () {
-            $("#btnFetch").click(function () {
+            $("#btnStart").click(function () {
                 $(this).prop("disabled", true);
                 $(this).html(
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Starting...`
+                );
+                $("#main-form").submit();
+            });
+            $("#btnStop").click(function () {
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Stopping...`
                 );
                 $("#main-form").submit();
             });

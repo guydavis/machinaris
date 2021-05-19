@@ -42,8 +42,10 @@ def setup():
 def plotting():
     gc = global_config.load()
     if request.method == 'POST':
-        if request.form.get('action') == 'plot_on':
-            plotman_cli.start_plot_run()
+        if request.form.get('action') == 'start':
+            plotman_cli.start_plotman()
+        elif request.form.get('action') == 'stop':
+            plotman_cli.stop_plotman()
         else:
             app.logger.info("Plotting form submitted: {0}".format(request.form))
     plotting = plotman_cli.load_plotting_summary()

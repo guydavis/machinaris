@@ -2,8 +2,11 @@
 # CLI interactions with the plotman script.
 #
 
+from app.models.plotman import PID_FILE
 import datetime
 import os
+import psutil
+import signal
 import shutil
 import time
 import traceback
@@ -41,11 +44,11 @@ def load_plotting_summary():
     
     cli_stdout = outs.decode('utf-8')
     #app.logger.info("Here is: {0}".format(cli_stdout))
-    last_plotting_summary = plotman.PlottingSummary(cli_stdout.splitlines())
+    last_plotting_summary = plotman.PlottingSummary(cli_stdout.splitlines(), get_plotman_pid())
     last_plotting_summary_load_time = datetime.datetime.now()
     return last_plotting_summary
 
-def start_plot_run():
+def start_plotman():
     global last_plotting_summary
     app.logger.info("Starting Plotman run....")
     try:
@@ -55,13 +58,32 @@ def start_plot_run():
         proc = Popen("{0} {1} </dev/tty".format(PLOTMAN_SCRIPT,'plot'), \
             shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
     except:
-        traceback.print_exc()
+        app.logger.info(traceback.format_exc())
         flash('Failed to start Plotman plotting run!', 'danger')
         flash('Please look in: {0}'.format(logfile), 'warning')
     else:
         last_plotting_summary = None # Force a refresh on next load
         flash('Plotman started successfully.', 'success')
-        time.sleep(5) # Wait for Plotman to start a plot running for display in table
+        time.sleep(3) # Wait for Plotman to start a plot running for display in table
+
+def get_plotman_pid():
+    for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
+        if proc.info['name'] == 'plotman':
+            return proc.info['pid']
+    return None
+
+def stop_plotman():
+    global last_plotting_summary
+    app.logger.info("Stopping Plotman run....")
+    try:
+        os.kill(get_plotman_pid(), signal.SIGTERM)
+    except:
+        app.logger.info(traceback.format_exc())
+        flash('Failed to stop Plotman plotting run!', 'danger')
+        flash('Please look in /root/.chia/plotman/logs/plotman.log', 'warning')
+    else:
+        last_plotting_summary = None # Force a refresh on next load
+        flash('Plotman stopped successfully.  No new plots will started, existing ones will continue.', 'success')
 
 def save_config(config):
     try:
@@ -75,7 +97,7 @@ def save_config(config):
         with open(src, 'w') as writer:
             writer.write(config)
     except Exception as ex:
-        traceback.print_exc()
+        app.logger.info(traceback.format_exc())
         flash('Updated plotman.yaml failed validation! Fix and save or refresh page.', 'danger')
         flash(str(ex), 'warning')
     else:
