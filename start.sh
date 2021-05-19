@@ -16,8 +16,8 @@ mkdir -p /root/.chia/machinaris/logs
 cd /machinaris
 if [ $FLASK_ENV == "development" ];
 then
-    /chia-blockchain/venv/bin/gunicorn --reload --bind 0.0.0.0:8926 app:app > /root/.chia/machinaris/logs/webui.log 2>&1 &
+    /chia-blockchain/venv/bin/gunicorn --reload --bind 0.0.0.0:8926 --log-level=debug app:app > /root/.chia/machinaris/logs/webui.log 2>&1 &
 else
-    /chia-blockchain/venv/bin/gunicorn --bind 0.0.0.0:8926 app:app > /root/.chia/machinaris/logs/webui.log 2>&1 &
+    /chia-blockchain/venv/bin/gunicorn --bind 0.0.0.0:8926 --log-level=info app:app > /root/.chia/machinaris/logs/webui.log 2>&1 &
 fi
 echo 'Completed startup.  Browse to port 8926.'

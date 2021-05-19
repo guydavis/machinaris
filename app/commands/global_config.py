@@ -3,6 +3,7 @@
 #
 
 import os
+import traceback
 
 from app import app
 
@@ -16,14 +17,20 @@ def is_setup():
     if "keys" not in os.environ:
         app.logger.info("No 'keys' environment variable set for this run. Set an in-container path to mnemonic.txt.")
         return False
-    keys = os.environ['keys'].split(':')
+    keys = os.environ['keys']
+    app.logger.info("Trying with full keys='{0}'".format(keys))
     foundKey = False
-    for key in keys:
-        if os.path.exists(key):
+    for key in keys.split(':'):
+        if os.path.exists(key.strip()):
+            app.logger.info("Found key file at: '{0}'".format(key.strip()))
             foundKey = True
         else:
-            app.logger.info("No such keys file: '{0}'".format(key))
-            app.logger.info(os.listdir(key))
+            app.logger.info("No such keys file: '{0}'".format(key.strip()))
+            app.logger.info(os.listdir(os.path.dirname(key.strip())))
+            try:
+                app.logger.info(os.stat(key.strip()))
+            except:
+                app.logger.info(traceback.format_exc())
     return foundKey
 
 def get_key_paths():
