@@ -22,7 +22,8 @@ def is_setup():
         if os.path.exists(key):
             foundKey = True
         else:
-            app.logger.info("No such keys file: {0}".format(key))
+            app.logger.info("No such keys file: '{0}'".format(key))
+            app.logger.info(os.listdir(key))
     return foundKey
 
 def get_key_paths():
