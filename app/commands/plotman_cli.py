@@ -64,7 +64,7 @@ def start_plotman():
     else:
         last_plotting_summary = None # Force a refresh on next load
         flash('Plotman started successfully.', 'success')
-        #time.sleep(3) # Wait for Plotman to start a plot running for display in table
+        time.sleep(5) # Wait for Plotman to start a plot running for display in table
 
 def action_plots(form):
     global last_plotting_summary
@@ -86,7 +86,7 @@ def action_plots(form):
             return
     last_plotting_summary = None # Force a refresh on next load
     flash('Plotman was able to {0} the selected plots successfully.'.format(action), 'success')
-    time.sleep(3) # Wait for Plotman to complete it's actions
+    time.sleep(5) # Wait for Plotman to complete its actions
 
 def get_plotman_pid():
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
