@@ -90,8 +90,12 @@ def network_blockchain():
 def network_connections():
     gc = global_config.load()
     if request.method == 'POST':
-        connection = request.form.get("connection")
-        chia_cli.add_connection(connection)
+        if request.form.get('action') == "add":
+            chia_cli.add_connection(request.form.get("connection"))
+        elif request.form.get('action') == "prune":
+            chia_cli.prune_leechers()
+        else:
+            app.logger.info("Unknown form action: {0}".format(request.form))
     connections = chia_cli.load_connections_show()
     now = datetime.now(tz=None)
     return render_template('network/connections.html', reload_seconds=60, 

@@ -34,10 +34,14 @@
                     <a class="nav-link active" href="{{ url_for('network_connections') }}">Connections</a>
                 </li>
             </ul>
-            <form class="d-flex" method="POST">
+            <form class="d-flex" method="POST" style="padding-bottom:5px" id="main-form">
                 <input class="form-control me-2" id="connection" name="connection" type="text"
-                    placeholder="chiadb.net:8444" aria-label="Add">
-                <button class="btn btn-outline-success" type="submit">Add</button>
+                    placeholder="node.chia.net:8444" aria-label="Add">
+                <button class="btn btn-outline-success text-nowrap" type="submit"
+                    name="action" value="add" id="btnAdd" form="main-form">Add Connection</button>
+                &nbsp;&nbsp;
+                <button class="btn btn-outline-success text-nowrap" hidden type="submit"
+                    name="action" value="prune" id="btnPrune" form="main-form">Prune Leechers</button>
             </form>
         </div>
     </nav>
@@ -47,5 +51,24 @@
             <pre>{{ connections }}</pre>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            $("#btnAdd").click(function () {
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...`
+                );
+                $("#main-form").submit();
+            });
+            $("#btnStop").click(function () {
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Pruning...`
+                );
+                $("#main-form").submit();
+            });
+        })
+    </script>
 
     {% endblock %}
