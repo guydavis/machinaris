@@ -54,7 +54,7 @@ def start_plotman():
     try:
         logfile = "/root/.chia/plotman/logs/plotman.log"
         log_fd = os.open(logfile, os.O_RDWR|os.O_CREAT)
-        log_fo = os.fdopen(log_fd, "w+")
+        log_fo = os.fdopen(log_fd, "a+")
         proc = Popen("{0} {1} </dev/tty".format(PLOTMAN_SCRIPT,'plot'), \
             shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
     except:
@@ -74,10 +74,13 @@ def action_plots(form):
     app.logger.info("About to {0} plots: {1}".format(action, plot_ids))
     for plot_id in plot_ids:
         try:
+            prefix = ""
+            if action == "kill":
+                prefix = "echo 'y' | "
             logfile = "/root/.chia/plotman/logs/plotman.log"
             log_fd = os.open(logfile, os.O_RDWR|os.O_CREAT)
-            log_fo = os.fdopen(log_fd, "w+")
-            proc = Popen("{0} {1} {2}</dev/tty".format(PLOTMAN_SCRIPT, action, plot_id), \
+            log_fo = os.fdopen(log_fd, "a+")
+            proc = Popen("{0} {1} {2} {3} </dev/tty".format(prefix, PLOTMAN_SCRIPT, action, plot_id), \
                 shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
         except:
             app.logger.info(traceback.format_exc())
