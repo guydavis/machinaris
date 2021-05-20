@@ -272,3 +272,40 @@ def generate_key(key_path):
     # Finally send a 'S' to chia wallet show to get past backup prompt on first check
     os.system("echo 'S' | chia wallet show &")
     return True
+
+def remove_connection(node_id, ip):
+    try:
+        proc = Popen("{0} show --remove-connection {1}".format(CHIA_BINARY, node_id), stdout=PIPE, stderr=PIPE, shell=True)
+        try:
+            outs, errs = proc.communicate(timeout=90)
+        except TimeoutExpired:
+            proc.kill()
+            proc.communicate()
+            app.logger.info("The timeout is expired!")
+            return False
+        if errs:
+            app.logger.info(errs.decode('utf-8'))
+            return False
+        if outs:
+            app.logger.info(outs.decode('utf-8'))
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+    app.logger.info("Successfully removed connection to {0}".format(ip))
+    return True
+
+def prune_leechers():
+    global last_connections_show
+    removed = 0
+    connections = load_connections_show()
+    for conn in connections.conns:
+        if conn['type'] == 'FULL_NODE':
+            if (conn['mib_down'] == 0) and (conn['mib_up'] == 0):
+                app.logger.debug("Removing {0} because at {1} was {2} up and {3} down.".format( \
+                  conn['ip'], conn['last_connect'], conn['mib_up'], conn['mib_down']))
+                if remove_connection(conn['nodeid'], conn['ip']):
+                    removed += 1
+    if removed > 0:
+        last_connections_show = None # Force reset on next load.
+        flash('Successfully pruned {0} leechers sitting at 0.0 MiB both up and down.'.format(removed), 'success')
+    else:
+        flash('Found no leechers to remove.  All good!', 'info')

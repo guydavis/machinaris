@@ -32,7 +32,7 @@ def load_plotting_summary():
         return last_plotting_summary
     proc = Popen("{0} {1} < /dev/tty".format(PLOTMAN_SCRIPT,'status'), stdout=PIPE, stderr=PIPE, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=30)
+        outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
@@ -125,4 +125,5 @@ def save_config(config):
         flash(str(ex), 'warning')
     else:
         flash('Nice! plotman.yaml validated and saved successfully.', 'success')
-        flash('NOTE: Currently requires restarting plotman to pickup changes via Docker exec or Container restart.', 'info')
+        if get_plotman_pid():
+            flash('NOTE: Please restart Plotman on the Plotting page to pickup your changes.', 'info')
