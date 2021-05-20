@@ -125,4 +125,5 @@ def save_config(config):
         flash(str(ex), 'warning')
     else:
         flash('Nice! plotman.yaml validated and saved successfully.', 'success')
-        flash('NOTE: Currently requires restarting plotman to pickup changes via Docker exec or Container restart.', 'info')
+        if get_plotman_pid():
+            flash('NOTE: Please restart Plotman on the Plotting page to pickup your changes.', 'info')
