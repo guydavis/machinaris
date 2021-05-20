@@ -30,7 +30,6 @@ def load_plotting_summary():
     if last_plotting_summary and last_plotting_summary_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
         return last_plotting_summary
-
     proc = Popen("{0} {1} < /dev/tty".format(PLOTMAN_SCRIPT,'status'), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=30)
@@ -41,7 +40,6 @@ def load_plotting_summary():
     if errs:
         app.logger.error(errs.decode('utf-8'))
         abort(500, description=errs.decode('utf-8'))
-    
     cli_stdout = outs.decode('utf-8')
     #app.logger.info("Here is: {0}".format(cli_stdout))
     last_plotting_summary = plotman.PlottingSummary(cli_stdout.splitlines(), get_plotman_pid())
@@ -74,14 +72,14 @@ def action_plots(form):
     app.logger.info("About to {0} plots: {1}".format(action, plot_ids))
     for plot_id in plot_ids:
         try:
-            prefix = ""
-            if action == "kill":
-                prefix = "echo 'y' | "
             logfile = "/root/.chia/plotman/logs/plotman.log"
             log_fd = os.open(logfile, os.O_RDWR|os.O_CREAT)
             log_fo = os.fdopen(log_fd, "a+")
-            proc = Popen("{0} {1} {2} {3} </dev/tty".format(prefix, PLOTMAN_SCRIPT, action, plot_id), \
-                shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
+            proc = Popen("{0} {1} {2} </dev/tty".format(PLOTMAN_SCRIPT, action, plot_id), \
+                shell=True, universal_newlines=True, stdin=PIPE, stdout=log_fo, stderr=log_fo)
+            if action == "kill":
+                time.sleep(2) # Wait for Plotman to prompt confirmation
+                proc.communicate('y')
         except:
             app.logger.info(traceback.format_exc())
             flash('Failed to {0} selected plot {1}.'.format(action, plot_id), 'danger')
