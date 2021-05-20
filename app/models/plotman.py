@@ -1,8 +1,13 @@
+import os
+import traceback
+
 from app import app
+
+PID_FILE = '/root/.chia/plotman/plotman.pid'
 
 class PlottingSummary:
 
-    def __init__(self, cli_stdout):
+    def __init__(self, cli_stdout, plotman_pid):
         self.rows = []
         for line in cli_stdout:
             if "plot id" in line.strip(): # The header row
@@ -16,9 +21,14 @@ class PlottingSummary:
                     i += 1
                 self.rows.append(row)
         self.calc_status()
+        app.logger.debug("plotman_pid: {0}".format(plotman_pid))
+        if plotman_pid:
+            self.plotman_running = True
+        else:
+            self.plotman_running = False
 
     def calc_status(self):
         if len(self.rows) > 0:
             self.display_status = "Active"
         else:
-            self.display_status = "Idle"
+            self.display_status = "Idle"       

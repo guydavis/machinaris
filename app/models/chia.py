@@ -1,3 +1,5 @@
+import os
+
 from datetime import datetime
 
 from app import app
@@ -60,15 +62,16 @@ class FarmSummary:
 class FarmPlots:
 
      def __init__(self, entries):
-        self.columns = ['dir', 'plot', 'mod_date', 'size']
+        self.columns = ['dir', 'plot', 'create_date', 'size']
         self.rows = []
-        for st_mtime, st_size, path in entries:
+        for st_ctime, st_size, path in entries:
             if not path.endswith(".plot"):
                 app.logger.info("Skipping non-plot file named: {0}".format(path))
                 continue
-            self.rows.append({ 'dir': '/plots',  \
-                'plot': path[len('/plots/'): ],  \
-                'mod_date': datetime.utcfromtimestamp(int(st_mtime)).strftime('%Y-%m-%d %H:%M:%S'), \
+            dir,file=os.path.split(path)
+            self.rows.append({ 'dir': dir,  \
+                'plot': file,  \
+                'create_date': datetime.utcfromtimestamp(int(st_ctime)).strftime('%Y-%m-%d %H:%M:%S'), \
                 'size': int(st_size) }) 
 
 class Wallet:

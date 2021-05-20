@@ -8,6 +8,8 @@
     </a>
 </header>
 
+<h5>Found {{ plots.rows | length }} total plots.</h5>
+
 <div class="table-responsive">
     <table class="table table-dark">
         <thead>
@@ -21,7 +23,11 @@
             {% for row in plots.rows %}
             <tr>
                 {% for column in plots.columns %}
-                    <td>{{ row[column] }}</td>
+                {% if column == "size" %}
+                <td>{{ row[column] | bytesfilter}}</td>
+                {% else %}
+                <td>{{ row[column] }}</td>
+                {% endif %}
                 {% endfor %}
             </tr>
             {% endfor %}
