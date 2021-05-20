@@ -9,6 +9,9 @@ sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/confi
 
 echo 'Configuring Plotman...'
 mkdir -p /root/.chia/plotman/logs
+# Temporarily migrate users with original plotman logs path
+if [ -f /root/.chia/plotman/plotman.yaml ]; then
+    sed -i 's/\/root\/.chia\/logs/\/root\/.chia\/plotman\/logs/g' /root/.chia/plotman/plotman.yaml
 cp -n /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.yaml
 
 echo 'Starting Machinaris...'

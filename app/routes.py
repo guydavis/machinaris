@@ -42,12 +42,15 @@ def setup():
 def plotting():
     gc = global_config.load()
     if request.method == 'POST':
+        app.logger.info("Form submitted: {0}".format(request.form))
         if request.form.get('action') == 'start':
             plotman_cli.start_plotman()
         elif request.form.get('action') == 'stop':
             plotman_cli.stop_plotman()
+        elif request.form.get('action') in ['suspend', 'resume', 'kill']:
+            plotman_cli.action_plots(request.form)
         else:
-            app.logger.info("Plotting form submitted: {0}".format(request.form))
+            app.logger.info("Unknown plotting form: {0}".format(request.form))
     plotting = plotman_cli.load_plotting_summary()
     now = datetime.now(tz=None)
     return render_template('plotting.html', reload_seconds=60, now=now, plotting=plotting, 

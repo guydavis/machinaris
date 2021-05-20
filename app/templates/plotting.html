@@ -22,28 +22,8 @@
         {% endwith %}
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-dark">
-            <thead>
-                <tr>
-                    {% for column in plotting.columns %}
-                    <th scope="col" class="text-success">{{ column }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in plotting.rows %}
-                <tr>
-                    {% for column in plotting.columns %}
-                    <td>{{ row[column] }}</td>
-                    {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
 
-    <form method="POST" id="main-form">
+    <form method="POST" id="plotman-form" style="padding-bottom: 10px;">
         {% if not plotting.plotman_running %}
         <fieldset>
             <input type="hidden" id="action" name="action" value="start" />
@@ -57,6 +37,39 @@
         {% endif %}
     </form>
 
+    <form method="POST" id="plotting-form">
+        <div class="table-responsive">
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-success">{{ column }}</th>
+                        {% for column in plotting.columns %}
+                        <th scope="col" class="text-success">{{ column }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in plotting.rows %}
+                    <tr>
+                        <td class="text-center"><input type="checkbox" name="plot_id" value="{{ row['plot_id'] }}"/></td>
+                        {% for column in plotting.columns %}
+                        <td>{{ row[column] }}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if plotting.rows|length > 0 %}
+        <fieldset>
+            <button form="plotting-form" type="submit" name="action" value="suspend" class="btn btn-outline-success" id="btnSuspend">Suspend Selected</button>
+            <button form="plotting-form" type="submit" name="action" value="resume" class="btn btn-outline-success" id="btnResume">Resume Selected</button>
+            <button form="plotting-form" type="submit" name="action" value="kill" class="btn btn-outline-success" id="btnKill">Kill Selected</button>
+        </fieldset>
+        {% endif %}
+    </form>
+
     <script>
         $(document).ready(function () {
             $("#btnStart").click(function () {
@@ -64,14 +77,38 @@
                 $(this).html(
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Starting...`
                 );
-                $("#main-form").submit();
+                $("#plotman-form").submit();
             });
             $("#btnStop").click(function () {
                 $(this).prop("disabled", true);
                 $(this).html(
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Stopping...`
                 );
-                $("#main-form").submit();
+                $("#plotman-form").submit();
+            });
+            $("#btnSuspend").click(function () {
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Suspending...`
+                );
+                $('#plotting-form').append('<input type="hidden" id="action" name="action" value="suspend" />');
+                $("#plotting-form").submit();
+            });
+            $("#btnResume").click(function () {
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Resuming...`
+                );
+                $('#plotting-form').append('<input type="hidden" id="action" name="action" value="resume" />');
+                $("#plotting-form").submit();
+            });
+            $("#btnKill").click(function () {
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Killing...`
+                );
+                $('#plotting-form').append('<input type="hidden" id="action" name="action" value="kill" />');
+                $("#plotting-form").submit();
             });
         })
     </script>

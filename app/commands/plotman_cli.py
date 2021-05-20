@@ -60,15 +60,37 @@ def start_plotman():
     except:
         app.logger.info(traceback.format_exc())
         flash('Failed to start Plotman plotting run!', 'danger')
-        flash('Please look in: {0}'.format(logfile), 'warning')
+        flash('Please see: {0}'.format(logfile), 'warning')
     else:
         last_plotting_summary = None # Force a refresh on next load
         flash('Plotman started successfully.', 'success')
-        time.sleep(3) # Wait for Plotman to start a plot running for display in table
+        #time.sleep(3) # Wait for Plotman to start a plot running for display in table
+
+def action_plots(form):
+    global last_plotting_summary
+    app.logger.info("Actioning plots....")
+    action = form.get('action')
+    plot_ids = form.getlist('plot_id')
+    app.logger.info("About to {0} plots: {1}".format(action, plot_ids))
+    for plot_id in plot_ids:
+        try:
+            logfile = "/root/.chia/plotman/logs/plotman.log"
+            log_fd = os.open(logfile, os.O_RDWR|os.O_CREAT)
+            log_fo = os.fdopen(log_fd, "w+")
+            proc = Popen("{0} {1} {2}</dev/tty".format(PLOTMAN_SCRIPT, action, plot_id), \
+                shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
+        except:
+            app.logger.info(traceback.format_exc())
+            flash('Failed to {0} selected plot {1}.'.format(action, plot_id), 'danger')
+            flash('Please see: {0}'.format(logfile), 'warning')
+            return
+    last_plotting_summary = None # Force a refresh on next load
+    flash('Plotman was able to {0} the selected plots successfully.'.format(action), 'success')
+    time.sleep(3) # Wait for Plotman to complete it's actions
 
 def get_plotman_pid():
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-        if proc.info['name'] == 'plotman':
+        if proc.info['name'] == 'plotman' and 'plot' in proc.info['cmdline']:
             return proc.info['pid']
     return None
 
@@ -80,10 +102,10 @@ def stop_plotman():
     except:
         app.logger.info(traceback.format_exc())
         flash('Failed to stop Plotman plotting run!', 'danger')
-        flash('Please look in /root/.chia/plotman/logs/plotman.log', 'warning')
+        flash('Please see /root/.chia/plotman/logs/plotman.log', 'warning')
     else:
         last_plotting_summary = None # Force a refresh on next load
-        flash('Plotman stopped successfully.  No new plots will started, existing ones will continue.', 'success')
+        flash('Plotman stopped successfully.  No new plots will be started, but existing ones will continue on.', 'success')
 
 def save_config(config):
     try:

@@ -21,7 +21,7 @@ class PlottingSummary:
                     i += 1
                 self.rows.append(row)
         self.calc_status()
-        app.logger.info("plotman_pid: {0}".format(plotman_pid))
+        app.logger.debug("plotman_pid: {0}".format(plotman_pid))
         if plotman_pid:
             self.plotman_running = True
         else:

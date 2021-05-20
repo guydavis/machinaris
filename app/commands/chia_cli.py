@@ -11,7 +11,7 @@ import traceback
 import yaml
 
 from flask import Flask, jsonify, abort, request, flash
-from stat import S_ISREG, ST_MTIME, ST_MODE, ST_SIZE
+from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
 from subprocess import Popen, TimeoutExpired, PIPE
 from os import path
 
@@ -58,11 +58,14 @@ def load_plots_farming():
     if last_plots_farming and last_plots_farming_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
         return last_plots_farming
-    dir_path = '/plots' # TODO Pull list from 'chia plots show'
-    entries = (os.path.join(dir_path, file_name) for file_name in os.listdir(dir_path))
-    entries = ((os.stat(path), path) for path in entries)
-    entries = ((stat[ST_MTIME], stat[ST_SIZE], path) for stat, path in entries if S_ISREG(stat[ST_MODE]))
-    last_plots_farming = chia.FarmPlots(entries)
+    all_entries = []
+    for dir_path in os.environ['plots_dir'].split(':'):
+        entries = (os.path.join(dir_path, file_name) for file_name in os.listdir(dir_path))
+        entries = ((os.stat(path), path) for path in entries)
+        entries = ((stat[ST_CTIME], stat[ST_SIZE], path) for stat, path in entries if S_ISREG(stat[ST_MODE]))
+        all_entries.extend(entries)
+    all_entries = sorted(all_entries, key=lambda entry: entry[0], reverse=True)
+    last_plots_farming = chia.FarmPlots(all_entries)
     last_plots_farming_load_time = datetime.datetime.now()
     return last_plots_farming
 
