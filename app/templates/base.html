@@ -13,6 +13,7 @@
     <meta http-equiv="refresh" content="{{ reload_seconds }}">
     {% endif %}
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}"/>
 </head>
 
 <body>
@@ -28,7 +29,7 @@
                         id="menu">
                         <li class="nav-item">
                             <a href="{{ url_for('index') }}" class="nav-link px-0 align-middle text-success">
-                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline ">Home</span>
+                                <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline ">Summary</span>
                             </a>
                         </li>
                         {% if not global_config.farming_only %}
@@ -48,7 +49,8 @@
                                 <i class="fs-4 bi-wallet"></i> <span class="ms-1 d-none d-sm-inline">Wallet</span></a>
                         </li>
                         <li>
-                            <a href="{{ url_for('network_blockchain') }}" class="nav-link px-0 align-middle text-success">
+                            <a href="{{ url_for('network_blockchain') }}"
+                                class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-globe"></i> <span class="ms-1 d-none d-sm-inline">Network</span></a>
                         </li>
                         {% endif %}
@@ -86,7 +88,7 @@
                     </ul>
                     <hr>
                     <div class="dropdown pb-4">
-                        <a href="https://github.com/guydavis/machinaris" target="_blank" title="Version 0.2"
+                        <a href="https://github.com/guydavis/machinaris" target="_blank"
                             class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                             id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fs-4 bi-github"></i>&nbsp;<span class="ms-1 d-none d-sm-inline">About</span> </a>
@@ -107,12 +109,25 @@
                 </div>
             </div>
             <div class="col py-3">
+
                 {% block content %}{% endblock %}
-                {% if reload_seconds %}
-                <footer class="pt-3 mt-4 text-muted border-top ">
-                    <small><i>Page refreshed at {{ now }}</i></small>
+
+                <footer class="pt-3 mt-4">
+                        <div class="row">
+                          <div class="col">
+                            <small><i>Loaded: {{ global_config.now }}</i></small>
+                          </div>
+                          <div class="col">
+                            <small><i>Machinaris {{ global_config.machinaris_version }}</i></small>
+                          </div>
+                          <div class="col">
+                            <small><i>Plotman {{ global_config.plotman_version }}</i></small>
+                          </div>
+                          <div class="col">
+                            <small><i>Chia™ {{ global_config.chia_version }}</i></small>
+                          </div>
+                      </div>
                 </footer>
-                {% endif %}
             </div>
         </div>
     </div>

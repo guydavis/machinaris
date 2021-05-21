@@ -23,7 +23,7 @@ ENV FLASK_APP=/machinaris/main.py
 ENV XDG_CONFIG_HOME=/root/.chia
 
 COPY . /machinaris/
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata && \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata && . /machinaris/patch_chia.sh && \
    /chia-blockchain/venv/bin/pip3 install git+https://github.com/ericaltendorf/plotman@main && \
    venv/bin/pip3 install -r /machinaris/requirements.txt && \
    cp -f /machinaris/entrypoint.sh /chia-blockchain/ && \

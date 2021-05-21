@@ -8,7 +8,7 @@ To get started with Machinaris, follow an install guide for your platform: [Wind
 
 ## Plotting View
 
-[Plotman](https://github.com/ericaltendorf/plotman) is used manage staggered/parallel plotting jobs, also exposed via the Machinaris web interface:
+[Plotman](https://github.com/ericaltendorf/plotman) manages staggered/parallel plotting jobs, also exposed via the Machinaris web interface:
 
 ![Plotting](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_plotting.png)
 
