@@ -25,14 +25,13 @@
     </div>
 
     <style>
-        a.active.nav-link{background-color: #212529!important }
-        a.inactive.nav-link{background-color: darkgrey!important }
+        a.active.nav-link{background-color: #3d3f42!important }
     </style>
     <nav class="navbar navbar-dark" style="padding-bottom: 0px;">
         <div class="container-fluid">
             <ul class="nav nav-tabs bg-dark">
                 <li class="nav-item">
-                    <a class="nav-link inactive" aria-current="page" href="{{ url_for('network_blockchain') }}">Blockchain</a>
+                    <a class="nav-link" aria-current="page" href="{{ url_for('network_blockchain') }}">Blockchain</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('network_connections') }}">Connections</a>
