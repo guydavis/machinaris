@@ -88,9 +88,9 @@ def load_chia_version():
     if errs:
         abort(500, description=errs.decode('utf-8'))
     last_chia_version = outs.decode('utf-8').strip()
-    if last_chia_version.endswith('.dev0'):
+    if '.dev' in last_chia_version:
         sem_ver = last_chia_version.split('.')
-        last_chia_version = sem_ver[0] + '.' + sem_ver[1] + '.' + str(int(sem_ver[2])-1)
+        last_chia_version = sem_ver[0] + '.' + sem_ver[1] + '.' + sem_ver[2]
     last_chia_version_load_time = datetime.datetime.now()
     return last_chia_version
 
