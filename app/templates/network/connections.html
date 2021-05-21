@@ -24,11 +24,15 @@
         {% endwith %}
     </div>
 
-    <nav class="navbar navbar-light" style="padding-bottom: 0px;">
+    <style>
+        a.active.nav-link{background-color: #212529!important }
+        a.inactive.nav-link{background-color: darkgrey!important }
+    </style>
+    <nav class="navbar navbar-dark" style="padding-bottom: 0px;">
         <div class="container-fluid">
-            <ul class="nav nav-tabs">
+            <ul class="nav nav-tabs bg-dark">
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="{{ url_for('network_blockchain') }}">Blockchain</a>
+                    <a class="nav-link inactive" aria-current="page" href="{{ url_for('network_blockchain') }}">Blockchain</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ url_for('network_connections') }}">Connections</a>
@@ -37,11 +41,8 @@
             <form class="d-flex" method="POST" style="padding-bottom:5px" id="main-form">
                 <input class="form-control me-2" id="connection" name="connection" type="text"
                     placeholder="node.chia.net:8444" aria-label="Add">
-                <button class="btn btn-outline-success text-nowrap" type="submit"
-                    name="action" value="add" id="btnAdd" form="main-form">Add Connection</button>
-                &nbsp;&nbsp;
-                <button class="btn btn-outline-success text-nowrap" hidden type="submit"
-                    name="action" value="prune" id="btnPrune" form="main-form">Prune Leechers</button>
+                <button class="btn btn-outline-success text-nowrap" type="submit" name="action" value="add" id="btnAdd"
+                    form="main-form">Add Connection</button>
             </form>
         </div>
     </nav>
@@ -59,6 +60,7 @@
                 $(this).html(
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...`
                 );
+                $('#main-form').append('<input type="hidden" id="action" name="action" value="add" />');
                 $("#main-form").submit();
             });
             $("#btnStop").click(function () {
@@ -66,6 +68,7 @@
                 $(this).html(
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Pruning...`
                 );
+                $('#main-form').append('<input type="hidden" id="action" name="action" value="prune" />');
                 $("#main-form").submit();
             });
         })

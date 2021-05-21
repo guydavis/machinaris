@@ -292,20 +292,3 @@ def remove_connection(node_id, ip):
         app.logger.info(traceback.format_exc())
     app.logger.info("Successfully removed connection to {0}".format(ip))
     return True
-
-def prune_leechers():
-    global last_connections_show
-    removed = 0
-    connections = load_connections_show()
-    for conn in connections.conns:
-        if conn['type'] == 'FULL_NODE':
-            if (conn['mib_down'] == 0) and (conn['mib_up'] == 0):
-                app.logger.debug("Removing {0} because at {1} was {2} up and {3} down.".format( \
-                  conn['ip'], conn['last_connect'], conn['mib_up'], conn['mib_down']))
-                if remove_connection(conn['nodeid'], conn['ip']):
-                    removed += 1
-    if removed > 0:
-        last_connections_show = None # Force reset on next load.
-        flash('Successfully pruned {0} leechers sitting at 0.0 MiB both up and down.'.format(removed), 'success')
-    else:
-        flash('Found no leechers to remove.  All good!', 'info')

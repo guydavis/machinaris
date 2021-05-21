@@ -21,8 +21,7 @@ def index():
         return redirect(url_for('setup'))
     farming = chia_cli.load_farm_summary()
     plotting = plotman_cli.load_plotting_summary()
-    now = datetime.now(tz=None)
-    return render_template('index.html', reload_seconds=60, now=now,
+    return render_template('index.html', reload_seconds=60, 
         farming=farming.__dict__, plotting=plotting.__dict__, 
         global_config=gc)
 
@@ -52,8 +51,7 @@ def plotting():
         else:
             app.logger.info("Unknown plotting form: {0}".format(request.form))
     plotting = plotman_cli.load_plotting_summary()
-    now = datetime.now(tz=None)
-    return render_template('plotting.html', reload_seconds=60, now=now, plotting=plotting, 
+    return render_template('plotting.html', reload_seconds=60,  plotting=plotting, 
         global_config=gc)
 
 @app.route('/farming')
@@ -61,8 +59,7 @@ def farming():
     gc = global_config.load()
     farming = chia_cli.load_farm_summary()
     plots = chia_cli.load_plots_farming()
-    now = datetime.now(tz=None)
-    return render_template('farming.html', now=now, farming=farming, plots=plots, 
+    return render_template('farming.html',  farming=farming, plots=plots, 
         global_config=gc)
 
 @app.route('/alerts')
@@ -82,9 +79,8 @@ def wallet():
 def network_blockchain():
     gc = global_config.load()
     blockchain = chia_cli.load_blockchain_show()
-    now = datetime.now(tz=None)
     return render_template('network/blockchain.html', reload_seconds=60, 
-        blockchain=blockchain.text, global_config=gc, now=now)
+        blockchain=blockchain.text, global_config=gc, now=gc['now'])
 
 @app.route('/network/connections', methods=['GET', 'POST'])
 def network_connections():
@@ -92,14 +88,11 @@ def network_connections():
     if request.method == 'POST':
         if request.form.get('action') == "add":
             chia_cli.add_connection(request.form.get("connection"))
-        elif request.form.get('action') == "prune":
-            chia_cli.prune_leechers()
         else:
             app.logger.info("Unknown form action: {0}".format(request.form))
     connections = chia_cli.load_connections_show()
-    now = datetime.now(tz=None)
     return render_template('network/connections.html', reload_seconds=60, 
-        connections=connections.text, global_config=gc, now=now)
+        connections=connections.text, global_config=gc, now=gc['now'])
 
 @app.route('/settings/plotting', methods=['GET', 'POST'])
 def settings_plotting():
