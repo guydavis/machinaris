@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file. The format 
 ## [0.2.1] - 2021-05-21
 
 - Dark mode CSS patch contributed by Hukuma1.  Looks great! Thanks for the help!
-- Patch to latest Chia binaries version at 1.1.6, display versions on page footer.
+- Patch to latest Chia binaries version at 1.1.6.  Thanks to ChrisM! Nice solution!
 - Fix broken 'Add Connection' button on Network | Connections page.
 
 ## [0.2] - 2021-05-20
