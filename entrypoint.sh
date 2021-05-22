@@ -50,6 +50,9 @@ if [[ ${testnet} == "true" ]]; then
   fi
 fi
 
+# Once per launch, try to get past wallet prompt
+echo 'S' | chia wallet show > /dev/null || true
+
 # Launch Machinaris web server and other services
 /machinaris/scripts/start-machinaris.sh
 
