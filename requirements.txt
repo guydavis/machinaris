@@ -1,5 +1,5 @@
 flask
+Flask-SQLAlchemy
 gunicorn
 pytz
-sqlite3
 wheel
