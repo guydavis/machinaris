@@ -19,6 +19,10 @@ from app import app
 from app.models import chia
 from app.commands import global_config
 
+# Hard-coded verson numbers for now
+MACHINARIS_VERSION="0.3.0"
+CHIADOG_VERSION="0.5.1" # See https://github.com/martomi/chiadog/releases
+
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 
@@ -29,7 +33,8 @@ def load():
     cfg['plotting_only'] = plotting_only()
     cfg['farming_only'] = farming_only()
     cfg['now'] = datetime.datetime.now(tz=None).strftime("%Y-%m-%d %H:%M:%S")
-    cfg['machinaris_version'] = "0.2.1" # TODO Get this from tag?
+    cfg['machinaris_version'] = MACHINARIS_VERSION
+    cfg['chiadog_version'] = CHIADOG_VERSION
     cfg['plotman_version'] = load_plotman_version()
     cfg['chia_version'] = load_chia_version()
     return cfg

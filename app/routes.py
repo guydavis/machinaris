@@ -5,7 +5,7 @@ from datetime import datetime
 from flask import Flask, flash, redirect, render_template, request, session, url_for, send_from_directory
 
 from app import app
-from app.commands import chia_cli, plotman_cli, global_config
+from app.commands import global_config, chia_cli, plotman_cli, chiadog_cli
 
 @app.route('/')
 def landing():
@@ -124,10 +124,15 @@ def settings_keys():
     return render_template('settings/keys.html', keys=keys.text, 
         key_paths=key_paths, global_config=gc)
 
-@app.route('/settings/alerts')
+@app.route('/settings/alerts', methods=['GET', 'POST'])
 def settings_alerts():
     gc = global_config.load()
-    return render_template('settings/alerts.html', 
+    if request.method == 'POST':
+        config = request.form.get("chiadog")
+        chiadog_cli.save_config(config)
+    else: # Load config fresh from disk
+        config = open('/root/.chia/chiadog/config.yaml','r').read()
+    return render_template('settings/alerts.html', config=config, 
         global_config=gc)
 
 @app.route('/favicon.ico')
