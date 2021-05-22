@@ -24,6 +24,7 @@ ENV FLASK_APP=/machinaris/main.py
 ENV XDG_CONFIG_HOME=/root/.chia
 
 # Base install of official Chia binaries at given branch
+ARG CHIA_BRANCH
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
    DEBIAN_FRONTEND=noninteractive apt-get install -y curl jq python3 \
    ansible tar bash ca-certificates git openssl unzip wget python3-pip \

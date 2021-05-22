@@ -50,7 +50,7 @@ if [[ ${testnet} == "true" ]]; then
   fi
 fi
 
-# Launch Machinaris web server
-/machinaris/start.sh
+# Launch Machinaris web server and other services
+/machinaris/scripts/start-machinaris.sh
 
 while true; do sleep 30; done;

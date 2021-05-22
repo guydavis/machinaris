@@ -38,5 +38,12 @@ Details on Blockchain and Connection status as well:
 
 ![Connections](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_network.png)
 
+## Container CLI
+
+While the WebUI is useful for quick and easy access, you also have the full power of a shell commandline (CLI) in the running Machinaris container.  All binaries are available to execute advanced commands as shown below:
+
+![ContainerCLI](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_container_cli.png)
+
+
 ## Trademark Notice
 CHIA NETWORK INC, CHIA™, the CHIA BLOCKCHAIN™, the CHIA PROTOCOL™, CHIALISP™ and the “leaf Logo” (including the leaf logo alone when it refers to or indicates Chia), are trademarks or registered trademarks of Chia Network, Inc., a Delaware corporation. *There is no affliation between this Machinaris project and the main Chia Network project.*
