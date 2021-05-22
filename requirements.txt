@@ -2,3 +2,4 @@ flask
 gunicorn
 pytz
 sqlite3
+wheel

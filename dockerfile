@@ -43,7 +43,7 @@ RUN . /machinaris/scripts/chiadog_install.sh && \
    /chia-blockchain/venv/bin/pip3 install git+https://github.com/ericaltendorf/plotman@main && \
    venv/bin/pip3 install -r /machinaris/requirements.txt && \
    cp -f /machinaris/entrypoint.sh /chia-blockchain/ && \
-   chmod 755 /machinaris/start.sh /chia-blockchain/entrypoint.sh 
+   chmod 755 /machinaris/scripts/* /chia-blockchain/entrypoint.sh 
 
 WORKDIR /chia-blockchain
 ENTRYPOINT ["bash", "./entrypoint.sh"]
