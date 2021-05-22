@@ -29,8 +29,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
    ansible tar bash ca-certificates git openssl unzip wget python3-pip \
    sudo acl build-essential python3-dev python3.8-venv python3.8-distutils \
    apt nfs-common python-is-python3 vim tzdata sqlite3
-RUN echo "Cloning ${BRANCH}"
-RUN git clone --branch ${BRANCH} https://github.com/Chia-Network/chia-blockchain.git \
+RUN echo "Cloning ${CHIA_BRANCH}"
+RUN git clone --branch ${CHIA_BRANCH} https://github.com/Chia-Network/chia-blockchain.git \
    && cd chia-blockchain \
    && git submodule update --init mozilla-ca \
    && chmod +x install.sh \

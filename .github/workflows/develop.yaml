@@ -4,12 +4,6 @@ on:
   push:
     branches:
       - 'develop'
-  workflow_dispatch:
-    inputs:
-      upstream_branch:
-        description: 'Chia branch to clone'
-        required: true
-        default: '1.1.6'
 
 jobs:
   docker:
@@ -45,7 +39,7 @@ jobs:
           platforms: linux/amd64
           push: true
           build-args: |
-            "BRANCH=${{ github.event.inputs.upstream_branch }}"
+            "CHIA_BRANCH=1.1.6"
           tags: |
             guydavis/machinaris:develop
             ghcr.io/guydavis/machinaris:develop
