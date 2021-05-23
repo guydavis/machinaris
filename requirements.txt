@@ -1,3 +1,5 @@
 flask
+Flask-SQLAlchemy
 gunicorn
 pytz
+wheel

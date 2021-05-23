@@ -4,8 +4,9 @@
 A huge thank-you to the great teams/devs behind these projects, being used by Machinaris:
 
 ## Core Components
-* [Chia™](https://www.chia.net/): the distributed cryptocurrency project offering a green money alternative. 
-* [Plotman](https://github.com/ericaltendorf/plotman): the outstanding parallel plotting manager
+* [Chia™](https://www.chia.net/): the distributed cryptocurrency project.
+* [Plotman](https://github.com/ericaltendorf/plotman): a parallel plotting manager.
+* [Chiadog](https://github.com/martomi/chiadog): a log monitor with alerting.
 
 ## Web Application
 * [Flask](https://flask.palletsprojects.com/en/2.0.x/): Web UI application server.
@@ -34,6 +35,4 @@ A big thanks to all that contributed with dev and test including:
 * yass15
 
 ## Trademark Notice
-CHIA NETWORK INC, CHIA™, the CHIA BLOCKCHAIN™, the CHIA PROTOCOL™, CHIALISP™ and the “leaf Logo” (including the leaf logo alone when it refers to or indicates Chia), are trademarks or registered trademarks of Chia Network, Inc., a Delaware corporation.  
-
-*There is no affliation between this Machinaris project and the main Chia Network project.*
+CHIA NETWORK INC, CHIA™, the CHIA BLOCKCHAIN™, the CHIA PROTOCOL™, CHIALISP™ and the “leaf Logo” (including the leaf logo alone when it refers to or indicates Chia), are trademarks or registered trademarks of Chia Network, Inc., a Delaware corporation.  *There is no affliation between this Machinaris project and the main Chia Network project.*

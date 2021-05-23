@@ -5,7 +5,7 @@ from datetime import datetime
 from flask import Flask, flash, redirect, render_template, request, session, url_for, send_from_directory
 
 from app import app
-from app.commands import chia_cli, plotman_cli, global_config
+from app.commands import global_config, chia_cli, plotman_cli, chiadog_cli
 
 @app.route('/')
 def landing():
@@ -59,14 +59,24 @@ def farming():
     gc = global_config.load()
     farming = chia_cli.load_farm_summary()
     plots = chia_cli.load_plots_farming()
-    return render_template('farming.html',  farming=farming, plots=plots, 
+    chia_cli.compare_plot_counts(gc, farming, plots)
+    return render_template('farming.html', farming=farming, plots=plots, 
         global_config=gc)
 
-@app.route('/alerts')
+@app.route('/alerts', methods=['GET', 'POST'])
 def alerts():
     gc = global_config.load()
-    return render_template('alerts.html', 
-        global_config=gc)
+    if request.method == 'POST':
+        app.logger.info("Form submitted: {0}".format(request.form))
+        if request.form.get('action') == 'start':
+            chiadog_cli.start_chiadog()
+        elif request.form.get('action') == 'stop':
+            chiadog_cli.stop_chiadog()
+        else:
+            app.logger.info("Unknown alerts form: {0}".format(request.form))
+    notifications = chiadog_cli.get_notifications()
+    return render_template('alerts.html', chiadog_running = chiadog_cli.get_chiadog_pid(),
+        reload_seconds=60, notifications=notifications, global_config=gc)
 
 @app.route('/wallet')    
 def wallet():
@@ -124,10 +134,15 @@ def settings_keys():
     return render_template('settings/keys.html', keys=keys.text, 
         key_paths=key_paths, global_config=gc)
 
-@app.route('/settings/alerts')
+@app.route('/settings/alerts', methods=['GET', 'POST'])
 def settings_alerts():
     gc = global_config.load()
-    return render_template('settings/alerts.html', 
+    if request.method == 'POST':
+        config = request.form.get("chiadog")
+        chiadog_cli.save_config(config)
+    else: # Load config fresh from disk
+        config = open('/root/.chia/chiadog/config.yaml','r').read()
+    return render_template('settings/alerts.html', config=config, 
         global_config=gc)
 
 @app.route('/favicon.ico')

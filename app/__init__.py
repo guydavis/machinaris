@@ -1,9 +1,14 @@
 import logging
+import os
+import pytz
+from pytz import timezone
+#import tzlocal
 
 from flask import Flask
 
 app = Flask(__name__)
 app.secret_key = b'$}#P)eu0A.O,s0Mz'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 if __name__ != '__main__':
     gunicorn_logger = logging.getLogger('gunicorn.error')
@@ -12,9 +17,7 @@ if __name__ != '__main__':
 
 from app import routes
 
-
 # Jinja template filters
-
 @app.template_filter()
 def bytesfilter(num, suffix='B'):
     """Convert a number of bytes to a human-readable format."""
@@ -25,3 +28,12 @@ def bytesfilter(num, suffix='B'):
     return "%.0f %s%s" % (num, 'Yi', suffix)
 
 app.jinja_env.filters['bytesfilter'] = bytesfilter
+
+def datetimefilter(value, format="%Y-%m-%d %H:%M"):
+    tz = pytz.timezone(os.environ['TZ'])
+    utc = pytz.timezone('UTC')  
+    value = utc.localize(value, is_dst=None).astimezone(pytz.utc)
+    local_dt = value.astimezone(tz)
+    return local_dt.strftime(format)
+
+app.jinja_env.filters['datetimefilter'] = datetimefilter

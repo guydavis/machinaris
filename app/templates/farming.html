@@ -8,7 +8,27 @@
     </a>
 </header>
 
-<h5>Found {{ plots.rows | length }} total plots.</h5>
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+        {% else %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {% endif %}
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+<h5>Found {{ plots.rows | length }} total plots. 
+    {% if not global_config.plotting_only %}
+    Current expected time to win: <span class="text-success">{{ farming.time_to_win }}</span>
+    {% endif %}
+</h5>
 
 <div class="table-responsive">
     <table class="table table-dark">

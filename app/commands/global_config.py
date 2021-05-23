@@ -19,6 +19,10 @@ from app import app
 from app.models import chia
 from app.commands import global_config
 
+# Hard-coded verson numbers for now
+MACHINARIS_VERSION="0.3.0"
+CHIADOG_VERSION="0.5.1" # See https://github.com/martomi/chiadog/releases
+
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 
@@ -29,7 +33,8 @@ def load():
     cfg['plotting_only'] = plotting_only()
     cfg['farming_only'] = farming_only()
     cfg['now'] = datetime.datetime.now(tz=None).strftime("%Y-%m-%d %H:%M:%S")
-    cfg['machinaris_version'] = "0.2.1" # TODO Get this from tag?
+    cfg['machinaris_version'] = MACHINARIS_VERSION
+    cfg['chiadog_version'] = CHIADOG_VERSION
     cfg['plotman_version'] = load_plotman_version()
     cfg['chia_version'] = load_chia_version()
     return cfg
@@ -88,7 +93,11 @@ def load_chia_version():
     if errs:
         abort(500, description=errs.decode('utf-8'))
     last_chia_version = outs.decode('utf-8').strip()
-    if '.dev' in last_chia_version:
+    # Chia devs use a really weird versioning offset...
+    if last_chia_version.endswith('dev0'):
+        sem_ver = last_chia_version.split('.')
+        last_chia_version = sem_ver[0] + '.' + sem_ver[1] + '.' + str(int(sem_ver[2])-1)
+    elif '.dev' in last_chia_version:
         sem_ver = last_chia_version.split('.')
         last_chia_version = sem_ver[0] + '.' + sem_ver[1] + '.' + sem_ver[2]
     last_chia_version_load_time = datetime.datetime.now()

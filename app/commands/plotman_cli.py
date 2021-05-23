@@ -2,7 +2,6 @@
 # CLI interactions with the plotman script.
 #
 
-from app.models.plotman import PID_FILE
 import datetime
 import os
 import psutil

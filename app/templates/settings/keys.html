@@ -2,6 +2,14 @@
 
 {% block content %}
 
+<div class="position-relative">
+    <div class="position-absolute top-0 end-0">
+        <a href="https://github.com/Chia-Network/chia-blockchain/wiki/CLI-Commands-Reference#other-commands-not-yet-documented"  target="_blank">
+            <i class="fs-4 bi-question-circle"></i>
+        </a>
+    </div>
+</div>
+
 <header class="pb-3 mb-4 border-bottom">
     <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
         <span class="fs-4">Wallet - chia keys show </span>
@@ -16,9 +24,14 @@
 
 <p><b>NOTE: Machinaris will never display your private key here.</b></p>
 
-<p>However, you may view it yourself by executing this from within the Docker container.
+<p>However, you may view it yourself by executing this from within the Docker container.</p>
+
+<div style="padding-left: 50px;">
     <code>chia keys show --show-mnemonic-seed</code>
-</p>
+</div>
+
+<br/>
+
 
 <p>Also, you may view the key file(s) on the host, which you mounted within the Docker container:</p>
 
