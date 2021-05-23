@@ -1,3 +1,4 @@
+from app.models.chia_logs import Challenges
 import pytz
 import os
 
@@ -5,7 +6,7 @@ from datetime import datetime
 from flask import Flask, flash, redirect, render_template, request, session, url_for, send_from_directory
 
 from app import app
-from app.commands import global_config, chia_cli, plotman_cli, chiadog_cli
+from app.commands import global_config, chia_cli, plotman_cli, chiadog_cli, chia_log_parser
 
 @app.route('/')
 def landing():
@@ -21,9 +22,10 @@ def index():
         return redirect(url_for('setup'))
     farming = chia_cli.load_farm_summary()
     plotting = plotman_cli.load_plotting_summary()
+    challenges = chia_log_parser.recent_challenges()
     return render_template('index.html', reload_seconds=60, 
         farming=farming.__dict__, plotting=plotting.__dict__, 
-        global_config=gc)
+        challenges=challenges, global_config=gc)
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
