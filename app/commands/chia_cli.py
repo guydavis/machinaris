@@ -295,5 +295,10 @@ def remove_connection(node_id, ip):
 
 def compare_plot_counts(global_config, farming, plots):
     if not global_config['plotting_only']:
-        if farming.plot_count != len(plots.rows):
-            flash("Warning! Chia is farming {0} plots, but Machinaris found {1} *.plot files on disk. Maybe try a 'chia plots check' command?".format(farming.plot_count, len(plots.rows), 'warning'))
+        try:
+            if int(farming.plot_count) != len(plots.rows):
+                flash("Warning! Chia is farming {0} plots, but Machinaris found {1} *.plot files on disk. Maybe try a 'chia plots check' command?".format(farming.plot_count, len(plots.rows), 'warning'))
+        except:
+            app.logger.info("Compare plots failed to check matching plot counts.")
+            app.logger.info(traceback.format_exc())
+    

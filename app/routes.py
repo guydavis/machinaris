@@ -85,6 +85,14 @@ def wallet():
     return render_template('wallet.html', wallet=wallet.text, 
         global_config=gc)
 
+@app.route('/keys')
+def keys():
+    gc = global_config.load()
+    keys = chia_cli.load_keys_show()
+    key_paths = global_config.get_key_paths()
+    return render_template('keys.html', keys=keys.text, 
+        key_paths=key_paths, global_config=gc)
+
 @app.route('/network/blockchain')
 def network_blockchain():
     gc = global_config.load()
@@ -125,14 +133,6 @@ def settings_farming():
         config = open('/root/.chia/mainnet/config/config.yaml','r').read()
     return render_template('settings/farming.html', config=config, 
         global_config=gc)
-
-@app.route('/settings/keys')
-def settings_keys():
-    gc = global_config.load()
-    keys = chia_cli.load_keys_show()
-    key_paths = global_config.get_key_paths()
-    return render_template('settings/keys.html', keys=keys.text, 
-        key_paths=key_paths, global_config=gc)
 
 @app.route('/settings/alerts', methods=['GET', 'POST'])
 def settings_alerts():
