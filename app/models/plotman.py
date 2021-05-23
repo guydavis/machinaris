@@ -12,6 +12,8 @@ class PlottingSummary:
         for line in cli_stdout:
             if "plot id" in line.strip(): # The header row
                 self.columns = line.replace('plot id', 'plot_id').strip().split()
+                # Plotman has two columns both named 'tmp' so change the 2nd one to 'size'
+                self.columns[6] = 'size'
             else: # A plotting row, so create as dictionary
                 row = {}
                 values = line.split()
