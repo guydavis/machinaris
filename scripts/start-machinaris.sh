@@ -14,16 +14,24 @@ if [ -f /root/.chia/plotman/plotman.yaml ]; then
     sed -i 's/\/root\/.chia\/logs/\/root\/.chia\/plotman\/logs/g' /root/.chia/plotman/plotman.yaml
 fi
 cp -n /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.yaml
+if [ ${farmer_pk} != 'null' ]; then
+    sed -i "s/^.*farmer_pk:.*$/        farmer_pk: ${farmer_pk}/g" /root/.chia/plotman/plotman.yaml
+fi
+if [ ${pool_pk} != 'null' ]; then
+    sed -i "s/^.*pool_pk:.*$/        pool_pk: ${pool_pk}/g" /root/.chia/plotman/plotman.yaml
+fi
 
-echo 'Configuring Chiadog...'
-mkdir -p /root/.chia/chiadog/logs
-mkdir -p /root/.chia/chiadog/notifications
-cp -n /machinaris/config/chiadog.sample.yaml /root/.chia/chiadog/config.yaml
-cp -f /machinaris/scripts/chiadog_notifier.sh /root/.chia/chiadog/notifier.sh && chmod 755 /root/.chia/chiadog/notifier.sh
+if [ "${mode}" != "plotter" ]; then
+    echo 'Configuring Chiadog...'
+    mkdir -p /root/.chia/chiadog/logs
+    cp -n /machinaris/config/chiadog.sample.yaml /root/.chia/chiadog/config.yaml
+    cp -f /machinaris/scripts/chiadog_notifier.sh /root/.chia/chiadog/notifier.sh && chmod 755 /root/.chia/chiadog/notifier.sh
+    . /machinaris/scripts/setup_databases.sh
 
-echo 'Starting Chiadog...'
-cd /chiadog
-python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
+    echo 'Starting Chiadog...'
+    cd /chiadog
+    python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
+fi
 
 echo 'Starting Machinaris...'
 mkdir -p /root/.chia/machinaris/logs

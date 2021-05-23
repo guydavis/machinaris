@@ -49,6 +49,10 @@
                                 <i class="fs-4 bi-wallet"></i> <span class="ms-1 d-none d-sm-inline">Wallet</span></a>
                         </li>
                         <li>
+                            <a href="{{ url_for('keys') }}" class="nav-link px-0 align-middle text-success">
+                                <i class="fs-4 bi-key"></i> <span class="ms-1 d-none d-sm-inline">Keys</span></a>
+                        </li>
+                        <li>
                             <a href="{{ url_for('network_blockchain') }}"
                                 class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-globe"></i> <span class="ms-1 d-none d-sm-inline">Network</span></a>
@@ -75,10 +79,6 @@
                                             class="d-none d-sm-inline text-white">Farming</span> </a>
                                 </li>
                                 {% endif %}
-                                <li>
-                                    <a href="{{ url_for('settings_keys') }}" class="nav-link px-0"> <span
-                                            class="d-none d-sm-inline text-white">Keys</span> </a>
-                                </li>
                                 <li>
                                     <a href="{{ url_for('settings_alerts') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Alerts</span> </a>

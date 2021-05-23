@@ -5,6 +5,9 @@ from datetime import datetime
 from app import app
 from app import utils
 
+# Treat *.plot files smaller than this as in-transit (copying) so don't count them
+MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
+
 class FarmSummary:
 
     def __init__(self, cli_stdout=None, farm_plots=None):
@@ -26,10 +29,15 @@ class FarmSummary:
                     self.transaction_fees = line.split(':')[1].strip()
                 # TODO Handle Connection error lines from Harvester etc
         elif farm_plots:
-            self.plot_count = len(farm_plots.rows)
+            self.plot_count = 0
             bytes_size = 0
             for plot in farm_plots.rows:
-                bytes_size += int(plot['size'])
+                if plot['size'] > MINIMUM_K32_PLOT_SIZE_BYTES:
+                    self.plot_count += 1
+                    bytes_size += int(plot['size'])
+                else:
+                    app.logger.debug("Skipping inclusion of {0} size plot: {1}".format( \
+                        utils.sizeof_fmt(plot['size'], plot['path'])))
             self.plot_size = utils.sizeof_fmt(bytes_size)
         else:
             raise Exception("Not provided either chia stdout lines or a list of plots.")

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2021-05-?
+
+- Integrate the excellent Chiadog project for log monitoring and alerting
+- Rebase of ubuntu:latest as official Chia docker updates too slowly after a Chia binaries release
+- Support farmer_pk and pool_pk env vars when mode=plotter, automatically configure Plotman
+
 ## [0.2.1] - 2021-05-21
 
 - Dark mode CSS patch contributed by Hukuma1.  Looks great! Thanks for the help!

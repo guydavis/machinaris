@@ -40,6 +40,13 @@ def load():
     return cfg
 
 def is_setup():
+    # First check if plotter and farmer_pk,pool_pk provided.
+    if "mode" in os.environ and os.environ['mode'] == 'plotter':
+        if "farmer_pk" in os.environ and os.environ['farmer_pk'] != 'null' and \
+            "pool_pk" in os.environ and os.environ['pool_pk'] != 'null':
+            app.logger.debug("Found plotter mode with farmer_pk and pool_pk provided.")
+            return True # When plotting don't need private in mnemonic.txt
+    # All other modes, we should have at least one keys path
     if "keys" not in os.environ:
         app.logger.info(
             "No 'keys' environment variable set for this run. Set an in-container path to mnemonic.txt.")
