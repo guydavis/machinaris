@@ -62,11 +62,20 @@ def farming():
     return render_template('farming.html',  farming=farming, plots=plots, 
         global_config=gc)
 
-@app.route('/alerts')
+@app.route('/alerts', methods=['GET', 'POST'])
 def alerts():
     gc = global_config.load()
-    return render_template('alerts.html', 
-        global_config=gc)
+    if request.method == 'POST':
+        app.logger.info("Form submitted: {0}".format(request.form))
+        if request.form.get('action') == 'start':
+            chiadog_cli.start_chiadog()
+        elif request.form.get('action') == 'stop':
+            chiadog_cli.stop_chiadog()
+        else:
+            app.logger.info("Unknown alerts form: {0}".format(request.form))
+    notifications = chiadog_cli.get_notifications()
+    return render_template('alerts.html', chiadog_running = chiadog_cli.get_chiadog_pid(),
+        reload_seconds=60, notifications=notifications, global_config=gc)
 
 @app.route('/wallet')    
 def wallet():

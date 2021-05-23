@@ -23,7 +23,7 @@ cp -f /machinaris/scripts/chiadog_notifier.sh /root/.chia/chiadog/notifier.sh &&
 
 echo 'Starting Chiadog...'
 cd /chiadog
-nohup python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log &
+python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
 
 echo 'Starting Machinaris...'
 mkdir -p /root/.chia/machinaris/logs
