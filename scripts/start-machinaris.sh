@@ -24,7 +24,6 @@ fi
 if [ "${mode}" != "plotter" ]; then
     echo 'Configuring Chiadog...'
     mkdir -p /root/.chia/chiadog/logs
-    mkdir -p /root/.chia/chiadog/notifications
     cp -n /machinaris/config/chiadog.sample.yaml /root/.chia/chiadog/config.yaml
     cp -f /machinaris/scripts/chiadog_notifier.sh /root/.chia/chiadog/notifier.sh && chmod 755 /root/.chia/chiadog/notifier.sh
     . /machinaris/scripts/setup_databases.sh
