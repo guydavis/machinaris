@@ -59,7 +59,8 @@ def farming():
     gc = global_config.load()
     farming = chia_cli.load_farm_summary()
     plots = chia_cli.load_plots_farming()
-    return render_template('farming.html',  farming=farming, plots=plots, 
+    chia_cli.compare_plot_counts(gc, farming, plots)
+    return render_template('farming.html', farming=farming, plots=plots, 
         global_config=gc)
 
 @app.route('/alerts', methods=['GET', 'POST'])
