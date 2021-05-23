@@ -21,7 +21,7 @@ if [ ${pool_pk} != 'null' ]; then
     sed -i "s/^.*pool_pk:.*$/        pool_pk: ${pool_pk}/g" /root/.chia/plotman/plotman.yaml
 fi
 
-if [ "${mode}" != "plotter" ];
+if [ "${mode}" != "plotter" ]; then
     echo 'Configuring Chiadog...'
     mkdir -p /root/.chia/chiadog/logs
     mkdir -p /root/.chia/chiadog/notifications

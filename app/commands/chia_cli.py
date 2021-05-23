@@ -297,7 +297,7 @@ def compare_plot_counts(global_config, farming, plots):
     if not global_config['plotting_only']:
         try:
             if int(farming.plot_count) != len(plots.rows):
-                flash("Warning! Chia is farming {0} plots, but Machinaris found {1} *.plot files on disk. Maybe try a 'chia plots check' command?".format(farming.plot_count, len(plots.rows), 'warning'))
+                flash("Warning! Chia is farming {0} plots, but Machinaris found {1} *.plot files on disk. See the <a href='https://github.com/guydavis/machinaris/wiki/FAQ#warning-chia-is-farming-x-plots-but-machinaris-found-y-plot-files-on-disk'>FAQ</a>.".format(farming.plot_count, len(plots.rows), 'warning'))
         except:
             app.logger.info("Compare plots failed to check matching plot counts.")
             app.logger.info(traceback.format_exc())
