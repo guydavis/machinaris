@@ -2,6 +2,24 @@
 
 {% block content %}
 
+<script>
+    function LogButton() {
+        var d = new Date();
+        var height = 600;
+        var width = 900;
+        var top = (screen.height - height) / 2;
+        var left = (screen.width - width) / 2;
+        window.open("{{ url_for('logs') }}?log=alerts", 'Chiadog Log ' + d.getTime(), 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+    }
+</script>
+
+<div class="position-relative">
+    <div class="position-absolute top-0 end-0">
+        <a href="#" title="View Logs" onclick='LogButton();return false;'>
+            <i class="fs-4 bi-text-indent-left"></i>
+        </a>
+    </div>
+</div>
 
 <header class="pb-3 mb-4 border-bottom">
     <span class="fs-4">Notifications: Chiadog Alerts</span>

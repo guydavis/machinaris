@@ -1,12 +1,13 @@
-from app.models.chia_logs import Challenges
+
 import pytz
 import os
+import time
 
 from datetime import datetime
 from flask import Flask, flash, redirect, render_template, request, session, url_for, send_from_directory
 
 from app import app
-from app.commands import global_config, chia_cli, plotman_cli, chiadog_cli, chia_log_parser
+from app.commands import global_config, chia_cli, plotman_cli, chiadog_cli, log_parser
 
 @app.route('/')
 def landing():
@@ -22,7 +23,7 @@ def index():
         return redirect(url_for('setup'))
     farming = chia_cli.load_farm_summary()
     plotting = plotman_cli.load_plotting_summary()
-    challenges = chia_log_parser.recent_challenges()
+    challenges = log_parser.recent_challenges()
     return render_template('index.html', reload_seconds=60, 
         farming=farming.__dict__, plotting=plotting.__dict__, 
         challenges=challenges, global_config=gc)
@@ -146,6 +147,19 @@ def settings_alerts():
         config = open('/root/.chia/chiadog/config.yaml','r').read()
     return render_template('settings/alerts.html', config=config, 
         global_config=gc)
+
+@app.route('/logs')
+def logs():
+    return render_template('logs.html')
+
+@app.route('/logfile')
+def logfile():
+    log_file = None
+    log_type = request.args.get("log")
+    if log_type in [ 'alerts', 'farming', 'plotting']:
+        return log_parser.get_log_lines(log_type)
+    else:
+        abort(500, "Unsupported log type: {0}".format(log_type))
 
 @app.route('/favicon.ico')
 def favicon():

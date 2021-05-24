@@ -2,6 +2,25 @@
 
 {% block content %}
 
+<script>
+    function LogButton() {
+        var d = new Date();
+        var height = 600;
+        var width = 900;
+        var top = (screen.height - height) / 2;
+        var left = (screen.width - width) / 2;
+        window.open("{{ url_for('logs') }}?log=plotting", 'Plotman Log ' + d.getTime(), 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+    }
+</script>
+
+<div class="position-relative">
+    <div class="position-absolute top-0 end-0">
+        <a href="#" title="View Logs" onclick='LogButton();return false;'>
+            <i class="fs-4 bi-text-indent-left"></i>
+        </a>
+    </div>
+</div>
+
 <header class="pb-3 mb-4 border-bottom">
     <span class="fs-4">Plotting Status: {{ plotting.display_status }}</span>
 </header>
@@ -27,12 +46,14 @@
         {% if not plotting.plotman_running %}
         <fieldset>
             <input type="hidden" id="action" name="action" value="start" />
-            <button type="submit" class="btn btn-outline-success" id="btnStart" title="Plotman is currently stopped.">Plot On!</button>
+            <button type="submit" class="btn btn-outline-success" id="btnStart"
+                title="Plotman is currently stopped.">Plot On!</button>
         </fieldset>
-        {% else %} 
+        {% else %}
         <fieldset>
             <input type="hidden" id="action" name="action" value="stop" />
-            <button type="submit" class="btn btn-outline-success" id="btnStop" title="Plotman is currently running.">Stop Plotman</button>
+            <button type="submit" class="btn btn-outline-success" id="btnStop"
+                title="Plotman is currently running.">Stop Plotman</button>
         </fieldset>
         {% endif %}
     </form>
@@ -51,7 +72,8 @@
                 <tbody>
                     {% for row in plotting.rows %}
                     <tr>
-                        <td class="text-center"><input type="checkbox" name="plot_id" value="{{ row['plot_id'] }}"/></td>
+                        <td class="text-center"><input type="checkbox" name="plot_id" value="{{ row['plot_id'] }}" />
+                        </td>
                         {% for column in plotting.columns %}
                         <td>{{ row[column] }}</td>
                         {% endfor %}
@@ -63,9 +85,12 @@
 
         {% if plotting.rows|length > 0 %}
         <fieldset>
-            <button form="plotting-form" type="submit" name="action" value="suspend" class="btn btn-outline-success" id="btnSuspend">Suspend Selected</button>
-            <button form="plotting-form" type="submit" name="action" value="resume" class="btn btn-outline-success" id="btnResume">Resume Selected</button>
-            <button form="plotting-form" type="submit" name="action" value="kill" class="btn btn-outline-success" id="btnKill">Kill Selected</button>
+            <button form="plotting-form" type="submit" name="action" value="suspend" class="btn btn-outline-success"
+                id="btnSuspend">Suspend Selected</button>
+            <button form="plotting-form" type="submit" name="action" value="resume" class="btn btn-outline-success"
+                id="btnResume">Resume Selected</button>
+            <button form="plotting-form" type="submit" name="action" value="kill" class="btn btn-outline-success"
+                id="btnKill">Kill Selected</button>
         </fieldset>
         {% endif %}
     </form>
