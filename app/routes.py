@@ -157,7 +157,8 @@ def logfile():
     log_file = None
     log_type = request.args.get("log")
     if log_type in [ 'alerts', 'farming', 'plotting']:
-        return log_parser.get_log_lines(log_type)
+        log_id = request.args.get("log_id")
+        return log_parser.get_log_lines(log_type, log_id)
     else:
         abort(500, "Unsupported log type: {0}".format(log_type))
 

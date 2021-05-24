@@ -15,7 +15,7 @@ class Challenges:
         self.columns = [ 'challenge_id', 'plots_past_filter', 'proofs_found', 'time_taken', 'created_at']
         self.rows = []
         for line in cli_stdout:
-            app.logger.info(line)
+            #app.logger.info(line)
             try:
                 self.rows.append({
                     'challenge_id': re.search('eligible for farming (\w+)', line, re.IGNORECASE).group(1) + '...',

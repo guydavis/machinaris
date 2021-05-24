@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <title>Logs</title>
+    <title>Machinaris Logs</title>
     <style>
         body {
             background-color: #15171a;
@@ -38,7 +38,7 @@
         function load_log_file() {
             var output = document.getElementById('output');
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', "{{ url_for('logfile') }}?log=" + get('log'));
+            xhr.open('GET', "{{ url_for('logfile') }}?log=" + get('log') + "&log_id=" + get('log_id'));
             xhr.send();
             xhr.onload = function () {
                 output.textContent = xhr.responseText;
@@ -46,14 +46,13 @@
                     console.log("Autoscrolling on new log content...")
                     document.getElementById('output').scrollIntoView(false);
                 }
-                setTimeout(load_log_file, 3000); // Load again in 3 seconds
+                setTimeout(load_log_file, 5000); // Load again in 5 seconds
             };
         }
     </script>
 </head>
 
 <body>
-
     <div class="position-relative">
         <div class="position-absolute top-0 end-0">
             <span style="padding:20px"><input id="autoscroll" name="autoscroll" type="checkbox" checked="checked" />
