@@ -1,5 +1,5 @@
 #
-# For info pulled from Chia's debug log at INFO level
+# Data from log reading and parsing
 #
 
 import re
