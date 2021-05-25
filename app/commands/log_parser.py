@@ -21,8 +21,10 @@ from app import app
 # Location of the auto-rotating log in container
 CHIA_LOG = '/root/.chia/mainnet/log/debug.log'
 
-CHALLENGES_TO_LOAD = 5
+# Roughly 1 minutes worth of challenges
+CHALLENGES_TO_LOAD = 8
 
+# When reading tail of a log, only send this many lines
 MAX_LOG_LINES = 250
 
 def recent_challenges():

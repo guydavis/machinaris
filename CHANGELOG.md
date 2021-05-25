@@ -5,8 +5,10 @@ All notable changes to this project will be documented in this file. The format 
 ## [0.3.0] - 2021-05-?
 
 - Integrate the excellent Chiadog project for log monitoring and alerting
-- Rebase of ubuntu:latest as official Chia docker updates too slowly after a Chia binaries release
+- Rebase off ubuntu:focal, include nice Dockerfile cleanup by sparklyballs 
 - Support farmer_pk and pool_pk env vars when mode=plotter, automatically configure Plotman
+- Log Viewer for Farming, Alerts, and Plotting including logs for running plot jobs
+- Plotman Analyze output available for plots with Plotman job logs.
 
 ## [0.2.1] - 2021-05-21
 

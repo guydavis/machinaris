@@ -14,13 +14,15 @@ To get started with Machinaris, follow an install guide for your platform: [Wind
 
 ## Farming View
 
-Machinaris builds upon the [offical docker image](https://github.com/orgs/Chia-Network/packages/container/package/chia), so all Farming is done via the official binaries.
+Machinaris installs the [latest stable version](https://github.com/Chia-Network/chia-blockchain/wiki/INSTALL#ubuntudebian), so all Farming is done via the official binaries.
 
 ![Farming](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_farming.png)
 
 ## Alerts
 
-*Coming Soon...*
+[Chiadog](https://github.com/martomi/chiadog) provides excellent monitoring of the Chia™ log files, ensuring you get notified when important events occur on your system:
+
+![Alerts](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/ChiaDog-1-Example.png)
 
 ## Setup
 

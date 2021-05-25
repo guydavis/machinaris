@@ -57,11 +57,11 @@
                                 class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-globe"></i> <span class="ms-1 d-none d-sm-inline">Network</span></a>
                         </li>
-                        {% endif %}
                         <li>
                             <a href="{{ url_for('alerts') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-bell"></i> <span class="ms-1 d-none d-sm-inline">Alerts</span></a>
                         </li>
+                        {% endif %}
                         <li>
                             <a href="#submenu3" data-bs-toggle="collapse"
                                 class="nav-link px-0 align-middle text-success">
@@ -78,11 +78,11 @@
                                     <a href="{{ url_for('settings_farming') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Farming</span> </a>
                                 </li>
-                                {% endif %}
                                 <li>
                                     <a href="{{ url_for('settings_alerts') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Alerts</span> </a>
                                 </li>
+                                {% endif %}
                             </ul>
                         </li>
                     </ul>

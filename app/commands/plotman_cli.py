@@ -5,6 +5,7 @@
 import datetime
 import os
 import psutil
+import re
 import signal
 import shutil
 import time
@@ -134,3 +135,39 @@ def save_config(config):
         if get_plotman_pid():
             flash(
                 'NOTE: Please restart Plotman on the Plotting page to pickup your changes.', 'info')
+
+def find_plotting_job_log(plot_id):
+    dir_path = '/root/.chia/plotman/logs'
+    directory = os.fsencode(dir_path)
+    for file in os.listdir(directory):
+        filename = os.fsdecode(file)
+        if filename.endswith(".log") and not filename.startswith('plotman.'): 
+            with open(os.path.join(str(dir_path), filename)) as logfile:
+                head = [next(logfile) for x in range(10)] # Check first 10 lines
+                for line in head:
+                    if plot_id in line:
+                        return os.path.join(str(dir_path), filename)
+            continue
+        else:
+            continue
+    return None
+
+def analyze(plot_file):
+    groups = re.match("plot-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", plot_file)
+    if not groups:
+        return "Invalid plot file name provided: {0}".format(plot_file)
+    plot_log_file = find_plotting_job_log(groups[7])
+    if plot_log_file:
+        proc = Popen("{0} {1} {2} < /dev/tty".format(
+            PLOTMAN_SCRIPT,'analyze', plot_log_file), stdout=PIPE, stderr=PIPE, shell=True)
+        try:
+            outs, errs = proc.communicate(timeout=90)
+        except TimeoutExpired:
+            proc.kill()
+            proc.communicate()
+            abort(500, description="The timeout is expired!")
+        if errs:
+            app.logger.error(errs.decode('utf-8'))
+            return "Failed to analyze plot log.  See machinaris/logs/webui.log for details."
+        return outs.decode('utf-8')
+    return "Sorry, not plotting job log found.  Perhaps plot was made elsewhere?"

@@ -59,6 +59,8 @@ def plotting():
 
 @app.route('/farming')
 def farming():
+    if request.args.get('analyze'):  # Xhr with a plot filename
+        return plotman_cli.analyze(request.args.get('analyze'))
     gc = global_config.load()
     farming = chia_cli.load_farm_summary()
     plots = chia_cli.load_plots_farming()

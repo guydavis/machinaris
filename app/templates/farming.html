@@ -11,6 +11,15 @@
         var left = (screen.width - width) / 2;
         window.open("{{ url_for('logs') }}?log=farming", 'Chia Log ' + d.getTime(), 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
     }
+    function PlotJobAnalyze(plot) {
+        var output = document.getElementById('plotAnalyzeContent');
+        var xhr = new XMLHttpRequest();
+            xhr.open('GET', "{{ url_for('farming') }}?analyze=" + plot);
+            xhr.send();
+            xhr.onload = function () {
+                output.textContent = xhr.responseText;
+            };
+    }
 </script>
 
 <div class="position-relative">
@@ -26,6 +35,21 @@
         <span class="fs-4">Farming Status: {{ farming.display_status }}</span>
     </a>
 </header>
+
+<div class="modal fade" id="analyzeModal" tabindex="-1" aria-labelledby="analyzeModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3 modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="analyzeModalLabel">Plotting Analysis</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+                <p>Analysis of the plotting job log shows time (seconds) spent in each phase:</p>
+                <pre id="plotAnalyzeContent"></pre>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div>
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -59,6 +83,7 @@
                     {% for column in plots.columns %}
                     <th scope="col" class="text-success">{{ column }}</th>
                     {% endfor %}
+                    <th scope="col" class="text-success"></th>
                 </tr>
             </thead>
             <tbody>
@@ -71,6 +96,13 @@
                     <td>{{ row[column] }}</td>
                     {% endif %}
                     {% endfor %}
+                    <td class="align-middle" style="padding:0px 5px 0px 0px">
+                        <!-- Careful, VS Code likes to wrap next line and break it. -->
+                        <a href="#" title="Analyze Plotting Job" data-bs-toggle="modal" data-bs-target="#analyzeModal" \
+                            onclick='PlotJobAnalyze("{{ row['plot'] }}");return false;'>
+                            <i class="fs-4 bi-stopwatch"></i>
+                        </a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
