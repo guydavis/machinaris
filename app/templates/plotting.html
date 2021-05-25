@@ -11,6 +11,14 @@
         var left = (screen.width - width) / 2;
         window.open("{{ url_for('logs') }}?log=plotting", 'Plotman Log ' + d.getTime(), 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
     }
+    function PlotsLogButton(plot_id) {
+        var d = new Date();
+        var height = 600;
+        var width = 900;
+        var top = (screen.height - height) / 2;
+        var left = (screen.width - width) / 2;
+        window.open("{{ url_for('logs') }}?log=plotting&log_id=" + plot_id, 'Plotman Log ' + d.getTime(), 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+    }
 </script>
 
 <div class="position-relative">
@@ -24,6 +32,26 @@
 <header class="pb-3 mb-4 border-bottom">
     <span class="fs-4">Plotting Status: {{ plotting.display_status }}</span>
 </header>
+
+<div class="modal fade" id="killModal" tabindex="-1" aria-labelledby="killModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="killModalLabel">Confirm Kill</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+                This action will terminate the selected plots, whether running or stopped, and delete all
+                their temporary files. Continue?
+            </div>
+            <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" id="btnConfirmKill">Kill
+                    Selected</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div>
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -67,6 +95,7 @@
                         {% for column in plotting.columns %}
                         <th scope="col" class="text-success">{{ column }}</th>
                         {% endfor %}
+                        <th scope="col" class="text-success"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,6 +106,11 @@
                         {% for column in plotting.columns %}
                         <td>{{ row[column] }}</td>
                         {% endfor %}
+                        <td style="padding:0px">
+                            <!-- Careful, VS Code likes to wrap next line and break it. -->
+                            <a href="#" title="View Logs" onclick='PlotsLogButton("{{ row['plot_id'] }}");return false;'>
+                                <i class="fs-4 bi-text-indent-left"></i>
+                            </a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -89,7 +123,7 @@
                 id="btnSuspend">Suspend Selected</button>
             <button form="plotting-form" type="submit" name="action" value="resume" class="btn btn-outline-success"
                 id="btnResume">Resume Selected</button>
-            <button form="plotting-form" type="submit" name="action" value="kill" class="btn btn-outline-success"
+            <button type="button" data-bs-toggle="modal" data-bs-target="#killModal" class="btn btn-outline-success"
                 id="btnKill">Kill Selected</button>
         </fieldset>
         {% endif %}
@@ -127,9 +161,9 @@
                 $('#plotting-form').append('<input type="hidden" id="action" name="action" value="resume" />');
                 $("#plotting-form").submit();
             });
-            $("#btnKill").click(function () {
-                $(this).prop("disabled", true);
-                $(this).html(
+            $("#btnConfirmKill").click(function () {
+                $('btnKill').prop("disabled", true);
+                $('btnKill').html(
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Killing...`
                 );
                 $('#plotting-form').append('<input type="hidden" id="action" name="action" value="kill" />');
