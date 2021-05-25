@@ -61,12 +61,18 @@ def plotting():
 def farming():
     if request.args.get('analyze'):  # Xhr with a plot filename
         return plotman_cli.analyze(request.args.get('analyze'))
+    elif request.args.get('check'):  # Xhr calling for check output
+        return chia_cli.check_plots(request.args.get('first_load'))
     gc = global_config.load()
     farming = chia_cli.load_farm_summary()
     plots = chia_cli.load_plots_farming()
     chia_cli.compare_plot_counts(gc, farming, plots)
     return render_template('farming.html', farming=farming, plots=plots, 
         global_config=gc)
+
+@app.route('/plots_check')
+def plots_check():
+    return render_template('plots_check.html')
 
 @app.route('/alerts', methods=['GET', 'POST'])
 def alerts():
