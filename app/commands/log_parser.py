@@ -28,6 +28,9 @@ CHALLENGES_TO_LOAD = 8
 MAX_LOG_LINES = 250
 
 def recent_challenges():
+    if not os.path.exists(CHIA_LOG):
+        app.logger.debug("Skipping challenges parsing as no such log file: {0}".format(CHIA_LOG))
+        return []
     proc = Popen("grep -i eligible {0} | tail -n {1}".format(CHIA_LOG, CHALLENGES_TO_LOAD), 
         stdout=PIPE, stderr=PIPE, shell=True)
     try:
