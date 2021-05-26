@@ -65,10 +65,15 @@ def load_plots_farming():
         return last_plots_farming
     all_entries = []
     for dir_path in os.environ['plots_dir'].split(':'):
-        entries = (os.path.join(dir_path, file_name) for file_name in os.listdir(dir_path))
-        entries = ((os.stat(path), path) for path in entries)
-        entries = ((stat[ST_CTIME], stat[ST_SIZE], path) for stat, path in entries if S_ISREG(stat[ST_MODE]))
-        all_entries.extend(entries)
+        try:
+            entries = (os.path.join(dir_path, file_name) for file_name in os.listdir(dir_path))
+            entries = ((os.stat(path), path) for path in entries)
+            entries = ((stat[ST_CTIME], stat[ST_SIZE], path) for stat, path in entries if S_ISREG(stat[ST_MODE]))
+            all_entries.extend(entries)
+        except:
+            app.logger.info("Failed to list files at {0}".format(dir_path))
+            app.logger.info(traceback.format_exc())
+            flash('Unable to list plots at {0}.  Did you mount your plots directories?'.format(dir_path), 'danger')
     all_entries = sorted(all_entries, key=lambda entry: entry[0], reverse=True)
     last_plots_farming = chia.FarmPlots(all_entries)
     last_plots_farming_load_time = datetime.datetime.now()
