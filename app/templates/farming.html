@@ -105,6 +105,8 @@
                     {% for column in plots.columns %}
                     {% if column == "size" %}
                     <td>{{ row[column] | bytesfilter}}</td>
+                    {% elif column == "plot" %}
+                    <td>{{ row[column] | plotnameshortener}}</td>
                     {% else %}
                     <td>{{ row[column] }}</td>
                     {% endif %}

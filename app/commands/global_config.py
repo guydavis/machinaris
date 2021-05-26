@@ -134,3 +134,21 @@ def load_plotman_version():
         last_plotman_version = last_plotman_version[len('plotman'):].strip()
     last_plotman_version_load_time = datetime.datetime.now()
     return last_plotman_version
+
+def get_disks(disk_type):
+    if disk_type == "plots":
+        try:
+            return os.environ['plots_dir'].split(':')
+        except:
+            app.logger.info("Unable to find any plots dirs for stats.")
+            app.logger.info(traceback.format_exc())
+            return []
+    elif disk_type == "plotting":
+        try:
+            stream = open('/root/.chia/plotman/plotman.yaml', 'r')
+            config = yaml.load(stream, Loader=yaml.SafeLoader)
+            return config["directories"]["tmp"]
+        except:
+            app.logger.info("Unable to find any plotting for stats.")
+            app.logger.info(traceback.format_exc())
+            return []
