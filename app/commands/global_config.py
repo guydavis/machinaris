@@ -52,11 +52,11 @@ def is_setup():
             "No 'keys' environment variable set for this run. Set an in-container path to mnemonic.txt.")
         return False
     keys = os.environ['keys']
-    app.logger.debug("Trying with full keys='{0}'".format(keys))
+    #app.logger.debug("Trying with full keys='{0}'".format(keys))
     foundKey = False
     for key in keys.split(':'):
         if os.path.exists(key.strip()):
-            app.logger.debug("Found key file at: '{0}'".format(key.strip()))
+            #app.logger.debug("Found key file at: '{0}'".format(key.strip()))
             foundKey = True
         else:
             app.logger.info("No such keys file: '{0}'".format(key.strip()))
@@ -134,3 +134,21 @@ def load_plotman_version():
         last_plotman_version = last_plotman_version[len('plotman'):].strip()
     last_plotman_version_load_time = datetime.datetime.now()
     return last_plotman_version
+
+def get_disks(disk_type):
+    if disk_type == "plots":
+        try:
+            return os.environ['plots_dir'].split(':')
+        except:
+            app.logger.info("Unable to find any plots dirs for stats.")
+            app.logger.info(traceback.format_exc())
+            return []
+    elif disk_type == "plotting":
+        try:
+            stream = open('/root/.chia/plotman/plotman.yaml', 'r')
+            config = yaml.load(stream, Loader=yaml.SafeLoader)
+            return config["directories"]["tmp"]
+        except:
+            app.logger.info("Unable to find any plotting for stats.")
+            app.logger.info(traceback.format_exc())
+            return []

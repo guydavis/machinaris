@@ -4,21 +4,29 @@
 #
 
 mkdir -p /root/.chia/machinaris/dbs
-cd /root/.chia/machinaris/dbs
-if [ ! -f machinaris.db ]; then
+pushd /root/.chia/machinaris/dbs
+rm -f machinaris.db # Temporarily delete old db 
+if [ ! -f stats.db ]; then
     echo 'Creating database for Machinaris...'
-    sqlite3 machinaris.db <<EOF
-CREATE TABLE stat (id INTEGER PRIMARY KEY, type TEXT, name TEXT, value REAL, unit TEXT, created_at TEXT);
-CREATE TRIGGER stat_on_insert AFTER INSERT ON stat
- BEGIN
-  UPDATE stat SET created_at = datetime('now') WHERE id = NEW.id;
- END;
+    sqlite3 stats.db <<EOF
+CREATE TABLE IF NOT EXISTS stat_plot_count (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
+CREATE TABLE stat_plots_size (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
+CREATE TABLE stat_total_chia (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
+CREATE TABLE stat_netspace_size (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
+CREATE TABLE stat_time_to_win (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
+CREATE TABLE stat_plots_total_used (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
+CREATE TABLE stat_plots_disk_used (id INTEGER PRIMARY KEY, hostname TEXT, path TEXT, value REAL, created_at TEXT);
+CREATE TABLE stat_plots_disk_free (id INTEGER PRIMARY KEY, hostname TEXT, path TEXT, value REAL, created_at TEXT);
+CREATE TABLE stat_plotting_total_used (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
+CREATE TABLE stat_plotting_disk_used (id INTEGER PRIMARY KEY, hostname TEXT, path TEXT, value REAL, created_at TEXT);
+CREATE TABLE stat_plotting_disk_free (id INTEGER PRIMARY KEY, hostname TEXT, path TEXT, value REAL, created_at TEXT);
 EOF
-    chmod 666 /root/.chia/machinaris/dbs/machinaris.db
+    chmod 666 /root/.chia/machinaris/dbs/stats.db
 fi
+popd
 
 mkdir -p /root/.chia/chiadog/dbs
-cd /root/.chia/chiadog/dbs
+pushd /root/.chia/chiadog/dbs
 if [ ! -f chiadog.db ]; then
     echo 'Creating database for Chiadog...'
     sqlite3 chiadog.db <<EOF
@@ -30,3 +38,4 @@ CREATE TRIGGER notification_on_insert AFTER INSERT ON notification
 EOF
     chmod 666 /root/.chia/chiadog/dbs/chiadog.db
 fi
+popd

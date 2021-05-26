@@ -3,9 +3,7 @@
 {% block content %}
 
 <header class="pb-3 mb-4 border-bottom">
-    <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-        <span class="fs-4">Network - chia show</span>
-    </a>
+    <span class="fs-4">Network - chia show</span>
 </header>
 
 <div>
@@ -60,14 +58,6 @@
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...`
                 );
                 $('#main-form').append('<input type="hidden" id="action" name="action" value="add" />');
-                $("#main-form").submit();
-            });
-            $("#btnStop").click(function () {
-                $(this).prop("disabled", true);
-                $(this).html(
-                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Pruning...`
-                );
-                $('#main-form').append('<input type="hidden" id="action" name="action" value="prune" />');
                 $("#main-form").submit();
             });
         })

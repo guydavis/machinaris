@@ -6,6 +6,7 @@
 import datetime
 import os
 import psutil
+import re
 import signal
 import shutil
 import time
@@ -28,6 +29,9 @@ CHALLENGES_TO_LOAD = 8
 MAX_LOG_LINES = 250
 
 def recent_challenges():
+    if not os.path.exists(CHIA_LOG):
+        app.logger.debug("Skipping challenges parsing as no such log file: {0}".format(CHIA_LOG))
+        return []
     proc = Popen("grep -i eligible {0} | tail -n {1}".format(CHIA_LOG, CHALLENGES_TO_LOAD), 
         stdout=PIPE, stderr=PIPE, shell=True)
     try:
@@ -74,5 +78,7 @@ def get_log_lines(log_type, log_id):
     if not log_file or not os.path.exists(log_file):
         app.logger.info("No log file found at {0}".format(log_file))
         return 'No log file found!'
+    class_escape = re.compile(r' chia.plotting.(\w+)(\s+): ')
+    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
     proc = Popen(['tail', '-n', str(MAX_LOG_LINES), log_file], stdout=PIPE)
-    return proc.stdout.read()
+    return  class_escape.sub('', ansi_escape.sub('', proc.stdout.read().decode("utf-8")))
