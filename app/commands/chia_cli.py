@@ -86,7 +86,7 @@ def save_config(config):
         with open(src, 'w') as writer:
             writer.write(config)
     except Exception as ex:
-        traceback.print_exc()
+        app.logger.info(traceback.format_exc())
         flash('Updated config.yaml failed validation! Fix and save or refresh page.', 'danger')
         flash(str(ex), 'warning')
     else:

@@ -16,6 +16,7 @@ if __name__ != '__main__':
     app.logger.setLevel(gunicorn_logger.level)
 
 from app import routes
+from app import schedules
 
 # Jinja template filters
 @app.template_filter()

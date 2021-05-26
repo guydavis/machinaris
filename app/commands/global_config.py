@@ -52,11 +52,11 @@ def is_setup():
             "No 'keys' environment variable set for this run. Set an in-container path to mnemonic.txt.")
         return False
     keys = os.environ['keys']
-    app.logger.debug("Trying with full keys='{0}'".format(keys))
+    #app.logger.debug("Trying with full keys='{0}'".format(keys))
     foundKey = False
     for key in keys.split(':'):
         if os.path.exists(key.strip()):
-            app.logger.debug("Found key file at: '{0}'".format(key.strip()))
+            #app.logger.debug("Found key file at: '{0}'".format(key.strip()))
             foundKey = True
         else:
             app.logger.info("No such keys file: '{0}'".format(key.strip()))
