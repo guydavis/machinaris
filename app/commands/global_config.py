@@ -50,6 +50,9 @@ def is_setup():
             app.logger.debug(
                 "Found plotter mode with farmer_pk and pool_pk provided.")
             return True  # When plotting don't need private in mnemonic.txt
+    if "mode" in os.environ and os.environ['mode'] == 'harvester':
+        # Harvester doesn't require a mnemonic private key as farmer's ca already imported.
+        return True
     # All other modes, we should have at least one keys path
     if "keys" not in os.environ:
         app.logger.info(
