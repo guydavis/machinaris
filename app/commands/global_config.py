@@ -21,7 +21,7 @@ from app.commands import global_config
 
 # Hard-coded verson numbers for now
 MACHINARIS_VERSION="0.3.0"
-CHIADOG_VERSION="0.5.1" # See https://github.com/martomi/chiadog/releases
+CHIADOG_VERSION="0.6.0" # See https://github.com/martomi/chiadog/releases
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
