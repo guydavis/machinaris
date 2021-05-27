@@ -87,7 +87,13 @@ class Wallet:
     def __init__(self, cli_stdout):
         self.text = ""
         for line in cli_stdout:
-            self.text += line + '\n'
+            try:
+                if line.lower().strip().startswith("no online backup"):
+                    self.text += line[line.index('Wallet Height'):] + '\n'
+            except:
+                app.logger.info("Malformed wallet show: {0}".format(line))
+            else:
+                self.text += line + '\n'
 
 class Keys:
 

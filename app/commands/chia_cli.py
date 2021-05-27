@@ -117,10 +117,7 @@ def load_wallet_show():
         abort(500, description="The timeout is expired!")
     if errs:
         abort(500, description=errs.decode('utf-8'))
-    
-    last_wallet_show = chia.Keys(outs.decode('utf-8').splitlines())
-    if "No online backup found" in last_wallet_show.text:
-        last_wallet_show.text = last_wallet_show[last_wallet_show.text.index('Wallet height'):]
+    last_wallet_show = chia.Wallet(outs.decode('utf-8').splitlines())
     last_wallet_show_load_time = datetime.datetime.now()
     return last_wallet_show
 
@@ -216,7 +213,7 @@ def load_keys_show():
     if errs:
         abort(500, description=errs.decode('utf-8'))
     
-    last_keys_show = chia.Wallet(outs.decode('utf-8').splitlines())
+    last_keys_show = chia.Keys(outs.decode('utf-8').splitlines())
     last_keys_show_load_time = datetime.datetime.now()
     return last_keys_show 
 
