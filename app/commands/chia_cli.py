@@ -119,7 +119,7 @@ def load_wallet_show():
         abort(500, description=errs.decode('utf-8'))
     
     last_wallet_show = chia.Keys(outs.decode('utf-8').splitlines())
-    if "No online backup found" in last_wallet_show:
+    if "No online backup found" in last_wallet_show.text:
         last_wallet_show = last_wallet_show[last_wallet_show.index('Wallet height'):]
     last_wallet_show_load_time = datetime.datetime.now()
     return last_wallet_show
@@ -281,7 +281,6 @@ def generate_key(key_path):
         flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
         flash(str(ex), 'warning')
         return False
-    clear_wallet_backup_prompt()
     return True
 
 def remove_connection(node_id, ip):
