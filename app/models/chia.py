@@ -88,7 +88,7 @@ class Wallet:
     def __init__(self, cli_stdout):
         self.text = ""
         for line in cli_stdout:
-            app.logger.info("NEW LINE: {0}".format(line))
+            #app.logger.info("NEW LINE: {0}".format(line))
             if "No online" in line or "skip restore from backup" in line or "own backup file" in line:
                 continue
             self.text += line + '\n'
