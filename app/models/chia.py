@@ -1,4 +1,5 @@
 import os
+import traceback
 
 from datetime import datetime
 
@@ -79,7 +80,7 @@ class FarmPlots:
             dir,file=os.path.split(path)
             self.rows.append({ 'dir': dir,  \
                 'plot': file,  \
-                'create_date': datetime.utcfromtimestamp(int(st_ctime)).strftime('%Y-%m-%d %H:%M:%S'), \
+                'create_date': datetime.fromtimestamp(int(st_ctime)).strftime('%Y-%m-%d %H:%M:%S'), \
                 'size': int(st_size) }) 
 
 class Wallet:
@@ -87,6 +88,9 @@ class Wallet:
     def __init__(self, cli_stdout):
         self.text = ""
         for line in cli_stdout:
+            #app.logger.info("NEW LINE: {0}".format(line))
+            if "No online" in line or "skip restore from backup" in line or "own backup file" in line:
+                continue
             self.text += line + '\n'
 
 class Keys:

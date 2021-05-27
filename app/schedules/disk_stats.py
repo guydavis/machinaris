@@ -78,8 +78,10 @@ def store_disk_stats(db, current_datetime, disk_type):
 
 def collect():
     with app.app_context():
+        gc = global_config.load()
         db = get_db()
         delete_old_stats(db)
         current_datetime = datetime.datetime.now().strftime("%Y%m%d%H%M")
         store_disk_stats(db, current_datetime, 'plots')
-        store_disk_stats(db, current_datetime, 'plotting')
+        if not (gc['farming_only'] or gc['harvesting_only']):
+            store_disk_stats(db, current_datetime, 'plotting')

@@ -32,7 +32,7 @@
                                 <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline ">Summary</span>
                             </a>
                         </li>
-                        {% if not global_config.farming_only %}
+                        {% if not (global_config.farming_only or global_config.harvesting_only) %}
                         <li>
                             <a href="{{ url_for('plotting') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-speedometer"></i> <span
@@ -44,19 +44,27 @@
                             <a href="{{ url_for('farming') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-tree"></i> <span class="ms-1 d-none d-sm-inline">Farming</span></a>
                         </li>
+                        {% endif %}
+                        {% if not (global_config.harvesting_only or global_config.plotting_only) %}
                         <li>
                             <a href="{{ url_for('wallet') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-wallet"></i> <span class="ms-1 d-none d-sm-inline">Wallet</span></a>
                         </li>
+                        {% endif %}
+                        {% if not (global_config.harvesting_only or global_config.plotting_only) %}
                         <li>
                             <a href="{{ url_for('keys') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-key"></i> <span class="ms-1 d-none d-sm-inline">Keys</span></a>
                         </li>
+                        {% endif %}
+                        {% if not (global_config.harvesting_only or global_config.plotting_only) %}
                         <li>
                             <a href="{{ url_for('network_blockchain') }}"
                                 class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-globe"></i> <span class="ms-1 d-none d-sm-inline">Network</span></a>
                         </li>
+                        {% endif %}
+                        {% if not (global_config.harvesting_only or global_config.plotting_only) %}
                         <li>
                             <a href="{{ url_for('alerts') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-bell"></i> <span class="ms-1 d-none d-sm-inline">Alerts</span></a>
@@ -67,7 +75,7 @@
                                 class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">Settings</span> </a>
                             <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                                {% if not global_config.farming_only %}
+                                {% if not (global_config.farming_only or global_config.harvesting_only) %}
                                 <li class="w-100">
                                     <a href="{{ url_for('settings_plotting') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Plotting</span> </a>
@@ -78,6 +86,8 @@
                                     <a href="{{ url_for('settings_farming') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Farming</span> </a>
                                 </li>
+                                {% endif %}
+                                {% if not (global_config.plotting_only or global_config.harvesting_only) %}
                                 <li>
                                     <a href="{{ url_for('settings_alerts') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Alerts</span> </a>
@@ -124,7 +134,7 @@
                             <small><i>Chia™ Dog {{ global_config.chiadog_version }}</i></small>
                           </div>
                           <div class="col">
-                            <small><i>Machinaris {{ global_config.machinaris_version }}</i></small>
+                            <small><i title="mode={{ global_config.machinaris_mode }}">Machinaris {{ global_config.machinaris_version }}</i></small>
                           </div>
                           <div class="col">
                             <small><i>Plotman {{ global_config.plotman_version }}</i></small>

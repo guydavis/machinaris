@@ -8,6 +8,7 @@ import psutil
 import re
 import signal
 import shutil
+import socket
 import time
 import traceback
 import yaml
@@ -38,7 +39,7 @@ def load_farm_summary():
             (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
         return last_farm_summary
 
-    if global_config.plotting_only():  # Just get plot count and size
+    if global_config.plotting_only() or global_config.harvesting_only():  # Just get plot count and size
         last_farm_summary = chia.FarmSummary(farm_plots=load_plots_farming())
     else: # Load from chia farm summary
         proc = Popen("{0} farm summary".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
@@ -49,7 +50,8 @@ def load_farm_summary():
             proc.communicate()
             abort(500, description="The timeout is expired!")
         if errs:
-            abort(500, description=errs.decode('utf-8'))
+            app.logger.info("Failed to load chia farm summary at.")
+            app.logger.info(traceback.format_exc())
         last_farm_summary = chia.FarmSummary(cli_stdout=outs.decode('utf-8').splitlines())
     last_farm_summary_load_time = datetime.datetime.now()
     return last_farm_summary
@@ -108,7 +110,7 @@ def load_wallet_show():
             (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
         return last_wallet_show
 
-    proc = Popen("{0} wallet show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("echo 'S' | {0} wallet show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -117,8 +119,7 @@ def load_wallet_show():
         abort(500, description="The timeout is expired!")
     if errs:
         abort(500, description=errs.decode('utf-8'))
-    
-    last_wallet_show = chia.Keys(outs.decode('utf-8').splitlines())
+    last_wallet_show = chia.Wallet(outs.decode('utf-8').splitlines())
     last_wallet_show_load_time = datetime.datetime.now()
     return last_wallet_show
 
@@ -214,7 +215,7 @@ def load_keys_show():
     if errs:
         abort(500, description=errs.decode('utf-8'))
     
-    last_keys_show = chia.Wallet(outs.decode('utf-8').splitlines())
+    last_keys_show = chia.Keys(outs.decode('utf-8').splitlines())
     last_keys_show_load_time = datetime.datetime.now()
     return last_keys_show 
 
@@ -279,8 +280,6 @@ def generate_key(key_path):
         flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
         flash(str(ex), 'warning')
         return False
-    # Finally send a 'S' to chia wallet show to get past backup prompt on first check
-    os.system("echo 'S' | chia wallet show &")
     return True
 
 def remove_connection(node_id, ip):

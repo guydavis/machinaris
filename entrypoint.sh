@@ -11,7 +11,11 @@ cd /chia-blockchain
 . ./activate
 
 mkdir -p /root/.chia/mainnet/log
-chia init 2>&1 > /root/.chia/mainnet/log/init.log
+if [ -d /root/.chia/farmer_ca ]; then
+  chia init -c /root/.chia/farmer_ca 2>&1 > /root/.chia/mainnet/log/init.log
+else # All regular cases
+  chia init 2>&1 > /root/.chia/mainnet/log/init.log
+fi
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
@@ -35,6 +39,7 @@ elif [[ ${mode} == 'harvester' ]]; then
     exit
   else
     chia configure --set-farmer-peer ${farmer_address}:${farmer_port}
+    chia configure --enable-upnp false
     chia start harvester
   fi
 elif [[ ${mode} == 'plotter' ]]; then

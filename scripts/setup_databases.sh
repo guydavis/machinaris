@@ -4,7 +4,7 @@
 #
 
 mkdir -p /root/.chia/machinaris/dbs
-pushd /root/.chia/machinaris/dbs
+cd /root/.chia/machinaris/dbs
 rm -f machinaris.db # Temporarily delete old db 
 if [ ! -f stats.db ]; then
     echo 'Creating database for Machinaris...'
@@ -23,10 +23,9 @@ CREATE TABLE stat_plotting_disk_free (id INTEGER PRIMARY KEY, hostname TEXT, pat
 EOF
     chmod 666 /root/.chia/machinaris/dbs/stats.db
 fi
-popd
 
 mkdir -p /root/.chia/chiadog/dbs
-pushd /root/.chia/chiadog/dbs
+cd /root/.chia/chiadog/dbs
 if [ ! -f chiadog.db ]; then
     echo 'Creating database for Chiadog...'
     sqlite3 chiadog.db <<EOF
@@ -38,4 +37,3 @@ CREATE TRIGGER notification_on_insert AFTER INSERT ON notification
 EOF
     chmod 666 /root/.chia/chiadog/dbs/chiadog.db
 fi
-popd

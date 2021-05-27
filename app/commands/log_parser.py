@@ -56,10 +56,14 @@ def find_plotting_job_log(plot_id):
         filename = os.fsdecode(file)
         if filename.endswith(".log") and not filename.startswith('plotman.'): 
             with open(os.path.join(str(dir_path), filename)) as logfile:
-                head = [next(logfile) for x in range(10)] # Check first 10 lines
-                for line in head:
-                    if plot_id in line:
-                        return os.path.join(str(dir_path), filename)
+                try:
+                    head = [next(logfile) for x in range(10)] # Check first 10 lines
+                    for line in head:
+                        if plot_id in line:
+                            return os.path.join(str(dir_path), filename)
+                except:
+                    app.logger.info("Failed to read 10 lines into: {0}".format(filename))
+                    app.logger.info(traceback.format_exc())
             continue
         else:
             continue
