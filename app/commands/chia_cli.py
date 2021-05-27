@@ -50,7 +50,8 @@ def load_farm_summary():
             proc.communicate()
             abort(500, description="The timeout is expired!")
         if errs:
-            abort(500, description=errs.decode('utf-8'))
+            app.logger.info("Failed to load chia farm summary at.")
+            app.logger.info(traceback.format_exc())
         last_farm_summary = chia.FarmSummary(cli_stdout=outs.decode('utf-8').splitlines())
     last_farm_summary_load_time = datetime.datetime.now()
     return last_farm_summary
