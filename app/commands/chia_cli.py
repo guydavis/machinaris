@@ -38,7 +38,7 @@ def load_farm_summary():
             (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
         return last_farm_summary
 
-    if global_config.plotting_only():  # Just get plot count and size
+    if global_config.plotting_only() or global_config.harvesting_only():  # Just get plot count and size
         last_farm_summary = chia.FarmSummary(farm_plots=load_plots_farming())
     else: # Load from chia farm summary
         proc = Popen("{0} farm summary".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)

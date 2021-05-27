@@ -32,6 +32,7 @@ def load():
     cfg = {}
     cfg['plotting_only'] = plotting_only()
     cfg['farming_only'] = farming_only()
+    cfg['harvesting_only'] = harvesting_only()
     cfg['now'] = datetime.datetime.now(tz=None).strftime("%Y-%m-%d %H:%M:%S")
     cfg['machinaris_version'] = MACHINARIS_VERSION
     cfg['chiadog_version'] = CHIADOG_VERSION
@@ -78,7 +79,10 @@ def plotting_only():
     return "mode" in os.environ and os.environ['mode'] == "plotter"
 
 def farming_only():
-    return "mode" in os.environ and os.environ['mode'] in ["harvester", "farmer"]
+    return "mode" in os.environ and os.environ['mode'] == "farmer"
+
+def harvesting_only():
+    return "mode" in os.environ and os.environ['mode'] == "harvester"
 
 last_chia_version = None
 last_chia_version_load_time = None
