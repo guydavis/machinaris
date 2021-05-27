@@ -124,7 +124,19 @@ def load_wallet_show():
 
 def clear_wallet_backup_prompt():
     app.logger.info('Clearing online backup prompt for wallet show.')
-    os.system("echo 'S' | chia wallet show &")
+    proc = Popen("{0} wallet show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+    time.sleep(3)
+    try:
+        outs, errs = proc.communicate(input='S', timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        app.logger.info("Timeout attempting to skip wallet show backup prompt.")
+    if errs:
+        app.logger.info("Error attempting to skip wallet show backup prompt.")
+        app.logger.info(errs.decode('utf-8').splitlines())
+    if outs:
+        app.logger.info(outs.decode('utf-8').splitlines())
 
 last_blockchain_show = None 
 last_blockchain_show_load_time = None 
