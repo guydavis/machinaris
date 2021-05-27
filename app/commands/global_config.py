@@ -35,6 +35,7 @@ def load():
     cfg['harvesting_only'] = harvesting_only()
     cfg['now'] = datetime.datetime.now(tz=None).strftime("%Y-%m-%d %H:%M:%S")
     cfg['machinaris_version'] = MACHINARIS_VERSION
+    cfg['machinaris_mode'] = os.environ['mode']
     cfg['chiadog_version'] = load_chiadog_version()
     cfg['plotman_version'] = load_plotman_version()
     cfg['chia_version'] = load_chia_version()

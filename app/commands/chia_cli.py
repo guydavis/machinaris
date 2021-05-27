@@ -122,6 +122,10 @@ def load_wallet_show():
     last_wallet_show_load_time = datetime.datetime.now()
     return last_wallet_show
 
+def clear_wallet_backup_prompt():
+    app.logger.info('Clearing online backup prompt for wallet show.')
+    os.system("echo 'S' | chia wallet show &")
+
 last_blockchain_show = None 
 last_blockchain_show_load_time = None 
 
@@ -279,8 +283,7 @@ def generate_key(key_path):
         flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
         flash(str(ex), 'warning')
         return False
-    # Finally send a 'S' to chia wallet show to get past backup prompt on first check
-    os.system("echo 'S' | chia wallet show &")
+    clear_wallet_backup_prompt()
     return True
 
 def remove_connection(node_id, ip):
