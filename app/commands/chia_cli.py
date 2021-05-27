@@ -120,7 +120,7 @@ def load_wallet_show():
     
     last_wallet_show = chia.Keys(outs.decode('utf-8').splitlines())
     if "No online backup found" in last_wallet_show.text:
-        last_wallet_show = last_wallet_show[last_wallet_show.index('Wallet height'):]
+        last_wallet_show.text = last_wallet_show[last_wallet_show.text.index('Wallet height'):]
     last_wallet_show_load_time = datetime.datetime.now()
     return last_wallet_show
 
