@@ -93,12 +93,6 @@ def alerts():
 def wallet():
     gc = global_config.load()
     wallet = chia_cli.load_wallet_show()
-    if "No online backup found" in wallet.text:
-        app.logger.info("In /wallet route, found online backup prompt.")
-        chia_cli.clear_wallet_backup_prompt()
-        wallet = chia_cli.load_wallet_show()
-        if "No online backup found" in wallet.text:
-            app.logger.info("Still have online backup prompt even after attempting to clear!")
     return render_template('wallet.html', wallet=wallet.text, 
         global_config=gc)
 

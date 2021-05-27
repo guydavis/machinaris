@@ -108,7 +108,7 @@ def load_wallet_show():
             (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
         return last_wallet_show
 
-    proc = Popen("{0} wallet show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("echo 'S' | {0} wallet show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -119,24 +119,10 @@ def load_wallet_show():
         abort(500, description=errs.decode('utf-8'))
     
     last_wallet_show = chia.Keys(outs.decode('utf-8').splitlines())
+    if "No online backup found" in last_wallet_show:
+        last_wallet_show = last_wallet_show[last_wallet_show.index('Wallet height'):]
     last_wallet_show_load_time = datetime.datetime.now()
     return last_wallet_show
-
-def clear_wallet_backup_prompt():
-    app.logger.info('Clearing online backup prompt for wallet show.')
-    proc = Popen("{0} wallet show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
-    time.sleep(3)
-    try:
-        outs, errs = proc.communicate(input='S', timeout=90)
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-        app.logger.info("Timeout attempting to skip wallet show backup prompt.")
-    if errs:
-        app.logger.info("Error attempting to skip wallet show backup prompt.")
-        app.logger.info(errs.decode('utf-8').splitlines())
-    if outs:
-        app.logger.info(outs.decode('utf-8').splitlines())
 
 last_blockchain_show = None 
 last_blockchain_show_load_time = None 
