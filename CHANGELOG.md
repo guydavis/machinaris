@@ -10,7 +10,6 @@ All notable changes to this project will be documented in this file. The format 
 - Rebase off ubuntu:focal, include nice Dockerfile cleanup by sparklyballs 
 - When mode=plotter, autoconfigure Plotman with provided farmer_pk and pool_pk
 - When mode=harvester, auto import of your farmer's CA certificates
-- Adopt ChiaPOS multi-threading library for faster plotting; see https://github.com/xrobau/chiapos 
 
 ## [0.2.1] - 2021-05-21
 

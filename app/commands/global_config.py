@@ -117,13 +117,10 @@ def load_chia_version():
         abort(500, description=errs.decode('utf-8'))
     last_chia_version = outs.decode('utf-8').strip()
     # Chia devs use a really weird versioning offset...
-    if last_chia_version.endswith('dev0'):
+    if last_chia_version.endswith('dev'):
         sem_ver = last_chia_version.split('.')
         last_chia_version = sem_ver[0] + '.' + \
             sem_ver[1] + '.' + str(int(sem_ver[2])-1)
-    elif '.dev' in last_chia_version:
-        sem_ver = last_chia_version.split('.')
-        last_chia_version = sem_ver[0] + '.' + sem_ver[1] + '.' + sem_ver[2]
     last_chia_version_load_time = datetime.datetime.now()
     return last_chia_version
 

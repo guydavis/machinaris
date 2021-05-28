@@ -35,7 +35,6 @@ RUN \
 		unzip \
 		vim \
 		wget \
-		cmake \
 	\
 # cleanup apt cache
 	\
@@ -55,15 +54,12 @@ COPY . /machinaris/
 # set workdir
 WORKDIR /chia-blockchain
 
-# install chia and patch for faster plotting; see https://github.com/xrobau/chiapos
+# install chia
 RUN \
 	git clone --branch ${CHIA_BRANCH} https://github.com/Chia-Network/chia-blockchain.git /chia-blockchain \
 	&& git submodule update --init mozilla-ca \
 	&& chmod +x install.sh \
 	&& /usr/bin/sh ./install.sh \
-	&& curl -o install_multithreaded_chiapos.sh https://gist.githubusercontent.com/SippieCup/8420c831ffcd74f4c4c3c756d1bda912/raw/45d44573b6aedf8ea47d8c485fb9eeeb342c53b4/install_multithreaded_chiapos.sh \
-	&& chmod a+x install_multithreaded_chiapos.sh \
-	&& ./install_multithreaded_chiapos.sh /chia-blockchain \
 	\
 # cleanup apt and pip caches
 	\
