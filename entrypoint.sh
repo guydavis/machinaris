@@ -11,11 +11,7 @@ cd /chia-blockchain
 . ./activate
 
 mkdir -p /root/.chia/mainnet/log
-if [ -d /root/.chia/farmer_ca ]; then
-  chia init -c /root/.chia/farmer_ca 2>&1 > /root/.chia/mainnet/log/init.log
-else # All regular cases
-  chia init 2>&1 > /root/.chia/mainnet/log/init.log
-fi
+chia init 2>&1 > /root/.chia/mainnet/log/init.log
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
@@ -38,9 +34,15 @@ elif [[ ${mode} == 'harvester' ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
+    if [ -d /root/.chia/farmer_ca ]; then
+      chia init -c /root/.chia/farmer_ca 2>&1 > /root/.chia/mainnet/log/init.log
+    else
+      echo "Did not find your farmer's ca folder at /root/.chia/farmer_ca."
+      echo "See: https://github.com/guydavis/machinaris/wiki/Generic#harvester-only"
+    fi
     chia configure --set-farmer-peer ${farmer_address}:${farmer_port}
     chia configure --enable-upnp false
-    chia start harvester
+    chia start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then
     echo "Starting in Plotter-only mode.  Run Plotman from either CLI or WebUI."

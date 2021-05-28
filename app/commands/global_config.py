@@ -50,6 +50,9 @@ def is_setup():
             app.logger.debug(
                 "Found plotter mode with farmer_pk and pool_pk provided.")
             return True  # When plotting don't need private in mnemonic.txt
+    if "mode" in os.environ and os.environ['mode'] == 'harvester':
+        # Harvester doesn't require a mnemonic private key as farmer's ca already imported.
+        return True
     # All other modes, we should have at least one keys path
     if "keys" not in os.environ:
         app.logger.info(
@@ -173,8 +176,9 @@ def load_chiadog_version():
     if errs:
         abort(500, description=errs.decode('utf-8'))
     last_chiadog_version = outs.decode('utf-8').strip()
-    if last_chiadog_version.startswith('chiadog'):
-        last_chiadog_version = last_chiadog_version[len('chiadog'):].strip()
+    app.logger.info(last_chiadog_version)
+    if last_chiadog_version.startswith('v'):
+        last_chiadog_version = last_chiadog_version[len('v'):].strip()
     last_chiadog_version_load_time = datetime.datetime.now()
     return last_chiadog_version
 
