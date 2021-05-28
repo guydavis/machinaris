@@ -176,8 +176,9 @@ def load_chiadog_version():
     if errs:
         abort(500, description=errs.decode('utf-8'))
     last_chiadog_version = outs.decode('utf-8').strip()
-    if last_chiadog_version.startswith('chiadog'):
-        last_chiadog_version = last_chiadog_version[len('chiadog'):].strip()
+    app.logger.info(last_chiadog_version)
+    if last_chiadog_version.startswith('v'):
+        last_chiadog_version = last_chiadog_version[len('v'):].strip()
     last_chiadog_version_load_time = datetime.datetime.now()
     return last_chiadog_version
 

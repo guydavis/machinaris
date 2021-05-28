@@ -2,13 +2,15 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.3.0] - 2021-05-?
+## [0.3.0] - 2021-05-28
 
 - Integrate the excellent Chiadog project for log monitoring and alerting
-- Rebase off ubuntu:focal, include nice Dockerfile cleanup by sparklyballs 
-- Support farmer_pk and pool_pk env vars when mode=plotter, automatically configure Plotman
+- Plotman Analyze output to show time spent in each plotting phase
 - Log Viewer for Farming, Alerts, and Plotting including logs for running plot jobs
-- Plotman Analyze output available for plots with Plotman job logs.
+- Rebase off ubuntu:focal, include nice Dockerfile cleanup by sparklyballs 
+- When mode=plotter, autoconfigure Plotman with provided farmer_pk and pool_pk
+- When mode=harvester, auto import of your farmer's CA certificates
+- Adopt ChiaPOS multi-threading library for faster plotting; see https://github.com/xrobau/chiapos 
 
 ## [0.2.1] - 2021-05-21
 
