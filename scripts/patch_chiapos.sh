@@ -5,7 +5,7 @@
 # See https://github.com/guydavis/machinaris/wiki/Releases#chiapos 
 #
 
-if [[ "${PATCH_CHIAPOS}" == "true" ]]; then
+if [ "${PATCH_CHIAPOS}" == "true" ]; then
     echo 'Patching with Chiapos...'
     cd /chia-blockchain
     curl -o install_multithreaded_chiapos.sh https://gist.githubusercontent.com/SippieCup/8420c831ffcd74f4c4c3c756d1bda912/raw/4be54e136f3f7c070f320e935e883e5ef4c7141d/install_multithreaded_chiapos.sh
