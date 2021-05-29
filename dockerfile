@@ -71,7 +71,7 @@ RUN \
 		/var/tmp/*
 # install additional tools such as Plotman, Chiadog, and Machinaris
 RUN \
-       . /machinaris/scripts/patch_chiapos.sh \
+       /usr/bin/bash /machinaris/scripts/patch_chiapos.sh \
 	&& . /machinaris/scripts/chiadog_install.sh \
 	&& . /machinaris/scripts/plotman_install.sh \
 	&& . /machinaris/scripts/machinaris_install.sh \
