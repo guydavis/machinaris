@@ -9,7 +9,7 @@ rm -f machinaris.db # Temporarily delete old db
 if [ ! -f stats.db ]; then
     echo 'Creating database for Machinaris...'
     sqlite3 stats.db <<EOF
-CREATE TABLE IF NOT EXISTS stat_plot_count (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
+CREATE TABLE stat_plot_count (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
 CREATE TABLE stat_plots_size (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
 CREATE TABLE stat_total_chia (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
 CREATE TABLE stat_netspace_size (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
