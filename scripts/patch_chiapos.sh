@@ -4,7 +4,8 @@
 # Patch for faster plotting, on some systems with newer/fast CPUs
 # See https://github.com/guydavis/machinaris/wiki/Releases#chiapos 
 #
-echo "PATCH_CHIAPOS=$PATCH_CHIAPOS"
+
+echo "PATCH_CHIAPOS=$1"
 if [[ $PATCH_CHIAPOS = 'true' ]]; then
     echo 'Patching with Chiapos...'
     cd /chia-blockchain
