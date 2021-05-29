@@ -40,6 +40,7 @@ jobs:
           push: true
           build-args: |
             "CHIA_BRANCH=1.1.6"
+            "PATCH_CHIAPOS=true"
           tags: |
             guydavis/machinaris:develop
             ghcr.io/guydavis/machinaris:develop
