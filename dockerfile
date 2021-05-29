@@ -48,6 +48,7 @@ RUN \
 FROM package_stage
 # Base install of official Chia binaries at the given branch
 ARG CHIA_BRANCH
+ARG PATCH_CHIAPOS
 
 # copy local files
 COPY . /machinaris/
@@ -56,11 +57,17 @@ COPY . /machinaris/
 WORKDIR /chia-blockchain
 
 # install Chia using official Chia Blockchain binaries
+# Only if PATCH_CHIAPOS set, then patch for faster plotting - only on :chiapos image tag; see https://github.com/xrobau/chiapos (from https://gist.github.com/SippieCup/8420c831ffcd74f4c4c3c756d1bda912)
 RUN \
 	git clone --branch ${CHIA_BRANCH} https://github.com/Chia-Network/chia-blockchain.git /chia-blockchain \
 	&& git submodule update --init mozilla-ca \
 	&& chmod +x install.sh \
 	&& /usr/bin/sh ./install.sh \
+    &&  [[ -z "${PATCH_CHIAPOS}" ]] || ( \
+		curl -o install_multithreaded_chiapos.sh https://gist.githubusercontent.com/SippieCup/8420c831ffcd74f4c4c3c756d1bda912/raw/4be54e136f3f7c070f320e935e883e5ef4c7141d/install_multithreaded_chiapos.sh \
+		&& chmod a+x install_multithreaded_chiapos.sh \
+		&& ./install_multithreaded_chiapos.sh /chia-blockchain \
+	) \
 	\
 # cleanup apt and pip caches
 	\
@@ -71,8 +78,7 @@ RUN \
 		/var/tmp/*
 # install additional tools such as Plotman, Chiadog, and Machinaris
 RUN \
-       /usr/bin/bash /machinaris/scripts/patch_chiapos.sh ${PATCH_CHIAPOS} \
-	&& . /machinaris/scripts/chiadog_install.sh \
+	. /machinaris/scripts/chiadog_install.sh \
 	&& . /machinaris/scripts/plotman_install.sh \
 	&& . /machinaris/scripts/machinaris_install.sh \
 	\
