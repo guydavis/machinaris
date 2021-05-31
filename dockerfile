@@ -36,6 +36,7 @@ RUN \
 		vim \
 		wget \
 		cmake \
+		rsync \
 	\
 # cleanup apt cache
 	\
@@ -58,7 +59,7 @@ WORKDIR /chia-blockchain
 
 # install Chia using official Chia Blockchain binaries
 RUN \
-	git clone --branch ${CHIA_BRANCH} https://github.com/Chia-Network/chia-blockchain.git /chia-blockchain \
+	git clone --branch ${CHIA_BRANCH}  --single-branch https://github.com/Chia-Network/chia-blockchain.git /chia-blockchain \
 	&& git submodule update --init mozilla-ca \
 	&& chmod +x install.sh \
 	&& /usr/bin/sh ./install.sh \
