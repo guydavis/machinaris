@@ -42,7 +42,7 @@ jobs:
           build-args: |
             "CHIA_BRANCH=1.1.6"
           tags: |
-            guydavis/machinaris:test
-            guydavis/machinaris:v${{ github.event.inputs.version }}
-            ghcr.io/guydavis/machinaris:test
-            ghcr.io/guydavis/machinaris:v${{ github.event.inputs.version }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:test
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:v${{ github.event.inputs.version }}
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:test
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:v${{ github.event.inputs.version }}

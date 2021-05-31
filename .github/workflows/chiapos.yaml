@@ -40,5 +40,5 @@ jobs:
             "CHIA_BRANCH=1.1.6"
             "PATCH_CHIAPOS=true"
           tags: |
-            guydavis/machinaris:chiapos
-            ghcr.io/guydavis/machinaris:chiapos
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:chiapos
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:chiapos
