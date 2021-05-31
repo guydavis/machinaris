@@ -26,10 +26,17 @@ done
 
 # import ssh key if exists
 if [ -f "/id_rsa" ]; then
-    echo "/id_rsa exists, try to import private ssh key"
+    echo "/id_rsa exists, trying to import private ssh key"
     mkdir -p ~/.ssh/
     cp -f /id_rsa ~/.ssh/id_rsa
-    ssh-keygen -y -f ~/.ssh/id_rsa ~/.ssh/id_rsa.pub || true
+    ssh-keygen -y -f ~/.ssh/id_rsa> ~/.ssh/id_rsa.pub || true
+    cat > ~/.ssh/config <<'_EOF'
+    Host *
+      StrictHostKeyChecking no
+
+_EOF
+
+
     chmod 700 ~/.ssh
     chmod 600 ~/.ssh/*
 fi
