@@ -106,6 +106,9 @@ ENV TZ=Etc/UTC
 ENV FLASK_ENV=production
 ENV FLASK_APP=/machinaris/main.py
 ENV XDG_CONFIG_HOME=/root/.chia
+ENV AUTO_PLOT=false
+
+VOLUME [ "/id_rsa" ]
 
 # ports
 EXPOSE 8555

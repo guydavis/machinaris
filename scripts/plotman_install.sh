@@ -3,8 +3,10 @@
 # Installs Plotman for plotting management
 #
 
-echo 'Installing Plotman...'
 
 cd /chia-blockchain
+PLOTMAN_OFFICIAL_URL=https://github.com/ericaltendorf/plotman@main
+from="${PLOTMAN_GIT_URL:-${PLOTMAN_OFFICIAL_URL}}"
 
-venv/bin/pip3 install git+https://github.com/ericaltendorf/plotman@main
+echo 'Installing Plotman from:${from}...'
+venv/bin/pip3 install git+${from} || venv/bin/pip3 install git+${PLOTMAN_OFFICIAL_URL}
