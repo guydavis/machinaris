@@ -1,4 +1,4 @@
-# Default/example plotman.yaml configuration file
+# Learn more about Plotman at https://github.com/ericaltendorf/plotman
 
 # Options for display and rendering
 user_interface:
@@ -15,7 +15,7 @@ directories:
         # STDERR of all plot jobs).  In order to monitor progress, plotman
         # reads these logs on a regular basis, so using a fast drive is
         # recommended.  DON'T CHANGE THIS IN-CONTAINER PATH
-        log: /root/.chia/logs
+        log: /root/.chia/plotman/logs
 
         # One or more directories to use as tmp dirs for plotting.  The
         # scheduler will use all of them and distribute jobs among them.
@@ -87,13 +87,13 @@ scheduling:
         tmpdir_stagger_phase_major: 2
         tmpdir_stagger_phase_minor: 1
         # Optional: default is 1
-        tmpdir_stagger_phase_limit: 2
+        tmpdir_stagger_phase_limit: 1
 
         # Don't run more than this many jobs at a time on a single temp dir.
         tmpdir_max_jobs: 2
 
         # Don't run more than this many jobs at a time in total.
-        global_max_jobs: 2
+        global_max_jobs: 4
 
         # Don't run any jobs (across all temp dirs) more often than this, in minutes.
         global_stagger_m: 30
@@ -110,7 +110,7 @@ plotting:
         e: False              # Use -e plotting option
         n_threads: 4          # Threads per job
         n_buckets: 128        # Number of buckets to split data into
-        job_buffer: 6750      # Per job memory
+        job_buffer: 3389      # Per job memory - Chia default
         # If specified, pass through to the -f and -p options.  See CLI reference.
         #   farmer_pk: ...
         #   pool_pk: ...

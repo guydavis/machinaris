@@ -2,9 +2,18 @@
 
 {% block content %}
 
+<div class="position-relative">
+    <div class="position-absolute top-0 end-0">
+        <a href="https://github.com/guydavis/machinaris/wiki/Chia" target="_blank">
+            <i class="fs-4 bi-question-circle"></i>
+        </a>
+    </div>
+</div>
+
+
 <header class="pb-3 mb-4 border-bottom">
     <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-        <span class="fs-4">Farming - config.yaml </span>
+        <span class="fs-4">Farming - Chia™ - config.yaml </span>
     </a>
 </header>
 
@@ -30,7 +39,7 @@
                 <textarea style="background: #D3D3D3;" class="form-control fs-6" id="config" name="config" rows="20"
                     style="height:100%;">{{ config }}</textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Save</button>
+            <button type="submit" class="btn btn-outline-success">Save</button>
         </fieldset>
     </form>
 

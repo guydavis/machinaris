@@ -1,10 +1,7 @@
-name: release
+name: chiapos
 
 on: 
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Release Version' 
+  workflow_dispatch
 
 jobs:
   docker:
@@ -41,8 +38,7 @@ jobs:
           push: true
           build-args: |
             "CHIA_BRANCH=1.1.6"
+            "PATCH_CHIAPOS=true"
           tags: |
-            guydavis/machinaris:latest
-            guydavis/machinaris:v${{ github.event.inputs.version }}
-            ghcr.io/guydavis/machinaris:latest
-            ghcr.io/guydavis/machinaris:v${{ github.event.inputs.version }}
+            guydavis/machinaris:chiapos
+            ghcr.io/guydavis/machinaris:chiapos

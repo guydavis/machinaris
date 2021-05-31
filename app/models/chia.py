@@ -1,26 +1,47 @@
+import os
+import traceback
+
 from datetime import datetime
 
 from app import app
+from app import utils
+
+# Treat *.plot files smaller than this as in-transit (copying) so don't count them
+MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
 class FarmSummary:
 
-    def __init__(self, cli_stdout):
-        for line in cli_stdout:
-            if "status" in line: 
-                self.calc_status(line.split(':')[1].strip())
-            elif "Total chia farmed" in line:
-                self.total_chia = line.split(':')[1].strip()
-            elif "Plot count" in line:
-                self.plot_count = line.split(':')[1].strip()
-            elif "Total size of plots" in line:
-                self.plot_size = line.split(':')[1].strip()
-            elif "Estimated network space" in line:
-                self.calc_network_size(line.split(':')[1].strip())
-            elif "Expected time to win" in line:
-                self.time_to_win = line.split(':')[1].strip()
-            elif "User transaction fees" in line:
-                self.transaction_fees = line.split(':')[1].strip()
-            # TODO Handle Connection error lines from Harvestor etc
+    def __init__(self, cli_stdout=None, farm_plots=None):
+        if cli_stdout:
+            for line in cli_stdout:
+                if "status" in line: 
+                    self.calc_status(line.split(':')[1].strip())
+                elif "Total chia farmed" in line:
+                    self.total_chia = line.split(':')[1].strip()
+                elif "Plot count" in line:
+                    self.plot_count = line.split(':')[1].strip()
+                elif "Total size of plots" in line:
+                    self.plot_size = line.split(':')[1].strip()
+                elif "Estimated network space" in line:
+                    self.calc_network_size(line.split(':')[1].strip())
+                elif "Expected time to win" in line:
+                    self.time_to_win = line.split(':')[1].strip()
+                elif "User transaction fees" in line:
+                    self.transaction_fees = line.split(':')[1].strip()
+                # TODO Handle Connection error lines from Harvester etc
+        elif farm_plots:
+            self.plot_count = 0
+            bytes_size = 0
+            for plot in farm_plots.rows:
+                if plot['size'] > MINIMUM_K32_PLOT_SIZE_BYTES:
+                    self.plot_count += 1
+                    bytes_size += int(plot['size'])
+                else:
+                    app.logger.debug("Skipping inclusion of {0} size plot: {1}".format( \
+                        utils.sizeof_fmt(plot['size'], plot['path'])))
+            self.plot_size = utils.sizeof_fmt(bytes_size)
+        else:
+            raise Exception("Not provided either chia stdout lines or a list of plots.")
 
     def calc_status(self, status):
         self.status = status
@@ -50,14 +71,29 @@ class FarmSummary:
 class FarmPlots:
 
      def __init__(self, entries):
-        self.columns = ['dir', 'plot', 'create_date']
+        self.columns = ['dir', 'plot', 'create_date', 'size']
         self.rows = []
-        for stat, path in entries:
-            self.rows.append({ 'dir': '/plots',  \
-                'plot': path[len('/plots/'): ],  \
-                'create_date': datetime.utcfromtimestamp(int(stat)).strftime('%Y-%m-%d %H:%M:%S') })
+        for st_ctime, st_size, path in entries:
+            if not path.endswith(".plot"):
+                app.logger.info("Skipping non-plot file named: {0}".format(path))
+                continue
+            dir,file=os.path.split(path)
+            self.rows.append({ 'dir': dir,  \
+                'plot': file,  \
+                'create_date': datetime.fromtimestamp(int(st_ctime)).strftime('%Y-%m-%d %H:%M:%S'), \
+                'size': int(st_size) }) 
 
 class Wallet:
+
+    def __init__(self, cli_stdout):
+        self.text = ""
+        for line in cli_stdout:
+            #app.logger.info("NEW LINE: {0}".format(line))
+            if "No online" in line or "skip restore from backup" in line or "own backup file" in line:
+                continue
+            self.text += line + '\n'
+
+class Keys:
 
     def __init__(self, cli_stdout):
         self.text = ""
@@ -75,5 +111,32 @@ class Connections:
 
     def __init__(self, cli_stdout):
         self.text = ""
+        self.conns = []
         for line in cli_stdout:
             self.text += line + '\n'
+            try:
+                if line.strip().startswith('Connections:'):
+                    pass
+                elif line.strip().startswith('Type'):
+                    self.columns = line.lower().replace('last connect', 'last_connect') \
+                        .replace('mib up|down', 'mib_up mib_down').strip().split()
+                elif line.strip().startswith('-SB Height'):
+                    pass
+                else:
+                    vals = line.strip().split()
+                    #app.logger.debug(vals)
+                    self.conns.append({
+                        'type': vals[0],
+                        'ip': vals[1],
+                        'ports': vals[2],
+                        'nodeid': vals[3].replace('...',''),
+                        'last_connect': datetime.strptime( \
+                            str(datetime.today().year) + ' ' + vals[4] + ' ' + vals[5] + ' ' + vals[6], 
+                            '%Y %b %d %H:%M:%S'),
+                        'mib_up': float(vals[7].split('|')[0]),
+                        'mib_down': float(vals[7].split('|')[1])
+                    })
+            except:
+                app.logger.info(traceback.format_exc())
+
+

@@ -1,10 +1,9 @@
-name: release
+name: develop
 
-on: 
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Release Version' 
+on:
+  push:
+    branches:
+      - 'develop'
 
 jobs:
   docker:
@@ -42,7 +41,5 @@ jobs:
           build-args: |
             "CHIA_BRANCH=1.1.6"
           tags: |
-            guydavis/machinaris:latest
-            guydavis/machinaris:v${{ github.event.inputs.version }}
-            ghcr.io/guydavis/machinaris:latest
-            ghcr.io/guydavis/machinaris:v${{ github.event.inputs.version }}
+            guydavis/machinaris:develop
+            ghcr.io/guydavis/machinaris:develop

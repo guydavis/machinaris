@@ -1,10 +1,10 @@
-name: release
+name: test
 
 on: 
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release Version' 
+        description: 'Test Version' 
 
 jobs:
   docker:
@@ -42,7 +42,7 @@ jobs:
           build-args: |
             "CHIA_BRANCH=1.1.6"
           tags: |
-            guydavis/machinaris:latest
+            guydavis/machinaris:test
             guydavis/machinaris:v${{ github.event.inputs.version }}
-            ghcr.io/guydavis/machinaris:latest
+            ghcr.io/guydavis/machinaris:test
             ghcr.io/guydavis/machinaris:v${{ github.event.inputs.version }}
