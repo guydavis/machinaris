@@ -3,7 +3,7 @@ version: '3.5'
 services: 
     machinaris:
         container_name: machinaris
-        image: ghcr.io/hereisderek/machinaris
+        image: ghcr.io/guydavis/machinaris
         restart: unless-stopped
         tty: true
         ports:
@@ -16,6 +16,6 @@ services:
         - "/path/to/scratch:/plotting:rw"
         - "/path/to/storage:/plots:rw"
         environment:
-        - TZ=Pacific/Auckland
-        - "PLOTMAN_GIT_URL=https://github.com/hereisderek/plotman@main"
+        - TZ=America/Edmonton
+        - "PLOTMAN_GIT_URL=https://github.com/ericaltendorf/plotman/tree/main/src/plotman"
         - "AUTO_PLOT=true"
