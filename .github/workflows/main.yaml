@@ -42,7 +42,7 @@ jobs:
           build-args: |
             "CHIA_BRANCH=1.1.6"
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/machinaris:latest
-            ${{ secrets.DOCKER_USERNAME }}/machinaris:v${{ github.event.inputs.version }}
-            ghcr.io/${{ secrets.DOCKER_USERNAME }}/machinaris:latest
-            ghcr.io/${{ secrets.DOCKER_USERNAME }}/machinaris:v${{ github.event.inputs.version }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:v${{ github.event.inputs.version }}
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:latest
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:v${{ github.event.inputs.version }}
