@@ -1,6 +1,12 @@
 flask
-Flask-SQLAlchemy
+flask-smorest
+python-dotenv
+marshmallow
+sqlalchemy
+sqlalchemy-utils
+flask-sqlalchemy
+marshmallow-sqlalchemy
 gunicorn
 pytz
 wheel
-APScheduler
+apscheduler

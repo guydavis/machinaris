@@ -12,10 +12,10 @@ db = SQLAlchemy(app)
 
 class Notification(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    priority = db.Column(db.String(40), unique=True, nullable=False)
+    priority = db.Column(db.String(40), nullable=False)
     service = db.Column(db.String(60), nullable=False)
     message = db.Column(db.String(255), nullable=False)
-    created_at = Column(DateTime, default=datetime.now, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now, nullable=False)
 
     def __repr__(self):
         return '{0} {1}-{2}: {3}'.format(self.created_at, self.priority, self.service, self.message)

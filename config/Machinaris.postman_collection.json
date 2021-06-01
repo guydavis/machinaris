@@ -1,0 +1,654 @@
+{
+	"info": {
+		"_postman_id": "c483592b-5a62-42cf-8e15-1ffabaa1b9ab",
+		"name": "Machinaris",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Alerts",
+			"item": [
+				{
+					"name": "Alerts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/farms",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"farms"
+							]
+						},
+						"description": "Get all alerts from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Alerts",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"priority\": \"NORMAL\",\r\n    \"service\": \"FULL_NODE\",\r\n    \"message\": \"Experiencing networking issues? Skipped 5 signage points!\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/alerts",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"alerts"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Alert",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/alerts",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"alerts"
+							]
+						},
+						"description": "Get an alert by id."
+					},
+					"response": []
+				},
+				{
+					"name": "Alert",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"priority\": \"HIGH\",\r\n    \"service\": \"FULL_NODE\",\r\n    \"message\": \"Experiencing networking issues? Skipped 5 signage points!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/alerts/1",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"alerts",
+								"1"
+							]
+						},
+						"description": "Update an alert by id."
+					},
+					"response": []
+				},
+				{
+					"name": "Alert",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/alerts/1",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"alerts",
+								"1"
+							]
+						},
+						"description": "Delete an alert by id."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Farms",
+			"item": [
+				{
+					"name": "Farms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/farms",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"farms"
+							]
+						},
+						"description": "Get all farms from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Farms",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"plot_count\": 174,\r\n    \"plot_size\": 17332.224,\r\n    \"netspace_size\": 15957229.568,\r\n    \"expected_time_to_win\": 262800.0\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/farms",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"farms"
+							]
+						},
+						"description": "Add a new Farm, or update an existing."
+					},
+					"response": []
+				},
+				{
+					"name": "Farm",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/farms",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"farms"
+							]
+						},
+						"description": "Get a farm by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Farm",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"plot_count\": 174,\r\n    \"plot_size\": 17332.224,\r\n    \"netspace_size\": 15957229.568,\r\n    \"expected_time_to_win\": 262800.0\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/farms/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"farms",
+								"aragorn"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Farm",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/farms/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"farms",
+								"aragorn"
+							]
+						},
+						"description": "Delete a farm's status."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Plots",
+			"item": [
+				{
+					"name": "Plots",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plots",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plots"
+							]
+						},
+						"description": "Get all completed plots from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Plots",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"plot_id\": \"39932db\",\r\n    \"hostname\":\"aragorn\",\r\n    \"dir\": \"/plots4\",\r\n    \"file\": \"plot-k32-2021-05-31-19-49-39932db6aac9678f69a66c7e13ae3df3c6387842994644ab1f545dc1a5b33831.plot\",\r\n    \"size\": 101.1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plots",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plots"
+							]
+						},
+						"description": "Add a new completed Plot."
+					},
+					"response": []
+				},
+				{
+					"name": "Plot",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plots/39932db",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plots",
+								"39932db"
+							]
+						},
+						"description": "Get a completed plot by plot_id (8-char prefix)"
+					},
+					"response": []
+				},
+				{
+					"name": "Plot",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plots/39932db",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plots",
+								"39932db"
+							]
+						},
+						"description": "Update a plot by plot_id (8-char prefix)"
+					},
+					"response": []
+				},
+				{
+					"name": "Plot",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plots/39932db",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plots",
+								"39932db"
+							]
+						},
+						"description": "Delete a completed plot's status."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Plottings",
+			"item": [
+				{
+					"name": "Plottings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plottings",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plottings"
+							]
+						},
+						"description": "Get all plotting jobs from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Plottings",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"plot_id\": \"20dfc942\",\r\n    \"hostname\": \"aragorn\",\r\n    \"k\": 32,\r\n    \"tmp\": \"/plotting\",\r\n    \"dst\": \"/plots3\",\r\n    \"wall\": \"5:51\",\r\n    \"phase\": \"2:4\",\r\n    \"size\": 209.0,\r\n    \"pid\": \"27181\",\r\n    \"stat\": \"RUN\",\r\n    \"mem\": \"2.0G\",\r\n    \"user\": \"10:20\",\r\n    \"sys\": \"1:07\",\r\n    \"io\": \"0:04\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plottings",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plottings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Plotting",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plottings/20dfc942",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plottings",
+								"20dfc942"
+							]
+						},
+						"description": "Get a plotting job by plot_id (8-char prefix)"
+					},
+					"response": []
+				},
+				{
+					"name": "Plotting",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"plot_id\": \"20dfc942\",\r\n    \"hostname\": \"aragorn\",\r\n    \"k\": 32,\r\n    \"tmp\": \"/plotting\",\r\n    \"dst\": \"/plots3\",\r\n    \"wall\": \"5:51\",\r\n    \"phase\": \"2:4\",\r\n    \"size\": 209.0,\r\n    \"pid\": \"27181\",\r\n    \"stat\": \"RUN\",\r\n    \"mem\": \"2.0G\",\r\n    \"user\": \"10:20\",\r\n    \"sys\": \"1:07\",\r\n    \"io\": \"0:04\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plottings/20dfc942",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plottings",
+								"20dfc942"
+							]
+						},
+						"description": "Update a plotting job by plot_id (8-char prefix)"
+					},
+					"response": []
+				},
+				{
+					"name": "Plotting",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plottings/20dfc942",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plottings",
+								"20dfc942"
+							]
+						},
+						"description": "Delete a plotting job's status."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Workers",
+			"item": [
+				{
+					"name": "Workers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"workers",
+								""
+							]
+						},
+						"description": "Get all workers reporting in with their status."
+					},
+					"response": []
+				},
+				{
+					"name": "Workers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"mode\": \"fullnode\",\r\n    \"plotting\": \"stopped\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/workers",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"workers"
+							]
+						},
+						"description": "Add a new Worker."
+					},
+					"response": []
+				},
+				{
+					"name": "Worker",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"workers",
+								"aragorn"
+							]
+						},
+						"description": "Get a worker by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Worker",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"mode\": \"farmer\",\r\n    \"plotting\": \"stopped\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"workers",
+								"aragorn"
+							]
+						},
+						"description": "Update a worker's status by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Worker",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"workers",
+								"aragorn"
+							]
+						},
+						"description": "Delete a worker's status by hostname."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

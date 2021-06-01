@@ -33,7 +33,7 @@ if [ "${mode}" != "plotter" ]; then
     python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
 fi
 
-echo 'Starting Machinaris...'
+
 mkdir -p /root/.chia/machinaris/logs
 cd /machinaris
 if [ $FLASK_ENV == "development" ];
@@ -44,5 +44,14 @@ else
     LOG_LEVEL='info'
     RELOAD=''
 fi
-/chia-blockchain/venv/bin/gunicorn ${RELOAD} --bind 0.0.0.0:8926 --timeout 90 --log-level=${LOG_LEVEL} app:app > /root/.chia/machinaris/logs/webui.log 2>&1 &
+echo 'Starting Machinaris API server...'
+/chia-blockchain/venv/bin/gunicorn ${RELOAD} \
+    --bind 0.0.0.0:8927 --timeout 90 \
+    --log-level=${LOG_LEVEL} \
+    api:app > /root/.chia/machinaris/logs/apisrv.log 2>&1 &
+echo 'Starting Machinaris Web server...'
+/chia-blockchain/venv/bin/gunicorn ${RELOAD} \
+    --bind 0.0.0.0:8926 --timeout 90 \
+    --log-level=${LOG_LEVEL} \
+    app:app > /root/.chia/machinaris/logs/webui.log 2>&1 &
 echo 'Completed startup.  Browse to port 8926.'
