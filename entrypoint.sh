@@ -15,7 +15,7 @@ chia init 2>&1 > /root/.chia/mainnet/log/init.log
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
-  echo "Adding key at path: {$k}"
+  echo "Adding key at path: ${k}"
   chia keys add -f ${k} > /dev/null
 done
 
