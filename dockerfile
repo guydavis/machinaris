@@ -99,6 +99,9 @@ ENV farmer_address="null"
 ENV farmer_port="null"
 # Only set true if using Chia's old test for testing only, default uses mainnet
 ENV testnet="false"
+# Can override the location of default Flask settings for api and web servers.
+ENV API_SETTINGS_FILE = '/root/.chia/machinaris/config/api.cfg'
+ENV WEB_SETTINGS_FILE = '/root/.chia/machinaris/config/web.cfg'
 
 ENV PATH="${PATH}:/chia-blockchain/venv/bin"
 ENV TZ=Etc/UTC

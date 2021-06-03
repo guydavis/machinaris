@@ -1,6 +1,6 @@
 """Extensions initialization"""
 
-from . import database
+from common.extensions import database
 from .api import Api
 
 

@@ -2,7 +2,7 @@ import marshmallow as ma
 from marshmallow_sqlalchemy import field_for
 
 from api.extensions.api import Schema, AutoSchema
-from api.models.workers import Worker
+from common.models.workers import Worker
 
 
 class WorkerSchema(AutoSchema):

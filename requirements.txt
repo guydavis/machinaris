@@ -10,3 +10,4 @@ gunicorn
 pytz
 wheel
 apscheduler
+requests

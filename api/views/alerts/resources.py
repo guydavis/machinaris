@@ -4,8 +4,8 @@ from flask.views import MethodView
 
 from api import app
 from api.extensions.api import Blueprint, SQLCursorPage
-from api.extensions.database import db
-from api.models import Alert
+from common.extensions.database import db
+from common.models import Alert
 
 from .schemas import AlertSchema, AlertQueryArgsSchema
 

@@ -2,7 +2,7 @@ import marshmallow as ma
 from marshmallow_sqlalchemy import field_for
 
 from api.extensions.api import Schema, AutoSchema
-from api.models.plottings import Plotting
+from common.models.plottings import Plotting
 
 
 class PlottingSchema(AutoSchema):

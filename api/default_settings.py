@@ -16,3 +16,6 @@ class DefaultConfig:
     SQLALCHEMY_DATABASE_URI = 'sqlite:////root/.chia/machinaris/dbs/machinaris.db'
     SQLALCHEMY_ECHO = True
     ETAG_DISABLED = True # https://flask-smorest.readthedocs.io/en/latest/etag.html
+    CONTROLLER_PROTO = 'http'
+    CONTROLLER_HOST = 'localhost'
+    CONTROLLER_PORT = 8927

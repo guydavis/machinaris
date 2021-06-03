@@ -4,8 +4,8 @@ from flask.views import MethodView
 
 from api import app
 from api.extensions.api import Blueprint, SQLCursorPage
-from api.extensions.database import db
-from api.models import Worker
+from common.extensions.database import db
+from common.models import Worker
 
 from .schemas import WorkerSchema, WorkerQueryArgsSchema
 
@@ -32,10 +32,9 @@ class Workers(MethodView):
     @blp.arguments(WorkerSchema)
     @blp.response(201, WorkerSchema)
     def post(self, new_item):
+        app.logger.info("new_item: {0}".format(new_item))
         item = Worker.query.get(new_item['hostname'])
         if item: # upsert
-            app.logger.info("item: {0}".format(item))
-            app.logger.info("new_item: {0}".format(new_item))
             new_item['created_at'] = item.created_at
             new_item['updated_at'] = dt.datetime.now()
             WorkerSchema().update(item, new_item)
