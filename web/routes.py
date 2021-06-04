@@ -34,7 +34,7 @@ def setup():
     app.logger.info("Setup found these key paths: {0}".format(key_paths))
     show_setup = True
     if request.method == 'POST':
-        show_setup = not chia_cli.generate_key(key_paths[0])
+        show_setup = not chia.generate_key(key_paths[0])
     if show_setup:
         return render_template('setup.html', key_paths = key_paths)
     else:
@@ -46,27 +46,27 @@ def plotting():
     if request.method == 'POST':
         app.logger.info("Form submitted: {0}".format(request.form))
         if request.form.get('action') == 'start':
-            plotman_cli.start_plotman()
+            plotman.start_plotman()
         elif request.form.get('action') == 'stop':
-            plotman_cli.stop_plotman()
+            plotman.stop_plotman()
         elif request.form.get('action') in ['suspend', 'resume', 'kill']:
-            plotman_cli.action_plots(request.form)
+            plotman.action_plots(request.form)
         else:
             app.logger.info("Unknown plotting form: {0}".format(request.form))
-    plotting = plotman_cli.load_plotting_summary()
+    plotting = plotman.load_plotting_summary()
     return render_template('plotting.html', reload_seconds=60,  plotting=plotting, 
         global_config=gc)
 
 @app.route('/farming')
 def farming():
     if request.args.get('analyze'):  # Xhr with a plot filename
-        return plotman_cli.analyze(request.args.get('analyze'))
+        return plotman.analyze(request.args.get('analyze'))
     elif request.args.get('check'):  # Xhr calling for check output
-        return chia_cli.check_plots(request.args.get('first_load'))
+        return chia.check_plots(request.args.get('first_load'))
     gc = globals.load()
-    farming = chia_cli.load_farm_summary()
-    plots = chia_cli.load_plots_farming()
-    chia_cli.compare_plot_counts(gc, farming, plots)
+    farming = chia.load_farm_summary()
+    plots = chia.load_plots_farming()
+    chia.compare_plot_counts(gc, farming, plots)
     return render_template('farming.html', farming=farming, plots=plots, 
         global_config=gc)
 
@@ -92,14 +92,14 @@ def alerts():
 @app.route('/wallet')    
 def wallet():
     gc = globals.load()
-    wallet = chia_cli.load_wallet_show()
+    wallet = chia.load_wallet_show()
     return render_template('wallet.html', wallet=wallet.text, 
         global_config=gc)
 
 @app.route('/keys')
 def keys():
     gc = globals.load()
-    keys = chia_cli.load_keys_show()
+    keys = chia.load_keys_show()
     key_paths = globals.get_key_paths()
     return render_template('keys.html', keys=keys.text, 
         key_paths=key_paths, global_config=gc)
@@ -107,7 +107,7 @@ def keys():
 @app.route('/network/blockchain')
 def network_blockchain():
     gc = globals.load()
-    blockchain = chia_cli.load_blockchain_show()
+    blockchain = chia.load_blockchain_show()
     return render_template('network/blockchain.html', reload_seconds=60, 
         blockchain=blockchain.text, global_config=gc, now=gc['now'])
 
@@ -116,10 +116,10 @@ def network_connections():
     gc = globals.load()
     if request.method == 'POST':
         if request.form.get('action') == "add":
-            chia_cli.add_connection(request.form.get("connection"))
+            chia.add_connection(request.form.get("connection"))
         else:
             app.logger.info("Unknown form action: {0}".format(request.form))
-    connections = chia_cli.load_connections_show()
+    connections = chia.load_connections_show()
     return render_template('network/connections.html', reload_seconds=60, 
         connections=connections.text, global_config=gc, now=gc['now'])
 
@@ -128,7 +128,7 @@ def settings_plotting():
     gc = globals.load()
     if request.method == 'POST':
         config = request.form.get("plotman")
-        plotman_cli.save_config(config)
+        plotman.save_config(config)
     else: # Load config fresh from disk
         config = open('/root/.chia/plotman/plotman.yaml','r').read()
     return render_template('settings/plotting.html', config=config, 
@@ -139,7 +139,7 @@ def settings_farming():
     gc = globals.load()
     if request.method == 'POST':
         config = request.form.get("config")
-        chia_cli.save_config(config)
+        chia.save_config(config)
     else: # Load config fresh from disk
         config = open('/root/.chia/mainnet/config/config.yaml','r').read()
     return render_template('settings/farming.html', config=config, 

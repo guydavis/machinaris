@@ -16,7 +16,7 @@ class Plotting(db.Model):
     dst = sa.Column(sa.String(length=255))
     wall = sa.Column(sa.String(length=8))
     phase = sa.Column(sa.String(length=8))
-    size = sa.Column(sa.REAL)
+    size = sa.Column(sa.String(length=8))
     pid = sa.Column(sa.Integer)
     stat = sa.Column(sa.String(length=8))
     mem = sa.Column(sa.String(length=8))

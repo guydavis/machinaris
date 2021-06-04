@@ -10,6 +10,7 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 
 ## Web Application
 * [Flask](https://flask.palletsprojects.com/en/2.0.x/): Web UI application server.
+* [Smorest](https://flask-smorest.readthedocs.io/en/latest/index.html): REST API framework.
 * [Bootstrap](https://getbootstrap.com/): Web UI look and feel.
 * [Bootstrap Icons](https://icons.getbootstrap.com/): Open source icons.
 * [Other Icons](https://www.shareicon.net/gardening-garden-flower-petals-nature-flowers-712891): Free icons for web apps.

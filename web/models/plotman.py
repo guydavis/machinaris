@@ -3,11 +3,26 @@ import traceback
 
 from web import app
 
-PID_FILE = '/root/.chia/plotman/plotman.pid'
 
 class PlottingSummary:
 
     def __init__(self, plottings):
+        self.columns = ['worker',
+                        'plot_id',
+                        'k',
+                        'tmp',
+                        'dst',
+                        'wall',
+                        'phase',
+                        'size',
+                        'pid',
+                        'stat',
+                        'mem',
+                        'user',
+                        'sys',
+                        'io',
+                        'created_at',
+                        ]
         self.rows = []
         for plotting in plottings:
             self.rows.append({
@@ -22,9 +37,9 @@ class PlottingSummary:
                 'pid': plotting.pid,
                 'stat': plotting.stat,
                 'mem': plotting.mem,
-                'user': plotting.stat,
-                'sys': plotting.stat,
-                'io': plotting.stat,
+                'user': plotting.user,
+                'sys': plotting.sys,
+                'io': plotting.io,
                 'created_at': plotting.created_at,
             })
         self.calc_status()
@@ -37,4 +52,4 @@ class PlottingSummary:
         if len(self.rows) > 0:
             self.display_status = "Active"
         else:
-            self.display_status = "Idle"       
+            self.display_status = "Idle"

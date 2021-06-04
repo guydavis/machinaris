@@ -35,7 +35,7 @@ def update():
                 "mode": os.environ['mode'],
                 "plotting": plotting_status,
             }
-            common.send_post('/workers', payload, debug=True)
+            common.send_post('/workers', payload, debug=False)
         except:
             app.logger.info("Failed to load send worker status.")
             app.logger.info(traceback.format_exc())
