@@ -32,7 +32,7 @@ Simplified setup allows you to either import your existing key mnemonic or gener
 
 ## Configuration
 
-Configuration updates for Chia and Plotman are available in the WebUI.  
+Configuration updates for Chia, Plotman, and Chiadog are available in the WebUI.  
 
 ![Connections](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_settings.png)
 
