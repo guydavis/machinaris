@@ -4,7 +4,7 @@
 #
 
 echo 'Configuring Chia...'
-#sed -i 's/log_stdout: false/log_stdout: true/g' /root/.chia/mainnet/config/config.yaml
+sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/mainnet/config/config.yaml
 sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/config.yaml
 
 echo 'Configuring Plotman...'
@@ -30,7 +30,10 @@ if [ "${mode}" != "plotter" ]; then
 
     echo 'Starting Chiadog...'
     cd /chiadog
-    python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
+    pidof python3
+    if [ $? != 0 ]; then
+        python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
+    fi
 fi
 
 echo 'Starting Machinaris...'
@@ -43,6 +46,12 @@ then
 else
     LOG_LEVEL='info'
     RELOAD=''
+fi
+
+# Kill gunicorn if already running to allow restart
+webui_pid=$(pidof 'gunicorn: master [app:app]')
+if [ ! -z $webui_pid ]; then 
+    kill $webui_pid
 fi
 /chia-blockchain/venv/bin/gunicorn ${RELOAD} --bind 0.0.0.0:8926 --timeout 90 --log-level=${LOG_LEVEL} app:app > /root/.chia/machinaris/logs/webui.log 2>&1 &
 echo 'Completed startup.  Browse to port 8926.'
