@@ -20,7 +20,7 @@ from app.models import chia
 from app.commands import global_config
 
 # Hard-coded verson numbers for now
-MACHINARIS_VERSION = "0.3.1"
+MACHINARIS_VERSION = "0.3.2"
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
