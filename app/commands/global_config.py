@@ -20,7 +20,7 @@ from app.models import chia
 from app.commands import global_config
 
 # Hard-coded verson numbers for now
-MACHINARIS_VERSION = "0.3.1"
+MACHINARIS_VERSION = "0.3.2"
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
@@ -118,10 +118,13 @@ def load_chia_version():
     last_chia_version = outs.decode('utf-8').strip()
     # Chia version with .dev is actually one # to high
     # See: https://github.com/Chia-Network/chia-blockchain/issues/5655
-    if '.dev' in last_chia_version:
+    if last_chia_version.endswith('dev0'):
         sem_ver = last_chia_version.split('.')
         last_chia_version = sem_ver[0] + '.' + \
             sem_ver[1] + '.' + str(int(sem_ver[2])-1)
+    elif '.dev' in last_chia_version:
+        sem_ver = last_chia_version.split('.')
+        last_chia_version = sem_ver[0] + '.' + sem_ver[1] + '.' + sem_ver[2]
     last_chia_version_load_time = datetime.datetime.now()
     return last_chia_version
 
