@@ -22,9 +22,9 @@ def update():
         try:
             hostname = common.get_hostname()
             plotting_summary = plotman_cli.load_plotting_summary()
-            # TODO Query for current set and delete any stale/completed records
+            payload = []
             for plot in plotting_summary.rows:
-                payload = {
+                payload.append({
                     "plot_id": plot['plot_id'],
                     "hostname": hostname,
                     "k": plot['k'],
@@ -39,8 +39,8 @@ def update():
                     "user": plot['user'],
                     "sys": plot['sys'],
                     "io": plot['io'],
-                }
-                common.send_post('/plottings', payload, debug=True)
+                })
+            common.send_post('/plottings', payload, debug=False)
         except:
             app.logger.info("Failed to load plotting summary and send.")
             app.logger.info(traceback.format_exc())

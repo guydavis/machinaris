@@ -7,7 +7,7 @@ from web import app
 class PlottingSummary:
 
     def __init__(self, plottings):
-        self.columns = ['worker',
+        self.columns = ['plotter',
                         'plot_id',
                         'k',
                         'tmp',
@@ -20,13 +20,12 @@ class PlottingSummary:
                         'mem',
                         'user',
                         'sys',
-                        'io',
-                        'created_at',
+                        'io'
                         ]
         self.rows = []
         for plotting in plottings:
             self.rows.append({
-                'worker': plotting.hostname,
+                'plotter': plotting.hostname,
                 'plot_id': plotting.plot_id,
                 'k': plotting.k,
                 'tmp': plotting.tmp,
@@ -39,8 +38,7 @@ class PlottingSummary:
                 'mem': plotting.mem,
                 'user': plotting.user,
                 'sys': plotting.sys,
-                'io': plotting.io,
-                'created_at': plotting.created_at,
+                'io': plotting.io
             })
         self.calc_status()
         if True:
