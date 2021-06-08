@@ -38,11 +38,7 @@ def load_farm_summary():
     if last_farm_summary and last_farm_summary_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
         return last_farm_summary
-    if globals.plotting_only():
-        return None
-    elif globals.harvesting_only():  # Just get plot count and size
-        last_farm_summary = chia.FarmSummary(farm_plots=load_plots_farming())
-    else: # Load from chia farm summary
+    if globals.farming_enabled(): # Load from chia farm summary
         proc = Popen("{0} farm summary".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=90)
@@ -54,6 +50,8 @@ def load_farm_summary():
             app.logger.info("Failed to load chia farm summary at.")
             app.logger.info(traceback.format_exc())
         last_farm_summary = chia.FarmSummary(cli_stdout=outs.decode('utf-8').splitlines())
+    else:  # Just get plot count and size
+        last_farm_summary = chia.FarmSummary(farm_plots=load_plots_farming())
     last_farm_summary_load_time = datetime.datetime.now()
     return last_farm_summary
 
@@ -304,7 +302,7 @@ def remove_connection(node_id, ip):
     return True
 
 def compare_plot_counts(globals, farming, plots):
-    if not globals['plotting_only']:
+    if farming:
         try:
             if int(farming.plot_count) < len(plots.rows):
                 flash("Warning! Chia is farming {0} plots, but Machinaris found {1} *.plot files on disk. See the <a href='https://github.com/guydavis/machinaris/wiki/FAQ#warning-chia-is-farming-x-plots-but-machinaris-found-y-plot-files-on-disk' target='_blank'>FAQ</a>.".format(farming.plot_count, len(plots.rows), 'warning'))

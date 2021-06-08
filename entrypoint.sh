@@ -27,9 +27,11 @@ done
 sed -i 's/localhost/127.0.0.1/g' ~/.chia/mainnet/config/config.yaml
 
 # Start services based on mode selected. Default is 'fullnode'
-if [[ ${mode} == 'farmer' ]]; then
+if [[ ${mode} == 'fullnode' ]]; then
+  chia start farmer
+elif [[ ${mode} =~ ^farmer.* ]]; then
   chia start farmer-only
-elif [[ ${mode} == 'harvester' ]]; then
+elif [[ ${mode} =~ ^harvester.* ]]; then
   if [[ -z ${farmer_address} || -z ${farmer_port} ]]; then
     echo "A farmer peer address and port are required."
     exit
@@ -46,8 +48,6 @@ elif [[ ${mode} == 'harvester' ]]; then
   fi
 elif [[ ${mode} == 'plotter' ]]; then
     echo "Starting in Plotter-only mode.  Run Plotman from either CLI or WebUI."
-else  
-  chia start farmer
 fi
 
 # Optionally use testnet instead of mainnet

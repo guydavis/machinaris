@@ -46,18 +46,17 @@ class FarmSummary:
 
 class FarmPlots:
 
-     def __init__(self, entries):
-        self.columns = ['dir', 'plot', 'create_date', 'size']
+     def __init__(self, plots):
+        self.columns = ['plot_id', 'hostname', 'dir', 'plot', 'create_date', 'size']
         self.rows = []
-        for st_ctime, st_size, path in entries:
-            if not path.endswith(".plot"):
-                app.logger.info("Skipping non-plot file named: {0}".format(path))
-                continue
-            dir,file=os.path.split(path)
-            self.rows.append({ 'dir': dir,  \
-                'plot': file,  \
-                'create_date': datetime.fromtimestamp(int(st_ctime)).strftime('%Y-%m-%d %H:%M:%S'), \
-                'size': int(st_size) }) 
+        for plot in plots:
+            self.rows.append({ \
+                'plot_id': plot.plot_id, \
+                'hostname': plot.hostname, \
+                'dir': plot.dir,  \
+                'plot': plot.file,  \
+                'create_date': plot.created_at, \
+                'size': plot.size }) 
 
 class Wallet:
 

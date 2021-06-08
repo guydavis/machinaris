@@ -1,4 +1,5 @@
 import os
+import re
 import traceback
 
 from datetime import datetime
@@ -71,16 +72,23 @@ class FarmSummary:
 class FarmPlots:
 
      def __init__(self, entries):
-        self.columns = ['dir', 'plot', 'create_date', 'size']
+        self.columns = ['plot_id', 'dir', 'plot', 'create_date', 'size']
         self.rows = []
         for st_ctime, st_size, path in entries:
             if not path.endswith(".plot"):
                 app.logger.info("Skipping non-plot file named: {0}".format(path))
                 continue
             dir,file=os.path.split(path)
-            self.rows.append({ 'dir': dir,  \
-                'plot': file,  \
-                'create_date': datetime.fromtimestamp(int(st_ctime)).strftime('%Y-%m-%d %H:%M:%S'), \
+            groups = re.match("plot-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", file)
+            if not groups:
+                app.logger.info("Invalid plot file name provided: {0}".format(file))
+                continue
+            plot_id = groups[7][:8]
+            self.rows.append({ \
+                'plot_id': plot_id, \
+                'dir': dir,  \
+                'file': file,  \
+                'created_at': datetime.fromtimestamp(int(st_ctime)).strftime('%Y-%m-%d %H:%M:%S'), \
                 'size': int(st_size) }) 
 
 class Wallet:

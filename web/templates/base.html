@@ -32,39 +32,39 @@
                                 <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline ">Summary</span>
                             </a>
                         </li>
-                        {% if not (global_config.farming_only or global_config.harvesting_only) %}
+                        {% if global_config.plotting_enabled %}
                         <li>
                             <a href="{{ url_for('plotting') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-speedometer"></i> <span
                                     class="ms-1 d-none d-sm-inline">Plotting</span> </a>
                         </li>
                         {% endif %}
-                        {% if not global_config.plotting_only %}
+                        {% if global_config.farming_enabled %}
                         <li>
                             <a href="{{ url_for('farming') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-tree"></i> <span class="ms-1 d-none d-sm-inline">Farming</span></a>
                         </li>
                         {% endif %}
-                        {% if not (global_config.harvesting_only or global_config.plotting_only) %}
+                        {% if global_config.farming_enabled %}
                         <li>
                             <a href="{{ url_for('wallet') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-wallet"></i> <span class="ms-1 d-none d-sm-inline">Wallet</span></a>
                         </li>
                         {% endif %}
-                        {% if not (global_config.harvesting_only or global_config.plotting_only) %}
+                        {% if global_config.farming_enabled %}
                         <li>
                             <a href="{{ url_for('keys') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-key"></i> <span class="ms-1 d-none d-sm-inline">Keys</span></a>
                         </li>
                         {% endif %}
-                        {% if not (global_config.harvesting_only or global_config.plotting_only) %}
+                        {% if global_config.farming_enabled %}
                         <li>
                             <a href="{{ url_for('network_blockchain') }}"
                                 class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-globe"></i> <span class="ms-1 d-none d-sm-inline">Network</span></a>
                         </li>
                         {% endif %}
-                        {% if not (global_config.harvesting_only or global_config.plotting_only) %}
+                        {% if global_config.farming_enabled %}
                         <li>
                             <a href="{{ url_for('alerts') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-bell"></i> <span class="ms-1 d-none d-sm-inline">Alerts</span></a>
@@ -75,19 +75,19 @@
                                 class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">Settings</span> </a>
                             <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                                {% if not (global_config.farming_only or global_config.harvesting_only) %}
+                                {% if global_config.plotting_enabled %}
                                 <li class="w-100">
                                     <a href="{{ url_for('settings_plotting') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Plotting</span> </a>
                                 </li>
                                 {% endif %}
-                                {% if not global_config.plotting_only %}
+                                {% if global_config.farming_enabled %}
                                 <li>
                                     <a href="{{ url_for('settings_farming') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Farming</span> </a>
                                 </li>
                                 {% endif %}
-                                {% if not (global_config.plotting_only or global_config.harvesting_only) %}
+                                {% if global_config.farming_enabled %}
                                 <li>
                                     <a href="{{ url_for('settings_alerts') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Alerts</span> </a>

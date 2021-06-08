@@ -14,9 +14,9 @@ from api.commands import plotman_cli
 from api.schedules import common
 
 def update():
-    if not globals.is_fullnode() or not globals.plotting_enabled():
+    if not globals.plotting_enabled():
         app.logger.info(
-            "Skipping plotting stats collection on plottinging/harvesting instance.")
+            "Skipping plotting stats collection on farming/harvesting instance.")
         return
     with app.app_context():
         try:

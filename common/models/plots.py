@@ -14,7 +14,7 @@ class Plot(db.Model):
     dir = sa.Column(sa.String(length=255))
     file = sa.Column(sa.String(length=255))
     size = sa.Column(sa.Integer)
-    created_at = sa.Column(sa.DateTime(), server_default=func.now())
+    created_at = sa.Column(sa.String(length=64))
     updated_at = sa.Column(sa.DateTime(), onupdate=func.now())
 
     

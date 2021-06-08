@@ -21,7 +21,7 @@ from os import path
 from web import app, db
 from common.models import farms as f, plots as p
 from common.config import globals
-from web.models.chia import FarmSummary
+from web.models.chia import FarmSummary, FarmPlots
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 
@@ -30,7 +30,8 @@ def load_farm_summary():
     return FarmSummary(farms)
 
 def load_plots_farming():
-    return []
+    plots = db.session.query(p.Plot).all()
+    return FarmPlots(plots)
 
 def recent_challenges():
     return []
@@ -235,7 +236,7 @@ def remove_connection(node_id, ip):
     return True
 
 def compare_plot_counts(global_config, farming, plots):
-    if not global_config['plotting_only']:
+    if farming:
         try:
             if int(farming.plot_count) < len(plots.rows):
                 flash("Warning! Chia is farming {0} plots, but Machinaris found {1} *.plot files on disk. See the <a href='https://github.com/guydavis/machinaris/wiki/FAQ#warning-chia-is-farming-x-plots-but-machinaris-found-y-plot-files-on-disk' target='_blank'>FAQ</a>.".format(farming.plot_count, len(plots.rows), 'warning'))

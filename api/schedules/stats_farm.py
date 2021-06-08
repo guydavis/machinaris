@@ -30,7 +30,7 @@ def close_connection(exception):
 
 
 def collect():
-    if globals.load()['plotting_only']:
+    if globals.plotting_enabled():
         app.logger.info(
             "Skipping farm summary stats collection on plotting-only instance.")
         return

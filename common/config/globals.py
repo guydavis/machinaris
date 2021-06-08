@@ -18,7 +18,7 @@ from subprocess import Popen, TimeoutExpired, PIPE
 from os import environ, path
 
 # Hard-coded verson number for now
-MACHINARIS_VERSION = "0.3.1"
+MACHINARIS_VERSION = "0.4.0"
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
@@ -28,8 +28,8 @@ RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time 
 def load():
     cfg = {}
     cfg['plotting_enabled'] = plotting_enabled()
-    cfg['farming_only'] = farming_only()
-    cfg['harvesting_only'] = harvesting_only()
+    cfg['farming_enabled'] = farming_enabled()
+    cfg['harvesting_enabled'] = harvesting_enabled()
     cfg['now'] = datetime.datetime.now(tz=None).strftime("%Y-%m-%d %H:%M:%S")
     cfg['machinaris_version'] = MACHINARIS_VERSION
     cfg['machinaris_mode'] = os.environ['mode']
@@ -91,22 +91,14 @@ def get_key_paths():
     return os.environ['keys'].split(':')
 
 
+def farming_enabled():
+    return "mode" in os.environ and ("farmer" in os.environ['mode'] or "fullnode" == os.environ['mode'])
+
+def harvesting_enabled():
+    return "mode" in os.environ and ("harvester" in os.environ['mode'] or "fullnode" == os.environ['mode'])
+
 def plotting_enabled():
-    return ("mode" in os.environ and os.environ['mode'] in ["plotter", "fullnode"]) or \
-        ("plotting_enabled" in os.environ)
-
-
-def is_fullnode():
-    return "mode" in os.environ and os.environ['mode'] == "fullnode"
-
-def farming_only():
-    return "mode" in os.environ and os.environ['mode'] == "farmer"
-
-def harvesting_only():
-    return "mode" in os.environ and os.environ['mode'] == "harvester"
-
-def plotting_only():
-    return "mode" in os.environ and os.environ['mode'] == "plotter"
+    return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode'])
 
 
 last_chia_version = None

@@ -83,5 +83,5 @@ def collect():
         delete_old_stats(db)
         current_datetime = datetime.datetime.now().strftime("%Y%m%d%H%M")
         store_disk_stats(db, current_datetime, 'plots')
-        if not (gc['farming_only'] or gc['harvesting_only']):
+        if gc['plotting_enabled']:
             store_disk_stats(db, current_datetime, 'plotting')

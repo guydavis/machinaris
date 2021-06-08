@@ -15,6 +15,7 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Bootstrap Icons](https://icons.getbootstrap.com/): Open source icons.
 * [Other Icons](https://www.shareicon.net/gardening-garden-flower-petals-nature-flowers-712891): Free icons for web apps.
 * [Boostrap Sidebars](https://dev.to/codeply/bootstrap-5-sidebar-examples-38pb): Used for sidebar menu layout.
+* [Toplevel](https://github.com/and-semakin/marshmallow-toplevel): Used for list of objects sent to REST API.
 
 ## Target Platforms
 * [Unraid](https://selfhosters.net/docker/templating/templating/): Creating an [application template](https://github.com/guydavis/machinaris-unraid) for Unraid.

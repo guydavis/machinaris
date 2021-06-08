@@ -19,14 +19,14 @@
   </div>
 
   <div class="row align-items-md-stretch">
-    {% if not (global_config.farming_only or global_config.harvesting_only) %}
+    {% if global_config.plotting_enabled %}
     <div class="col-md-6">
       <div class="h-20 p-2 bg-light border rounded-3">
         <h6 class="display-6 text-center">Plotting: {{ plotting.display_status }}</h6>
       </div>
     </div>
     {% endif %}
-    {% if not (global_config.plotting_only or global_config.harvesting_only) %}
+    {% if global_config.farming_enabled %}
     <div class="col-md-6">
       <div class="h-20 p-2 bg-light border rounded-3">
         <h6 class="display-6 text-center">Farming: {{ farming.display_status }}</h6>
@@ -44,7 +44,7 @@
         <h6 class="display-6 text-center">Total Plots</h6>
       </div>
     </div>
-    {% if not (global_config.plotting_only or global_config.harvesting_only) %}
+    {% if global_config.farming_enabled %}
     <div class="col-md-6">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
         <h1 class="display-1 text-center text-success">{{ farming.total_chia }}</h1>
@@ -63,7 +63,7 @@
         <h6 class="display-6 text-center">Total Plots Size</h6>
       </div>
     </div>
-    {% if not (global_config.plotting_only or global_config.harvesting_only) %}
+    {% if global_config.farming_enabled %}
     <div class="col-md-6">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
         <h4 class="display-4 text-center text-success">{{ farming.netspace_display_size }}</h4>
@@ -73,7 +73,7 @@
     {% endif %}
   </div>
 
-  {% if not global_config.plotting_only %}
+  {% if global_config.farming_enabled %}
   <br />
   <div class="col-md-12">
     <div class="h-100 p-2 text-white bg-dark rounded-3">

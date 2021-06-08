@@ -14,7 +14,7 @@ from api.commands import chia_cli
 from api.schedules import common
 
 def update():
-    if not globals.is_fullnode() and not globals.farming_only():
+    if not globals.farming_enabled() and not globals.harvesting_enabled():
         app.logger.info(
             "Skipping farm summary stats collection on plotting-only instance.")
         return

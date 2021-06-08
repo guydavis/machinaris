@@ -89,7 +89,7 @@ RUN \
 ENV keys="/root/.chia/mnemonic.txt"  
 # Provide a colon-separated list of in-container paths to your completed plots
 ENV plots_dir="/plots"
-# One of fullnode, plotter, farmer, or harvester. Default is fullnode
+# One of fullnode, farmer, harvester, plotter, farmer+plotter, harvester+plotter. Default is fullnode
 ENV mode="fullnode" 
 # If mode=plotter, optional 2 public keys will be set in your plotman.yaml
 ENV farmer_pk="null"

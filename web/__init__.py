@@ -41,6 +41,7 @@ def datetimefilter(value, format="%Y-%m-%d %H:%M"):
 app.jinja_env.filters['datetimefilter'] = datetimefilter
 
 def plotnameshortener(value):
+    #app.logger.info("Shorten: {0}".format(value))
     match = re.match("plot-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", value)
     if match:
         return "plot-k{0}-{1}-{2}-{3}-{4}-{5}-{6}...".format( match.group(1), 

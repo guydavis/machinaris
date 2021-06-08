@@ -79,7 +79,7 @@
                 id="btnCheck" form="main-form" style="float: right; margin: 0px 5px 0px 0px"
                 onclick='CheckButton();return false;'>Check Plots</button>
             <h5 style="width: 100%; padding-top: 7px;">
-                {% if global_config.plotting_only %}
+                {% if global_config.plotting_enabled %}
                 Found {{ plots.rows | length }} total plots.
                 {% else %}
                 Found {{ farming.plot_count }} total plots.

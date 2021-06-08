@@ -7,14 +7,14 @@ from api.extensions.api import Blueprint, SQLCursorPage
 from common.extensions.database import db
 from common.models import Plot
 
-from .schemas import PlotSchema, PlotQueryArgsSchema
+from .schemas import PlotSchema, PlotQueryArgsSchema, BatchOfPlotSchema, BatchOfPlotQueryArgsSchema
 
 
 blp = Blueprint(
-    'Plots',
+    'Plot',
     __name__,
     url_prefix='/plots',
-    description="Operations on plots"
+    description="Operations on all plots on farmer"
 )
 
 
@@ -22,58 +22,55 @@ blp = Blueprint(
 class Plots(MethodView):
 
     @blp.etag
-    @blp.arguments(PlotQueryArgsSchema, location='query')
+    @blp.arguments(BatchOfPlotQueryArgsSchema, location='query')
     @blp.response(200, PlotSchema(many=True))
     @blp.paginate(SQLCursorPage)
     def get(self, args):
         ret = Plot.query.filter_by(**args)
+        app.logger.info(ret)
         return ret
 
     @blp.etag
-    @blp.arguments(PlotSchema)
-    @blp.response(201, PlotSchema)
-    def post(self, new_item):
-        item = Plot.query.get(new_item['plot_id'])
-        if item: # upsert
-            app.logger.info("item: {0}".format(item))
-            app.logger.info("new_item: {0}".format(new_item))
-            new_item['created_at'] = item.created_at
-            new_item['updated_at'] = dt.datetime.now()
-            PlotSchema().update(item, new_item)
-        else: # insert
+    @blp.arguments(BatchOfPlotSchema)
+    @blp.response(201, PlotSchema(many=True))
+    def post(self, new_items):
+        # Now delete all old plots by hostname of first new plotting
+        db.session.query(Plot).filter(Plot.hostname==new_items[0]['hostname']).delete()
+        #db.session.commit()
+        items = []
+        for new_item in new_items:
             item = Plot(**new_item)
-        db.session.add(item)
+            db.session.add(item)
+            items.append(item)
         db.session.commit()
-        return item
+        return items
 
 
-@blp.route('/<plot_id>')
-class PlotsByPlotId(MethodView):
+@blp.route('/<hostname>')
+class PlotByHostname(MethodView):
 
     @blp.etag
     @blp.response(200, PlotSchema)
-    def get(self, plot_id):
-        return Plot.query.get_or_404(plot_id)
+    def get(self, hostname):
+        return db.session.query(Plot).filter(Plot.hostname==hostname)
 
     @blp.etag
-    @blp.arguments(PlotSchema)
-    @blp.response(200, PlotSchema)
-    def put(self, new_item, plot_id):
-        app.logger.info("new_item: {0}".format(new_item))
-        item = Plot.query.get_or_404(plot_id)
-        new_item['plot_id'] = item.plot_id
-        new_item['created_at'] = item.created_at
-        new_item['updated_at'] = dt.datetime.now()
-        blp.check_etag(item, PlotSchema)
-        PlotSchema().update(item, new_item)
-        db.session.add(item)
+    @blp.arguments(BatchOfPlotSchema)
+    @blp.response(200, PlotSchema(many=True))
+    def put(self, new_items, hostname):
+        # Now delete all old plots by hostname of first new plotting
+        db.session.query(Plot).filter(Plot.hostname==hostname).delete()
+        #db.session.commit()
+        items = []
+        for new_item in new_items:
+            item = Plot(**new_item)
+            items.append(item)
+            db.session.add(item)
         db.session.commit()
-        return item
+        return items
 
     @blp.etag
     @blp.response(204)
-    def delete(self, plot_id):
-        item = Plot.query.get_or_404(plot_id)
-        blp.check_etag(item, PlotSchema)
-        db.session.delete(item)
+    def delete(self, hostname):
+        db.session.query(Plot).filter(Plot.hostname==hostname).delete()
         db.session.commit()
