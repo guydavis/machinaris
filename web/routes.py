@@ -31,6 +31,11 @@ def index():
     return render_template('index.html', reload_seconds=60, farming=farming.__dict__, \
         plotting=plotting.__dict__, challenges=challenges, workers=workers, global_config=gc)
 
+@app.route('/views/challenges')
+def views_challenges():
+    challenges = chia.recent_challenges()
+    return render_template('views/challenges.html', challenges=challenges)
+
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
     key_paths = globals.get_key_paths()

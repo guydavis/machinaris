@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.secret_key = b'$}#P)eu0A.O,s0Mz'
 app.config.from_object(DefaultConfig)
 # Override config with optional settings file
-app.config.from_envvar('WEB_SETTINGS_FILE', silent=False)
+app.config.from_envvar('WEB_SETTINGS_FILE', silent=True)
 
 
 db = SQLAlchemy(app)

@@ -56,6 +56,28 @@ class FarmPlots:
                 'create_date': plot.created_at, \
                 'size': plot.size }) 
 
+
+class BlockchainChallenges:
+
+    def __init__(self, challenges):
+        self.columns = ['hostname',
+                        'challenge_id',
+                        'plots_past_filter',
+                        'proofs_found',
+                        'time_taken',
+                        'created_at',
+                        ]
+        self.rows = []
+        for challenge in challenges:
+            self.rows.append({
+                'hostname': challenge.hostname,
+                'challenge_id': challenge.challenge_id,
+                'plots_past_filter': challenge.plots_past_filter,
+                'proofs_found': challenge.proofs_found,
+                'time_taken': challenge.time_taken,
+                'created_at': challenge.created_at,
+            })
+
 class Wallet:
 
     def __init__(self, cli_stdout):

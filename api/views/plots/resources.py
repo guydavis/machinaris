@@ -36,7 +36,6 @@ class Plots(MethodView):
     def post(self, new_items):
         # Now delete all old plots by hostname of first new plotting
         db.session.query(Plot).filter(Plot.hostname==new_items[0]['hostname']).delete()
-        #db.session.commit()
         items = []
         for new_item in new_items:
             item = Plot(**new_item)
@@ -60,7 +59,6 @@ class PlotByHostname(MethodView):
     def put(self, new_items, hostname):
         # Now delete all old plots by hostname of first new plotting
         db.session.query(Plot).filter(Plot.hostname==hostname).delete()
-        #db.session.commit()
         items = []
         for new_item in new_items:
             item = Plot(**new_item)

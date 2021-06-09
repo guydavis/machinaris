@@ -19,9 +19,9 @@ from subprocess import Popen, TimeoutExpired, PIPE
 from os import path
 
 from web import app, db
-from common.models import farms as f, plots as p
+from common.models import farms as f, plots as p, challenges as c
 from common.config import globals
-from web.models.chia import FarmSummary, FarmPlots
+from web.models.chia import FarmSummary, FarmPlots, BlockchainChallenges
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 
@@ -34,7 +34,9 @@ def load_plots_farming():
     return FarmPlots(plots)
 
 def recent_challenges():
-    return []
+    minute_ago = (datetime.datetime.now() - datetime.timedelta(minutes=2)).strftime("%Y-%m-%d %H:%M:%S.000")
+    challenges = db.session.query(c.Challenge).filter(c.Challenge.created_at >= minute_ago).order_by(c.Challenge.created_at.desc())
+    return BlockchainChallenges(challenges[:8]) # Last minute challenge
 
 def load_wallet_show():
     global last_wallet_show

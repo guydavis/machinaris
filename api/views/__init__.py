@@ -1,4 +1,5 @@
 from . import alerts
+from . import challenges
 from . import farms
 from . import plots
 from . import plottings
@@ -7,6 +8,7 @@ from . import workers
 
 MODULES = (
     alerts,
+    challenges,
     farms,
     plots,
     plottings,

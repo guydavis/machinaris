@@ -4,7 +4,7 @@ import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from api import app
-from api.schedules import status_worker, status_farm, status_plotting, status_plots
+from api.schedules import status_worker, status_farm, status_plotting, status_plots, status_challenges
 from api.schedules import stats_disk, stats_farm
 
 scheduler = BackgroundScheduler()
@@ -23,6 +23,7 @@ scheduler.add_job(func=status_worker.update, trigger='interval', seconds=30)
 scheduler.add_job(func=status_farm.update, trigger='interval', seconds=30) 
 scheduler.add_job(func=status_plotting.update, trigger='interval', seconds=30) 
 scheduler.add_job(func=status_plots.update, trigger='interval', seconds=30) 
+scheduler.add_job(func=status_challenges.update, trigger='interval', seconds=5) 
 
 scheduler.start()
 

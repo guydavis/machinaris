@@ -6,5 +6,5 @@ class DefaultConfig:
     SQLALCHEMY_DATABASE_URI = 'sqlite:////root/.chia/machinaris/dbs/machinaris.db'
     SQLALCHEMY_ECHO = True
     CONTROLLER_SCHEME = 'http'
-    CONTROLLER_HOST = os.environ['controller_host']
+    CONTROLLER_HOST = os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost'
     CONTROLLER_PORT = os.environ['controller_api_port'] if 'controller_api_port' in os.environ else '8926'

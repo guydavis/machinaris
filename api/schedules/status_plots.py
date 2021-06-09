@@ -16,7 +16,7 @@ from api import utils
 def update():
     if not globals.farming_enabled() and not globals.harvesting_enabled():
         app.logger.info(
-            "Skipping plotting stats collection on farming/harvesting instance.")
+            "Skipping plotting status collection on farming/harvesting instance.")
         return
     with app.app_context():
         try:
