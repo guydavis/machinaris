@@ -18,7 +18,7 @@ class FarmSummary:
         self.total_chia = 0
         self.netspace_size = 0
         self.netspace_display_size = "?"
-        self.time_to_win = "Unknown"
+        self.expected_time_to_win = "Unknown"
         for farm in farms:
             self.plot_count += farm.plot_count
             self.plots_size += farm.plots_size
@@ -27,7 +27,7 @@ class FarmSummary:
                 self.netspace_display_size = converters.gib_to_fmt(farm.netspace_size)
                 self.netspace_size = farm.netspace_size
                 self.status = farm.status
-        
+                self.expected_time_to_win = farm.expected_time_to_win
         self.plots_display_size = converters.gib_to_fmt(self.plots_size)
         self.calc_status(self.status)
 
@@ -35,8 +35,6 @@ class FarmSummary:
         self.status = status
         if self.status == "Farming":
             self.display_status = "Active"
-        #elif self.status == "Not synced or not connected to peers":
-        #    self.display_status = "<span style='font-size:.6em'>" + self.status + '</span>'
         else:
             self.display_status = self.status
 
@@ -47,12 +45,12 @@ class FarmSummary:
 class FarmPlots:
 
      def __init__(self, plots):
-        self.columns = ['plot_id', 'hostname', 'dir', 'plot', 'create_date', 'size']
+        self.columns = ['farmer', 'plot_id',  'dir', 'plot', 'create_date', 'size']
         self.rows = []
         for plot in plots:
             self.rows.append({ \
+                'farmer': plot.hostname, \
                 'plot_id': plot.plot_id, \
-                'hostname': plot.hostname, \
                 'dir': plot.dir,  \
                 'plot': plot.file,  \
                 'create_date': plot.created_at, \

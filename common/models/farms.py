@@ -16,7 +16,7 @@ class Farm(db.Model):
     plots_size = sa.Column(sa.REAL)  # GiB
     total_chia = sa.Column(sa.REAL) 
     netspace_size = sa.Column(sa.REAL)  # GiB
-    expected_time_to_win = sa.Column(sa.Integer)  # Days
+    expected_time_to_win = sa.Column(sa.String(length=64))
     created_at = sa.Column(sa.DateTime(), server_default=func.now())
     updated_at = sa.Column(sa.DateTime(), onupdate=func.now())
 

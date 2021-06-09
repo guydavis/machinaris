@@ -2,7 +2,7 @@
 # Performs a REST call to controller (possibly localhost) of latest farm status.
 #
 
-from api.schedules.common import get_controller_url
+
 import datetime
 import http
 import json
@@ -17,7 +17,7 @@ from flask import g
 from common.config import globals
 from api.commands import plotman_cli
 from api import app
-from api.schedules import common
+from api import utils
 
 def update():
     with app.app_context():
@@ -35,7 +35,7 @@ def update():
                 "mode": os.environ['mode'],
                 "plotting": plotting_status,
             }
-            common.send_post('/workers', payload, debug=False)
+            utils.send_post('/workers', payload, debug=False)
         except:
             app.logger.info("Failed to load send worker status.")
             app.logger.info(traceback.format_exc())

@@ -1,8 +1,6 @@
-"""Default application settings"""
-
+import os
 
 class DefaultConfig:
-    """Default configuration"""
     API_TITLE = "Machinaris API"
     API_VERSION = 0.1
     OPENAPI_VERSION = '3.0.2'
@@ -16,6 +14,6 @@ class DefaultConfig:
     SQLALCHEMY_DATABASE_URI = 'sqlite:////root/.chia/machinaris/dbs/machinaris.db'
     SQLALCHEMY_ECHO = True
     ETAG_DISABLED = True # https://flask-smorest.readthedocs.io/en/latest/etag.html
-    CONTROLLER_PROTO = 'http'
-    CONTROLLER_HOST = 'localhost'
-    CONTROLLER_PORT = 8927
+    CONTROLLER_SCHEME = 'http'
+    CONTROLLER_HOST = os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost'
+    CONTROLLER_PORT = os.environ['controller_api_port'] if 'controller_api_port' in os.environ else '8927'

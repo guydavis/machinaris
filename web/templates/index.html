@@ -18,18 +18,39 @@
     {% endwith %}
   </div>
 
+  {% if farming.expected_time_to_win != 'Unknown' %}
+  <div class="row align-items-md-stretch">
+    <div class="col-md-12">
+      <div class="h-30 p-2 text-white bg-dark rounded-3">
+        <h6 class="display-6 text-center">Expected Time to Win: 
+          <span class="text-success">{{ farming.expected_time_to_win }}</span>
+        </h6>
+      </div>
+    </div>
+  </div>
+  <br />
+  {% endif %}
+
   <div class="row align-items-md-stretch">
     {% if global_config.plotting_enabled %}
     <div class="col-md-6">
       <div class="h-20 p-2 bg-light border rounded-3">
-        <h6 class="display-6 text-center">Plotting: {{ plotting.display_status }}</h6>
+        <h6 class="display-6 text-center">Plotting:
+          <span {% if plotting.display_status == 'Active' %} class="text-success" {% endif %} >
+            {{ plotting.display_status }}
+          </span> 
+        </h6>
       </div>
     </div>
     {% endif %}
     {% if global_config.farming_enabled %}
     <div class="col-md-6">
       <div class="h-20 p-2 bg-light border rounded-3">
-        <h6 class="display-6 text-center">Farming: {{ farming.display_status }}</h6>
+        <h6 class="display-6 text-center">Farming: 
+          <span {% if farming.display_status == 'Active' %} class="text-success" {% endif %} >
+          {{ farming.display_status }}
+          </span> 
+        </h6>
       </div>
     </div>
     {% endif %}

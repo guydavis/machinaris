@@ -6,16 +6,23 @@ import re
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
+from web.default_settings import DefaultConfig
+
 app = Flask(__name__)
 app.secret_key = b'$}#P)eu0A.O,s0Mz'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////root/.chia/machinaris/dbs/machinaris.db'
+app.config.from_object(DefaultConfig)
+# Override config with optional settings file
+app.config.from_envvar('WEB_SETTINGS_FILE', silent=False)
+
+
 db = SQLAlchemy(app)
 
 if __name__ != '__main__':
     gunicorn_logger = logging.getLogger('gunicorn.error')
     app.logger.handlers = gunicorn_logger.handlers
     app.logger.setLevel(gunicorn_logger.level)
+
+app.logger.info("CONTROLLER_HOST={0}".format(app.config['CONTROLLER_HOST']))
 
 from web import routes
 

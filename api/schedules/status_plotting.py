@@ -11,7 +11,7 @@ from common.config import globals
 from common.utils import converters
 from api import app
 from api.commands import plotman_cli
-from api.schedules import common
+from api import utils
 
 def update():
     if not globals.plotting_enabled():
@@ -20,7 +20,7 @@ def update():
         return
     with app.app_context():
         try:
-            hostname = common.get_hostname()
+            hostname = utils.get_hostname()
             plotting_summary = plotman_cli.load_plotting_summary()
             payload = []
             for plot in plotting_summary.rows:
@@ -40,7 +40,10 @@ def update():
                     "sys": plot['sys'],
                     "io": plot['io'],
                 })
-            common.send_post('/plottings', payload, debug=False)
+            if len(payload) > 0:
+                utils.send_post('/plottings', payload, debug=False)
+            else:
+                utils.send_delete('/plottings/{0}'.format(hostname), debug=True)
         except:
             app.logger.info("Failed to load plotting summary and send.")
             app.logger.info(traceback.format_exc())

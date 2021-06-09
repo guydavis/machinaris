@@ -7,8 +7,8 @@ from datetime import datetime
 from flask import Flask, flash, redirect, render_template, request, session, url_for, send_from_directory
 
 from common.config import globals
-from web import app
-from web.actions import chia, plotman, chiadog
+from web import app, utils
+from web.actions import chia, plotman, chiadog, worker
 
 @app.route('/')
 def landing():
@@ -22,11 +22,14 @@ def index():
     gc = globals.load()
     if not globals.is_setup():
         return redirect(url_for('setup'))
+    if not utils.is_controller():
+        return redirect(url_for('controller'))
+    workers = worker.load_worker_summary()
     farming = chia.load_farm_summary()
     plotting = plotman.load_plotting_summary()
     challenges = chia.recent_challenges()
     return render_template('index.html', reload_seconds=60, farming=farming.__dict__, \
-        plotting=plotting.__dict__, challenges=challenges, global_config=gc)
+        plotting=plotting.__dict__, challenges=challenges, workers=workers, global_config=gc)
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
@@ -39,6 +42,10 @@ def setup():
         return render_template('setup.html', key_paths = key_paths)
     else:
         return redirect(url_for('index'))
+
+@app.route('/controller')
+def controller():
+    return render_template('controller.html', controller_url = utils.get_controller_url())
 
 @app.route('/plotting', methods=['GET', 'POST'])
 def plotting():
@@ -64,6 +71,7 @@ def farming():
     elif request.args.get('check'):  # Xhr calling for check output
         return chia.check_plots(request.args.get('first_load'))
     gc = globals.load()
+    
     farming = chia.load_farm_summary()
     plots = chia.load_plots_farming()
     chia.compare_plot_counts(gc, farming, plots)
