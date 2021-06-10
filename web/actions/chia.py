@@ -19,9 +19,9 @@ from subprocess import Popen, TimeoutExpired, PIPE
 from os import path
 
 from web import app, db
-from common.models import farms as f, plots as p, challenges as c
+from common.models import farms as f, plots as p, challenges as c, wallets as w
 from common.config import globals
-from web.models.chia import FarmSummary, FarmPlots, BlockchainChallenges
+from web.models.chia import FarmSummary, FarmPlots, BlockchainChallenges, Wallets
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 
@@ -38,25 +38,9 @@ def recent_challenges():
     challenges = db.session.query(c.Challenge).filter(c.Challenge.created_at >= minute_ago).order_by(c.Challenge.created_at.desc())
     return BlockchainChallenges(challenges[:8]) # Last minute challenge
 
-def load_wallet_show():
-    global last_wallet_show
-    global last_wallet_show_load_time
-    if last_wallet_show and last_wallet_show_load_time >= \
-            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
-        return last_wallet_show
-
-    proc = Popen("echo 'S' | {0} wallet show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
-    try:
-        outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-        abort(500, description="The timeout is expired!")
-    if errs:
-        abort(500, description=errs.decode('utf-8'))
-    last_wallet_show = chia.Wallet(outs.decode('utf-8').splitlines())
-    last_wallet_show_load_time = datetime.datetime.now()
-    return last_wallet_show
+def load_wallets():
+    wallets = db.session.query(w.Wallet).all()
+    return Wallets(wallets)
 
 last_blockchain_show = None 
 last_blockchain_show_load_time = None 

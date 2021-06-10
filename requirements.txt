@@ -12,3 +12,4 @@ pytz
 wheel
 apscheduler
 requests
+pexpect

@@ -19,7 +19,7 @@
   </div>
 
   {% if farming.expected_time_to_win != 'Unknown' %}
-  <div class="row align-items-md-stretch">
+  <div class="row align-items-md-stretch" style="margin-top:5px; margin-bottom:5px;">
     <div class="col-md-12">
       <div class="h-30 p-2 text-white bg-dark rounded-3">
         <h4 class="text-center">Expected Time to Win:
@@ -28,12 +28,11 @@
       </div>
     </div>
   </div>
-  <br />
   {% endif %}
 
   <div class="row align-items-md-stretch">
     {% if global_config.plotting_enabled %}
-    <div class="col-md-6">
+    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-20 p-2 bg-light border rounded-3">
         <h6 class="display-6 text-center">Plotting:
           <span {% if plotting.display_status=='Active' %} class="text-success" {% endif %}>
@@ -44,7 +43,7 @@
     </div>
     {% endif %}
     {% if global_config.farming_enabled %}
-    <div class="col-md-6">
+    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-20 p-2 bg-light border rounded-3">
         <h6 class="display-6 text-center">Farming:
           <span {% if farming.display_status=='Active' %} class="text-success" {% endif %}>
@@ -56,36 +55,32 @@
     {% endif %}
   </div>
 
-  <br />
-
   <div class="row align-items-md-stretch">
-    <div class="col-md-6">
+    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
         <h1 class="display-1 text-center text-success">{{ farming.plot_count }}</h1>
         <h6 class="display-6 text-center">Total Plots</h6>
       </div>
     </div>
     {% if global_config.farming_enabled %}
-    <div class="col-md-6">
+    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
         <h1 class="display-1 text-center text-success">{{ farming.total_chia }}</h1>
-        <h6 class="display-6 text-center">Total Chia</h6>
+        <h6 class="display-6 text-center">Total Chia Farmed</h6>
       </div>
     </div>
     {% endif %}
   </div>
 
-  <br />
-
   <div class="row align-items-md-stretch">
-    <div class="col-md-6">
+    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
         <h4 class="display-4 text-center text-success">{{ farming.plots_display_size }}</h4>
         <h6 class="display-6 text-center">Total Plots Size</h6>
       </div>
     </div>
     {% if global_config.farming_enabled %}
-    <div class="col-md-6">
+    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
         <h4 class="display-4 text-center text-success">{{ farming.netspace_display_size }}</h4>
         <h6 class="display-6 text-center">Estimated Netspace Size</h6>
@@ -109,21 +104,11 @@
         });
     }, 1000 * 5);
   </script>
-  <br />
-  <div class="col-md-12">
+  <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
     <div class="h-100 p-2 text-white bg-dark rounded-3" id="challenges-table-div">
       {% include 'views/challenges.html' %}
     </div>
   </div>
-  {% if challenges.rows|length == 0 %}
-  <div class="text-center" style="padding-top:100 px; padding-bottom: 0px">
-    <h6>No challenges found in Chia's log yet. Probably just starting up, syncing, or no plots yet...</h6>
-    <h6>If you have plots and this persists long, check the Alerts tab and review Chia's log.
-      See the <a
-        href="https://github.com/guydavis/machinaris/wiki/FAQ#why-are-there-no-challenges-shown-on-the-main-machinaris-page"
-        target="_blank">FAQ.</a></h6>
-  </div>
-  {% endif %}
 
   {% endif %}
 

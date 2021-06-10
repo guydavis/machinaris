@@ -3,6 +3,7 @@ from . import challenges
 from . import farms
 from . import plots
 from . import plottings
+from . import wallets
 from . import workers
 
 
@@ -12,6 +13,7 @@ MODULES = (
     farms,
     plots,
     plottings,
+    wallets,
     workers,
 )
 

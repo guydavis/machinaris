@@ -44,12 +44,6 @@ def get_stats_db():
         db = g._stats_database = sqlite3.connect('/root/.chia/machinaris/dbs/stats.db')
     return db
 
-def get_app_db():
-    db = getattr(g, '_app_database', None)
-    if db is None:
-        db = g._app_database = sqlite3.connect('/root/.chia/machinaris/dbs/machinaris.db')
-    return db
-
 def is_setup():
     # First check if plotter and farmer_pk,pool_pk provided.
     if "mode" in os.environ and os.environ['mode'] == 'plotter':

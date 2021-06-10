@@ -78,15 +78,16 @@ class BlockchainChallenges:
                 'created_at': challenge.created_at,
             })
 
-class Wallet:
+class Wallets:
 
-    def __init__(self, cli_stdout):
-        self.text = ""
-        for line in cli_stdout:
-            #app.logger.info("NEW LINE: {0}".format(line))
-            if "No online" in line or "skip restore from backup" in line or "own backup file" in line:
-                continue
-            self.text += line + '\n'
+    def __init__(self, wallets):
+        self.columns = ['hostname', 'details', 'updated_at']
+        self.rows = []
+        for wallet in wallets:
+            self.rows.append({ \
+                'hostname': wallet.hostname, \
+                'details': wallet.details,
+                'updated_at': wallet.updated_at }) 
 
 class Keys:
 

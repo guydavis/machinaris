@@ -15,4 +15,4 @@ class WorkerSchema(AutoSchema):
 class WorkerQueryArgsSchema(Schema):
     hostname = ma.fields.Str()
     mode = ma.fields.Str()
-    plotter = ma.fields.Str()
+    plotting = ma.fields.Str()

@@ -4,6 +4,7 @@
 
 import datetime
 import os
+import pexpect
 import psutil
 import re
 import signal
@@ -108,17 +109,23 @@ def load_wallet_show():
     if last_wallet_show and last_wallet_show_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
         return last_wallet_show
-
-    proc = Popen("echo 'S' | {0} wallet show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
-    try:
-        outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-        abort(500, description="The timeout is expired!")
-    if errs:
-        abort(500, description=errs.decode('utf-8'))
-    last_wallet_show = chia.Wallet(outs.decode('utf-8').splitlines())
+    child = pexpect.spawn("{0} wallet show".format(CHIA_BINARY))
+    wallet_index = 1
+    while True:
+        i = child.expect(["Wallet height:.*\r\n", "Choose wallet key:.*\r\n", "No online backup file found.*\r\n"])
+        if i == 0:
+            app.logger.info("wallet show returned 'Wallet height...' so collecting details.")
+            last_wallet_show = chia.Wallet(child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8"))
+            break
+        elif i == 1:
+            app.logger.info("wallet show got index prompt so selecting #{0}".format(wallet_index))
+            child.sendline("{0}".format(wallet_index))
+            wallet_index += 1
+        elif i == 2:
+            child.sendline("S")
+        else:
+            app.logger.info("pexpect returned {0}".format(i))
+            last_wallet_show = chia.Wallet("ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8"))
     last_wallet_show_load_time = datetime.datetime.now()
     return last_wallet_show
 

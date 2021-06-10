@@ -105,8 +105,8 @@ def alerts():
 @app.route('/wallet')    
 def wallet():
     gc = globals.load()
-    wallet = chia.load_wallet_show()
-    return render_template('wallet.html', wallet=wallet.text, 
+    wallets = chia.load_wallets()
+    return render_template('wallet.html', wallets=wallets, 
         global_config=gc)
 
 @app.route('/keys')

@@ -22,7 +22,7 @@ from api import utils
 def update():
     with app.app_context():
         try:
-            hostname = common.get_hostname()
+            hostname = utils.get_hostname()
             gc = globals.load()
             plotting_status = "disabled"
             if gc['plotting_enabled']:
@@ -34,6 +34,7 @@ def update():
                 "hostname": hostname,
                 "mode": os.environ['mode'],
                 "plotting": plotting_status,
+                "config": json.dumps(gc),
             }
             utils.send_post('/workers', payload, debug=False)
         except:
