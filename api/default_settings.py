@@ -12,6 +12,9 @@ class DefaultConfig:
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:////root/.chia/machinaris/dbs/machinaris.db'
+    SQLALCHEMY_BINDS = {
+        'chiadog':    'sqlite:////root/.chia/chiadog/dbs/chiadog.db',
+    }
     SQLALCHEMY_ECHO = True
     ETAG_DISABLED = True # https://flask-smorest.readthedocs.io/en/latest/etag.html
     CONTROLLER_SCHEME = 'http'

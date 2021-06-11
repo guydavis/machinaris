@@ -15,8 +15,8 @@ import yaml
 from flask import Flask, jsonify, abort, request, flash, g
 from subprocess import Popen, TimeoutExpired, PIPE
 
-from common.models import alerts
-from web import app
+from common.models import alerts as a
+from web import app, db
 
 def save_config(config):
     try:
@@ -45,7 +45,7 @@ def get_chiadog_pid():
     return None
 
 def get_notifications():
-    return chiadog.Notification.query.order_by(chiadog.Notification.created_at.desc()).limit(20).all()
+    return db.session.query(a.Alert).order_by(a.Alert.created_at.desc()).limit(20).all()
 
 def start_chiadog():
     app.logger.info("Starting Chiadog monitoring....")

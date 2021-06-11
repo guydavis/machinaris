@@ -36,5 +36,5 @@ def update():
             app.logger.info(payload)
             utils.send_post('/blockchains', payload, debug=False)
         except:
-            app.logger.info("Failed to load send blockchains status.")
+            app.logger.info("Failed to load and send blockchains status.")
             app.logger.info(traceback.format_exc())

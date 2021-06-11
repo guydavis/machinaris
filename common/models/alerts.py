@@ -9,7 +9,8 @@ from common.extensions.database import db
 class Alert(db.Model):
     __tablename__ = "alerts"
 
-    id = sa.Column(sa.Integer, primary_key=True)
+    unique_id = sa.Column(sa.String(length=64), primary_key=True)
+    hostname = sa.Column(sa.String(length=255), nullable=False)
     priority = sa.Column(sa.String(40), nullable=False)
     service = sa.Column(sa.String(60), nullable=False)
     message = sa.Column(sa.String, nullable=False)

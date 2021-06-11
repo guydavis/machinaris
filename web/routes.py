@@ -98,8 +98,8 @@ def alerts():
             chiadog_cli.stop_chiadog()
         else:
             app.logger.info("Unknown alerts form: {0}".format(request.form))
-    notifications = chiadog_cli.get_notifications()
-    return render_template('alerts.html', chiadog_running = chiadog_cli.get_chiadog_pid(),
+    notifications = chiadog.get_notifications()
+    return render_template('alerts.html', chiadog_running = chiadog.get_chiadog_pid(),
         reload_seconds=60, notifications=notifications, global_config=gc)
 
 @app.route('/wallet')    

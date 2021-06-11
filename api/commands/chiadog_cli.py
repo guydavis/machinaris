@@ -44,8 +44,9 @@ def get_chiadog_pid():
             return proc.info['pid']
     return None
 
-def get_notifications():
-    return chiadog.Notification.query.order_by(chiadog.Notification.created_at.desc()).limit(20).all()
+def get_notifications(since):
+    return chiadog.Notification.query.filter(chiadog.Notification.created_at >= since). \
+        order_by(chiadog.Notification.created_at.desc()).limit(20).all()
 
 def start_chiadog():
     app.logger.info("Starting Chiadog monitoring....")
