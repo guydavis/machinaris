@@ -4,7 +4,8 @@
 
 <div class="position-relative">
     <div class="position-absolute top-0 end-0">
-        <a href="https://github.com/Chia-Network/chia-blockchain/wiki/CLI-Commands-Reference#other-commands-not-yet-documented"  target="_blank">
+        <a href="https://github.com/Chia-Network/chia-blockchain/wiki/CLI-Commands-Reference#other-commands-not-yet-documented"
+            target="_blank">
             <i class="fs-4 bi-question-circle"></i>
         </a>
     </div>
@@ -15,10 +16,21 @@
 </header>
 
 <div class="p-1 mb-4 bg-light border rounded-3">
+    {% if keys.rows|length > 0 %}
+    {% for key in keys.rows %}
     <div class="container-fluid">
-        <pre>{{ keys }}</pre>
+        <h3>{{key.hostname}}</h3>
+        <pre>{{ key.details}}</pre>
     </div>
+    {% endfor %}
 </div>
+{% else %}
+<div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
+    <h6>No keys found from any farmers. Not added?</h6>
+    <h6>Try running 'chia key show' on your farmers to verify.</h6>
+</div>
+{% endif %}
+
 
 <p><b>NOTE: Machinaris will never display your private key here.</b></p>
 
@@ -28,7 +40,7 @@
     <code>chia keys show --show-mnemonic-seed</code>
 </div>
 
-<br/>
+<br />
 
 
 <p>Also, you may view the key file(s) on the host, which you mounted within the Docker container:</p>

@@ -25,20 +25,10 @@ from api.models import chia
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 
-RELOAD_MINIMUM_SECS = 30 # Don't query chia unless at least this long since last time.
-
 # When reading tail of chia plots check output, limit to this many lines
 MAX_LOG_LINES = 2000
 
-last_farm_summary = None 
-last_farm_summary_load_time = None 
-
 def load_farm_summary():
-    global last_farm_summary
-    global last_farm_summary_load_time
-    if last_farm_summary and last_farm_summary_load_time >= \
-            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
-        return last_farm_summary
     if globals.farming_enabled(): # Load from chia farm summary
         proc = Popen("{0} farm summary".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
         try:
@@ -50,21 +40,12 @@ def load_farm_summary():
         if errs:
             app.logger.info("Failed to load chia farm summary at.")
             app.logger.info(traceback.format_exc())
-        last_farm_summary = chia.FarmSummary(cli_stdout=outs.decode('utf-8').splitlines())
+        farm_summary = chia.FarmSummary(cli_stdout=outs.decode('utf-8').splitlines())
     else:  # Just get plot count and size
-        last_farm_summary = chia.FarmSummary(farm_plots=load_plots_farming())
-    last_farm_summary_load_time = datetime.datetime.now()
-    return last_farm_summary
-
-last_plots_farming = None 
-last_plots_farming_load_time = None 
+        farm_summary = chia.FarmSummary(farm_plots=load_plots_farming())
+    return farm_summary
 
 def load_plots_farming():
-    global last_plots_farming
-    global last_plots_farming_load_time
-    if last_plots_farming and last_plots_farming_load_time >= \
-            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
-        return last_plots_farming
     all_entries = []
     for dir_path in os.environ['plots_dir'].split(':'):
         try:
@@ -77,9 +58,8 @@ def load_plots_farming():
             app.logger.info(traceback.format_exc())
             flash('Unable to list plots at {0}.  Did you mount your plots directories?'.format(dir_path), 'danger')
     all_entries = sorted(all_entries, key=lambda entry: entry[0], reverse=True)
-    last_plots_farming = chia.FarmPlots(all_entries)
-    last_plots_farming_load_time = datetime.datetime.now()
-    return last_plots_farming
+    plots_farming = chia.FarmPlots(all_entries)
+    return plots_farming
 
 def save_config(config):
     try:
@@ -100,22 +80,15 @@ def save_config(config):
         flash('Nice! config.yaml validated and saved successfully.', 'success')
         flash('NOTE: Currently requires restarting the container to pickup changes.', 'info')
 
-last_wallet_show = None 
-last_wallet_show_load_time = None 
-
 def load_wallet_show():
-    global last_wallet_show
-    global last_wallet_show_load_time
-    if last_wallet_show and last_wallet_show_load_time >= \
-            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
-        return last_wallet_show
+    wallet_show = ""
     child = pexpect.spawn("{0} wallet show".format(CHIA_BINARY))
     wallet_index = 1
     while True:
         i = child.expect(["Wallet height:.*\r\n", "Choose wallet key:.*\r\n", "No online backup file found.*\r\n"])
         if i == 0:
             app.logger.info("wallet show returned 'Wallet height...' so collecting details.")
-            last_wallet_show = chia.Wallet(child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8"))
+            wallet_show += chia.Wallet(child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8"))
             break
         elif i == 1:
             app.logger.info("wallet show got index prompt so selecting #{0}".format(wallet_index))
@@ -125,20 +98,10 @@ def load_wallet_show():
             child.sendline("S")
         else:
             app.logger.info("pexpect returned {0}".format(i))
-            last_wallet_show = chia.Wallet("ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8"))
-    last_wallet_show_load_time = datetime.datetime.now()
-    return last_wallet_show
-
-last_blockchain_show = None 
-last_blockchain_show_load_time = None 
+            wallet_show += chia.Wallet("ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8"))
+    return wallet_show
 
 def load_blockchain_show():
-    global last_blockchain_show
-    global last_blockchain_show_load_time
-    if last_blockchain_show and last_blockchain_show_load_time >= \
-            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
-        return last_blockchain_show
-
     proc = Popen("{0} show --state".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -148,21 +111,9 @@ def load_blockchain_show():
         abort(500, description="The timeout is expired!")
     if errs:
         abort(500, description=errs.decode('utf-8'))
-    
-    last_blockchain_show = chia.Blockchain(outs.decode('utf-8').splitlines())
-    last_blockchain_show_load_time = datetime.datetime.now()
-    return last_blockchain_show
-
-last_connections_show = None 
-last_connections_show_load_time = None 
+    return chia.Blockchain(outs.decode('utf-8').splitlines())
 
 def load_connections_show():
-    global last_connections_show
-    global last_connections_show_load_time
-    if last_connections_show and last_connections_show_load_time >= \
-            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
-        return last_connections_show
-
     proc = Popen("{0} show --connections".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -172,10 +123,7 @@ def load_connections_show():
         abort(500, description="The timeout is expired!")
     if errs:
         abort(500, description=errs.decode('utf-8'))
-    
-    last_connections_show = chia.Connections(outs.decode('utf-8').splitlines())
-    last_connections_show_load_time = datetime.datetime.now()
-    return last_connections_show
+    return chia.Connections(outs.decode('utf-8').splitlines())
 
 def add_connection(connection):
     try:
@@ -201,16 +149,7 @@ def add_connection(connection):
         app.logger.info("{0}".format(outs.decode('utf-8')))
         flash('Nice! Connection added to Chia and sync engaging!', 'success')
 
-last_keys_show = None 
-last_keys_show_load_time = None 
-
 def load_keys_show():
-    global last_keys_show
-    global last_keys_show_load_time
-    if last_keys_show and last_keys_show_load_time >= \
-            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
-        return last_keys_show
-
     proc = Popen("{0} keys show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -220,10 +159,7 @@ def load_keys_show():
         abort(500, description="The timeout is expired!")
     if errs:
         abort(500, description=errs.decode('utf-8'))
-    
-    last_keys_show = chia.Keys(outs.decode('utf-8').splitlines())
-    last_keys_show_load_time = datetime.datetime.now()
-    return last_keys_show 
+    return chia.Keys(outs.decode('utf-8').splitlines())
 
 def generate_key(key_path):
     if os.path.exists(key_path) and os.stat(key_path).st_size > 0:

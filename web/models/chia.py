@@ -91,25 +91,41 @@ class Wallets:
 
 class Keys:
 
-    def __init__(self, cli_stdout):
-        self.text = ""
-        for line in cli_stdout:
-            self.text += line + '\n'
+    def __init__(self, keys):
+        self.columns = ['hostname', 'details', 'updated_at']
+        self.rows = []
+        for key in keys:
+            self.rows.append({ \
+                'hostname': key.hostname, \
+                'details': key.details,
+                'updated_at': key.updated_at }) 
 
-class Blockchain:
+class Blockchains:
 
-    def __init__(self, cli_stdout):
-        self.text = ""
-        for line in cli_stdout:
-            self.text += line + '\n'
+    def __init__(self, blockchains):
+        self.columns = ['hostname', 'details', 'updated_at']
+        self.rows = []
+        for blockchain in blockchains:
+            self.rows.append({ \
+                'hostname': blockchain.hostname, \
+                'details': blockchain.details,
+                'updated_at': blockchain.updated_at }) 
 
 class Connections:
 
-    def __init__(self, cli_stdout):
-        self.text = ""
+    def __init__(self, connections):
+        self.rows = []
+        for connection in connections:
+            self.rows.append({
+                'hostname': connection.hostname,
+                'details': connection.details
+            })
+    
+    def parse(connections):
+        # TODO Deal with connection listing from multiple machines
+        connection = connections[0]
         self.conns = []
-        for line in cli_stdout:
-            self.text += line + '\n'
+        for line in connection.details.split('\n'):
             try:
                 if line.strip().startswith('Connections:'):
                     pass
@@ -134,5 +150,3 @@ class Connections:
                     })
             except:
                 app.logger.info(traceback.format_exc())
-
-

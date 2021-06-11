@@ -123,32 +123,6 @@ class Connections:
 
     def __init__(self, cli_stdout):
         self.text = ""
-        self.conns = []
         for line in cli_stdout:
             self.text += line + '\n'
-            try:
-                if line.strip().startswith('Connections:'):
-                    pass
-                elif line.strip().startswith('Type'):
-                    self.columns = line.lower().replace('last connect', 'last_connect') \
-                        .replace('mib up|down', 'mib_up mib_down').strip().split()
-                elif line.strip().startswith('-SB Height'):
-                    pass
-                else:
-                    vals = line.strip().split()
-                    #app.logger.debug(vals)
-                    self.conns.append({
-                        'type': vals[0],
-                        'ip': vals[1],
-                        'ports': vals[2],
-                        'nodeid': vals[3].replace('...',''),
-                        'last_connect': datetime.strptime( \
-                            str(datetime.today().year) + ' ' + vals[4] + ' ' + vals[5] + ' ' + vals[6], 
-                            '%Y %b %d %H:%M:%S'),
-                        'mib_up': float(vals[7].split('|')[0]),
-                        'mib_down': float(vals[7].split('|')[1])
-                    })
-            except:
-                app.logger.info(traceback.format_exc())
-
 

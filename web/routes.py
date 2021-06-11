@@ -114,15 +114,15 @@ def keys():
     gc = globals.load()
     keys = chia.load_keys_show()
     key_paths = globals.get_key_paths()
-    return render_template('keys.html', keys=keys.text, 
+    return render_template('keys.html', keys=keys, 
         key_paths=key_paths, global_config=gc)
 
 @app.route('/network/blockchain')
 def network_blockchain():
     gc = globals.load()
-    blockchain = chia.load_blockchain_show()
+    blockchains = chia.load_blockchain_show()
     return render_template('network/blockchain.html', reload_seconds=60, 
-        blockchain=blockchain.text, global_config=gc, now=gc['now'])
+        blockchains=blockchains, global_config=gc, now=gc['now'])
 
 @app.route('/network/connections', methods=['GET', 'POST'])
 def network_connections():
@@ -134,7 +134,7 @@ def network_connections():
             app.logger.info("Unknown form action: {0}".format(request.form))
     connections = chia.load_connections_show()
     return render_template('network/connections.html', reload_seconds=60, 
-        connections=connections.text, global_config=gc, now=gc['now'])
+        connections=connections, global_config=gc, now=gc['now'])
 
 @app.route('/settings/plotting', methods=['GET', 'POST'])
 def settings_plotting():

@@ -1,5 +1,5 @@
 #
-# Performs a REST call to controller (possibly localhost) of latest farm status.
+# Performs a REST call to controller (possibly localhost) of latest public keys status.
 #
 
 
@@ -22,19 +22,19 @@ from api import utils
 def update():
     if not globals.farming_enabled():
         app.logger.info(
-            "Skipping wallet status collection on non-farming instance.")
+            "Skipping public keys status collection on non-farming instance.")
         return
     with app.app_context():
         try:
             hostname = utils.get_hostname()
-            wallet = chia_cli.load_wallet_show()
-            app.logger.info(wallet.text)
+            public_keys = chia_cli.load_keys_show()
+            app.logger.info(public_keys.text)
             payload = {
                 "hostname": hostname,
-                "details": wallet.text.replace('\r', ''),
+                "details": public_keys.text.replace('\r', ''),
             }
             app.logger.info(payload)
-            utils.send_post('/wallets', payload, debug=True)
+            utils.send_post('/keys', payload, debug=False)
         except:
-            app.logger.info("Failed to load send wallet status.")
+            app.logger.info("Failed to load send public keys status.")
             app.logger.info(traceback.format_exc())

@@ -7,7 +7,9 @@
 </header>
 
 <style>
-    a.active.nav-link{background-color: #3d3f42!important }
+    a.active.nav-link {
+        background-color: #3d3f42 !important
+    }
 </style>
 <nav class="navbar navbar-dark" style="padding-bottom: 0px;">
     <div class="container-fluid">
@@ -22,10 +24,20 @@
     </div>
 </nav>
 
-<div class="p-5 mb-4 bg-light border rounded-3">
+<div class="p-1 mb-4 bg-light border rounded-3">
+    {% if blockchains.rows|length > 0 %}
+    {% for blockchain in blockchains.rows %}
     <div class="container-fluid">
-        <pre>{{ blockchain }}</pre>
+        <h3>{{blockchain.hostname}}</h3>
+        <pre>{{ blockchain.details}}</pre>
     </div>
+    {% endfor %}
 </div>
+{% else %}
+<div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
+    <h6>No blockchains found from any farmers. Not added?</h6>
+    <h6>Try running 'chia show --state' on your farmers to verify.</h6>
+</div>
+{% endif %}
 
 {% endblock %}

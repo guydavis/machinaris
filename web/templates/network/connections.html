@@ -44,11 +44,22 @@
         </div>
     </nav>
 
-    <div class="p-5 mb-4 bg-light border rounded-3">
+    <div class="p-1 mb-4 bg-light border rounded-3">
+        {% if connections.rows|length > 0 %}
+        {% for connection in connections.rows %}
         <div class="container-fluid">
-            <pre>{{ connections }}</pre>
+            <h3>{{connection.hostname}}</h3>
+            <pre>{{connection.details}}</pre>
         </div>
+        {% endfor %}
     </div>
+    {% else %}
+    <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
+        <h6>No connections found from any farmers. Not running?</h6>
+        <h6>Try running 'chia show --connections' on your farmers to verify.</h6>
+    </div>
+    {% endif %}
+    
 
     <script>
         $(document).ready(function () {

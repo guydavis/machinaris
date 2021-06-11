@@ -19,9 +19,11 @@ from subprocess import Popen, TimeoutExpired, PIPE
 from os import path
 
 from web import app, db
-from common.models import farms as f, plots as p, challenges as c, wallets as w
+from common.models import farms as f, plots as p, challenges as c, wallets as w, \
+    blockchains as b, connections as co, keys as k
 from common.config import globals
-from web.models.chia import FarmSummary, FarmPlots, BlockchainChallenges, Wallets
+from web.models.chia import FarmSummary, FarmPlots, BlockchainChallenges, Wallets, \
+    Blockchains, Connections, Keys
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 
@@ -42,53 +44,17 @@ def load_wallets():
     wallets = db.session.query(w.Wallet).all()
     return Wallets(wallets)
 
-last_blockchain_show = None 
-last_blockchain_show_load_time = None 
-
 def load_blockchain_show():
-    global last_blockchain_show
-    global last_blockchain_show_load_time
-    if last_blockchain_show and last_blockchain_show_load_time >= \
-            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
-        return last_blockchain_show
-
-    proc = Popen("{0} show --state".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
-    try:
-        outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-        abort(500, description="The timeout is expired!")
-    if errs:
-        abort(500, description=errs.decode('utf-8'))
-    
-    last_blockchain_show = chia.Blockchain(outs.decode('utf-8').splitlines())
-    last_blockchain_show_load_time = datetime.datetime.now()
-    return last_blockchain_show
-
-last_connections_show = None 
-last_connections_show_load_time = None 
+    blockchains = db.session.query(b.Blockchain).all()
+    return Blockchains(blockchains)
 
 def load_connections_show():
-    global last_connections_show
-    global last_connections_show_load_time
-    if last_connections_show and last_connections_show_load_time >= \
-            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
-        return last_connections_show
+    connections = db.session.query(co.Connection).all()
+    return Connections(connections)
 
-    proc = Popen("{0} show --connections".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
-    try:
-        outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-        abort(500, description="The timeout is expired!")
-    if errs:
-        abort(500, description=errs.decode('utf-8'))
-    
-    last_connections_show = chia.Connections(outs.decode('utf-8').splitlines())
-    last_connections_show_load_time = datetime.datetime.now()
-    return last_connections_show
+def load_keys_show():
+    keys = db.session.query(k.Key).all()
+    return Keys(keys)
 
 def add_connection(connection):
     try:
@@ -113,30 +79,6 @@ def add_connection(connection):
     else:
         app.logger.info("{0}".format(outs.decode('utf-8')))
         flash('Nice! Connection added to Chia and sync engaging!', 'success')
-
-last_keys_show = None 
-last_keys_show_load_time = None 
-
-def load_keys_show():
-    global last_keys_show
-    global last_keys_show_load_time
-    if last_keys_show and last_keys_show_load_time >= \
-            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
-        return last_keys_show
-
-    proc = Popen("{0} keys show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
-    try:
-        outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-        abort(500, description="The timeout is expired!")
-    if errs:
-        abort(500, description=errs.decode('utf-8'))
-    
-    last_keys_show = chia.Keys(outs.decode('utf-8').splitlines())
-    last_keys_show_load_time = datetime.datetime.now()
-    return last_keys_show 
 
 def generate_key(key_path):
     if os.path.exists(key_path) and os.stat(key_path).st_size > 0:
