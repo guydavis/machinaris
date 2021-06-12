@@ -18,7 +18,7 @@ from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
 from subprocess import Popen, TimeoutExpired, PIPE
 from os import path
 
-from web import app, db
+from web import app, db, utils
 from common.models import farms as f, plots as p, challenges as c, wallets as w, \
     blockchains as b, connections as co, keys as k
 from common.config import globals
@@ -55,6 +55,24 @@ def load_connections_show():
 def load_keys_show():
     keys = db.session.query(k.Key).all()
     return Keys(keys)
+
+def load_config(farmer):
+    return utils.send_get(farmer, "/configs/{0}/farming".format(farmer.hostname), debug=False).content
+
+def save_config(farmer, config):
+    try: # Validate the YAML first
+        yaml.safe_load(config)
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+        flash('Updated config.yaml failed validation! Fix and save or refresh page.', 'danger')
+        flash(str(ex), 'warning')
+    try:
+        utils.send_put(farmer, "/configs/{0}/farming".format(farmer.hostname), config, debug=True)
+    except Exception as ex:
+        flash('Failed to save config to farmer.  Please check log files.', 'danger')
+        flash(str(ex), 'warning')
+    else:
+        flash('Nice! Chia\'s config.yaml validated and saved successfully.', 'success')
 
 def add_connection(connection):
     try:

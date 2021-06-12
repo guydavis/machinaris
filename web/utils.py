@@ -10,6 +10,37 @@ import socket
 
 from web import app
 
+def send_get(worker, path, query_params={}, debug=False):
+    if debug:
+        http.client.HTTPConnection.debuglevel = 1
+    response = requests.get(worker.url + path, params = query_params)
+    http.client.HTTPConnection.debuglevel = 0
+    return response
+
+def send_post(worker, payload, debug=False):
+    headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+    if debug:
+        http.client.HTTPConnection.debuglevel = 1
+    response = requests.post(worker.url + path, headers = headers, data = json.dumps(payload))
+    http.client.HTTPConnection.debuglevel = 0
+    return response
+
+def send_put(worker, path, payload, debug=False):
+    headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+    if debug:
+        http.client.HTTPConnection.debuglevel = 1
+    response = requests.put(worker.url + path, headers = headers, data = json.dumps(payload))
+    http.client.HTTPConnection.debuglevel = 0
+    return response
+
+def send_delete(worker, path, debug=False):
+    headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+    if debug:
+        http.client.HTTPConnection.debuglevel = 1
+    response = requests.delete(worker.url + path, headers = headers)
+    http.client.HTTPConnection.debuglevel = 0
+    return response
+
 def get_controller_url():
     return "{0}://{1}:{2}".format(
         app.config['CONTROLLER_SCHEME'],

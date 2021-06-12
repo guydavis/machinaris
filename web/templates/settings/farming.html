@@ -33,11 +33,43 @@
         {% endwith %}
     </div>
 
+    <script>
+        $(document).ready(function () {
+            function load_config(worker) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url_for('views_settings_config') }}?type=farming&worker=" + worker,
+                })
+                    .done(function (data) {
+                        //console.log(data);
+                        $("#config").val(data)
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR, textStatus, errorThrown);
+                    });
+            }
+            //Call the function when #input is clicked
+            $(document).on("change", "#worker", function (e) {
+                load_config($("#worker").value)
+            });
+            //Call the function when the page loads
+            load_config("{{selected_worker}}");
+        });
+    </script>
     <form method="POST">
         <fieldset>
+            <div class="row mb-3">
+                <label for="worker" class="col-sm-1 col-form-label-lg text-end p-1">Farmer</label>
+                <div class="col-sm-3">
+                    <select id="worker" name="worker" class="form-select">
+                        {% for worker in workers %}
+                        <option {% if worker==selected_worker %}selected{% endif %}>{{ worker }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
             <div class="mb-3" id="texteditor">
-                <textarea style="background: #D3D3D3;" class="form-control fs-6" id="config" name="config" rows="20"
-                    style="height:100%;">{{ config }}</textarea>
+                <textarea style="background: #D3D3D3;" class="form-control fs-6" id="config" name="config" rows="18"
+                    style="height:100%;"></textarea>
             </div>
             <button type="submit" class="btn btn-outline-success">Save</button>
         </fieldset>

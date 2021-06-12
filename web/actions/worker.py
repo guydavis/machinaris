@@ -23,3 +23,6 @@ from web.models.worker import WorkerSummary
 def load_worker_summary():
     workers = db.session.query(w.Worker).all()
     return WorkerSummary(workers)
+
+def get_worker_by_hostname(hostname):
+    return db.session.query(w.Worker).get(hostname)

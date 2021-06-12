@@ -84,6 +84,7 @@ class Wallets:
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
         for wallet in wallets:
+            updated_at = wallet.updated_at or datetime.now()
             self.rows.append({ \
                 'hostname': wallet.hostname, \
                 'details': wallet.details,

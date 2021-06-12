@@ -1,6 +1,7 @@
 from . import alerts
 from . import blockchains
 from . import challenges
+from . import configs
 from . import connections
 from . import farms
 from . import keys
@@ -14,6 +15,7 @@ MODULES = (
     alerts,
     blockchains,
     challenges,
+    configs,
     connections,
     farms,
     keys,

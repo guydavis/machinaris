@@ -4,7 +4,8 @@ import os
 import time
 
 from datetime import datetime
-from flask import Flask, flash, redirect, render_template, request, session, url_for, send_from_directory
+from flask import Flask, flash, redirect, render_template, \
+        request, session, url_for, send_from_directory, make_response
 
 from common.config import globals
 from web import app, utils
@@ -140,34 +141,55 @@ def network_connections():
 def settings_plotting():
     gc = globals.load()
     if request.method == 'POST':
-        config = request.form.get("plotman")
-        plotman.save_config(config)
-    else: # Load config fresh from disk
-        config = open('/root/.chia/plotman/plotman.yaml','r').read()
-    return render_template('settings/plotting.html', config=config, 
-        global_config=gc)
+        plotman.save_config( \
+            worker.get_worker_by_hostname(request.form.get('worker')), \
+            request.form.get("config")
+        )
+    workers = worker.load_worker_summary()
+    selected_worker = workers.farmers[0]
+    return render_template('settings/plotting.html',
+        workers=workers.farmers, selected_worker=selected_worker, global_config=gc)
 
 @app.route('/settings/farming', methods=['GET', 'POST'])
 def settings_farming():
     gc = globals.load()
     if request.method == 'POST':
-        config = request.form.get("config")
-        chia.save_config(config)
-    else: # Load config fresh from disk
-        config = open('/root/.chia/mainnet/config/config.yaml','r').read()
-    return render_template('settings/farming.html', config=config, 
-        global_config=gc)
+        chia.save_config( \
+            worker.get_worker_by_hostname(request.form.get('worker')), \
+            request.form.get("config")
+        )
+    workers = worker.load_worker_summary()
+    selected_worker = workers.farmers[0]
+    return render_template('settings/farming.html',
+        workers=workers.farmers, selected_worker=selected_worker, global_config=gc)
 
 @app.route('/settings/alerts', methods=['GET', 'POST'])
 def settings_alerts():
     gc = globals.load()
     if request.method == 'POST':
-        config = request.form.get("chiadog")
-        chiadog_cli.save_config(config)
-    else: # Load config fresh from disk
-        config = open('/root/.chia/chiadog/config.yaml','r').read()
-    return render_template('settings/alerts.html', config=config, 
-        global_config=gc)
+        chiadog.save_config( \
+            worker.get_worker_by_hostname(request.form.get('worker')), \
+            request.form.get("config")
+        )
+    workers = worker.load_worker_summary()
+    selected_worker = workers.farmers[0]
+    return render_template('settings/alerts.html',
+        workers=workers.farmers, selected_worker=selected_worker, global_config=gc)
+
+@app.route('/settings/config')
+def views_settings_config():
+    w = worker.get_worker_by_hostname(request.args.get('worker'))
+    config_type = request.args.get('type')
+    if config_type == "alerts":
+        response = make_response(chiadog.load_config(w), 200)
+    elif config_type == "farming":
+        response = make_response(chia.load_config(w), 200)
+    elif config_type == "plotting":
+        response = make_response(plotman.load_config(w), 200)
+    else:
+        abort("Unsupported config type: {0}".format(config_type), 400)
+    response.mimetype = "application/x-yaml"
+    return response
 
 @app.route('/logs')
 def logs():

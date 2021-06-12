@@ -34,6 +34,7 @@ def update():
                 "hostname": hostname,
                 "mode": os.environ['mode'],
                 "plotting": plotting_status,
+                "url": utils.get_remote_url(),
                 "config": json.dumps(gc),
             }
             utils.send_post('/workers', payload, debug=False)

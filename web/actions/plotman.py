@@ -15,7 +15,7 @@ import yaml
 from flask import Flask, jsonify, abort, request, flash
 from subprocess import Popen, TimeoutExpired, PIPE
 from common.models import plottings as pl
-from web import app, db
+from web import app, db, utils
 from web.models.plotman import PlottingSummary
 
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
@@ -92,27 +92,23 @@ def stop_plotman():
         last_plotting_summary = None  # Force a refresh on next load
         flash('Plotman stopped successfully.  No new plots will be started, but existing ones will continue on.', 'success')
 
-def save_config(config):
-    try:
-        # Validate the YAML first
+def load_config(plotter):
+    return utils.send_get(plotter, "/configs/{0}/plotting".format(plotter.hostname), debug=False).content
+
+def save_config(plotter, config):
+    try: # Validate the YAML first
         yaml.safe_load(config)
-        # Save a copy of the old config file
-        src = "/root/.chia/plotman/plotman.yaml"
-        dst = "/root/.chia/plotman/plotman." + \
-            time.strftime("%Y%m%d-%H%M%S")+".yaml"
-        shutil.copy(src, dst)
-        # Now save the new contents to main config file
-        with open(src, 'w') as writer:
-            writer.write(config)
     except Exception as ex:
         app.logger.info(traceback.format_exc())
         flash('Updated plotman.yaml failed validation! Fix and save or refresh page.', 'danger')
         flash(str(ex), 'warning')
+    try:
+        utils.send_put(plotter, "/configs/{0}/plotting".format(plotter.hostname), config, debug=True)
+    except Exception as ex:
+        flash('Failed to save config to plotter.  Please check log files.', 'danger')
+        flash(str(ex), 'warning')
     else:
-        flash('Nice! plotman.yaml validated and saved successfully.', 'success')
-        if get_plotman_pid():
-            flash(
-                'NOTE: Please restart Plotman on the Plotting page to pickup your changes.', 'info')
+        flash('Nice! Plotman\'s plotman.yaml validated and saved successfully.', 'success')
 
 def find_plotting_job_log(plot_id):
     dir_path = '/root/.chia/plotman/logs'

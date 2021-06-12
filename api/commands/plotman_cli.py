@@ -114,6 +114,9 @@ def stop_plotman():
         last_plotting_summary = None  # Force a refresh on next load
         flash('Plotman stopped successfully.  No new plots will be started, but existing ones will continue on.', 'success')
 
+def load_config():
+    return open('/root/.chia/plotman/plotman.yaml','r').read()
+
 def save_config(config):
     try:
         # Validate the YAML first
@@ -128,13 +131,10 @@ def save_config(config):
             writer.write(config)
     except Exception as ex:
         app.logger.info(traceback.format_exc())
-        flash('Updated plotman.yaml failed validation! Fix and save or refresh page.', 'danger')
-        flash(str(ex), 'warning')
+        raise Exception('Updated plotman.yaml failed validation!\n' + str(ex))
     else:
-        flash('Nice! plotman.yaml validated and saved successfully.', 'success')
-        if get_plotman_pid():
-            flash(
-                'NOTE: Please restart Plotman on the Plotting page to pickup your changes.', 'info')
+        # TODO Restart plotman loop if running locally
+        pass
 
 def find_plotting_job_log(plot_id):
     dir_path = '/root/.chia/plotman/logs'

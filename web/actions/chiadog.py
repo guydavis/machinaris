@@ -16,27 +16,25 @@ from flask import Flask, jsonify, abort, request, flash, g
 from subprocess import Popen, TimeoutExpired, PIPE
 
 from common.models import alerts as a
-from web import app, db
+from web import app, db, utils
 
-def save_config(config):
-    try:
-        # Validate the YAML first
+def load_config(farmer):
+    return utils.send_get(farmer, "/configs/{0}/alerts".format(farmer.hostname), debug=False).content
+
+def save_config(farmer, config):
+    try: # Validate the YAML first
         yaml.safe_load(config)
-        # Save a copy of the old config file
-        src="/root/.chia/chiadog/config.yaml"
-        dst="/root/.chia/chiadog/config.yaml."+time.strftime("%Y%m%d-%H%M%S")+".yaml"
-        shutil.copy(src,dst)
-        # Now save the new contents to main config file
-        with open(src, 'w') as writer:
-            writer.write(config)
     except Exception as ex:
         app.logger.info(traceback.format_exc())
         flash('Updated config.yaml failed validation! Fix and save or refresh page.', 'danger')
         flash(str(ex), 'warning')
+    try:
+        utils.send_put(farmer, "/configs/{0}/alerts".format(farmer.hostname), config, debug=True)
+    except Exception as ex:
+        flash('Failed to save config to farmer.  Please check log files.', 'danger')
+        flash(str(ex), 'warning')
     else:
         flash('Nice! Chiadog\'s config.yaml validated and saved successfully.', 'success')
-        if get_chiadog_pid():
-            flash('NOTE: Please restart Chiadog on the Alerts page to pickup your changes.', 'info')
 
 def get_chiadog_pid():
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):

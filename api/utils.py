@@ -35,6 +35,13 @@ def get_controller_url():
         app.config['CONTROLLER_PORT']
     )
 
+def get_remote_url():
+    return "{0}://{1}:{2}".format(
+        app.config['CONTROLLER_SCHEME'],
+        get_hostname(),
+        app.config['CONTROLLER_PORT']
+    )
+
 def get_hostname():
     if 'hostname' in os.environ:
         hostname = os.environ['hostname']

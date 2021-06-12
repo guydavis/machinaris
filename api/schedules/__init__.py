@@ -29,7 +29,7 @@ scheduler.add_job(func=status_wallets.update, trigger='interval', seconds=30)
 scheduler.add_job(func=status_blockchains.update, trigger='interval', seconds=30) 
 scheduler.add_job(func=status_connections.update, trigger='interval', seconds=30) 
 scheduler.add_job(func=status_keys.update, trigger='interval', seconds=30) 
-scheduler.add_job(func=status_alerts.update, trigger='interval', seconds=10) 
+scheduler.add_job(func=status_alerts.update, trigger='interval', seconds=30) 
 
 scheduler.start()
 

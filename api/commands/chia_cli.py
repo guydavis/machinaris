@@ -61,6 +61,9 @@ def load_plots_farming():
     plots_farming = chia.FarmPlots(all_entries)
     return plots_farming
 
+def load_config():
+    return open('/root/.chia/mainnet/config/config.yaml','r').read()
+
 def save_config(config):
     try:
         # Validate the YAML first
@@ -74,11 +77,10 @@ def save_config(config):
             writer.write(config)
     except Exception as ex:
         app.logger.info(traceback.format_exc())
-        flash('Updated config.yaml failed validation! Fix and save or refresh page.', 'danger')
-        flash(str(ex), 'warning')
+        raise Exception('Updated config.yaml failed validation!\n' + str(ex))
     else:
-        flash('Nice! config.yaml validated and saved successfully.', 'success')
-        flash('NOTE: Currently requires restarting the container to pickup changes.', 'info')
+        # TODO restart chia services
+        pass
 
 def load_wallet_show():
     wallet_show = ""
@@ -88,7 +90,7 @@ def load_wallet_show():
         i = child.expect(["Wallet height:.*\r\n", "Choose wallet key:.*\r\n", "No online backup file found.*\r\n"])
         if i == 0:
             app.logger.info("wallet show returned 'Wallet height...' so collecting details.")
-            wallet_show += chia.Wallet(child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8"))
+            wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
             break
         elif i == 1:
             app.logger.info("wallet show got index prompt so selecting #{0}".format(wallet_index))
@@ -98,8 +100,8 @@ def load_wallet_show():
             child.sendline("S")
         else:
             app.logger.info("pexpect returned {0}".format(i))
-            wallet_show += chia.Wallet("ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8"))
-    return wallet_show
+            wallet_show += "ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
+    return chia.Wallet(wallet_show)
 
 def load_blockchain_show():
     proc = Popen("{0} show --state".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)

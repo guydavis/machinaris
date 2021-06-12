@@ -18,6 +18,9 @@ from subprocess import Popen, TimeoutExpired, PIPE
 from api.models import chiadog
 from api import app
 
+def load_config():
+    return open('/root/.chia/chiadog/config.yaml','r').read()
+
 def save_config(config):
     try:
         # Validate the YAML first
@@ -31,12 +34,10 @@ def save_config(config):
             writer.write(config)
     except Exception as ex:
         app.logger.info(traceback.format_exc())
-        flash('Updated config.yaml failed validation! Fix and save or refresh page.', 'danger')
-        flash(str(ex), 'warning')
+        raise Exception('Updated config.yaml failed validation!\n' + str(ex))
     else:
-        flash('Nice! Chiadog\'s config.yaml validated and saved successfully.', 'success')
-        if get_chiadog_pid():
-            flash('NOTE: Please restart Chiadog on the Alerts page to pickup your changes.', 'info')
+        # TODO Restart chiadog process
+        pass
 
 def get_chiadog_pid():
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
