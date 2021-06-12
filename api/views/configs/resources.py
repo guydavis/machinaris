@@ -31,7 +31,6 @@ class Configs(MethodView):
 class ConfigByHostname(MethodView):
 
     def get(self, hostname, type):
-        #app.logger.info("Getting config for {0} on {1}".format(type, hostname))
         if type == "farming":
             config = chia_cli.load_config()
         elif type == "plotting":
@@ -45,7 +44,6 @@ class ConfigByHostname(MethodView):
         return response
 
     def put(self, hostname, type):
-        app.logger.info("Saving config for {0} on {1}".format(type, hostname))
         try:
             if type == "farming":
                 chia_cli.save_config(self.clean_config(request.data))
@@ -58,7 +56,7 @@ class ConfigByHostname(MethodView):
             response = make_response("Successfully saved config for {0} on {1}".format(type, hostname), 200)
             return response
         except Exception as ex:
-            app.logger.info(traceback.format_exc())
+            app.logger.error(traceback.format_exc())
             abort(400, str(ex))
 
     def clean_config(self, req_data):

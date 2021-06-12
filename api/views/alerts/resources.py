@@ -27,7 +27,6 @@ class Alerts(MethodView):
     @blp.paginate(SQLCursorPage)
     def get(self, args):
         ret = Alert.query.filter_by(**args)
-        app.logger.info(ret)
         return ret
 
     @blp.etag
@@ -37,7 +36,6 @@ class Alerts(MethodView):
         items = []
         for new_item in new_items:
             item = Alert.query.get(new_item['unique_id'])
-            app.logger.info("Found: {0}".format(item))
             if not item:  # Request contains previously received alerts, only add new
                 item = Alert(**new_item)
                 items.append(item)
@@ -61,7 +59,6 @@ class AlertByHostname(MethodView):
         items = []
         for new_item in new_items:
             item = Alert.query.get(new_item['unique_id'])
-            app.logger.info("Found: {0}".format(item))
             if not item:  # Request contains previously received alerts, only add new
                 item = Alert(**new_item)
                 items.append(item)

@@ -32,7 +32,6 @@ class Workers(MethodView):
     @blp.arguments(WorkerSchema)
     @blp.response(201, WorkerSchema)
     def post(self, new_item):
-        app.logger.info("new_item: {0}".format(new_item))
         item = Worker.query.get(new_item['hostname'])
         if item: # upsert
             new_item['created_at'] = item.created_at
@@ -57,7 +56,6 @@ class WorkersByHostname(MethodView):
     @blp.arguments(WorkerSchema)
     @blp.response(200, WorkerSchema)
     def put(self, new_item, hostname):
-        app.logger.info("new_item: {0}".format(new_item))
         item = Worker.query.get_or_404(hostname)
         new_item['hostname'] = item.hostname
         new_item['created_at'] = item.created_at

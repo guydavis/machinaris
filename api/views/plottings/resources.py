@@ -27,7 +27,6 @@ class Plottings(MethodView):
     @blp.paginate(SQLCursorPage)
     def get(self, args):
         ret = Plotting.query.filter_by(**args)
-        app.logger.info(ret)
         return ret
 
     @blp.etag

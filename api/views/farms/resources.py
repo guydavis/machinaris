@@ -34,8 +34,6 @@ class Farms(MethodView):
     def post(self, new_item):
         item = Farm.query.get(new_item['hostname'])
         if item: # upsert
-            app.logger.info("item: {0}".format(item))
-            app.logger.info("new_item: {0}".format(new_item))
             new_item['created_at'] = item.created_at
             new_item['updated_at'] = dt.datetime.now()
             FarmSchema().update(item, new_item)
@@ -58,7 +56,6 @@ class FarmsByHostname(MethodView):
     @blp.arguments(FarmSchema)
     @blp.response(200, FarmSchema)
     def put(self, new_item, hostname):
-        app.logger.info("new_item: {0}".format(new_item))
         item = Farm.query.get_or_404(hostname)
         new_item['hostname'] = item.hostname
         new_item['created_at'] = item.created_at
