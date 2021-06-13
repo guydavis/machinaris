@@ -3,7 +3,8 @@
 #  Original: https://github.com/Chia-Network/chia-docker/blob/main/entrypoint.sh
 #   - Improved key generation via webui when no keys found
 #   - Add plotter-only mode for systems to just run Plotman
-#   - Launch the Machinaris web server in the background
+#   - Start Chiadog log monitoring process
+#   - Launch the Machinaris web and api servers in the background
 #
 
 cd /chia-blockchain
@@ -29,14 +30,11 @@ if [ -f "/id_rsa" ]; then
     echo "/id_rsa exists, trying to import private ssh key"
     mkdir -p ~/.ssh/
     cp -f /id_rsa ~/.ssh/id_rsa
-    ssh-keygen -y -f ~/.ssh/id_rsa> ~/.ssh/id_rsa.pub || true
+    #ssh-keygen -y -f ~/.ssh/id_rsa> ~/.ssh/id_rsa.pub || true
     cat > ~/.ssh/config <<'_EOF'
     Host *
       StrictHostKeyChecking no
-
 _EOF
-
-
     chmod 700 ~/.ssh
     chmod 600 ~/.ssh/*
 fi
