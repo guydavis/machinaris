@@ -69,21 +69,56 @@
         {% endwith %}
     </div>
 
-
     <form method="POST" id="plotman-form" style="padding-bottom: 10px;">
-        {% if not plotting.plotman_running %}
         <fieldset>
-            <input type="hidden" id="action" name="action" value="start" />
-            <button type="submit" class="btn btn-outline-success" id="btnStart"
-                title="Plotman is currently stopped.">Plot On!</button>
+            {% for plotter in plotters %}
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    {{ plotter.hostname }}: {{plotter.plotting_status}}
+                </button>
+                <ul class="dropdown-menu bg-dark btn-outline-success">
+                    <li>
+                        <a class="dropdown-item text-white text-decoration-none" href="#">
+                            {% if plotter.plotting_status == 'stopped' %}
+                            <i class="fs-4 bi-text-indent-left"></i> 
+                            <span class="align-text-bottom">Start Plotting</span>
+                            {% else %}
+                            <i class="fs-4 bi-text-indent-left"></i> 
+                            <span class="align-text-bottom">Stop Plotting</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-white text-decoration-none" href="#">
+                            <i class="fs-4 bi-text-indent-left"></i> 
+                            <span class="align-text-bottom"></span>View Plotting Logs</span>
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-white text-decoration-none" href="#">
+                            {% if plotter.archiving_status == 'stopped' %}
+                            <i class="fs-4 bi-text-indent-left"></i> 
+                            <span class="align-text-bottom">Start Archiving</span>
+                            {% else %}
+                            <i class="fs-4 bi-text-indent-left"></i> 
+                            <span class="align-text-bottom">Stop Archiving</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-white text-decoration-none" href="#">
+                            <i class="fs-4 bi-text-indent-left"></i>
+                            <span class="align-text-bottom"></span>View Archiving Logs</span> 
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            {% endfor %}
         </fieldset>
-        {% else %}
-        <fieldset>
-            <input type="hidden" id="action" name="action" value="stop" />
-            <button type="submit" class="btn btn-outline-success" id="btnStop"
-                title="Plotman is currently running.">Stop Plotman</button>
-        </fieldset>
-        {% endif %}
     </form>
 
     <form method="POST" id="plotting-form">
@@ -110,7 +145,8 @@
                             <!-- Careful, VS Code likes to wrap next line and break it. -->
                             <a href="#" title="View Logs" onclick='PlotsLogButton("{{ row['plot_id'] }}");return false;'>
                                 <i class="fs-4 bi-text-indent-left"></i>
-                            </a></td>
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

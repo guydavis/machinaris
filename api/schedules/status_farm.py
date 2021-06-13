@@ -32,7 +32,7 @@ def update():
                 "netspace_size": converters.str_to_gibs(farm_summary.netspace_size),
                 "expected_time_to_win": farm_summary.time_to_win
             }
-            utils.send_post('/farms', payload, debug=False)
+            utils.send_post('/farms/', payload, debug=False)
         except:
             app.logger.info("Failed to load farm summary and send.")
             app.logger.info(traceback.format_exc())

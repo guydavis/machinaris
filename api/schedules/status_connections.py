@@ -34,7 +34,7 @@ def update():
                 "details": connections.text.replace('\r', ''),
             }
             app.logger.info(payload)
-            utils.send_post('/connections', payload, debug=False)
+            utils.send_post('/connections/', payload, debug=False)
         except:
             app.logger.info("Failed to load and send connections status.")
             app.logger.info(traceback.format_exc())

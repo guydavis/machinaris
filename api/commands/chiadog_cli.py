@@ -49,6 +49,22 @@ def get_notifications(since):
     return chiadog.Notification.query.filter(chiadog.Notification.created_at >= since). \
         order_by(chiadog.Notification.created_at.desc()).limit(20).all()
 
+def dispatch_action(job):
+    service = job['service']
+    if service != 'monitoring':
+        raise Exception("Only monitoring jobs handled here!")
+    action = job['action']
+    if action == "start":
+        start_chiadog()
+    elif action == "stop":
+        stop_chiadog()
+    elif action == "restart":
+        stop_chiadog()
+        time.sleep(5)
+        start_chiadog()
+    else:
+        raise Exception("Unsupported action {0} for monitoring.".format(action))
+
 def start_chiadog():
     app.logger.info("Starting Chiadog monitoring....")
     try:

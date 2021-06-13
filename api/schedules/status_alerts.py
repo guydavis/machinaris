@@ -47,7 +47,7 @@ def update():
                     "created_at": alert.created_at.strftime("%Y-%m-%d %H:%M:%S"),
                 })
             if len(payload) > 0:
-                utils.send_post('/alerts', payload, debug=False)
+                utils.send_post('/alerts/', payload, debug=False)
         except:
             app.logger.info("Failed to load and send alerts status.")
             app.logger.info(traceback.format_exc())

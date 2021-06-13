@@ -48,6 +48,10 @@ class PlottingSummary:
 
     def calc_status(self):
         if len(self.rows) > 0:
-            self.display_status = "Active"
+            self.display_status = "Suspended"
+            for row in self.rows:
+                if row.stat != 'STP':
+                    self.display_status = "Active"
+                    return
         else:
             self.display_status = "Idle"

@@ -33,7 +33,7 @@ def update():
                     "time_taken": challenge['time_taken'],
                     "created_at": challenge['created_at'],
                 })
-            utils.send_post('/challenges', payload, debug=False)
+            utils.send_post('/challenges/', payload, debug=False)
         except:
             app.logger.info("Failed to load recent challenges and send.")
             app.logger.info(traceback.format_exc())

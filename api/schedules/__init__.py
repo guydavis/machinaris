@@ -20,16 +20,16 @@ scheduler = BackgroundScheduler()
 #scheduler.add_job(func=stats_disk.collect, trigger='interval', seconds=20) # Test immediately
 
 # Status gathering - reported via API
-scheduler.add_job(func=status_worker.update, trigger='interval', seconds=30) 
-scheduler.add_job(func=status_farm.update, trigger='interval', seconds=30) 
-scheduler.add_job(func=status_plotting.update, trigger='interval', seconds=30) 
-scheduler.add_job(func=status_plots.update, trigger='interval', seconds=30) 
-scheduler.add_job(func=status_challenges.update, trigger='interval', seconds=5) 
-scheduler.add_job(func=status_wallets.update, trigger='interval', seconds=30) 
-scheduler.add_job(func=status_blockchains.update, trigger='interval', seconds=30) 
-scheduler.add_job(func=status_connections.update, trigger='interval', seconds=30) 
-scheduler.add_job(func=status_keys.update, trigger='interval', seconds=30) 
-scheduler.add_job(func=status_alerts.update, trigger='interval', seconds=30) 
+#scheduler.add_job(func=status_worker.update, trigger='interval', seconds=30) 
+#scheduler.add_job(func=status_farm.update, trigger='interval', seconds=30) 
+scheduler.add_job(func=status_plotting.update, trigger='interval', seconds=10) 
+#scheduler.add_job(func=status_plots.update, trigger='interval', seconds=30) 
+#scheduler.add_job(func=status_challenges.update, trigger='interval', seconds=5) 
+#scheduler.add_job(func=status_wallets.update, trigger='interval', seconds=30) 
+#scheduler.add_job(func=status_blockchains.update, trigger='interval', seconds=30) 
+#scheduler.add_job(func=status_connections.update, trigger='interval', seconds=30) 
+#scheduler.add_job(func=status_keys.update, trigger='interval', seconds=30) 
+#scheduler.add_job(func=status_alerts.update, trigger='interval', seconds=30) 
 
 scheduler.start()
 

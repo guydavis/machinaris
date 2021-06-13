@@ -15,10 +15,10 @@ class WorkerSummary:
         self.harvesters = []
         for worker in workers:
             if worker.mode == "fullnode" or "plotter" in worker.mode:
-                self.plotters.append(worker.hostname)
+                self.plotters.append(worker)
             if worker.mode == "fullnode" or "farmer" in worker.mode:
-                self.farmers.append(worker.hostname)
+                self.farmers.append(worker)
             if worker.mode == "fullnode" or "harvester" in worker.mode:
-                self.harvesters.append(worker.hostname)
+                self.harvesters.append(worker)
             if worker.mode == "fullnode":
-                self.fullnodes.append(worker.hostname)
+                self.fullnodes.append(worker)

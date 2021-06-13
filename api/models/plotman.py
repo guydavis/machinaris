@@ -10,6 +10,7 @@ class PlottingSummary:
     def __init__(self, cli_stdout, plotman_pid):
         self.rows = []
         for line in cli_stdout:
+            app.info.logger("LINE: {0}".format(line))
             if "plot id" in line.strip(): # The header row
                 self.columns = line.replace('plot id', 'plot_id').strip().split()
                 # Plotman has two columns both named 'tmp' so change the 2nd one to 'size'

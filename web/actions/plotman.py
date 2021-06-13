@@ -17,6 +17,7 @@ from subprocess import Popen, TimeoutExpired, PIPE
 from common.models import plottings as pl
 from web import app, db, utils
 from web.models.plotman import PlottingSummary
+from . import worker as w
 
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 
@@ -26,6 +27,16 @@ RELOAD_MINIMUM_SECS = 30
 def load_plotting_summary():
     plottings = db.session.query(pl.Plotting).all()
     return PlottingSummary(plottings)
+
+def load_plotters():
+    plotters = []
+    for plotter in w.load_worker_summary().plotters:
+        plotters.append({
+            'hostname': plotter.hostname,
+            'plotting_status': plotter.plotting_status(),
+            'archiving_status': plotter.archiving_status(),
+        })
+    return plotters
 
 def start_plotman():
     global last_plotting_summary

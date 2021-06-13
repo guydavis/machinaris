@@ -33,7 +33,7 @@ def update():
                 "details": public_wallet.text.replace('\r', ''),
             }
             app.logger.info(payload)
-            utils.send_post('/wallets', payload, debug=False)
+            utils.send_post('/wallets/', payload, debug=False)
         except:
             app.logger.info("Failed to load and send public wallet status.")
             app.logger.info(traceback.format_exc())

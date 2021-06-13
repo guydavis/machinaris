@@ -33,9 +33,9 @@ def update():
                     "size": plot['size'],
                 })
             if len(payload) > 0:
-                utils.send_post('/plots', payload, debug=False)
+                utils.send_post('/plots/', payload, debug=False)
             else:
-                utils.send_delete('/plots', debug=False)
+                utils.send_delete('/plots/', debug=False)
         except:
             app.logger.info("Failed to load plots farming and send.")
             app.logger.info(traceback.format_exc())

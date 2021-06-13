@@ -136,7 +136,7 @@ def load_plotman_version():
     if last_plotman_version and last_plotman_version_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_plotman_version
-    proc = Popen("{0} version < /dev/tty".format(PLOTMAN_SCRIPT),
+    proc = Popen("{0} version".format(PLOTMAN_SCRIPT),
                  stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)

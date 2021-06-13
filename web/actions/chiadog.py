@@ -36,12 +36,6 @@ def save_config(farmer, config):
     else:
         flash('Nice! Chiadog\'s config.yaml validated and saved successfully.', 'success')
 
-def get_chiadog_pid():
-    for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-        if proc.info['name'] == 'python3' and '/root/.chia/chiadog/config.yaml' in proc.info['cmdline']:
-            return proc.info['pid']
-    return None
-
 def get_notifications():
     return db.session.query(a.Alert).order_by(a.Alert.created_at.desc()).limit(20).all()
 

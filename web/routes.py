@@ -66,9 +66,10 @@ def plotting():
             plotman.action_plots(request.form)
         else:
             app.logger.info("Unknown plotting form: {0}".format(request.form))
+    plotters = plotman.load_plotters()
     plotting = plotman.load_plotting_summary()
     return render_template('plotting.html', reload_seconds=60,  plotting=plotting, 
-        global_config=gc)
+        plotters=plotters, global_config=gc)
 
 @app.route('/farming')
 def farming():
