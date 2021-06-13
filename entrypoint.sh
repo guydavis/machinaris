@@ -15,7 +15,7 @@ chia init 2>&1 > /root/.chia/mainnet/log/init.log
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
-  echo "Adding key at path: {$k}"
+  echo "Adding key at path: ${k}"
   chia keys add -f ${k} > /dev/null
 done
 
@@ -23,6 +23,23 @@ done
 for p in ${plots_dir//:/ }; do
     chia plots add -d ${p}
 done
+
+# import ssh key if exists
+if [ -f "/id_rsa" ]; then
+    echo "/id_rsa exists, trying to import private ssh key"
+    mkdir -p ~/.ssh/
+    cp -f /id_rsa ~/.ssh/id_rsa
+    ssh-keygen -y -f ~/.ssh/id_rsa> ~/.ssh/id_rsa.pub || true
+    cat > ~/.ssh/config <<'_EOF'
+    Host *
+      StrictHostKeyChecking no
+
+_EOF
+
+
+    chmod 700 ~/.ssh
+    chmod 600 ~/.ssh/*
+fi
 
 sed -i 's/localhost/127.0.0.1/g' ~/.chia/mainnet/config/config.yaml
 
@@ -60,7 +77,16 @@ fi
 # Once per launch, try to get past wallet prompt
 echo 'S' | chia wallet show > /dev/null || true
 
+
+if [ ! -f /root/.chia/plotman/plotman.yaml ]; then
+    AUTO_PLOT="false"
+fi
+
 # Launch Machinaris web server and other services
 /machinaris/scripts/start-machinaris.sh
+
+if [ ${AUTO_PLOT,,} = "true" ]; then
+  plotman plot
+fi
 
 while true; do sleep 30; done;

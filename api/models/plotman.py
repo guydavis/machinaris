@@ -1,4 +1,5 @@
 import os
+import re
 import traceback
 
 from api import app
@@ -15,7 +16,7 @@ class PlottingSummary:
                 self.columns = line.replace('plot id', 'plot_id').strip().split()
                 # Plotman has two columns both named 'tmp' so change the 2nd one to 'size'
                 self.columns[6] = 'size'
-            else: # A plotting row, so create as dictionary
+            elif re.match(r'^(\w){8}\s.*$', line.strip()): # A plotting row, so create as dictionary
                 row = {}
                 values = line.split()
                 i = 0
@@ -23,6 +24,8 @@ class PlottingSummary:
                     row[self.columns[i]] = values[i]
                     i += 1
                 self.rows.append(row)
+            else: 
+                app.logger.info("PLOTMAN_STATUS: {0}".format(line))
         self.calc_status()
         #app.logger.debug("plotman_pid: {0}".format(plotman_pid))
         if plotman_pid:

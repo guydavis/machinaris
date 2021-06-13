@@ -131,3 +131,6 @@ dmypy.json
 # Development only webui launch script
 scripts/start-api-dev.sh
 scripts/start-web-dev.sh
+
+# Ignore any local SSH keys
+keyfile

@@ -36,6 +36,7 @@ RUN \
 		vim \
 		wget \
 		cmake \
+		rsync \
 	\
 # cleanup apt cache
 	\
@@ -58,7 +59,7 @@ WORKDIR /chia-blockchain
 
 # install Chia using official Chia Blockchain binaries
 RUN \
-	git clone --branch ${CHIA_BRANCH} https://github.com/Chia-Network/chia-blockchain.git /chia-blockchain \
+	git clone --branch ${CHIA_BRANCH}  --single-branch https://github.com/Chia-Network/chia-blockchain.git /chia-blockchain \
 	&& git submodule update --init mozilla-ca \
 	&& chmod +x install.sh \
 	&& /usr/bin/sh ./install.sh \
@@ -96,7 +97,7 @@ ENV farmer_pk="null"
 ENV pool_pk="null"
 # If mode=harvester, required for host and port the harvester will your farmer
 ENV farmer_address="null"
-ENV farmer_port="null"
+ENV farmer_port="8447"
 # Only set true if using Chia's old test for testing only, default uses mainnet
 ENV testnet="false"
 # Can override the location of default settings for api and web servers.
@@ -112,6 +113,9 @@ ENV TZ=Etc/UTC
 ENV FLASK_ENV=production
 ENV FLASK_APP=/machinaris/main.py
 ENV XDG_CONFIG_HOME=/root/.chia
+ENV AUTO_PLOT=false
+
+VOLUME [ "/id_rsa" ]
 
 # ports
 EXPOSE 8555
