@@ -23,7 +23,7 @@ PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 RELOAD_MINIMUM_SECS = 30
 
 def load_plotting_summary():
-    proc = Popen("{0} {1}".format(PLOTMAN_SCRIPT,
+    proc = Popen("{0} {1} < /dev/tty".format(PLOTMAN_SCRIPT,
                  'status'), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -88,7 +88,7 @@ def start_plotman():
     try:
         logfile = "/root/.chia/plotman/logs/plotman.log"
         app.logger.info("About to start plotman...")
-        proc = Popen("nohup {0} {1} >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'plot', logfile),
+        proc = Popen("nohup {0} {1} < /dev/tty >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'plot', logfile),
                      shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
         app.logger.info("Completed launch of plotman.")
     except:
@@ -114,7 +114,7 @@ def start_archiver():
     try:
         logfile = "/root/.chia/plotman/logs/archiver.log"
         app.logger.info("About to start archiver...")
-        proc = Popen("nohup {0} {1} >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'archive', logfile),
+        proc = Popen("nohup {0} {1} < /dev/tty >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'archive', logfile),
                      shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
         app.logger.info("Completed launch of archiver.")
     except:
