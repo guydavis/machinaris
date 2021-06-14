@@ -75,6 +75,7 @@ def plotting():
             plotman.action_plots(action, plot_ids)
         else:
             app.logger.info("Unknown plotting form: {0}".format(request.form))
+        return redirect(url_for('plotting')) # Force a redirect to allow time to update status
     plotters = plotman.load_plotters()
     for plotter in plotters:
         print("Plotter on {0} is {1}".format(plotter['hostname'], plotter['plotting_status']))

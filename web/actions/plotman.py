@@ -95,7 +95,6 @@ def stop_plotman(plotter):
         flash('Failed to stop Plotman plotting run!', 'danger')
         flash('Please see /root/.chia/plotman/logs/plotman.log', 'warning')
     else:
-        last_plotting_summary = None  # Force a refresh on next load
         flash('Plotman stopped successfully.  No new plots will be started, but existing ones will continue on.', 'success')
 
 def load_config(plotter):

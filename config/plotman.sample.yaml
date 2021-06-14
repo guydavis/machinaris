@@ -26,8 +26,8 @@ commands:
         interactive:
                 # Set it to False if you don't want to auto start plotting when 'interactive' is ran.
                 # You can override this value from the command line, type "plotman interactive -h" for details
-                autostart_plotting: True
-                autostart_archiving: True
+                autostart_plotting: False
+                autostart_archiving: False
 
 # Where to plot and log.
 directories:
@@ -39,10 +39,7 @@ directories:
         # If multiple directories share a common prefix, reports will
         # abbreviate and show just the uniquely identifying suffix.
         tmp:
-                - /mnt/tmp/00
-                - /mnt/tmp/01
-                - /mnt/tmp/02
-                - /mnt/tmp/03
+                - /plotting
 
         # Optional: Allows overriding some characteristics of certain tmp
         # directories. This contains a map of tmp directory names to
@@ -51,11 +48,11 @@ directories:
         #
         # Currently support override parameters:
         #     - tmpdir_max_jobs
-        tmp_overrides:
+        #tmp_overrides:
                 # In this example, /mnt/tmp/00 is larger than the other tmp
                 # dirs and it can hold more plots than the default.
-                "/mnt/tmp/00":
-                        tmpdir_max_jobs: 5
+        #        "/mnt/tmp/00":
+        #                tmpdir_max_jobs: 5
 
         # Optional: tmp2 directory.  If specified, will be passed to
         # chia plots create as -2.  Only one tmp2 directory is supported.
@@ -69,8 +66,7 @@ directories:
         # If dst is commented out, the tmp directories will be used as the
         # buffer.
         dst:
-                - /mnt/dst/00
-                - /mnt/dst/01
+                - /plots
 
 # Archival configuration.  Optional; if you do not wish to run the
 # archiving operation, comment this section out.  Almost everyone
@@ -120,10 +116,10 @@ scheduling:
         tmpdir_stagger_phase_limit: 1
 
         # Don't run more than this many jobs at a time on a single temp dir.
-        tmpdir_max_jobs: 3
+        tmpdir_max_jobs: 2
 
         # Don't run more than this many jobs at a time in total.
-        global_max_jobs: 12
+        global_max_jobs: 4
 
         # Don't run any jobs (across all temp dirs) more often than this, in minutes.
         global_stagger_m: 30
