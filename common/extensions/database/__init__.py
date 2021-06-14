@@ -1,8 +1,14 @@
+import logging
+import traceback
+
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()  # pylint: disable=invalid-name
+db = SQLAlchemy()  
 
 def init_app(app):
-    """Initialize relational database extension"""
     db.init_app(app)
-    db.create_all(app=app)
+    try:
+        db.create_all(app=app)
+    except:
+        logging.error("Failed to create all for db. {0}".format(traceback.format_exc()))
+        traceback.print_exc()

@@ -52,7 +52,7 @@
                 load_config($("#worker").value)
             });
             //Call the function when the page loads
-            load_config("{{selected_worker}}");
+            load_config("{{selected_worker.hostname}}");
         });
     </script>
     <form method="POST">
@@ -62,7 +62,7 @@
                 <div class="col-sm-3">
                     <select id="worker" name="worker" class="form-select">
                         {% for worker in workers %}
-                        <option {% if worker==selected_worker %}selected{% endif %}>{{ worker }}</option>
+                        <option {% if worker==selected_worker %}selected{% endif %}>{{ worker.hostname }}</option>
                         {% endfor %}
                     </select>
                 </div>

@@ -13,7 +13,7 @@ mkdir -p /root/.chia/plotman/logs
 if [ -f /root/.chia/plotman/plotman.yaml ]; then
     grep -q "version:" /root/.chia/plotman/plotman.yaml
     if [ $? != 0 ]; then
-        . /machinaris/scripts/migrate_plotman_config.sh
+        . /machinaris/scripts/plotman_migrate.sh
     fi
 fi
 cp -n /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.yaml
@@ -33,8 +33,8 @@ if [ "${mode}" != "plotter" ]; then
 
     echo 'Starting Chiadog...'
     cd /chiadog
-    pidof python3
-    if [ $? != 0 ]; then
+    chiadog_pid=$(pidof python3)
+    if [ ! -z $chiadog_pid ]; then
         python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
     fi
 fi
