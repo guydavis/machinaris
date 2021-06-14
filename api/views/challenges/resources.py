@@ -33,13 +33,14 @@ class Challenges(MethodView):
     @blp.arguments(BatchOfChallengeSchema)
     @blp.response(201, ChallengeSchema(many=True))
     def post(self, new_items):
+        if len(new_items) == 0:
+            return "No challenges provided.", 400
+        db.session.query(Challenge).filter(Challenge.hostname==new_items[0]['hostname']).delete()
         items = []
         for new_item in new_items:
-            item = Challenge.query.get(new_item['unique_id'])
-            if not item:  # Request contains previously received challenges, only add new
-                item = Challenge(**new_item)
-                items.append(item)
-                db.session.add(item)
+            item = Challenge(**new_item)
+            items.append(item)
+            db.session.add(item)
         db.session.commit()
         return items
 
@@ -56,13 +57,12 @@ class ChallengeByHostname(MethodView):
     @blp.arguments(BatchOfChallengeSchema)
     @blp.response(200, ChallengeSchema(many=True))
     def put(self, new_items, hostname):
+        db.session.query(Challenge).filter(Challenge.hostname==hostname).delete()
         items = []
         for new_item in new_items:
-            item = Challenge.query.get(new_item['unique_id'])
-            if not item:  # Request contains previously received challenges, only add new
-                item = Challenge(**new_item)
-                items.append(item)
-                db.session.add(item)
+            item = Challenge(**new_item)
+            items.append(item)
+            db.session.add(item)
         db.session.commit()
         return items
 

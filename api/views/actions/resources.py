@@ -32,20 +32,22 @@ class Actions(MethodView):
         try:
             if service in ["plotting", "archiving"]:
                 plotman_cli.dispatch_action(body)
-                time.sleep(7) # Time for processes to start/stop
-                status_plotting.update()
             elif service == "farming":
                 chia_cli.dispatch_action(body)
-                time.sleep(7) # Time for processes to start/stop
+            elif service == "monitoring":
+                chiadog_cli.dispatch_action(body)
+            else:
+                abort("Unknown service provided: {0}".format(service))
+            # Now trigger updates after a delay
+            time.sleep(12)
+            status_worker.update()
+            if service in ["plotting", "archiving"]:
+                status_plotting.update()
+            elif service == "farming":
                 status_farm.update()
                 status_plots.update()
             elif service == "monitoring":
-                chiadog_cli.dispatch_action(body)
-                time.sleep(7) # Time for processes to start/stop
                 status_alerts.update()
-            else:
-                abort("Unknown service provided: {0}".format(service))
-            status_worker.update()  # Always update worker status
             time.sleep(3) # Time for status update to reach database
             return make_response("Action completed.", 200)
         except Exception as ex:
