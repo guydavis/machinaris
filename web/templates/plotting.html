@@ -3,31 +3,24 @@
 {% block content %}
 
 <script>
-    function LogButton() {
+    function PlotsLogButton(hostname, plot_id) {
         var d = new Date();
         var height = 600;
         var width = 900;
         var top = (screen.height - height) / 2;
         var left = (screen.width - width) / 2;
-        window.open("{{ url_for('logs') }}?log=plotting", 'Plotman Log', 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        window.open("{{ url_for('logs') }}?log=plotting&hostname=" + hostname + "&log_id=" + plot_id, 'Plotman Log ' + plot_id, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
     }
-    function PlotsLogButton(plot_id) {
-        var d = new Date();
-        var height = 600;
-        var width = 900;
-        var top = (screen.height - height) / 2;
-        var left = (screen.width - width) / 2;
-        window.open("{{ url_for('logs') }}?log=plotting&log_id=" + plot_id, 'Plotman Log ' + plot_id, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+    function PlottingAction(hostname, action, status) {
+        $("#"+hostname+"_btn").prop("disabled", true);
+        $("#"+hostname+"_btn").html(
+            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> '+ hostname + ': ' + status + '...'
+        );
+        $('#plotman-form').append('<input type="hidden" id="action" name="action" value="' + action + '" />');
+        $('#plotman-form').append('<input type="hidden" id="hostname" name="hostname" value="' + hostname + '" />');
+        $("#plotman-form").submit();
     }
 </script>
-
-<div class="position-relative">
-    <div class="position-absolute top-0 end-0">
-        <a href="#" title="View Logs" onclick='LogButton();return false;'>
-            <i class="fs-4 bi-text-indent-left"></i>
-        </a>
-    </div>
-</div>
 
 <header class="pb-3 mb-4 border-bottom">
     <span class="fs-4">Plotting Status: {{ plotting.display_status }}</span>
@@ -74,16 +67,18 @@
             {% for plotter in plotters %}
             <div class="btn-group">
                 <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
-                    aria-expanded="false">
+                    aria-expanded="false" id="{{ plotter.hostname }}_btn">
                     {{ plotter.hostname }}: {{plotter.plotting_status}}
                 </button>
                 <ul class="dropdown-menu bg-dark btn-outline-success">
                     <li>
-                        <a class="dropdown-item text-white text-decoration-none" href="#">
+                        <a class="dropdown-item text-white text-decoration-none" href="#"
                             {% if plotter.plotting_status == 'stopped' %}
+                            onclick='PlottingAction("{{ plotter.hostname }}","start", "starting");return false;'>
                             <i class="fs-4 bi-text-indent-left"></i> 
                             <span class="align-text-bottom">Start Plotting</span>
                             {% else %}
+                            onclick='PlottingAction("{{ plotter.hostname }}","stop", "stopping");return false;'>
                             <i class="fs-4 bi-text-indent-left"></i> 
                             <span class="align-text-bottom">Stop Plotting</span>
                             {% endif %}
@@ -95,6 +90,7 @@
                             <span class="align-text-bottom"></span>View Plotting Logs</span>
                         </a>
                     </li>
+                    {% if plotter.archiving_enabled %}
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -115,6 +111,7 @@
                             <span class="align-text-bottom"></span>View Archiving Logs</span> 
                         </a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
             {% endfor %}
@@ -143,7 +140,7 @@
                         {% endfor %}
                         <td style="padding:0px">
                             <!-- Careful, VS Code likes to wrap next line and break it. -->
-                            <a href="#" title="View Logs" onclick='PlotsLogButton("{{ row['plot_id'] }}");return false;'>
+                            <a href="#" title="View Logs" onclick='PlotsLogButton("{{ row['hostname'] }}","{{ row['plot_id'] }}");return false;'>
                                 <i class="fs-4 bi-text-indent-left"></i>
                             </a>
                         </td>
@@ -167,20 +164,6 @@
 
     <script>
         $(document).ready(function () {
-            $("#btnStart").click(function () {
-                $(this).prop("disabled", true);
-                $(this).html(
-                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Starting...`
-                );
-                $("#plotman-form").submit();
-            });
-            $("#btnStop").click(function () {
-                $(this).prop("disabled", true);
-                $(this).html(
-                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Stopping...`
-                );
-                $("#plotman-form").submit();
-            });
             $("#btnSuspend").click(function () {
                 $(this).prop("disabled", true);
                 $(this).html(

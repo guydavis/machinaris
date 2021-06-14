@@ -27,6 +27,9 @@ class Worker(db.Model):
 
     def archiving_status(self):
         return j.loads(self.services)['archiver_status'] 
+
+    def archiving_enabled(self):
+        return j.loads(self.config)['archiving_enabled'] 
     
     def monitoring_status(self):
         return j.loads(self.services)['chiadog_status'] 

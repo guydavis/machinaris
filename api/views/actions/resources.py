@@ -25,26 +25,28 @@ class Actions(MethodView):
     def post(self):
         try:
             body = json.loads(request.data)
+            app.logger.info("BODY IS: {0}".format(body))
             service = body['service']
         except:
             abort("Invalid action request without service.", 400)
         try:
-            if service == "plotting":
+            if service in ["plotting", "archiving"]:
                 plotman_cli.dispatch_action(body)
-                time.sleep(5)
+                time.sleep(7) # Time for processes to start/stop
                 status_plotting.update()
             elif service == "farming":
                 chia_cli.dispatch_action(body)
-                time.sleep(5)
+                time.sleep(7) # Time for processes to start/stop
                 status_farm.update()
                 status_plots.update()
             elif service == "monitoring":
                 chiadog_cli.dispatch_action(body)
-                time.sleep(5)
+                time.sleep(7) # Time for processes to start/stop
                 status_alerts.update()
             else:
                 abort("Unknown service provided: {0}".format(service))
             status_worker.update()  # Always update worker status
+            time.sleep(3) # Time for status update to reach database
             return make_response("Action completed.", 200)
         except Exception as ex:
             app.logger.info(traceback.format_exc())

@@ -6,6 +6,156 @@
 	},
 	"item": [
 		{
+			"name": "Actions",
+			"item": [
+				{
+					"name": "Actions - Start Plotting",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"start\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"actions"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Actions - Suspend a Plot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"suspend\",\r\n    \"plot_ids\": [\"6e0ea650\"]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"actions"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Actions - Resume a Plot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"resume\",\r\n    \"plot_ids\": [\"6e0ea650\"]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"actions"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Actions - Kill a Plot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"kill\",\r\n    \"plot_ids\": [\"6e0ea650\"]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"actions"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Actions - Stop Plotting",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"stop\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"actions"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Alerts",
 			"item": [
 				{

@@ -50,7 +50,7 @@ class PlottingSummary:
         if len(self.rows) > 0:
             self.display_status = "Suspended"
             for row in self.rows:
-                if row.stat != 'STP':
+                if row['stat'] != 'STP':
                     self.display_status = "Active"
                     return
         else:

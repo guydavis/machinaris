@@ -28,7 +28,7 @@ def update():
         try:
             hostname = utils.get_hostname()
             blockchain = chia_cli.load_blockchain_show()
-            app.logger.info(blockchain.text)
+            #app.logger.info(blockchain.text)
             payload = {
                 "hostname": hostname,
                 "details": blockchain.text.replace('\r', ''),

@@ -17,7 +17,7 @@ def send_get(worker, path, query_params={}, debug=False):
     http.client.HTTPConnection.debuglevel = 0
     return response
 
-def send_post(worker, payload, debug=False):
+def send_post(worker, path, payload, debug=False):
     headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
     if debug:
         http.client.HTTPConnection.debuglevel = 1

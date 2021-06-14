@@ -59,14 +59,25 @@ def plotting():
     if request.method == 'POST':
         app.logger.info("Form submitted: {0}".format(request.form))
         if request.form.get('action') == 'start':
-            plotman.start_plotman()
+            hostname= request.form.get('hostname')
+            plotter = worker.get_worker_by_hostname(hostname)
+            app.logger.info("Starting plotman on {0}".format(hostname))
+            plotman.start_plotman(plotter)
         elif request.form.get('action') == 'stop':
-            plotman.stop_plotman()
+            hostname= request.form.get('hostname')
+            plotter = worker.get_worker_by_hostname(hostname)
+            app.logger.info("Stopping plotman on {0}".format(hostname))
+            plotman.stop_plotman(plotter)
         elif request.form.get('action') in ['suspend', 'resume', 'kill']:
-            plotman.action_plots(request.form)
+            action = request.form.get('action')
+            plot_ids = request.form.getlist('plot_id')
+            app.logger.info("Actioning plotman {0}".format(action))
+            plotman.action_plots(action, plot_ids)
         else:
             app.logger.info("Unknown plotting form: {0}".format(request.form))
     plotters = plotman.load_plotters()
+    for plotter in plotters:
+        print("Plotter on {0} is {1}".format(plotter['hostname'], plotter['plotting_status']))
     plotting = plotman.load_plotting_summary()
     return render_template('plotting.html', reload_seconds=60,  plotting=plotting, 
         plotters=plotters, global_config=gc)
@@ -78,7 +89,6 @@ def farming():
     elif request.args.get('check'):  # Xhr calling for check output
         return chia.check_plots(request.args.get('first_load'))
     gc = globals.load()
-    
     farming = chia.load_farm_summary()
     plots = chia.load_plots_farming()
     chia.compare_plot_counts(gc, farming, plots)
@@ -101,8 +111,8 @@ def alerts():
         else:
             app.logger.info("Unknown alerts form: {0}".format(request.form))
     notifications = chiadog.get_notifications()
-    return render_template('alerts.html', chiadog_running = chiadog.get_chiadog_pid(),
-        reload_seconds=60, notifications=notifications, global_config=gc)
+    return render_template('alerts.html', reload_seconds=60, 
+        notifications=notifications, global_config=gc)
 
 @app.route('/wallet')    
 def wallet():

@@ -21,3 +21,4 @@ sed -i -e "s/.*# recommended.  DON'T CHANGE THIS IN-CONTAINER PATH.*$//g" plotma
 
 # Finally, append cleaned-up old config to new preamble
 tee -a plotman.yaml > /dev/null < plotman_end.yaml
+rm -f plotman_end.yaml

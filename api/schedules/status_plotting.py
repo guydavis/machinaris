@@ -41,9 +41,9 @@ def update():
                     "io": plot['io'],
                 })
             if len(payload) > 0:
-                utils.send_post('/plottings/', payload, debug=True)
+                utils.send_post('/plottings/', payload, debug=False)
             else:
-                utils.send_delete('/plottings/{0}'.format(hostname), debug=True)
+                utils.send_delete('/plottings/{0}'.format(hostname), debug=False)
         except:
             app.logger.info("Failed to load plotting summary and send.")
             app.logger.info(traceback.format_exc())

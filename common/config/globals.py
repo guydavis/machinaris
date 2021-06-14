@@ -28,6 +28,7 @@ RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time 
 def load():
     cfg = {}
     cfg['plotting_enabled'] = plotting_enabled()
+    cfg['archiving_enabled'] = archiving_enabled()
     cfg['farming_enabled'] = farming_enabled()
     cfg['harvesting_enabled'] = harvesting_enabled()
     cfg['now'] = datetime.datetime.now(tz=None).strftime("%Y-%m-%d %H:%M:%S")
@@ -94,6 +95,18 @@ def harvesting_enabled():
 def plotting_enabled():
     return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode'])
 
+def archiving_enabled():
+    if not plotting_enabled():
+        return False
+    try:
+        with open("/root/.chia/plotman/plotman.yaml") as fp:
+            for line in fp.readlines():
+                if line.startswith("archiving"):
+                    return True
+        return False
+    except:
+        logger.info("Failed to read plotman.yaml so archiving_enabled=False.")
+        logger.info(traceback.format_exc())
 
 last_chia_version = None
 last_chia_version_load_time = None

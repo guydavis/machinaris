@@ -17,4 +17,5 @@ RELOAD='--reload'
 /chia-blockchain/venv/bin/gunicorn ${RELOAD} \
     --bind 0.0.0.0:8927 --timeout 90 \
     --log-level=${LOG_LEVEL} \
+    --workers=2 \
     api:app

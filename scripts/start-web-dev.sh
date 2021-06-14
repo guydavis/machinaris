@@ -13,4 +13,5 @@ cd /machinaris-dev
     --bind 0.0.0.0:8926 \
     --timeout 90 \
     --log-level=debug \
+    --workers=2 \
     web:app

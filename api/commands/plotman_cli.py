@@ -13,7 +13,7 @@ import traceback
 import yaml
 
 from flask import Flask, jsonify, abort, request, flash
-from subprocess import Popen, TimeoutExpired, PIPE
+from subprocess import Popen, TimeoutExpired, PIPE, DEVNULL
 from api.models import plotman
 from api import app
 
@@ -22,15 +22,7 @@ PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 # Don't query plotman unless at least this long since last time.
 RELOAD_MINIMUM_SECS = 30
 
-last_plotting_summary = None
-last_plotting_summary_load_time = None
-
 def load_plotting_summary():
-    global last_plotting_summary
-    global last_plotting_summary_load_time
-    if last_plotting_summary and last_plotting_summary_load_time >= \
-            (datetime.datetime.now() - datetime.timedelta(seconds=RELOAD_MINIMUM_SECS)):
-        return last_plotting_summary
     proc = Popen("{0} {1}".format(PLOTMAN_SCRIPT,
                  'status'), stdout=PIPE, stderr=PIPE, shell=True)
     try:
@@ -43,34 +35,33 @@ def load_plotting_summary():
         app.logger.error(errs.decode('utf-8'))
         abort(500, description=errs.decode('utf-8'))
     cli_stdout = outs.decode('utf-8')
-    #app.logger.info("Here is: {0}".format(cli_stdout))
-    last_plotting_summary = plotman.PlottingSummary(
-        cli_stdout.splitlines(), get_plotman_pid())
-    last_plotting_summary_load_time = datetime.datetime.now()
-    return last_plotting_summary
+    return plotman.PlottingSummary(cli_stdout.splitlines(), get_plotman_pid())
 
 def dispatch_action(job):
     service = job['service']
-    if service != 'plotting':
-        raise Exception("Only plotting jobs handled here!")
     action = job['action']
-    if action == "start":
-        start_plotman()
-    elif action == "stop":
-        stop_plotman()
-    elif action == "restart":
-        stop_plotman()
-        time.sleep(5)
-        start_plotman()
-    else:
-        action_plots(job)
+    if service == 'plotting':
+        if action == "start":
+            start_plotman()
+        elif action == "stop":
+            stop_plotman()
+        elif action == "restart":
+            stop_plotman()
+            time.sleep(5)
+            start_plotman()
+        else:
+            action_plots(job)
+    elif service == 'archiving':
+        if action == "start":
+            start_archiver()
+        elif action == "stop":
+            stop_archiver()
 
 def action_plots(job):
-    global last_plotting_summary
-    app.logger.info("Actioning plots....")
+    #app.logger.info("Actioning plots....")
     action = job['action']
     plot_ids = job['plot_ids']
-    app.logger.info("About to {0} plots: {1}".format(action, plot_ids))
+    #app.logger.info("About to {0} plots: {1}".format(action, plot_ids))
     for plot_id in plot_ids:
         try:
             prefix = ""
@@ -93,31 +84,24 @@ def get_plotman_pid():
     return None
 
 def start_plotman():
-    app.logger.info("Starting Plotman run...")
+    #app.logger.info("Starting Plotman run...")
     try:
         logfile = "/root/.chia/plotman/logs/plotman.log"
-        log_fd = os.open(logfile, os.O_RDWR | os.O_CREAT)
-        log_fo = os.fdopen(log_fd, "a+")
-        # TODO Figure out how to avoid need for tty here...
-        proc = Popen("{0} {1} </dev/tty".format(PLOTMAN_SCRIPT, 'plot'),
-                     shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
+        app.logger.info("About to start plotman...")
+        proc = Popen("nohup {0} {1} >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'plot', logfile),
+                     shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
+        app.logger.info("Completed launch of plotman.")
     except:
         app.logger.info('Failed to start Plotman plotting run!')
         app.logger.info(traceback.format_exc())
-    else:
-        # TODO Trigger an immediate status_plotman update.
-        pass
 
 def stop_plotman():
-    app.logger.info("Stopping Plotman run...")
+    #app.logger.info("Stopping Plotman run...")
     try:
         os.kill(get_plotman_pid(), signal.SIGTERM)
     except:
         app.logger.info('Failed to stop Plotman plotting run!')
         app.logger.info(traceback.format_exc())
-    else:
-        # TODO Trigger an immediate status_plotman update. 
-        pass
 
 def get_archiver_pid():
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
@@ -126,31 +110,24 @@ def get_archiver_pid():
     return None
 
 def start_archiver():
-    app.logger.info("Starting Archiver run...")
+    #app.logger.info("Starting archiver run...")
     try:
         logfile = "/root/.chia/plotman/logs/archiver.log"
-        log_fd = os.open(logfile, os.O_RDWR | os.O_CREAT)
-        log_fo = os.fdopen(log_fd, "a+")
-        # TODO Figure out how to avoid need for tty here...
-        proc = Popen("{0} {1} </dev/tty".format(PLOTMAN_SCRIPT, 'archive'),
-                     shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
+        app.logger.info("About to start archiver...")
+        proc = Popen("nohup {0} {1} >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'archive', logfile),
+                     shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
+        app.logger.info("Completed launch of archiver.")
     except:
         app.logger.info('Failed to start Plotman archiving run!')
         app.logger.info(traceback.format_exc())
-    else:
-        # TODO Trigger an immediate status_plotman update.
-        pass
 
 def stop_archiver():
-    app.logger.info("Stopping Archiver run...")
+    #app.logger.info("Stopping Archiver run...")
     try:
-        os.kill(get_plotman_pid(), signal.SIGTERM)
+        os.kill(get_archiver_pid(), signal.SIGTERM)
     except:
         app.logger.info('Failed to stop Plotman archiving run!')
         app.logger.info(traceback.format_exc())
-    else:
-        # TODO Trigger an immediate status_plotman update. 
-        pass
 
 def load_config():
     return open('/root/.chia/plotman/plotman.yaml','r').read()
@@ -170,9 +147,13 @@ def save_config(config):
     except Exception as ex:
         app.logger.info(traceback.format_exc())
         raise Exception('Updated plotman.yaml failed validation!\n' + str(ex))
-    else:
-        # TODO Restart plotman loop if running locally
-        pass
+    else: # Restart services if running
+        if get_plotman_pid():
+            stop_plotman()
+            start_plotman()
+        if get_archiver_pid():
+            stop_archiver()
+            start_archiver()
 
 def find_plotting_job_log(plot_id):
     dir_path = '/root/.chia/plotman/logs'

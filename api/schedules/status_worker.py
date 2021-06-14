@@ -38,12 +38,13 @@ def update():
 def gather_services_status():
     gc = globals.load()
     plotman_status = "disabled"
-    archiver_status = "disabled"
     if gc['plotting_enabled']:
         if plotman_cli.get_plotman_pid():
             plotman_status = "running"
         else:
             plotman_status = "stopped"
+    archiver_status = "disabled"
+    if gc['archiving_enabled']:
         if plotman_cli.get_archiver_pid():
             archiver_status = "running"
         else:

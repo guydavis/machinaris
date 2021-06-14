@@ -28,7 +28,7 @@ def update():
         try:
             hostname = utils.get_hostname()
             public_keys = chia_cli.load_keys_show()
-            app.logger.info(public_keys.text)
+            #app.logger.info(public_keys.text)
             payload = {
                 "hostname": hostname,
                 "details": public_keys.text.replace('\r', ''),

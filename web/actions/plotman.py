@@ -35,66 +35,61 @@ def load_plotters():
             'hostname': plotter.hostname,
             'plotting_status': plotter.plotting_status(),
             'archiving_status': plotter.archiving_status(),
+            'archiving_enabled': plotter.archiving_enabled()
         })
+    app.logger.info("PLOTTERS: {0}".format(plotters))
     return plotters
 
-def start_plotman():
-    global last_plotting_summary
+def start_plotman(plotter):
     app.logger.info("Starting Plotman run....")
     try:
-        logfile = "/root/.chia/plotman/logs/plotman.log"
-        log_fd = os.open(logfile, os.O_RDWR | os.O_CREAT)
-        log_fo = os.fdopen(log_fd, "a+")
-        proc = Popen("{0} {1} </dev/tty".format(PLOTMAN_SCRIPT, 'plot'),
-                     shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
+        utils.send_post(plotter, "/actions/", {"service": "plotting","action": "start"}, debug=True)
     except:
         app.logger.info(traceback.format_exc())
         flash('Failed to start Plotman plotting run!', 'danger')
-        flash('Please see: {0}'.format(logfile), 'warning')
+        flash('Please see log files.', 'warning')
     else:
-        last_plotting_summary = None  # Force a refresh on next load
         flash('Plotman started successfully.', 'success')
-        # Wait for Plotman to start a plot running for display in table
-        time.sleep(5)
 
-def action_plots(form):
-    global last_plotting_summary
-    app.logger.info("Actioning plots....")
-    action = form.get('action')
-    plot_ids = form.getlist('plot_id')
-    app.logger.info("About to {0} plots: {1}".format(action, plot_ids))
-    for plot_id in plot_ids:
+def action_plots(action, plot_ids):
+    plots_by_worker = group_plots_by_worker(plot_ids)
+    app.logger.info("About to {0} plots: {1}".format(action, plots_by_worker))
+    error = False
+    for hostname in plots_by_worker.keys():
         try:
-            prefix = ""
-            if action == "kill":
-                prefix = "printf 'y\n' |"
-            logfile = "/root/.chia/plotman/logs/plotman.log"
-            log_fd = os.open(logfile, os.O_RDWR | os.O_CREAT)
-            log_fo = os.fdopen(log_fd, "a+")
-            proc = Popen("{0} {1} {2} {3}".format(prefix, PLOTMAN_SCRIPT, action, plot_id),
-                         shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
+            plotter = w.get_worker_by_hostname(hostname)
+            plot_ids = plots_by_worker[hostname]
+            utils.send_post(plotter, "/actions/", debug=True,
+                payload={"service": "plotting","action": action, "plot_ids": plot_ids}
+            )
         except:
+            error = True
             app.logger.info(traceback.format_exc())
-            flash('Failed to {0} selected plot {1}.'.format(
-                action, plot_id), 'danger')
-            flash('Please see: {0}'.format(logfile), 'warning')
-            return
-    last_plotting_summary = None  # Force a refresh on next load
-    flash('Plotman was able to {0} the selected plots successfully.'.format(
-        action), 'success')
-    time.sleep(5)  # Wait for Plotman to complete its actions
+    if error:
+        flash('Failed to action all plots!', 'danger')
+        flash('Please see the log file(s) on your plotter(s).', 'warning')
+    else:
+        flash('Plotman was able to {0} the selected plots successfully.'.format(
+            action), 'success')
 
-def get_plotman_pid():
-    for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-        if proc.info['name'] == 'plotman' and 'plot' in proc.info['cmdline']:
-            return proc.info['pid']
-    return None
+def group_plots_by_worker(plot_ids):
+    plots_by_worker = {}
+    all_plottings = load_plotting_summary()
+    for plot_id in plot_ids:
+        hostname = None
+        for plot in all_plottings.rows:
+            if plot['plot_id'] == plot_id:
+                hostname = plot['plotter']
+        if hostname:
+            if not hostname in plots_by_worker:
+                plots_by_worker[hostname] = []
+            plots_by_worker[hostname].append(plot_id)
+    return plots_by_worker
 
-def stop_plotman():
-    global last_plotting_summary
+def stop_plotman(plotter):
     app.logger.info("Stopping Plotman run....")
     try:
-        os.kill(get_plotman_pid(), signal.SIGTERM)
+        utils.send_post(plotter, "/actions/", payload={"service": "plotting","action": "stop"}, debug=True)
     except:
         app.logger.info(traceback.format_exc())
         flash('Failed to stop Plotman plotting run!', 'danger')

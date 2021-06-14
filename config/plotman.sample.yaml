@@ -97,11 +97,11 @@ directories:
 # format.
 #
 # Complete example: https://github.com/ericaltendorf/plotman/wiki/Archiving
-archiving:
-  target: local_rsync
-  env:
-    command: rsync
-    site_root: /farm/sites
+#archiving:
+#  target: local_rsync
+#  env:
+#    command: rsync
+#    site_root: /farm/sites
 
 # Plotting scheduling parameters
 scheduling:
