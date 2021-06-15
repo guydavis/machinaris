@@ -42,12 +42,6 @@ def get_controller_url():
         app.config['CONTROLLER_PORT']
     )
 
-def get_controller_web():
-    return "{0}://{1}:8926".format(
-        app.config['CONTROLLER_SCHEME'],
-        app.config['CONTROLLER_HOST']
-    )
-
 def get_remote_url():
     return "{0}://{1}:{2}".format(
         app.config['CONTROLLER_SCHEME'],

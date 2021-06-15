@@ -48,6 +48,11 @@ def get_controller_url():
         app.config['CONTROLLER_PORT']
     )
 
+def get_controller_web():
+    return "http://{0}:8926".format(
+        app.config['CONTROLLER_HOST']
+    )
+
 def get_hostname():
     if 'hostname' in os.environ:
         hostname = os.environ['hostname']
