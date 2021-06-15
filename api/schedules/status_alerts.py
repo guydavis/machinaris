@@ -24,8 +24,7 @@ first_run = True
 def update():
     global first_run
     if not globals.farming_enabled():
-        app.logger.info(
-            "Skipping alerts status collection on non-farming instance.")
+        #app.logger.info("Skipping alerts status collection on non-farming instance.")
         return
     with app.app_context():
         try:

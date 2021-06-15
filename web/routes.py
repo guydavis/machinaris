@@ -51,7 +51,7 @@ def setup():
 
 @app.route('/controller')
 def controller():
-    return render_template('controller.html', controller_url = utils.get_controller_url())
+    return render_template('controller.html', controller_url = utils.get_controller_web())
 
 @app.route('/plotting', methods=['GET', 'POST'])
 def plotting():

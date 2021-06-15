@@ -21,8 +21,7 @@ from api import utils
 
 def update():
     if not globals.farming_enabled():
-        app.logger.info(
-            "Skipping public wallet status collection on non-farming instance.")
+        #app.logger.info("Skipping public wallet status collection on non-farming instance.")
         return
     with app.app_context():
         try:
