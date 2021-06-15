@@ -22,3 +22,6 @@ class WorkerSummary:
                 self.harvesters.append(worker)
             if worker.mode == "fullnode":
                 self.fullnodes.append(worker)
+
+    def set_ping_response(self, response):
+        self.ping_response = response

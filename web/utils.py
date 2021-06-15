@@ -10,10 +10,10 @@ import socket
 
 from web import app
 
-def send_get(worker, path, query_params={}, debug=False):
+def send_get(worker, path, query_params={}, timeout=30, debug=False):
     if debug:
         http.client.HTTPConnection.debuglevel = 1
-    response = requests.get(worker.url + path, params = query_params)
+    response = requests.get(worker.url + path, params = query_params, timeout=timeout)
     http.client.HTTPConnection.debuglevel = 0
     return response
 

@@ -37,6 +37,7 @@ def load():
     cfg['chiadog_version'] = load_chiadog_version()
     cfg['plotman_version'] = load_plotman_version()
     cfg['chia_version'] = load_chia_version()
+    cfg['is_controller'] = "localhost" == (os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost')
     return cfg
 
 def get_stats_db():

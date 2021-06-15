@@ -6,7 +6,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from api import app
 from api.schedules import status_worker, status_farm, status_plotting, \
     status_plots, status_challenges, status_wallets, status_blockchains, \
-    status_connections, status_keys, status_alerts
+    status_connections, status_keys, status_alerts, status_controller
 from api.schedules import stats_disk, stats_farm
 
 scheduler = BackgroundScheduler()
@@ -21,6 +21,7 @@ scheduler = BackgroundScheduler()
 
 # Status gathering - reported via API
 scheduler.add_job(func=status_worker.update, trigger='interval', seconds=60) 
+scheduler.add_job(func=status_controller.update, trigger='interval', seconds=60) 
 scheduler.add_job(func=status_farm.update, trigger='interval', seconds=60) 
 scheduler.add_job(func=status_plotting.update, trigger='interval', seconds=60) 
 scheduler.add_job(func=status_plots.update, trigger='interval', seconds=60) 

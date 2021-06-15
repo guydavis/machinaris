@@ -10,6 +10,13 @@ import socket
 
 from api import app
 
+def send_get(worker, path, query_params={}, timeout=30, debug=False):
+    if debug:
+        http.client.HTTPConnection.debuglevel = 1
+    response = requests.get(worker.url + path, params = query_params, timeout=timeout)
+    http.client.HTTPConnection.debuglevel = 0
+    return response
+
 def send_post(path, payload, debug=False):
     controller_url = get_controller_url()
     headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
@@ -48,3 +55,6 @@ def get_hostname():
     else:
         hostname = socket.gethostname()
     return hostname
+
+def is_controller():
+    return app.config['CONTROLLER_HOST'] == "localhost"

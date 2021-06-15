@@ -70,6 +70,12 @@
                                 <i class="fs-4 bi-bell"></i> <span class="ms-1 d-none d-sm-inline">Alerts</span></a>
                         </li>
                         {% endif %}
+                        {% if global_config.is_controller %}
+                        <li>
+                            <a href="{{ url_for('workers') }}" class="nav-link px-0 align-middle text-success">
+                                <i class="fs-4 bi-diagram-3"></i> <span class="ms-1 d-none d-sm-inline">Workers</span></a>
+                        </li>
+                        {% endif %}
                         <li>
                             <a href="#submenu3" data-bs-toggle="collapse"
                                 class="nav-link px-0 align-middle text-success">

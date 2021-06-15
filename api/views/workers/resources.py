@@ -37,6 +37,8 @@ class Workers(MethodView):
         if item: # update
             new_item['created_at'] = item.created_at
             new_item['updated_at'] = dt.datetime.now()
+            new_item['latest_ping_result'] = item.latest_ping_result
+            new_item['ping_success_at'] = item.ping_success_at
             app.logger.info("Updating...")
             WorkerSchema().update(item, new_item)
         else: # insert

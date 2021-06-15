@@ -132,6 +132,16 @@ def keys():
     return render_template('keys.html', keys=keys, 
         key_paths=key_paths, global_config=gc)
 
+@app.route('/workers', methods=['GET', 'POST'])
+def workers():
+    gc = globals.load()
+    if request.method == 'POST':
+        if request.form.get('action') == "prune":
+            worker.prune_workers_status(request.form.getlist('hostname'))
+    workers = worker.load_worker_summary()
+    return render_template('workers.html', reload_seconds=60, 
+        workers=workers, global_config=gc, now=gc['now'])
+
 @app.route('/network/blockchain')
 def network_blockchain():
     gc = globals.load()
