@@ -9,7 +9,7 @@ from flask import Flask, flash, redirect, render_template, \
 
 from common.config import globals
 from web import app, utils
-from web.actions import chia, plotman, chiadog, worker
+from web.actions import chia, plotman, chiadog, worker, log_handler
 
 @app.route('/')
 def landing():
@@ -57,17 +57,20 @@ def controller():
 def plotting():
     gc = globals.load()
     if request.method == 'POST':
-        app.logger.info("Form submitted: {0}".format(request.form))
         if request.form.get('action') == 'start':
             hostname= request.form.get('hostname')
             plotter = worker.get_worker_by_hostname(hostname)
-            app.logger.info("Starting plotman on {0}".format(hostname))
-            plotman.start_plotman(plotter)
+            if request.form.get('service') == 'plotting':
+                plotman.start_plotman(plotter)
+            elif request.form.get('service') == 'archiving':
+                plotman.start_archiving(plotter)
         elif request.form.get('action') == 'stop':
             hostname= request.form.get('hostname')
             plotter = worker.get_worker_by_hostname(hostname)
-            app.logger.info("Stopping plotman on {0}".format(hostname))
-            plotman.stop_plotman(plotter)
+            if request.form.get('service') == 'plotting':
+                plotman.stop_plotman(plotter)
+            elif request.form.get('service') == 'archiving':
+                plotman.stop_archiving(plotter)
         elif request.form.get('action') in ['suspend', 'resume', 'kill']:
             action = request.form.get('action')
             plot_ids = request.form.getlist('plot_id')
@@ -77,8 +80,6 @@ def plotting():
             app.logger.info("Unknown plotting form: {0}".format(request.form))
         return redirect(url_for('plotting')) # Force a redirect to allow time to update status
     plotters = plotman.load_plotters()
-    for plotter in plotters:
-        print("Plotter on {0} is {1}".format(plotter['hostname'], plotter['plotting_status']))
     plotting = plotman.load_plotting_summary()
     return render_template('plotting.html', reload_seconds=60,  plotting=plotting, 
         plotters=plotters, global_config=gc)
@@ -90,11 +91,12 @@ def farming():
     elif request.args.get('check'):  # Xhr calling for check output
         return chia.check_plots(request.args.get('first_load'))
     gc = globals.load()
+    farmers = chia.load_farmers()
     farming = chia.load_farm_summary()
     plots = chia.load_plots_farming()
     chia.compare_plot_counts(gc, farming, plots)
     return render_template('farming.html', farming=farming, plots=plots, 
-        global_config=gc)
+        farmers=farmers, global_config=gc)
 
 @app.route('/plots_check')
 def plots_check():
@@ -158,7 +160,9 @@ def settings_plotting():
             request.form.get("config")
         )
     workers = worker.load_worker_summary()
-    selected_worker = workers.farmers[0]
+    selected_worker = None
+    if len(workers.farmers) > 0:
+        selected_worker = workers.farmers[0]
     return render_template('settings/plotting.html',
         workers=workers.farmers, selected_worker=selected_worker, global_config=gc)
 
@@ -171,7 +175,9 @@ def settings_farming():
             request.form.get("config")
         )
     workers = worker.load_worker_summary()
-    selected_worker = workers.farmers[0]
+    selected_worker = None
+    if len(workers.farmers) > 0:
+        selected_worker = workers.farmers[0]
     return render_template('settings/farming.html',
         workers=workers.farmers, selected_worker=selected_worker, global_config=gc)
 
@@ -184,7 +190,9 @@ def settings_alerts():
             request.form.get("config")
         )
     workers = worker.load_worker_summary()
-    selected_worker = workers.farmers[0]
+    selected_worker = None
+    if len(workers.farmers) > 0:
+        selected_worker = workers.farmers[0]
     return render_template('settings/alerts.html',
         workers=workers.farmers, selected_worker=selected_worker, global_config=gc)
 
@@ -209,11 +217,11 @@ def logs():
 
 @app.route('/logfile')
 def logfile():
-    log_file = None
+    w = worker.get_worker_by_hostname(request.args.get('hostname'))
     log_type = request.args.get("log")
     if log_type in [ 'alerts', 'farming', 'plotting']:
         log_id = request.args.get("log_id")
-        return log_parser.get_log_lines(log_type, log_id)
+        return log_handler.get_log_lines(w, log_type, log_id)
     else:
         abort(500, "Unsupported log type: {0}".format(log_type))
 

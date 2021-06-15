@@ -24,6 +24,7 @@ from common.models import farms as f, plots as p, challenges as c, wallets as w,
 from common.config import globals
 from web.models.chia import FarmSummary, FarmPlots, BlockchainChallenges, Wallets, \
     Blockchains, Connections, Keys
+from . import worker as wk
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 
@@ -56,8 +57,17 @@ def load_keys_show():
     keys = db.session.query(k.Key).all()
     return Keys(keys)
 
+def load_farmers():
+    farmers = []
+    for farmer in wk.load_worker_summary().farmers:
+        farmers.append({
+            'hostname': farmer.hostname,
+            'farming_status': farmer.farming_status().lower()
+        })
+    return farmers
+
 def load_config(farmer):
-    return utils.send_get(farmer, "/configs/{0}/farming".format(farmer.hostname), debug=False).content
+    return utils.send_get(farmer, "/configs/farming", debug=False).content
 
 def save_config(farmer, config):
     try: # Validate the YAML first
@@ -67,7 +77,7 @@ def save_config(farmer, config):
         flash('Updated config.yaml failed validation! Fix and save or refresh page.', 'danger')
         flash(str(ex), 'warning')
     try:
-        utils.send_put(farmer, "/configs/{0}/farming".format(farmer.hostname), config, debug=True)
+        utils.send_put(farmer, "/configs/farming", config, debug=True)
     except Exception as ex:
         flash('Failed to save config to farmer.  Please check log files.', 'danger')
         flash(str(ex), 'warning')

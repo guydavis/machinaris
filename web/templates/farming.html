@@ -3,15 +3,15 @@
 {% block content %}
 
 <script>
-    function LogButton() {
+    function ViewLogs(hostname) {
         var d = new Date();
         var height = 600;
         var width = 900;
         var top = (screen.height - height) / 2;
         var left = (screen.width - width) / 2;
-        window.open("{{ url_for('logs') }}?log=farming", 'Chia Log', 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        window.open("{{ url_for('logs') }}?log=farming"+ "&hostname=" + hostname, 'Chia Log', 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
     }
-    function CheckButton() {
+    function CheckPlots(hostname) {
         var d = new Date();
         var height = 600;
         var width = 900;
@@ -19,7 +19,7 @@
         var left = (screen.width - width) / 2;
         window.open("{{ url_for('plots_check') }}", 'Plots Check', 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
     }
-    function PlotJobAnalyze(plot) {
+    function PlotJobAnalyze(hostname, plot) {
         var output = document.getElementById('plotAnalyzeContent');
         var xhr = new XMLHttpRequest();
         xhr.open('GET', "{{ url_for('farming') }}?analyze=" + plot);
@@ -30,16 +30,11 @@
     }
 </script>
 
-<div class="position-relative">
-    <div class="position-absolute top-0 end-0">
-        <a href="#" title="View Logs" onclick='LogButton();return false;'>
-            <i class="fs-4 bi-text-indent-left"></i>
-        </a>
-    </div>
-</div>
-
 <header class="pb-3 mb-4 border-bottom">
-    <span class="fs-4">Farming Status: {{ farming.display_status }}</span>
+    <span class="fs-4">Farming:
+        {{ farming.plot_count }} plots.
+        Current expected time to win: <i class="text-success">{{ farming.expected_time_to_win }}</i>
+    </span>
 </header>
 
 <div class="modal fade" id="analyzeModal" tabindex="-1" aria-labelledby="analyzeModalLabel" aria-hidden="true">
@@ -73,16 +68,34 @@
         {% endwith %}
     </div>
 
-    <form class="d-flex" method="POST" style="padding-bottom:5px; width:100%" id="main-form">
-        <div style="width: 100%;">
-            <button class="btn btn-outline-success text-nowrap align-baseline" type="submit" name="action" value="add"
-                id="btnCheck" form="main-form" style="float: right; margin: 0px 5px 0px 0px"
-                onclick='CheckButton();return false;'>Check Plots</button>
-            <h5 style="width: 100%; padding-top: 7px;">
-                Found {{ farming.plot_count }} total plots.
-                Current expected time to win: <span class="text-success">{{ farming.expected_time_to_win }}</span>
-            </h5>
-        </div>
+    <form class="d-flex" method="POST" style="padding-bottom:5px; width:100%;" id="main-form">
+        <fieldset>
+            <div style="width: 100%; padding-bottom: 10px;">
+                {% for farmer in farmers %}
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false" id="{{ farmer.hostname }}_btn">
+                        {{ farmer.hostname }}: {{farmer.farming_status}}
+                    </button>
+                    <ul class="dropdown-menu bg-dark btn-outline-success">
+                        <li>
+                            <a class="dropdown-item text-white text-decoration-none" href="#"
+                                onclick='ViewLogs("{{ farmer.hostname }}");return false;'>>
+                                <i class="fs-4 bi-text-indent-left"></i>
+                                <span class="align-text-bottom"></span>View Log</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-white text-decoration-none" href="#">
+                                <i class="fs-4 bi-text-indent-left"></i>
+                                <span class="align-text-bottom"></span>Check Plots</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        <fieldset>
     </form>
 
     <div class="table-responsive">

@@ -37,7 +37,6 @@ def load_plotters():
             'archiving_status': plotter.archiving_status(),
             'archiving_enabled': plotter.archiving_enabled()
         })
-    app.logger.info("PLOTTERS: {0}".format(plotters))
     return plotters
 
 def start_plotman(plotter):
@@ -97,8 +96,30 @@ def stop_plotman(plotter):
     else:
         flash('Plotman stopped successfully.  No new plots will be started, but existing ones will continue on.', 'success')
 
+def start_archiving(plotter):
+    app.logger.info("Starting Archiver....")
+    try:
+        utils.send_post(plotter, "/actions/", {"service": "archiving","action": "start"}, debug=True)
+    except:
+        app.logger.info(traceback.format_exc())
+        flash('Failed to start Plotman archiver!', 'danger')
+        flash('Please see log files.', 'warning')
+    else:
+        flash('Archiver started successfully.', 'success')
+
+def stop_archiving(plotter):
+    app.logger.info("Stopping Archiver run....")
+    try:
+        utils.send_post(plotter, "/actions/", payload={"service": "archiving","action": "stop"}, debug=True)
+    except:
+        app.logger.info(traceback.format_exc())
+        flash('Failed to stop Plotman archiver', 'danger')
+        flash('Please see /root/.chia/plotman/logs/archiver.log', 'warning')
+    else:
+        flash('Archiver stopped successfully.', 'success')
+
 def load_config(plotter):
-    return utils.send_get(plotter, "/configs/{0}/plotting".format(plotter.hostname), debug=False).content
+    return utils.send_get(plotter, "/configs/plotting", debug=False).content
 
 def save_config(plotter, config):
     try: # Validate the YAML first
@@ -108,7 +129,7 @@ def save_config(plotter, config):
         flash('Updated plotman.yaml failed validation! Fix and save or refresh page.', 'danger')
         flash(str(ex), 'warning')
     try:
-        utils.send_put(plotter, "/configs/{0}/plotting".format(plotter.hostname), config, debug=True)
+        utils.send_put(plotter, "/configs/plotting", config, debug=True)
     except Exception as ex:
         flash('Failed to save config to plotter.  Please check log files.', 'danger')
         flash(str(ex), 'warning')

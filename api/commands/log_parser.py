@@ -69,11 +69,11 @@ def find_plotting_job_log(plot_id):
             continue
     return None
 
-def get_log_lines(log_type, log_id):
+def get_log_lines(log_type, log_id=None):
     if log_type == "alerts":
         log_file = "/root/.chia/chiadog/logs/chiadog.log"
     elif log_type == "plotting":
-        if log_id != 'undefined':
+        if log_id:
             log_file =  find_plotting_job_log(log_id)
         else:
             log_file = "/root/.chia/plotman/logs/plotman.log"

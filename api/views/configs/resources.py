@@ -27,10 +27,10 @@ class Configs(MethodView):
         return response
 
 
-@blp.route('/<hostname>/<type>')
-class ConfigByHostname(MethodView):
+@blp.route('/<type>')
+class ConfigByType(MethodView):
 
-    def get(self, hostname, type):
+    def get(self, type):
         if type == "farming":
             config = chia_cli.load_config()
         elif type == "plotting":
@@ -43,7 +43,7 @@ class ConfigByHostname(MethodView):
         response.mimetype = "application/x-yaml"
         return response
 
-    def put(self, hostname, type):
+    def put(self, type):
         try:
             if type == "farming":
                 chia_cli.save_config(self.clean_config(request.data))

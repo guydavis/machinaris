@@ -3,20 +3,25 @@
 {% block content %}
 
 <script>
-    function PlotsLogButton(hostname, plot_id) {
+    function PlottingLogs(type, hostname, plot_id) {
         var d = new Date();
         var height = 600;
         var width = 900;
         var top = (screen.height - height) / 2;
         var left = (screen.width - width) / 2;
-        window.open("{{ url_for('logs') }}?log=plotting&hostname=" + hostname + "&log_id=" + plot_id, 'Plotman Log ' + plot_id, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        if (typeof plot_id !== 'undefined') {
+            window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname + "&log_id=" + plot_id, 'Plotman Log ' + plot_id + ' on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        } else {
+            window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname, 'Plotman Log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        }
     }
-    function PlottingAction(hostname, action, status) {
+    function PlottingAction(hostname, service, action, status) {
         $("#"+hostname+"_btn").prop("disabled", true);
         $("#"+hostname+"_btn").html(
             '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> '+ hostname + ': ' + status + '...'
         );
         $('#plotman-form').append('<input type="hidden" id="action" name="action" value="' + action + '" />');
+        $('#plotman-form').append('<input type="hidden" id="service" name="service" value="' + service + '" />');
         $('#plotman-form').append('<input type="hidden" id="hostname" name="hostname" value="' + hostname + '" />');
         $("#plotman-form").submit();
     }
@@ -74,18 +79,19 @@
                     <li>
                         <a class="dropdown-item text-white text-decoration-none" href="#"
                             {% if plotter.plotting_status == 'stopped' %}
-                            onclick='PlottingAction("{{ plotter.hostname }}","start", "starting");return false;'>
+                            onclick='PlottingAction("{{ plotter.hostname }}","plotting","start", "starting");return false;'>
                             <i class="fs-4 bi-text-indent-left"></i> 
                             <span class="align-text-bottom">Start Plotting</span>
                             {% else %}
-                            onclick='PlottingAction("{{ plotter.hostname }}","stop", "stopping");return false;'>
+                            onclick='PlottingAction("{{ plotter.hostname }}","plotting","stop", "stopping");return false;'>
                             <i class="fs-4 bi-text-indent-left"></i> 
                             <span class="align-text-bottom">Stop Plotting</span>
                             {% endif %}
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item text-white text-decoration-none" href="#">
+                        <a class="dropdown-item text-white text-decoration-none" href="#"
+                            onclick='PlottingLogs("plotting", "{{ plotter.hostname }}");return false;'>
                             <i class="fs-4 bi-text-indent-left"></i> 
                             <span class="align-text-bottom"></span>View Plotting Logs</span>
                         </a>
@@ -95,18 +101,21 @@
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <a class="dropdown-item text-white text-decoration-none" href="#">
+                        <a class="dropdown-item text-white text-decoration-none" href="#"\
+                            onclick='PlottingAction("{{ plotter.hostname }}","archiving","start", "starting");return false;'>>
                             {% if plotter.archiving_status == 'stopped' %}
                             <i class="fs-4 bi-text-indent-left"></i> 
                             <span class="align-text-bottom">Start Archiving</span>
                             {% else %}
+                            onclick='PlottingAction("{{ plotter.hostname }}","archiving","stop", "stopping");return false;'>>
                             <i class="fs-4 bi-text-indent-left"></i> 
                             <span class="align-text-bottom">Stop Archiving</span>
                             {% endif %}
                         </a>
                     </li>
                     <li>
-                        <a class="dropdown-item text-white text-decoration-none" href="#">
+                        <a class="dropdown-item text-white text-decoration-none" href="#"
+                            onclick='PlottingLogs("archiving", "{{ plotter.hostname }}");return false;'>\>
                             <i class="fs-4 bi-text-indent-left"></i>
                             <span class="align-text-bottom"></span>View Archiving Logs</span> 
                         </a>
@@ -140,7 +149,7 @@
                         {% endfor %}
                         <td style="padding:0px">
                             <!-- Careful, VS Code likes to wrap next line and break it. -->
-                            <a href="#" title="View Logs" onclick='PlotsLogButton("{{ row['hostname'] }}","{{ row['plot_id'] }}");return false;'>
+                            <a href="#" title="View Logs" onclick='PlottingLogs("plotting","{{ row['hostname'] }}","{{ row['plot_id'] }}");return false;'>
                                 <i class="fs-4 bi-text-indent-left"></i>
                             </a>
                         </td>
@@ -181,8 +190,8 @@
                 $("#plotting-form").submit();
             });
             $("#btnConfirmKill").click(function () {
-                $('btnKill').prop("disabled", true);
-                $('btnKill').html(
+                $('#btnKill').prop("disabled", true);
+                $('#btnKill').html(
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Killing...`
                 );
                 $('#plotting-form').append('<input type="hidden" id="action" name="action" value="kill" />');

@@ -19,7 +19,7 @@ from common.models import alerts as a
 from web import app, db, utils
 
 def load_config(farmer):
-    return utils.send_get(farmer, "/configs/{0}/alerts".format(farmer.hostname), debug=False).content
+    return utils.send_get(farmer, "/configs/alerts", debug=False).content
 
 def save_config(farmer, config):
     try: # Validate the YAML first
@@ -29,7 +29,7 @@ def save_config(farmer, config):
         flash('Updated config.yaml failed validation! Fix and save or refresh page.', 'danger')
         flash(str(ex), 'warning')
     try:
-        utils.send_put(farmer, "/configs/{0}/alerts".format(farmer.hostname), config, debug=True)
+        utils.send_put(farmer, "/configs/alerts", config, debug=True)
     except Exception as ex:
         flash('Failed to save config to farmer.  Please check log files.', 'danger')
         flash(str(ex), 'warning')

@@ -6,6 +6,7 @@ from . import configs
 from . import connections
 from . import farms
 from . import keys
+from . import logs
 from . import plots
 from . import plottings
 from . import wallets
@@ -21,6 +22,7 @@ MODULES = (
     connections,
     farms,
     keys,
+    logs,
     plots,
     plottings,
     wallets,
