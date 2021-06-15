@@ -22,7 +22,7 @@ def get_log_lines(worker, log_type, log_id):
         payload = {"type": log_type }
         if log_id != 'undefined':
             payload['log_id'] = log_id
-        response = utils.send_get(worker, "/logs/{0}".format(log_type), payload, debug=True)
+        response = utils.send_get(worker, "/logs/{0}".format(log_type), payload, debug=False)
         return response.content.decode('utf-8')
     except:
         app.logger.info(traceback.format_exc())

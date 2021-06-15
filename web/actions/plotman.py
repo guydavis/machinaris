@@ -4,6 +4,7 @@
 
 import datetime
 import os
+from flask.helpers import make_response
 import psutil
 import re
 import signal
@@ -42,7 +43,7 @@ def load_plotters():
 def start_plotman(plotter):
     app.logger.info("Starting Plotman run....")
     try:
-        utils.send_post(plotter, "/actions/", {"service": "plotting","action": "start"}, debug=True)
+        utils.send_post(plotter, "/actions/", {"service": "plotting","action": "start"}, debug=False)
     except:
         app.logger.info(traceback.format_exc())
         flash('Failed to start Plotman plotting run!', 'danger')
@@ -58,7 +59,7 @@ def action_plots(action, plot_ids):
         try:
             plotter = w.get_worker_by_hostname(hostname)
             plot_ids = plots_by_worker[hostname]
-            utils.send_post(plotter, "/actions/", debug=True,
+            utils.send_post(plotter, "/actions/", debug=False,
                 payload={"service": "plotting","action": action, "plot_ids": plot_ids}
             )
         except:
@@ -88,7 +89,7 @@ def group_plots_by_worker(plot_ids):
 def stop_plotman(plotter):
     app.logger.info("Stopping Plotman run....")
     try:
-        utils.send_post(plotter, "/actions/", payload={"service": "plotting","action": "stop"}, debug=True)
+        utils.send_post(plotter, "/actions/", payload={"service": "plotting","action": "stop"}, debug=False)
     except:
         app.logger.info(traceback.format_exc())
         flash('Failed to stop Plotman plotting run!', 'danger')
@@ -99,7 +100,7 @@ def stop_plotman(plotter):
 def start_archiving(plotter):
     app.logger.info("Starting Archiver....")
     try:
-        utils.send_post(plotter, "/actions/", {"service": "archiving","action": "start"}, debug=True)
+        utils.send_post(plotter, "/actions/", {"service": "archiving","action": "start"}, debug=False)
     except:
         app.logger.info(traceback.format_exc())
         flash('Failed to start Plotman archiver!', 'danger')
@@ -110,7 +111,7 @@ def start_archiving(plotter):
 def stop_archiving(plotter):
     app.logger.info("Stopping Archiver run....")
     try:
-        utils.send_post(plotter, "/actions/", payload={"service": "archiving","action": "stop"}, debug=True)
+        utils.send_post(plotter, "/actions/", payload={"service": "archiving","action": "stop"}, debug=False)
     except:
         app.logger.info(traceback.format_exc())
         flash('Failed to stop Plotman archiver', 'danger')
@@ -129,45 +130,26 @@ def save_config(plotter, config):
         flash('Updated plotman.yaml failed validation! Fix and save or refresh page.', 'danger')
         flash(str(ex), 'warning')
     try:
-        utils.send_put(plotter, "/configs/plotting", config, debug=True)
+        utils.send_put(plotter, "/configs/plotting", config, debug=False)
     except Exception as ex:
         flash('Failed to save config to plotter.  Please check log files.', 'danger')
         flash(str(ex), 'warning')
     else:
         flash('Nice! Plotman\'s plotman.yaml validated and saved successfully.', 'success')
 
-def find_plotting_job_log(plot_id):
-    dir_path = '/root/.chia/plotman/logs'
-    directory = os.fsencode(dir_path)
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-        if filename.endswith(".log") and not filename.startswith('plotman.'): 
-            with open(os.path.join(str(dir_path), filename)) as logfile:
-                head = [next(logfile) for x in range(10)] # Check first 10 lines
-                for line in head:
-                    if plot_id in line:
-                        return os.path.join(str(dir_path), filename)
-            continue
-        else:
-            continue
-    return None
-
-def analyze(plot_file):
-    groups = re.match("plot-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", plot_file)
-    if not groups:
-        return "Invalid plot file name provided: {0}".format(plot_file)
-    plot_log_file = find_plotting_job_log(groups[7])
-    if plot_log_file:
-        proc = Popen("{0} {1} {2} < /dev/tty".format(
-            PLOTMAN_SCRIPT,'analyze', plot_log_file), stdout=PIPE, stderr=PIPE, shell=True)
+def analyze(plot_file, plotters):
+    # Don't know which plotter might have the plot result so try them in-turn
+    for plotter in plotters:
         try:
-            outs, errs = proc.communicate(timeout=90)
-        except TimeoutExpired:
-            proc.kill()
-            proc.communicate()
-            abort(500, description="The timeout is expired!")
-        if errs:
-            app.logger.error(errs.decode('utf-8'))
-            return "Failed to analyze plot log.  See machinaris/logs/webui.log for details."
-        return outs.decode('utf-8')
-    return "Sorry, not plotting job log found.  Perhaps plot was made elsewhere?"
+            payload = {"service":"plotting", "action":"analyze", "plot_file": plot_file }
+            response = utils.send_post(plotter, "/analysis/", payload, debug=False)
+            if response.status_code == 200:
+                return response.content.decode('utf-8')
+            elif response.status_code == 404:
+                app.logger.info("Plotter on {0} did not have plot log for {1}".format(plotter.hostname, plot_file))
+            else:
+                app.logger.info("Plotter on {0} returned an unexpected error: {1}".format(plotter.hostname, response.status_code))
+            return response.content.decode('utf-8')
+        except:
+            app.logger.info(traceback.format_exc())
+    return make_response("Sorry, not plotting job log found.  Perhaps plot was made elsewhere?", 200)

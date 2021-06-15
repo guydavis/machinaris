@@ -177,16 +177,16 @@ def analyze(plot_file):
         return "Invalid plot file name provided: {0}".format(plot_file)
     plot_log_file = find_plotting_job_log(groups[7])
     if plot_log_file:
-        proc = Popen("{0} {1} {2}".format(
+        proc = Popen("{0} {1} {2} < /dev/tty".format(
             PLOTMAN_SCRIPT,'analyze', plot_log_file), stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=90)
         except TimeoutExpired:
             proc.kill()
             proc.communicate()
-            abort(500, description="The timeout is expired!")
+            abort(500, description="The timeout is expired attempting to start plots check.")
         if errs:
             app.logger.error(errs.decode('utf-8'))
-            return "Failed to analyze plot log.  See machinaris/logs/webui.log for details."
+            abort(500, description="Failed to analyze plots.")
         return outs.decode('utf-8')
-    return "Sorry, not plotting job log found.  Perhaps plot was made elsewhere?"
+    return None

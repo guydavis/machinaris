@@ -29,7 +29,7 @@ def save_config(farmer, config):
         flash('Updated config.yaml failed validation! Fix and save or refresh page.', 'danger')
         flash(str(ex), 'warning')
     try:
-        utils.send_put(farmer, "/configs/alerts", config, debug=True)
+        utils.send_put(farmer, "/configs/alerts", config, debug=False)
     except Exception as ex:
         flash('Failed to save config to farmer.  Please check log files.', 'danger')
         flash(str(ex), 'warning')

@@ -77,7 +77,7 @@ def save_config(farmer, config):
         flash('Updated config.yaml failed validation! Fix and save or refresh page.', 'danger')
         flash(str(ex), 'warning')
     try:
-        utils.send_put(farmer, "/configs/farming", config, debug=True)
+        utils.send_put(farmer, "/configs/farming", config, debug=False)
     except Exception as ex:
         flash('Failed to save config to farmer.  Please check log files.', 'danger')
         flash(str(ex), 'warning')
@@ -191,36 +191,11 @@ def remove_connection(node_id, ip):
     app.logger.info("Successfully removed connection to {0}".format(ip))
     return True
 
-def compare_plot_counts(global_config, farming, plots):
-    if farming:
-        try:
-            if int(farming.plot_count) < len(plots.rows):
-                flash("Warning! Chia is farming {0} plots, but Machinaris found {1} *.plot files on disk. See the <a href='https://github.com/guydavis/machinaris/wiki/FAQ#warning-chia-is-farming-x-plots-but-machinaris-found-y-plot-files-on-disk' target='_blank'>FAQ</a>.".format(farming.plot_count, len(plots.rows), 'warning'))
-        except:
-            app.logger.info("Compare plots failed to check matching plot counts.")
-            app.logger.info(traceback.format_exc())
-
-def is_plots_check_running():
-    for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-        if proc.info['name'] == 'chia' and 'plots' in proc.info['cmdline'] and 'check' in proc.info['cmdline']:
-            return proc.info['pid']
-    return None
-
-def check_plots(first_load):
-    output_file = '/root/.chia/mainnet/log/plots_check.log'
-    if not is_plots_check_running() and first_load == "true":
-        try:
-            log_fd = os.open(output_file, os.O_RDWR | os.O_CREAT)
-            log_fo = os.fdopen(log_fd, "a+")
-            proc = Popen("{0} plots check".format(CHIA_BINARY), shell=True, 
-                universal_newlines=True, stdout=log_fo, stderr=log_fo)
-        except:
-            app.logger.info(traceback.format_exc())
-            return 'Failed to start plots check job!'
-        else:
-            return "Starting chia plots check at " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    else:
-        class_escape = re.compile(r' chia.plotting.(\w+)(\s+): ')
-        ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
-        proc = Popen(['tail', '-n', str(MAX_LOG_LINES), output_file], stdout=PIPE)
-        return  class_escape.sub('', ansi_escape.sub('', proc.stdout.read().decode("utf-8")))
+def check_plots(worker, first_load):
+    try:
+        payload = {"service":"farming", "action":"check_plots", "first_load": first_load }
+        response = utils.send_post(worker, "/analysis/", payload, debug=False)
+        return response.content.decode('utf-8')
+    except:
+        app.logger.info(traceback.format_exc())
+        flash('Failed to check plots on {0}. Please see logs.'.format(worker.hostname), 'danger')

@@ -1,4 +1,5 @@
 from . import actions
+from . import analysis
 from . import alerts
 from . import blockchains
 from . import challenges
@@ -16,6 +17,7 @@ from . import workers
 
 MODULES = (
     actions,
+    analysis,
     alerts,
     blockchains,
     challenges,

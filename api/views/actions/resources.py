@@ -25,7 +25,6 @@ class Actions(MethodView):
     def post(self):
         try:
             body = json.loads(request.data)
-            app.logger.info("BODY IS: {0}".format(body))
             service = body['service']
         except:
             abort("Invalid action request without service.", 400)

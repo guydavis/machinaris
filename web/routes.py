@@ -87,14 +87,17 @@ def plotting():
 @app.route('/farming')
 def farming():
     if request.args.get('analyze'):  # Xhr with a plot filename
-        return plotman.analyze(request.args.get('analyze'))
+        plot_file = request.args.get('analyze')
+        plotters = worker.load_worker_summary().plotters
+        return plotman.analyze(plot_file, plotters)
     elif request.args.get('check'):  # Xhr calling for check output
-        return chia.check_plots(request.args.get('first_load'))
+        w = worker.get_worker_by_hostname(request.args.get('hostname'))
+        first_load = request.args.get("first_load")
+        return chia.check_plots(w, first_load)
     gc = globals.load()
     farmers = chia.load_farmers()
     farming = chia.load_farm_summary()
     plots = chia.load_plots_farming()
-    chia.compare_plot_counts(gc, farming, plots)
     return render_template('farming.html', farming=farming, plots=plots, 
         farmers=farmers, global_config=gc)
 

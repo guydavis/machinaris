@@ -152,6 +152,127 @@
 						"description": "Add a new Alert."
 					},
 					"response": []
+				},
+				{
+					"name": "Actions - Start Archiving",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"archiving\",\r\n    \"action\": \"start\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"actions"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Actions - Stop Archiving",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"archiving\",\r\n    \"action\": \"stop\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"actions"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Analysis",
+			"item": [
+				{
+					"name": "Analysis - Check Plots",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"farming\",\r\n    \"action\": \"check_plots\",\r\n    \"first_load\": \"true\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/analysis",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"analysis"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Analysis - Analyze Plot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"analyze\",\r\n    \"plot_file\": \"plot-k32-2021-05-30-19-25-d81461844857bb09d7b253f9ae1aaf9f37cb4535abd02a264ccfb06e027785ae.plot\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/analysis",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"analysis"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
 				}
 			]
 		},
@@ -453,7 +574,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/aragorn/farming",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/farming",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -461,7 +582,6 @@
 							"port": "{{port}}",
 							"path": [
 								"configs",
-								"aragorn",
 								"farming"
 							]
 						},
@@ -495,7 +615,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/aragorn/plotting",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/plotting",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -503,7 +623,6 @@
 							"port": "{{port}}",
 							"path": [
 								"configs",
-								"aragorn",
 								"plotting"
 							]
 						},
@@ -923,6 +1042,120 @@
 							]
 						},
 						"description": "Delete a worker's status by hostname."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Logs",
+			"item": [
+				{
+					"name": "Logs - Alerts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/logs/alerts",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"logs",
+								"alerts"
+							]
+						},
+						"description": "Get all completed plots from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Logs - Plotting",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/logs/plotting",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"logs",
+								"plotting"
+							]
+						},
+						"description": "Get all completed plots from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Logs - Plotting by PlotID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/logs/plotting",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"logs",
+								"plotting"
+							]
+						},
+						"description": "Get all completed plots from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Logs - Farming",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/logs/farming",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"logs",
+								"farming"
+							]
+						},
+						"description": "Get all completed plots from all workers."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ping",
+			"item": [
+				{
+					"name": "Ping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/ping",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"ping"
+							]
+						},
+						"description": "Get all workers reporting in with their status."
 					},
 					"response": []
 				}

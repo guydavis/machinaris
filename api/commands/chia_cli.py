@@ -246,15 +246,6 @@ def remove_connection(node_id, ip):
     app.logger.info("Successfully removed connection to {0}".format(ip))
     return True
 
-def compare_plot_counts(globals, farming, plots):
-    if farming:
-        try:
-            if int(farming.plot_count) < len(plots.rows):
-                flash("Warning! Chia is farming {0} plots, but Machinaris found {1} *.plot files on disk. See the <a href='https://github.com/guydavis/machinaris/wiki/FAQ#warning-chia-is-farming-x-plots-but-machinaris-found-y-plot-files-on-disk' target='_blank'>FAQ</a>.".format(farming.plot_count, len(plots.rows), 'warning'))
-        except:
-            app.logger.info("Compare plots failed to check matching plot counts.")
-            app.logger.info(traceback.format_exc())
-
 def is_plots_check_running():
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
         if proc.info['name'] == 'chia' and 'plots' in proc.info['cmdline'] and 'check' in proc.info['cmdline']:
