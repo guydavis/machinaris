@@ -90,7 +90,7 @@ RUN \
 ENV keys="/root/.chia/mnemonic.txt"  
 # Provide a colon-separated list of in-container paths to your completed plots
 ENV plots_dir="/plots"
-# One of fullnode, plotter, farmer, or harvester. Default is fullnode
+# One of fullnode, farmer, harvester, plotter, farmer+plotter, harvester+plotter. Default is fullnode
 ENV mode="fullnode" 
 # If mode=plotter, optional 2 public keys will be set in your plotman.yaml
 ENV farmer_pk="null"
@@ -100,6 +100,13 @@ ENV farmer_address="null"
 ENV farmer_port="8447"
 # Only set true if using Chia's old test for testing only, default uses mainnet
 ENV testnet="false"
+# Can override the location of default settings for api and web servers.
+ENV API_SETTINGS_FILE='/root/.chia/machinaris/config/api.cfg'
+ENV WEB_SETTINGS_FILE='/root/.chia/machinaris/config/web.cfg'
+# Local network hostname of a Machinaris controller - localhost when standalone
+ENV controller_host="localhost"
+ENV controller_web_port=8926
+ENV controller_api_port=8927
 
 ENV PATH="${PATH}:/chia-blockchain/venv/bin"
 ENV TZ=Etc/UTC
@@ -114,6 +121,7 @@ VOLUME [ "/id_rsa" ]
 EXPOSE 8555
 EXPOSE 8444
 EXPOSE 8926
+EXPOSE 8927
 
 WORKDIR /chia-blockchain
 ENTRYPOINT ["bash", "./entrypoint.sh"]

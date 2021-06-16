@@ -129,5 +129,8 @@ dmypy.json
 .pyre/
 
 # Development only webui launch script
-start-webui-dev.sh
+scripts/start-api-dev.sh
+scripts/start-web-dev.sh
+
+# Ignore any local SSH keys
 keyfile

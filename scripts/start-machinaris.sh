@@ -9,9 +9,12 @@ sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/confi
 
 echo 'Configuring Plotman...'
 mkdir -p /root/.chia/plotman/logs
-# Temporarily migrate users with original plotman logs path
+# Temporarily migrate users with old < v0.4 configs
 if [ -f /root/.chia/plotman/plotman.yaml ]; then
-    sed -i 's/\/root\/.chia\/logs/\/root\/.chia\/plotman\/logs/g' /root/.chia/plotman/plotman.yaml
+    grep -q "version:" /root/.chia/plotman/plotman.yaml
+    if [ $? != 0 ]; then
+        . /machinaris/scripts/plotman_migrate.sh
+    fi
 fi
 cp -n /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.yaml
 if [ ${farmer_pk} != 'null' ]; then
@@ -30,13 +33,13 @@ if [ "${mode}" != "plotter" ]; then
 
     echo 'Starting Chiadog...'
     cd /chiadog
-    pidof python3
-    if [ $? != 0 ]; then
+    chiadog_pid=$(pidof python3)
+    if [ ! -z $chiadog_pid ]; then
         python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
     fi
 fi
 
-echo 'Starting Machinaris...'
+mkdir -p /root/.chia/machinaris/config
 mkdir -p /root/.chia/machinaris/logs
 cd /machinaris
 if [ $FLASK_ENV == "development" ];
@@ -49,9 +52,28 @@ else
 fi
 
 # Kill gunicorn if already running to allow restart
-webui_pid=$(pidof 'gunicorn: master [app:app]')
-if [ ! -z $webui_pid ]; then 
-    kill $webui_pid
+api_pid=$(pidof 'gunicorn: master [api:app]')
+if [ ! -z $api_pid ]; then 
+    kill $api_pid
 fi
-/chia-blockchain/venv/bin/gunicorn ${RELOAD} --bind 0.0.0.0:8926 --timeout 90 --log-level=${LOG_LEVEL} app:app > /root/.chia/machinaris/logs/webui.log 2>&1 &
+echo 'Starting Machinaris API server...'
+/chia-blockchain/venv/bin/gunicorn ${RELOAD} \
+    --bind 0.0.0.0:8927 --timeout 90 \
+    --log-level=${LOG_LEVEL} \
+    --workers=2 \
+    api:app > /root/.chia/machinaris/logs/apisrv.log 2>&1 &
+
+# Kill gunicorn if already running to allow restart
+web_pid=$(pidof 'gunicorn: master [web:app]')
+if [ ! -z $web_pid ]; then 
+    kill $web_pid
+fi
+echo 'Starting Machinaris Web server...'
+/chia-blockchain/venv/bin/gunicorn ${RELOAD} \
+    --bind 0.0.0.0:8926 --timeout 90 \
+    --log-level=${LOG_LEVEL} \
+    --workers=2 \
+    web:app > /root/.chia/machinaris/logs/webui.log 2>&1 &
+
+
 echo 'Completed startup.  Browse to port 8926.'

@@ -5,7 +5,6 @@
 
 mkdir -p /root/.chia/machinaris/dbs
 cd /root/.chia/machinaris/dbs
-rm -f machinaris.db # Temporarily delete old db 
 if [ ! -f stats.db ]; then
     echo 'Creating database for Machinaris...'
     sqlite3 stats.db <<EOF

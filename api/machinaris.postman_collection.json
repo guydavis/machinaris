@@ -1,0 +1,1661 @@
+{
+	"info": {
+		"_postman_id": "c483592b-5a62-42cf-8e15-1ffabaa1b9ab",
+		"name": "Machinaris",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Actions",
+			"item": [
+				{
+					"name": "Actions - Start Plotting",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"start\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"actions"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Actions - Suspend a Plot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"suspend\",\r\n    \"plot_ids\": [\"6e0ea650\"]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"actions"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Actions - Resume a Plot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"resume\",\r\n    \"plot_ids\": [\"6e0ea650\"]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"actions"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Actions - Kill a Plot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"kill\",\r\n    \"plot_ids\": [\"6e0ea650\"]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"actions"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Actions - Stop Plotting",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"stop\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"actions"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Actions - Start Archiving",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"archiving\",\r\n    \"action\": \"start\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"actions"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Actions - Stop Archiving",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"archiving\",\r\n    \"action\": \"stop\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"actions"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Analysis",
+			"item": [
+				{
+					"name": "Analysis - Check Plots",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"farming\",\r\n    \"action\": \"check_plots\",\r\n    \"first_load\": \"true\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/analysis",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"analysis"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Analysis - Analyze Plot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"analyze\",\r\n    \"plot_file\": \"plot-k32-2021-05-30-19-25-d81461844857bb09d7b253f9ae1aaf9f37cb4535abd02a264ccfb06e027785ae.plot\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/analysis",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"analysis"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Alerts",
+			"item": [
+				{
+					"name": "Alerts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/farms",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"farms"
+							]
+						},
+						"description": "Get all alerts from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Alerts",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"priority\": \"NORMAL\",\r\n    \"service\": \"FULL_NODE\",\r\n    \"message\": \"Experiencing networking issues? Skipped 5 signage points!\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/alerts",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"alerts"
+							]
+						},
+						"description": "Add a new Alert."
+					},
+					"response": []
+				},
+				{
+					"name": "Alert",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/alerts",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"alerts"
+							]
+						},
+						"description": "Get an alert by id."
+					},
+					"response": []
+				},
+				{
+					"name": "Alert",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"priority\": \"HIGH\",\r\n    \"service\": \"FULL_NODE\",\r\n    \"message\": \"Experiencing networking issues? Skipped 5 signage points!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/alerts/1",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"alerts",
+								"1"
+							]
+						},
+						"description": "Update an alert by id."
+					},
+					"response": []
+				},
+				{
+					"name": "Alert",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/alerts/1",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"alerts",
+								"1"
+							]
+						},
+						"description": "Delete an alert by id."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Blockchains",
+			"item": [
+				{
+					"name": "Blockchains",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"blockchains"
+							]
+						},
+						"description": "Get all workers reporting in with their status."
+					},
+					"response": []
+				},
+				{
+					"name": "Blockchains",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"details\": \"Current Blockchain Status: Full Node Synced\\n\\nPeak: Hash: d08b47309102311c1e438888164aa7b9cc8b6888d3aafc325433ee635d7d80f8\\n      Time: Thu Jun 10 2021 17:03:05 MDT                  Height:     413471\\n\\nEstimated network space: 21.216 EiB\\nCurrent difficulty: 1472\\nCurrent VDF sub_slot_iters: 116391936\\nTotal iterations since the start of the blockchain: 1357356548603\\n\\n  Height: |   Hash:\\n   413471 | d08b47309102311c1e438888164aa7b9cc8b6888d3aafc325433ee635d7d80f8\\n   413470 | 973a2c7bd891c437db013a29fd8ceacebd811ffa5f662c5ccb9564e1c6f0afaa\\n   413469 | 8dc9b663aa55c7625adde8f9aa815aa33c5a450d0493a33b18de56c9c8a46e08\\n   413468 | 3080240055b4619c008a824f8fb907444bed9220561742f54adb17af48d6a94a\\n   413467 | f8825b2a3f6ed8d9d67384818406d8e38a8b3c3aa20caace78455156db7c5dd7\\n   413466 | 743f9a531e9bb95d6ab9f66b15ce88ed53d76487103a7af6a7526d99e8ba7bfd\\n   413465 | ae965c41126cae2f572ebc53a4fb76e3094d63c203e3d3751d30fb4a9deb31e0\\n   413464 | d515077ab2c47bc0c0ba428031e8cfca4778db3dc0c79bafdee492e87bd0d0f7\\n   413463 | baf964512edcf922d8239200ea844b69387472da57e8766ea766f71c05183e8f\\n   413462 | 7972d3dd0ab37e1a82e607cfc0d20929adf9a2611a00135e926ea2a0a69e5309\\n\",\r\n    \"hostname\": \"aragorn\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"blockchains"
+							]
+						},
+						"description": "Add a new Worker."
+					},
+					"response": []
+				},
+				{
+					"name": "Blockchains",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"blockchains",
+								"aragorn"
+							]
+						},
+						"description": "Get a worker by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Blockchain",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"details\": \"Current Blockchain Status: Full Node Synced\\n\\nPeak: Hash: d08b47309102311c1e438888164aa7b9cc8b6888d3aafc325433ee635d7d80f8\\n      Time: Thu Jun 10 2021 17:03:05 MDT                  Height:     413471\\n\\nEstimated network space: 21.216 EiB\\nCurrent difficulty: 1472\\nCurrent VDF sub_slot_iters: 116391936\\nTotal iterations since the start of the blockchain: 1357356548603\\n\\n  Height: |   Hash:\\n   413471 | d08b47309102311c1e438888164aa7b9cc8b6888d3aafc325433ee635d7d80f8\\n   413470 | 973a2c7bd891c437db013a29fd8ceacebd811ffa5f662c5ccb9564e1c6f0afaa\\n   413469 | 8dc9b663aa55c7625adde8f9aa815aa33c5a450d0493a33b18de56c9c8a46e08\\n   413468 | 3080240055b4619c008a824f8fb907444bed9220561742f54adb17af48d6a94a\\n   413467 | f8825b2a3f6ed8d9d67384818406d8e38a8b3c3aa20caace78455156db7c5dd7\\n   413466 | 743f9a531e9bb95d6ab9f66b15ce88ed53d76487103a7af6a7526d99e8ba7bfd\\n   413465 | ae965c41126cae2f572ebc53a4fb76e3094d63c203e3d3751d30fb4a9deb31e0\\n   413464 | d515077ab2c47bc0c0ba428031e8cfca4778db3dc0c79bafdee492e87bd0d0f7\\n   413463 | baf964512edcf922d8239200ea844b69387472da57e8766ea766f71c05183e8f\\n   413462 | 7972d3dd0ab37e1a82e607cfc0d20929adf9a2611a00135e926ea2a0a69e5309\\n\",\r\n    \"hostname\": \"aragorn\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"blockchains",
+								"aragorn"
+							]
+						},
+						"description": "Update a worker's status by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Blockchain",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"blockchains",
+								"aragorn"
+							]
+						},
+						"description": "Delete a worker's status by hostname."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Configs",
+			"item": [
+				{
+					"name": "Configs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/configs",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"configs"
+							]
+						},
+						"description": "Get all workers reporting in with their status."
+					},
+					"response": []
+				},
+				{
+					"name": "Config",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/farming",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"configs",
+								"farming"
+							]
+						},
+						"description": "Get the config by type (farming, alerts, plotting) of a particular worker by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Config",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "# Options for display and rendering\r\nuser_interface:\r\n        # Call out to the `stty` program to determine terminal size, instead of\r\n        # relying on what is reported by the curses library.   In some cases,\r\n        # the curses library fails to update on SIGWINCH signals.  If the\r\n        # `plotman interactive` curses interface does not properly adjust when\r\n        # you resize the terminal window, you can try setting this to True. \r\n        use_stty_size: True\r\n\r\n# Where to plot and log.\r\ndirectories:\r\n        # One directory in which to store all plot job logs (the STDOUT/\r\n        # STDERR of all plot jobs).  In order to monitor progress, plotman\r\n        # reads these logs on a regular basis, so using a fast drive is\r\n        # recommended.  DON'T CHANGE THIS IN-CONTAINER PATH\r\n        log: /root/.chia/plotman/logs\r\n\r\n        # One or more directories to use as tmp dirs for plotting.  The\r\n        # scheduler will use all of them and distribute jobs among them.\r\n        # It assumes that IO is independent for each one (i.e., that each\r\n        # one is on a different physical device).\r\n        #\r\n        # If multiple directories share a common prefix, reports will\r\n        # abbreviate and show just the uniquely identifying suffix.\r\n        # REMEMBER ALL PATHS ARE IN-CONTAINER, THEY MAP TO HOST PATHS\r\n        tmp:\r\n                - /plotting\r\n\r\n        # Optional: Allows overriding some characteristics of certain tmp\r\n        # directories. This contains a map of tmp directory names to\r\n        # attributes. If a tmp directory and attribute is not listed here,\r\n        # it uses the default attribute setting from the main configuration.\r\n        #\r\n        # Currently support override parameters:\r\n        #     - tmpdir_max_jobs\r\n        #tmp_overrides:\r\n                # In this example, /mnt/tmp/00 is larger than the other tmp\r\n                # dirs and it can hold more plots than the default.\r\n                #\"/mnt/tmp/00\":\r\n                #        tmpdir_max_jobs: 5\r\n\r\n        # Optional: tmp2 directory.  If specified, will be passed to\r\n        # chia plots create as -2.  Only one tmp2 directory is supported.\r\n        # tmp2: /mnt/tmp/a\r\n\r\n        # One or more directories; the scheduler will use all of them.\r\n        # These again are presumed to be on independent physical devices,\r\n        # so writes (plot jobs) and reads (archivals) can be scheduled\r\n        # to minimize IO contention.\r\n        # REMEMBER ALL PATHS ARE IN-CONTAINER, THEY MAP TO HOST PATHS\r\n        dst:\r\n                - /plots4\r\n\r\n        # Archival configuration.  Optional; if you do not wish to run the\r\n        # archiving operation, comment this section out.\r\n        #\r\n        # Currently archival depends on an rsync daemon running on the remote\r\n        # host, and that the module is configured to match the local path.\r\n        # See code for details.\r\n        #archive:\r\n                #rsyncd_module: plots\r\n                #rsyncd_path: /plots\r\n                #rsyncd_bwlimit: 80000  # Bandwidth limit in KB/s\r\n                #rsyncd_host: myfarmer\r\n                #rsyncd_user: chia\r\n                # Optional index.  If omitted or set to 0, plotman will archive\r\n                # to the first archive dir with free space.  If specified,\r\n                # plotman will skip forward up to 'index' drives (if they exist).\r\n                # This can be useful to reduce io contention on a drive on the\r\n                # archive host if you have multiple plotters (simultaneous io\r\n                # can still happen at the time a drive fills up.)  E.g., if you\r\n                # have four plotters, you could set this to 0, 1, 2, and 3, on\r\n                # the 4 machines, or 0, 1, 0, 1.\r\n                #   index: 0\r\n\r\n\r\n# Plotting scheduling parameters\r\nscheduling:\r\n        # Run a job on a particular temp dir only if the number of existing jobs\r\n        # before tmpdir_stagger_phase_major tmpdir_stagger_phase_minor\r\n        # is less than tmpdir_stagger_phase_limit.\r\n        # Phase major corresponds to the plot phase, phase minor corresponds to\r\n        # the table or table pair in sequence, phase limit corresponds to\r\n        # the number of plots allowed before [phase major, phase minor]\r\n        tmpdir_stagger_phase_major: 2\r\n        tmpdir_stagger_phase_minor: 1\r\n        # Optional: default is 1\r\n        tmpdir_stagger_phase_limit: 2\r\n\r\n        # Don't run more than this many jobs at a time on a single temp dir.\r\n        tmpdir_max_jobs: 4\r\n\r\n        # Don't run more than this many jobs at a time in total.\r\n        global_max_jobs: 4\r\n\r\n        # Don't run any jobs (across all temp dirs) more often than this, in minutes.\r\n        global_stagger_m: 30\r\n\r\n        # How often the daemon wakes to consider starting a new plot job, in seconds.\r\n        polling_time_s: 20\r\n\r\n\r\n# Plotting parameters.  These are pass-through parameters to chia plots create.\r\n# See documentation at\r\n# https://github.com/Chia-Network/chia-blockchain/wiki/CLI-Commands-Reference#create\r\nplotting:\r\n        k: 32\r\n        e: False              # Use -e plotting option\r\n        n_threads: 4          # Threads per job\r\n        n_buckets: 128        # Number of buckets to split data into\r\n        job_buffer: 6750      # Per job memory\r\n        # If specified, pass through to the -f and -p options.  See CLI reference.\r\n        #   farmer_pk: ...\r\n        #   pool_pk: ...\r\n",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/plotting",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"configs",
+								"plotting"
+							]
+						},
+						"description": "Update a worker's status by hostname."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Connections",
+			"item": [
+				{
+					"name": "Connections",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/connections",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"connections"
+							]
+						},
+						"description": "Get all workers reporting in with their status."
+					},
+					"response": []
+				},
+				{
+					"name": "Connections",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"details\": \"Connections:\\nType      IP                                     Ports       NodeID      Last Connect      MiB Up|Dwn\\nFARMER    127.0.0.1                              35768/8447  5030a7c7... Jun 06 11:59:15      4.4|0.0    \\nWALLET    127.0.0.1                              53320/8449  8da31b3c... Jun 10 17:11:11     61.0|0.2    \\nFULL_NODE 98.42.235.33                           58310/8444  66ed8652... Jun 10 17:11:29     37.5|11.7   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 196.6.108.133                           8444/8444  aef62de6... Jun 10 17:11:29     11.0|9.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 142.116.207.156                        64993/8444  8cbee1a1... Jun 10 17:11:29     22.1|18.4   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 162.157.232.229                        49695/8444  82229227... Jun 10 17:11:29     37.5|7.5    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 126.34.220.139                         58224/8444  8f1e6fbd... Jun 10 17:11:29     44.4|6.4    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 146.90.67.86                           58706/8444  dc3d5fd3... Jun 10 17:11:29     22.3|8.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 62.72.72.18                            51432/8444  cc8d30a1... Jun 10 17:11:29     40.0|8.7    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 89.3.70.3                              52644/8444  d5a79111... Jun 10 17:11:29     15.4|14.5   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 217.150.85.254                         56945/8444  c692334c... Jun 10 17:11:29     33.0|5.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 47.221.53.187                           7156/8444  068aa0d8... Jun 10 17:11:29     27.5|6.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 34.83.48.161                           50682/8444  50cede37... Jun 10 17:11:29     12.6|27.9   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 24.61.13.167                           60766/8444  6668de8c... Jun 10 17:11:29     40.3|7.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 95.90.239.182                          28543/8444  42f9fffa... Jun 10 17:11:29     31.6|6.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 69.7.50.71                             37988/8444  cd47a608... Jun 10 17:11:29     31.9|8.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 98.39.191.247                          59402/8444  422bfa93... Jun 10 17:11:29     23.5|10.0   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 185.169.255.253                        48322/8444  df1edc4e... Jun 10 17:11:29     21.1|10.2   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 37.236.57.5                            55945/8444  ce238c97... Jun 10 17:11:29     32.5|7.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 64.52.178.42                           53878/8444  687276f3... Jun 10 17:11:29     37.2|6.3    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 81.96.106.80                            8444/8444  1f40d561... Jun 10 17:11:29     11.5|5.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 70.123.152.54                          59738/8444  464433fe... Jun 10 17:11:29     24.1|7.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 50.71.199.59                           57607/8444  25e4dec6... Jun 10 17:11:29     28.1|12.2   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 73.103.4.161                           51043/8444  81a6f543... Jun 10 17:11:29     25.3|6.0    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 35.245.107.20                           8444/8444  bc3b4c7f... Jun 10 17:11:28      6.5|25.7   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 120.159.246.189                        50048/8444  12a4e4c3... Jun 10 17:11:29     37.2|5.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 176.74.136.237                         59187/8444  064af1ff... Jun 10 17:11:29     11.3|5.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 124.170.30.236                         54333/8444  186f04b7... Jun 10 17:11:29     34.2|5.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nWALLET    67.169.137.7                           12531/8449  a83c030b... Jun 10 17:10:49     15.4|0.0    \\nFULL_NODE 146.0.42.48                            49654/8444  544d6a83... Jun 10 17:11:29      5.3|27.3   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 162.238.17.143                         52617/8444  9c724b92... Jun 10 17:11:29     22.3|6.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 201.182.250.91                         60129/8444  8b994149... Jun 10 17:11:29     31.0|5.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 97.71.166.110                          29177/8444  8c083dfb... Jun 10 17:11:29     17.8|9.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 141.226.13.132                         20729/8444  f7297d33... Jun 10 17:11:29     19.5|6.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 93.230.124.44                          60427/8444  2616af3c... Jun 10 17:11:29     17.3|4.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 206.214.235.77                         48184/8444  3075a4a7... Jun 10 17:11:29     22.9|7.3    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 67.212.26.23                            8444/8444  902e01c9... Jun 10 17:11:29     12.4|9.3    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 89.71.160.112                          55557/8444  a305de34... Jun 10 17:07:17    318.2|0.3    \\n                                                 -SB Height:   355768    -Hash: e4a34ad5...\\nFULL_NODE 46.91.167.6                            56952/8444  6be52e1b... Jun 10 17:11:29     10.2|5.7    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 193.248.51.240                         59712/8444  6661b300... Jun 10 17:11:29     23.5|3.9    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 99.228.97.71                            8444/8444  477bd121... Jun 10 17:11:29      5.7|3.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 189.216.73.40                          28594/8444  3cd480e5... Jun 10 17:11:29     33.2|4.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 115.87.251.30                          62981/8444  eae094f2... Jun 10 17:11:29     16.0|3.7    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 143.0.66.107                           63301/8444  b1e29b55... Jun 10 17:11:29     24.8|3.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 69.251.178.188                         50590/8444  ff43371f... Jun 10 17:11:29     11.1|7.9    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 144.217.70.156                          8444/8444  143dee88... Jun 10 17:11:29      3.7|16.3   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 69.117.168.170                         52801/8444  87f8020e... Jun 10 17:11:29      5.0|12.3   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 184.82.171.57                          51262/8444  f39113b3... Jun 10 17:11:29     12.8|4.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 79.239.54.186                          62849/8444  1ac2a9cc... Jun 10 17:11:29      4.1|7.0    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 87.156.67.122                          57079/8444  f7468ceb... Jun 10 17:11:29      3.2|10.2   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 108.52.212.168                          8444/8444  ba69d135... Jun 10 17:11:29      3.8|15.6   \\n                                                 -SB Height:   413500    -Hash: 1faed23b...\\nFULL_NODE 190.66.115.0                           56824/8444  3dfb3a5c... Jun 10 17:11:29     13.0|3.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 193.19.203.123                         49821/8444  f1bf06a4... Jun 10 17:11:29     42.7|3.0    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 195.139.243.134                        54331/8444  d1272228... Jun 10 17:11:29      4.0|4.4    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 121.99.68.189                          51475/8444  ef9f53d6... Jun 10 17:11:29     18.8|2.9    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 31.46.27.48                            49851/8444  01503446... Jun 10 17:11:29     41.8|3.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 77.32.64.128                           45522/8444  24bed860... Jun 10 17:11:29      3.3|4.3    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 98.223.145.203                         52154/8444  390f64fb... Jun 10 17:11:29     10.4|1.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 187.159.189.97                         21155/8444  7b3f571e... Jun 10 17:11:29     12.1|1.4    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 87.11.39.118                           50274/8444  5f64cb69... Jun 10 17:11:29      7.4|1.4    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 50.72.171.104                          64442/8444  9caf9464... Jun 10 17:11:29      9.6|1.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 184.22.2.180                           50670/8444  91ca57ac... Jun 10 17:11:29     10.3|1.4    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 24.99.74.232                           51157/8444  c1bc0db6... Jun 10 17:11:29      7.9|1.4    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 47.34.196.180                          53218/8444  8dad25fe... Jun 10 17:11:29      6.8|1.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 2.137.248.234                          59970/8444  9363c2be... Jun 10 17:11:29      2.7|1.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 176.79.179.12                          63630/8444  4bb73938... Jun 10 17:11:29      6.3|1.0    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 45.19.15.238                           62099/8444  b5a50bd2... Jun 10 17:11:29      5.7|0.9    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 141.101.169.130                        53737/8444  bec8c009... Jun 10 17:11:29      4.6|1.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 58.8.85.193                            59254/8444  edef406b... Jun 10 17:11:29      4.2|0.9    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 142.59.49.107                          51016/8444  17166190... Jun 10 17:11:29      4.5|0.9    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 178.4.22.28                            63324/8444  114dbc36... Jun 10 17:11:29     10.2|0.9    \\n                                                 -SB Height:   413236    -Hash: bfca4c7c...\\nFULL_NODE 85.251.51.231                          39536/8444  674f5409... Jun 10 17:11:29      2.0|0.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 175.120.132.134                        62368/8444  06e18be4... Jun 10 17:11:29      4.6|0.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 177.228.164.23                         48832/8444  3494d2f9... Jun 10 17:11:29      3.6|0.7    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 193.43.13.129                          49724/8444  50dc65b9... Jun 10 17:11:29      1.2|0.5    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 1.46.9.74                              49126/8444  622c8123... Jun 10 17:11:29      5.6|0.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 184.22.169.88                          56169/8444  aeb4f0f7... Jun 10 17:11:29      4.1|0.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 87.229.105.138                         60997/8444  85ac2252... Jun 10 17:11:29      2.5|0.4    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 91.73.148.221                           9417/8444  48ce7771... Jun 10 17:11:29      1.0|0.5    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 37.18.142.135                          21748/8444  fd5dafbc... Jun 10 17:11:26      3.1|0.5    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 94.255.182.26                          59201/8444  7663cce0... Jun 10 17:11:29      0.9|0.5    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 139.64.168.66                           8444/8444  3904416a... Jun 10 16:50:35      0.0|0.0    \\n                                                 -SB Height:   411376    -Hash: f35f21cf...\\nFULL_NODE 90.65.155.36                           55136/8444  96a414ae... Jun 10 17:11:29      0.1|0.0    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\n\",\r\n    \"hostname\": \"aragorn\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/connections",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"connections"
+							]
+						},
+						"description": "Add a new Worker."
+					},
+					"response": []
+				},
+				{
+					"name": "Connection",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/connections/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"connections",
+								"aragorn"
+							]
+						},
+						"description": "Get a worker by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Connection",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"details\": \"Connections:\\nType      IP                                     Ports       NodeID      Last Connect      MiB Up|Dwn\\nFARMER    127.0.0.1                              35768/8447  5030a7c7... Jun 06 11:59:15      4.4|0.0    \\nWALLET    127.0.0.1                              53320/8449  8da31b3c... Jun 10 17:11:11     61.0|0.2    \\nFULL_NODE 98.42.235.33                           58310/8444  66ed8652... Jun 10 17:11:29     37.5|11.7   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 196.6.108.133                           8444/8444  aef62de6... Jun 10 17:11:29     11.0|9.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 142.116.207.156                        64993/8444  8cbee1a1... Jun 10 17:11:29     22.1|18.4   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 162.157.232.229                        49695/8444  82229227... Jun 10 17:11:29     37.5|7.5    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 126.34.220.139                         58224/8444  8f1e6fbd... Jun 10 17:11:29     44.4|6.4    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 146.90.67.86                           58706/8444  dc3d5fd3... Jun 10 17:11:29     22.3|8.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 62.72.72.18                            51432/8444  cc8d30a1... Jun 10 17:11:29     40.0|8.7    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 89.3.70.3                              52644/8444  d5a79111... Jun 10 17:11:29     15.4|14.5   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 217.150.85.254                         56945/8444  c692334c... Jun 10 17:11:29     33.0|5.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 47.221.53.187                           7156/8444  068aa0d8... Jun 10 17:11:29     27.5|6.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 34.83.48.161                           50682/8444  50cede37... Jun 10 17:11:29     12.6|27.9   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 24.61.13.167                           60766/8444  6668de8c... Jun 10 17:11:29     40.3|7.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 95.90.239.182                          28543/8444  42f9fffa... Jun 10 17:11:29     31.6|6.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 69.7.50.71                             37988/8444  cd47a608... Jun 10 17:11:29     31.9|8.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 98.39.191.247                          59402/8444  422bfa93... Jun 10 17:11:29     23.5|10.0   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 185.169.255.253                        48322/8444  df1edc4e... Jun 10 17:11:29     21.1|10.2   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 37.236.57.5                            55945/8444  ce238c97... Jun 10 17:11:29     32.5|7.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 64.52.178.42                           53878/8444  687276f3... Jun 10 17:11:29     37.2|6.3    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 81.96.106.80                            8444/8444  1f40d561... Jun 10 17:11:29     11.5|5.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 70.123.152.54                          59738/8444  464433fe... Jun 10 17:11:29     24.1|7.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 50.71.199.59                           57607/8444  25e4dec6... Jun 10 17:11:29     28.1|12.2   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 73.103.4.161                           51043/8444  81a6f543... Jun 10 17:11:29     25.3|6.0    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 35.245.107.20                           8444/8444  bc3b4c7f... Jun 10 17:11:28      6.5|25.7   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 120.159.246.189                        50048/8444  12a4e4c3... Jun 10 17:11:29     37.2|5.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 176.74.136.237                         59187/8444  064af1ff... Jun 10 17:11:29     11.3|5.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 124.170.30.236                         54333/8444  186f04b7... Jun 10 17:11:29     34.2|5.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nWALLET    67.169.137.7                           12531/8449  a83c030b... Jun 10 17:10:49     15.4|0.0    \\nFULL_NODE 146.0.42.48                            49654/8444  544d6a83... Jun 10 17:11:29      5.3|27.3   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 162.238.17.143                         52617/8444  9c724b92... Jun 10 17:11:29     22.3|6.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 201.182.250.91                         60129/8444  8b994149... Jun 10 17:11:29     31.0|5.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 97.71.166.110                          29177/8444  8c083dfb... Jun 10 17:11:29     17.8|9.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 141.226.13.132                         20729/8444  f7297d33... Jun 10 17:11:29     19.5|6.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 93.230.124.44                          60427/8444  2616af3c... Jun 10 17:11:29     17.3|4.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 206.214.235.77                         48184/8444  3075a4a7... Jun 10 17:11:29     22.9|7.3    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 67.212.26.23                            8444/8444  902e01c9... Jun 10 17:11:29     12.4|9.3    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 89.71.160.112                          55557/8444  a305de34... Jun 10 17:07:17    318.2|0.3    \\n                                                 -SB Height:   355768    -Hash: e4a34ad5...\\nFULL_NODE 46.91.167.6                            56952/8444  6be52e1b... Jun 10 17:11:29     10.2|5.7    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 193.248.51.240                         59712/8444  6661b300... Jun 10 17:11:29     23.5|3.9    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 99.228.97.71                            8444/8444  477bd121... Jun 10 17:11:29      5.7|3.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 189.216.73.40                          28594/8444  3cd480e5... Jun 10 17:11:29     33.2|4.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 115.87.251.30                          62981/8444  eae094f2... Jun 10 17:11:29     16.0|3.7    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 143.0.66.107                           63301/8444  b1e29b55... Jun 10 17:11:29     24.8|3.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 69.251.178.188                         50590/8444  ff43371f... Jun 10 17:11:29     11.1|7.9    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 144.217.70.156                          8444/8444  143dee88... Jun 10 17:11:29      3.7|16.3   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 69.117.168.170                         52801/8444  87f8020e... Jun 10 17:11:29      5.0|12.3   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 184.82.171.57                          51262/8444  f39113b3... Jun 10 17:11:29     12.8|4.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 79.239.54.186                          62849/8444  1ac2a9cc... Jun 10 17:11:29      4.1|7.0    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 87.156.67.122                          57079/8444  f7468ceb... Jun 10 17:11:29      3.2|10.2   \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 108.52.212.168                          8444/8444  ba69d135... Jun 10 17:11:29      3.8|15.6   \\n                                                 -SB Height:   413500    -Hash: 1faed23b...\\nFULL_NODE 190.66.115.0                           56824/8444  3dfb3a5c... Jun 10 17:11:29     13.0|3.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 193.19.203.123                         49821/8444  f1bf06a4... Jun 10 17:11:29     42.7|3.0    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 195.139.243.134                        54331/8444  d1272228... Jun 10 17:11:29      4.0|4.4    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 121.99.68.189                          51475/8444  ef9f53d6... Jun 10 17:11:29     18.8|2.9    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 31.46.27.48                            49851/8444  01503446... Jun 10 17:11:29     41.8|3.1    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 77.32.64.128                           45522/8444  24bed860... Jun 10 17:11:29      3.3|4.3    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 98.223.145.203                         52154/8444  390f64fb... Jun 10 17:11:29     10.4|1.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 187.159.189.97                         21155/8444  7b3f571e... Jun 10 17:11:29     12.1|1.4    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 87.11.39.118                           50274/8444  5f64cb69... Jun 10 17:11:29      7.4|1.4    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 50.72.171.104                          64442/8444  9caf9464... Jun 10 17:11:29      9.6|1.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 184.22.2.180                           50670/8444  91ca57ac... Jun 10 17:11:29     10.3|1.4    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 24.99.74.232                           51157/8444  c1bc0db6... Jun 10 17:11:29      7.9|1.4    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 47.34.196.180                          53218/8444  8dad25fe... Jun 10 17:11:29      6.8|1.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 2.137.248.234                          59970/8444  9363c2be... Jun 10 17:11:29      2.7|1.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 176.79.179.12                          63630/8444  4bb73938... Jun 10 17:11:29      6.3|1.0    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 45.19.15.238                           62099/8444  b5a50bd2... Jun 10 17:11:29      5.7|0.9    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 141.101.169.130                        53737/8444  bec8c009... Jun 10 17:11:29      4.6|1.2    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 58.8.85.193                            59254/8444  edef406b... Jun 10 17:11:29      4.2|0.9    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 142.59.49.107                          51016/8444  17166190... Jun 10 17:11:29      4.5|0.9    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 178.4.22.28                            63324/8444  114dbc36... Jun 10 17:11:29     10.2|0.9    \\n                                                 -SB Height:   413236    -Hash: bfca4c7c...\\nFULL_NODE 85.251.51.231                          39536/8444  674f5409... Jun 10 17:11:29      2.0|0.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 175.120.132.134                        62368/8444  06e18be4... Jun 10 17:11:29      4.6|0.8    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 177.228.164.23                         48832/8444  3494d2f9... Jun 10 17:11:29      3.6|0.7    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 193.43.13.129                          49724/8444  50dc65b9... Jun 10 17:11:29      1.2|0.5    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 1.46.9.74                              49126/8444  622c8123... Jun 10 17:11:29      5.6|0.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 184.22.169.88                          56169/8444  aeb4f0f7... Jun 10 17:11:29      4.1|0.6    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 87.229.105.138                         60997/8444  85ac2252... Jun 10 17:11:29      2.5|0.4    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 91.73.148.221                           9417/8444  48ce7771... Jun 10 17:11:29      1.0|0.5    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 37.18.142.135                          21748/8444  fd5dafbc... Jun 10 17:11:26      3.1|0.5    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 94.255.182.26                          59201/8444  7663cce0... Jun 10 17:11:29      0.9|0.5    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\nFULL_NODE 139.64.168.66                           8444/8444  3904416a... Jun 10 16:50:35      0.0|0.0    \\n                                                 -SB Height:   411376    -Hash: f35f21cf...\\nFULL_NODE 90.65.155.36                           55136/8444  96a414ae... Jun 10 17:11:29      0.1|0.0    \\n                                                 -SB Height:   413503    -Hash: 9d365544...\\n\",\r\n    \"hostname\": \"aragorn\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/connections/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"connections",
+								"aragorn"
+							]
+						},
+						"description": "Update a worker's status by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Connection",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/connections/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"connections",
+								"aragorn"
+							]
+						},
+						"description": "Delete a worker's status by hostname."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Farms",
+			"item": [
+				{
+					"name": "Farms",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/farms",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"farms"
+							]
+						},
+						"description": "Get all farms from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Farms",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"mode\": \"fullnode\",\r\n    \"status\": \"Farming\",\r\n    \"plot_count\": 174,\r\n    \"plots_size\": 17332.224,\r\n    \"netspace_size\": 15957229.568,\r\n    \"expected_time_to_win\": 262800.0\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/farms",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"farms"
+							]
+						},
+						"description": "Add a new Farm, or update an existing."
+					},
+					"response": []
+				},
+				{
+					"name": "Farm",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/farms/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"farms",
+								"aragorn"
+							]
+						},
+						"description": "Get a farm by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Farm",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"plot_count\": 174,\r\n    \"plot_size\": 17332.224,\r\n    \"netspace_size\": 15957229.568,\r\n    \"expected_time_to_win\": 262800.0\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/farms/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"farms",
+								"aragorn"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Farm",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/farms/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"farms",
+								"aragorn"
+							]
+						},
+						"description": "Delete a farm's status."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Keys",
+			"item": [
+				{
+					"name": "Keys",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/keys",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"keys"
+							]
+						},
+						"description": "Get all workers reporting in with their status."
+					},
+					"response": []
+				},
+				{
+					"name": "Keys",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"details\": \"Showing all public keys derived from your private keys:\\n\\nFingerprint: 234983294832\\nMaster public key (m): kjflksjflkjslkfj\\nFarmer public key (m/12381/8444/0/0): lkjsfljdslkfjslkf\\nPool public key (m/12381/8444/1/0): kjsflkdsjf\\nFirst wallet address: sdfkjdsfs\\n\",\r\n    \"hostname\": \"aragorn\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/keys",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"keys"
+							]
+						},
+						"description": "Add a new Worker."
+					},
+					"response": []
+				},
+				{
+					"name": "Keys",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/keys/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"keys",
+								"aragorn"
+							]
+						},
+						"description": "Get a worker by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Key",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"details\": \"Showing all public keys derived from your private keys:\\n\\nFingerprint: 1606814864\\nMaster public key (m): kjflksjflkjslkfj\\nFarmer public key (m/12381/8444/0/0): lkjsfljdslkfjslkf\\nPool public key (m/12381/8444/1/0): kjsflkdsjf\\nFirst wallet address: sdfkjdsfs\\n\",\r\n    \"hostname\": \"aragorn\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/keys/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"keys",
+								"aragorn"
+							]
+						},
+						"description": "Update a worker's status by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Key",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/keys/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"keys",
+								"aragorn"
+							]
+						},
+						"description": "Delete a worker's status by hostname."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Logs",
+			"item": [
+				{
+					"name": "Logs - Alerts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/logs/alerts",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"logs",
+								"alerts"
+							]
+						},
+						"description": "Get all completed plots from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Logs - Plotting",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/logs/plotting",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"logs",
+								"plotting"
+							]
+						},
+						"description": "Get all completed plots from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Logs - Plotting by PlotID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/logs/plotting",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"logs",
+								"plotting"
+							]
+						},
+						"description": "Get all completed plots from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Logs - Farming",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/logs/farming",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"logs",
+								"farming"
+							]
+						},
+						"description": "Get all completed plots from all workers."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ping",
+			"item": [
+				{
+					"name": "Ping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/ping",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"ping"
+							]
+						},
+						"description": "Get all workers reporting in with their status."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Plots",
+			"item": [
+				{
+					"name": "Plots",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plots",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plots"
+							]
+						},
+						"description": "Get all completed plots from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Plots",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"plot_id\": \"39932db\",\r\n        \"hostname\": \"aragorn\",\r\n        \"dir\": \"/plots4\",\r\n        \"file\": \"plot-k32-2021-05-31-19-49-39932db6aac9678f69a66c7e13ae3df3c6387842994644ab1f545dc1a5b33831.plot\",\r\n        \"size\": 101.1,\r\n        \"created_at\": \"2021-06-01 12:00:00\"\r\n    },\r\n    {\r\n        \"plot_id\": \"abcd1234\",\r\n        \"hostname\": \"aragorn\",\r\n        \"dir\": \"/plots3\",\r\n        \"file\": \"plot-k32-2021-06-05-08-11-6babcdab98751845807084f9316e1ca4204d78cb05a1110415b9b36602f9bad1.plot\",\r\n        \"size\": 101.1,\r\n        \"created_at\": \"2021-06-02 23:23:12\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plots",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plots"
+							]
+						},
+						"description": "Add a new completed Plot."
+					},
+					"response": []
+				},
+				{
+					"name": "Plot",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plots/39932db",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plots",
+								"39932db"
+							]
+						},
+						"description": "Delete a completed plot's status."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Plottings",
+			"item": [
+				{
+					"name": "Plottings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plottings",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plottings"
+							]
+						},
+						"description": "Get all plotting jobs from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Plottings",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"plot_id\": \"20dfc942\",\r\n        \"hostname\": \"aragorn\",\r\n        \"k\": 32,\r\n        \"tmp\": \"/plotting\",\r\n        \"dst\": \"/plots3\",\r\n        \"wall\": \"5:51\",\r\n        \"phase\": \"2:4\",\r\n        \"size\": \"209.0\",\r\n        \"pid\": \"27181\",\r\n        \"stat\": \"RUN\",\r\n        \"mem\": \"2.0G\",\r\n        \"user\": \"10:20\",\r\n        \"sys\": \"1:07\",\r\n        \"io\": \"0:04\"\r\n    },\r\n    {\r\n        \"plot_id\": \"abcd1234\",\r\n        \"hostname\": \"legolas\",\r\n        \"k\": 32,\r\n        \"tmp\": \"/plotting\",\r\n        \"dst\": \"/plots4\",\r\n        \"wall\": \"5:51\",\r\n        \"phase\": \"2:4\",\r\n        \"size\": \"209.0\",\r\n        \"pid\": \"27181\",\r\n        \"stat\": \"RUN\",\r\n        \"mem\": \"2.0G\",\r\n        \"user\": \"10:20\",\r\n        \"sys\": \"1:07\",\r\n        \"io\": \"0:04\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plottings",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plottings"
+							]
+						},
+						"description": "Creates the current plottings for the given hostname (of first plotting).  Deletes any old plottings."
+					},
+					"response": []
+				},
+				{
+					"name": "Plottings",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plottings/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plottings",
+								"aragorn"
+							]
+						},
+						"description": "Delete a plotting job's status."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Challenges",
+			"item": [
+				{
+					"name": "Challenges",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/challenges",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"challenges"
+							]
+						},
+						"description": "Get all plotting jobs from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Challenges",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"unique_id\": \"aragorn_9334b36cad_2021-06-09 13:14:58.026\",\r\n        \"hostname\": \"aragorn\",\r\n        \"challenge_id\": \"9334b36cad\",\r\n        \"plots_past_filter\": \"1/279\",\r\n        \"proofs_found\": 0,\r\n        \"time_taken\": \"0.02874 s\",\r\n        \"created_at\": \"2021-06-09 13:14:58.026\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/challenges",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"challenges"
+							]
+						},
+						"description": "Creates the current plottings for the given hostname (of first plotting).  Deletes any old plottings."
+					},
+					"response": []
+				},
+				{
+					"name": "Challenges",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/challenges/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"challenges",
+								"aragorn"
+							]
+						},
+						"description": "Delete a plotting job's status."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Wallets",
+			"item": [
+				{
+					"name": "Wallets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/wallets",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"wallets"
+							]
+						},
+						"description": "Get all workers reporting in with their status."
+					},
+					"response": []
+				},
+				{
+					"name": "Wallets",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"details\": \"Wallet height: 412124242\\nSync status: Synced\\nBalances, fingerprint: 29832489032\\nWallet ID 1 type STANDARD_WALLET\\n   -Total Balance: 1e-10 xch (100 mojo)\\n   -Pending Total Balance: 1e-10 xch (100 mojo)\\n   -Spendable: 1e-10 xch (100 mojo)\\n\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/wallets",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"wallets"
+							]
+						},
+						"description": "Add a new Worker."
+					},
+					"response": []
+				},
+				{
+					"name": "Wallet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/wallets/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"wallets",
+								"aragorn"
+							]
+						},
+						"description": "Get a worker by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Wallet",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"details\": \"Wallet height: 412124242\\nSync status: Synced\\nBalances, fingerprint: 29832489032\\nWallet ID 1 type STANDARD_WALLET\\n   -Total Balance: 1e-10 xch (100 mojo)\\n   -Pending Total Balance: 1e-10 xch (100 mojo)\\n   -Spendable: 1e-10 xch (100 mojo)\\n\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/wallets/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"wallets",
+								"aragorn"
+							]
+						},
+						"description": "Update a worker's status by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Wallet",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/wallets/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"wallets",
+								"aragorn"
+							]
+						},
+						"description": "Delete a worker's status by hostname."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Workers",
+			"item": [
+				{
+					"name": "Workers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"workers",
+								""
+							]
+						},
+						"description": "Get all workers reporting in with their status."
+					},
+					"response": []
+				},
+				{
+					"name": "Workers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"mode\": \"fullnode\",\r\n    \"plotting\": \"stopped\",\r\n    \"url\": \"http://aragorn:8927\",\r\n    \"config\": \"{\\\"plotting_enabled\\\": true, \\\"farming_enabled\\\": true, \\\"harvesting_enabled\\\": true, \\\"now\\\": \\\"2021-06-10 16: 03: 19\\\", \\\"machinaris_version\\\": \\\"0.4.0\\\", \\\"machinaris_mode\\\": \\\"fullnode\\\", \\\"chiadog_version\\\": \\\"0.6.0\\\", \\\"plotman_version\\\": \\\"0.3.1\\\", \\\"chia_version\\\": \\\"1.1.6\\\"}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/workers",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"workers"
+							]
+						},
+						"description": "Add a new Worker."
+					},
+					"response": []
+				},
+				{
+					"name": "Worker",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"workers",
+								"aragorn"
+							]
+						},
+						"description": "Get a worker by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Worker",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"mode\": \"fullnode\",\r\n    \"plotting\": \"stopped\",\r\n    \"url\": \"http://aragorn:8927\",\r\n    \"config\": \"{\\\"plotting_enabled\\\": true, \\\"farming_enabled\\\": true, \\\"harvesting_enabled\\\": true, \\\"now\\\": \\\"2021-06-10 16: 03: 19\\\", \\\"machinaris_version\\\": \\\"0.4.0\\\", \\\"machinaris_mode\\\": \\\"fullnode\\\", \\\"chiadog_version\\\": \\\"0.6.0\\\", \\\"plotman_version\\\": \\\"0.3.1\\\", \\\"chia_version\\\": \\\"1.1.6\\\"}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"workers",
+								"aragorn"
+							]
+						},
+						"description": "Update a worker's status by hostname."
+					},
+					"response": []
+				},
+				{
+					"name": "Worker",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"workers",
+								"aragorn"
+							]
+						},
+						"description": "Delete a worker's status by hostname."
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
