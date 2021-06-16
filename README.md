@@ -4,7 +4,7 @@ An easy-to-use, pure-Docker solution, for both plotting and farming the Chia™ 
 
 ![Home](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_home.png)
 
-To get started with Machinaris, follow an install guide for your platform: [Windows](https://github.com/guydavis/machinaris/wiki/Windows), [Linux](https://github.com/guydavis/machinaris/wiki/Linux), [Macintosh](https://github.com/guydavis/machinaris/wiki/MacOS), [Unraid](https://github.com/guydavis/machinaris/wiki/Unraid), and [others](https://github.com/guydavis/machinaris/wiki/Generic).
+To get started with Machinaris, follow an install guide for your platform: [Windows](https://github.com/guydavis/machinaris/wiki/Windows), [Linux](https://github.com/guydavis/machinaris/wiki/Linux), [Macintosh](https://github.com/guydavis/machinaris/wiki/MacOS), [Unraid](https://github.com/guydavis/machinaris/wiki/Unraid), and [others](https://github.com/guydavis/machinaris/wiki/Docker).
 
 ## Plotting View
 
@@ -45,6 +45,12 @@ Details on Blockchain and Connection status as well:
 While the WebUI is useful for quick and easy access, you also have the full power of a shell commandline (CLI) in the running Machinaris container.  All binaries are available to execute advanced commands as shown below:
 
 ![ContainerCLI](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_container_cli.png)
+
+## Worker Management
+
+When Machinaris is [deployed to multiple systems](https://github.com/guydavis/machinaris/wiki/Workers) on your LAN, you can control each plotter, harvester, and farmer - all from a central WebUI on the Machinaris controller.  Configuration, monitoring, and alerting are all available in this centralized portal.
+
+![Workers](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_workers.png)
 
 
 ## Trademark Notice

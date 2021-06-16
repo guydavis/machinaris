@@ -39,8 +39,8 @@ class FarmSummary:
                     bytes_size += int(plot['size'])
                 else:
                     app.logger.debug("Skipping inclusion of {0} size plot: {1}".format( \
-                        utils.sizeof_fmt(plot['size'], plot['path'])))
-            self.plot_size = utils.sizeof_fmt(bytes_size)
+                        converters.sizeof_fmt(plot['size'], plot['path'])))
+            self.plot_size = converters.sizeof_fmt(bytes_size)
         else:
             raise Exception("Not provided either chia stdout lines or a list of plots.")
 

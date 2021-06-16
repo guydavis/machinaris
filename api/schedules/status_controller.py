@@ -7,6 +7,7 @@ import datetime
 import http
 import json
 import os
+import pytz
 import requests
 import socket
 import sqlite3
@@ -34,12 +35,15 @@ def update():
             app.logger.info("Failed to load and send worker status.")
 
 def ping_workers(workers):
+    tz = pytz.timezone('Etc/UTC')
     for worker in workers:
         try:
             app.logger.info("Pinging worker api endpoint: {0}".format(worker.hostname))
             utils.send_get(worker, "/ping/", timeout=3, debug=False)
             worker.latest_ping_result = "Responding"
-            worker.ping_success_at = datetime.datetime.now()
+            worker.ping_success_at = datetime.datetime.now(tz=tz)
+        except requests.exceptions.ConnectTimeout as ex:
+            worker.latest_ping_result = "Unreachable"
         except Exception as ex:
             app.logger.info(traceback.format_exc())
-            worker.latest_ping_result = "Unreachable"
+            worker.latest_ping_result = "Request Error"

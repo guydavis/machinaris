@@ -15,7 +15,7 @@ class DefaultConfig:
     SQLALCHEMY_BINDS = {
         'chiadog':    'sqlite:////root/.chia/chiadog/dbs/chiadog.db',
     }
-    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_ECHO = True if 'FLASK_ENV' in os.environ and os.environ['FLASK_ENV'] == "development" else False
     ETAG_DISABLED = True # https://flask-smorest.readthedocs.io/en/latest/etag.html
     CONTROLLER_SCHEME = 'http'
     CONTROLLER_HOST = os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost'

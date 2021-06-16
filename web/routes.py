@@ -174,10 +174,10 @@ def settings_plotting():
         )
     workers = worker.load_worker_summary()
     selected_worker = None
-    if len(workers.farmers) > 0:
-        selected_worker = workers.farmers[0]
+    if len(workers.plotters) > 0:
+        selected_worker = workers.plotters[0]
     return render_template('settings/plotting.html',
-        workers=workers.farmers, selected_worker=selected_worker, global_config=gc)
+        workers=workers.plotters, selected_worker=selected_worker, global_config=gc)
 
 @app.route('/settings/farming', methods=['GET', 'POST'])
 def settings_farming():
