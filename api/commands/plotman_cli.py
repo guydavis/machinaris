@@ -4,6 +4,7 @@
 
 import datetime
 import os
+import pathlib
 import psutil
 import re
 import signal
@@ -84,10 +85,11 @@ def get_plotman_pid():
     return None
 
 def start_plotman():
-    #app.logger.info("Starting Plotman run...")
+    app.logger.info("Starting Plotman run...")
     try:
+        if len(load_plotting_summary().rows) == 0:  # No plots running
+            clean_tmp_dirs_before_run()  
         logfile = "/root/.chia/plotman/logs/plotman.log"
-        app.logger.info("About to start plotman...")
         proc = Popen("nohup {0} {1} < /dev/tty >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'plot', logfile),
                      shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
         app.logger.info("Completed launch of plotman.")
@@ -95,8 +97,20 @@ def start_plotman():
         app.logger.info('Failed to start Plotman plotting run!')
         app.logger.info(traceback.format_exc())
 
+def clean_tmp_dirs_before_run():
+    try:
+        with open("/root/.chia/plotman/plotman.yaml") as f:
+            config = yaml.safe_load(f)
+            for tmp_dir in config['directories']['tmp']:
+                app.logger.info("No running plot jobs found so deleting {0}/*.tmp before starting plotman.".format(tmp_dir))
+                for p in pathlib.Path(tmp_dir).glob("*.tmp"):
+                    p.unlink()
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+        raise Exception('Updated plotman.yaml failed validation!\n' + str(ex))
+
 def stop_plotman():
-    #app.logger.info("Stopping Plotman run...")
+    app.logger.info("Stopping Plotman run...")
     try:
         os.kill(get_plotman_pid(), signal.SIGTERM)
     except:
