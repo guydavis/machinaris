@@ -53,6 +53,11 @@
             //Call the function when the page loads
             load_config("{{selected_worker.hostname}}");
         });
+
+        function downloadConfig() {
+            worker = $("#worker").val()
+            window.location.href = '/settings/config/' + worker + '_plotman.yaml?type=plotting&worker=' + worker
+        }
     </script>
     <form method="POST">
         <fieldset>
@@ -61,7 +66,8 @@
                 <div class="col-sm-3">
                     <select id="worker" name="worker" class="form-select">
                         {% for worker in workers %}
-                        <option value="{{ worker.hostname }}" {% if worker==selected_worker %}selected{% endif %}>{{ worker.hostname }}</option>
+                        <option value="{{ worker.hostname }}" {% if worker==selected_worker %}selected{% endif %}>{{
+                            worker.hostname }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -70,7 +76,15 @@
                 <textarea style="background: #D3D3D3;" class="form-control fs-6" id="config" name="config" rows="18"
                     style="height:100%;"></textarea>
             </div>
-            <button type="submit" class="btn btn-outline-success">Save</button>
+            <div class="row g-3">
+                <div class="col-sm">
+                    <button type="submit" class="btn btn-outline-success">Save</button>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="text-right btn btn-outline-success"
+                        onclick="downloadConfig(); return false">Download</button>
+                </div>
+            </div>
         </fieldset>
     </form>
 

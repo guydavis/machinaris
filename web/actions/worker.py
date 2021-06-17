@@ -39,7 +39,7 @@ def load_worker_summary():
     return WorkerSummary(workers)
 
 def get_worker_by_hostname(hostname):
-    app.logger.info("Searching for worker with hostname: {0}".format(hostname))
+    #app.logger.info("Searching for worker with hostname: {0}".format(hostname))
     return db.session.query(w.Worker).get(hostname)
 
 def prune_workers_status(hostnames):

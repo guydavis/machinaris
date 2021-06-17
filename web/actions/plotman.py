@@ -41,7 +41,7 @@ def load_plotters():
     return plotters
 
 def start_plotman(plotter):
-    app.logger.info("Starting Plotman run....")
+    app.logger.info("Starting Plotman run...")
     try:
         utils.send_post(plotter, "/actions/", {"service": "plotting","action": "start"}, debug=False)
     except:
@@ -87,7 +87,7 @@ def group_plots_by_worker(plot_ids):
     return plots_by_worker
 
 def stop_plotman(plotter):
-    app.logger.info("Stopping Plotman run....")
+    app.logger.info("Stopping Plotman run...")
     try:
         utils.send_post(plotter, "/actions/", payload={"service": "plotting","action": "stop"}, debug=False)
     except:
