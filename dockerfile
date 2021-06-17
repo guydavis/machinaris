@@ -37,6 +37,8 @@ RUN \
 		wget \
 		cmake \
 		rsync \
+		libsodium-dev \
+		g++ \
 	\
 # cleanup apt cache
 	\
