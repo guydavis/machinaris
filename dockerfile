@@ -1,5 +1,5 @@
 # set ubuntu release version
-ARG UBUNTU_VER="focal"
+ARG UBUNTU_VER="hirsute"
 
 ######## packages stage ###########
 FROM ubuntu:${UBUNTU_VER} as package_stage
@@ -76,6 +76,7 @@ RUN \
        /usr/bin/bash /machinaris/scripts/patch_chiapos.sh ${PATCH_CHIAPOS} \
 	&& . /machinaris/scripts/chiadog_install.sh \
 	&& . /machinaris/scripts/plotman_install.sh \
+	&& . /machinaris/scripts/madmax_install.sh \
 	&& . /machinaris/scripts/machinaris_install.sh \
 	\
 # cleanup apt and pip caches

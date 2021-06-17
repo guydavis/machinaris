@@ -20,7 +20,7 @@ Machinaris installs the [latest stable version](https://github.com/Chia-Network/
 
 ## Alerts
 
-[Chiadog](https://github.com/martomi/chiadog) provides monitoring of the Chia™ log files, ensuring you get notified when important events occur on your system:
+[Chiadog](https://github.com/martomi/chiadog) provides monitoring of the Chia™ log files, ensuring you get notified when important events occur across your farm:
 
 ![Alerts](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/ChiaDog-1-Example.png)
 
