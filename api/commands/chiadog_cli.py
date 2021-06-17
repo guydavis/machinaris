@@ -66,7 +66,7 @@ def dispatch_action(job):
         raise Exception("Unsupported action {0} for monitoring.".format(action))
 
 def start_chiadog():
-    app.logger.info("Starting Chiadog monitoring....")
+    #app.logger.info("Starting Chiadog monitoring....")
     try:
         workdir = "/chiadog"
         configfile = "/root/.chia/chiadog/config.yaml"
@@ -76,19 +76,13 @@ def start_chiadog():
         proc = Popen("/chia-blockchain/venv/bin/python3 -u main.py --config {0}".format(configfile), \
             shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo, cwd="/chiadog")
     except:
+        app.logger.info('Failed to start Chiadog monitoring!')
         app.logger.info(traceback.format_exc())
-        flash('Failed to start Chiadog monitoring!', 'danger')
-        flash('Please see: {0}'.format(logfile), 'warning')
-    else:
-        flash('Chiadog monitoring started.  Notifications will be sent.', 'success')
 
 def stop_chiadog():
-    app.logger.info("Stopping Chiadog monitoring....")
+    #app.logger.info("Stopping Chiadog monitoring....")
     try:
         os.kill(get_chiadog_pid(), signal.SIGTERM)
     except:
+        app.logger.info('Failed to stop Chiadog monitoring!')
         app.logger.info(traceback.format_exc())
-        flash('Failed to stop Chiadog monitoring!', 'danger')
-        flash('Please see /root/.chia/chiadog/logs/chiadog.log', 'warning')
-    else:
-        flash('Chiadog monitoring stopped successfully.  No notifications will be sent!', 'success')

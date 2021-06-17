@@ -110,14 +110,17 @@ def alerts():
     gc = globals.load()
     if request.method == 'POST':
         app.logger.info("Form submitted: {0}".format(request.form))
+        w = worker.get_worker_by_hostname(request.form.get('hostname'))
+        app.logger.info("Worker is: {0}".format(w))
         if request.form.get('action') == 'start':
-            chiadog_cli.start_chiadog()
+            chiadog.start_chiadog(w)
         elif request.form.get('action') == 'stop':
-            chiadog_cli.stop_chiadog()
+            chiadog.stop_chiadog(w)
         else:
             app.logger.info("Unknown alerts form: {0}".format(request.form))
+    farmers = chiadog.load_farmers()
     notifications = chiadog.get_notifications()
-    return render_template('alerts.html', reload_seconds=60, 
+    return render_template('alerts.html', reload_seconds=60, farmers=farmers,
         notifications=notifications, global_config=gc)
 
 @app.route('/wallet')    
@@ -209,8 +212,9 @@ def settings_alerts():
     return render_template('settings/alerts.html',
         workers=workers.farmers, selected_worker=selected_worker, global_config=gc)
 
-@app.route('/settings/config')
-def views_settings_config():
+@app.route('/settings/config', defaults={'path': ''})
+@app.route('/settings/config/<path:path>')
+def views_settings_config(path):
     w = worker.get_worker_by_hostname(request.args.get('worker'))
     config_type = request.args.get('type')
     if config_type == "alerts":
