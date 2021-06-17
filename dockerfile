@@ -23,8 +23,8 @@ RUN \
 		nfs-common \
 		openssl \
 		python3 \
-		python3.8-distutils \
-		python3.8-venv \
+		python3.9-distutils \
+		python3.9-venv \
 		python3-dev \
 		python3-pip \
 		python-is-python3 \
