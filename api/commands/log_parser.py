@@ -61,7 +61,7 @@ def find_plotting_job_log(plot_id):
             with open(os.path.join(str(dir_path), filename)) as logfile:
                 try:
                     head = [next(logfile)
-                            for x in range(10)]  # Check first 10 lines
+                            for x in range(15)]  # Check first 15 lines for ID
                     for line in head:
                         if plot_id in line:
                             return os.path.join(str(dir_path), filename)

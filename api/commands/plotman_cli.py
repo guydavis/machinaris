@@ -177,7 +177,7 @@ def find_plotting_job_log(plot_id):
         if filename.endswith(".log") and not filename.startswith('plotman.'): 
             with open(os.path.join(str(dir_path), filename)) as logfile:
                 try:
-                    head = [next(logfile) for x in range(10)] # Check first 10 lines
+                    head = [next(logfile) for x in range(15)] # Check first 15 lines
                     for line in head:
                         if plot_id in line:
                             return os.path.join(str(dir_path), filename)
