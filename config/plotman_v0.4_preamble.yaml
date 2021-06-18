@@ -19,7 +19,7 @@ user_interface:
         # the curses library fails to update on SIGWINCH signals.  If the
         # `plotman interactive` curses interface does not properly adjust when
         # you resize the terminal window, you can try setting this to True. 
-        use_stty_size: False
+        use_stty_size: True
 
 # Optional custom settings for the subcommands (status, interactive etc)
 commands:

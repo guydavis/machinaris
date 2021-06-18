@@ -6,7 +6,7 @@
 
 echo 'Starting Machinaris...'
 mkdir -p /root/.chia/machinaris/logs
-cd /machinaris-dev
+cd /code/machinaris
 
 /chia-blockchain/venv/bin/gunicorn \
     --reload \

@@ -1,5 +1,5 @@
 # set ubuntu release version
-ARG UBUNTU_VER="focal"
+ARG UBUNTU_VER="hirsute"
 
 ######## packages stage ###########
 FROM ubuntu:${UBUNTU_VER} as package_stage
@@ -23,8 +23,8 @@ RUN \
 		nfs-common \
 		openssl \
 		python3 \
-		python3.8-distutils \
-		python3.8-venv \
+		python3.9-distutils \
+		python3.9-venv \
 		python3-dev \
 		python3-pip \
 		python-is-python3 \
@@ -37,6 +37,8 @@ RUN \
 		wget \
 		cmake \
 		rsync \
+		libsodium-dev \
+		g++ \
 	\
 # cleanup apt cache
 	\
@@ -76,6 +78,7 @@ RUN \
        /usr/bin/bash /machinaris/scripts/patch_chiapos.sh ${PATCH_CHIAPOS} \
 	&& . /machinaris/scripts/chiadog_install.sh \
 	&& . /machinaris/scripts/plotman_install.sh \
+	&& . /machinaris/scripts/madmax_install.sh \
 	&& . /machinaris/scripts/machinaris_install.sh \
 	\
 # cleanup apt and pip caches
