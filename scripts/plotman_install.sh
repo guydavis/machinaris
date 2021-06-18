@@ -4,7 +4,7 @@
 #
 
 cd /chia-blockchain
-PLOTMAN_REPO_URL=https://github.com/guydavis/plotman@main
+PLOTMAN_REPO_URL=https://github.com/guydavis/plotman@guydavis_madmax
 from="${PLOTMAN_GIT_URL:-${PLOTMAN_REPO_URL}}"
 
 echo 'Installing Plotman from:${from}...'

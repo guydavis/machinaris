@@ -40,3 +40,37 @@ body {
 .col-auto.col-md-3.col-xl-2.px-sm-2.px-0.bg-dark {
     border-right: 1px solid #000;
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: #3aac59;
+  border: 0px none #ffffff;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3aac59;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #3aac59;
+}
+::-webkit-scrollbar-track {
+  background: #15171a;
+  border: 0px none #ffffff;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-track:hover {
+  background: #15171a;
+}
+::-webkit-scrollbar-track:active {
+  background: #15171a;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
