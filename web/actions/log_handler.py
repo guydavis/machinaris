@@ -26,4 +26,4 @@ def get_log_lines(worker, log_type, log_id):
         return response.content.decode('utf-8')
     except:
         app.logger.info(traceback.format_exc())
-        flash('Failed to load log file from {0}'.format(worker.hostname), 'danger')
+        return 'Failed to load log file from {0}'.format(worker.hostname)

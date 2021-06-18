@@ -5,6 +5,7 @@
 import datetime
 import logging
 import os
+import re
 import shutil
 import socket
 import sqlite3
@@ -17,13 +18,13 @@ from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
 from subprocess import Popen, TimeoutExpired, PIPE
 from os import environ, path
 
-# Hard-coded verson number for now
-MACHINARIS_VERSION = "0.4.0"
-
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
+MADMAX_BINARY = '/usr/bin/chia_plot'
+CHIADOG_PATH = '/chiadog'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
+
 
 def load():
     cfg = {}
@@ -32,19 +33,24 @@ def load():
     cfg['farming_enabled'] = farming_enabled()
     cfg['harvesting_enabled'] = harvesting_enabled()
     cfg['now'] = datetime.datetime.now(tz=None).strftime("%Y-%m-%d %H:%M:%S")
-    cfg['machinaris_version'] = MACHINARIS_VERSION
+    cfg['machinaris_version'] = load_machinaris_version()
     cfg['machinaris_mode'] = os.environ['mode']
     cfg['chiadog_version'] = load_chiadog_version()
     cfg['plotman_version'] = load_plotman_version()
     cfg['chia_version'] = load_chia_version()
-    cfg['is_controller'] = "localhost" == (os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost')
+    cfg['madmax_version'] = load_madmax_version()
+    cfg['is_controller'] = "localhost" == (
+        os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost')
     return cfg
+
 
 def get_stats_db():
     db = getattr(g, '_stats_database', None)
     if db is None:
-        db = g._stats_database = sqlite3.connect('/root/.chia/machinaris/dbs/stats.db')
+        db = g._stats_database = sqlite3.connect(
+            '/root/.chia/machinaris/dbs/stats.db')
     return db
+
 
 def is_setup():
     # First check if plotter and farmer_pk,pool_pk provided.
@@ -63,11 +69,11 @@ def is_setup():
             "No 'keys' environment variable set for this run. Set an in-container path to mnemonic.txt.")
         return False
     keys = os.environ['keys']
-    #logging.debug("Trying with full keys='{0}'".format(keys))
+    # logging.debug("Trying with full keys='{0}'".format(keys))
     foundKey = False
     for key in keys.split(':'):
         if os.path.exists(key.strip()):
-            #logging.debug("Found key file at: '{0}'".format(key.strip()))
+            # logging.debug("Found key file at: '{0}'".format(key.strip()))
             foundKey = True
         else:
             logging.info("No such keys file: '{0}'".format(key.strip()))
@@ -90,11 +96,14 @@ def get_key_paths():
 def farming_enabled():
     return "mode" in os.environ and ("farmer" in os.environ['mode'] or "fullnode" == os.environ['mode'])
 
+
 def harvesting_enabled():
     return "mode" in os.environ and ("harvester" in os.environ['mode'] or "fullnode" == os.environ['mode'])
 
+
 def plotting_enabled():
     return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode'])
+
 
 def archiving_enabled():
     if not plotting_enabled():
@@ -108,6 +117,7 @@ def archiving_enabled():
     except:
         logger.info("Failed to read plotman.yaml so archiving_enabled=False.")
         logger.info(traceback.format_exc())
+
 
 last_chia_version = None
 last_chia_version_load_time = None
@@ -154,8 +164,8 @@ def load_plotman_version():
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_plotman_version
     proc = Popen("{0} version".format(PLOTMAN_SCRIPT),
-                    stdout=PIPE, stderr=PIPE, shell=True,
-                    start_new_session=True, creationflags=0)
+                 stdout=PIPE, stderr=PIPE, shell=True,
+                 start_new_session=True, creationflags=0)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -182,7 +192,7 @@ def load_chiadog_version():
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_chiadog_version
     proc = Popen("/chia-blockchain/venv/bin/python3 -u main.py --version",
-                 stdout=PIPE, stderr=PIPE, shell=True, cwd="/chiadog")
+                 stdout=PIPE, stderr=PIPE, shell=True, cwd=CHIADOG_PATH)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -192,11 +202,60 @@ def load_chiadog_version():
     if errs:
         abort(500, description=errs.decode('utf-8'))
     last_chiadog_version = outs.decode('utf-8').strip()
-    logging.info(last_chiadog_version)
     if last_chiadog_version.startswith('v'):
         last_chiadog_version = last_chiadog_version[len('v'):].strip()
     last_chiadog_version_load_time = datetime.datetime.now()
     return last_chiadog_version
+
+
+last_madmax_version = None
+last_madmax_version_load_time = None
+
+
+def load_madmax_version():
+    global last_madmax_version
+    global last_madmax_version_load_time
+    if last_madmax_version and last_madmax_version_load_time >= \
+            (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
+        return last_madmax_version
+    proc = Popen("{0} --help".format(MADMAX_BINARY),
+                 stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        abort(500, description="The timeout is expired!")
+    if errs:
+        abort(500, description=errs.decode('utf-8'))
+    last_madmax_version = "?"
+    for line in outs.decode('utf-8').splitlines():
+        m = re.search(
+            r'^Multi-threaded pipelined Chia k32 plotter - (\w+)$', line, flags=re.IGNORECASE)
+        if m:
+            last_madmax_version = m.group(1)
+    last_madmax_version_load_time = datetime.datetime.now()
+    return last_madmax_version
+
+
+last_machinaris_version = None
+last_machinaris_version_load_time = None
+
+
+def load_machinaris_version():
+    global last_machinaris_version
+    global last_machinaris_version_load_time
+    if last_machinaris_version and last_machinaris_version_load_time >= \
+            (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
+        return last_machinaris_version
+    try:
+        with open('/machinaris/VERSION') as version_file:
+            last_machinaris_version = version_file.read().strip()
+    except:
+        logging.info(traceback.format_exc())
+        last_machinaris_version = "?"
+    last_machinaris_version_load_time = datetime.datetime.now()
+    return last_machinaris_version
 
 
 def get_disks(disk_type):

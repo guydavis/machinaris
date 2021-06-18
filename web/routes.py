@@ -74,7 +74,6 @@ def plotting():
         elif request.form.get('action') in ['suspend', 'resume', 'kill']:
             action = request.form.get('action')
             plot_ids = request.form.getlist('plot_id')
-            app.logger.info("Actioning plotman {0}".format(action))
             plotman.action_plots(action, plot_ids)
         else:
             app.logger.info("Unknown plotting form: {0}".format(request.form))
@@ -109,15 +108,14 @@ def plots_check():
 def alerts():
     gc = globals.load()
     if request.method == 'POST':
-        app.logger.info("Form submitted: {0}".format(request.form))
         w = worker.get_worker_by_hostname(request.form.get('hostname'))
-        app.logger.info("Worker is: {0}".format(w))
         if request.form.get('action') == 'start':
             chiadog.start_chiadog(w)
         elif request.form.get('action') == 'stop':
             chiadog.stop_chiadog(w)
         else:
             app.logger.info("Unknown alerts form: {0}".format(request.form))
+        return redirect(url_for('alerts')) # Force a redirect to allow time to update status
     farmers = chiadog.load_farmers()
     notifications = chiadog.get_notifications()
     return render_template('alerts.html', reload_seconds=60, farmers=farmers,

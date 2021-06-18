@@ -3,6 +3,7 @@
 #
 
 import datetime
+import itertools
 import os
 import pathlib
 import psutil
