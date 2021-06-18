@@ -174,18 +174,18 @@ def find_plotting_job_log(plot_id):
     directory = os.fsencode(dir_path)
     for file in os.listdir(directory):
         filename = os.fsdecode(file)
-        if filename.endswith(".log") and not filename.startswith('plotman.'): 
-            with open(os.path.join(str(dir_path), filename)) as logfile:
-                try:
-                    head = [next(logfile) for x in range(15)] # Check first 15 lines
-                    for line in head:
+        try:
+            if filename.endswith(".log") and not filename.startswith('plotman.'):
+                with open(os.path.join(str(dir_path), filename)) as logfile:
+                    for line in itertools.islice(logfile, 0, 15):
                         if plot_id in line:
                             return os.path.join(str(dir_path), filename)
-                except:
-                    pass  # probably too short a file
-            continue
-        else:
-            continue
+                continue
+            else:
+                continue
+        except:
+            app.logger.info("find_plotting_job_log: Skipping error when reading head of {0}".format(filename))
+            app.logger.info(traceback.format_exc())
     return None
 
 def analyze(plot_file):
