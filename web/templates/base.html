@@ -128,19 +128,22 @@
 
                 {% block content %}{% endblock %}
 
-                <footer class="pt-3 mt-4">
+                <footer class="pt-1 mt-1">
                         <div class="row">
                           <div class="col">
-                            <small><i>Loaded: {{ global_config.now }}</i></small>
+                            <small><i>{{ global_config.now }}</i></small>
                           </div>
                           <div class="col">
                             <small><i>Chia™ {{ global_config.chia_version }}</i></small>
                           </div>
                           <div class="col">
-                            <small><i>Chia™ Dog {{ global_config.chiadog_version }}</i></small>
+                            <small><i>Chiadog {{ global_config.chiadog_version }}</i></small>
                           </div>
                           <div class="col">
                             <small><i title="mode={{ global_config.machinaris_mode }}">Machinaris {{ global_config.machinaris_version }}</i></small>
+                          </div>
+                          <div class="col">
+                            <small><i>Madmax {{ global_config.madmax_version }}</i></small>
                           </div>
                           <div class="col">
                             <small><i>Plotman {{ global_config.plotman_version }}</i></small>

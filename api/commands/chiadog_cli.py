@@ -36,8 +36,9 @@ def save_config(config):
         app.logger.info(traceback.format_exc())
         raise Exception('Updated config.yaml failed validation!\n' + str(ex))
     else:
-        # TODO Restart chiadog process
-        pass
+        if get_chiadog_pid():
+            stop_chiadog()
+            start_chiadog()
 
 def get_chiadog_pid():
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
@@ -71,10 +72,8 @@ def start_chiadog():
         workdir = "/chiadog"
         configfile = "/root/.chia/chiadog/config.yaml"
         logfile = "/root/.chia/chiadog/logs/chiadog.log"
-        log_fd = os.open(logfile, os.O_RDWR|os.O_CREAT)
-        log_fo = os.fdopen(log_fd, "a+")
-        proc = Popen("/chia-blockchain/venv/bin/python3 -u main.py --config {0}".format(configfile), \
-            shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo, cwd="/chiadog")
+        proc = Popen("nohup /chia-blockchain/venv/bin/python3 -u main.py --config {0} >> {1} 2>&1 &".format(configfile, logfile), \
+            shell=True, universal_newlines=True, stdout=None, stderr=None, cwd="/chiadog")
     except:
         app.logger.info('Failed to start Chiadog monitoring!')
         app.logger.info(traceback.format_exc())

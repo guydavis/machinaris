@@ -7,7 +7,7 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Chia™](https://www.chia.net/): the distributed cryptocurrency project.
 * [Plotman](https://github.com/ericaltendorf/plotman): a parallel plotting manager.
 * [Chiadog](https://github.com/martomi/chiadog): a log monitor with alerting.
-* [Madmax](https://github.com/madMAx43v3r/chia-plotter): a faster plotter.
+* [Madmax](https://github.com/madMAx43v3r/chia-plotter): a pipelined, multi-threaded plotter.
 
 ## Web Application
 * [Flask](https://flask.palletsprojects.com/en/2.0.x/): Web UI application server.

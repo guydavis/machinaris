@@ -14,7 +14,7 @@ To get started with Machinaris, follow an install guide for your platform: [Wind
 
 ## Farming View
 
-Machinaris installs the [latest stable version](https://github.com/Chia-Network/chia-blockchain/wiki/INSTALL#ubuntudebian) and applies a [multithreading performance patch](https://github.com/xrobau/chiapos) for faster plotting.
+Machinaris bundles the [latest official Chia version](https://github.com/Chia-Network/chia-blockchain/wiki/INSTALL#ubuntudebian) inside the Docker image.
 
 ![Farming](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_farming.png)
 

@@ -38,12 +38,12 @@ def ping_workers(workers):
     tz = pytz.timezone('Etc/UTC')
     for worker in workers:
         try:
-            app.logger.info("Pinging worker api endpoint: {0}".format(worker.hostname))
+            #app.logger.info("Pinging worker api endpoint: {0}".format(worker.hostname))
             utils.send_get(worker, "/ping/", timeout=3, debug=False)
             worker.latest_ping_result = "Responding"
             worker.ping_success_at = datetime.datetime.now(tz=tz)
         except requests.exceptions.ConnectTimeout as ex:
-            worker.latest_ping_result = "Unreachable"
+            worker.latest_ping_result = "Connect Timeout"
         except Exception as ex:
             app.logger.info(traceback.format_exc())
-            worker.latest_ping_result = "Request Error"
+            worker.latest_ping_result = "Connect Error"

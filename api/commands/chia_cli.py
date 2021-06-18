@@ -89,17 +89,17 @@ def load_wallet_show():
     while True:
         i = child.expect(["Wallet height:.*\r\n", "Choose wallet key:.*\r\n", "No online backup file found.*\r\n"])
         if i == 0:
-            app.logger.info("wallet show returned 'Wallet height...' so collecting details.")
+            app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
             wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
             break
         elif i == 1:
-            app.logger.info("wallet show got index prompt so selecting #{0}".format(wallet_index))
+            app.logger.debug("wallet show got index prompt so selecting #{0}".format(wallet_index))
             child.sendline("{0}".format(wallet_index))
             wallet_index += 1
         elif i == 2:
             child.sendline("S")
         else:
-            app.logger.info("pexpect returned {0}".format(i))
+            app.logger.debug("pexpect returned {0}".format(i))
             wallet_show += "ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
     return chia.Wallet(wallet_show)
 
@@ -131,9 +131,9 @@ def add_connection(connection):
     try:
         hostname,port = connection.split(':')
         if socket.gethostbyname(hostname) == hostname:
-            app.logger.info('{} is a valid IP address'.format(hostname))
+            app.logger.debug('{} is a valid IP address'.format(hostname))
         elif socket.gethostbyname(hostname) != hostname:
-            app.logger.info('{} is a valid hostname'.format(hostname))
+            app.logger.debug('{} is a valid hostname'.format(hostname))
         proc = Popen("{0} show --add-connection {1}".format(CHIA_BINARY, connection), stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=90)
@@ -198,7 +198,7 @@ def generate_key(key_path):
         flash('Unable to save mnemonic to {0}'.format(key_path), 'danger')
         return False
     else:
-        app.logger.info("Store mnemonic output: {0}".format(outs.decode('utf-8')))
+        #app.logger.info("Store mnemonic output: {0}".format(outs.decode('utf-8')))
         try:
             mnemonic_words = open(key_path,'r').read().split()
             if len(mnemonic_words) != 24:
