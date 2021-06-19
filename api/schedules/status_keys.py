@@ -32,7 +32,6 @@ def update():
                 "hostname": hostname,
                 "details": public_keys.text.replace('\r', ''),
             }
-            app.logger.info(payload)
             utils.send_post('/keys/', payload, debug=False)
         except:
             app.logger.info("Failed to load and send public keys status.")

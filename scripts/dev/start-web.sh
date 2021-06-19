@@ -1,7 +1,7 @@
 #!/bin/env bash
 #
 # Launch WebUI in DEV mode from within container.  
-# NOT IN GIT.  Runs in foreground of shell.
+# Runs in foreground of shell.
 #
 
 echo 'Starting Machinaris...'

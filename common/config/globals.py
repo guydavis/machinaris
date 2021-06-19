@@ -111,7 +111,7 @@ def archiving_enabled():
     try:
         with open("/root/.chia/plotman/plotman.yaml") as fp:
             for line in fp.readlines():
-                if line.startswith("archiving"):
+                if line.strip().startswith("archiving"):
                     return True
         return False
     except:

@@ -9,6 +9,7 @@ import traceback
 from flask import g
 
 from common.config import globals
+from common.utils import converters
 from api import app
 from api.commands import chia_cli
 
@@ -30,11 +31,12 @@ def close_connection(exception):
 
 
 def collect():
-    if globals.plotting_enabled():
-        app.logger.info(
-            "Skipping farm summary stats collection on plotting-only instance.")
+    if not globals.farming_enabled():
+        app.logger.debug(
+            "Skipping farm summary stats collection as not farming on this Machinaris instance.")
         return
     with app.app_context():
+        app.logger.debug("Collecting stats about farms.")
         current_datetime = datetime.datetime.now().strftime("%Y%m%d%H%M")
         farm_summary = chia_cli.load_farm_summary()
         db = get_db()
@@ -46,7 +48,7 @@ def collect():
             app.logger.info(traceback.format_exc())
         try:
             cur.execute("INSERT INTO stat_plots_size (value, created_at) VALUES (?,?)",
-                        (utils.str_to_gibs(farm_summary.plots_size),current_datetime,))
+                        (converters.str_to_gibs(farm_summary.plots_size),current_datetime,))
         except:
             app.logger.info(traceback.format_exc())
         if farm_summary.status == "Farming":  # Only collect if fully synced
@@ -57,12 +59,12 @@ def collect():
                 app.logger.info(traceback.format_exc())
             try:
                 cur.execute("INSERT INTO stat_netspace_size (value, created_at) VALUES (?,?)",
-                            (utils.str_to_gibs(farm_summary.netspace_size),current_datetime,))
+                            (converters.str_to_gibs(farm_summary.netspace_size),current_datetime,))
             except:
                 app.logger.info(traceback.format_exc())
             try:
                 cur.execute("INSERT INTO stat_time_to_win (value, created_at) VALUES (?,?)",
-                            (utils.etw_to_minutes(farm_summary.time_to_win),current_datetime,))
+                            (converters.etw_to_minutes(farm_summary.time_to_win),current_datetime,))
             except:
                 app.logger.info(traceback.format_exc())
         db.commit()

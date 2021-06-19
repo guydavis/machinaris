@@ -23,5 +23,3 @@ app.config.from_envvar('API_SETTINGS_FILE', silent=True)
 
 api = extensions.create_api(app)
 views.register_blueprints(api)
-
-from api import schedules

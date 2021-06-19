@@ -61,6 +61,7 @@ echo 'Starting Machinaris API server...'
     --bind 0.0.0.0:8927 --timeout 90 \
     --log-level=${LOG_LEVEL} \
     --workers=2 \
+    --config api/gunicorn.conf.py \
     api:app > /root/.chia/machinaris/logs/apisrv.log 2>&1 &
 
 # Kill gunicorn if already running to allow restart

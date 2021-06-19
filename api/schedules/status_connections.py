@@ -32,7 +32,6 @@ def update():
                 "hostname": hostname,
                 "details": connections.text.replace('\r', ''),
             }
-            app.logger.info(payload)
             utils.send_post('/connections/', payload, debug=False)
         except:
             app.logger.info("Failed to load and send connections status.")

@@ -38,10 +38,8 @@ class Workers(MethodView):
             new_item['updated_at'] = dt.datetime.now()
             new_item['latest_ping_result'] = item.latest_ping_result
             new_item['ping_success_at'] = item.ping_success_at
-            app.logger.info("Updating...")
             WorkerSchema().update(item, new_item)
         else: # insert
-            app.logger.info("Inserting...")
             item = Worker(**new_item)
         db.session.add(item)
         db.session.commit()

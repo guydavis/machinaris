@@ -38,10 +38,6 @@ class FarmSummary:
         else:
             self.display_status = self.status
 
-    def __str__(self): 
-        return "%s plots with %s chia taking up %s of total netspace: %s" % \
-            (self.plot_count, self.total_chia, self.plot_size, self.netspace_size)
-
 class FarmPlots:
 
      def __init__(self, plots):
