@@ -81,6 +81,8 @@ def get_log_lines(log_type, log_id=None):
             log_file = find_plotting_job_log(log_id)
         else:
             log_file = "/root/.chia/plotman/logs/plotman.log"
+    elif log_type == "archiving":
+        log_file = "/root/.chia/plotman/logs/archiver.log"
     elif log_type == "farming":
         log_file = "/root/.chia/mainnet/log/debug.log"
     if not log_file or not os.path.exists(log_file):

@@ -22,7 +22,7 @@ blp = Blueprint(
 class Logs(MethodView):
 
     def get(self):
-        response = make_response(json.dumps(['alerts', 'farming', 'plotting']), 200)
+        response = make_response(json.dumps(['alerts', 'farming', 'plotting', 'archiving']), 200)
         response.mimetype = "application/json"
         return response
 

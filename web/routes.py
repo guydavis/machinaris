@@ -234,7 +234,7 @@ def logs():
 def logfile():
     w = worker.get_worker_by_hostname(request.args.get('hostname'))
     log_type = request.args.get("log")
-    if log_type in [ 'alerts', 'farming', 'plotting']:
+    if log_type in [ 'alerts', 'farming', 'plotting', 'archiving']:
         log_id = request.args.get("log_id")
         return log_handler.get_log_lines(w, log_type, log_id)
     else:

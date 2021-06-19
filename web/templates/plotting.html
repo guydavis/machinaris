@@ -101,13 +101,13 @@
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <a class="dropdown-item text-white text-decoration-none" href="#"\
-                            onclick='PlottingAction("{{ plotter.hostname }}","archiving","start", "starting");return false;'>>
+                        <a class="dropdown-item text-white text-decoration-none" href="#"
+                            onclick='PlottingAction("{{ plotter.hostname }}","archiving","start", "starting");return false;'>
                             {% if plotter.archiving_status == 'stopped' %}
                             <i class="fs-4 bi-text-indent-left"></i> 
                             <span class="align-text-bottom">Start Archiving</span>
                             {% else %}
-                            onclick='PlottingAction("{{ plotter.hostname }}","archiving","stop", "stopping");return false;'>>
+                            onclick='PlottingAction("{{ plotter.hostname }}","archiving","stop", "stopping");return false;'>
                             <i class="fs-4 bi-text-indent-left"></i> 
                             <span class="align-text-bottom">Stop Archiving</span>
                             {% endif %}
@@ -115,9 +115,9 @@
                     </li>
                     <li>
                         <a class="dropdown-item text-white text-decoration-none" href="#"
-                            onclick='PlottingLogs("archiving", "{{ plotter.hostname }}");return false;'>\>
+                            onclick='PlottingLogs("archiving", "{{ plotter.hostname }}");return false;'>
                             <i class="fs-4 bi-text-indent-left"></i>
-                            <span class="align-text-bottom"></span>View Archiving Logs</span> 
+                            <span class="align-text-bottom"></span>View Archiving Logs</span>
                         </a>
                     </li>
                     {% endif %}
