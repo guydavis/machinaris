@@ -35,7 +35,7 @@ if [ "${mode}" != "plotter" ]; then
     cd /chiadog
     chiadog_pid=$(pidof python3)
     if [ ! -z $chiadog_pid ]; then
-        python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
+        /chia-blockchain/venv/bin/python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
     fi
 fi
 
