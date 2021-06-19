@@ -54,13 +54,13 @@ def get_stats_db():
 
 def is_setup():
     # First check if plotter and farmer_pk,pool_pk provided.
-    if "mode" in os.environ and os.environ['mode'] == 'plotter':
+        if "mode" in os.environ and os.environ['mode'] == 'plotter':
         if "farmer_pk" in os.environ and os.environ['farmer_pk'] != 'null' and \
                 "pool_pk" in os.environ and os.environ['pool_pk'] != 'null':
             logging.debug(
                 "Found plotter mode with farmer_pk and pool_pk provided.")
             return True  # When plotting don't need private in mnemonic.txt
-    if "mode" in os.environ and os.environ['mode'] == 'harvester':
+    if "mode" in os.environ and 'harvester' in os.environ['mode']:
         # Harvester doesn't require a mnemonic private key as farmer's ca already imported.
         return True
     # All other modes, we should have at least one keys path
