@@ -102,8 +102,8 @@
                     </li>
                     <li>
                         <a class="dropdown-item text-white text-decoration-none" href="#"
+                        {% if plotter.archiving_status == 'stopped' %}
                             onclick='PlottingAction("{{ plotter.hostname }}","archiving","start", "starting");return false;'>
-                            {% if plotter.archiving_status == 'stopped' %}
                             <i class="fs-4 bi-text-indent-left"></i> 
                             <span class="align-text-bottom">Start Archiving</span>
                             {% else %}
