@@ -26,7 +26,7 @@ def update():
                 "mode": os.environ['mode'],
                 "status": farm_summary.status,
                 "plot_count": farm_summary.plot_count,
-                "plots_size": converters.str_to_gibs(farm_summary.plot_size),
+                "plots_size": converters.str_to_gibs(farm_summary.plots_size),
                 "total_chia": farm_summary.total_chia,
                 "netspace_size": converters.str_to_gibs(farm_summary.netspace_size),
                 "expected_time_to_win": farm_summary.time_to_win

@@ -20,7 +20,6 @@ TABLES = ['stat_plots_total_used', 'stat_plots_disk_used', 'stat_plots_disk_free
 
 DELETE_OLD_STATS_AFTER_DAYS = 2
 
-
 def get_db():
     db = getattr(g, '_stats_database', None)
     if db is None:
@@ -78,6 +77,7 @@ def store_disk_stats(db, current_datetime, disk_type):
 
 def collect():
     with app.app_context():
+        app.logger.debug("Collecting stats about disks.")
         gc = globals.load()
         db = get_db()
         delete_old_stats(db)

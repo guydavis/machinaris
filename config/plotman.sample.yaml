@@ -25,7 +25,7 @@ user_interface:
 commands:
         interactive:
                 # Set it to False if you don't want to auto start plotting when 'interactive' is ran.
-                # You can override this value from the command line, type "plotman interactive -h" for details
+                # You can override this value from the command line, type plotman interactive -h for details
                 autostart_plotting: False
                 autostart_archiving: False
 
@@ -51,7 +51,7 @@ directories:
         #tmp_overrides:
                 # In this example, /mnt/tmp/00 is larger than the other tmp
                 # dirs and it can hold more plots than the default.
-        #        "/mnt/tmp/00":
+        #        /mnt/tmp/00:
         #                tmpdir_max_jobs: 5
 
         # Optional: tmp2 directory.  If specified, will be passed to
@@ -130,8 +130,8 @@ scheduling:
 
 
 # Plotting parameters.  These are pass-through parameters to chia plots create.
-# See documentation at
-# https://github.com/Chia-Network/chia-blockchain/wiki/CLI-Commands-Reference#create
+# Chia: https://github.com/Chia-Network/chia-blockchain/wiki/CLI-Commands-Reference#create
+# Madmax: https://github.com/madMAx43v3r/chia-plotter#usage
 plotting:
         # Your public keys: farmer and pool - Required for madmax, optional for chia with mnemonic.txt
         # farmer_pk: ...

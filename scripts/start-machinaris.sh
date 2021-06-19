@@ -35,7 +35,7 @@ if [ "${mode}" != "plotter" ]; then
     cd /chiadog
     chiadog_pid=$(pidof python3)
     if [ ! -z $chiadog_pid ]; then
-        python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
+        /chia-blockchain/venv/bin/python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
     fi
 fi
 
@@ -61,6 +61,7 @@ echo 'Starting Machinaris API server...'
     --bind 0.0.0.0:8927 --timeout 90 \
     --log-level=${LOG_LEVEL} \
     --workers=2 \
+    --config api/gunicorn.conf.py \
     api:app > /root/.chia/machinaris/logs/apisrv.log 2>&1 &
 
 # Kill gunicorn if already running to allow restart

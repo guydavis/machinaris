@@ -60,7 +60,7 @@ def is_setup():
             logging.debug(
                 "Found plotter mode with farmer_pk and pool_pk provided.")
             return True  # When plotting don't need private in mnemonic.txt
-    if "mode" in os.environ and os.environ['mode'] == 'harvester':
+    if "mode" in os.environ and 'harvester' in os.environ['mode']:
         # Harvester doesn't require a mnemonic private key as farmer's ca already imported.
         return True
     # All other modes, we should have at least one keys path
@@ -111,7 +111,7 @@ def archiving_enabled():
     try:
         with open("/root/.chia/plotman/plotman.yaml") as fp:
             for line in fp.readlines():
-                if line.startswith("archiving"):
+                if line.strip().startswith("archiving"):
                     return True
         return False
     except:

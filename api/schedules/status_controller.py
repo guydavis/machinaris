@@ -43,7 +43,11 @@ def ping_workers(workers):
             worker.latest_ping_result = "Responding"
             worker.ping_success_at = datetime.datetime.now(tz=tz)
         except requests.exceptions.ConnectTimeout as ex:
-            worker.latest_ping_result = "Connect Timeout"
+            app.logger.info(str(ex))
+            worker.latest_ping_result = "Connection Timeout"
+        except requests.exceptions.ConnectionError as ex:
+            app.logger.info(str(ex))
+            worker.latest_ping_result = "Connection Refused"
         except Exception as ex:
-            app.logger.info(traceback.format_exc())
-            worker.latest_ping_result = "Connect Error"
+            app.logger.info(str(ex))
+            worker.latest_ping_result = "Connection Error"

@@ -1,13 +1,13 @@
 #!/bin/env bash
 #
 # Launch WebUI in DEV mode from within container.  
-# NOT IN GIT.  Runs in foreground of shell.
+# Runs in foreground of shell.
 #
 
 echo 'Starting Machinaris...'
 mkdir -p /root/.chia/machinaris/logs
 cd /code/machinaris
-LOG_LEVEL='debug'
+LOG_LEVEL='info'
 RELOAD='--reload'
 
 # To enable SSL, use the Chia self-signed cert
@@ -18,4 +18,5 @@ RELOAD='--reload'
     --bind 0.0.0.0:8927 --timeout 90 \
     --log-level=${LOG_LEVEL} \
     --workers=2 \
+    --config api/gunicorn.conf.py \
     api:app

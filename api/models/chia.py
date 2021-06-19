@@ -22,7 +22,7 @@ class FarmSummary:
                 elif "Plot count" in line:
                     self.plot_count = line.split(':')[1].strip()
                 elif "Total size of plots" in line:
-                    self.plot_size = line.split(':')[1].strip()
+                    self.plots_size = line.split(':')[1].strip()
                 elif "Estimated network space" in line:
                     self.calc_netspace_size(line.split(':')[1].strip())
                 elif "Expected time to win" in line:
@@ -40,7 +40,7 @@ class FarmSummary:
                 else:
                     app.logger.debug("Skipping inclusion of {0} size plot: {1}".format( \
                         converters.sizeof_fmt(plot['size'], plot['path'])))
-            self.plot_size = converters.sizeof_fmt(bytes_size)
+            self.plots_size = converters.sizeof_fmt(bytes_size)
         else:
             raise Exception("Not provided either chia stdout lines or a list of plots.")
 
@@ -65,10 +65,6 @@ class FarmSummary:
             app.logger.info("Unable to split network size value: {0}".format(netspace_size))
             self.display_netspace_size = self.netspace_size
         
-    def __str__(self): 
-        return "%s plots with %s chia taking up %s of total netspace: %s" % \
-            (self.plot_count, self.total_chia, self.plot_size, self.netspace_size)
-
 class FarmPlots:
 
      def __init__(self, entries):

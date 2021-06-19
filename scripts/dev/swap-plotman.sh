@@ -1,7 +1,6 @@
 #!/bin/env bash
 #
-# Launch WebUI in DEV mode from within container.  
-# NOT IN GIT.  Runs in foreground of shell.
+# Used to swap to my dev copy of Plotman for editing
 #
 
 echo 'Swapping to development Plotman...'

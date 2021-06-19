@@ -15,4 +15,4 @@ class FarmSchema(AutoSchema):
 class FarmQueryArgsSchema(Schema):
     hostname = ma.fields.Str()
     plot_count = ma.fields.Str()
-    plot_size = ma.fields.Str()
+    plots_size = ma.fields.Str()

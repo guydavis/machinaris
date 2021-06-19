@@ -24,7 +24,6 @@ class Analysis(MethodView):
     def post(self):
         try:
             body = json.loads(request.data)
-            app.logger.info("BODY IS: {0}".format(body))
             service = body['service']
             action = body['action']
         except:
