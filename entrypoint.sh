@@ -16,8 +16,12 @@ chia init 2>&1 > /root/.chia/mainnet/log/init.log
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
-  echo "Adding key at path: ${k}"
-  chia keys add -f ${k} > /dev/null
+  if [ -f ${k} ]; then
+    echo "Adding key at path: ${k}"
+    chia keys add -f ${k} > /dev/null
+  else
+    echo "Skipping 'chia keys add' as no file found at: ${k}"
+  fi
 done
 
 # Loop over provided list of completed plot directories
