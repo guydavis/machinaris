@@ -140,7 +140,12 @@ def save_config(plotter, config):
 def analyze(plot_file, plotters):
     # Don't know which plotter might have the plot result so try them in-turn
     for plotter in plotters:
+        if plotter.latest_ping_result != "Responding":
+            app.logger.info("Skipping analyze call to {0} as last ping was: {1}".format( \
+                plotter.hostname, plotter.latest_ping_result))
+            continue
         try:
+            app.logger.info("Trying {0} for analyze....".format(plotter.hostname))
             payload = {"service":"plotting", "action":"analyze", "plot_file": plot_file }
             response = utils.send_post(plotter, "/analysis/", payload, debug=False)
             if response.status_code == 200:
@@ -149,7 +154,6 @@ def analyze(plot_file, plotters):
                 app.logger.info("Plotter on {0} did not have plot log for {1}".format(plotter.hostname, plot_file))
             else:
                 app.logger.info("Plotter on {0} returned an unexpected error: {1}".format(plotter.hostname, response.status_code))
-            return response.content.decode('utf-8')
         except:
             app.logger.info(traceback.format_exc())
     return make_response("Sorry, not plotting job log found.  Perhaps plot was made elsewhere?", 200)
