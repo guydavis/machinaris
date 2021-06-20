@@ -1,36 +1,22 @@
-# Default/example plotman.yaml configuration file
-
+# Learn more about Plotman at https://github.com/ericaltendorf/plotman
 # https://github.com/ericaltendorf/plotman/wiki/Configuration#versions
 version: [1]
 
 logging:
-        # One directory in which to store all plot job logs (the STDOUT/
-        # STDERR of all plot jobs).  In order to monitor progress, plotman
-        # reads these logs on a regular basis, so using a fast drive is
-        # recommended.
-        plots: /home/chia/chia/logs
-        # transfers:
-        # application:
+        # DO NOT CHANGE THIS IN-CONTAINER PATH USED BY MACHINARIS!
+        plots: /root/.chia/plotman/logs
 
-# Options for display and rendering
 user_interface:
-        # Call out to the `stty` program to determine terminal size, instead of
-        # relying on what is reported by the curses library.   In some cases,
-        # the curses library fails to update on SIGWINCH signals.  If the
-        # `plotman interactive` curses interface does not properly adjust when
-        # you resize the terminal window, you can try setting this to True. 
-        use_stty_size: True
+        use_stty_size: False
 
-# Optional custom settings for the subcommands (status, interactive etc)
 commands:
         interactive:
-                # Set it to False if you don't want to auto start plotting when 'interactive' is ran.
-                # You can override this value from the command line, type plotman interactive -h for details
                 autostart_plotting: False
                 autostart_archiving: False
-
+  
 # Where to plot and log.
 directories:
+
         # One or more directories to use as tmp dirs for plotting.  The
         # scheduler will use all of them and distribute jobs among them.
         # It assumes that IO is independent for each one (i.e., that each
@@ -38,6 +24,7 @@ directories:
         #
         # If multiple directories share a common prefix, reports will
         # abbreviate and show just the uniquely identifying suffix.
+        # REMEMBER ALL PATHS ARE IN-CONTAINER, THEY MAP TO HOST PATHS
         tmp:
                 - /plotting
 
@@ -49,78 +36,53 @@ directories:
         # Currently support override parameters:
         #     - tmpdir_max_jobs
         #tmp_overrides:
-                # In this example, /mnt/tmp/00 is larger than the other tmp
+                # In this example, /plotting3 is larger than the other tmp
                 # dirs and it can hold more plots than the default.
-        #        /mnt/tmp/00:
-        #                tmpdir_max_jobs: 5
+                #/plotting3:
+                #        tmpdir_max_jobs: 5
 
         # Optional: tmp2 directory.  If specified, will be passed to
-        # chia plots create as -2.  Only one tmp2 directory is supported.
-        # For type:madmax, this is recommended as 110 GB of RAM disk or similar
-        # tmp2: /mnt/tmp/a
+        # the chia and madmax plotters as the '-2' param.
+        # tmp2: /plotting2
 
-        # Optional: A list of one or more directories; the scheduler will
-        # use all of them.  These again are presumed to be on independent
-        # physical devices so writes (plot jobs) and reads (archivals) can
-        # be scheduled to minimize IO contention.
-        # 
-        # If dst is commented out, the tmp directories will be used as the
-        # buffer.
+        # One or more directories; the scheduler will use all of them.
+        # These again are presumed to be on independent physical devices,
+        # so writes (plot jobs) and reads (archivals) can be scheduled
+        # to minimize IO contention.
+        # REMEMBER ALL PATHS ARE IN-CONTAINER, THEY MAP TO HOST PATHS
         dst:
                 - /plots
 
-# Archival configuration.  Optional; if you do not wish to run the
-# archiving operation, comment this section out.  Almost everyone
-# should be using the archival feature.  It is meant to distribute
-# plots among multiple disks filling them all.  This can be done both
-# to local and to remote disks.
-#
-# As of v0.4, archiving commands are highly configurable.  The basic
-# configuration consists of a script for checking available disk space
-# and another for actually transferring plots.  Each can be specified
-# as either a path to an existing script or inline script contents.
-# It is expected that most people will use existing recipes and will
-# adjust them by specifying environment variables that will set their
-# system specific values.  These can be provided to the scripts via
-# the `env` key.  plotman will additionally provide `source` and
-# `destination` environment variables to the transfer script so it
-# knows the specifically selected items to process.  plotman also needs
-# to be able to generally detect if a transfer process is already
-# running.  To be able to identify externally launched transfers, the
-# process name and an argument prefix to match must be provided.  Note
-# that variable substitution of environment variables including those
-# specified in the env key can be used in both process name and process
-# argument prefix elements but that they use the python substitution
-# format.
-#
-# Complete example: https://github.com/ericaltendorf/plotman/wiki/Archiving
+# See: https://github.com/guydavis/machinaris/wiki/Plotman#archiving
 #archiving:
-#  target: local_rsync
-#  env:
-#    command: rsync
-#    site_root: /farm/sites
+        #target: rsyncd
+        #env:
+                #site_root: /mnt/disks
+                #user: root
+                #host: aragorn
+                #rsync_port: 12000
+                #site: disks
 
 # Plotting scheduling parameters
 scheduling:
         # Run a job on a particular temp dir only if the number of existing jobs
-        # before [tmpdir_stagger_phase_major : tmpdir_stagger_phase_minor]
+        # before tmpdir_stagger_phase_major tmpdir_stagger_phase_minor
         # is less than tmpdir_stagger_phase_limit.
         # Phase major corresponds to the plot phase, phase minor corresponds to
         # the table or table pair in sequence, phase limit corresponds to
-        # the number of plots allowed before [phase major : phase minor].
-        # e.g, with default settings, a new plot will start only when your plot
-        # reaches phase [2 : 1] on your temp drive. This setting takes precidence
-        # over global_stagger_m
+        # the number of plots allowed before [phase major, phase minor]
         tmpdir_stagger_phase_major: 2
         tmpdir_stagger_phase_minor: 1
         # Optional: default is 1
         tmpdir_stagger_phase_limit: 1
 
         # Don't run more than this many jobs at a time on a single temp dir.
-        tmpdir_max_jobs: 2
+        # Increase for staggered plotting by chia, leave at 1 for madmax sequential plotting
+        tmpdir_max_jobs: 1
 
         # Don't run more than this many jobs at a time in total.
-        global_max_jobs: 4
+        # Increase for staggered plotting by chia, leave at 1 for madmax sequential plotting
+        global_max_jobs: 1 
 
         # Don't run any jobs (across all temp dirs) more often than this, in minutes.
         global_stagger_m: 30
@@ -130,22 +92,20 @@ scheduling:
 
 
 # Plotting parameters.  These are pass-through parameters to chia plots create.
-# Chia: https://github.com/Chia-Network/chia-blockchain/wiki/CLI-Commands-Reference#create
-# Madmax: https://github.com/madMAx43v3r/chia-plotter#usage
+# https://github.com/Chia-Network/chia-blockchain/wiki/CLI-Commands-Reference#create
 plotting:
-        # Your public keys: farmer and pool - Required for madmax, optional for chia with mnemonic.txt
-        # farmer_pk: ...
-        # pool_pk: ...
+        # See Keys page on left for public keys. These are both required for madmax.
+        # They are optional for chia if using mnemonic.txt, else required
+        #farmer_pk: ...
+        #pool_pk: ...
 
-        # If you enable Chia, plot in *parallel* with higher tmpdir_max_jobs and global_max_jobs
-        type: chia           # The stock plotter: https://github.com/Chia-Network/chia-blockchain
-        k: 32                # k-size of plot, leave at 32 most of the time
-        e: False             # Use -e plotting option
-        n_threads: 2         # Threads per job
-        n_buckets: 128       # Number of buckets to split data into
-        job_buffer: 3389     # Per job memory
-
-        # If you enable MadMax, plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
-        #type: madmax          # Madmax plotter: https://github.com/madMAx43v3r/chia-plotter
+        #type: madmax          # Either stock 'chia' plotter or 'madmax' plotter 
         #n_threads: 4          # Default is 4, crank up if you have many cores
         #n_buckets: 256        # Default is 256
+
+        type: chia            # The stock Chia plotter
+        k: 32                 # The k-size of final plot to create
+        e: False              # Use -e plotting option
+        n_threads: 4          # Threads per job
+        n_buckets: 128        # Number of buckets to split data into
+        job_buffer: 3389      # Per job memory
