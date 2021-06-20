@@ -12,7 +12,7 @@ cd /chia-blockchain
 . ./activate
 
 mkdir -p /root/.chia/mainnet/log
-chia init 2>&1 > /root/.chia/mainnet/log/init.log
+chia init >> /root/.chia/mainnet/log/init.log 2>&1 
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do

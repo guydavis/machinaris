@@ -19,7 +19,7 @@ fi
 
 # Perform database migration, if any
 cd /machinaris/api
-FLASK_APP=__init__.py flask db upgrade
+FLASK_APP=__init__.py flask db upgrade >> /root/.chia/machinaris/logs/migration.log 2>&1 
 
 # If old databases weren't managed by flask-migrate before, copy over old data
 if [ ! -f /root/.chia/machinaris/dbs/.managed ] && [ -f /root/.chia/machinaris/dbs/stats.db.old ]; then
