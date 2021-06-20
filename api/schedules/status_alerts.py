@@ -23,8 +23,8 @@ first_run = True
 
 def update():
     global first_run
-    if not globals.farming_enabled():
-        #app.logger.info("Skipping alerts status collection on non-farming instance.")
+    if not globals.farming_enabled() and not globals.harvesting_enabled():
+        #app.logger.info("Skipping alerts status collection on plotting-only instance.")
         return
     with app.app_context():
         try:

@@ -177,6 +177,8 @@ def load_plotman_version():
     last_plotman_version = outs.decode('utf-8').strip()
     if last_plotman_version.startswith('plotman'):
         last_plotman_version = last_plotman_version[len('plotman'):].strip()
+    if last_plotman_version.endswith('+dev'):
+        last_plotman_version = last_plotman_version[:-len('+dev')].strip()
     last_plotman_version_load_time = datetime.datetime.now()
     return last_plotman_version
 

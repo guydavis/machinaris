@@ -13,3 +13,4 @@ wheel
 apscheduler
 requests
 pexpect
+flask-migrate

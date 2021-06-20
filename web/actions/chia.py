@@ -58,12 +58,19 @@ def load_keys_show():
     return Keys(keys)
 
 def load_farmers():
+    worker_summary = wk.load_worker_summary()
     farmers = []
-    for farmer in wk.load_worker_summary().farmers:
-        farmers.append({
-            'hostname': farmer.hostname,
-            'farming_status': farmer.farming_status().lower()
-        })
+    for farmer in worker_summary.workers:
+        if farmer in worker_summary.farmers:
+            farmers.append({
+                'hostname': farmer.hostname,
+                'farming_status': farmer.farming_status().lower()
+            })
+        elif farmer in worker_summary.harvesters:
+            farmers.append({
+                'hostname': farmer.hostname,
+                'farming_status': 'harvesting'
+            })
     return farmers
 
 def load_config(farmer):
