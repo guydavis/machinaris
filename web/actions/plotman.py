@@ -79,7 +79,7 @@ def group_plots_by_worker(plot_ids):
         hostname = None
         for plot in all_plottings.rows:
             if plot['plot_id'] == plot_id:
-                hostname = plot['plotter']
+                hostname = plot['worker']
         if hostname:
             if not hostname in plots_by_worker:
                 plots_by_worker[hostname] = []
