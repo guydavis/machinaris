@@ -14,7 +14,7 @@ class PlottingSummary:
             if "plot id" in line.strip(): # The header row
                 self.columns = line.replace('plot id', 'plot_id').strip().split()
                 # Plotman has two columns both named 'tmp' so change the 2nd one to 'size'
-                self.columns[6] = 'size'
+                self.columns[7] = 'size'
             elif re.match(r'^(\w){8}\s.*$', line.strip()): # A plotting row, so create as dictionary
                 row = {}
                 values = line.split()
@@ -23,10 +23,7 @@ class PlottingSummary:
                     row[self.columns[i]] = values[i]
                     i += 1
                 self.rows.append(row)
-            #else: # Dump non-plotting output
-            #    app.logger.info("PLOTMAN_STATUS: {0}".format(line))
         self.calc_status()
-        #app.logger.debug("plotman_pid: {0}".format(plotman_pid))
         if plotman_pid:
             self.plotman_running = True
         else:

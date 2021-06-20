@@ -7,7 +7,8 @@ from web import app
 class PlottingSummary:
 
     def __init__(self, plottings):
-        self.columns = ['plotter',
+        self.columns = ['worker',
+                        'plotter',
                         'plot_id',
                         'k',
                         'tmp',
@@ -25,7 +26,8 @@ class PlottingSummary:
         self.rows = []
         for plotting in plottings:
             self.rows.append({
-                'plotter': plotting.hostname,
+                'worker': plotting.hostname,
+                'plotter': plotting.plotter,
                 'plot_id': plotting.plot_id,
                 'k': plotting.k,
                 'tmp': plotting.tmp,

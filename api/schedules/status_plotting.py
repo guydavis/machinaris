@@ -26,6 +26,7 @@ def update():
                 payload.append({
                     "plot_id": plot['plot_id'],
                     "hostname": hostname,
+                    "plotter": plot['plotter'],
                     "k": plot['k'],
                     "tmp": plot['tmp'],
                     "dst": plot['dst'],

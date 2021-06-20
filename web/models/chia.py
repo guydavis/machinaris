@@ -41,11 +41,11 @@ class FarmSummary:
 class FarmPlots:
 
      def __init__(self, plots):
-        self.columns = ['farmer', 'plot_id',  'dir', 'plot', 'create_date', 'size']
+        self.columns = ['worker', 'plot_id',  'dir', 'plot', 'create_date', 'size']
         self.rows = []
         for plot in plots:
             self.rows.append({ \
-                'farmer': plot.hostname, \
+                'worker': plot.hostname, \
                 'plot_id': plot.plot_id, \
                 'dir': plot.dir,  \
                 'plot': plot.file,  \
