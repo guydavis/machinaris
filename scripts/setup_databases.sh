@@ -3,6 +3,7 @@
 # Use flask-migrate to manage the different sqlite dbs
 #
 
+mkdir -p /root/.chia/machinaris/logs
 mkdir -p /root/.chia/machinaris/dbs
 mkdir -p /root/.chia/chiadog/dbs
 
