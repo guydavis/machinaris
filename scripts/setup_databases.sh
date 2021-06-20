@@ -7,12 +7,12 @@ mkdir -p /root/.chia/machinaris/dbs
 mkdir -p /root/.chia/chiadog/dbs
 
 # If old databases not managed by flask-migrate yet
-if [ ! -f /root/.chia/machinaris/dbs/.managed ]; then
+if [ ! -f /root/.chia/machinaris/dbs/.managed ] && [ -f /root/.chia/machinaris/dbs/stats.db ]; then
     cd /root/.chia/machinaris/dbs
     rm -f machinaris.db
     mv stats.db stats.db.old
 fi
-if [ ! -f /root/.chia/chiadog/dbs/.managed ]; then
+if [ ! -f /root/.chia/chiadog/dbs/.managed ] && [ -f /root/.chia/chiadog/dbs/chiadog.db ]; then
     cd /root/.chia/chiadog/dbs
     mv chiadog.db chiadog.db.old
 fi
@@ -22,7 +22,7 @@ cd /machinaris/api
 FLASK_APP=__init__.py flask db upgrade
 
 # If old databases weren't managed by flask-migrate before, copy over old data
-if [ ! -f /root/.chia/machinaris/dbs/.managed ]; then
+if [ ! -f /root/.chia/machinaris/dbs/.managed ] && [ -f /root/.chia/machinaris/dbs/stats.db.old ]; then
     sqlite3 /root/.chia/machinaris/dbs/stats.db.old <<EOF
     ATTACH DATABASE '/root/.chia/machinaris/dbs/stats.db' AS new_db;
     INSERT INTO new_db.stat_plots_disk_used SELECT * FROM stat_plots_disk_used;
@@ -37,12 +37,13 @@ if [ ! -f /root/.chia/machinaris/dbs/.managed ]; then
     INSERT INTO new_db.stat_plotting_disk_free SELECT * FROM stat_plotting_disk_free;
     INSERT INTO new_db.stat_total_chia SELECT * FROM stat_total_chia;
 EOF
-    touch /root/.chia/machinaris/dbs/.managed
 fi
-if [ ! -f /root/.chia/chiadog/dbs/.managed ]; then
+touch /root/.chia/machinaris/dbs/.managed
+
+if [ ! -f /root/.chia/chiadog/dbs/.managed ] && [ -f /root/.chia/chiadog/dbs/chiadog.db.old ]; then
     sqlite3 /root/.chia/chiadog/dbs/chiadog.db.old <<EOF
     ATTACH DATABASE '/root/.chia/chiadog/dbs/chiadog.db' AS new_db;
     INSERT INTO new_db.notification SELECT * FROM notification;
 EOF
-    touch /root/.chia/chiadog/dbs/.managed
 fi
+touch /root/.chia/chiadog/dbs/.managed
