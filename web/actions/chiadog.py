@@ -23,12 +23,14 @@ def load_config(farmer):
     return utils.send_get(farmer, "/configs/alerts", debug=False).content
 
 def load_farmers():
+    worker_summary = wk.load_worker_summary()
     farmers = []
-    for farmer in wk.load_worker_summary().farmers:
-        farmers.append({
-            'hostname': farmer.hostname,
-            'monitoring_status': farmer.monitoring_status().lower()
-        })
+    for worker in worker_summary.workers:
+        if worker in worker_summary.farmers or worker in worker_summary.harvesters:
+            farmers.append({
+                'hostname': worker.hostname,
+                'monitoring_status': worker.monitoring_status().lower()
+            })
     return farmers
 
 def save_config(farmer, config):

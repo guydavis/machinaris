@@ -13,6 +13,7 @@ class DefaultConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = 'sqlite:////root/.chia/machinaris/dbs/machinaris.db'
     SQLALCHEMY_BINDS = {
+        'stats':      'sqlite:////root/.chia/machinaris/dbs/stats.db',
         'chiadog':    'sqlite:////root/.chia/chiadog/dbs/chiadog.db',
     }
     SQLALCHEMY_ECHO = True if 'FLASK_ENV' in os.environ and os.environ['FLASK_ENV'] == "development" else False

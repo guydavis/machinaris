@@ -50,8 +50,8 @@ def get_remote_url():
     )
 
 def get_hostname():
-    if 'hostname' in os.environ:
-        hostname = os.environ['hostname']
+    if 'worker_address' in os.environ:
+        hostname = os.environ['worker_address']
     else:
         hostname = socket.gethostname()
     return hostname

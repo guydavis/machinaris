@@ -12,6 +12,6 @@ cd /code/machinaris
     --reload \
     --bind 0.0.0.0:8926 \
     --timeout 90 \
-    --log-level=debug \
+    --log-level=info \
     --workers=2 \
     web:app

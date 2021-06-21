@@ -35,8 +35,9 @@ if [ "${mode}" != "plotter" ]; then
     cd /chiadog
     chiadog_pid=$(pidof python3)
     if [ ! -z $chiadog_pid ]; then
-        /chia-blockchain/venv/bin/python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
+        kill $chiadog_pid
     fi
+    /chia-blockchain/venv/bin/python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
 fi
 
 mkdir -p /root/.chia/machinaris/config
@@ -76,5 +77,7 @@ echo 'Starting Machinaris Web server...'
     --workers=2 \
     web:app > /root/.chia/machinaris/logs/webui.log 2>&1 &
 
-
 echo 'Completed startup.  Browse to port 8926.'
+
+# For later dev if needed during troubleshooting
+chmod 755 /machinaris/scripts/dev/*.sh

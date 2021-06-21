@@ -29,17 +29,17 @@ from . import worker as wk
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 
 def load_farm_summary():
-    farms = db.session.query(f.Farm).all()
+    farms = db.session.query(f.Farm).order_by(f.Farm.hostname).all()
     return FarmSummary(farms)
 
 def load_plots_farming():
-    plots = db.session.query(p.Plot).all()
+    plots = db.session.query(p.Plot).order_by(p.Plot.created_at.desc()).all()
     return FarmPlots(plots)
 
 def recent_challenges():
-    minute_ago = (datetime.datetime.now() - datetime.timedelta(minutes=2)).strftime("%Y-%m-%d %H:%M:%S.000")
+    minute_ago = (datetime.datetime.now() - datetime.timedelta(seconds=80)).strftime("%Y-%m-%d %H:%M:%S.000")
     challenges = db.session.query(c.Challenge).filter(c.Challenge.created_at >= minute_ago).order_by(c.Challenge.created_at.desc())
-    return BlockchainChallenges(challenges[:8]) # Last minute challenge
+    return BlockchainChallenges(challenges)
 
 def load_wallets():
     wallets = db.session.query(w.Wallet).all()
@@ -58,12 +58,19 @@ def load_keys_show():
     return Keys(keys)
 
 def load_farmers():
+    worker_summary = wk.load_worker_summary()
     farmers = []
-    for farmer in wk.load_worker_summary().farmers:
-        farmers.append({
-            'hostname': farmer.hostname,
-            'farming_status': farmer.farming_status().lower()
-        })
+    for farmer in worker_summary.workers:
+        if farmer in worker_summary.farmers:
+            farmers.append({
+                'hostname': farmer.hostname,
+                'farming_status': farmer.farming_status().lower()
+            })
+        elif farmer in worker_summary.harvesters:
+            farmers.append({
+                'hostname': farmer.hostname,
+                'farming_status': 'harvesting'
+            })
     return farmers
 
 def load_config(farmer):

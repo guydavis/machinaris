@@ -11,6 +11,7 @@ class Plotting(db.Model):
 
     plot_id = sa.Column(sa.String(length=8), primary_key=True)
     hostname = sa.Column(sa.String(length=255), nullable=False)
+    plotter = sa.Column(sa.String(length=64), nullable=True)
     k = sa.Column(sa.Integer, nullable=False)
     tmp = sa.Column(sa.String(length=255), nullable=False)
     dst = sa.Column(sa.String(length=255), nullable=False)

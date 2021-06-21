@@ -11,7 +11,7 @@ class Worker(db.Model):
     __tablename__ = "workers"
 
     hostname = sa.Column(sa.String(length=255), primary_key=True)
-    mode = sa.Column(sa.String(length=40), nullable=False)
+    mode = sa.Column(sa.String(length=64), nullable=False)
     services = sa.Column(sa.String, nullable=False)
     url = sa.Column(sa.String, nullable=False)
     config = sa.Column(sa.String, nullable=False)

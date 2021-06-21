@@ -1,6 +1,6 @@
 # machinaris
 
-An easy-to-use, pure-Docker solution, for both plotting and farming the Chia™ cryptocurrency.  Currently in [*beta*](https://github.com/users/guydavis/packages/container/package/machinaris)!
+An easy-to-use, pure-Docker solution, for both plotting and farming the Chia™ cryptocurrency.  Currently in [*beta*](https://github.com/guydavis/machinaris/wiki/Releases)!
 
 ![Home](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_home.png)
 
@@ -29,6 +29,8 @@ Machinaris bundles the [latest official Chia version](https://github.com/Chia-Ne
 Simplified setup allows you to either import your existing key mnemonic or generate a new one directly in the Machinaris WebUI on first launch:
 
 ![Setup](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_setup.png)
+
+That's for fullnode (default) and farmer modes. However, for [harvester](https://github.com/guydavis/machinaris/wiki/Docker#harvester-only) you only need the farmer's CA certificates and for [plotter](https://github.com/guydavis/machinaris/wiki/Docker#plotter-only) only your pool and farmer public keys.
 
 ## Configuration
 
