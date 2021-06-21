@@ -53,6 +53,7 @@ def gather_services_status():
     chiadog_status = "disabled"
     if gc['farming_enabled']:
         chia_farm_status = chia_cli.load_farm_summary().status
+    if gc['farming_enabled'] or gc['harvesting_enabled']:
         if chiadog_cli.get_chiadog_pid():
             chiadog_status = "running"
         else:
