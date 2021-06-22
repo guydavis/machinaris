@@ -20,7 +20,9 @@ blp = Blueprint(
 class Logs(MethodView):
 
     def get(self):
-        response = make_response("Pong!", 200)
+        response = make_response(
+            """Pong!
+            """, 200)
         response.mimetype = "plain/text"
         return response
 

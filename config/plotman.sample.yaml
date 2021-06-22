@@ -1,6 +1,6 @@
 # Learn more about Plotman at https://github.com/ericaltendorf/plotman
 # https://github.com/ericaltendorf/plotman/wiki/Configuration#versions
-version: [1]
+version: [2]
 
 logging:
         # DO NOT CHANGE THIS IN-CONTAINER PATH USED BY MACHINARIS!
@@ -91,21 +91,24 @@ scheduling:
         polling_time_s: 20
 
 
-# Plotting parameters.  These are pass-through parameters to chia plots create.
-# https://github.com/Chia-Network/chia-blockchain/wiki/CLI-Commands-Reference#create
+# Configure the plotter.  See: https://github.com/guydavis/machinaris/wiki/Plotman#plotting
 plotting:
-        # See Keys page on left for public keys. These are both required for madmax.
-        # They are optional for chia if using mnemonic.txt, else required
-        #farmer_pk: ...
-        #pool_pk: ...
+        #farmer_pk: YOUR_FARMER_PUBLIC_KEY
+        #pool_pk: YOUR_POOL_PUBLIC_KEY
 
-        #type: madmax          # Either stock 'chia' plotter or 'madmax' plotter 
-        #n_threads: 4          # Default is 4, crank up if you have many cores
-        #n_buckets: 256        # Default is 256
+        # If you enable 'chia', plot in *parallel* with higher tmpdir_max_jobs and global_max_jobs
+        # If you enable 'madmax', plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
+        type: chia
 
-        type: chia            # The stock Chia plotter
-        k: 32                 # The k-size of final plot to create
-        e: False              # Use -e plotting option
-        n_threads: 4          # Threads per job
-        n_buckets: 128        # Number of buckets to split data into
-        job_buffer: 3389      # Per job memory
+        # The chia plotter: https://github.com/Chia-Network/chia-blockchain
+        chia:
+                k: 32                # k-size of plot, leave at 32 most of the time
+                e: False             # Disable bitfield back sorting (default is True) 
+                n_threads: 2         # Threads per job
+                n_buckets: 128       # Number of buckets to split data into
+                job_buffer: 3389     # Per job memory
+
+        # The madmax plotter: https://github.com/madMAx43v3r/chia-plotter
+        madmax:
+                n_threads: 4          # Default is 4, crank up if you have many cores
+                n_buckets: 256        # Default is 256

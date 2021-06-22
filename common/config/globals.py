@@ -19,6 +19,8 @@ from subprocess import Popen, TimeoutExpired, PIPE
 from os import environ, path
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
+PLOTMAN_CONFIG = '/root/.chia/plotman/plotman.yaml'
+PLOTMAN_SAMPLE = '/machinaris/config/plotman.sample.yaml'
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 MADMAX_BINARY = '/usr/bin/chia_plot'
 CHIADOG_PATH = '/chiadog'
@@ -115,8 +117,8 @@ def archiving_enabled():
                     return True
         return False
     except:
-        logger.info("Failed to read plotman.yaml so archiving_enabled=False.")
-        logger.info(traceback.format_exc())
+        logging.info("Failed to read plotman.yaml so archiving_enabled=False.")
+        logging.info(traceback.format_exc())
 
 
 last_chia_version = None
@@ -163,6 +165,10 @@ def load_plotman_version():
     if last_plotman_version and last_plotman_version_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_plotman_version
+    if not os.path.exists(PLOTMAN_CONFIG):
+        logging.info("No existing plotman config found, so copying sample to: {0}" \
+                .format(PLOTMAN_CONFIG))
+        shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_CONFIG)
     proc = Popen("{0} version".format(PLOTMAN_SCRIPT),
                  stdout=PIPE, stderr=PIPE, shell=True,
                  start_new_session=True, creationflags=0)

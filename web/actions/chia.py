@@ -119,7 +119,7 @@ def generate_key(key_path):
     if os.path.exists(key_path) and os.stat(key_path).st_size > 0:
         app.logger.info('Skipping key generation as file exists and is NOT empty! {0}'.format(key_path))
         flash('Skipping key generation as file exists and is NOT empty!', 'danger')
-        flash('key_path={0}'.format(key_path), 'warning')
+        flash('In-container path: {0}'.format(key_path), 'warning')
         return False
     proc = Popen("{0} keys generate".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
     try:
@@ -176,6 +176,55 @@ def generate_key(key_path):
         flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
         flash(str(ex), 'warning')
         return False
+    return True
+
+def import_key(key_path, mnemonic):
+    if len(mnemonic.strip().split()) != 24:
+        flash('Did not receive a 24-word mnemonic seed phrase!', 'danger')
+        return False
+    if os.path.exists(key_path) and os.stat(key_path).st_size > 0:
+        app.logger.info('Skipping key import as file exists and is NOT empty! {0}'.format(key_path))
+        flash('Skipping key import as file exists and is NOT empty!', 'danger')
+        flash('In container path: {0}'.format(key_path), 'warning')
+        return False
+    with open(key_path, 'w') as keyfile:
+        keyfile.write('{0}\n'.format(mnemonic))
+    proc = Popen("{0} keys add -f {0}".format(CHIA_BINARY, key_path), stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        app.logger.info(traceback.format_exc())
+        flash('Timed out while adding key!', 'danger')
+        flash(str(ex), 'warning')
+        return False
+    if errs:
+        app.logger.info("{0}".format(errs.decode('utf-8')))
+        flash('Unable to import provided mnemonic seed phrase!', 'danger')
+        flash(errs.decode('utf-8'), 'warning')
+        return False
+        flash('{0}'.format(" ".join(mnemonic_words)), 'info')
+    if os.environ['mode'].startswith('farmer'):
+        cmd = 'farmer-only'
+    else:
+        cmd = 'farmer'
+    proc = Popen("{0} start {1} -r".format(CHIA_BINARY, cmd), stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        app.logger.info(traceback.format_exc())
+        flash('Timed out while starting farmer! Try restarting the Machinaris container.', 'danger')
+        flash(str(ex), 'warning')
+        return False
+    if errs:
+        app.logger.info("{0}".format(errs.decode('utf-8')))
+        flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
+        flash(str(ex), 'warning')
+        return False
+    flash('Welcome! Your mnemonic was placed at {0} in container. Keep it secret! Keep it safe!'.format(key_path), 'success')
     return True
 
 def remove_connection(node_id, ip):

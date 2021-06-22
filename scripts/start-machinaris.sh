@@ -9,14 +9,8 @@ sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/confi
 
 echo 'Configuring Plotman...'
 mkdir -p /root/.chia/plotman/logs
-# Temporarily migrate users with old < v0.4 configs
-if [ -f /root/.chia/plotman/plotman.yaml ]; then
-    grep -q "version:" /root/.chia/plotman/plotman.yaml
-    if [ $? != 0 ]; then
-        . /machinaris/scripts/plotman_migrate.sh
-    fi
-fi
-cp -n /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.yaml
+# Check for existing, old versions of plotman.yaml and migrate them, else use default
+. /machinaris/scripts/plotman_migrate.py
 if [ ${farmer_pk} != 'null' ]; then
     sed -i "s/^.*farmer_pk:.*$/        farmer_pk: ${farmer_pk}/g" /root/.chia/plotman/plotman.yaml
 fi

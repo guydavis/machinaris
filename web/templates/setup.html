@@ -17,12 +17,15 @@
     <main>
         <div class="container py-4">
 
-            <div class="p-5 mb-4 bg-light rounded-3">
+            <div class="p-5 mb-4 bg-light rounded-5">
                 <div class="container-fluid py-5">
-                    <h1 class="display-4">
-                        <img src="{{ url_for('static', filename='error.png') }}" style= />
-                        <span>Uh-oh! No Keys Found</span>
-                    </h1>
+                    <img src="{{ url_for('static', filename='machinaris.png') }}"
+                        style="height:128px; width:128px; float:left; margin-left:50px" />
+                    <div class="text-center" style="margin-top: 20px">
+                        <div class="display-4">Welcome to Machinaris!</div>
+                        <div>An easy-to-use WebUI for Chia plotting and farming.</div>
+                    </div>
+                    <br clear="all" />
                     <hr class="my-4">
 
                     <div>
@@ -41,26 +44,31 @@
                             {% endwith %}
                         </div>
 
-                        <p>No valid keys were found at these path(s) in-container: </p>
-                        <ul>
-                            {% for key_path in key_paths: %}
-                            <li>{{ key_path }}</li>
-                            {% endfor %}
-                        </ul>
-                        <p>To correct this, either add your existing key mnemonic(s)
-                            into the file(s) above, where mapped to your host filesystem.<br />
-                            Then <b>restart</b> the Machinaris container.</p>
+                        <p>To get started with Machinaris as a Chia fullnode or farmer, either import your existing
+                            24-word
+                            mnemonic seed phrase: </p>
+                        <!-- Sample mnemonic to hint with, key long since thrown-away -->
+                        <input class="form-control me-2" id="mnemonic" name="mnemonic" type="text"
+                            placeholder="north divorce holiday whisper inquiry toy rare minute father ostrich surprise runway ill episode dance rather unaware concert sunset maid gather grain gift wire"
+                            aria-label="Import Key">
+                        <br />
+                        <button class="btn btn-outline-success" type="submit" id="btnImport">Import Existing
+                            Key</button>
+                        <h3 style="padding-top: 25px;">OR</h3>
 
-                        <h3>OR</h3>
-
-                        <p>You can generate a brand-new mnemonic key that will be written to:
-                            <b>{{ key_paths[0] }}</b>
+                        <p>You can generate a brand-new mnemonic phrase that will be written to this in-container
+                            path: {{ key_paths[0] }}
                         </p>
-
-                        <form method="POST" id="main-form">
-                            <button class="btn btn-outline-success" type="submit" id="btnFetch">Generate New
-                                Key</button>
+                        <button class="btn btn-outline-success" type="submit" id="btnGenerate">Generate New Key</button>
                         </form>
+
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <p>NOTE: If you would prefer to instead import your mnenmoic yourself at the command-line, 
+                            see the Wiki for details.</p>
                     </div>
                 </div>
             </div>
@@ -72,11 +80,31 @@
 
     <script>
         $(document).ready(function () {
-            $("#btnFetch").click(function () {
+            $("#btnImport").click(function () {
+                var mnemonic = $('#mnemonic').val().trim();
+                if (!mnemonic) {
+                    alert("Please provide a non-empty mnemonic seed phrase to import.");
+                    return;
+                }
+                if (mnemonic.split(' ').length != 24) {
+                    alert("Please exactly 24 words in the mnemonic seed phrase to import.");
+                    return;
+                }
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Importing...`
+                );
+                $('#main-form').append('<input type="hidden" id="action" name="action" value="import" />');
+                $("#main-form").submit();
+            });
+        })
+        $(document).ready(function () {
+            $("#btnGenerate").click(function () {
                 $(this).prop("disabled", true);
                 $(this).html(
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Generating...`
                 );
+                $('#main-form').append('<input type="hidden" id="action" name="action" value="generate" />');
                 $("#main-form").submit();
             });
         })
