@@ -105,15 +105,10 @@
             </tbody>
         </table>
     </div>
-    {% elif chiadog_running %}
-    <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
-        <h6>No notifications from Chiadog yet... so check back soon.</h6>
-        <h6>Expect at least a summary notification once daily.</h6>
-    </div>
     {% else %}
     <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
-        <h6>No notifications found and Chiadog monitoring is off.</h6>
-        <h6>Please configure "Settings | Alerts" and then Start Chiadog</h6>
+        <h6>No notifications from Chiadog yet... so check back soon.</h6>
+        <h6>Expect at least a summary notification once daily as long as running above.</h6>
     </div>
     {% endif %}
 

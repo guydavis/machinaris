@@ -159,9 +159,9 @@ def generate_key(key_path):
         except:
                 flash('{0} was unreadable or not found.'.format(key_path), 'danger')
                 return False
-        flash('Welcome! A new key has been generated at {0} within the container filesystem. See the ' + \
+        flash('Welcome! A new key has been generated at {0} within the container filesystem. See the '.format(key_path) + \
         '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
-            'details.'.format(key_path), 'success')
+            'details.', 'success')
         flash('{0}'.format(" ".join(mnemonic_words)), 'info')
     if os.environ['mode'].startswith('farmer'):
         cmd = 'farmer-only'
@@ -195,6 +195,7 @@ def import_key(key_path, mnemonic):
         return False
     with open(key_path, 'w') as keyfile:
         keyfile.write('{0}\n'.format(mnemonic))
+    time.sleep(3)
     proc = Popen("{0} keys add -f {0}".format(CHIA_BINARY, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -210,7 +211,8 @@ def import_key(key_path, mnemonic):
         flash('Unable to import provided mnemonic seed phrase!', 'danger')
         flash(errs.decode('utf-8'), 'warning')
         return False
-        flash('{0}'.format(" ".join(mnemonic_words)), 'info')
+    if out:
+        app.logger.info(out.decode('utf-8'))
     if os.environ['mode'].startswith('farmer'):
         cmd = 'farmer-only'
     else:
@@ -230,9 +232,11 @@ def import_key(key_path, mnemonic):
         flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
         flash(str(ex), 'warning')
         return False
-    flash('Welcome! Your mnemonic was imported as {0} within the container filesystem. see the ' + \
+    if out:
+        app.logger.info("{0}".format(out.decode('utf-8')))
+    flash('Welcome! Your mnemonic was imported as {0} within the container filesystem. see the '.format(key_path) + \
         '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
-            'details.'.format(key_path), 'success')
+            'details.', 'success')
     return True
 
 def remove_connection(node_id, ip):
