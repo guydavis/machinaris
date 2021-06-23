@@ -29,7 +29,7 @@ if __name__ != '__main__':
     app.logger.handlers = gunicorn_logger.handlers
     app.logger.setLevel(gunicorn_logger.level)
 
-app.logger.info("CONTROLLER_HOST={0}".format(app.config['CONTROLLER_HOST']))
+app.logger.debug("CONTROLLER_HOST={0}".format(app.config['CONTROLLER_HOST']))
 
 from web import routes
 

@@ -42,7 +42,7 @@ def setup():
     if globals.is_setup():
         return redirect(url_for('index'))
     key_paths = globals.get_key_paths()
-    app.logger.info("Setup found these key paths: {0}".format(key_paths))
+    app.logger.debug("Setup found these key paths: {0}".format(key_paths))
     show_setup = True
     if request.method == 'POST':
         if request.form.get('action') == 'generate':

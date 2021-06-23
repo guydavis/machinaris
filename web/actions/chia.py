@@ -159,7 +159,9 @@ def generate_key(key_path):
         except:
                 flash('{0} was unreadable or not found.'.format(key_path), 'danger')
                 return False
-        flash('Welcome! A new key has been generated at {0} in-container. Keep it secret! Keep it safe! Learn more...'.format(key_path), 'success')
+        flash('Welcome! A new key has been generated at {0} within the container filesystem. See the ' + \
+        '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
+            'details.'.format(key_path), 'success')
         flash('{0}'.format(" ".join(mnemonic_words)), 'info')
     if os.environ['mode'].startswith('farmer'):
         cmd = 'farmer-only'
@@ -213,7 +215,7 @@ def import_key(key_path, mnemonic):
         cmd = 'farmer-only'
     else:
         cmd = 'farmer'
-    proc = Popen("{0} start {1}".format(CHIA_BINARY, cmd), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} start {1} -r".format(CHIA_BINARY, cmd), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -228,7 +230,9 @@ def import_key(key_path, mnemonic):
         flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
         flash(str(ex), 'warning')
         return False
-    flash('Welcome! Your mnemonic was placed at {0} in container. Keep it secret! Keep it safe!'.format(key_path), 'success')
+    flash('Welcome! Your mnemonic was imported as {0} within the container filesystem. see the ' + \
+        '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
+            'details.'.format(key_path), 'success')
     return True
 
 def remove_connection(node_id, ip):
