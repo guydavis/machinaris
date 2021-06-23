@@ -212,7 +212,7 @@ def import_key(key_path, mnemonic):
         flash(errs.decode('utf-8'), 'warning')
         return False
     if outs:
-        app.logger.info(outs.decode('utf-8'))
+        app.logger.debug(outs.decode('utf-8'))
     if os.environ['mode'].startswith('farmer'):
         cmd = 'farmer-only'
     else:
@@ -233,7 +233,7 @@ def import_key(key_path, mnemonic):
         flash(str(ex), 'warning')
         return False
     if outs:
-        app.logger.info(outs.decode('utf-8'))
+        app.logger.debug(outs.decode('utf-8'))
     flash('Welcome! Your mnemonic was imported as {0} within the container filesystem. see the '.format(key_path) + \
         '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
             'details.', 'success')
