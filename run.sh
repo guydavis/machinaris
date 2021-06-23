@@ -4,7 +4,7 @@
 # See: https://github.com/guydavis/machinaris/wiki/Docker#full-node
 #
 # 1) Install a recent version of Docker for your OS
-# 2) Change all uppercase placeholders to match your system paths and settings
+# 2) Change all uppercase placeholders below to match your system paths and settings
 # 3) Change TZ to local TZ_database_name from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
 # 4) Execute script and browse to http://localhost:8926 to view Machinaris WebUI
 # 5) Port-forward tcp/8444 at your router to Chia Network.  Do NOT port forward 8926 which is LAN-only!
@@ -20,7 +20,7 @@ docker run \
     -v '~/.machinaris':'/root/.chia':'rw' \
     -v '/PATH/TO/PLOTS':'/plots':'rw' \
     -v '/PATH/TO/TEMP':'/plotting':'rw' \
-    'ghcr.io/guydavis/machinaris'
+    ghcr.io/guydavis/machinaris
 
 # If fullnode is a controller of workers: https://github.com/guydavis/machinaris/wiki/Workers
 # Add these options above the image line at end of above run command
