@@ -22,7 +22,7 @@ services:
             - "8926:8926"
         #
         # Machinaris API: See https://github.com/guydavis/machinaris/wiki/Workers
-        # - "8927:8927"
+        #    - "8927:8927"
         # 
         volumes:
         # Path to Machinaris application storage (host_path:container_path)
@@ -38,9 +38,7 @@ services:
             - "/PATH/TO/TEMP:/plotting:rw"
         #
         # if Plotman Archiving via Rsync, then add your SSH private key to send to final destination
-        # - "~/.ssh/id_rsa:/id_rsa:ro"
-        #
-        hostname: YOUR_HOST_COMPUTER_NAME_RESOLVABLE_BY_YOUR_DNS_SERVER
+        #    - "~/.ssh/id_rsa:/id_rsa:ro"
         #
         # Only if running multiple Machinaris workers. See https://github.com/guydavis/machinaris/wiki/Workers 
         #dns:
@@ -48,30 +46,29 @@ services:
         #
         environment:
         # Local timezone, use 'TZ database name' from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
-        - TZ=America/Edmonton
+            - TZ=America/Edmonton
         #
         # More than one plots folder above? See: https://github.com/guydavis/machinaris/wiki/FAQ#can-i-use-two-or-more-final-destination-directories-to-hold-my-plots
-        # - plots_dir=/plots1:/plots2:/plots3
+        #    - plots_dir=/plots1:/plots2:/plots3
         #
         # Mode: fullnode, farmer, harvester, plotter, farmer+plotter, harvester+plotter. Default is fullnode
-        # - mode="fullnode"
+        #    - mode="fullnode"
         # 
         # If using madmax or mode=plotter, these 2 public keys will be set in your plotman.yaml
-        #- farmer_pk="YOUR_FARMER_PUBLIC_KEY"
-        #- pool_pk="YOUR_POOL_PUBLIC_KEY
+        #    - farmer_pk="YOUR_FARMER_PUBLIC_KEY"
+        #    - pool_pk="YOUR_POOL_PUBLIC_KEY
         #
         # If mode=harvester, required for host and port the harvester will your farmer
-        #- farmer_address="FARMER_HOST_OR_IP"
-        #- farmer_port="8447"
+        #    - farmer_address="FARMER_HOST_OR_IP"
+        #    - farmer_port="8447"
         #
         # True only if you want plotman to immediately start plotting on a restart, when configured
-        # - "AUTO_PLOT=true"
+        #    - "AUTO_PLOT=true"
         #
         # If this is a worker-only, point it to the Machinaris controller on your LAN
-        # - controller_host="CONTROLLER_HOST"
-        # - controller_web_port=8926
-        # - controller_api_port=8927
-        #
+        #    - controller_host="CONTROLLER_HOST"
+        #    - controller_web_port=8926
+        #    - controller_api_port=8927
         #
         # Set these to match your system capabilities and plotter requirements
         resources:

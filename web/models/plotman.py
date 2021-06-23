@@ -30,8 +30,8 @@ class PlottingSummary:
                 'plotter': plotting.plotter,
                 'plot_id': plotting.plot_id,
                 'k': plotting.k,
-                'tmp': plotting.tmp,
-                'dst': plotting.dst,
+                'tmp': self.strip_trailing_slash(plotting.tmp),
+                'dst': self.strip_trailing_slash(plotting.dst),
                 'wall': plotting.wall,
                 'phase': plotting.phase,
                 'size': plotting.size,
@@ -57,3 +57,8 @@ class PlottingSummary:
                     return
         else:
             self.display_status = "Idle"
+
+    def strip_trailing_slash(self, path):
+        if path.endswith('/'):
+            return path[:-1]
+        return path

@@ -5,6 +5,8 @@ import re
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.engine import Engine
+from sqlalchemy import event
 
 from web.default_settings import DefaultConfig
 
@@ -14,6 +16,11 @@ app.config.from_object(DefaultConfig)
 # Override config with optional settings file
 app.config.from_envvar('WEB_SETTINGS_FILE', silent=True)
 
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA journal_mode=WAL")
+    cursor.close()
 
 db = SQLAlchemy(app)
 
@@ -22,7 +29,7 @@ if __name__ != '__main__':
     app.logger.handlers = gunicorn_logger.handlers
     app.logger.setLevel(gunicorn_logger.level)
 
-app.logger.info("CONTROLLER_HOST={0}".format(app.config['CONTROLLER_HOST']))
+app.logger.debug("CONTROLLER_HOST={0}".format(app.config['CONTROLLER_HOST']))
 
 from web import routes
 

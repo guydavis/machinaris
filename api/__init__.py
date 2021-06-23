@@ -7,6 +7,14 @@ import logging
 
 from flask import Flask
 from flask_migrate import Migrate
+from sqlalchemy.engine import Engine
+from sqlalchemy import event
+
+@event.listens_for(Engine, "connect")
+def set_sqlite_pragma(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+    cursor.execute("PRAGMA journal_mode=WAL")
+    cursor.close()
 
 app = Flask('Machinaris API')
 

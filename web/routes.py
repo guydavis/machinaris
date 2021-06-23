@@ -39,11 +39,16 @@ def views_challenges():
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
+    if globals.is_setup():
+        return redirect(url_for('index'))
     key_paths = globals.get_key_paths()
-    app.logger.info("Setup found these key paths: {0}".format(key_paths))
+    app.logger.debug("Setup found these key paths: {0}".format(key_paths))
     show_setup = True
     if request.method == 'POST':
-        show_setup = not chia.generate_key(key_paths[0])
+        if request.form.get('action') == 'generate':
+            show_setup = not chia.generate_key(key_paths[0])
+        elif request.form.get('action') == 'import':
+            show_setup = not chia.import_key(key_paths[0], request.form.get('mnemonic'))
     if show_setup:
         return render_template('setup.html', key_paths = key_paths)
     else:

@@ -1,6 +1,6 @@
 # machinaris
 
-An easy-to-use, pure-Docker solution, for both plotting and farming the Chia™ cryptocurrency.  Currently in [*beta*](https://github.com/guydavis/machinaris/wiki/Releases)!
+A Docker image for plotting and farming the Chia™ cryptocurrency on just [one computer](https://github.com/guydavis/machinaris/wiki/Docker) or across [many](https://github.com/guydavis/machinaris/wiki/Workers).
 
 ![Home](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_home.png)
 
@@ -8,19 +8,19 @@ To get started with Machinaris, follow an install guide for your platform: [Wind
 
 ## Plotting View
 
-[Plotman](https://github.com/ericaltendorf/plotman) manages staggered/parallel plotting jobs, also exposed via the Machinaris web interface:
+Plotting with both [MadMax](https://github.com/madMAx43v3r/chia-plotter) and [Chia™](https://github.com/Chia-Network/chia-blockchain) plotters is managed by [Plotman](https://github.com/ericaltendorf/plotman) through the Machinaris WebUI.
 
 ![Plotting](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_plotting.png)
 
 ## Farming View
 
-Machinaris bundles the [latest official Chia version](https://github.com/Chia-Network/chia-blockchain/wiki/INSTALL#ubuntudebian) inside the Docker image.
+Machinaris bundles the [latest Chia™ version](https://github.com/Chia-Network/chia-blockchain/wiki/INSTALL#ubuntudebian) inside the Docker image.
 
 ![Farming](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_farming.png)
 
 ## Alerts
 
-[Chiadog](https://github.com/martomi/chiadog) provides monitoring of the Chia™ log files, ensuring you get notified when important events occur across your farm:
+[Chiadog](https://github.com/martomi/chiadog) provides monitoring of the log files, ensuring you get notified when important events occur across your farm:
 
 ![Alerts](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/ChiaDog-1-Example.png)
 
@@ -44,7 +44,7 @@ Details on Blockchain and Connection status as well:
 
 ## Container CLI
 
-While the WebUI is useful for quick and easy access, you also have the full power of a shell commandline (CLI) in the running Machinaris container.  All binaries are available to execute advanced commands as shown below:
+While the WebUI is useful for quick and easy access, you also have the full power of a shell commandline (CLI) in the running Machinaris container.  All binaries are available to execute advanced commands:
 
 ![ContainerCLI](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_container_cli.png)
 

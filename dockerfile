@@ -39,6 +39,7 @@ RUN \
 		rsync \
 		libsodium-dev \
 		g++ \
+		iputils-ping \
 	\
 # cleanup apt cache
 	\

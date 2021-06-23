@@ -19,12 +19,21 @@ from subprocess import Popen, TimeoutExpired, PIPE, DEVNULL
 from api.models import plotman
 from api import app
 
+PLOTMAN_CONFIG = '/root/.chia/plotman/plotman.yaml'
+PLOTMAN_SAMPLE = '/machinaris/config/plotman.sample.yaml'
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 
 # Don't query plotman unless at least this long since last time.
 RELOAD_MINIMUM_SECS = 30
 
+def check_config():
+    if not os.path.exists(PLOTMAN_CONFIG):
+        app.logger.info("No existing plotman config found, so copying sample to: {0}" \
+                .format(PLOTMAN_CONFIG))
+        shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_CONFIG)
+
 def load_plotting_summary():
+    check_config()
     proc = Popen("{0} {1} < /dev/tty".format(PLOTMAN_SCRIPT,
                  'status'), stdout=PIPE, stderr=PIPE, shell=True)
     try:
@@ -60,6 +69,7 @@ def dispatch_action(job):
             stop_archiver()
 
 def action_plots(job):
+    check_config()
     #app.logger.info("Actioning plots....")
     action = job['action']
     plot_ids = job['plot_ids']
@@ -87,6 +97,7 @@ def get_plotman_pid():
 
 def start_plotman():
     app.logger.info("Starting Plotman run...")
+    check_config()
     try:
         if len(load_plotting_summary().rows) == 0:  # No plots running
             clean_tmp_dirs_before_run()  
@@ -125,7 +136,8 @@ def get_archiver_pid():
     return None
 
 def start_archiver():
-    #app.logger.info("Starting archiver run...")
+    app.logger.info("Starting archiver run...")
+    check_config()
     try:
         logfile = "/root/.chia/plotman/logs/archiver.log"
         app.logger.info("About to start archiver...")
@@ -137,7 +149,7 @@ def start_archiver():
         app.logger.info(traceback.format_exc())
 
 def stop_archiver():
-    #app.logger.info("Stopping Archiver run...")
+    app.logger.info("Stopping Archiver run...")
     try:
         os.kill(get_archiver_pid(), signal.SIGTERM)
     except:

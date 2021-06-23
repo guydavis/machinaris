@@ -119,7 +119,7 @@ def generate_key(key_path):
     if os.path.exists(key_path) and os.stat(key_path).st_size > 0:
         app.logger.info('Skipping key generation as file exists and is NOT empty! {0}'.format(key_path))
         flash('Skipping key generation as file exists and is NOT empty!', 'danger')
-        flash('key_path={0}'.format(key_path), 'warning')
+        flash('In-container path: {0}'.format(key_path), 'warning')
         return False
     proc = Popen("{0} keys generate".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
     try:
@@ -159,9 +159,15 @@ def generate_key(key_path):
         except:
                 flash('{0} was unreadable or not found.'.format(key_path), 'danger')
                 return False
-        flash('Welcome! A new key has been generated at {0}. Keep it secret! Keep it safe!'.format(key_path), 'success')
+        flash('Welcome! A new key has been generated at {0} within the container filesystem. See the '.format(key_path) + \
+        '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
+            'details.', 'success')
         flash('{0}'.format(" ".join(mnemonic_words)), 'info')
-    proc = Popen("{0} start farmer".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+    if os.environ['mode'].startswith('farmer'):
+        cmd = 'farmer-only'
+    else:
+        cmd = 'farmer'
+    proc = Popen("{0} start {1}".format(CHIA_BINARY, cmd), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -176,6 +182,61 @@ def generate_key(key_path):
         flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
         flash(str(ex), 'warning')
         return False
+    return True
+
+def import_key(key_path, mnemonic):
+    if len(mnemonic.strip().split()) != 24:
+        flash('Did not receive a 24-word mnemonic seed phrase!', 'danger')
+        return False
+    if os.path.exists(key_path) and os.stat(key_path).st_size > 0:
+        app.logger.info('Skipping key import as file exists and is NOT empty! {0}'.format(key_path))
+        flash('Skipping key import as file exists and is NOT empty!', 'danger')
+        flash('In container path: {0}'.format(key_path), 'warning')
+        return False
+    with open(key_path, 'w') as keyfile:
+        keyfile.write('{0}\n'.format(mnemonic))
+    time.sleep(3)
+    proc = Popen("{0} keys add -f {1}".format(CHIA_BINARY, key_path), stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        app.logger.info(traceback.format_exc())
+        flash('Timed out while adding key!', 'danger')
+        flash(str(ex), 'warning')
+        return False
+    if errs:
+        app.logger.info("{0}".format(errs.decode('utf-8')))
+        flash('Unable to import provided mnemonic seed phrase!', 'danger')
+        flash(errs.decode('utf-8'), 'warning')
+        return False
+    if outs:
+        app.logger.debug(outs.decode('utf-8'))
+    if os.environ['mode'].startswith('farmer'):
+        cmd = 'farmer-only'
+    else:
+        cmd = 'farmer'
+    proc = Popen("{0} start {1} -r".format(CHIA_BINARY, cmd), stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        app.logger.info(traceback.format_exc())
+        flash('Timed out while starting farmer! Try restarting the Machinaris container.', 'danger')
+        flash(str(ex), 'warning')
+        return False
+    if errs:
+        app.logger.info("{0}".format(errs.decode('utf-8')))
+        flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
+        flash(str(ex), 'warning')
+        return False
+    if outs:
+        app.logger.debug(outs.decode('utf-8'))
+    flash('Welcome! Your mnemonic was imported as {0} within the container filesystem. see the '.format(key_path) + \
+        '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
+            'details.', 'success')
     return True
 
 def remove_connection(node_id, ip):
