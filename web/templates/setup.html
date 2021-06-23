@@ -48,18 +48,20 @@
                             24-word
                             mnemonic seed phrase: </p>
                         <!-- Sample mnemonic to hint with, key long since thrown-away -->
-                        <input class="form-control me-2" id="mnemonic" name="mnemonic" type="text"
-                            placeholder="north divorce holiday whisper inquiry toy rare minute father ostrich surprise runway ill episode dance rather unaware concert sunset maid gather grain gift wire"
-                            aria-label="Import Key">
-                        <br />
-                        <button class="btn btn-outline-success" type="submit" id="btnImport">Import Existing
-                            Key</button>
-                        <h3 style="padding-top: 25px;">OR</h3>
+                        <form id="main-form" method="POST">
+                            <input class="form-control me-2" id="mnemonic" name="mnemonic" type="text"
+                                placeholder="north divorce holiday whisper inquiry toy rare minute father ostrich surprise runway ill episode dance rather unaware concert sunset maid gather grain gift wire"
+                                aria-label="Import Key">
+                            <br />
+                            <button class="btn btn-outline-success" type="submit" id="btnImport">Import Existing
+                                Key</button>
+                            <h3 style="padding-top: 25px;">OR</h3>
 
-                        <p>You can generate a brand-new mnemonic phrase that will be written to this in-container
-                            path: {{ key_paths[0] }}
-                        </p>
-                        <button class="btn btn-outline-success" type="submit" id="btnGenerate">Generate New Key</button>
+                            <p>You can generate a brand-new mnemonic phrase that will be written to this in-container
+                                path: {{ key_paths[0] }}
+                            </p>
+                            <button class="btn btn-outline-success" type="submit" id="btnGenerate">Generate New
+                                Key</button>
                         </form>
 
                         <br />
@@ -70,8 +72,9 @@
                         <br />
                         <br />
                         <br />
-                        
-                        <p class="small">NOTE: If you would prefer to instead import your mnenmoic seed phrase yourself at the command-line,
+
+                        <p class="small">NOTE: If you would prefer to instead import your mnenmoic seed phrase yourself
+                            at the command-line,
                             see the <a href="https://github.com/guydavis/machinaris/wiki/Keys"
                                 target="_blank">Machinaris Wiki</a> for details.</p>
                     </div>
