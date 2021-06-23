@@ -195,10 +195,10 @@ def settings_farming():
         )
     workers = worker.load_worker_summary()
     selected_worker = None
-    if len(workers.farmers) > 0:
-        selected_worker = workers.farmers[0]
+    if len(workers.farmers_harvesters) > 0:
+        selected_worker = workers.farmers_harvesters[0]
     return render_template('settings/farming.html',
-        workers=workers.farmers, selected_worker=selected_worker, global_config=gc)
+        workers=workers.farmers_harvesters, selected_worker=selected_worker, global_config=gc)
 
 @app.route('/settings/alerts', methods=['GET', 'POST'])
 def settings_alerts():
@@ -210,10 +210,10 @@ def settings_alerts():
         )
     workers = worker.load_worker_summary()
     selected_worker = None
-    if len(workers.farmers) > 0:
-        selected_worker = workers.farmers[0]
+    if len(workers.farmers_harvesters) > 0:
+        selected_worker = workers.farmers_harvesters[0]
     return render_template('settings/alerts.html',
-        workers=workers.farmers, selected_worker=selected_worker, global_config=gc)
+        workers=workers.farmers_harvesters, selected_worker=selected_worker, global_config=gc)
 
 @app.route('/settings/config', defaults={'path': ''})
 @app.route('/settings/config/<path:path>')
