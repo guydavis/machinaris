@@ -14,7 +14,7 @@ import traceback
 import yaml as sys_yaml
 
 TARGET_VERSION = 2
-PLOTMAN_SAMPLE = '/code/machinaris/config/plotman.sample.yaml'
+PLOTMAN_SAMPLE = '/machinaris/config/plotman.sample.yaml'
 PLOTMAN_EXAMPLE = '/root/.chia/plotman/plotman.sample.yaml'
 PLOTMAN_CONFIG = '/root/.chia/plotman/plotman.yaml'
 

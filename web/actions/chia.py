@@ -159,9 +159,13 @@ def generate_key(key_path):
         except:
                 flash('{0} was unreadable or not found.'.format(key_path), 'danger')
                 return False
-        flash('Welcome! A new key has been generated at {0}. Keep it secret! Keep it safe!'.format(key_path), 'success')
+        flash('Welcome! A new key has been generated at {0} in-container. Keep it secret! Keep it safe! Learn more...'.format(key_path), 'success')
         flash('{0}'.format(" ".join(mnemonic_words)), 'info')
-    proc = Popen("{0} start farmer".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+    if os.environ['mode'].startswith('farmer'):
+        cmd = 'farmer-only'
+    else:
+        cmd = 'farmer'
+    proc = Popen("{0} start {1}".format(CHIA_BINARY, cmd), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -209,7 +213,7 @@ def import_key(key_path, mnemonic):
         cmd = 'farmer-only'
     else:
         cmd = 'farmer'
-    proc = Popen("{0} start {1} -r".format(CHIA_BINARY, cmd), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} start {1}".format(CHIA_BINARY, cmd), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
