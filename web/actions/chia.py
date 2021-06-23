@@ -196,7 +196,7 @@ def import_key(key_path, mnemonic):
     with open(key_path, 'w') as keyfile:
         keyfile.write('{0}\n'.format(mnemonic))
     time.sleep(3)
-    proc = Popen("{0} keys add -f {0}".format(CHIA_BINARY, key_path), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} keys add -f {1}".format(CHIA_BINARY, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -211,8 +211,8 @@ def import_key(key_path, mnemonic):
         flash('Unable to import provided mnemonic seed phrase!', 'danger')
         flash(errs.decode('utf-8'), 'warning')
         return False
-    if out:
-        app.logger.info(out.decode('utf-8'))
+    if outs:
+        app.logger.info(outs.decode('utf-8'))
     if os.environ['mode'].startswith('farmer'):
         cmd = 'farmer-only'
     else:
@@ -232,8 +232,8 @@ def import_key(key_path, mnemonic):
         flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
         flash(str(ex), 'warning')
         return False
-    if out:
-        app.logger.info("{0}".format(out.decode('utf-8')))
+    if outs:
+        app.logger.info(outs.decode('utf-8'))
     flash('Welcome! Your mnemonic was imported as {0} within the container filesystem. see the '.format(key_path) + \
         '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
             'details.', 'success')
