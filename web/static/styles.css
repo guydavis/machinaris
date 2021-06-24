@@ -18,6 +18,10 @@ body {
     font-weight: 500;
 }
 
+.text-white {
+  color: #c7c7c7;
+}
+
 .display-6 {
     color: #c7c7c7;
 }
@@ -32,6 +36,7 @@ body {
     font-weight: 500;
 }
 
+/* Bootstrap icons */
 .fs-4 {
     color: #c7c7c7;
 }

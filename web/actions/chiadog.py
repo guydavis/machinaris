@@ -25,11 +25,11 @@ def load_config(farmer):
 def load_farmers():
     worker_summary = wk.load_worker_summary()
     farmers = []
-    for worker in worker_summary.workers:
-        if worker in worker_summary.farmers or worker in worker_summary.harvesters:
+    for farmer in worker_summary.workers:
+        if (farmer in worker_summary.farmers) or (farmer in worker_summary.harvesters):
             farmers.append({
-                'hostname': worker.hostname,
-                'monitoring_status': worker.monitoring_status().lower()
+                'hostname': farmer.hostname,
+                'monitoring_status': farmer.monitoring_status().lower()
             })
     return farmers
 

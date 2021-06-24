@@ -48,7 +48,7 @@
             }
             //Call the function when #input is clicked
             $(document).on("change", "#worker", function (e) {
-                load_config($("#worker").value)
+                load_config($("#worker").val())
             });
             //Call the function when the page loads
             load_config("{{selected_worker.hostname}}");
