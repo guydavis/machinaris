@@ -23,22 +23,7 @@ yaml = ruamel.yaml.YAML()
 yaml.indent(mapping=8, sequence=4, offset=2)
 yaml.preserve_quotes = True
 
-try:
-    shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_EXAMPLE) # Always place latest example file
-    if not os.path.exists(PLOTMAN_CONFIG):
-        logging.info("No existing plotman config found, so copying sample to: {0}".format(PLOTMAN_CONFIG))
-        shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_CONFIG)
-        sys.exit(0)
-
-    # Check for config version
-    config = yaml.load(pathlib.Path(PLOTMAN_CONFIG))
-    if 'version' in config:
-        version =  config["version"][0]
-    else:
-        version = 0
-    if version == TARGET_VERSION:
-        sys.exit(0) # No further action to take as up-to-date
-
+def migrate_config():
     new_config = yaml.load(pathlib.Path(PLOTMAN_SAMPLE))
     old_config = yaml.load(pathlib.Path(PLOTMAN_CONFIG))
 
@@ -71,5 +56,21 @@ try:
     shutil.copy(PLOTMAN_CONFIG, dst)
     # Then save the migrated config
     yaml.dump(new_config, pathlib.Path(PLOTMAN_CONFIG))
-except:
-    logging.info(traceback.format_exc())
+
+if __name__ == "__main__":
+    try:
+        shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_EXAMPLE) # Always place latest example file
+        if not os.path.exists(PLOTMAN_CONFIG):
+            logging.info("No existing plotman config found, so copying sample to: {0}".format(PLOTMAN_CONFIG))
+            shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_CONFIG)
+        # Check for config version
+        config = yaml.load(pathlib.Path(PLOTMAN_CONFIG))
+        if 'version' in config:
+            version =  config["version"][0]
+        else:
+            version = 0
+        if version != TARGET_VERSION:
+            logging.info("Migrating plotman.yaml as found version: {0}".format(version))
+            migrate_config()
+    except:
+        logging.info(traceback.format_exc())
