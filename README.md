@@ -48,11 +48,20 @@ While the WebUI is useful for quick and easy access, you also have the full powe
 
 ![ContainerCLI](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_container_cli.png)
 
+To enter an in-container shell, just type `docker exec -it machinaris bash` from the host OS.
+
 ## Worker Management
 
 When Machinaris is [deployed to multiple systems](https://github.com/guydavis/machinaris/wiki/Workers) on your LAN, you can control each plotter, harvester, and farmer - all from a central WebUI on the Machinaris controller.  Configuration, monitoring, and alerting are all available in this centralized portal.
 
 ![Workers](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_workers.png)
+
+
+## REST API
+
+Machinaris includes a complete [REST API](api/machinaris.postman_collection.json) offering opportunities for integration and extension with other tools.
+
+![Workers](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_api.png)
 
 
 ## Trademark Notice
