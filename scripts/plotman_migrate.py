@@ -31,7 +31,7 @@ try:
         sys.exit(0)
 
     # Check for config version
-    config = yaml.load(PLOTMAN_CONFIG)
+    config = yaml.load(pathlib.Path(PLOTMAN_CONFIG))
     if 'version' in config:
         version =  config["version"][0]
     else:
