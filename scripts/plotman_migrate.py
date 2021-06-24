@@ -61,7 +61,7 @@ if __name__ == "__main__":
     try:
         shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_EXAMPLE) # Always place latest example file
         if not os.path.exists(PLOTMAN_CONFIG):
-            logging.info("No existing plotman config found, so copying sample to: {0}".format(PLOTMAN_CONFIG))
+            print("No existing plotman config found, so copying sample to: {0}".format(PLOTMAN_CONFIG))
             shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_CONFIG)
         # Check for config version
         config = yaml.load(pathlib.Path(PLOTMAN_CONFIG))
@@ -70,7 +70,7 @@ if __name__ == "__main__":
         else:
             version = 0
         if version != TARGET_VERSION:
-            logging.info("Migrating plotman.yaml as found version: {0}".format(version))
+            print("Migrating plotman.yaml as found version: {0}".format(version))
             migrate_config()
     except:
-        logging.info(traceback.format_exc())
+        print(traceback.format_exc())

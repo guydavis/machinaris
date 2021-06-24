@@ -20,13 +20,13 @@ docker run `
     -v P:\PATH\TO\PLOTS:\:/plots:rw `
     ghcr.io/guydavis/machinaris
 
-# If fullnode is a controller of workers: https://github.com/guydavis/machinaris/wiki/Workers
+# If this is a controller: https://github.com/guydavis/machinaris/wiki/Workers
 # Add these options above the image line at end of above run command
-#   -p 8927:8927 \
+#   -p 8927:8927 `
 #   --dns (Get-DnsClientServerAddress -AddressFamily IPv4 | Select-Object -ExpandProperty ServerAddresses) `
 
 
-# If plotting only, see: https://github.com/guydavis/machinaris/wiki/Docker#plotter-only
+# If plotting only, see: https://github.com/guydavis/machinaris/wiki/Workers#plotter
 # Add these options above the ghcr.io image line at end of above run command
 #   -e controller_host=YOUR_CONTROLLER_HOST ` 
 #   -e mode=plotter `
@@ -35,7 +35,7 @@ docker run `
 #   If using Plotman to rsync completed plots to final destination
 #   -v C:\Users\USERNAME\.ssh\id_rsa:/id_rsa:ro `
 
-# If harvesting only, see: https://github.com/guydavis/machinaris/wiki/Docker#harvester-only
+# If harvesting only, see: https://github.com/guydavis/machinaris/wiki/Workers#harvester
 # Add these options above the image line at end of above run command
 #   -e controller_host=YOUR_CONTROLLER_HOST ` 
 #   -e mode=harvester `
@@ -43,7 +43,6 @@ docker run `
 #   -e farmer_port=8447 `
 # Then copy your fullnode/farmer's ca folder over and name it C:\Users\USERNAME\.machinaris\farmer_ca
 
-# If farming only, see: https://github.com/guydavis/machinaris/wiki/Docker#farmer-only
-# Add these options above the image line at end of above run command
-#   -e controller_host=YOUR_CONTROLLER_HOST ` 
-#   -e mode=farmer `
+# If both plotting & harvesting, see: https://github.com/guydavis/machinaris/wiki/Workers#harvesterplotter
+# Combine above and add this options above the image line at end of above run command
+#   -e mode=harvester+plotter `
