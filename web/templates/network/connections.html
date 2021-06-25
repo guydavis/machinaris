@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="pb-3 mb-4 border-bottom">
+    <span class="fs-4">Network - chia show</span>
+</header>
+
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+        {% else %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {% endif %}
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <style>
+        a.active.nav-link{background-color: #3d3f42!important }
+    </style>
+    <nav class="navbar navbar-dark" style="padding-bottom: 0px;">
+        <div class="container-fluid">
+            <ul class="nav nav-tabs bg-dark">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{{ url_for('network_blockchain') }}">Blockchain</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('network_connections') }}">Connections</a>
+                </li>
+            </ul>
+            <form class="d-flex" method="POST" style="padding-bottom:5px" id="main-form">
+                <input class="form-control me-2" id="connection" name="connection" type="text"
+                    placeholder="node.chia.net:8444" aria-label="Add">
+                <button class="btn btn-outline-success text-nowrap" type="submit" name="action" value="add" id="btnAdd"
+                    form="main-form">Add Connection</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="p-1 mb-4 bg-light border rounded-3">
+        {% if connections.rows|length > 0 %}
+        {% for connection in connections.rows %}
+        <div class="container-fluid">
+            <h3>{{connection.hostname}}</h3>
+            <pre>{{connection.details}}</pre>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
+        <h6>No connections found from any farmers. Not running?</h6>
+        <h6>Try running 'chia show --connections' on your farmers to verify.</h6>
+    </div>
+    {% endif %}
+    
+
+    <script>
+        $(document).ready(function () {
+            $("#btnAdd").click(function () {
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...`
+                );
+                $('#main-form').append('<input type="hidden" id="action" name="action" value="add" />');
+                $("#main-form").submit();
+            });
+        })
+    </script>
+
+    {% endblock %}

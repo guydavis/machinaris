@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="pb-3 mb-4 border-bottom">
+    <span class="fs-4">Keys - chia wallet show </span>
+</header>
+
+
+{% if wallets.rows|length > 0 %}
+<div class="table-responsive">
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th scope="col" class="text-success">Farmer</th>
+                <th scope="col" class="text-success">Details</th>
+                <th scope="col" class="text-success">Updated At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for wallet in wallets.rows %}
+            <tr>
+                <td>{{wallet.hostname}}</td>
+                <td style="white-space: pre-wrap;">{{wallet.details}}</td>
+                <td>{{wallet.updated_at | datetimefilter}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
+    <h6>No wallets found from any farmers. Not configured?</h6>
+    <h6>Try running 'chia wallet show' on your farmers to verify.</h6>
+</div>
+{% endif %}
+
+{% endblock %}

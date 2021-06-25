@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="position-relative">
+    <div class="position-absolute top-0 end-0">
+        <a href="https://github.com/guydavis/machinaris/wiki/Chia" target="_blank">
+            <i class="fs-4 bi-question-circle"></i>
+        </a>
+    </div>
+</div>
+
+
+<header class="pb-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+        <span class="fs-4">Farming - Chia™ - config.yaml </span>
+    </a>
+</header>
+
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+        {% else %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {% endif %}
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            function load_config(worker) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url_for('views_settings_config') }}?type=farming&worker=" + worker,
+                })
+                    .done(function (data) {
+                        //console.log(data);
+                        $("#config").val(data)
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR, textStatus, errorThrown);
+                    });
+            }
+            //Call the function when #input is clicked
+            $(document).on("change", "#worker", function (e) {
+                load_config($("#worker").val())
+            });
+            //Call the function when the page loads
+            load_config("{{selected_worker.hostname}}");
+        });
+        
+        function downloadConfig() {
+            worker = $("#worker").val()
+            window.location.href = '/settings/config/' + worker + '_chia_config.yaml?type=farming&worker=' + worker
+        }
+    </script>
+    <form method="POST">
+        <fieldset>
+            <div class="row mb-3">
+                <label for="worker" class="col-sm-1 col-form-label-lg text-end p-1">Worker</label>
+                <div class="col-sm-3">
+                    <select id="worker" name="worker" class="form-select">
+                        {% for worker in workers %}
+                        <option {% if worker==selected_worker %}selected{% endif %}>{{ worker.hostname }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3" id="texteditor">
+                <textarea style="background: #D3D3D3;" class="form-control fs-6" id="config" name="config" rows="18"
+                    style="height:100%;"></textarea>
+            </div>
+            <div class="row g-3">
+                <div class="col-sm">
+                    <button type="submit" class="btn btn-outline-success">Save</button>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="text-right btn btn-outline-success"
+                        onclick="downloadConfig(); return false">Download</button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+    {% endblock %}

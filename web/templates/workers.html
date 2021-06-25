@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="pb-3 mb-4 border-bottom">
+  <span class="fs-4">Machinaris - Workers</span>
+</header>
+
+<div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  {% if category == 'message' %}
+  <div class="alert alert-warning" role="alert">
+    {% else %}
+    <div class="alert alert-{{ category }}" role="alert">
+      {% endif %}
+      {{ message|safe }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+  </div>
+
+  {% if workers.workers|length > 0 %}
+  <form method="POST" id="workers-form" style="padding-bottom: 10px;">
+    <fieldset>
+      <table class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Hostname</th>
+            <th scope="col">System Type</th>
+            <th scope="col">Last Status Received At</th>
+            <th scope="col">Last Ping to Worker</th>
+            <th scope="col">Last Successful Ping to Worker</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for worker in workers.workers %}
+          <tr>
+            <td class="text-center"><input type="checkbox" name="hostname" value="{{ worker.hostname }}" />
+            <td>{{worker.hostname}}</td>
+            <td>{{worker.mode}}</td>
+            <td>{{worker.updated_at | datetimefilter}}</td>
+            <td>{{worker.latest_ping_result}}</td>
+            <td>{{worker.ping_success_at | datetimefilter}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <fieldset>
+        <button form="workers-form" type="submit" name="action" value="prune" class="btn btn-outline-success"
+          id="btnPrune" title="Only deletes status of selected worker(s).">Prune Selected</button>
+      </fieldset>
+  </form>
+
+  <script>
+    $(document).ready(function () {
+      $("#btnPrune").click(function () {
+        $(this).prop("disabled", true);
+        $(this).html(
+          `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Pruning...`
+        );
+        $('#workers-form').append('<input type="hidden" id="action" name="action" value="prune" />');
+        $("#workers-form").submit();
+      });
+    })
+  </script>
+
+  {% else %}
+
+  <div class="text-center" style="padding-top:100 px; padding-bottom: 0px">
+    <h6>No Machinaris workers have reported status successfully.</h6>
+    <h6>Please check each expected worker's log files.</h6>
+    <h6>For more, see the Machinaris <a href="https://github.com/guydavis/machinaris/wiki/Workers" target="_blank">wiki.</a></h6>
+  </div>
+  <br/>
+  <br/>
+  {% endif %}
+
+
+  {% endblock %}

@@ -1,39 +1,50 @@
 #!/bin/bash
 #
-# Create the sqlite databases and tables
+# Use flask-migrate to manage the different sqlite dbs
 #
 
+mkdir -p /root/.chia/machinaris/logs
 mkdir -p /root/.chia/machinaris/dbs
-cd /root/.chia/machinaris/dbs
-rm -f machinaris.db # Temporarily delete old db 
-if [ ! -f stats.db ]; then
-    echo 'Creating database for Machinaris...'
-    sqlite3 stats.db <<EOF
-CREATE TABLE stat_plot_count (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
-CREATE TABLE stat_plots_size (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
-CREATE TABLE stat_total_chia (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
-CREATE TABLE stat_netspace_size (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
-CREATE TABLE stat_time_to_win (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
-CREATE TABLE stat_plots_total_used (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
-CREATE TABLE stat_plots_disk_used (id INTEGER PRIMARY KEY, hostname TEXT, path TEXT, value REAL, created_at TEXT);
-CREATE TABLE stat_plots_disk_free (id INTEGER PRIMARY KEY, hostname TEXT, path TEXT, value REAL, created_at TEXT);
-CREATE TABLE stat_plotting_total_used (id INTEGER PRIMARY KEY, value REAL, created_at TEXT);
-CREATE TABLE stat_plotting_disk_used (id INTEGER PRIMARY KEY, hostname TEXT, path TEXT, value REAL, created_at TEXT);
-CREATE TABLE stat_plotting_disk_free (id INTEGER PRIMARY KEY, hostname TEXT, path TEXT, value REAL, created_at TEXT);
-EOF
-    chmod 666 /root/.chia/machinaris/dbs/stats.db
+mkdir -p /root/.chia/chiadog/dbs
+
+# If old databases not managed by flask-migrate yet
+if [ ! -f /root/.chia/machinaris/dbs/.managed ] && [ -f /root/.chia/machinaris/dbs/stats.db ]; then
+    cd /root/.chia/machinaris/dbs
+    rm -f machinaris.db
+    mv stats.db stats.db.old
+fi
+if [ ! -f /root/.chia/chiadog/dbs/.managed ] && [ -f /root/.chia/chiadog/dbs/chiadog.db ]; then
+    cd /root/.chia/chiadog/dbs
+    mv chiadog.db chiadog.db.old
 fi
 
-mkdir -p /root/.chia/chiadog/dbs
-cd /root/.chia/chiadog/dbs
-if [ ! -f chiadog.db ]; then
-    echo 'Creating database for Chiadog...'
-    sqlite3 chiadog.db <<EOF
-CREATE TABLE notification (id INTEGER PRIMARY KEY, priority TEXT, service TEXT, message TEXT, created_at TEXT);
-CREATE TRIGGER notification_on_insert AFTER INSERT ON notification
- BEGIN
-  UPDATE notification SET created_at = datetime('now') WHERE id = NEW.id;
- END;
+# Perform database migration, if any
+cd /machinaris/api
+FLASK_APP=__init__.py flask db upgrade >> /root/.chia/machinaris/logs/migration.log 2>&1 
+
+# If old databases weren't managed by flask-migrate before, copy over old data
+if [ ! -f /root/.chia/machinaris/dbs/.managed ] && [ -f /root/.chia/machinaris/dbs/stats.db.old ]; then
+    sqlite3 /root/.chia/machinaris/dbs/stats.db.old <<EOF
+    ATTACH DATABASE '/root/.chia/machinaris/dbs/stats.db' AS new_db;
+    INSERT INTO new_db.stat_plots_disk_used SELECT * FROM stat_plots_disk_used;
+    INSERT INTO new_db.stat_plotting_disk_used SELECT * FROM stat_plotting_disk_used;
+    INSERT INTO new_db.stat_netspace_size SELECT * FROM stat_netspace_size;
+    INSERT INTO new_db.stat_plots_size SELECT * FROM stat_plots_size;
+    INSERT INTO new_db.stat_plotting_total_used SELECT * FROM stat_plotting_total_used;
+    INSERT INTO new_db.stat_plot_count SELECT * FROM stat_plot_count;
+    INSERT INTO new_db.stat_plots_total_used SELECT * FROM stat_plots_total_used;
+    INSERT INTO new_db.stat_time_to_win SELECT * FROM stat_time_to_win;
+    INSERT INTO new_db.stat_plots_disk_free SELECT * FROM stat_plots_disk_free;
+    INSERT INTO new_db.stat_plotting_disk_free SELECT * FROM stat_plotting_disk_free;
+    INSERT INTO new_db.stat_total_chia SELECT * FROM stat_total_chia;
 EOF
-    chmod 666 /root/.chia/chiadog/dbs/chiadog.db
 fi
+touch /root/.chia/machinaris/dbs/.managed
+
+if [ ! -f /root/.chia/chiadog/dbs/.managed ] && [ -f /root/.chia/chiadog/dbs/chiadog.db.old ]; then
+    sqlite3 /root/.chia/chiadog/dbs/chiadog.db.old <<EOF
+    ATTACH DATABASE '/root/.chia/chiadog/dbs/chiadog.db' AS new_db;
+    INSERT INTO new_db.notification SELECT * FROM notification;
+EOF
+fi
+touch /root/.chia/chiadog/dbs/.managed

@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  {% if category == 'message' %}
+  <div class="alert alert-warning" role="alert">
+    {% else %}
+    <div class="alert alert-{{ category }}" role="alert">
+      {% endif %}
+      {{ message|safe }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+  </div>
+
+  {% if farming.expected_time_to_win != 'Unknown' %}
+  <div class="row align-items-md-stretch" style="margin-top:5px; margin-bottom:5px;">
+    <div class="col-md-12">
+      <div class="h-30 p-2 text-white bg-dark rounded-3">
+        <h4 class="text-center">Expected Time to Win:
+          <span class="text-success">{{ farming.expected_time_to_win }}</span>
+        </h4>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row align-items-md-stretch">
+    {% if global_config.plotting_enabled %}
+    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+      <div class="h-20 p-2 bg-light border rounded-3">
+        <h6 class="display-6 text-center">Plotting:
+          <span {% if plotting.display_status=='Active' %} class="text-success" {% endif %}>
+            {{ plotting.display_status }}
+          </span>
+        </h6>
+      </div>
+    </div>
+    {% endif %}
+    {% if global_config.farming_enabled %}
+    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+      <div class="h-20 p-2 bg-light border rounded-3">
+        <h6 class="display-6 text-center">Farming:
+          <span {% if farming.display_status=='Active' %} class="text-success" {% endif %}>
+            {{ farming.display_status }}
+          </span>
+        </h6>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="row align-items-md-stretch">
+    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+      <div class="h-100 p-2 text-white bg-dark rounded-3">
+        <h1 class="display-1 text-center text-success">{{ farming.plot_count }}</h1>
+        <h6 class="display-6 text-center">Total Plots</h6>
+      </div>
+    </div>
+    {% if global_config.farming_enabled %}
+    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+      <div class="h-100 p-2 text-white bg-dark rounded-3">
+        <h1 class="display-1 text-center text-success">{{ farming.total_chia }}</h1>
+        <h6 class="display-6 text-center">Total Chia Farmed</h6>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div class="row align-items-md-stretch">
+    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+      <div class="h-100 p-2 text-white bg-dark rounded-3">
+        <h4 class="display-4 text-center text-success">{{ farming.plots_display_size }}</h4>
+        <h6 class="display-6 text-center">Total Plots Size</h6>
+      </div>
+    </div>
+    {% if global_config.farming_enabled %}
+    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+      <div class="h-100 p-2 text-white bg-dark rounded-3">
+        <h4 class="display-4 text-center text-success">{{ farming.netspace_display_size }}</h4>
+        <h6 class="display-6 text-center">Estimated Netspace Size</h6>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if global_config.farming_enabled %}
+  <script>
+    setInterval(function () {
+      $.ajax({
+        type: "GET",
+        url: "{{ url_for('views_challenges') }}",
+      })
+        .done(function (data) {
+          //console.log(data);
+          $("#challenges-table-div").html(data)
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+          console.log(jqXHR, textStatus, errorThrown);
+        });
+    }, 1000 * 5);
+  </script>
+  <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
+    <div class="h-100 p-2 text-white bg-dark rounded-3" id="challenges-table-div">
+      {% include 'views/challenges.html' %}
+    </div>
+  </div>
+
+  {% endif %}
+
+  {% endblock %}

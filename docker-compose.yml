@@ -1,0 +1,81 @@
+version: '3.8'
+#
+# Machinaris: https://github.com/guydavis/machinaris
+#   An easy-to-use WebUI for Chia plotting and farming. Includes Chia, Plotman, 
+#   MadMax, and Chiadog in a single Docker image. Default run mode is 'fullnode'.
+#   Also runs as 'plotter', 'harvester', 'farmer' & 'harvester+plotter', 'farmer+plotter'
+#
+# Docker Compose for a fullnode appears below.  As needed, uncomment and replace UPPERCASE.
+#
+
+machinaris:
+    container_name: machinaris
+    image: ghcr.io/guydavis/machinaris
+    hostname: YOUR_HOST_COMPUTERS_HOSTNAME
+    restart: always
+    tty: true
+    ports:
+    # Chia network port: You should port forward at your router.
+        - "8446:8444"
+    #
+    # Machinaris Web: Do NOT port forward - LAN only!  
+    # To proxy see: https://github.com/guydavis/machinaris/wiki/Nginx
+        - "8926:8926"
+    #
+    # Machinaris API, also LAN only! See https://github.com/guydavis/machinaris/wiki/Workers
+    #    - "8927:8927"
+    # 
+    volumes:
+    # Path to Machinaris application storage (host_path:container_path)
+        - "~/.machinaris:/root/.chia:rw"
+    #
+    # Path to your completed plots. 
+        - "/PATH/TO/PLOTS:/plots:rw"
+    #
+    # If plotting, you'll need a temporary plotting space
+        - "/PATH/TO/TEMP:/plotting:rw"
+    #
+    # if Plotman Archiving via Rsync, then add your SSH private key to send to final destination
+    #    - "~/.ssh/id_rsa:/id_rsa:ro"
+    #
+    # Only if running multiple Machinaris workers. See https://github.com/guydavis/machinaris/wiki/Workers 
+    #dns:
+    #    - YOUR_LAN_DNS_SERVER_IP_ADDRESS
+    #
+    environment:
+    # Local timezone, use 'TZ database name' from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
+        - TZ=America/Edmonton
+    #
+    # More than one plots folder above? See: https://github.com/guydavis/machinaris/wiki/FAQ#can-i-use-two-or-more-final-destination-directories-to-hold-my-plots
+    #    - plots_dir=/plots1:/plots2:/plots3
+    #
+    # Mode: fullnode, farmer, harvester, plotter, farmer+plotter, harvester+plotter. Default is fullnode
+    #    - mode=fullnode
+    # 
+    # If using madmax plotter, these 2 public keys will be set in your plotman.yaml
+    #    - farmer_pk=YOUR_FARMER_PUBLIC_KEY
+    #    - pool_pk=YOUR_POOL_PUBLIC_KEY
+    #
+    # If mode=harvester, required for host and port the harvester will your farmer
+    #    - farmer_address=FARMER_HOST_OR_IP
+    #    - farmer_port=8447
+    #
+    # True only if you want plotman to immediately start plotting on a restart, when configured
+    #    - AUTO_PLOT=true
+    #
+    # If this is a worker, point it to the Machinaris controller on your LAN
+    #    - controller_host=CONTROLLER_HOST_OR_IP
+    #    - controller_web_port=8926
+    #    - controller_api_port=8927
+    #
+    # Optionally, if your worker machine's hostname is not resolvable on your LAN, use the IP instead
+    #    - worker_address=IP_OF_WORKER_HOST_ON_LAN
+    #
+    # Set these to match your system capabilities and plotter requirements
+    resources:
+    limits:
+        cpus: '4'
+        memory: 8G
+    reservations:
+        cpus: '1'
+        memory: 2G

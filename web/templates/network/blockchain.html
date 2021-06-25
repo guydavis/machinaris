@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<header class="pb-3 mb-4 border-bottom">
+    <span class="fs-4">Network - chia show</span>
+</header>
+
+<style>
+    a.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+</style>
+<nav class="navbar navbar-dark" style="padding-bottom: 0px;">
+    <div class="container-fluid">
+        <ul class="nav nav-tabs bg-dark">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('network_blockchain') }}">Blockchain</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('network_connections') }}">Connections</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="p-1 mb-4 bg-light border rounded-3">
+    {% if blockchains.rows|length > 0 %}
+    {% for blockchain in blockchains.rows %}
+    <div class="container-fluid">
+        <h3>{{blockchain.hostname}}</h3>
+        <pre>{{ blockchain.details}}</pre>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
+    <h6>No blockchains found from any farmers. Not added?</h6>
+    <h6>Try running 'chia show --state' on your farmers to verify.</h6>
+</div>
+{% endif %}
+
+{% endblock %}

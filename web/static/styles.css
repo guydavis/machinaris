@@ -1,0 +1,85 @@
+/* Main background color */
+body {
+    background-color: #15171a;
+    color: #c7c7c7;
+}
+
+/* Rounded sections */
+.rounded-3 {
+    border-radius: .5rem!important;
+    background-color: #212529!important;
+    -webkit-box-shadow: 0px 1px 0px 0px #000;
+    box-shadow: 0px 1px 0px 0px #000;
+    border: 0!important;
+}
+
+.text-success {
+    color: #3aac59!important;
+    font-weight: 500;
+}
+
+.dropdown-item:focus, .dropdown-item:hover {
+  background-color: #198754;
+}
+
+.text-white, .display-6, .table-dark {
+    color: #c7c7c7!important;
+}
+
+.form-control, .form-select {
+    background-color: #c7c7c7;
+}
+
+.nav-link.active {
+    color: #3aac59!important;
+    font-weight: 500;
+}
+
+.nav-link {
+    color: #3aac59!important;
+    font-weight: 500;
+}
+
+/* Bootstrap icons */
+.fs-4 {
+    color: #c7c7c7;
+}
+
+/* Menu */
+.col-auto.col-md-3.col-xl-2.px-sm-2.px-0.bg-dark {
+    border-right: 1px solid #000;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: #3aac59;
+  border: 0px none #ffffff;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3aac59;
+}
+::-webkit-scrollbar-thumb:active {
+  background: #3aac59;
+}
+::-webkit-scrollbar-track {
+  background: #15171a;
+  border: 0px none #ffffff;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-track:hover {
+  background: #15171a;
+}
+::-webkit-scrollbar-track:active {
+  background: #15171a;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}

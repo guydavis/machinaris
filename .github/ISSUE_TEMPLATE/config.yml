@@ -1,0 +1,8 @@
+contact_links:
+  - about: Ask a general question or request support in Discussions
+    name: Ask for Support
+    url: >-
+      https://github.com/guydavis/machinaris/discussions/new
+  - about: Get support in the Machinaris Discord.
+    name: Join the Machinaris Discord Server
+    url: 'https://discord.gg/mX4AtMTt87'

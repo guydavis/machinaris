@@ -1,21 +1,21 @@
 # Learn more about Plotman at https://github.com/ericaltendorf/plotman
+# https://github.com/ericaltendorf/plotman/wiki/Configuration#versions
+version: [2]
 
-# Options for display and rendering
+logging:
+        # DO NOT CHANGE THIS IN-CONTAINER PATH USED BY MACHINARIS!
+        plots: /root/.chia/plotman/logs
+
 user_interface:
-        # Call out to the `stty` program to determine terminal size, instead of
-        # relying on what is reported by the curses library.   In some cases,
-        # the curses library fails to update on SIGWINCH signals.  If the
-        # `plotman interactive` curses interface does not properly adjust when
-        # you resize the terminal window, you can try setting this to True. 
-        use_stty_size: True
+        use_stty_size: False
 
+commands:
+        interactive:
+                autostart_plotting: False
+                autostart_archiving: False
+  
 # Where to plot and log.
 directories:
-        # One directory in which to store all plot job logs (the STDOUT/
-        # STDERR of all plot jobs).  In order to monitor progress, plotman
-        # reads these logs on a regular basis, so using a fast drive is
-        # recommended.  DON'T CHANGE THIS IN-CONTAINER PATH
-        log: /root/.chia/plotman/logs
 
         # One or more directories to use as tmp dirs for plotting.  The
         # scheduler will use all of them and distribute jobs among them.
@@ -36,14 +36,14 @@ directories:
         # Currently support override parameters:
         #     - tmpdir_max_jobs
         #tmp_overrides:
-                # In this example, /mnt/tmp/00 is larger than the other tmp
+                # In this example, /plotting3 is larger than the other tmp
                 # dirs and it can hold more plots than the default.
-                #"/mnt/tmp/00":
-                        #tmpdir_max_jobs: 5
+                #/plotting3:
+                #        tmpdir_max_jobs: 5
 
         # Optional: tmp2 directory.  If specified, will be passed to
-        # chia plots create as -2.  Only one tmp2 directory is supported.
-        # tmp2: /mnt/tmp/a
+        # the chia and madmax plotters as the '-2' param.
+        # tmp2: /plotting2
 
         # One or more directories; the scheduler will use all of them.
         # These again are presumed to be on independent physical devices,
@@ -53,28 +53,15 @@ directories:
         dst:
                 - /plots
 
-        # Archival configuration.  Optional; if you do not wish to run the
-        # archiving operation, comment this section out.
-        #
-        # Currently archival depends on an rsync daemon running on the remote
-        # host, and that the module is configured to match the local path.
-        # See code for details.
-        #archive:
-                #rsyncd_module: plots
-                #rsyncd_path: /plots
-                #rsyncd_bwlimit: 80000  # Bandwidth limit in KB/s
-                #rsyncd_host: myfarmer
-                #rsyncd_user: chia
-                # Optional index.  If omitted or set to 0, plotman will archive
-                # to the first archive dir with free space.  If specified,
-                # plotman will skip forward up to 'index' drives (if they exist).
-                # This can be useful to reduce io contention on a drive on the
-                # archive host if you have multiple plotters (simultaneous io
-                # can still happen at the time a drive fills up.)  E.g., if you
-                # have four plotters, you could set this to 0, 1, 2, and 3, on
-                # the 4 machines, or 0, 1, 0, 1.
-                #   index: 0
-
+# See: https://github.com/guydavis/machinaris/wiki/Plotman#archiving
+#archiving:
+        #target: rsyncd
+        #env:
+                #site_root: /mnt/disks
+                #user: root
+                #host: aragorn
+                #rsync_port: 12000
+                #site: disks
 
 # Plotting scheduling parameters
 scheduling:
@@ -90,10 +77,12 @@ scheduling:
         tmpdir_stagger_phase_limit: 1
 
         # Don't run more than this many jobs at a time on a single temp dir.
-        tmpdir_max_jobs: 2
+        # Increase for staggered plotting by chia, leave at 1 for madmax sequential plotting
+        tmpdir_max_jobs: 1
 
         # Don't run more than this many jobs at a time in total.
-        global_max_jobs: 4
+        # Increase for staggered plotting by chia, leave at 1 for madmax sequential plotting
+        global_max_jobs: 1 
 
         # Don't run any jobs (across all temp dirs) more often than this, in minutes.
         global_stagger_m: 30
@@ -102,15 +91,24 @@ scheduling:
         polling_time_s: 20
 
 
-# Plotting parameters.  These are pass-through parameters to chia plots create.
-# See documentation at
-# https://github.com/Chia-Network/chia-blockchain/wiki/CLI-Commands-Reference#create
+# Configure the plotter.  See: https://github.com/guydavis/machinaris/wiki/Plotman#plotting
 plotting:
-        k: 32
-        e: False              # Use -e plotting option
-        n_threads: 4          # Threads per job
-        n_buckets: 128        # Number of buckets to split data into
-        job_buffer: 3389      # Per job memory - Chia default
-        # If specified, pass through to the -f and -p options.  See CLI reference.
-        #   farmer_pk: ...
-        #   pool_pk: ...
+        #farmer_pk: YOUR_FARMER_PUBLIC_KEY
+        #pool_pk: YOUR_POOL_PUBLIC_KEY
+
+        # If you enable 'chia', plot in *parallel* with higher tmpdir_max_jobs and global_max_jobs
+        # If you enable 'madmax', plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
+        type: chia
+
+        # The chia plotter: https://github.com/Chia-Network/chia-blockchain
+        chia:
+                k: 32                # k-size of plot, leave at 32 most of the time
+                e: False             # Disable bitfield back sorting (default is True) 
+                n_threads: 2         # Threads per job
+                n_buckets: 128       # Number of buckets to split data into
+                job_buffer: 3389     # Per job memory
+
+        # The madmax plotter: https://github.com/madMAx43v3r/chia-plotter
+        madmax:
+                n_threads: 4          # Default is 4, crank up if you have many cores
+                n_buckets: 256        # Default is 256

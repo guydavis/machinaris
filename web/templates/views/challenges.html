@@ -1,0 +1,36 @@
+{% if challenges.rows|length > 0 %}
+<table class="table table-dark">
+    <thead>
+      <tr>
+        <th scope="col">Worker</th>
+        <th scope="col">Challenge</th>
+        <th scope="col">Plots Passed Filter</th>
+        <th scope="col">Proofs Found</th>
+        <th scope="col">Time Taken</th>
+        <th scope="col">Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for challenge in challenges.rows %}
+      <tr>
+        <td>{{challenge.hostname}}</td>
+        <td>{{challenge.challenge_id}}</td>
+        <td>{{challenge.plots_past_filter}}</td>
+        <td>{{challenge.proofs_found}}</td>
+        <td>{{challenge.time_taken}}</td>
+        <td>{{challenge.created_at}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% else %}
+
+  <div class="text-center" style="padding-top:100 px; padding-bottom: 0px">
+    <h6>No recent challenges found in Chia's log on your farmers. Are they configured and running?</h6>
+    <h6>If you have plots and this persists for long, check the Alerts tab and review Chia's log.
+      See the <a
+        href="https://github.com/guydavis/machinaris/wiki/FAQ#why-are-there-no-challenges-shown-on-the-main-machinaris-page"
+        target="_blank">FAQ.</a></h6>
+  </div>
+  {% endif %}

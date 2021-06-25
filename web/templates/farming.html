@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script>
+    function ViewLogs(hostname) {
+        var d = new Date();
+        var height = 600;
+        var width = 900;
+        var top = (screen.height - height) / 2;
+        var left = (screen.width - width) / 2;
+        window.open("{{ url_for('logs') }}?log=farming" + "&hostname=" + hostname, 'Chia Log for ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+    }
+    function CheckPlots(hostname) {
+        var d = new Date();
+        var height = 600;
+        var width = 900;
+        var top = (screen.height - height) / 2;
+        var left = (screen.width - width) / 2;
+        window.open("{{ url_for('plots_check') }}?hostname=" + hostname, 'Plots Check on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+    }
+    function PlotJobAnalyze(plot) {
+        var output = document.getElementById('plotAnalyzeContent');
+        output.textContent = ""; // Clear any old analysis before requesting
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', "{{ url_for('farming') }}?analyze=" + plot);
+        xhr.send();
+        xhr.onload = function () {
+            output.textContent = xhr.responseText;
+        };
+    }
+</script>
+
+<header class="pb-3 mb-4 border-bottom">
+    <span class="fs-4">Farming:
+        {{ farming.plot_count }} plots.
+        Current expected time to win: <i class="text-success">{{ farming.expected_time_to_win }}</i>
+    </span>
+</header>
+
+<div class="modal fade" id="analyzeModal" tabindex="-1" aria-labelledby="analyzeModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3 modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="analyzeModalLabel">Plotting Analysis</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+                <p>Analysis of the plotting job log shows time (seconds) spent in each phase:</p>
+                <pre id="plotAnalyzeContent"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+        {% else %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {% endif %}
+            {{ message|safe }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <form method="POST" style="padding-bottom:5px; width:100%;" id="main-form">
+        <fieldset>
+            <div style="width: 100%; padding-bottom: 10px;">
+                {% for farmer in farmers %}
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false" id="{{ farmer.hostname }}_btn">
+                        {{ farmer.hostname }}: {{farmer.farming_status}}
+                    </button>
+                    <ul class="dropdown-menu bg-dark btn-outline-success">
+                        <li>
+                            <a class="dropdown-item text-white text-decoration-none" href="#"
+                                onclick='ViewLogs("{{ farmer.hostname }}");return false;'>
+                                <i class="fs-4 bi-text-indent-left"></i>
+                                <span class="align-text-bottom"></span>View Log</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item text-white text-decoration-none" href="#"
+                                onclick='CheckPlots("{{ farmer.hostname }}");return false;'>
+                                <i class="fs-4 bi-text-indent-left"></i>
+                                <span class="align-text-bottom"></span>Check Plots</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+            <fieldset>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    {% for column in plots.columns %}
+                    <th scope="col" class="text-success">{{ column }}</th>
+                    {% endfor %}
+                    <th scope="col" class="text-success"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in plots.rows %}
+                <tr>
+                    {% for column in plots.columns %}
+                    {% if column == "size" %}
+                    <td>{{ row[column] | bytesfilter}}</td>
+                    {% elif column == "plot" %}
+                    <td>{{ row[column] | plotnameshortener}}</td>
+                    {% else %}
+                    <td>{{ row[column] }}</td>
+                    {% endif %}
+                    {% endfor %}
+                    <td class="align-middle" style="padding:0px 5px 0px 0px">
+                        <!-- Careful, VS Code likes to format a space into 'plot' quotes for some reason -->
+                        <a href="#" title="Analyze Plotting Job" data-bs-toggle="modal" data-bs-target="#analyzeModal"
+                            onclick='PlotJobAnalyze("{{ row['plot'] }}");return false;'>
+                            <i class="fs-4 bi-stopwatch"></i>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% endblock %}

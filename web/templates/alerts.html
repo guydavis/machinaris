@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script>
+    function MonitoringLogs(hostname) {
+        var d = new Date();
+        var height = 600;
+        var width = 900;
+        var top = (screen.height - height) / 2;
+        var left = (screen.width - width) / 2;
+        window.open("{{ url_for('logs') }}?log=alerts&hostname=" + hostname, 'Chiadog Log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+    }
+    function MonitoringAction(hostname, service, action, status) {
+        $("#"+hostname+"_btn").prop("disabled", true);
+        $("#"+hostname+"_btn").html(
+            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> '+ hostname + ': ' + status + '...'
+        );
+        $('#chiadog-form').append('<input type="hidden" id="action" name="action" value="' + action + '" />');
+        $('#chiadog-form').append('<input type="hidden" id="service" name="service" value="' + service + '" />');
+        $('#chiadog-form').append('<input type="hidden" id="hostname" name="hostname" value="' + hostname + '" />');
+        $("#chiadog-form").submit();
+    }
+</script>
+
+<header class="pb-3 mb-4 border-bottom">
+    <span class="fs-4">Alerts: Recent Notifications</span>
+</header>
+
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+        {% else %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {% endif %}
+            {{ message|safe }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+
+    <form method="POST" id="chiadog-form" style="padding-bottom: 10px;">
+        <fieldset>
+            {% for farmer in farmers %}
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false" id="{{ farmer.hostname }}_btn">
+                    {{ farmer.hostname }}: {{farmer.monitoring_status}}
+                </button>
+                <ul class="dropdown-menu bg-dark btn-outline-success">
+                    <li>
+                        <a class="dropdown-item text-white text-decoration-none" href="#"
+                            {% if farmer.monitoring_status == 'stopped' %}
+                            onclick='MonitoringAction("{{ farmer.hostname }}","monitoring","start", "starting");return false;'>
+                            <i class="fs-4 bi-text-indent-left"></i> 
+                            <span class="align-text-bottom">Start Monitoring</span>
+                            {% else %}
+                            onclick='MonitoringAction("{{ farmer.hostname }}","monitoring","stop", "stopping");return false;'>
+                            <i class="fs-4 bi-text-indent-left"></i> 
+                            <span class="align-text-bottom">Stop Monitoring</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item text-white text-decoration-none" href="#"
+                            onclick='MonitoringLogs("{{ farmer.hostname }}");return false;'>
+                            <i class="fs-4 bi-text-indent-left"></i> 
+                            <span class="align-text-bottom"></span>View Monitoring Logs</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            {% endfor %}
+        </fieldset>
+    </form>
+
+
+    {% if notifications|length > 0 %}
+    <div class="table-responsive">
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-success">Worker</th>
+                    <th scope="col" class="text-success">Service</th>
+                    <th scope="col" class="text-success">Notification</th>
+                    <th scope="col" class="text-success">Recorded At</th>
+                    <th scope="col" class="text-success">Priority</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for notification in notifications %}
+                <tr>
+                    <td>{{notification.hostname}}</td>
+                    <td>{{notification.service}}</td>
+                    <td style="white-space: pre-wrap;">{{notification.message}}</td>
+                    <td>{{notification.created_at | datetimefilter}}</td>
+                    <td>{{notification.priority}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
+        <h6>No notifications from Chiadog yet... so check back soon.</h6>
+        <h6>Expect at least a summary notification once daily as long as running above.</h6>
+    </div>
+    {% endif %}
+
+    <script>
+        $(document).ready(function () {
+            $("#btnStart").click(function () {
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Starting...`
+                );
+                $("#chiadog-form").submit();
+            });
+            $("#btnStop").click(function () {
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Stopping...`
+                );
+                $("#chiadog-form").submit();
+            });
+        })
+    </script>
+
+    {% endblock %}
