@@ -170,50 +170,49 @@ def network_connections():
     return render_template('network/connections.html', reload_seconds=60, 
         connections=connections, global_config=gc, now=gc['now'])
 
+def find_selected_worker(workers_summary, hostname):
+    if len(workers_summary.workers) == 0:
+        return None
+    for worker in workers_summary.workers:
+        if worker.hostname == hostname:
+            return worker
+    return workers_summary.workers[0]
+
 @app.route('/settings/plotting', methods=['GET', 'POST'])
 def settings_plotting():
+    selected_worker_hostname = None
     gc = globals.load()
     if request.method == 'POST':
-        plotman.save_config( \
-            worker.get_worker_by_hostname(request.form.get('worker')), \
-            request.form.get("config")
-        )
-    workers = worker.load_worker_summary()
-    selected_worker = None
-    if len(workers.plotters) > 0:
-        selected_worker = workers.plotters[0]
+        selected_worker_hostname = request.form.get('worker')
+        plotman.save_config(worker.get_worker_by_hostname(selected_worker_hostname), request.form.get("config"))
+    workers_summary = worker.load_worker_summary()
+    selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
     return render_template('settings/plotting.html',
-        workers=workers.plotters, selected_worker=selected_worker, global_config=gc)
+        workers=workers_summary.plotters, selected_worker=selected_worker, global_config=gc)
 
 @app.route('/settings/farming', methods=['GET', 'POST'])
 def settings_farming():
+    selected_worker_hostname = None
     gc = globals.load()
     if request.method == 'POST':
-        chia.save_config( \
-            worker.get_worker_by_hostname(request.form.get('worker')), \
-            request.form.get("config")
-        )
-    workers = worker.load_worker_summary()
-    selected_worker = None
-    if len(workers.farmers_harvesters) > 0:
-        selected_worker = workers.farmers_harvesters[0]
+        selected_worker_hostname = request.form.get('worker')
+        chia.save_config(worker.get_worker_by_hostname(selected_worker_hostname), request.form.get("config"))
+    workers_summary = worker.load_worker_summary()
+    selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
     return render_template('settings/farming.html',
-        workers=workers.farmers_harvesters, selected_worker=selected_worker, global_config=gc)
+        workers=workers_summary.farmers_harvesters, selected_worker=selected_worker, global_config=gc)
 
 @app.route('/settings/alerts', methods=['GET', 'POST'])
 def settings_alerts():
+    selected_worker_hostname = None
     gc = globals.load()
     if request.method == 'POST':
-        chiadog.save_config( \
-            worker.get_worker_by_hostname(request.form.get('worker')), \
-            request.form.get("config")
-        )
-    workers = worker.load_worker_summary()
-    selected_worker = None
-    if len(workers.farmers_harvesters) > 0:
-        selected_worker = workers.farmers_harvesters[0]
+        selected_worker_hostname = request.form.get('worker')
+        chiadog.save_config(worker.get_worker_by_hostname(selected_worker_hostname), request.form.get("config"))
+    workers_summary = worker.load_worker_summary()
+    selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
     return render_template('settings/alerts.html',
-        workers=workers.farmers_harvesters, selected_worker=selected_worker, global_config=gc)
+        workers=workers_summary.farmers_harvesters, selected_worker=selected_worker, global_config=gc)
 
 @app.route('/settings/config', defaults={'path': ''})
 @app.route('/settings/config/<path:path>')

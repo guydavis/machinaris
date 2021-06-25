@@ -5,7 +5,6 @@ Thank you for taking the time to contribute!
 * [Suggesting a feature](#suggesting-a-feature)
 * [Filing a bug report](#filing-a-bug-report)
 * [Submitting a pull request](#submitting-a-pull-request)
-* [Updating Wiki Documentation](#updating-wiki-documentation)
 
 ## Suggesting a feature
 
@@ -21,7 +20,7 @@ When suggesting a feature, make sure to:
 
 ## Filing a bug report
 
-If you're having trouble with our code/libraries/products on your Raspberry Pi try asking on our Discussions (https://github.com/guydavis/machinaris/discussions) or Discord (https://discord.gg/mX4AtMTt87).
+If you're having trouble with Machinaris try asking on our Discussions (https://github.com/guydavis/machinaris/discussions) or Discord (https://discord.gg/mX4AtMTt87).  Feel free to submit fixes for documentation too, not just bugs!
 
 If all else fails then please raise an Issue to let us know. Be as detailed as possible, and be ready to answer questions when we get back to you. Make sure you include your system setup:
 
@@ -42,6 +41,7 @@ When contributing a new example or making a change to a library please keep your
 
 #### Do
 
+* Do fork the project and work off the `integration` branch.
 * Do use pep8 style guidelines
 * Do comment your code where necessary
 * Do submit only a single example/feature per pull-request
