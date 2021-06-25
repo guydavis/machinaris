@@ -41,6 +41,7 @@ When contributing a new example or making a change to a library please keep your
 
 #### Do
 
+* Do fork the project and work off the `integration` branch.
 * Do use pep8 style guidelines
 * Do comment your code where necessary
 * Do submit only a single example/feature per pull-request

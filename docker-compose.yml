@@ -10,7 +10,7 @@ version: '3.8'
 
 machinaris:
     container_name: machinaris
-    image: ghcr.io/guydavis/machinaris:test
+    image: ghcr.io/guydavis/machinaris
     hostname: YOUR_HOST_COMPUTERS_HOSTNAME
     restart: always
     tty: true
