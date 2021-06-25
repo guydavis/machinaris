@@ -53,7 +53,7 @@ class ConfigByType(MethodView):
                 chiadog_cli.save_config(self.clean_config(request.data))
             else:
                 abort(400, "Unknown config type provided: {0}".format(type))
-            response = make_response("Successfully saved config for {0}".format(type), 200)
+            response = make_response("Successfully saved config.", 200)
             return response
         except Exception as ex:
             app.logger.error(traceback.format_exc())
