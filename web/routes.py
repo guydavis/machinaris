@@ -172,45 +172,41 @@ def network_connections():
 
 @app.route('/settings/plotting', methods=['GET', 'POST'])
 def settings_plotting():
+    selected_worker = None
     gc = globals.load()
     if request.method == 'POST':
-        plotman.save_config( \
-            worker.get_worker_by_hostname(request.form.get('worker')), \
-            request.form.get("config")
-        )
+        selected_worker = worker.get_worker_by_hostname(request.form.get('worker'))
+        plotman.save_config(selected_worker, request.form.get("config"))
     workers = worker.load_worker_summary()
-    selected_worker = None
-    if len(workers.plotters) > 0:
+    if not selected_worker and len(workers.plotters) > 0:
         selected_worker = workers.plotters[0]
     return render_template('settings/plotting.html',
         workers=workers.plotters, selected_worker=selected_worker, global_config=gc)
 
 @app.route('/settings/farming', methods=['GET', 'POST'])
 def settings_farming():
+    selected_worker = None
     gc = globals.load()
     if request.method == 'POST':
-        chia.save_config( \
-            worker.get_worker_by_hostname(request.form.get('worker')), \
-            request.form.get("config")
-        )
+        selected_worker = worker.get_worker_by_hostname(request.form.get('worker'))
+        chia.save_config(selected_worker, request.form.get("config"))
     workers = worker.load_worker_summary()
     selected_worker = None
-    if len(workers.farmers_harvesters) > 0:
+    if not selected_worker and len(workers.farmers_harvesters) > 0:
         selected_worker = workers.farmers_harvesters[0]
     return render_template('settings/farming.html',
         workers=workers.farmers_harvesters, selected_worker=selected_worker, global_config=gc)
 
 @app.route('/settings/alerts', methods=['GET', 'POST'])
 def settings_alerts():
+    selected_worker = None
     gc = globals.load()
     if request.method == 'POST':
-        chiadog.save_config( \
-            worker.get_worker_by_hostname(request.form.get('worker')), \
-            request.form.get("config")
-        )
+        selected_worker = worker.get_worker_by_hostname(request.form.get('worker'))
+        chiadog.save_config(selected_worker, request.form.get("config"))
     workers = worker.load_worker_summary()
     selected_worker = None
-    if len(workers.farmers_harvesters) > 0:
+    if not selected_worker and len(workers.farmers_harvesters) > 0:
         selected_worker = workers.farmers_harvesters[0]
     return render_template('settings/alerts.html',
         workers=workers.farmers_harvesters, selected_worker=selected_worker, global_config=gc)

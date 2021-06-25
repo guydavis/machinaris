@@ -18,12 +18,16 @@ body {
     font-weight: 500;
 }
 
-.text-white {
-  color: #c7c7c7;
+.dropdown-item:focus, .dropdown-item:hover {
+  background-color: #198754;
 }
 
-.display-6 {
-    color: #c7c7c7;
+.text-white, .display-6, .table-dark {
+    color: #c7c7c7!important;
+}
+
+.form-control, .form-select {
+    background-color: #c7c7c7;
 }
 
 .nav-link.active {
