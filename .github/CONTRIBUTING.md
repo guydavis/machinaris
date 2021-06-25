@@ -46,6 +46,7 @@ When contributing a new example or making a change to a library please keep your
 * Do comment your code where necessary
 * Do submit only a single example/feature per pull-request
 * Do include a description of what your change is expected to do
+* Do include the new API calls by updating the Postman collection
 
 #### Don't
 
