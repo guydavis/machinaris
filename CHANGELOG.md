@@ -6,8 +6,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Support for [Madmax plotter](https://github.com/madMAx43v3r/chia-plotter), in addition to official [Chia plotter](https://github.com/Chia-Network/chia-blockchain).
 - Manage multiple plotters, harvesters, and farmers across your LAN, all from a [single WebUI on one controller system](https://github.com/guydavis/machinaris/wiki/Workers).
-- Move to latest Ubuntu (HirsuteHippo) including Python 3.9
-- Stylish new scrollbar coloring courtesy of Hukuma1, a wizard on the UI styling!
+
 
 ## [0.3.2] - 2021-06-06
 
