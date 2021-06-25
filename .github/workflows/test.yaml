@@ -44,6 +44,4 @@ jobs:
             "PATCH_CHIAPOS=true"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:test
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:v${{ github.event.inputs.version }}
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:test
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:v${{ github.event.inputs.version }}
