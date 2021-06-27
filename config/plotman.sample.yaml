@@ -110,5 +110,5 @@ plotting:
 
         # The madmax plotter: https://github.com/madMAx43v3r/chia-plotter
         madmax:
-                n_threads: 4          # Default is 4, crank up if you have many cores
+                n_threads: 4          # Default is 4, SLOWLY crank up if you have many cores
                 n_buckets: 256        # Default is 256
