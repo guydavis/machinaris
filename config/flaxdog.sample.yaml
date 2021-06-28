@@ -1,6 +1,6 @@
 # This is useful to differentiate multiple chiadog
 # instances monitoring multiple harvesters
-notification_title_prefix: 'Machinaris-Chia'
+notification_title_prefix: 'Machinaris-Flax'
 log_level: INFO
 
 # Only one consumer can be enabled at a time, you can
@@ -9,7 +9,7 @@ log_level: INFO
 chia_logs:
   file_log_consumer:
     enable: true
-    file_path: '~/.chia/mainnet/log/debug.log'
+    file_path: '~/.chia/flax/mainnet/log/debug.log'
   #network_log_consumer:
   #  enable: false
   #  remote_file_path: '~/.chia/mainnet/log/debug.log'

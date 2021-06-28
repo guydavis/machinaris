@@ -30,19 +30,12 @@ if [ ${AUTO_PLOT,,} = "true" ]; then
     nohup plotman plot < /dev/tty >> /root/.chia/plotman/logs/plotman.log 2>&1 &
 fi
 
+# Start the log monitors
 if [ "${mode}" != "plotter" ]; then
-    echo 'Configuring Chiadog...'
-    mkdir -p /root/.chia/chiadog/logs
-    cp -n /machinaris/config/chiadog.sample.yaml /root/.chia/chiadog/config.yaml
-    cp -f /machinaris/scripts/chiadog_notifier.sh /root/.chia/chiadog/notifier.sh && chmod 755 /root/.chia/chiadog/notifier.sh
-
-    echo 'Starting Chiadog...'
-    cd /chiadog
-    chiadog_pid=$(pidof python3)
-    if [ ! -z $chiadog_pid ]; then
-        kill $chiadog_pid
-    fi
-    /chia-blockchain/venv/bin/python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
+    . /machinaris/scripts/chiadog_launch.sh
+fi
+if [[ "${mode}" != "plotter" ]] && [[ ${blockchains} =~ ^flax.* ]]; then
+    . /machinaris/scripts/flaxdog_launch.sh
 fi
 
 # Even standalone plotting mode needs database setup
