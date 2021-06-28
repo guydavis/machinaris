@@ -18,16 +18,16 @@ from subprocess import Popen, TimeoutExpired, PIPE
 from api.models import chiadog
 from api import app
 
-def load_config():
-    return open('/root/.chia/chiadog/config.yaml','r').read()
+def load_config(blockchain='chia'):
+    return open('/root/.{0}/chiadog/config.yaml'.format(blockchain),'r').read()
 
-def save_config(config):
+def save_config(config, blockchain='chia'):
     try:
         # Validate the YAML first
         yaml.safe_load(config)
         # Save a copy of the old config file
-        src="/root/.chia/chiadog/config.yaml"
-        dst="/root/.chia/chiadog/config.yaml."+time.strftime("%Y%m%d-%H%M%S")+".yaml"
+        src='/root/.{0}/chiadog/config.yaml'.format(blockchain)
+        dst='/root/.{0}/chiadog/config.yaml'.format(blockchain)+time.strftime("%Y%m%d-%H%M%S")+".yaml"
         shutil.copy(src,dst)
         # Now save the new contents to main config file
         with open(src, 'w') as writer:
@@ -36,13 +36,13 @@ def save_config(config):
         app.logger.info(traceback.format_exc())
         raise Exception('Updated config.yaml failed validation!\n' + str(ex))
     else:
-        if get_chiadog_pid():
-            stop_chiadog()
-            start_chiadog()
+        if get_chiadog_pid(blockchain):
+            stop_chiadog(blockchain)
+            start_chiadog(blockchain)
 
-def get_chiadog_pid():
+def get_chiadog_pid(blockchain='chia'):
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-        if proc.info['name'] == 'python3' and '/root/.chia/chiadog/config.yaml' in proc.info['cmdline']:
+        if proc.info['name'] == 'python3' and '/root/.{0}/chiadog/config.yaml'.format(blockchain) in proc.info['cmdline']:
             return proc.info['pid']
     return None
 

@@ -21,6 +21,8 @@ def update():
         try:
             hostname = utils.get_hostname()
             farm_summary = chia_cli.load_farm_summary()
+            if globals.flax_enabled():
+                flax_farm_summary = chia_cli.load_flax_farm_summary()
             payload = {
                 "hostname": hostname,
                 "mode": os.environ['mode'],
@@ -29,7 +31,10 @@ def update():
                 "plots_size": converters.str_to_gibs(farm_summary.plots_size),
                 "total_chia": 0 if not hasattr(farm_summary, 'total_chia') else farm_summary.total_chia,
                 "netspace_size": 0 if not hasattr(farm_summary, 'netspace_size') else converters.str_to_gibs(farm_summary.netspace_size),
-                "expected_time_to_win": "" if not hasattr(farm_summary, 'time_to_win') else farm_summary.time_to_win
+                "expected_time_to_win": "" if not hasattr(farm_summary, 'time_to_win') else farm_summary.time_to_win,
+                "total_flax": 0 if not hasattr(farm_summary, 'total_flax') else farm_summary.total_flax,
+                "flax_netspace_size": 0 if not hasattr(farm_summary, 'flax_netspace_size') else converters.str_to_gibs(farm_summary.flax_netspace_size),
+                "flax_expected_time_to_win": "" if not hasattr(farm_summary, 'time_to_win') else farm_summary.flax_time_to_win,
             }
             utils.send_post('/farms/', payload, debug=False)
         except:

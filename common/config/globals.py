@@ -106,6 +106,8 @@ def harvesting_enabled():
 def plotting_enabled():
     return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode'])
 
+def flax_enabled():
+    return "blockchains" in os.environ and "flax" in os.environ['mode']
 
 def archiving_enabled():
     if not plotting_enabled():

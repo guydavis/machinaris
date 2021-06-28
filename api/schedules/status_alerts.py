@@ -34,17 +34,20 @@ def update():
                 first_run = False
             else: # On subsequent schedules, load only last 5 minutes.
                 since = (datetime.datetime.now() - datetime.timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S.000")
-            alerts = chiadog_cli.get_notifications(since)
-            payload = []
-            for alert in alerts:
-                payload.append({
-                    "unique_id": hostname + '_' + alert.created_at.strftime("%Y-%m-%d_%H:%M:%S"),
-                    "hostname":  hostname,
-                    "priority": alert.priority,
-                    "service": alert.service,
-                    "message": alert.message,
-                    "created_at": alert.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-                })
+            for blockchain in ['chia', 'flax']:
+                alerts = chiadog_cli.get_notifications(blockchain, since)
+                payload = []
+                for alert in alerts:
+                    payload.append({
+                        "unique_id": hostname + '_{0}_'.format(blockchain) + \
+                                alert.created_at.strftime("%Y-%m-%d_%H:%M:%S"),
+                        "hostname":  hostname,
+                        "blockchain": blockchain,
+                        "priority": alert.priority,
+                        "service": alert.service,
+                        "message": alert.message,
+                        "created_at": alert.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                    })
             if len(payload) > 0:
                 utils.send_post('/alerts/', payload, debug=False)
         except:

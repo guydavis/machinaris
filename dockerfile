@@ -70,6 +70,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/flax_install.sh ${FLAX_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/flaxdog_install.sh \
 	&& rm -rf \
 		/root/.cache \
 		/tmp/* \

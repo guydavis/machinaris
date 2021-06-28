@@ -24,7 +24,7 @@ class FarmSummary:
             self.plot_count += farm.plot_count
             self.plots_size += farm.plots_size
             if farm.mode == "fullnode":
-                self.total_chia = farm.total_chia
+                self.total_chia = round(farm.total_chia, 3)
                 fullnode_plots_size = farm.plots_size
                 self.netspace_display_size = converters.gib_to_fmt(farm.netspace_size)
                 self.netspace_size = farm.netspace_size

@@ -23,6 +23,9 @@ class Worker(db.Model):
     def farming_status(self):
         return j.loads(self.services)['chia_farm_status']
     
+    def flax_farming_status(self):
+        return j.loads(self.services)['flax_farm_status']
+    
     def plotting_status(self):
         return j.loads(self.services)['plotman_status']
 
