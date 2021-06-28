@@ -7,7 +7,7 @@ echo 'Installing Flaxdog...'
 
 cd /
 
-git clone git@github.com:langhorst/flaxdog.git
+git clone https://github.com/langhorst/flaxdog.git
 
 cd /flax-blockchain/
 
