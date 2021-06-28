@@ -6,7 +6,7 @@
 /usr/bin/bash /machinaris/scripts/chia_launch.sh
 
 # Optionally launch forked blockchains for multi-farming
-if [[ ${blockchains} =~ ^flax.* ]]; then
+if [[ ${blockchains} =~ flax ]]; then
   /usr/bin/bash /machinaris/scripts/flax_launch.sh
 fi
 

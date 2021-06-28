@@ -34,7 +34,7 @@ fi
 if [ "${mode}" != "plotter" ]; then
     . /machinaris/scripts/chiadog_launch.sh
 fi
-if [[ "${mode}" != "plotter" ]] && [[ ${blockchains} =~ ^flax.* ]]; then
+if [[ "${mode}" != "plotter" ]] && [[ ${blockchains} =~ flax ]]; then
     . /machinaris/scripts/flaxdog_launch.sh
 fi
 
