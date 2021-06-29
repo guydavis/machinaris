@@ -49,7 +49,7 @@ def save_config(farmer, config):
         flash('Nice! Chiadog\'s config.yaml validated and saved successfully.', 'success')
 
 def get_notifications():
-    return db.session.query(a.Alert).order_by(a.Alert.created_at.desc()).limit(20).all()
+    return db.session.query(a.Alert).order_by(a.Alert.created_at.desc()).limit(25).all()
 
 def start_chiadog(farmer):
     app.logger.info("Starting Chiadog monitoring...")

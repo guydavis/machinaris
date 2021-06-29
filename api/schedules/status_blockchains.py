@@ -25,14 +25,19 @@ def update():
         return
     with app.app_context():
         try:
-            hostname = utils.get_hostname()
-            blockchain = chia_cli.load_blockchain_show()
-            #app.logger.info(blockchain.text)
-            payload = {
-                "hostname": hostname,
-                "details": blockchain.text.replace('\r', ''),
-            }
-            utils.send_post('/blockchains/', payload, debug=False)
+            blockchains = ['chia']
+            if globals.flax_enabled():
+                blockchains.append('flax')
+            for blockchain in blockchains:
+                hostname = utils.get_hostname()
+                bc = chia_cli.load_blockchain_show(blockchain)
+                #app.logger.info(blockchain.text)
+                payload = {
+                    "hostname": hostname,
+                    "blockchain": blockchain,
+                    "details": bc.text.replace('\r', ''),
+                }
+                utils.send_post('/blockchains/', payload, debug=False)
         except:
             app.logger.info("Failed to load and send blockchains status.")
             app.logger.info(traceback.format_exc())

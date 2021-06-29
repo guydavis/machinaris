@@ -19,8 +19,9 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Boostrap Sidebars](https://dev.to/codeply/bootstrap-5-sidebar-examples-38pb): Used for sidebar menu layout.
 * [Toplevel](https://github.com/and-semakin/marshmallow-toplevel): Used for list of objects sent to REST API.
 
-## Target Platforms
-* [Unraid](https://selfhosters.net/docker/templating/templating/): Guide to creating an [application template](https://github.com/guydavis/machinaris-unraid) for Unraid.
+## Blockchain Forks
+* [Flax](https://github.com/Flax-Network/flax-blockchain)
+* [Flaxdog](https://github.com/langhorst/flaxdog)
 
 ## Testers and Developers
 

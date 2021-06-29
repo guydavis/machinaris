@@ -86,6 +86,7 @@
             <thead>
                 <tr>
                     <th scope="col" class="text-success">Worker</th>
+                    <th scope="col" class="text-success">Blockchain</th>
                     <th scope="col" class="text-success">Service</th>
                     <th scope="col" class="text-success">Notification</th>
                     <th scope="col" class="text-success">Recorded At</th>
@@ -96,6 +97,7 @@
                 {% for notification in notifications %}
                 <tr>
                     <td>{{notification.hostname}}</td>
+                    <td>{{notification.blockchain}}</td>
                     <td>{{notification.service}}</td>
                     <td style="white-space: pre-wrap;">{{notification.message}}</td>
                     <td>{{notification.created_at | datetimefilter}}</td>

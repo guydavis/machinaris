@@ -11,6 +11,7 @@ class Alert(db.Model):
 
     unique_id = sa.Column(sa.String(length=128), primary_key=True)
     hostname = sa.Column(sa.String(length=255), nullable=False)
+    blockchain = sa.Column(sa.String(length=64), nullable=True)
     priority = sa.Column(sa.String(64), nullable=False)
     service = sa.Column(sa.String(64), nullable=False)
     message = sa.Column(sa.String, nullable=False)

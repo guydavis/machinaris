@@ -38,8 +38,10 @@ def update():
             payload = []
             for alert in alerts:
                 payload.append({
-                    "unique_id": hostname + '_' + alert.created_at.strftime("%Y-%m-%d_%H:%M:%S"),
+                    "unique_id": hostname + '_{0}_'.format(alert.blockchain) + \
+                            alert.created_at.strftime("%Y-%m-%d_%H:%M:%S"),
                     "hostname":  hostname,
+                    "blockchain": alert.blockchain,
                     "priority": alert.priority,
                     "service": alert.service,
                     "message": alert.message,

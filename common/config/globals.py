@@ -24,6 +24,8 @@ PLOTMAN_SAMPLE = '/machinaris/config/plotman.sample.yaml'
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 MADMAX_BINARY = '/usr/bin/chia_plot'
 CHIADOG_PATH = '/chiadog'
+FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
+FLAXDOG_PATH = '/flaxdog'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
 
@@ -34,12 +36,15 @@ def load():
     cfg['archiving_enabled'] = archiving_enabled()
     cfg['farming_enabled'] = farming_enabled()
     cfg['harvesting_enabled'] = harvesting_enabled()
+    cfg['flax_enabled'] = flax_enabled()
     cfg['now'] = datetime.datetime.now(tz=None).strftime("%Y-%m-%d %H:%M:%S")
     cfg['machinaris_version'] = load_machinaris_version()
     cfg['machinaris_mode'] = os.environ['mode']
     cfg['chiadog_version'] = load_chiadog_version()
     cfg['plotman_version'] = load_plotman_version()
     cfg['chia_version'] = load_chia_version()
+    cfg['flax_version'] = load_flax_version()
+    cfg['flaxdog_version'] = load_flaxdog_version()
     cfg['madmax_version'] = load_madmax_version()
     cfg['is_controller'] = "localhost" == (
         os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost')
@@ -106,6 +111,8 @@ def harvesting_enabled():
 def plotting_enabled():
     return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode'])
 
+def flax_enabled():
+    return "blockchains" in os.environ and "flax" in os.environ['blockchains']
 
 def archiving_enabled():
     if not plotting_enabled():
@@ -283,3 +290,63 @@ def get_disks(disk_type):
             logging.info("Unable to find any plotting for stats.")
             logging.info(traceback.format_exc())
             return []
+
+
+last_flax_version = None
+last_flax_version_load_time = None
+
+def load_flax_version():
+    global last_flax_version
+    global last_flax_version_load_time
+    if last_flax_version and last_flax_version_load_time >= \
+            (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
+        return last_flax_version
+    proc = Popen("{0} version".format(CHIA_BINARY),
+                 stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        abort(500, description="The timeout is expired!")
+    if errs:
+        abort(500, description=errs.decode('utf-8'))
+    last_flax_version = outs.decode('utf-8').strip()
+    # Chia version with .dev is actually one # to high
+    # See: https://github.com/Chia-Network/flax-blockchain/issues/5655
+    if last_flax_version.endswith('dev0'):
+        sem_ver = last_flax_version.split('.')
+        last_flax_version = sem_ver[0] + '.' + \
+            sem_ver[1] + '.' + str(int(sem_ver[2])-1)
+    elif '.dev' in last_flax_version:
+        sem_ver = last_flax_version.split('.')
+        last_flax_version = sem_ver[0] + '.' + sem_ver[1] + '.' + sem_ver[2]
+    last_flax_version_load_time = datetime.datetime.now()
+    return last_flax_version
+
+last_flaxdog_version = None
+last_flaxdog_version_load_time = None
+
+
+def load_flaxdog_version():
+    global last_flaxdog_version
+    global last_flaxdog_version_load_time
+    if last_flaxdog_version and last_flaxdog_version_load_time >= \
+            (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
+        return last_flaxdog_version
+    proc = Popen("/flax-blockchain/venv/bin/python3 -u main.py --version",
+                 stdout=PIPE, stderr=PIPE, shell=True, cwd=FLAXDOG_PATH)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        abort(500, description="The timeout is expired!")
+    if errs:
+        abort(500, description=errs.decode('utf-8'))
+    last_flaxdog_version = outs.decode('utf-8').strip()
+    if last_flaxdog_version.startswith('v'):
+        last_flaxdog_version = last_flaxdog_version[len('v'):].strip()
+    last_flaxdog_version = last_flaxdog_version.split('-')[0]
+    last_flaxdog_version_load_time = datetime.datetime.now()
+    return last_flaxdog_version

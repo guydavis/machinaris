@@ -9,5 +9,5 @@ event_message="$3"
 
 cd /root/.chia/chiadog/dbs
 sqlite3 chiadog.db <<EOF
-INSERT INTO notification (priority,service,message,created_at) VALUES ('${event_priority_name//\'/\'\'}','${event_service_name//\'/\'\'}','${event_message//\'/\'\'}', strftime('%Y-%m-%d %H:%M:%S','now'));
+INSERT INTO notification (blockchain,priority,service,message,created_at) VALUES ('chia','${event_priority_name//\'/\'\'}','${event_service_name//\'/\'\'}','${event_message//\'/\'\'}', strftime('%Y-%m-%d %H:%M:%S','now'));
 EOF
