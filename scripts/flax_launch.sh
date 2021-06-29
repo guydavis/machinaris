@@ -8,7 +8,7 @@ cd /flax-blockchain
 . ./activate
 
 # Only the /root/.chia folder is volume-mounted so store flax within
-mkdir /root/.chia/flax
+mkdir -p /root/.chia/flax
 ln -s /root/.chia/flax /root/.flax 
 
 mkdir -p /root/.flax/mainnet/log
