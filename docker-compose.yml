@@ -16,14 +16,20 @@ machinaris:
     tty: true
     ports:
     # Chia network port: You should port forward at your router.
-        - "8446:8444"
+        - "8444:8444"
+    # Chia farmer port: LAN-only for harvesters to connect. Do not port-forward at router.
+        - "8447:8447"
+    # Flax network port: You should port forward at your router.
+        - "6888:6888"
+    # Flax farmer port: LAN-only for harvesters to connect. Do not port-forward at router.
+        - "6885:6885"
     #
     # Machinaris Web: Do NOT port forward - LAN only!  
     # To proxy see: https://github.com/guydavis/machinaris/wiki/Nginx
         - "8926:8926"
     #
     # Machinaris API, also LAN only! See https://github.com/guydavis/machinaris/wiki/Workers
-    #    - "8927:8927"
+        - "8927:8927"
     # 
     volumes:
     # Path to Machinaris application storage (host_path:container_path)
