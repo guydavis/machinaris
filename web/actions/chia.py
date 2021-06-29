@@ -27,6 +27,7 @@ from web.models.chia import FarmSummary, FarmPlots, BlockchainChallenges, Wallet
 from . import worker as wk
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
+FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
 
 def load_farm_summary():
     farms = db.session.query(f.Farm).order_by(f.Farm.hostname).all()
@@ -94,11 +95,17 @@ def save_config(farmer, config):
 def add_connection(connection):
     try:
         hostname,port = connection.split(':')
+        binary = CHIA_BINARY
+        try:
+            if int(port) == 6888:
+                binary = FLAX_BINARY
+        except:
+            app.logger.info("Bad port provided.")
         if socket.gethostbyname(hostname) == hostname:
             app.logger.info('{} is a valid IP address'.format(hostname))
         elif socket.gethostbyname(hostname) != hostname:
             app.logger.info('{} is a valid hostname'.format(hostname))
-        proc = Popen("{0} show --add-connection {1}".format(CHIA_BINARY, connection), stdout=PIPE, stderr=PIPE, shell=True)
+        proc = Popen("{0} show --add-connection {1}".format(binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=90)
         except TimeoutExpired:

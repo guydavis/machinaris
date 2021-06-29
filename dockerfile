@@ -91,6 +91,7 @@ ENV pool_pk="null"
 # If mode=harvester, required for host and port the harvester will your farmer
 ENV farmer_address="null"
 ENV farmer_port="8447"
+ENV flax_farmer_port="6885"
 # Can override the location of default settings for api and web servers.
 ENV API_SETTINGS_FILE='/root/.chia/machinaris/config/api.cfg'
 ENV WEB_SETTINGS_FILE='/root/.chia/machinaris/config/web.cfg'
