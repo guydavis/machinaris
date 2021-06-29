@@ -30,12 +30,12 @@ class FarmSummary:
             if farm.mode == "fullnode":
                 self.status = farm.status
                 fullnode_plots_size = farm.plots_size
-                self.total_chia = round(farm.total_chia, 3)
-                self.netspace_display_size = converters.gib_to_fmt(farm.netspace_size)
+                self.total_chia = '0.0' if not farm.total_chia else round(farm.total_chia, 3)
+                self.netspace_display_size = '?' if not farm.netspace_size else converters.gib_to_fmt(farm.netspace_size)
                 self.netspace_size = farm.netspace_size
                 self.expected_time_to_win = farm.expected_time_to_win
-                self.total_flax = round(farm.total_flax, 3)
-                self.flax_netspace_display_size = converters.gib_to_fmt(farm.flax_netspace_size)
+                self.total_flax =  '0.0' if not farm.total_flax else round(farm.total_flax, 3)
+                self.flax_netspace_display_size = '?' if not farm.flax_netspace_size else converters.gib_to_fmt(farm.flax_netspace_size)
                 self.flax_netspace_size = farm.flax_netspace_size
                 self.flax_expected_time_to_win = farm.flax_expected_time_to_win
                 

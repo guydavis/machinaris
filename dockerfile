@@ -84,7 +84,7 @@ ENV plots_dir="/plots"
 # One of fullnode, farmer, harvester, plotter, farmer+plotter, harvester+plotter. Default is fullnode
 ENV mode="fullnode" 
 # Default is only the 'chia' blockchain, but can add 'flax' too. A comma-separated list
-ENV blockchains=chia
+ENV blockchains="chia,flax"
 # If provided then these optional 2 public keys will be set in your plotman.yaml
 ENV farmer_pk="null"
 ENV pool_pk="null"
