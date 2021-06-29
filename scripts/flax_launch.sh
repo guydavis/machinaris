@@ -15,6 +15,10 @@ mkdir -p /root/.flax/mainnet/log
 flax init >> /root/.flax/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Flax...'
+while [ ! -f /root/.flax/mainnet/config/config.yaml ]; do
+  echo "Waiting for creation of /root/.flax/mainnet/config/config.yaml..."
+  sleep 1
+done
 sed -i 's/log_stdout: true/log_stdout: false/g' /root/.flax/mainnet/config/config.yaml
 sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.flax/mainnet/config/config.yaml
 

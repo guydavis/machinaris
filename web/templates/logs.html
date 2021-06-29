@@ -38,7 +38,7 @@
         function load_log_file() {
             var output = document.getElementById('output');
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', "{{ url_for('logfile') }}?hostname=" + get('hostname') + "&log=" + get('log') + "&log_id=" + get('log_id'));
+            xhr.open('GET', "{{ url_for('logfile') }}?hostname=" + get('hostname') + "&log=" + get('log') + "&log_id=" + get('log_id') + "&blockchain=" + get('blockchain'));
             xhr.send();
             xhr.onload = function () {
                 output.textContent = xhr.responseText;

@@ -12,6 +12,10 @@ mkdir -p /root/.chia/mainnet/log
 chia init >> /root/.chia/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Chia...'
+while [ ! -f /root/.chia/mainnet/config/config.yaml ]; do
+  echo "Waiting for creation of /root/.chia/mainnet/config/config.yaml..."
+  sleep 1
+done
 sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/mainnet/config/config.yaml
 sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/config.yaml
 

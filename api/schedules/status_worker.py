@@ -52,15 +52,26 @@ def gather_services_status():
     chia_farm_status = "disabled"
     chiadog_status = "disabled"
     if gc['farming_enabled']:
-        chia_farm_status = chia_cli.load_farm_summary().status
+        chia_farm_status = chia_cli.load_farm_summary('chia').status
     if gc['farming_enabled'] or gc['harvesting_enabled']:
-        if chiadog_cli.get_chiadog_pid():
+        if chiadog_cli.get_chiadog_pid('chia'):
             chiadog_status = "running"
         else:
             chiadog_status = "stopped"
+    flax_farm_status = "disabled"
+    flaxdog_status = "disabled"
+    if gc['farming_enabled'] and gc['flax_enabled']:
+        flax_farm_status = chia_cli.load_farm_summary('flax').status
+    if gc['flax_enabled'] and (gc['farming_enabled'] or gc['harvesting_enabled']):
+        if chiadog_cli.get_chiadog_pid('flax'):
+            flaxdog_status = "running"
+        else:
+            flaxdog_status = "stopped"
     return json.dumps({
         'plotman_status': plotman_status,
         'archiver_status': archiver_status,
         'chia_farm_status': chia_farm_status,
-        'chiadog_status': chiadog_status
+        'chiadog_status': chiadog_status,
+        'flax_farm_status': flax_farm_status,
+        'flaxdog_status': flaxdog_status,
     })

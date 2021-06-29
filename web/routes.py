@@ -240,7 +240,8 @@ def logfile():
     log_type = request.args.get("log")
     if log_type in [ 'alerts', 'farming', 'plotting', 'archiving']:
         log_id = request.args.get("log_id")
-        return log_handler.get_log_lines(w, log_type, log_id)
+        blockchain = request.args.get("blockchain")
+        return log_handler.get_log_lines(w, log_type, log_id, blockchain)
     else:
         abort(500, "Unsupported log type: {0}".format(log_type))
 

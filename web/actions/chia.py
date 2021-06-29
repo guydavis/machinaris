@@ -33,7 +33,7 @@ def load_farm_summary():
     return FarmSummary(farms)
 
 def load_plots_farming():
-    plots = db.session.query(p.Plot).order_by(p.Plot.created_at.desc()).all()
+    plots = db.session.query(p.Plot).order_by(p.Plot.created_at.desc()).limit(150).all()
     return FarmPlots(plots)
 
 def recent_challenges():

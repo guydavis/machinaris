@@ -20,8 +20,9 @@ from subprocess import Popen, TimeoutExpired, PIPE
 from api.models import log
 from api import app
 
-# Location of the auto-rotating log in container
+# Location of the auto-rotating logs in container
 CHIA_LOG = '/root/.chia/mainnet/log/debug.log'
+FLAX_LOG = '/root/.flax/mainnet/log/debug.log'
 
 # Roughly 1 minutes worth of challenges
 CHALLENGES_TO_LOAD = 8
@@ -30,12 +31,15 @@ CHALLENGES_TO_LOAD = 8
 MAX_LOG_LINES = 250
 
 
-def recent_challenges():
-    if not os.path.exists(CHIA_LOG):
+def recent_challenges(blockchain='chia'):
+    log_file = CHIA_LOG
+    if blockchain == 'flax':
+        log_file = FLAX_LOG
+    if not os.path.exists(log_file):
         app.logger.debug(
-            "Skipping challenges parsing as no such log file: {0}".format(CHIA_LOG))
+            "Skipping challenges parsing as no such log file: {0}".format(log_file))
         return []
-    proc = Popen("grep -i eligible {0} | tail -n {1}".format(CHIA_LOG, CHALLENGES_TO_LOAD),
+    proc = Popen("grep -i eligible {0} | tail -n {1}".format(log_file, CHALLENGES_TO_LOAD),
                  stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -73,9 +77,12 @@ def find_plotting_job_log(plot_id):
     return None
 
 
-def get_log_lines(log_type, log_id=None):
+def get_log_lines(log_type, log_id=None, blockchain=None):
     if log_type == "alerts":
-        log_file = "/root/.chia/chiadog/logs/chiadog.log"
+        if blockchain == 'flax':
+            log_file = "/root/.chia/flaxdog/logs/flaxdog.log"       
+        else:
+            log_file = "/root/.chia/chiadog/logs/chiadog.log"
     elif log_type == "plotting":
         if log_id:
             log_file = find_plotting_job_log(log_id)
@@ -84,10 +91,14 @@ def get_log_lines(log_type, log_id=None):
     elif log_type == "archiving":
         log_file = "/root/.chia/plotman/logs/archiver.log"
     elif log_type == "farming":
-        log_file = "/root/.chia/mainnet/log/debug.log"
+        if blockchain == 'flax':
+            log_file = "/root/.flax/mainnet/log/debug.log"       
+        else:
+            log_file = "/root/.chia/mainnet/log/debug.log"
     if not log_file or not os.path.exists(log_file):
         app.logger.info("No log file found at {0}".format(log_file))
         return 'No log file found!'
+    app.logger.info("Log file found at {0}".format(log_file))
     class_escape = re.compile(r' chia.plotting.(\w+)(\s+): ')
     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
     proc = Popen(['tail', '-n', str(MAX_LOG_LINES), log_file], stdout=PIPE)

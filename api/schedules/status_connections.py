@@ -25,14 +25,19 @@ def update():
         return
     with app.app_context():
         try:
-            hostname = utils.get_hostname()
-            connections = chia_cli.load_connections_show()
-            #app.logger.info(connections.text)
-            payload = {
-                "hostname": hostname,
-                "details": connections.text.replace('\r', ''),
-            }
-            utils.send_post('/connections/', payload, debug=False)
+            blockchains = ['chia']
+            if globals.flax_enabled():
+                blockchains.append('flax')
+            for blockchain in blockchains:
+                hostname = utils.get_hostname()
+                connections = chia_cli.load_connections_show(blockchain)
+                #app.logger.info(connections.text)
+                payload = {
+                    "hostname": hostname,
+                    "blockchain": blockchain,
+                    "details": connections.text.replace('\r', ''),
+                }
+                utils.send_post('/connections/', payload, debug=False)
         except:
             app.logger.info("Failed to load and send connections status.")
             app.logger.info(traceback.format_exc())

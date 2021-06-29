@@ -32,7 +32,8 @@ class Wallets(MethodView):
     @blp.arguments(WalletSchema)
     @blp.response(201, WalletSchema)
     def post(self, new_item):
-        item = Wallet.query.get(new_item['hostname'])
+        item = Wallet.query.filter(Wallet.hostname==new_item['hostname'], \
+            Wallet.blockchain==new_item['blockchain']).first()
         if item: # upsert
             new_item['created_at'] = item.created_at
             new_item['updated_at'] = dt.datetime.now()
@@ -44,19 +45,19 @@ class Wallets(MethodView):
         return item
 
 
-@blp.route('/<hostname>')
+@blp.route('/<hostname>/<blockchain>')
 class WalletsByHostname(MethodView):
 
     @blp.etag
     @blp.response(200, WalletSchema)
-    def get(self, hostname):
+    def get(self, hostname, blockchain):
         return Wallet.query.get_or_404(hostname)
 
     @blp.etag
     @blp.arguments(WalletSchema)
     @blp.response(200, WalletSchema)
-    def put(self, new_item, hostname):
-        item = Wallet.query.get_or_404(hostname)
+    def put(self, new_item, hostname, blockchain):
+        item = Wallet.query.filter(Wallet.hostname==hostname, Wallet.blockchain==blockchain)
         new_item['hostname'] = item.hostname
         new_item['created_at'] = item.created_at
         new_item['updated_at'] = dt.datetime.now()

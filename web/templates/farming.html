@@ -3,13 +3,13 @@
 {% block content %}
 
 <script>
-    function ViewLogs(hostname) {
+    function ViewLogs(hostname, blockchain) {
         var d = new Date();
         var height = 600;
         var width = 900;
         var top = (screen.height - height) / 2;
         var left = (screen.width - width) / 2;
-        window.open("{{ url_for('logs') }}?log=farming" + "&hostname=" + hostname, 'Chia Log for ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        window.open("{{ url_for('logs') }}?log=farming" + "&hostname=" + hostname + "&blockchain=" + blockchain, 'Farming Log for ' + blockchain + ' on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
     }
     function CheckPlots(hostname) {
         var d = new Date();
@@ -32,9 +32,12 @@
 </script>
 
 <header class="pb-3 mb-4 border-bottom">
-    <span class="fs-4">Farming:
-        {{ farming.plot_count }} plots.
-        Current expected time to win: <i class="text-success">{{ farming.expected_time_to_win }}</i>
+    <div class="row align-items-md-stretch" style="width:100%">
+        <div class="col-md-4 fs-4">Farming: {{ farming.plot_count }} plots.</div>
+        <div class="col-md-4 fs-4">Chia ETW: <i class="text-success">{{ farming.expected_time_to_win }}</i></div>
+        {% if global_config.flax_enabled %}
+        <div class="col-md-4 fs-4">Flax ETW: <i class="text-success">{{ farming.flax_expected_time_to_win }}</i></div>
+        {% endif %}
     </span>
 </header>
 
@@ -81,11 +84,20 @@
                     <ul class="dropdown-menu bg-dark btn-outline-success">
                         <li>
                             <a class="dropdown-item text-white text-decoration-none" href="#"
-                                onclick='ViewLogs("{{ farmer.hostname }}");return false;'>
+                                onclick='ViewLogs("{{ farmer.hostname }}","chia");return false;'>
                                 <i class="fs-4 bi-text-indent-left"></i>
-                                <span class="align-text-bottom"></span>View Log</span>
+                                <span class="align-text-bottom"></span>View Chia Log</span>
                             </a>
                         </li>
+                        {% if global_config.flax_enabled %}
+                        <li>
+                            <a class="dropdown-item text-white text-decoration-none" href="#"
+                                onclick='ViewLogs("{{ farmer.hostname }}","flax");return false;'>
+                                <i class="fs-4 bi-text-indent-left"></i>
+                                <span class="align-text-bottom"></span>View Flax Log</span>
+                            </a>
+                        </li>
+                        {% endif %}
                         <li>
                             <a class="dropdown-item text-white text-decoration-none" href="#"
                                 onclick='CheckPlots("{{ farmer.hostname }}");return false;'>

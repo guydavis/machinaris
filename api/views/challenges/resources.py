@@ -35,7 +35,7 @@ class Challenges(MethodView):
     def post(self, new_items):
         if len(new_items) == 0:
             return "No challenges provided.", 400
-        db.session.query(Challenge).filter(Challenge.hostname==new_items[0]['hostname'], Challenge.blockchain==new_items[0]['blockchain']).delete()
+        db.session.query(Challenge).filter(Challenge.hostname==new_items[0]['hostname']).delete()
         items = []
         for new_item in new_items:
             item = Challenge(**new_item)

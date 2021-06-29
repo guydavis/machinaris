@@ -19,6 +19,8 @@ class FarmSummary:
                     self.calc_status(line.split(':')[1].strip())
                 elif "Total chia farmed" in line:
                     self.total_chia = line.split(':')[1].strip()
+                elif "Total flax farmed" in line:
+                    self.total_chia = line.split(':')[1].strip()
                 elif "Plot count" in line:
                     self.plot_count = line.split(':')[1].strip()
                 elif "Total size of plots" in line:
@@ -29,7 +31,6 @@ class FarmSummary:
                     self.time_to_win = line.split(':')[1].strip()
                 elif "User transaction fees" in line:
                     self.transaction_fees = line.split(':')[1].strip()
-                # TODO Handle Connection error lines from Harvester etc
         elif farm_plots:
             self.plot_count = 0
             bytes_size = 0

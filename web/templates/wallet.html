@@ -13,6 +13,7 @@
         <thead>
             <tr>
                 <th scope="col" class="text-success">Farmer</th>
+                <th scope="col" class="text-success">Blockchain</th>
                 <th scope="col" class="text-success">Details</th>
                 <th scope="col" class="text-success">Updated At</th>
             </tr>
@@ -21,6 +22,7 @@
             {% for wallet in wallets.rows %}
             <tr>
                 <td>{{wallet.hostname}}</td>
+                <td>{{wallet.blockchain}}</td>
                 <td style="white-space: pre-wrap;">{{wallet.details}}</td>
                 <td>{{wallet.updated_at | datetimefilter}}</td>
             </tr>
