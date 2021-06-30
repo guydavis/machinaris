@@ -36,7 +36,7 @@ def get_binary(blockchain):
         return FLAX_BINARY
     raise Exception("Invalid blockchain: ".format(blockchain))
 
-def load_farm_summary(blockchain='chia'):
+def load_farm_summary(blockchain):
     chia_binary = get_binary(blockchain)
     if globals.farming_enabled(): # Load from chia farm summary
         proc = Popen("{0} farm summary".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
@@ -70,10 +70,10 @@ def load_plots_farming():
     plots_farming = chia.FarmPlots(all_entries)
     return plots_farming
 
-def load_config(blockchain='chia'):
+def load_config(blockchain):
     return open('/root/.{0}/mainnet/config/config.yaml'.format(blockchain),'r').read()
 
-def save_config(config, blockchain='chia'):
+def save_config(config, blockchain):
     try:
         # Validate the YAML first
         yaml.safe_load(config)
@@ -91,7 +91,7 @@ def save_config(config, blockchain='chia'):
         # TODO restart chia or flax services
         pass
 
-def load_wallet_show(blockchain='chia'):
+def load_wallet_show(blockchain):
     chia_binary = get_binary(blockchain)
     wallet_show = ""
     child = pexpect.spawn("{0} wallet show".format(chia_binary))
@@ -113,7 +113,7 @@ def load_wallet_show(blockchain='chia'):
             wallet_show += "ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
     return chia.Wallet(wallet_show)
 
-def load_blockchain_show(blockchain='chia'):
+def load_blockchain_show(blockchain):
     chia_binary = get_binary(blockchain)
     proc = Popen("{0} show --state".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
@@ -126,7 +126,7 @@ def load_blockchain_show(blockchain='chia'):
         abort(500, description=errs.decode('utf-8'))
     return chia.Blockchain(outs.decode('utf-8').splitlines())
 
-def load_connections_show(blockchain='chia'):
+def load_connections_show(blockchain):
     chia_binary = get_binary(blockchain)
     proc = Popen("{0} show --connections".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
@@ -139,7 +139,7 @@ def load_connections_show(blockchain='chia'):
         abort(500, description=errs.decode('utf-8'))
     return chia.Connections(outs.decode('utf-8').splitlines())
 
-def add_connection(connection, blockchain='chia'):
+def add_connection(connection, blockchain):
     chia_binary = get_binary(blockchain)
     try:
         hostname,port = connection.split(':')
@@ -227,7 +227,7 @@ def generate_key(key_path):
             # TODO 'flax keys add' the new key
             start_farmer('flax')
 
-def start_farmer(blockchain='chia'):
+def start_farmer(blockchain):
     chia_binary = get_binary(blockchain)
     proc = Popen("{0} start farmer".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
@@ -246,7 +246,7 @@ def start_farmer(blockchain='chia'):
         return False
     return True
 
-def remove_connection(node_id, ip, blockchain='chia'):
+def remove_connection(node_id, ip, blockchain):
     chia_binary = get_binary(blockchain)
     try:
         proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
@@ -267,13 +267,13 @@ def remove_connection(node_id, ip, blockchain='chia'):
     app.logger.info("Successfully removed connection to {0}".format(ip))
     return True
 
-def is_plots_check_running(blockchain='chia'):
+def is_plots_check_running(blockchain):
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
         if proc.info['name'] == blockchain and 'plots' in proc.info['cmdline'] and 'check' in proc.info['cmdline']:
             return proc.info['pid']
     return None
 
-def check_plots(first_load, blockchain='chia'):
+def check_plots(first_load, blockchain):
     chia_binary = get_binary(blockchain)
     output_file = '/root/.chia/mainnet/log/plots_check.log'
     if not is_plots_check_running() and first_load == "true":

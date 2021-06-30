@@ -34,7 +34,7 @@ def load_farm_summary():
     return FarmSummary(farms)
 
 def load_plots_farming():
-    plots = db.session.query(p.Plot).order_by(p.Plot.created_at.desc()).limit(150).all()
+    plots = db.session.query(p.Plot).order_by(p.Plot.created_at.desc()).all()
     return FarmPlots(plots)
 
 def recent_challenges():
@@ -74,10 +74,10 @@ def load_farmers():
             })
     return farmers
 
-def load_config(farmer):
-    return utils.send_get(farmer, "/configs/farming", debug=False).content
+def load_config(farmer, blockchain):
+    return utils.send_get(farmer, "/configs/farming?blockchain=" + blockchain, debug=False).content
 
-def save_config(farmer, config):
+def save_config(farmer, blockchain, config):
     try: # Validate the YAML first
         yaml.safe_load(config)
     except Exception as ex:
@@ -85,7 +85,7 @@ def save_config(farmer, config):
         flash('Updated config.yaml failed validation! Fix and save or refresh page.', 'danger')
         flash(str(ex), 'warning')
     try:
-        utils.send_put(farmer, "/configs/farming", config, debug=False)
+        utils.send_put(farmer, "/configs/farming/" + blockchain, config, debug=False)
     except Exception as ex:
         flash('Failed to save config to farmer.  Please check log files.', 'danger')
         flash(str(ex), 'warning')

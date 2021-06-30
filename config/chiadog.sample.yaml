@@ -10,12 +10,6 @@ chia_logs:
   file_log_consumer:
     enable: true
     file_path: '~/.chia/mainnet/log/debug.log'
-  #network_log_consumer:
-  #  enable: false
-  #  remote_file_path: '~/.chia/mainnet/log/debug.log'
-  #  remote_host: 192.168.0.100
-  #  remote_user: chia
-  #  remote_port: 22
 
 # Enable this and chiadog will ping a remote server every 5 minutes
 # That way you can know that the monitoring is running as expected

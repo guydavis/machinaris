@@ -31,7 +31,7 @@ CHALLENGES_TO_LOAD = 8
 MAX_LOG_LINES = 250
 
 
-def recent_challenges(blockchain='chia'):
+def recent_challenges(blockchain):
     log_file = CHIA_LOG
     if blockchain == 'flax':
         log_file = FLAX_LOG

@@ -13,7 +13,7 @@
 
 <header class="pb-3 mb-4 border-bottom">
     <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-        <span class="fs-4">Farming - Chia™ - config.yaml </span>
+        <span class="fs-4">Farming - config.yaml </span>
     </a>
 </header>
 
@@ -35,10 +35,10 @@
 
     <script>
         $(document).ready(function () {
-            function load_config(worker) {
+            function load_config(worker, blockchain) {
                 $.ajax({
                     type: "GET",
-                    url: "{{ url_for('views_settings_config') }}?type=farming&worker=" + worker,
+                    url: "{{ url_for('views_settings_config') }}?type=farming&worker=" + worker + "&blockchain=" + blockchain,
                 })
                     .done(function (data) {
                         //console.log(data);
@@ -49,15 +49,19 @@
             }
             //Call the function when #input is clicked
             $(document).on("change", "#worker", function (e) {
-                load_config($("#worker").val())
+                load_config($("#worker").val(), $("#blockchain").val())
+            });
+            $(document).on("change", "#blockchain", function (e) {
+                load_config($("#worker").val(), $("#blockchain").val())
             });
             //Call the function when the page loads
-            load_config("{{selected_worker.hostname}}");
+            load_config("{{selected_worker.hostname}}", "{{selected_blockchain}}");
         });
         
         function downloadConfig() {
             worker = $("#worker").val()
-            window.location.href = '/settings/config/' + worker + '_chia_config.yaml?type=farming&worker=' + worker
+            blockchain = $("#blockchain").val()
+            window.location.href = '/settings/config/' + worker + '_' + blockchain + '_config.yaml?type=farming&worker=' + worker + "&blockchain=" + blockchain
         }
     </script>
     <form method="POST">
@@ -68,6 +72,14 @@
                     <select id="worker" name="worker" class="form-select">
                         {% for worker in workers %}
                         <option {% if worker==selected_worker %}selected{% endif %}>{{ worker.hostname }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <label for="blockchain" class="col-sm-1 col-form-label-lg text-end p-1">Blockchain</label>
+                <div class="col-sm-3">
+                    <select id="blockchain" name="blockchain" class="form-select">
+                        {% for blockchain in blockchains %}
+                        <option {% if blockchain==selected_blockchain %}selected{% endif %}>{{ blockchain }}</option>
                         {% endfor %}
                     </select>
                 </div>
