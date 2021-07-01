@@ -40,7 +40,6 @@ jobs:
           push: true
           build-args: |
             "CHIA_BRANCH=1.1.7"
-            "PATCH_CHIAPOS=true"
             "FLAX_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:develop
