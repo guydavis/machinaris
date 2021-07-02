@@ -9,6 +9,7 @@ cd /flax-blockchain
 
 # Only the /root/.chia folder is volume-mounted so store flax within
 mkdir -p /root/.chia/flax
+rm -f /root/.flax
 ln -s /root/.chia/flax /root/.flax 
 
 mkdir -p /root/.flax/mainnet/log

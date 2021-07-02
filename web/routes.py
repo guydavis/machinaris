@@ -193,25 +193,31 @@ def settings_plotting():
 @app.route('/settings/farming', methods=['GET', 'POST'])
 def settings_farming():
     selected_worker_hostname = None
+    blockchains = os.environ['blockchains'].split(',')
+    selected_blockchain = blockchains[0]
     gc = globals.load()
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
-        chia.save_config(worker.get_worker_by_hostname(selected_worker_hostname), request.form.get("config"))
+        selected_blockchain = request.form.get('blockchain')
+        chia.save_config(worker.get_worker_by_hostname(selected_worker_hostname), selected_blockchain, request.form.get("config"))
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
-    return render_template('settings/farming.html',
+    return render_template('settings/farming.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
         workers=workers_summary.farmers_harvesters, selected_worker=selected_worker, global_config=gc)
 
 @app.route('/settings/alerts', methods=['GET', 'POST'])
 def settings_alerts():
     selected_worker_hostname = None
+    blockchains = os.environ['blockchains'].split(',')
+    selected_blockchain = blockchains[0]
     gc = globals.load()
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
-        chiadog.save_config(worker.get_worker_by_hostname(selected_worker_hostname), request.form.get("config"))
+        selected_blockchain = request.form.get('blockchain')
+        chiadog.save_config(worker.get_worker_by_hostname(selected_worker_hostname), selected_blockchain, request.form.get("config"))
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
-    return render_template('settings/alerts.html',
+    return render_template('settings/alerts.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
         workers=workers_summary.farmers_harvesters, selected_worker=selected_worker, global_config=gc)
 
 @app.route('/settings/config', defaults={'path': ''})
@@ -220,9 +226,9 @@ def views_settings_config(path):
     w = worker.get_worker_by_hostname(request.args.get('worker'))
     config_type = request.args.get('type')
     if config_type == "alerts":
-        response = make_response(chiadog.load_config(w), 200)
+        response = make_response(chiadog.load_config(w, request.args.get('blockchain')), 200)
     elif config_type == "farming":
-        response = make_response(chia.load_config(w), 200)
+        response = make_response(chia.load_config(w, request.args.get('blockchain')), 200)
     elif config_type == "plotting":
         response = make_response(plotman.load_config(w), 200)
     else:

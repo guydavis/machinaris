@@ -5,9 +5,5 @@ cp -f /machinaris/scripts/flaxdog_notifier.sh /root/.chia/flaxdog/notifier.sh &&
 
 echo 'Starting Flaxdog...'
 cd /flaxdog
-# TODO Find pid of just Flaxdog, not Chiadog
-#flaxdog_pid=$(pidof python3)
-#if [ ! -z $flaxdog_pid ]; then
-#    kill $flaxdog_pid
-#fi
+# Existing flaxdogs are killed in chiadog_launch.sh
 /flax-blockchain/venv/bin/python3 -u main.py --config /root/.chia/flaxdog/config.yaml > /root/.chia/flaxdog/logs/flaxdog.log 2>&1 &

@@ -1,4 +1,4 @@
-# This is useful to differentiate multiple chiadog
+# This is useful to differentiate multiple flaxdog
 # instances monitoring multiple harvesters
 notification_title_prefix: 'Machinaris-Flax'
 log_level: INFO
@@ -6,18 +6,12 @@ log_level: INFO
 # Only one consumer can be enabled at a time, you can
 # delete the section for the consumer which you aren't using
 # DON'T CHANGE file_path IT'S ALREADY SET IN-CONTAINER FOR MACHINARIS!
-chia_logs:
+flax_logs:
   file_log_consumer:
     enable: true
     file_path: '~/.chia/flax/mainnet/log/debug.log'
-  #network_log_consumer:
-  #  enable: false
-  #  remote_file_path: '~/.chia/mainnet/log/debug.log'
-  #  remote_host: 192.168.0.100
-  #  remote_user: chia
-  #  remote_port: 22
 
-# Enable this and chiadog will ping a remote server every 5 minutes
+# Enable this and flaxdog will ping a remote server every 5 minutes
 # That way you can know that the monitoring is running as expected
 #keep_alive_monitor:
 #  enable_remote_ping: false
@@ -55,8 +49,8 @@ notifier:
     daily_stats: true
     wallet_events: true
     credentials:
-      sender: 'chia@example.com'
-      sender_name: 'chiadog'
+      sender: 'flax@example.com'
+      sender_name: 'flaxdog'
       recipient: 'you@example.com'
       username_smtp: 'username'
       password_smtp: 'password'
@@ -84,7 +78,7 @@ notifier:
     enable: false
     daily_stats: true
     wallet_events: true
-    topic: chia/chiadog/alert
+    topic: flax/flaxdog/alert
     qos: 1
     retain: false
     credentials:
