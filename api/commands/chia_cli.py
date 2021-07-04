@@ -267,20 +267,19 @@ def remove_connection(node_id, ip, blockchain):
     app.logger.info("Successfully removed connection to {0}".format(ip))
     return True
 
-def is_plots_check_running(blockchain):
+def is_plots_check_running():
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-        if proc.info['name'] == blockchain and 'plots' in proc.info['cmdline'] and 'check' in proc.info['cmdline']:
+        if proc.info['name'] == 'chia' and 'plots' in proc.info['cmdline'] and 'check' in proc.info['cmdline']:
             return proc.info['pid']
     return None
 
-def check_plots(first_load, blockchain):
-    chia_binary = get_binary(blockchain)
+def check_plots(first_load):
     output_file = '/root/.chia/mainnet/log/plots_check.log'
     if not is_plots_check_running() and first_load == "true":
         try:
             log_fd = os.open(output_file, os.O_RDWR | os.O_CREAT)
             log_fo = os.fdopen(log_fd, "a+")
-            proc = Popen("{0} plots check".format(chia_binary), shell=True, 
+            proc = Popen("{0} plots check".format(CHIA_BINARY), shell=True, 
                 universal_newlines=True, stdout=log_fo, stderr=log_fo)
         except:
             app.logger.info(traceback.format_exc())
@@ -288,7 +287,7 @@ def check_plots(first_load, blockchain):
         else:
             return "Starting plots check at " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
     else:
-        class_escape = re.compile(r' {0}.plotting.(\w+)(\s+): '.format(blockchain))
+        class_escape = re.compile(r' chia.plotting.(\w+)(\s+): ')
         ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
         proc = Popen(['tail', '-n', str(MAX_LOG_LINES), output_file], stdout=PIPE)
         return  class_escape.sub('', ansi_escape.sub('', proc.stdout.read().decode("utf-8")))
