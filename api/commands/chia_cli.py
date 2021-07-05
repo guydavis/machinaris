@@ -60,7 +60,7 @@ def load_plots_farming():
         try:
             entries = (os.path.join(dir_path, file_name) for file_name in os.listdir(dir_path))
             entries = ((os.stat(path), path) for path in entries)
-            entries = ((stat[ST_CTIME], stat[ST_SIZE], path) for stat, path in entries if S_ISREG(stat[ST_MODE]))
+            entries = ((stat[ST_MTIME], stat[ST_SIZE], path) for stat, path in entries if S_ISREG(stat[ST_MODE]))
             all_entries.extend(entries)
         except:
             app.logger.info("Failed to list files at {0}".format(dir_path))
