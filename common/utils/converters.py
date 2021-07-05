@@ -28,8 +28,8 @@ def str_to_gibs(str):
         elif unit.lower().strip().endswith('eib'):
             return float(val) * 1024 * 1024 * 1024
     except:
-        logging.info("Failed to convert to GiB: {0}".format(str))
-        logging.info(traceback.format_exc())
+        print("Failed to convert to GiB: {0}".format(str))
+        print(traceback.format_exc())
         return None
 
 
