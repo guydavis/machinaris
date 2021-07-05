@@ -40,7 +40,7 @@ jobs:
           platforms: linux/amd64
           push: true
           build-args: |
-            "CHIA_BRANCH=1.1.7"
+            "CHIA_BRANCH=main"
             "FLAX_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:test
