@@ -9,6 +9,7 @@ from . import farms
 from . import keys
 from . import logs
 from . import ping
+from . import plotnfts
 from . import plots
 from . import plottings
 from . import wallets
@@ -27,6 +28,7 @@ MODULES = (
     keys,
     logs,
     ping,
+    plotnfts,
     plots,
     plottings,
     wallets,

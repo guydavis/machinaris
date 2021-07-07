@@ -220,6 +220,16 @@ def settings_alerts():
     return render_template('settings/alerts.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
         workers=workers_summary.farmers_harvesters, selected_worker=selected_worker, global_config=gc)
 
+@app.route('/settings/pools', methods=['GET', 'POST'])
+def settings_pools():
+    gc = globals.load()
+    if request.method == 'POST':
+        chia.process_pool_save(request.form.get('choice'), request.form.get('pool_url'))
+    plotnfts = chia.load_plotnfts()
+    if plotnfts.is_pooling():
+        return render_template('settings/pools.html', global_config=gc)
+    return render_template('settings/solo.html', plotnfts=plotnfts, global_config=gc)
+
 @app.route('/settings/config', defaults={'path': ''})
 @app.route('/settings/config/<path:path>')
 def views_settings_config(path):

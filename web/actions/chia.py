@@ -11,6 +11,7 @@ import shutil
 import socket
 import time
 import traceback
+import urllib
 import yaml
 
 from flask import Flask, jsonify, abort, request, flash
@@ -20,10 +21,10 @@ from os import path
 
 from web import app, db, utils
 from common.models import farms as f, plots as p, challenges as c, wallets as w, \
-    blockchains as b, connections as co, keys as k
+    blockchains as b, connections as co, keys as k, plotnfts as pn
 from common.config import globals
 from web.models.chia import FarmSummary, FarmPlots, BlockchainChallenges, Wallets, \
-    Blockchains, Connections, Keys
+    Blockchains, Connections, Keys, Plotnfts
 from . import worker as wk
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
@@ -57,6 +58,10 @@ def load_connections_show():
 def load_keys_show():
     keys = db.session.query(k.Key).all()
     return Keys(keys)
+
+def load_plotnfts():
+    plotnfts = db.session.query(pn.Plotnft).all()
+    return Plotnfts(plotnfts)
 
 def load_farmers():
     worker_summary = wk.load_worker_summary()
@@ -274,3 +279,21 @@ def check_plots(worker, first_load):
     except:
         app.logger.info(traceback.format_exc())
         flash('Failed to check plots on {0}. Please see logs.'.format(worker.hostname), 'danger')
+
+def process_pool_save(choice, pool_url):
+    if choice == "self":
+        app.logger.info("Leave a pool if joined, comment out pool_contract_address everywhere.")
+        pass
+    elif choice == "join":
+        try:
+            if not pool_url.strip():
+                raise Exception("Empty pool URL provided.")
+            result = urllib.parse.urlparse(pool_url)
+            if result.scheme != 'https':
+                raise Exception("Non-HTTPS scheme provided.")
+            if not result.netloc:
+                raise Exception("No hostname or IP provided.")
+        except Exception as ex:
+            app.logger.info(traceback.format_exc())
+            flash('{0}'.format(str(ex)), 'danger')
+        app.logger.info("Joining {0}".format(pool_url))

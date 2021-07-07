@@ -81,10 +81,10 @@
                                 class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">Settings</span> </a>
                             <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
-                                {% if global_config.plotting_enabled %}
-                                <li class="w-100">
-                                    <a href="{{ url_for('settings_plotting') }}" class="nav-link px-0"> <span
-                                            class="d-none d-sm-inline text-white">Plotting</span> </a>
+                                {% if global_config.farming_enabled %}
+                                <li>
+                                    <a href="{{ url_for('settings_alerts') }}" class="nav-link px-0"> <span
+                                            class="d-none d-sm-inline text-white">Alerts</span> </a>
                                 </li>
                                 {% endif %}
                                 {% if global_config.farming_enabled %}
@@ -93,10 +93,17 @@
                                             class="d-none d-sm-inline text-white">Farming</span> </a>
                                 </li>
                                 {% endif %}
+                                {% if global_config.plotting_enabled %}
+                                <li class="w-100">
+                                    <a href="{{ url_for('settings_plotting') }}" class="nav-link px-0"> <span
+                                            class="d-none d-sm-inline text-white">Plotting</span> </a>
+                                </li>
+                                {% endif %}
+    
                                 {% if global_config.farming_enabled %}
                                 <li>
-                                    <a href="{{ url_for('settings_alerts') }}" class="nav-link px-0"> <span
-                                            class="d-none d-sm-inline text-white">Alerts</span> </a>
+                                    <a href="{{ url_for('settings_pools') }}" class="nav-link px-0"> <span
+                                            class="d-none d-sm-inline text-white">Pools</span> </a>
                                 </li>
                                 {% endif %}
                             </ul>

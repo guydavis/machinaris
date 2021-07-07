@@ -5,6 +5,7 @@ from .connections import Connection
 from .farms import Farm 
 from .keys import Key
 from .plots import Plot 
+from .plotnfts import Plotnft
 from .plottings import Plotting 
 from .stats import StatPlotCount, StatPlotsSize, StatTotalChia, StatNetspaceSize, StatTimeToWin, \
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \

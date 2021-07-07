@@ -179,3 +179,25 @@ class Connections:
                     })
             except:
                 app.logger.info(traceback.format_exc())
+
+
+class Plotnfts:
+
+    def __init__(self, plotnfts):
+        self.columns = ['hostname', 'details', 'updated_at']
+        self.rows = []
+        for plotnft in plotnfts:
+            updated_at = plotnft.updated_at or datetime.now()
+            self.rows.append({ 
+                'hostname': plotnft.hostname, 
+                'blockchain': plotnft.blockchain, 
+                'details': plotnft.details, 
+                'updated_at': plotnft.updated_at })
+    
+    def is_pooling(self):
+        pooling = False
+        for row in self.rows:
+            for line in row['details'].split('\n'):
+                if "pool" in line:
+                    return True
+        return False
