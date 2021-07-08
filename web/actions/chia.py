@@ -395,6 +395,7 @@ def process_pool_join(choice, pool_url, pool_wallet_id):
                     flash('Error while joining Chia pool. Please double-check pool URL: {0}'.format(pool_url), 'danger')
                     flash(line, 'warning')
                     return False
+        time.sleep(15)
         try: # Trigger a status update
             requests.get("http://localhost:8927/plotnfts/", timeout=5)
         except:
