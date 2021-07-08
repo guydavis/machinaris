@@ -4,7 +4,7 @@
 # See https://github.com/madMAx43v3r/chia-plotter
 #
 
-MADMAX_BRANCH=pool-puzzles
+MADMAX_BRANCH=main
 
 # Checkout the project
 cd /
