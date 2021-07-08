@@ -4,7 +4,7 @@
 # See https://github.com/madMAx43v3r/chia-plotter
 #
 
-MADMAX_BRANCH=main
+MADMAX_BRANCH=master
 
 # Checkout the project
 cd /
