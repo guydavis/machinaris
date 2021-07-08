@@ -308,7 +308,7 @@ def process_pool_save(choice, pool_url, current_pool_url):
         if current_pool_url == pool_url:
             flash('Already pooling with {0}.  No changes made.'.format(pool_url), 'message')
             return False
-        return process_pool_create(choice, pool_url)
+        return process_pool_join(choice, pool_url, pool_wallet_id)
 
 def process_pool_leave(choice, wallet_id):
         app.logger.info("Attempting to leave pool.")
@@ -348,8 +348,8 @@ def process_pool_leave(choice, wallet_id):
         flash('Successfully left pool, switching to self plotting.  Please wait a while to complete, then refresh page. See below for details.', 'success')
         return True
 
-def process_pool_create(choice, pool_url):
-        app.logger.info("Attempting to join pool at URL: {0}".format(pool_url))
+def process_pool_join(choice, pool_url, pool_wallet_id):
+        app.logger.info("Attempting to join pool at URL: {0} with wallet_id: {1}".format(pool_url, pool_wallet_id))
         try:
             if not pool_url.strip():
                 raise Exception("Empty pool URL provided.")
@@ -362,8 +362,12 @@ def process_pool_create(choice, pool_url):
             app.logger.info(traceback.format_exc())
             flash('{0}'.format(str(ex)), 'danger')
             return False
-        app.logger.info("Joining {0}".format(pool_url))
-        proc = Popen("{0} plotnft create -y -u {1} -s pool".format(CHIA_BINARY, pool_url), stdout=PIPE, stderr=PIPE, shell=True)
+        if pool_wallet_id:
+            cmd = "{0} plotnft join -y -u {1} -i {2}".format(CHIA_BINARY, pool_url, pool_wallet_id)
+        else:  # Both creating NFT and joining pool in one setp
+            cmd = "{0} plotnft create -y -u {1} -s pool".format(CHIA_BINARY, pool_url)
+        app.logger.info("Executing: {0}".format(cmd))
+        proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=90)
         except TimeoutExpired:

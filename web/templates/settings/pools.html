@@ -87,7 +87,8 @@
                     </div>
                     <div class="col-lg-3">
                         <input class="form-control" id="pool_url" name="pool_url" type="text"
-                            placeholder="https://myfave.pool.org" value="{{ current_pool_url }}">
+                            placeholder="https://myfave.pool.org" 
+                            {% if current_pool_url %} value="{{ current_pool_url }}" {% endif %}>
                     </div>
                     <div class="col-lg-1"></div>
                     <div class="col-auto d-flex align-items-center">
