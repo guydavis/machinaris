@@ -113,6 +113,28 @@ def load_wallet_show(blockchain):
             wallet_show += "ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
     return chia.Wallet(wallet_show)
 
+def load_plotnft_show(blockchain):
+    chia_binary = get_binary(blockchain)
+    wallet_show = ""
+    child = pexpect.spawn("{0} plotnft show".format(chia_binary))
+    wallet_index = 1
+    while True:
+        i = child.expect(["Wallet height:.*\r\n", "Choose wallet key:.*\r\n", "No online backup file found.*\r\n"])
+        if i == 0:
+            app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
+            wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
+            break
+        elif i == 1:
+            app.logger.debug("wallet show got index prompt so selecting #{0}".format(wallet_index))
+            child.sendline("{0}".format(wallet_index))
+            wallet_index += 1
+        elif i == 2:
+            child.sendline("S")
+        else:
+            app.logger.debug("pexpect returned {0}".format(i))
+            wallet_show += "ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
+    return chia.Wallet(wallet_show)
+
 def load_blockchain_show(blockchain):
     chia_binary = get_binary(blockchain)
     proc = Popen("{0} show --state".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)

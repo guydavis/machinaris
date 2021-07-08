@@ -18,6 +18,8 @@ Machinaris bundles the [latest Chia™ version](https://github.com/Chia-Network/
 
 ![Farming](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_farming.png)
 
+Machinaris also optionally farms your plots to the [Flax Network](https://flaxnetwork.org/) too!
+
 ## Alerts
 
 [Chiadog](https://github.com/martomi/chiadog) provides monitoring of the log files, ensuring you get notified when important events occur across your farm:

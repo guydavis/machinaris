@@ -179,3 +179,27 @@ class Connections:
                     })
             except:
                 app.logger.info(traceback.format_exc())
+
+
+class Plotnfts:
+
+    def __init__(self, plotnfts):
+        self.columns = ['hostname', 'details', 'updated_at']
+        self.rows = []
+        for plotnft in plotnfts:
+            updated_at = plotnft.updated_at or datetime.now()
+            self.rows.append({ 
+                'hostname': plotnft.hostname, 
+                'blockchain': plotnft.blockchain, 
+                'details': plotnft.details, 
+                'updated_at': plotnft.updated_at })
+    
+    def get_current_pool_url(self):
+        pool_url = None
+        for row in self.rows:
+            for line in row['details'].split('\n'):
+                if "Current pool URL:" in line:
+                    pool_url = line[len("Current pool URL:"):].strip()
+                elif "Target state: SELF_POOLING" in line:
+                    return None  # Switching back to self-pooling, no pool_url
+        return pool_url

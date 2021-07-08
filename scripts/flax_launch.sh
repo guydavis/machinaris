@@ -34,9 +34,15 @@ for k in ${keys//:/ }; do
 done
 
 # Loop over provided list of completed plot directories
-for p in ${plots_dir//:/ }; do
+if [ -z "${flax_plots_dir}" ]; then
+  for p in ${plots_dir//:/ }; do
     flax plots add -d ${p}
-done
+  done
+else
+  for p in ${flax_plots_dir//:/ }; do
+    flax plots add -d ${p}
+  done
+fi
 
 sed -i 's/localhost/127.0.0.1/g' ~/.flax/mainnet/config/config.yaml
 
