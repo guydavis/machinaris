@@ -29,7 +29,7 @@ class FarmSummary:
                     self.total_chia = line.split(':')[1].strip()
                 elif "Plot count:" in line:
                     self.plot_count = line.split(':')[1].strip()
-                elif "Harvester 127.0.0.1:" in line:
+                elif "Local Harvester" in line:
                     next_line_local_harvester = True
                 elif not self.plots_size and "Total size of plots" in line:
                     self.plots_size = line.split(':')[1].strip()
