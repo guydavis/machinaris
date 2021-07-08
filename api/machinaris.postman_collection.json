@@ -1373,6 +1373,81 @@
 			]
 		},
 		{
+			"name": "Plotnfts",
+			"item": [
+				{
+					"name": "Plotnfts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plotnfts",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plotnfts"
+							]
+						},
+						"description": "Get all completed plots from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Plotnfts",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"blockchain\": \"chia\",\r\n        \"details\": \"Wallet height: 1234546\\nSync status: Synced\\n\",\r\n        \"hostname\": \"aragorn\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plots",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plots"
+							]
+						},
+						"description": "Add a new completed Plot."
+					},
+					"response": []
+				},
+				{
+					"name": "Plotnfts",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plotnfts/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plotnfts",
+								"aragorn"
+							]
+						},
+						"description": "Delete a completed plot's status."
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Plottings",
 			"item": [
 				{

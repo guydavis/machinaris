@@ -9,6 +9,7 @@ from common.models import Plotnft
 
 from .schemas import PlotnftSchema, PlotnftQueryArgsSchema
 
+from api.commands import chia_cli
 
 blp = Blueprint(
     'Plotnfts',
@@ -26,6 +27,8 @@ class Plotnfts(MethodView):
     @blp.response(200, PlotnftSchema(many=True))
     @blp.paginate(SQLCursorPage)
     def get(self, args):
+        # Trigger an update when receieved from web-tier immediately after create/join/leave
+        chia_cli.load_plotnft_show('chia')
         return Plotnft.query.filter_by(**args)
 
     @blp.etag

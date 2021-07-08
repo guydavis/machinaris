@@ -185,6 +185,8 @@ def settings_plotting():
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
         plotman.save_config(worker.get_worker_by_hostname(selected_worker_hostname), request.form.get("config"))
+    else:
+        flash('Automatically set your public key values below. Please review and save the config at least once!', 'message')
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
     return render_template('settings/plotting.html',
@@ -224,11 +226,14 @@ def settings_alerts():
 def settings_pools():
     gc = globals.load()
     if request.method == 'POST':
-        chia.process_pool_save(request.form.get('choice'), request.form.get('pool_url'))
+        plotnfts = chia.load_plotnfts()
+        current_pool_url = plotnfts.get_current_pool_url()
+        chia.process_pool_save(request.form.get('choice'), request.form.get('pool_url'), current_pool_url)
     plotnfts = chia.load_plotnfts()
-    if plotnfts.is_pooling():
-        return render_template('settings/pools.html', global_config=gc)
-    return render_template('settings/solo.html', plotnfts=plotnfts, global_config=gc)
+    plotnft_log = chia.get_plotnft_log()
+    current_pool_url = plotnfts.get_current_pool_url()
+    return render_template('settings/pools.html', plotnfts=plotnfts, current_pool_url=current_pool_url, 
+        plotnft_log = plotnft_log, global_config=gc)
 
 @app.route('/settings/config', defaults={'path': ''})
 @app.route('/settings/config/<path:path>')

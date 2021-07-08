@@ -93,9 +93,12 @@ scheduling:
 
 # Configure the plotter.  See: https://github.com/guydavis/machinaris/wiki/Plotman#plotting
 plotting:
+        # Your farmer public key is always required for plotting
         #farmer_pk: YOUR_FARMER_PUBLIC_KEY (always required)
+        # Your pool public key is only required for solo plotting, else comment it out!
         #pool_pk: YOUR_POOL_PUBLIC_KEY (comment this out if portable pool plotting)
-        #pool_contract_address: YOUR_POOL_CONTRACT_ADDRESS (required if portable pool plotting)
+        # Your pool contract address is only required for portable pool plotting, else comment it out!
+        #pool_contract_address: YOUR_POOL_CONTRACT_ADDRESS (comment this out if solo plotting)
 
         # If you enable 'chia', plot in *parallel* with higher tmpdir_max_jobs and global_max_jobs
         # If you enable 'madmax', plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
