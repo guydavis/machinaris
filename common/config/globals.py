@@ -63,10 +63,14 @@ def is_setup():
     # First check if plotter and farmer_pk,pool_pk provided.
     if "mode" in os.environ and os.environ['mode'] == 'plotter':
         if "farmer_pk" in os.environ and os.environ['farmer_pk'] != 'null' and \
-                "pool_pk" in os.environ and os.environ['pool_pk'] != 'null':
-            logging.debug(
-                "Found plotter mode with farmer_pk and pool_pk provided.")
-            return True  # When plotting don't need private in mnemonic.txt
+                (("pool_pk" in os.environ and os.environ['pool_pk'] != 'null') or \
+                ("pool_contract_address" in os.environ and os.environ['pool_contract_address'] != 'null')):
+            logging.info(
+                "Found plotter mode with farmer_pk and pool_pk/pool_contract_address provided.")
+        else:
+            logging.error(
+                "Found plotter mode WITHOUT farmer_pk and pool_pk/pool_contract_address provided.")
+        return True  # When plotting don't need private in mnemonic.txt
     if "mode" in os.environ and 'harvester' in os.environ['mode']:
         # Harvester doesn't require a mnemonic private key as farmer's ca already imported.
         return True
