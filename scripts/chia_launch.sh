@@ -34,8 +34,6 @@ for p in ${plots_dir//:/ }; do
     chia plots add -d ${p}
 done
 
-
-
 sed -i 's/localhost/127.0.0.1/g' ~/.chia/mainnet/config/config.yaml
 
 # Start services based on mode selected. Default is 'fullnode'

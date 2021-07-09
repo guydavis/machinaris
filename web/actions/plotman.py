@@ -151,7 +151,12 @@ def load_config_replacements():
     return replacements
 
 def load_config(plotter):
-    replacements = load_config_replacements()
+    replacements = []
+    try:
+        replacements = load_config_replacements()
+    except:
+        app.logger.info("Unable to load replacements on install with mode={0}".format(os.environ['mode']))
+        app.logger.info(traceback.format_exc())
     lines = []
     config = utils.send_get(plotter, "/configs/plotting", debug=False).content.decode('utf-8')
     for line in config.splitlines():

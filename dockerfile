@@ -85,9 +85,10 @@ ENV plots_dir="/plots"
 ENV mode="fullnode" 
 # Required is the 'chia' blockchain, but can optionally add 'flax' too. A comma-separated list.
 ENV blockchains="chia"
-# If provided then these optional 2 public keys will be set in your plotman.yaml
+# If provided then these optional 3 public keys will be set in your plotman.yaml
 ENV farmer_pk="null"
 ENV pool_pk="null"
+ENV pool_contract_address="null"
 # If mode=harvester, required for host and port the harvester will your farmer
 ENV farmer_address="null"
 ENV farmer_port="8447"
