@@ -18,16 +18,16 @@ from subprocess import Popen, TimeoutExpired, PIPE
 from api.models import chiadog
 from api import app
 
-def load_config():
-    return open('/root/.chia/chiadog/config.yaml','r').read()
+def load_config(blockchain):
+    return open('/root/.chia/{0}dog/config.yaml'.format(blockchain),'r').read()
 
-def save_config(config):
+def save_config(config, blockchain):
     try:
         # Validate the YAML first
         yaml.safe_load(config)
         # Save a copy of the old config file
-        src="/root/.chia/chiadog/config.yaml"
-        dst="/root/.chia/chiadog/config.yaml."+time.strftime("%Y%m%d-%H%M%S")+".yaml"
+        src='/root/.chia/{0}dog/config.yaml'.format(blockchain)
+        dst='/root/.chia/{0}dog/config.yaml'.format(blockchain)+time.strftime("%Y%m%d-%H%M%S")+".yaml"
         shutil.copy(src,dst)
         # Now save the new contents to main config file
         with open(src, 'w') as writer:
@@ -36,13 +36,13 @@ def save_config(config):
         app.logger.info(traceback.format_exc())
         raise Exception('Updated config.yaml failed validation!\n' + str(ex))
     else:
-        if get_chiadog_pid():
-            stop_chiadog()
-            start_chiadog()
+        if get_chiadog_pid(blockchain):
+            stop_chiadog(blockchain)
+            start_chiadog(blockchain)
 
-def get_chiadog_pid():
+def get_chiadog_pid(blockchain):
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-        if proc.info['name'] == 'python3' and '/root/.chia/chiadog/config.yaml' in proc.info['cmdline']:
+        if proc.info['name'] == 'python3' and '/root/.chia/{0}dog/config.yaml'.format(blockchain) in proc.info['cmdline']:
             return proc.info['pid']
     return None
 
@@ -67,21 +67,25 @@ def dispatch_action(job):
         raise Exception("Unsupported action {0} for monitoring.".format(action))
 
 def start_chiadog():
-    #app.logger.info("Starting Chiadog monitoring....")
-    try:
-        workdir = "/chiadog"
-        configfile = "/root/.chia/chiadog/config.yaml"
-        logfile = "/root/.chia/chiadog/logs/chiadog.log"
-        proc = Popen("nohup /chia-blockchain/venv/bin/python3 -u main.py --config {0} >> {1} 2>&1 &".format(configfile, logfile), \
-            shell=True, universal_newlines=True, stdout=None, stderr=None, cwd="/chiadog")
-    except:
-        app.logger.info('Failed to start Chiadog monitoring!')
-        app.logger.info(traceback.format_exc())
+    #app.logger.info("Starting monitoring....")
+    blockchains = [ b.strip() for b in os.environ['blockchains'].split(',') ]
+    for blockchain in blockchains:
+        try:
+            workdir = "/{0}dog".format(blockchain)
+            configfile = "/root/.chia/{0}dog/config.yaml".format(blockchain)
+            logfile = "/root/.chia/{0}dog/logs/{0}dog.log".format(blockchain)
+            proc = Popen("nohup /{0}-blockchain/venv/bin/python3 -u main.py --config {1} >> {2} 2>&1 &".format(blockchain, configfile, logfile), \
+                shell=True, universal_newlines=True, stdout=None, stderr=None, cwd="/{0}dog".format(blockchain))
+        except:
+            app.logger.info('Failed to start monitoring!')
+            app.logger.info(traceback.format_exc())
 
 def stop_chiadog():
-    #app.logger.info("Stopping Chiadog monitoring....")
-    try:
-        os.kill(get_chiadog_pid(), signal.SIGTERM)
-    except:
-        app.logger.info('Failed to stop Chiadog monitoring!')
-        app.logger.info(traceback.format_exc())
+    #app.logger.info("Stopping monitoring....")
+    blockchains = [ b.strip() for b in os.environ['blockchains'].split(',') ]
+    for blockchain in blockchains:
+        try:
+            os.kill(get_chiadog_pid(blockchain), signal.SIGTERM)
+        except:
+            app.logger.info('Failed to stop monitoring!')
+            app.logger.info(traceback.format_exc())

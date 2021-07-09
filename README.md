@@ -1,6 +1,6 @@
 # machinaris
 
-A Docker image for plotting and farming the Chia™ cryptocurrency on [one computer](https://github.com/guydavis/machinaris/wiki/Docker) or across [many](https://github.com/guydavis/machinaris/wiki/Workers).
+A Docker image for plotting and farming the Chia™ cryptocurrency on [one computer](https://github.com/guydavis/machinaris/wiki/Docker) or across [many](https://github.com/guydavis/machinaris/wiki/Workers). Now with [official Pool support](https://github.com/guydavis/machinaris/wiki/Pooling)!
 
 ![Home](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_home.png)
 
@@ -17,6 +17,8 @@ Plotting with both [MadMax](https://github.com/madMAx43v3r/chia-plotter) and [Ch
 Machinaris bundles the [latest Chia™ version](https://github.com/Chia-Network/chia-blockchain/wiki/INSTALL#ubuntudebian) inside the Docker image.
 
 ![Farming](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_farming.png)
+
+Machinaris also optionally farms your plots to the [Flax Network](https://flaxnetwork.org/) too!
 
 ## Alerts
 

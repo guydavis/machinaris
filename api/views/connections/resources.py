@@ -32,7 +32,8 @@ class Connections(MethodView):
     @blp.arguments(ConnectionSchema)
     @blp.response(201, ConnectionSchema)
     def post(self, new_item):
-        item = Connection.query.get(new_item['hostname'])
+        item = Connection.query.filter(Connection.hostname==new_item['hostname'], \
+            Connection.blockchain==new_item['blockchain']).first()
         if item: # upsert
             new_item['created_at'] = item.created_at
             new_item['updated_at'] = dt.datetime.now()

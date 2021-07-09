@@ -4,9 +4,11 @@
 # See https://github.com/madMAx43v3r/chia-plotter
 #
 
+MADMAX_BRANCH=master
+
 # Checkout the project
 cd /
-git clone https://github.com/madMAx43v3r/chia-plotter.git 
+git clone --branch ${MADMAX_BRANCH} https://github.com/madMAx43v3r/chia-plotter.git 
 
 # Build the code
 cd chia-plotter

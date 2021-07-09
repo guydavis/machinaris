@@ -16,20 +16,33 @@ class FarmSummary:
         self.plot_count = 0
         self.plots_size = 0
         self.total_chia = 0
+        self.total_flax = 0
         self.netspace_size = 0
+        self.flax_netspace_size = 0
         self.netspace_display_size = "?"
+        self.flax_netspace_display_size = "?"
         self.expected_time_to_win = "Unknown"
+        self.flax_expected_time_to_win = "Unknown"
+        fullnode_plots_size = 0
         for farm in farms:
             self.plot_count += farm.plot_count
             self.plots_size += farm.plots_size
             if farm.mode == "fullnode":
-                self.total_chia = farm.total_chia
-                self.netspace_display_size = converters.gib_to_fmt(farm.netspace_size)
-                self.netspace_size = farm.netspace_size
                 self.status = farm.status
+                fullnode_plots_size = farm.plots_size
+                self.total_chia = '0.0' if not farm.total_chia else round(farm.total_chia, 3)
+                self.netspace_display_size = '?' if not farm.netspace_size else converters.gib_to_fmt(farm.netspace_size)
+                self.netspace_size = farm.netspace_size
                 self.expected_time_to_win = farm.expected_time_to_win
+                self.total_flax =  '0.0' if not farm.total_flax else round(farm.total_flax, 3)
+                self.flax_netspace_display_size = '?' if not farm.flax_netspace_size else converters.gib_to_fmt(farm.flax_netspace_size)
+                self.flax_netspace_size = farm.flax_netspace_size
+                self.flax_expected_time_to_win = farm.flax_expected_time_to_win
+                
         self.plots_display_size = converters.gib_to_fmt(self.plots_size)
         self.calc_status(self.status)
+        if fullnode_plots_size != self.plots_size: # Calculate for full farm including harvesters
+            self.calc_entire_farm_flax_etw(fullnode_plots_size, self.flax_expected_time_to_win, self.plots_size)
 
     def calc_status(self, status):
         self.status = status
@@ -37,6 +50,16 @@ class FarmSummary:
             self.display_status = "Active"
         else:
             self.display_status = self.status
+
+    # Only needed for older Flax code-base which reports ETW of plots only on fullnode
+    def calc_entire_farm_flax_etw(self, fullnode_plots_size, expected_time_to_win, total_farm_plots_size):
+        try:
+            fullnode_etw_mins = converters.etw_to_minutes(expected_time_to_win)
+            total_farm_etw_mins = (fullnode_plots_size / total_farm_plots_size) * fullnode_etw_mins
+            self.flax_expected_time_to_win = converters.format_minutes(int(total_farm_etw_mins))
+        except:
+            app.logger.debug("Failed to calculate ETW for entire farm due to: {0}".format(traceback.format_exc()))
+            self.expected_time_to_win = "Unknown"
 
 class FarmPlots:
 
@@ -57,6 +80,7 @@ class BlockchainChallenges:
 
     def __init__(self, challenges):
         self.columns = ['hostname',
+                        'blockchain',
                         'challenge_id',
                         'plots_past_filter',
                         'proofs_found',
@@ -67,6 +91,7 @@ class BlockchainChallenges:
         for challenge in challenges:
             self.rows.append({
                 'hostname': challenge.hostname,
+                'blockchain': challenge.blockchain,
                 'challenge_id': challenge.challenge_id,
                 'plots_past_filter': challenge.plots_past_filter,
                 'proofs_found': challenge.proofs_found,
@@ -81,9 +106,10 @@ class Wallets:
         self.rows = []
         for wallet in wallets:
             updated_at = wallet.updated_at or datetime.now()
-            self.rows.append({ \
-                'hostname': wallet.hostname, \
-                'details': wallet.details,
+            self.rows.append({ 
+                'hostname': wallet.hostname, 
+                'blockchain': wallet.blockchain, 
+                'details': wallet.details, 
                 'updated_at': wallet.updated_at }) 
 
 class Keys:
@@ -92,8 +118,8 @@ class Keys:
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
         for key in keys:
-            self.rows.append({ \
-                'hostname': key.hostname, \
+            self.rows.append({ 
+                'hostname': key.hostname, 
                 'details': key.details,
                 'updated_at': key.updated_at }) 
 
@@ -103,8 +129,9 @@ class Blockchains:
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
         for blockchain in blockchains:
-            self.rows.append({ \
-                'hostname': blockchain.hostname, \
+            self.rows.append({ 
+                'hostname': blockchain.hostname, 
+                'blockchain': blockchain.blockchain, 
                 'details': blockchain.details,
                 'updated_at': blockchain.updated_at }) 
 
@@ -115,6 +142,7 @@ class Connections:
         for connection in connections:
             self.rows.append({
                 'hostname': connection.hostname,
+                'blockchain': connection.blockchain, 
                 'details': connection.details
             })
     
@@ -147,3 +175,27 @@ class Connections:
                     })
             except:
                 app.logger.info(traceback.format_exc())
+
+
+class Plotnfts:
+
+    def __init__(self, plotnfts):
+        self.columns = ['hostname', 'details', 'updated_at']
+        self.rows = []
+        for plotnft in plotnfts:
+            updated_at = plotnft.updated_at or datetime.now()
+            self.rows.append({ 
+                'hostname': plotnft.hostname, 
+                'blockchain': plotnft.blockchain, 
+                'details': plotnft.details, 
+                'updated_at': plotnft.updated_at })
+    
+    def get_current_pool_url(self):
+        pool_url = None
+        for row in self.rows:
+            for line in row['details'].split('\n'):
+                if "Current pool URL:" in line:
+                    pool_url = line[len("Current pool URL:"):].strip()
+                elif "Target state: SELF_POOLING" in line:
+                    return None  # Switching back to self-pooling, no pool_url
+        return pool_url

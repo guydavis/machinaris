@@ -1,1 +1,41 @@
-Generic single-database configuration.
+Schema versioning with Flask-Migrate
+
+## Creating a migration
+As developer, modify models, then run this to generate a new migration and commit it.
+
+```
+cd /code/machinaris/api
+FLASK_APP=__init__.py flask db migrate 
+```
+This creates migration based on current model.
+
+## Testing a migration
+
+Run scripts/setup_databases.sh manually. (This is run on each launch of the container)
+
+```
+cd /machinaris/api
+FLASK_APP=__init__.py flask db upgrade
+```
+
+This applies migrations against old db
+
+## Initial Setup of Flask-migrate
+
+Note, initial adoption of flask-migrate happened in June, 2021 and should not need to be repeated.
+
+To create very first migration, point to empty sqlite db, by putting these default_settings.py
+
+```
+SQLALCHEMY_DATABASE_URI = 'sqlite:///'
+SQLALCHEMY_BINDS = {
+    'stats':      'sqlite:///',
+    'chiadog':    'sqlite:///',
+}
+```
+then:
+```
+cd /code/machinaris/api
+FLASK_APP=__init__.py flask db init --multidb
+FLASK_APP=__init__.py flask db migrate
+``` 

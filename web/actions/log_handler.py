@@ -17,11 +17,13 @@ from flask import Flask, jsonify, abort, request, flash
 
 from web import app, db, utils
 
-def get_log_lines(worker, log_type, log_id):
+def get_log_lines(worker, log_type, log_id, blockchain):
     try:
         payload = {"type": log_type }
         if log_id != 'undefined':
             payload['log_id'] = log_id
+        if blockchain != 'undefined':
+            payload['blockchain'] = blockchain
         response = utils.send_get(worker, "/logs/{0}".format(log_type), payload, debug=False)
         return response.content.decode('utf-8')
     except:

@@ -19,8 +19,9 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Boostrap Sidebars](https://dev.to/codeply/bootstrap-5-sidebar-examples-38pb): Used for sidebar menu layout.
 * [Toplevel](https://github.com/and-semakin/marshmallow-toplevel): Used for list of objects sent to REST API.
 
-## Target Platforms
-* [Unraid](https://selfhosters.net/docker/templating/templating/): Guide to creating an [application template](https://github.com/guydavis/machinaris-unraid) for Unraid.
+## Blockchain Forks
+* [Flax](https://github.com/Flax-Network/flax-blockchain)
+* [Flaxdog](https://github.com/langhorst/flaxdog)
 
 ## Testers and Developers
 
@@ -46,6 +47,11 @@ A big thanks to all that contributed with dev and test including:
 * ServantDad
 * efnats
 * myusuf3
+* kahn2k
+* barkcollar
+* dartec
+* elexx
+
 
 ## Trademark Notice
 CHIA NETWORK INC, CHIA™, the CHIA BLOCKCHAIN™, the CHIA PROTOCOL™, CHIALISP™ and the “leaf Logo” (including the leaf logo alone when it refers to or indicates Chia), are trademarks or registered trademarks of Chia Network, Inc., a Delaware corporation.  *There is no affliation between this Machinaris project and the main Chia Network project.*

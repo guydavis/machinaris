@@ -3,10 +3,6 @@
 # Configures Chia and Plotman, then launches Machinaris web server
 #
 
-echo 'Configuring Chia...'
-sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/mainnet/config/config.yaml
-sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/config.yaml
-
 echo 'Configuring Plotman...'
 mkdir -p /root/.chia/plotman/logs
 # Check for existing, old versions of plotman.yaml and migrate them, else use default
@@ -17,22 +13,36 @@ fi
 if [ ${pool_pk} != 'null' ]; then
     sed -i "s/^.*pool_pk:.*$/        pool_pk: ${pool_pk}/g" /root/.chia/plotman/plotman.yaml
 fi
-
-if [ "${mode}" != "plotter" ]; then
-    echo 'Configuring Chiadog...'
-    mkdir -p /root/.chia/chiadog/logs
-    cp -n /machinaris/config/chiadog.sample.yaml /root/.chia/chiadog/config.yaml
-    cp -f /machinaris/scripts/chiadog_notifier.sh /root/.chia/chiadog/notifier.sh && chmod 755 /root/.chia/chiadog/notifier.sh
-    . /machinaris/scripts/setup_databases.sh
-
-    echo 'Starting Chiadog...'
-    cd /chiadog
-    chiadog_pid=$(pidof python3)
-    if [ ! -z $chiadog_pid ]; then
-        kill $chiadog_pid
-    fi
-    /chia-blockchain/venv/bin/python3 -u main.py --config /root/.chia/chiadog/config.yaml > /root/.chia/chiadog/logs/chiadog.log 2>&1 &
+if [ ${pool_contract_address} != 'null' ]; then
+    sed -i "s/^.*pool_contract_address:.*$/        pool_contract_address: ${pool_contract_address}/g" /root/.chia/plotman/plotman.yaml
 fi
+# Import ssh key if exists
+if [ -f "/id_rsa" ]; then
+    echo "/id_rsa exists, trying to import private ssh key"
+    mkdir -p ~/.ssh/
+    cp -f /id_rsa ~/.ssh/id_rsa
+    cat > ~/.ssh/config <<'_EOF'
+    Host *
+      StrictHostKeyChecking no
+_EOF
+    chmod 700 ~/.ssh
+    chmod 600 ~/.ssh/*
+fi
+# Start plotting automatically if requested (not the default)
+if [ ${AUTO_PLOT,,} = "true" ]; then
+    nohup plotman plot < /dev/tty >> /root/.chia/plotman/logs/plotman.log 2>&1 &
+fi
+
+# Start the log monitors
+if [ "${mode}" != "plotter" ]; then
+    . /machinaris/scripts/chiadog_launch.sh
+fi
+if [[ "${mode}" != "plotter" ]] && [[ ${blockchains} =~ flax ]]; then
+    . /machinaris/scripts/flaxdog_launch.sh
+fi
+
+# Even standalone plotting mode needs database setup
+. /machinaris/scripts/setup_databases.sh
 
 mkdir -p /root/.chia/machinaris/config
 mkdir -p /root/.chia/machinaris/logs

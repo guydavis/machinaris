@@ -11,6 +11,7 @@ class Challenge(db.Model):
 
     unique_id = sa.Column(sa.String(length=64), primary_key=True)
     hostname = sa.Column(sa.String(length=255), nullable=False)
+    blockchain = sa.Column(sa.String(length=64), nullable=True)
     challenge_id = sa.Column(sa.String(length=64), nullable=False)
     plots_past_filter = sa.Column(sa.String(length=32), nullable=False)
     proofs_found = sa.Column(sa.Integer, nullable=False)

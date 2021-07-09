@@ -7,7 +7,7 @@
 # 2) Change all uppercase placeholders below to match your system paths and settings
 # 3) Change TZ to local TZ_database_name from https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List
 # 4) Execute script and browse to http://localhost:8926 to view Machinaris WebUI
-# 5) Port-forward tcp/8444 at your router to Chia Network.  Do NOT port forward 8926 which is LAN-only!
+# 5) Port-forward tcp/8444 (chia) & tcp/6888 (flax) at your router. Do NOT port forward 8926 which is LAN-only!
 #
 
 # Standalone launch of a fullnode, all services
@@ -15,8 +15,7 @@ docker run \
     -d -t \
     --name=machinaris \
     --hostname=$(hostname -s) \
-    -p 8444:8444 \
-    -p 8926:8926 \
+    -p 8926:8926 -p 8927:8927 -p 8444:8444 -p 8447:8447 -p 6888:6888 -p 6885:6885 \
     -e TZ=America/Edmonton \
     -v ~/.machinaris:/root/.chia:rw \
     -v /PATH/TO/PLOTS:/plots:rw \

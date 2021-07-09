@@ -19,6 +19,7 @@ from common.models import plottings as pl
 from web import app, db, utils
 from web.models.plotman import PlottingSummary
 from . import worker as w
+from . import chia as c
 
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 
@@ -119,8 +120,50 @@ def stop_archiving(plotter):
     else:
         flash('Archiver stopped successfully.', 'success')
 
+def load_key_pk(type):
+    keys = c.load_keys_show()
+    m = re.search('{0} public key .*: (\w+)'.format(type), keys.rows[0]['details'])
+    if m:
+        return m.group(1)
+    return None
+
+def load_pool_contract_address():
+    plotnfts = c.load_plotnfts()
+    m = re.search('P2 singleton address .*: (\w+)'.format(type), plotnfts.rows[0]['details'])
+    if m:
+        return m.group(1)
+    return None
+
+def load_config_replacements():
+    replacements = []
+    farmer_pk = load_key_pk('Farmer')
+    if farmer_pk:
+        app.logger.info("FARMER_PK: {0}".format(farmer_pk))
+        replacements.append([ 'farmer_pk:.*$', 'farmer_pk: '+ farmer_pk])
+    pool_pk = load_key_pk('Pool')
+    if pool_pk:
+        app.logger.info("POOL_PK: {0}".format(pool_pk))
+        replacements.append([ 'pool_pk:.*$', 'pool_pk: '+ pool_pk])
+    pool_contract_address = load_pool_contract_address()
+    if pool_contract_address:
+        app.logger.info("POOL_CONTRACT_ADDRESS: {0}".format(pool_contract_address))
+        replacements.append([ 'pool_contract_address:.*$', 'pool_contract_address: '+ pool_contract_address])
+    return replacements
+
 def load_config(plotter):
-    return utils.send_get(plotter, "/configs/plotting", debug=False).content
+    replacements = []
+    try:
+        replacements = load_config_replacements()
+    except:
+        app.logger.info("Unable to load replacements on install with mode={0}".format(os.environ['mode']))
+        app.logger.info(traceback.format_exc())
+    lines = []
+    config = utils.send_get(plotter, "/configs/plotting", debug=False).content.decode('utf-8')
+    for line in config.splitlines():
+        for replacement in replacements:
+            line = re.sub(replacement[0], replacement[1], line)
+        lines.append(line)
+    return '\n'.join(lines)
 
 def save_config(plotter, config):
     try: # Validate the YAML first

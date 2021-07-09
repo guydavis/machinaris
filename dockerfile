@@ -53,6 +53,7 @@ FROM package_stage
 # Base install of official Chia binaries at the given branch
 ARG CHIA_BRANCH
 ARG PATCH_CHIAPOS
+ARG FLAX_BRANCH
 
 # copy local files
 COPY . /machinaris/
@@ -60,30 +61,16 @@ COPY . /machinaris/
 # set workdir
 WORKDIR /chia-blockchain
 
-# install Chia using official Chia Blockchain binaries
+# Install Chia, Plotman, Chiadog, Madmax, Flax, Machinaris, etc
 RUN \
-	git clone --branch ${CHIA_BRANCH}  --single-branch https://github.com/Chia-Network/chia-blockchain.git /chia-blockchain \
-	&& git submodule update --init mozilla-ca \
-	&& chmod +x install.sh \
-	&& /usr/bin/sh ./install.sh \
-	\
-# cleanup apt and pip caches
-	\
-	&& rm -rf \
-		/root/.cache \
-		/tmp/* \
-		/var/lib/apt/lists/* \
-		/var/tmp/*
-# install additional tools such as Plotman, Chiadog, and Machinaris
-RUN \
-       /usr/bin/bash /machinaris/scripts/patch_chiapos.sh ${PATCH_CHIAPOS} \
-	&& . /machinaris/scripts/chiadog_install.sh \
-	&& . /machinaris/scripts/plotman_install.sh \
-	&& . /machinaris/scripts/madmax_install.sh \
-	&& . /machinaris/scripts/machinaris_install.sh \
-	\
-# cleanup apt and pip caches
-	\
+	/usr/bin/bash /machinaris/scripts/chia_install.sh ${CHIA_BRANCH} \
+    && /usr/bin/bash /machinaris/scripts/patch_chiapos.sh ${PATCH_CHIAPOS} \
+	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh \
+	&& /usr/bin/bash /machinaris/scripts/plotman_install.sh \
+	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \
+	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
+	&& /usr/bin/bash /machinaris/scripts/flax_install.sh ${FLAX_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/flaxdog_install.sh \
 	&& rm -rf \
 		/root/.cache \
 		/tmp/* \
@@ -96,14 +83,16 @@ ENV keys="/root/.chia/mnemonic.txt"
 ENV plots_dir="/plots"
 # One of fullnode, farmer, harvester, plotter, farmer+plotter, harvester+plotter. Default is fullnode
 ENV mode="fullnode" 
-# If mode=plotter, optional 2 public keys will be set in your plotman.yaml
+# Required is the 'chia' blockchain, but can optionally add 'flax' too. A comma-separated list.
+ENV blockchains="chia,flax"
+# If provided then these optional 3 public keys will be set in your plotman.yaml
 ENV farmer_pk="null"
 ENV pool_pk="null"
+ENV pool_contract_address="null"
 # If mode=harvester, required for host and port the harvester will your farmer
 ENV farmer_address="null"
 ENV farmer_port="8447"
-# Only set true if using Chia's old test for testing only, default uses mainnet
-ENV testnet="false"
+ENV flax_farmer_port="6885"
 # Can override the location of default settings for api and web servers.
 ENV API_SETTINGS_FILE='/root/.chia/machinaris/config/api.cfg'
 ENV WEB_SETTINGS_FILE='/root/.chia/machinaris/config/web.cfg'
@@ -112,7 +101,7 @@ ENV controller_host="localhost"
 ENV controller_web_port=8926
 ENV controller_api_port=8927
 
-ENV PATH="${PATH}:/chia-blockchain/venv/bin"
+ENV PATH="${PATH}:/chia-blockchain/venv/bin:/flax-blockchain/venv/bin"
 ENV TZ=Etc/UTC
 ENV FLASK_ENV=production
 ENV FLASK_APP=/machinaris/main.py

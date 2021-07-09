@@ -14,14 +14,24 @@ class FarmSummary:
 
     def __init__(self, cli_stdout=None, farm_plots=None):
         if cli_stdout:
+            next_line_local_harvester = False
+            self.plots_size = None
             for line in cli_stdout:
-                if "status" in line: 
+                if next_line_local_harvester:
+                    self.plot_count = line.strip().split(' ')[0]
+                    self.plots_size = line.strip().split(':')[1].strip()
+                    next_line_local_harvester = False
+                elif "status" in line: 
                     self.calc_status(line.split(':')[1].strip())
                 elif "Total chia farmed" in line:
                     self.total_chia = line.split(':')[1].strip()
-                elif "Plot count" in line:
+                elif "Total flax farmed" in line:
+                    self.total_chia = line.split(':')[1].strip()
+                elif "Plot count:" in line:
                     self.plot_count = line.split(':')[1].strip()
-                elif "Total size of plots" in line:
+                elif "Local Harvester" in line:
+                    next_line_local_harvester = True
+                elif not self.plots_size and "Total size of plots" in line:
                     self.plots_size = line.split(':')[1].strip()
                 elif "Estimated network space" in line:
                     self.calc_netspace_size(line.split(':')[1].strip())
@@ -29,7 +39,6 @@ class FarmSummary:
                     self.time_to_win = line.split(':')[1].strip()
                 elif "User transaction fees" in line:
                     self.transaction_fees = line.split(':')[1].strip()
-                # TODO Handle Connection error lines from Harvester etc
         elif farm_plots:
             self.plot_count = 0
             bytes_size = 0

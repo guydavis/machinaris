@@ -45,19 +45,19 @@ class Challenges(MethodView):
         return items
 
 
-@blp.route('/<hostname>')
+@blp.route('/<hostname>/<blockchain>')
 class ChallengeByHostname(MethodView):
 
     @blp.etag
     @blp.response(200, ChallengeSchema)
-    def get(self, hostname):
-        return db.session.query(Challenge).filter(Challenge.hostname==hostname)
+    def get(self, hostname, blockchain):
+        return db.session.query(Challenge).filter(Challenge.hostname==hostname, Challenge.blockchain==blockchain)
 
     @blp.etag
     @blp.arguments(BatchOfChallengeSchema)
     @blp.response(200, ChallengeSchema(many=True))
-    def put(self, new_items, hostname):
-        db.session.query(Challenge).filter(Challenge.hostname==hostname).delete()
+    def put(self, new_items, hostname, blockchain):
+        db.session.query(Challenge).filter(Challenge.hostname==hostname, Challenge.blockchain==blockchain).delete()
         items = []
         for new_item in new_items:
             item = Challenge(**new_item)
@@ -68,6 +68,6 @@ class ChallengeByHostname(MethodView):
 
     @blp.etag
     @blp.response(204)
-    def delete(self, hostname):
-        db.session.query(Challenge).filter(Challenge.hostname==hostname).delete()
+    def delete(self, hostname, blockchain):
+        db.session.query(Challenge).filter(Challenge.hostname==hostname, Challenge.blockchain==blockchain).delete()
         db.session.commit()

@@ -18,18 +18,6 @@
     {% endwith %}
   </div>
 
-  {% if farming.expected_time_to_win != 'Unknown' %}
-  <div class="row align-items-md-stretch" style="margin-top:5px; margin-bottom:5px;">
-    <div class="col-md-12">
-      <div class="h-30 p-2 text-white bg-dark rounded-3">
-        <h4 class="text-center">Expected Time to Win:
-          <span class="text-success">{{ farming.expected_time_to_win }}</span>
-        </h4>
-      </div>
-    </div>
-  </div>
-  {% endif %}
-
   <div class="row align-items-md-stretch">
     {% if global_config.plotting_enabled %}
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
@@ -58,36 +46,78 @@
   <div class="row align-items-md-stretch">
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h1 class="display-1 text-center text-success">{{ farming.plot_count }}</h1>
+        <h4 class="display-4 text-center text-success">{{ farming.plot_count }}</h4>
         <h6 class="display-6 text-center">Total Plots</h6>
       </div>
     </div>
     {% if global_config.farming_enabled %}
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h1 class="display-1 text-center text-success">{{ farming.total_chia }}</h1>
-        <h6 class="display-6 text-center">Total Chia Farmed</h6>
+        <h4 class="display-4 text-center text-success">{{ farming.plots_display_size }}</h4>
+        <h6 class="display-6 text-center">Total Plots Size</h6>
       </div>
     </div>
     {% endif %}
   </div>
 
+  {% if farming.expected_time_to_win != 'Unknown' %}
+  <div class="row align-items-md-stretch" style="margin-top:5px; margin-bottom:5px;">
+    <div class="col-md-12">
+      <div class="h-30 p-2 text-white bg-dark rounded-3">
+        <h4 class="text-center">Chia - Expected Time to Win:
+          <span class="text-success">{{ farming.expected_time_to_win }}</span>
+        </h4>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
   <div class="row align-items-md-stretch">
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success">{{ farming.plots_display_size }}</h4>
-        <h6 class="display-6 text-center">Total Plots Size</h6>
+        <h4 class="display-4 text-center text-success">{{ farming.total_chia }}</h4>
+        <h6 class="display-6 text-center">Chia Total Farmed</h6>
       </div>
     </div>
     {% if global_config.farming_enabled %}
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
         <h4 class="display-4 text-center text-success">{{ farming.netspace_display_size }}</h4>
-        <h6 class="display-6 text-center">Estimated Netspace Size</h6>
+        <h6 class="display-6 text-center">Chia Netspace Size</h6>
       </div>
     </div>
     {% endif %}
   </div>
+
+  {% if global_config.flax_enabled %}
+  {% if farming.flax_expected_time_to_win != 'Unknown' %}
+  <div class="row align-items-md-stretch" style="margin-top:5px; margin-bottom:5px;">
+    <div class="col-md-12">
+      <div class="h-30 p-2 text-white bg-dark rounded-3">
+        <h4 class="text-center">Flax - Expected Time to Win:
+          <span class="text-success">{{ farming.flax_expected_time_to_win }}</span>
+        </h4>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  <div class="row align-items-md-stretch">
+    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+      <div class="h-100 p-2 text-white bg-dark rounded-3">
+        <h4 class="display-4 text-center text-success">{{ farming.total_flax }}</h4>
+        <h6 class="display-6 text-center">Flax Total Farmed</h6>
+      </div>
+    </div>
+    {% if global_config.farming_enabled %}
+    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+      <div class="h-100 p-2 text-white bg-dark rounded-3">
+        <h4 class="display-4 text-center text-success">{{ farming.flax_netspace_display_size }}</h4>
+        <h6 class="display-6 text-center">Flax Netspace Size</h6>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+  {% endif %}
 
   {% if global_config.farming_enabled %}
   <script>

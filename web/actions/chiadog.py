@@ -19,8 +19,8 @@ from common.models import alerts as a
 from web import app, db, utils
 from . import worker as wk
 
-def load_config(farmer):
-    return utils.send_get(farmer, "/configs/alerts", debug=False).content
+def load_config(farmer, blockchain):
+    return utils.send_get(farmer, "/configs/alerts?blockchain=" + blockchain, debug=False).content
 
 def load_farmers():
     worker_summary = wk.load_worker_summary()
@@ -33,7 +33,7 @@ def load_farmers():
             })
     return farmers
 
-def save_config(farmer, config):
+def save_config(farmer, blockchain, config):
     try: # Validate the YAML first
         yaml.safe_load(config)
     except Exception as ex:
@@ -41,7 +41,7 @@ def save_config(farmer, config):
         flash('Updated config.yaml failed validation! Fix and save or refresh page.', 'danger')
         flash(str(ex), 'warning')
     try:
-        utils.send_put(farmer, "/configs/alerts", config, debug=False)
+        utils.send_put(farmer, "/configs/alerts/" + blockchain, config, debug=False)
     except Exception as ex:
         flash('Failed to save config to farmer.  Please check log files.', 'danger')
         flash(str(ex), 'warning')
@@ -49,7 +49,7 @@ def save_config(farmer, config):
         flash('Nice! Chiadog\'s config.yaml validated and saved successfully.', 'success')
 
 def get_notifications():
-    return db.session.query(a.Alert).order_by(a.Alert.created_at.desc()).limit(20).all()
+    return db.session.query(a.Alert).order_by(a.Alert.created_at.desc()).limit(25).all()
 
 def start_chiadog(farmer):
     app.logger.info("Starting Chiadog monitoring...")

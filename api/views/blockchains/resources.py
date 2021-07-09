@@ -32,7 +32,8 @@ class Blockchains(MethodView):
     @blp.arguments(BlockchainSchema)
     @blp.response(201, BlockchainSchema)
     def post(self, new_item):
-        item = Blockchain.query.get(new_item['hostname'])
+        item = Blockchain.query.filter(Blockchain.hostname==new_item['hostname'], \
+            Blockchain.blockchain==new_item['blockchain']).first()
         if item: # upsert
             new_item['created_at'] = item.created_at
             new_item['updated_at'] = dt.datetime.now()
@@ -44,7 +45,7 @@ class Blockchains(MethodView):
         return item
 
 
-@blp.route('/<hostname>')
+@blp.route('/<hostname>/<blockchain>')
 class BlockchainsByHostname(MethodView):
 
     @blp.etag
@@ -55,7 +56,7 @@ class BlockchainsByHostname(MethodView):
     @blp.etag
     @blp.arguments(BlockchainSchema)
     @blp.response(200, BlockchainSchema)
-    def put(self, new_item, hostname):
+    def put(self, new_item, hostname, blockchain):
         item = Blockchain.query.get_or_404(hostname)
         new_item['hostname'] = item.hostname
         new_item['created_at'] = item.created_at

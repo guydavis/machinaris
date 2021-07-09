@@ -3,6 +3,7 @@
     <thead>
       <tr>
         <th scope="col">Worker</th>
+        <th scope="col">Blockchain</th>
         <th scope="col">Challenge</th>
         <th scope="col">Plots Passed Filter</th>
         <th scope="col">Proofs Found</th>
@@ -14,6 +15,7 @@
       {% for challenge in challenges.rows %}
       <tr>
         <td>{{challenge.hostname}}</td>
+        <td>{{challenge.blockchain}}</td>
         <td>{{challenge.challenge_id}}</td>
         <td>{{challenge.plots_past_filter}}</td>
         <td>{{challenge.proofs_found}}</td>

@@ -28,7 +28,11 @@
 </script>
 
 <header class="pb-3 mb-4 border-bottom">
-    <span class="fs-4">Plotting Status: {{ plotting.display_status }}</span>
+    <span class="fs-4">Plotting Status: {{ plotting.display_status }}
+        {% if plotting.display_status == 'Active' %}
+            - {{ plotting.rows|length }} jobs.
+        {% endif %}
+    </span>
 </header>
 
 <div class="modal fade" id="killModal" tabindex="-1" aria-labelledby="killModalLabel" aria-hidden="true">
