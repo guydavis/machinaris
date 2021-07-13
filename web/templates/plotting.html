@@ -30,7 +30,11 @@
 <header class="pb-3 mb-4 border-bottom">
     <span class="fs-4">Plotting Status: {{ plotting.display_status }}
         {% if plotting.display_status == 'Active' %}
+            {% if plotting.rows|length == 1 %}
+            - {{ plotting.rows|length }} job.
+            {% else %}
             - {{ plotting.rows|length }} jobs.
+            {% endif %}
         {% endif %}
     </span>
 </header>

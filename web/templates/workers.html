@@ -2,9 +2,28 @@
 
 {% block content %}
 
+<div class="position-relative">
+  <div class="position-absolute top-0 end-0">
+      <a href="https://github.com/guydavis/machinaris/wiki/Workers" target="_blank">
+          <i class="fs-4 bi-question-circle"></i>
+      </a>
+  </div>
+</div>
+
 <header class="pb-3 mb-4 border-bottom">
   <span class="fs-4">Machinaris - Workers</span>
 </header>
+
+<script>
+  function WorkerLaunch(hostname) {
+      var d = new Date();
+      var height = 600;
+      var width = 900;
+      var top = (screen.height - height) / 2;
+      var left = (screen.width - width) / 2;
+      window.open("{{ url_for('worker_launch') }}", 'Worker Launch Config', 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+  }
+</script>
 
 <div>
   {% with messages = get_flashed_messages(with_categories=true) %}
@@ -51,8 +70,16 @@
       </table>
 
       <fieldset>
-        <button form="workers-form" type="submit" name="action" value="prune" class="btn btn-outline-success"
-          id="btnPrune" title="Only deletes status of selected worker(s).">Prune Selected</button>
+        <div class="row g-3">
+          <div class="col-sm">
+            <button form="workers-form" type="submit" name="action" value="prune" class="btn btn-outline-success"
+              id="btnPrune" title="Only deletes status of selected worker(s).">Prune Selected</button>
+          </div>
+          <div class="col-sm-2">
+            <button type="button" class="text-right btn btn-outline-success"
+              onclick="WorkerLaunch(); return false">New Launch</button>
+          </div>
+        </div>
       </fieldset>
   </form>
 
@@ -74,10 +101,11 @@
   <div class="text-center" style="padding-top:100 px; padding-bottom: 0px">
     <h6>No Machinaris workers have reported status successfully.</h6>
     <h6>Please check each expected worker's log files.</h6>
-    <h6>For more, see the Machinaris <a href="https://github.com/guydavis/machinaris/wiki/Workers" target="_blank">wiki.</a></h6>
+    <h6>For more, see the Machinaris <a href="https://github.com/guydavis/machinaris/wiki/Workers"
+        target="_blank">wiki.</a></h6>
   </div>
-  <br/>
-  <br/>
+  <br />
+  <br />
   {% endif %}
 
 
