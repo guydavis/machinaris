@@ -7,6 +7,13 @@ mkdir -p /root/.chia/machinaris/logs
 mkdir -p /root/.chia/machinaris/dbs
 mkdir -p /root/.chia/chiadog/dbs
 
+# Optional reset parameter will remove broken DBs, allowing fresh setup of status
+if [ $1 == 'reset' ]; then
+    mv /root/.chia/machinaris/dbs/machinaris.db /root/.chia/machinaris/dbs/machinaris.db.bak
+    mv /root/.chia/machinaris/dbs/stats.db /root/.chia/machinaris/dbs/stats.db.bak
+    mv /root/.chia/chiadog/dbs/chiadog.db /root/.chia/chiadog/dbs/chiadog.db.bak
+fi
+
 # If old databases not managed by flask-migrate yet
 if [ ! -f /root/.chia/machinaris/dbs/.managed ] && [ -f /root/.chia/machinaris/dbs/stats.db ]; then
     cd /root/.chia/machinaris/dbs

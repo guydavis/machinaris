@@ -21,16 +21,24 @@ def update():
         try:
             hostname = utils.get_hostname()
             plots_farming = chia_cli.load_plots_farming()
+            plots_by_id = {}
             payload = []
             for plot in plots_farming.rows:
-                payload.append({
-                    "plot_id": plot['plot_id'],
-                    "hostname": hostname,
-                    "dir": plot['dir'],
-                    "file": plot['file'],
-                    "created_at": plot['created_at'],
-                    "size": plot['size'],
-                })
+                plot_id = plot['plot_id']
+                if plot_id in plots_by_id:
+                    other_plot = plots_by_id[plot_id]
+                    app.logger.info("Skipping addition of plot at {0}/{1} because same plot_id found at {2}/{3}".format(
+                        plot['dir'], plot['file'], other_plot['dir'], other_plot['file']))
+                else: # No conflict so add it to plots list
+                    plots_by_id[plot_id] = plot
+                    payload.append({
+                        "plot_id": plot_id,
+                        "hostname": hostname,
+                        "dir": plot['dir'],
+                        "file": plot['file'],
+                        "created_at": plot['created_at'],
+                        "size": plot['size'],
+                    })
             if len(payload) > 0:
                 utils.send_post('/plots/', payload, debug=False)
             else:

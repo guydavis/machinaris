@@ -266,6 +266,12 @@ def logfile():
     else:
         abort(500, "Unsupported log type: {0}".format(log_type))
 
+@app.route('/worker_launch')
+def worker_launch():
+    [farmer_pk, pool_pk, pool_contract_address] = plotman.load_plotting_keys()
+    return render_template('worker_launch.html', farmer_pk=farmer_pk, 
+        pool_pk=pool_pk, pool_contract_address=pool_contract_address)
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),

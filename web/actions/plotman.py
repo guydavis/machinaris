@@ -200,3 +200,15 @@ def analyze(plot_file, plotters):
         except:
             app.logger.info(traceback.format_exc())
     return make_response("Sorry, not plotting job log found.  Perhaps plot was made elsewhere?", 200)
+
+def load_plotting_keys():
+    farmer_pk = load_key_pk('Farmer')
+    pool_pk = load_key_pk('Pool')
+    pool_contract_address = load_pool_contract_address()
+    if not farmer_pk:
+        farmer_pk = None if os.environ['farmer_pk'] == 'null' else os.environ['farmer_pk']
+    if not pool_pk:
+        pool_pk = None if os.environ['pool_pk'] == 'null' else os.environ['pool_pk']
+    if not pool_contract_address:
+        pool_contract_address = None if os.environ['pool_contract_address'] == 'null' else os.environ['pool_contract_address']
+    return [farmer_pk, pool_pk, pool_contract_address]
