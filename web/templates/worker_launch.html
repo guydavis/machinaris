@@ -100,20 +100,24 @@
         function updateAppData() {
             var os = getRadioButtonValue('os')
             if (os == 'windows') {
-                $('#appdata').text = '%APPDATA%/.machinaris';
-                document.getElementById('volume_host_path0').value = "C:/chia_plots";
-                document.getElementById('volume_host_path1').value = "C:/chia_plotting";
+                document.getElementById('appdata').value = '%APPDATA%/.machinaris';
+                document.getElementById('volume_host_path0').value = "C:/my_chia_plots";
+                document.getElementById('volume_host_path1').value = "C:/my_chia_plotting";
             } else if (os == 'macintosh') {
-                $('#appdata').text = '~/.machinaris';
+                document.getElementById('appdata').value = '~/.machinaris';
                 document.getElementById('volume_host_path0').value = "/Volumes/disk1";
                 document.getElementById('volume_host_path1').value = "/Volumes/temp1";
             } else {
-                $('#appdata').text = '~/.machinaris';
+                document.getElementById('appdata').value = '~/.machinaris';
                 document.getElementById('volume_host_path0').value = "/mnt/disk1";
                 document.getElementById('volume_host_path1').value = "/mnt/temp1";
             }
         }
         function updateDocker() {
+            updateDockerRun();
+            updateDockerCompose();
+        }
+        function updateDockerRun() {
             var os = getRadioButtonValue('os')
             if (os == 'windows') {
                 line_end = ' `\n';
@@ -122,12 +126,25 @@
             }
             cmd = 'docker run' + line_end;
             cmd += '    -d -t --name machinaris' + line_end;
-            if (os == 'windows') {
-                cmd += '    -h (hostname)' + line_end;
-                cmd += '    --dns (Get-DnsClientServerAddress -AddressFamily IPv4 | Select-Object -ExpandProperty ServerAddresses)' + line_end;
-            } else {
-                cmd += '    -h $(hostname -s)' + line_end;
-                cmd += "    --dns $(cat /etc/resolv.conf | grep nameserver | cut -d ' ' -f 2)" + line_end;
+            if (document.getElementById("worker_hostname").value) {
+                cmd += '    -h ' + document.getElementById("worker_hostname").value + line_end;
+            }
+            else {
+                if (os == 'windows') {
+                    cmd += '    -h (hostname)' + line_end;
+                } else {
+                    cmd += '    -h $(hostname -s)' + line_end;
+                }
+            }
+            if (document.getElementById("dns_ip_addr").value) {
+                cmd += '    --dns ' + document.getElementById("dns_ip_addr").value + line_end;
+            }
+            else {
+                if (os == 'windows') {
+                    cmd += '    --dns (Get-DnsClientServerAddress -AddressFamily IPv4 | Select-Object -ExpandProperty ServerAddresses)' + line_end;
+                } else {
+                    cmd += "    --dns $(cat /etc/resolv.conf | grep nameserver | cut -d ' ' -f 2)" + line_end;
+                }
             }
             cmd += '    -v "' + document.getElementById("appdata").value + ':/root/.chia"' + line_end;
             var cur_vols = $('#volumes').children().length
@@ -188,6 +205,85 @@
             }
             cmd += '    ghcr.io/guydavis/machinaris';
             $('#run').html(cmd);
+        }
+        function updateDockerCompose() {
+            var line_end = ' \n';
+            var os = getRadioButtonValue('os')
+            cmd =  "version: '3.8'" + line_end;
+            cmd += "machinaris:" + line_end;
+            cmd += "    image: ghcr.io/guydavis/machinaris" + line_end;
+            if (document.getElementById("worker_hostname").value) {
+                cmd += '    hostname:' + document.getElementById("worker_hostname").value + line_end;
+            }
+            if (document.getElementById("dns_ip_addr").value) {
+                cmd += '    dns:' + document.getElementById("dns_ip_addr").value + line_end;
+            }
+            cmd += '    restart: always' + line_end;
+            cmd += '    tty: true' + line_end;
+            cmd += '    volumes:' + line_end;
+            cmd += '        - "' + document.getElementById("appdata").value + ':/root/.chia"' + line_end;
+            var cur_vols = $('#volumes').children().length
+            var plots_dir = []
+            $('#volumes').children().each( (index, element) => {
+                volume_host_path = document.getElementById("volume_host_path" + index).value;
+                volume_container_path = document.getElementById("volume_container_path" + index).value;
+                cmd += '        - "' + volume_host_path + ':' + volume_container_path + '"'  + line_end;
+                if ($('#volume_type' + index).val() == 'plots') {
+                    plots_dir.push(volume_container_path)
+                }
+            });
+            cmd += '    environment:' + line_end;
+            cmd += '        - TZ="' + $('#timezone').val() + '"' + line_end;
+            var mode = ""
+            if (document.getElementById('mode-harvester').checked) {
+                mode = "harvester";
+                cmd += '        - farmer_address=' + document.getElementById("farmer_address").value + line_end;
+                cmd += '        - farmer_port=' + document.getElementById("farmer_port").value + line_end;
+                if (document.getElementById("blockchain-flax").checked) {
+                    cmd += '        - flax_farmer_port=' + document.getElementById("flax_farmer_port").value + line_end;
+                }
+            } else if (document.getElementById('mode-plotter').checked) {
+                if (mode) {
+                    mode += ',plotter' + line_end;
+                }
+                else {
+                    mode = 'plotter' + line_end;
+                }
+                cmd += '        - "farmer_pk=' + document.getElementById("farmer_pk").value + '"' + line_end;
+                cmd += '        - "pool_pk=' + document.getElementById("pool_pk").value + line_end;
+                cmd += '        - "pool_contract_address=' + document.getElementById("pool_contract_address").value + '"' + line_end;
+            }
+            if (mode) { // harvester, plotter, or harvester+plotter
+                cmd += '        - mode=' + mode + line_end;
+                cmd += '        - controller_host=' + location.hostname + line_end;
+            } else { // fullnode
+                cmd += '        - mode=fullnode' + line_end;
+            }
+            if (document.getElementById("ip_addr").value) {
+                cmd += '        - worker_address=' + document.getElementById("ip_addr").value + line_end;
+            }
+            cmd += '        - plots_dir=' + plots_dir.join(':') + line_end;
+            var blockchains = 'chia'
+            if (document.getElementById("blockchain-flax").checked) {
+                blockchains += ',flax'
+            }
+            cmd += '        - blockchains=' + blockchains + line_end;
+            var auto_plot = getRadioButtonValue('auto_plot'); 
+            if (auto_plot == "true") {
+                cmd += '        - AUTO_PLOT=' + auto_plot + line_end;
+            }
+            cmd += '    ports:' + line_end;
+            cmd += '        - 8926:8926' + line_end;
+            cmd += '        - 8927:8927' + line_end;
+            if (!mode) {  // Defaults to fullnode
+                cmd += '        - 8444:8444' + line_end;
+                cmd += '        - 8447:8447' + line_end;
+                if (document.getElementById("blockchain-flax").checked) {
+                    cmd += '        - 6888:6888' + line_end;
+                    cmd += '        - 6885:6885' + line_end;
+                }
+            }
+            $('#compose').html(cmd);
         }
         $(document).ready(function () {
             $('#plotting_keys_row').hide()
@@ -316,6 +412,20 @@
             </div>
             <div class="row mb-3">
                 <div class="col offset">
+                    <div class="row">
+                        <label for="worker_hostname" class="form-label">Worker Hostname (Optional)</label>
+                        <input type="text" class="form-control" placeholder="myhostname" aria-label="worker_hostname"
+                            id='worker_hostname' onkeyup="updateDocker()">
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="ip_addr" class="form-label">Worker IP Address (Optional)</label>
+                    <input type="text" class="form-control" placeholder="192.168.1.100" aria-label="ip_addr"
+                        id='ip_addr' onkeyup="updateDocker()">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col offset">
                     <label for="inputState" class="form-label">Blockchains to Farm</label>
                     <div class="row">
                         <div class="col">
@@ -335,9 +445,9 @@
                     </div>
                 </div>
                 <div class="col">
-                    <label for="ip_addr" class="form-label">Worker IP Address (Optional)</label>
-                    <input type="text" class="form-control" placeholder="192.168.1.100" aria-label="ip_addr"
-                        id='ip_addr' onkeyup="updateDocker()">
+                    <label for="dns_ip_addr" class="form-label">DNS Server IP Address (Optional)</label>
+                    <input type="text" class="form-control" placeholder="192.168.1.1" aria-label="dns_ip_addr"
+                        id='dns_ip_addr' onkeyup="updateDocker()">
                 </div>
             </div>
             <h4>Volume Mounts</h4>

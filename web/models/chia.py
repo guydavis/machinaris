@@ -66,14 +66,21 @@ class FarmPlots:
      def __init__(self, plots):
         self.columns = ['worker', 'plot_id',  'dir', 'plot', 'create_date', 'size']
         self.rows = []
+        plots_by_id = {}
         for plot in plots:
-            self.rows.append({ \
-                'worker': plot.hostname, \
-                'plot_id': plot.plot_id, \
-                'dir': plot.dir,  \
-                'plot': plot.file,  \
-                'create_date': plot.created_at, \
-                'size': plot.size }) 
+            if plot.plot_id in plots_by_id:
+                other_plot = plots_by_id[plot.plot_id]
+                app.logger.info("Skipping listing of plot on {0} at {1}/{2} because same plot_id found on {3} at {4}/{5}".format(
+                    plot.hostname, plot.dir, plot.file, other_plot.hostname, other_plot.dir, other_plot.file))
+            else: # No conflict so add it to plots list
+                plots_by_id[plot.plot_id] = plot
+                self.rows.append({ \
+                    'worker': plot.hostname, \
+                    'plot_id': plot.plot_id, \
+                    'dir': plot.dir,  \
+                    'plot': plot.file,  \
+                    'create_date': plot.created_at, \
+                    'size': plot.size }) 
 
 
 class BlockchainChallenges:
