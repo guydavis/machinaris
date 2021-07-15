@@ -143,16 +143,16 @@
                 if (os == 'windows') {
                     cmd += '    --dns (Get-DnsClientServerAddress -AddressFamily IPv4 | Select-Object -ExpandProperty ServerAddresses)' + line_end;
                 } else {
-                    cmd += "    --dns $(cat /etc/resolv.conf | grep nameserver | cut -d ' ' -f 2)" + line_end;
+                    //cmd += "    --dns $(cat /etc/resolv.conf | grep nameserver | cut -d ' ' -f 2)" + line_end;
                 }
             }
-            cmd += '    -v "' + document.getElementById("appdata").value + ':/root/.chia"' + line_end;
+            cmd += '    -v ' + document.getElementById("appdata").value + ':/root/.chia' + line_end;
             var cur_vols = $('#volumes').children().length
             var plots_dir = []
             $('#volumes').children().each( (index, element) => {
                 volume_host_path = document.getElementById("volume_host_path" + index).value;
                 volume_container_path = document.getElementById("volume_container_path" + index).value;
-                cmd += '    -v "' + volume_host_path + ':' + volume_container_path + '"' + line_end;
+                cmd += '    -v ' + volume_host_path + ':' + volume_container_path + line_end;
                 if ($('#volume_type' + index).val() == 'plots') {
                     plots_dir.push(volume_container_path)
                 }
@@ -166,7 +166,8 @@
                 if (document.getElementById("blockchain-flax").checked) {
                     cmd += '    -e flax_farmer_port=' + document.getElementById("flax_farmer_port").value + line_end;
                 }
-            } else if (document.getElementById('mode-plotter').checked) {
+            }  
+            if (document.getElementById('mode-plotter').checked) {
                 if (mode) {
                     mode += ',plotter';
                 }
@@ -174,7 +175,7 @@
                     mode = 'plotter';
                 }
                 cmd += '    -e "farmer_pk=' + document.getElementById("farmer_pk").value + '"' + line_end;
-                cmd += '    -e "pool_pk=' + document.getElementById("pool_pk").value + line_end;
+                cmd += '    -e "pool_pk=' + document.getElementById("pool_pk").value + '"' + line_end;
                 cmd += '    -e "pool_contract_address=' + document.getElementById("pool_contract_address").value + '"' + line_end;
             }
             if (mode) { // harvester, plotter, or harvester+plotter
@@ -221,13 +222,13 @@
             cmd += '    restart: always' + line_end;
             cmd += '    tty: true' + line_end;
             cmd += '    volumes:' + line_end;
-            cmd += '        - "' + document.getElementById("appdata").value + ':/root/.chia"' + line_end;
+            cmd += '        - ' + document.getElementById("appdata").value + ':/root/.chia' + line_end;
             var cur_vols = $('#volumes').children().length
             var plots_dir = []
             $('#volumes').children().each( (index, element) => {
                 volume_host_path = document.getElementById("volume_host_path" + index).value;
                 volume_container_path = document.getElementById("volume_container_path" + index).value;
-                cmd += '        - "' + volume_host_path + ':' + volume_container_path + '"'  + line_end;
+                cmd += '        - ' + volume_host_path + ':' + volume_container_path + line_end;
                 if ($('#volume_type' + index).val() == 'plots') {
                     plots_dir.push(volume_container_path)
                 }
@@ -242,15 +243,16 @@
                 if (document.getElementById("blockchain-flax").checked) {
                     cmd += '        - flax_farmer_port=' + document.getElementById("flax_farmer_port").value + line_end;
                 }
-            } else if (document.getElementById('mode-plotter').checked) {
+            } 
+            if (document.getElementById('mode-plotter').checked) {
                 if (mode) {
-                    mode += ',plotter' + line_end;
+                    mode += ',plotter';
                 }
                 else {
-                    mode = 'plotter' + line_end;
+                    mode = 'plotter';
                 }
                 cmd += '        - "farmer_pk=' + document.getElementById("farmer_pk").value + '"' + line_end;
-                cmd += '        - "pool_pk=' + document.getElementById("pool_pk").value + line_end;
+                cmd += '        - "pool_pk=' + document.getElementById("pool_pk").value + '"' + line_end;
                 cmd += '        - "pool_contract_address=' + document.getElementById("pool_contract_address").value + '"' + line_end;
             }
             if (mode) { // harvester, plotter, or harvester+plotter
