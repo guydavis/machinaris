@@ -11,7 +11,7 @@ if [ ${farmer_pk} != 'null' ]; then
     sed -i "s/^.*farmer_pk:.*$/        farmer_pk: ${farmer_pk}/g" /root/.chia/plotman/plotman.yaml
 fi
 if [ ${pool_pk} != 'null' ]; then
-    sed -i "s/^.*pool_pk:.*$/        pool_pk: ${pool_pk}/g" /root/.chia/plotman/plotman.yaml
+    sed -i "s/^.*pool_pk:.*$/        #pool_pk: ${pool_pk}/g" /root/.chia/plotman/plotman.yaml
 fi
 if [ ${pool_contract_address} != 'null' ]; then
     sed -i "s/^.*pool_contract_address:.*$/        pool_contract_address: ${pool_contract_address}/g" /root/.chia/plotman/plotman.yaml
