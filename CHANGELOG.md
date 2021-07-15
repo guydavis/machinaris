@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file. The format 
 ## [0.5.1] - 2021-07-?
 
 - Wizard on Workers page to create a Docker run/compose based on your settings. [Issue #97](https://github.com/guydavis/machinaris/issues/97)
-- Update to patch release of Chia 1.2.1, including a fix for harvester cache updates.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.1).
+- Update to patch release of Chia 1.2.2, including a fix for harvester cache updates.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.2).
 
 ## [0.5.0] - 2021-07-09
 
