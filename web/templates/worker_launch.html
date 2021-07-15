@@ -81,12 +81,21 @@
             } else {
                 $('#plotting_keys_row').hide()
             }
+            toggleControllerAddressVisibility();
         }
         function toggleFarmerAddressVisibility() {
             if (document.getElementById('mode-harvester').checked) {
                 $('#farmer_address_row').show()
             } else {
                 $('#farmer_address_row').hide()
+            }
+            toggleControllerAddressVisibility();
+        }
+        function toggleControllerAddressVisibility() {
+            if (!document.getElementById('mode-plotter').checked && !document.getElementById('mode-harvester').checked)  {
+                $('#controller_address_row').hide()
+            } else {
+                $('#controller_address_row').show()
             }
         }
         function getRadioButtonValue(name) {
@@ -417,7 +426,7 @@
                     {% include 'views/timezones_select.html' %}
                 </div>
             </div>
-            <div class="row mb-3">
+            <div class="row mb-3" id="controller_address_row">
                 <div class="col offset">
                         <label for="controller_host" class="form-label">Controller Hostname</label>
                         <input type="text" class="form-control" placeholder="" aria-label="controller_host"
