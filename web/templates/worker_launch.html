@@ -81,12 +81,21 @@
             } else {
                 $('#plotting_keys_row').hide()
             }
+            toggleControllerAddressVisibility();
         }
         function toggleFarmerAddressVisibility() {
             if (document.getElementById('mode-harvester').checked) {
                 $('#farmer_address_row').show()
             } else {
                 $('#farmer_address_row').hide()
+            }
+            toggleControllerAddressVisibility();
+        }
+        function toggleControllerAddressVisibility() {
+            if (!document.getElementById('mode-plotter').checked && !document.getElementById('mode-harvester').checked)  {
+                $('#controller_address_row').hide()
+            } else {
+                $('#controller_address_row').show()
             }
         }
         function getRadioButtonValue(name) {
@@ -100,7 +109,7 @@
         function updateAppData() {
             var os = getRadioButtonValue('os')
             if (os == 'windows') {
-                document.getElementById('appdata').value = '%APPDATA%/.machinaris';
+                document.getElementById('appdata').value = '${APPDATA}/.machinaris';
                 document.getElementById('volume_host_path0').value = "C:/my_chia_plots";
                 document.getElementById('volume_host_path1').value = "C:/my_chia_plotting";
             } else if (os == 'macintosh') {
@@ -157,7 +166,7 @@
                     plots_dir.push(volume_container_path)
                 }
             });
-            cmd += '    -e TZ="' + $('#timezone').val() + '"' + line_end;
+            cmd += '    -e TZ=' + $('#timezone').val() + line_end;
             var mode = ""
             if (document.getElementById('mode-harvester').checked) {
                 mode = "harvester";
@@ -174,13 +183,14 @@
                 else {
                     mode = 'plotter';
                 }
-                cmd += '    -e "farmer_pk=' + document.getElementById("farmer_pk").value + '"' + line_end;
-                cmd += '    -e "pool_pk=' + document.getElementById("pool_pk").value + '"' + line_end;
-                cmd += '    -e "pool_contract_address=' + document.getElementById("pool_contract_address").value + '"' + line_end;
+                cmd += '    -e farmer_pk=' + document.getElementById("farmer_pk").value + line_end;
+                cmd += '    -e pool_pk=' + document.getElementById("pool_pk").value + line_end;
+                cmd += '    -e pool_contract_address=' + document.getElementById("pool_contract_address").value + line_end;
             }
             if (mode) { // harvester, plotter, or harvester+plotter
                 cmd += '    -e mode=' + mode + line_end;
-                cmd += '    -e controller_host=' + location.hostname + line_end;
+                cmd += '    -e controller_host=' + document.getElementById("controller_host").value + line_end;
+                cmd += '    -e controller_api_port=' + document.getElementById("controller_api_port").value + line_end;
             } else { // fullnode
                 cmd += '    -e mode=fullnode' + line_end;
             }
@@ -210,38 +220,40 @@
         function updateDockerCompose() {
             var line_end = ' \n';
             var os = getRadioButtonValue('os')
-            cmd =  "version: '3.8'" + line_end;
-            cmd += "machinaris:" + line_end;
-            cmd += "    image: ghcr.io/guydavis/machinaris" + line_end;
+            cmd =  "version: '3.9'" + line_end;
+            cmd +=  "services:" + line_end;
+            cmd += "    machinaris:" + line_end;
+            cmd += "        image: ghcr.io/guydavis/machinaris" + line_end;
+            cmd += "        container_name: machinaris" + line_end;
             if (document.getElementById("worker_hostname").value) {
-                cmd += '    hostname:' + document.getElementById("worker_hostname").value + line_end;
+                cmd += '            hostname:' + document.getElementById("worker_hostname").value + line_end;
             }
             if (document.getElementById("dns_ip_addr").value) {
-                cmd += '    dns:' + document.getElementById("dns_ip_addr").value + line_end;
+                cmd += '        dns:' + document.getElementById("dns_ip_addr").value + line_end;
             }
-            cmd += '    restart: always' + line_end;
-            cmd += '    tty: true' + line_end;
-            cmd += '    volumes:' + line_end;
-            cmd += '        - ' + document.getElementById("appdata").value + ':/root/.chia' + line_end;
+            cmd += '        restart: always' + line_end;
+            cmd += '        tty: true' + line_end;
+            cmd += '        volumes:' + line_end;
+            cmd += '            - ' + document.getElementById("appdata").value + ':/root/.chia' + line_end;
             var cur_vols = $('#volumes').children().length
             var plots_dir = []
             $('#volumes').children().each( (index, element) => {
                 volume_host_path = document.getElementById("volume_host_path" + index).value;
                 volume_container_path = document.getElementById("volume_container_path" + index).value;
-                cmd += '        - ' + volume_host_path + ':' + volume_container_path + line_end;
+                cmd += '            - ' + volume_host_path + ':' + volume_container_path + line_end;
                 if ($('#volume_type' + index).val() == 'plots') {
                     plots_dir.push(volume_container_path)
                 }
             });
-            cmd += '    environment:' + line_end;
-            cmd += '        - TZ="' + $('#timezone').val() + '"' + line_end;
+            cmd += '        environment:' + line_end;
+            cmd += '            - TZ=' + $('#timezone').val() + line_end;
             var mode = ""
             if (document.getElementById('mode-harvester').checked) {
                 mode = "harvester";
-                cmd += '        - farmer_address=' + document.getElementById("farmer_address").value + line_end;
-                cmd += '        - farmer_port=' + document.getElementById("farmer_port").value + line_end;
+                cmd += '            - farmer_address=' + document.getElementById("farmer_address").value + line_end;
+                cmd += '            - farmer_port=' + document.getElementById("farmer_port").value + line_end;
                 if (document.getElementById("blockchain-flax").checked) {
-                    cmd += '        - flax_farmer_port=' + document.getElementById("flax_farmer_port").value + line_end;
+                    cmd += '            - flax_farmer_port=' + document.getElementById("flax_farmer_port").value + line_end;
                 }
             } 
             if (document.getElementById('mode-plotter').checked) {
@@ -251,38 +263,39 @@
                 else {
                     mode = 'plotter';
                 }
-                cmd += '        - "farmer_pk=' + document.getElementById("farmer_pk").value + '"' + line_end;
-                cmd += '        - "pool_pk=' + document.getElementById("pool_pk").value + '"' + line_end;
-                cmd += '        - "pool_contract_address=' + document.getElementById("pool_contract_address").value + '"' + line_end;
+                cmd += '            - farmer_pk=' + document.getElementById("farmer_pk").value + line_end;
+                cmd += '            - pool_pk=' + document.getElementById("pool_pk").value + line_end;
+                cmd += '            - pool_contract_address=' + document.getElementById("pool_contract_address").value + line_end;
             }
             if (mode) { // harvester, plotter, or harvester+plotter
-                cmd += '        - mode=' + mode + line_end;
-                cmd += '        - controller_host=' + location.hostname + line_end;
+                cmd += '            - mode=' + mode + line_end;
+                cmd += '            - controller_host=' + document.getElementById("controller_host").value + line_end;
+                cmd += '            - controller_api_port=' + document.getElementById("controller_api_port").value + line_end;
             } else { // fullnode
-                cmd += '        - mode=fullnode' + line_end;
+                cmd += '            - mode=fullnode' + line_end;
             }
             if (document.getElementById("ip_addr").value) {
-                cmd += '        - worker_address=' + document.getElementById("ip_addr").value + line_end;
+                cmd += '            - worker_address=' + document.getElementById("ip_addr").value + line_end;
             }
-            cmd += '        - plots_dir=' + plots_dir.join(':') + line_end;
+            cmd += '            - plots_dir=' + plots_dir.join(':') + line_end;
             var blockchains = 'chia'
             if (document.getElementById("blockchain-flax").checked) {
                 blockchains += ',flax'
             }
-            cmd += '        - blockchains=' + blockchains + line_end;
+            cmd += '            - blockchains=' + blockchains + line_end;
             var auto_plot = getRadioButtonValue('auto_plot'); 
             if (auto_plot == "true") {
-                cmd += '        - AUTO_PLOT=' + auto_plot + line_end;
+                cmd += '            - AUTO_PLOT=' + auto_plot + line_end;
             }
-            cmd += '    ports:' + line_end;
-            cmd += '        - 8926:8926' + line_end;
-            cmd += '        - 8927:8927' + line_end;
+            cmd += '        ports:' + line_end;
+            cmd += '            - 8926' + line_end;
+            cmd += '            - 8927' + line_end;
             if (!mode) {  // Defaults to fullnode
-                cmd += '        - 8444:8444' + line_end;
-                cmd += '        - 8447:8447' + line_end;
+                cmd += '            - 8444' + line_end;
+                cmd += '            - 8447' + line_end;
                 if (document.getElementById("blockchain-flax").checked) {
-                    cmd += '        - 6888:6888' + line_end;
-                    cmd += '        - 6885:6885' + line_end;
+                    cmd += '            - 6888' + line_end;
+                    cmd += '            - 6885' + line_end;
                 }
             }
             $('#compose').html(cmd);
@@ -291,6 +304,7 @@
             $('#plotting_keys_row').hide()
             //$('#farmer_address_row').hide() 
             $('#farmer_address').val(location.hostname)
+            $('#controller_host').val(location.hostname)
             updateDocker();
         });
     </script>
@@ -350,7 +364,7 @@
             </div>
             <div class="row mb-3" id="farmer_address_row">
                 <div class="col-6">
-                    <label for="farmer_address" class="form-label">Farmer Address</label>
+                    <label for="farmer_address" class="form-label">Farmer Hostname</label>
                     <input type="text" class="form-control" aria-label="farmer_address" id="farmer_address"
                         onkeyup="updateDocker()">
                 </div>
@@ -403,7 +417,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col">
-                    <label for="appdata" class="form-label">Application Data</label>
+                    <label for="appdata" class="form-label">Application Data Path</label>
                     <input type="text" id='appdata' class="form-control" value='~/.machinaris' aria-label="appdata"
                         onkeyup="updateDocker()">
                 </div>
@@ -412,13 +426,23 @@
                     {% include 'views/timezones_select.html' %}
                 </div>
             </div>
+            <div class="row mb-3" id="controller_address_row">
+                <div class="col offset">
+                        <label for="controller_host" class="form-label">Controller Hostname</label>
+                        <input type="text" class="form-control" placeholder="" aria-label="controller_host"
+                            id='controller_host' onkeyup="updateDocker()">
+                </div>
+                <div class="col">
+                    <label for="controller_api_port" class="form-label">Controller API Port</label>
+                    <input type="text" class="form-control" value="8927" aria-label="controller_api_port"
+                        id='controller_api_port' onkeyup="updateDocker()">
+                </div>
+            </div>
             <div class="row mb-3">
                 <div class="col offset">
-                    <div class="row">
                         <label for="worker_hostname" class="form-label">Worker Hostname (Optional)</label>
                         <input type="text" class="form-control" placeholder="myhostname" aria-label="worker_hostname"
                             id='worker_hostname' onkeyup="updateDocker()">
-                    </div>
                 </div>
                 <div class="col">
                     <label for="ip_addr" class="form-label">Worker IP Address (Optional)</label>
@@ -521,9 +545,7 @@
             <i class="fs-4 bi-clipboard text-white"></i>
         </a>
         <h2>Docker Compose</h2>
-        <pre id="compose">
-TODO
-        </pre>
+        <pre id="compose"></pre>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"

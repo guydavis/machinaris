@@ -76,13 +76,13 @@ def action_plots(job):
     #app.logger.info("About to {0} plots: {1}".format(action, plot_ids))
     for plot_id in plot_ids:
         try:
-            prefix = ""
+            suffix = ""
             if action == "kill":
-                prefix = "printf 'y\n' |"
+                suffix = "--force"
             logfile = "/root/.chia/plotman/logs/plotman.log"
             log_fd = os.open(logfile, os.O_RDWR | os.O_CREAT)
             log_fo = os.fdopen(log_fd, "a+")
-            proc = Popen("{0} {1} {2} {3}".format(prefix, PLOTMAN_SCRIPT, action, plot_id),
+            proc = Popen("{0} {1} {2} {3}".format(PLOTMAN_SCRIPT, action, suffix, plot_id),
                          shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
         except:
             app.logger.info('Failed to {0} selected plot {1}.'.format(action, plot_id))
@@ -113,13 +113,20 @@ def clean_tmp_dirs_before_run():
     try:
         with open("/root/.chia/plotman/plotman.yaml") as f:
             config = yaml.safe_load(f)
-            for tmp_dir in config['directories']['tmp']:
-                app.logger.info("No running plot jobs found so deleting {0}/*.tmp before starting plotman.".format(tmp_dir))
-                for p in pathlib.Path(tmp_dir).glob("*.tmp"):
-                    p.unlink()
+            if 'directories' in config:
+                if 'tmp' in config['directories']:
+                    for tmp_dir in config['directories']['tmp']:
+                        app.logger.info("No running plot jobs found so deleting {0}/*.tmp before starting plotman.".format(tmp_dir))
+                        for p in pathlib.Path(tmp_dir).glob("*.tmp"):
+                            p.unlink()
+                if 'tmp2' in config['directories']:
+                    tmp_dir = config['directories']['tmp2']
+                    app.logger.info("No running plot jobs found so deleting {0}/*.tmp before starting plotman.".format(tmp_dir))
+                    for p in pathlib.Path(tmp_dir).glob("*.tmp"):
+                        p.unlink()
     except Exception as ex:
-        app.logger.info(traceback.format_exc())
-        raise Exception('Updated plotman.yaml failed validation!\n' + str(ex))
+        app.logger.info("Skipping deletion of temp files due to {0}.".format(traceback.format_exc()))
+
 
 def stop_plotman():
     app.logger.info("Stopping Plotman run...")

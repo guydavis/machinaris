@@ -110,10 +110,17 @@ ENV AUTO_PLOT=false
 
 VOLUME [ "/id_rsa" ]
 
-# ports
-EXPOSE 8555
+# Chia protocol port - forward at router
 EXPOSE 8444
+# Chia RPC port - DO NOT forward at router
+EXPOSE 8447
+# Flax protocol port - forward at router
+EXPOSE 6888
+# Flax RPC port - DO NOT forward at router
+EXPOSE 6885
+# Machinaris WebUI - DO NOT forward at router, proxy if needed
 EXPOSE 8926
+# Machinaris API - DO NOT forward at router
 EXPOSE 8927
 
 WORKDIR /chia-blockchain
