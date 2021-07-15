@@ -100,7 +100,7 @@
         function updateAppData() {
             var os = getRadioButtonValue('os')
             if (os == 'windows') {
-                document.getElementById('appdata').value = '%APPDATA%/.machinaris';
+                document.getElementById('appdata').value = '${APPDATA}/.machinaris';
                 document.getElementById('volume_host_path0').value = "C:/my_chia_plots";
                 document.getElementById('volume_host_path1').value = "C:/my_chia_plotting";
             } else if (os == 'macintosh') {

@@ -113,13 +113,20 @@ def clean_tmp_dirs_before_run():
     try:
         with open("/root/.chia/plotman/plotman.yaml") as f:
             config = yaml.safe_load(f)
-            for tmp_dir in config['directories']['tmp']:
-                app.logger.info("No running plot jobs found so deleting {0}/*.tmp before starting plotman.".format(tmp_dir))
-                for p in pathlib.Path(tmp_dir).glob("*.tmp"):
-                    p.unlink()
+            if 'directories' in config:
+                if 'tmp' in config['directories']:
+                    for tmp_dir in config['directories']['tmp']:
+                        app.logger.info("No running plot jobs found so deleting {0}/*.tmp before starting plotman.".format(tmp_dir))
+                        for p in pathlib.Path(tmp_dir).glob("*.tmp"):
+                            p.unlink()
+                if 'tmp2' in config['directories']:
+                    tmp_dir = config['directories']['tmp2']
+                    app.logger.info("No running plot jobs found so deleting {0}/*.tmp before starting plotman.".format(tmp_dir))
+                    for p in pathlib.Path(tmp_dir).glob("*.tmp"):
+                        p.unlink()
     except Exception as ex:
-        app.logger.info(traceback.format_exc())
-        raise Exception('Updated plotman.yaml failed validation!\n' + str(ex))
+        app.logger.info("Skipping deletion of temp files due to {0}.".format(traceback.format_exc()))
+
 
 def stop_plotman():
     app.logger.info("Stopping Plotman run...")
