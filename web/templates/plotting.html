@@ -137,7 +137,7 @@
 
     <form method="POST" id="plotting-form">
         <div class="table-responsive">
-            <table class="table table-dark">
+            <table id="data" class="table table-dark">
                 <thead>
                     <tr>
                         <th scope="col" class="text-success"></th>
@@ -207,5 +207,12 @@
             });
         })
     </script>
-
     {% endblock %}
+
+    {% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $('#data').DataTable();
+        });
+    </script>
+    {% endblock %

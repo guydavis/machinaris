@@ -83,3 +83,13 @@ body {
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+/** datatables.js pagination footer */
+.page-item.active .page-link {
+  background-color: lightgrey !important;
+  border: 1px solid black;
+}
+.page-link {
+  color: black !important;
+}
+
