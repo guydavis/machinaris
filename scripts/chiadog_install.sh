@@ -9,6 +9,12 @@ cd /
 
 git clone https://github.com/martomi/chiadog.git
 
+# Temporary patch for spam about partial proofs
+# https://github.com/martomi/chiadog/issues/252#issuecomment-877416135
+
+cd /chiadog/src/chia_log/handlers/
+sed -i 's/FoundProofs(),//g' harvester_activity_handler.py
+
 cd /chia-blockchain/
 
 # Chia-blockchain needs PyYAML=5.4.1 but Chiadog wants exactly 5.4

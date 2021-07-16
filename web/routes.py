@@ -185,8 +185,6 @@ def settings_plotting():
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
         plotman.save_config(worker.get_worker_by_hostname(selected_worker_hostname), request.form.get("config"))
-    else:
-        flash('Automatically set your public key values below. Please review and save the config at least once!', 'message')
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
     return render_template('settings/plotting.html',

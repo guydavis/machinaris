@@ -2,35 +2,6 @@
 
 {% block content %}
 
-<script>
-    function ViewLogs(hostname, blockchain) {
-        var d = new Date();
-        var height = 600;
-        var width = 900;
-        var top = (screen.height - height) / 2;
-        var left = (screen.width - width) / 2;
-        window.open("{{ url_for('logs') }}?log=farming" + "&hostname=" + hostname + "&blockchain=" + blockchain, 'Farming Log for ' + blockchain + ' on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
-    }
-    function CheckPlots(hostname) {
-        var d = new Date();
-        var height = 600;
-        var width = 900;
-        var top = (screen.height - height) / 2;
-        var left = (screen.width - width) / 2;
-        window.open("{{ url_for('plots_check') }}?hostname=" + hostname, 'Plots Check on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
-    }
-    function PlotJobAnalyze(plot) {
-        var output = document.getElementById('plotAnalyzeContent');
-        output.textContent = ""; // Clear any old analysis before requesting
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', "{{ url_for('farming') }}?analyze=" + plot);
-        xhr.send();
-        xhr.onload = function () {
-            output.textContent = xhr.responseText;
-        };
-    }
-</script>
-
 <header class="pb-3 mb-4 border-bottom">
     <div class="row align-items-md-stretch" style="width:100%">
         <div class="col-md-4 fs-4">Farming: {{ farming.plot_count }} plots.</div>
@@ -151,6 +122,32 @@
 
     {% block scripts %}
     <script>
+        function ViewLogs(hostname, blockchain) {
+            var d = new Date();
+            var height = 600;
+            var width = 900;
+            var top = (screen.height - height) / 2;
+            var left = (screen.width - width) / 2;
+            window.open("{{ url_for('logs') }}?log=farming" + "&hostname=" + hostname + "&blockchain=" + blockchain, 'Farming Log for ' + blockchain + ' on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        }
+        function CheckPlots(hostname) {
+            var d = new Date();
+            var height = 600;
+            var width = 900;
+            var top = (screen.height - height) / 2;
+            var left = (screen.width - width) / 2;
+            window.open("{{ url_for('plots_check') }}?hostname=" + hostname, 'Plots Check on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        }
+        function PlotJobAnalyze(plot) {
+            var output = document.getElementById('plotAnalyzeContent');
+            output.textContent = ""; // Clear any old analysis before requesting
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', "{{ url_for('farming') }}?analyze=" + plot);
+            xhr.send();
+            xhr.onload = function () {
+                output.textContent = xhr.responseText;
+            };
+        }
         $(document).ready(function () {
             $('#data').DataTable();
         });
