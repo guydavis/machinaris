@@ -2,27 +2,6 @@
 
 {% block content %}
 
-<script>
-    function MonitoringLogs(hostname, blockchain) {
-        var d = new Date();
-        var height = 600;
-        var width = 900;
-        var top = (screen.height - height) / 2;
-        var left = (screen.width - width) / 2;
-        window.open("{{ url_for('logs') }}?log=alerts&hostname=" + hostname + "&blockchain=" + blockchain, 'Chiadog Log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
-    }
-    function MonitoringAction(hostname, service, action, status) {
-        $("#"+hostname+"_btn").prop("disabled", true);
-        $("#"+hostname+"_btn").html(
-            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> '+ hostname + ': ' + status + '...'
-        );
-        $('#chiadog-form').append('<input type="hidden" id="action" name="action" value="' + action + '" />');
-        $('#chiadog-form').append('<input type="hidden" id="service" name="service" value="' + service + '" />');
-        $('#chiadog-form').append('<input type="hidden" id="hostname" name="hostname" value="' + hostname + '" />');
-        $("#chiadog-form").submit();
-    }
-</script>
-
 <header class="pb-3 mb-4 border-bottom">
     <span class="fs-4">Alerts: Recent Notifications</span>
 </header>
@@ -123,8 +102,30 @@
     </div>
     {% endif %}
 
+    {% endblock %}
+
+    {% block scripts %}
     <script>
+        function MonitoringLogs(hostname, blockchain) {
+            var d = new Date();
+            var height = 600;
+            var width = 900;
+            var top = (screen.height - height) / 2;
+            var left = (screen.width - width) / 2;
+            window.open("{{ url_for('logs') }}?log=alerts&hostname=" + hostname + "&blockchain=" + blockchain, 'Chiadog Log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        }
+        function MonitoringAction(hostname, service, action, status) {
+            $("#"+hostname+"_btn").prop("disabled", true);
+            $("#"+hostname+"_btn").html(
+                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> '+ hostname + ': ' + status + '...'
+            );
+            $('#chiadog-form').append('<input type="hidden" id="action" name="action" value="' + action + '" />');
+            $('#chiadog-form').append('<input type="hidden" id="service" name="service" value="' + service + '" />');
+            $('#chiadog-form').append('<input type="hidden" id="hostname" name="hostname" value="' + hostname + '" />');
+            $("#chiadog-form").submit();
+        }
         $(document).ready(function () {
+            $('#data').DataTable();
             $("#btnStart").click(function () {
                 $(this).prop("disabled", true);
                 $(this).html(
@@ -139,15 +140,6 @@
                 );
                 $("#chiadog-form").submit();
             });
-        })
-    </script>
-
-    {% endblock %}
-
-    {% block scripts %}
-    <script>
-        $(document).ready(function () {
-            $('#data').DataTable();
         });
     </script>
     {% endblock %}

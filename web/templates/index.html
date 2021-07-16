@@ -120,6 +120,17 @@
   {% endif %}
 
   {% if global_config.farming_enabled %}
+  <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
+    <div class="h-100 p-2 text-white bg-dark rounded-3" id="challenges-table-div">
+      {% include 'views/challenges.html' %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% endblock %}
+
+  {% block scripts %}
+  {% if global_config.farming_enabled %}
   <script>
     setInterval(function () {
       $.ajax({
@@ -134,12 +145,5 @@
         });
     }, 1000 * 5);
   </script>
-  <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
-    <div class="h-100 p-2 text-white bg-dark rounded-3" id="challenges-table-div">
-      {% include 'views/challenges.html' %}
-    </div>
-  </div>
-
   {% endif %}
-
   {% endblock %}
