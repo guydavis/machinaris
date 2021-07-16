@@ -144,11 +144,11 @@ def load_key_pk(type):
 
 def load_pool_contract_address():
     plotnfts = c.load_plotnfts()
-    if plotnfts.rows.length == 1:
+    if len(plotnfts.rows) == 1:
         m = re.search('P2 singleton address .*: (\w+)'.format(type), plotnfts.rows[0]['details'])
         if m:
             return m.group(1)
-    elif plotnfts.rows.length > 1:
+    elif len(plotnfts.rows) > 1:
         app.logger.info("Did not find a unique P2 singleton address as multiple plotnfts exist.  Not replacing in plotman.yaml.")
     return None
 
