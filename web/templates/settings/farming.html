@@ -26,7 +26,7 @@
         {% else %}
         <div class="alert alert-{{ category }}" role="alert">
             {% endif %}
-            {{ message }}
+            {{ message|safe }}
         </div>
         {% endfor %}
         {% endif %}

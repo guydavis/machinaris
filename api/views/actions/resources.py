@@ -51,4 +51,4 @@ class Actions(MethodView):
             return make_response("Action completed.", 200)
         except Exception as ex:
             app.logger.info(traceback.format_exc())
-            abort("Failed during {0} action.".format(service), 500)
+            return str(ex), 400
