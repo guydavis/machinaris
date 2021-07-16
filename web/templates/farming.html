@@ -113,7 +113,7 @@
     </form>
 
     <div class="table-responsive">
-        <table class="table table-dark">
+        <table id="data" class="table table-dark">
             <thead>
                 <tr>
                     {% for column in plots.columns %}
@@ -147,4 +147,12 @@
         </table>
     </div>
 
+    {% endblock %}
+
+    {% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $('#data').DataTable();
+        });
+    </script>
     {% endblock %}
