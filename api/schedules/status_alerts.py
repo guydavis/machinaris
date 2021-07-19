@@ -26,6 +26,9 @@ def update():
     if not globals.farming_enabled() and not globals.harvesting_enabled():
         #app.logger.info("Skipping alerts status collection on plotting-only instance.")
         return
+    if globals.load()['is_controller']:
+        #app.logger.info("Skipping alerts polling on fullnode are already placed in database directly via chiadog_notifier.sh script.")
+        return
     with app.app_context():
         try:
             hostname = utils.get_hostname()
