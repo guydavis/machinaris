@@ -15,7 +15,6 @@ import yaml
 from flask import Flask, jsonify, abort, request, flash, g
 from subprocess import Popen, TimeoutExpired, PIPE
 
-from api.models import chiadog
 from api import app
 
 def load_config(blockchain):
@@ -45,10 +44,6 @@ def get_chiadog_pid(blockchain):
         if proc.info['name'] == 'python3' and '/root/.chia/{0}dog/config.yaml'.format(blockchain) in proc.info['cmdline']:
             return proc.info['pid']
     return None
-
-def get_notifications(since):
-    return chiadog.Notification.query.filter(chiadog.Notification.created_at >= since). \
-        order_by(chiadog.Notification.created_at.desc()).limit(20).all()
 
 def dispatch_action(job):
     service = job['service']

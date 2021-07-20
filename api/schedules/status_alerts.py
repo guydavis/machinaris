@@ -14,10 +14,10 @@ import traceback
 
 from flask import g
 
+from common.models import alerts as a
 from common.config import globals
 from api.commands import chiadog_cli
-from api import app
-from api import utils
+from api import app, utils
 
 first_run = True
 
@@ -31,13 +31,14 @@ def update():
         return
     with app.app_context():
         try:
+            from api import db
             hostname = utils.get_hostname()
             if first_run:  # On first launch, load last week of notifications
                 since = (datetime.datetime.now() - datetime.timedelta(weeks=1)).strftime("%Y-%m-%d %H:%M:%S.000")
                 first_run = False
             else: # On subsequent schedules, load only last 5 minutes.
                 since = (datetime.datetime.now() - datetime.timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S.000")
-            alerts = chiadog_cli.get_notifications(since)
+            alerts = db.session.query(a.Alert).filter(a.Alert.created_at >= since).order_by(a.Alert.created_at.desc()).limit(20).all()
             payload = []
             for alert in alerts:
                 payload.append({
