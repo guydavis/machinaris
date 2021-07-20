@@ -149,7 +149,10 @@
             };
         }
         $(document).ready(function () {
-            $('#data').DataTable();
+            $('#data').DataTable({
+                "order": [[ 4, "desc" ]],
+                "columnDefs": [ { "orderable": false, targets: [6] } ],
+            });
         });
     </script>
     {% endblock %}

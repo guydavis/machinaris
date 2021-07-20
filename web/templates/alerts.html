@@ -125,7 +125,9 @@
             $("#chiadog-form").submit();
         }
         $(document).ready(function () {
-            $('#data').DataTable();
+            $('#data').DataTable({
+                "order": [[ 4, "desc" ]],
+            });
             $("#btnStart").click(function () {
                 $(this).prop("disabled", true);
                 $(this).html(

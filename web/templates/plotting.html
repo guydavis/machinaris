@@ -181,7 +181,7 @@
             $("#plotman-form").submit();
         }
         $(document).ready(function () {
-            $('#data').DataTable();
+            $('#data').DataTable({"ordering": false,});
             $("#btnSuspend").click(function () {
                 $(this).prop("disabled", true);
                 $(this).html(
