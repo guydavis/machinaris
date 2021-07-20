@@ -48,10 +48,8 @@ app.jinja_env.filters['bytesfilter'] = bytesfilter
 def datetimefilter(value, format="%Y-%m-%d %H:%M"):
     tz = pytz.timezone(os.environ['TZ'])
     utc = pytz.timezone('UTC')
-    if value: 
-        value = utc.localize(value, is_dst=None).astimezone(pytz.utc)
-        local_dt = value.astimezone(tz)
-        return local_dt.strftime(format)
+    if value:
+        return value.strftime(format)
     else:
         return ""
 
@@ -62,7 +60,7 @@ def plotnameshortener(value):
     match = re.match("plot-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", value)
     if match:
         return "plot-k{0}-{1}-{2}-{3}-{4}-{5}-{6}...".format( match.group(1), 
-            match.group(2), match.group(3), match.group(4), match.group(5), match.group(5),
+            match.group(2), match.group(3), match.group(4), match.group(5), match.group(6),
             match.group(7)[:20])
     return value
 

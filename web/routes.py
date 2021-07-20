@@ -113,11 +113,14 @@ def plots_check():
 def alerts():
     gc = globals.load()
     if request.method == 'POST':
-        w = worker.get_worker_by_hostname(request.form.get('hostname'))
         if request.form.get('action') == 'start':
+            w = worker.get_worker_by_hostname(request.form.get('hostname'))
             chiadog.start_chiadog(w)
         elif request.form.get('action') == 'stop':
+            w = worker.get_worker_by_hostname(request.form.get('hostname'))
             chiadog.stop_chiadog(w)
+        elif request.form.get('action') == 'remove':
+            chiadog.remove_alerts(request.form.getlist('unique_id'))
         else:
             app.logger.info("Unknown alerts form: {0}".format(request.form))
         return redirect(url_for('alerts')) # Force a redirect to allow time to update status
