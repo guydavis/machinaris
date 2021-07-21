@@ -103,15 +103,18 @@ plotting:
         # If you enable 'madmax', plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
         type: chia
 
-        # The chia plotter: https://github.com/Chia-Network/chia-blockchain
         chia:
+                # The stock plotter: https://github.com/Chia-Network/chia-blockchain
                 k: 32                # k-size of plot, leave at 32 most of the time
-                e: False             # Disable bitfield back sorting (default is True) 
+                e: False             # Use -e plotting option
                 n_threads: 2         # Threads per job
                 n_buckets: 128       # Number of buckets to split data into
                 job_buffer: 3389     # Per job memory
 
-        # The madmax plotter: https://github.com/madMAx43v3r/chia-plotter
+        # If you enable madMAx, plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
         madmax:
+                # madMAx plotter: https://github.com/madMAx43v3r/chia-plotter
                 n_threads: 4          # Default is 4, SLOWLY crank up if you have many cores
                 n_buckets: 256        # Default is 256
+                n_buckets3: 256       # Default is 256
+                n_rmulti2: 1          # Default is 1 
