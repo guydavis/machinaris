@@ -111,7 +111,6 @@ plotting:
                 n_buckets: 128       # Number of buckets to split data into
                 job_buffer: 3389     # Per job memory
 
-        # If you enable madMAx, plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
         madmax:
                 # madMAx plotter: https://github.com/madMAx43v3r/chia-plotter
                 n_threads: 4          # Default is 4, SLOWLY crank up if you have many cores
