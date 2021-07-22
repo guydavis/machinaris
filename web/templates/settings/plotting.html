@@ -32,6 +32,7 @@
         {% endwith %}
     </div>
 
+    <div class="alert alert-warning" role="error" id="xhr_error" style="display: none"></div>
     <form method="POST">
         <fieldset>
             <div class="row mb-3">
@@ -66,13 +67,21 @@
     {% block scripts %}
     <script>
         $(document).ready(function () {
+            $('#xhr_error').hide();
             function load_config(worker) {
-                $.ajax({
+                jqxhr = $.ajax({
                     type: "GET",
                     url: "{{ url_for('views_settings_config') }}?type=plotting&worker=" + worker,
                 })
                     .done(function (data) {
                         //console.log(data);
+                        replacements_occurred = jqxhr.getResponseHeader('ConfigReplacementsOccurred');
+                        if (replacements_occurred == 'True') {
+                            $('#xhr_error').html("Plotting keys automatically replaced below. Please review and Save at least once!");
+                            $('#xhr_error').show();
+                        } else {
+                            $('#xhr_error').hide();
+                        }
                         $("#config").val(data)
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         console.log(jqXHR, textStatus, errorThrown);

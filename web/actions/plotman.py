@@ -177,11 +177,18 @@ def load_config(plotter):
         app.logger.info(traceback.format_exc())
     lines = []
     config = utils.send_get(plotter, "/configs/plotting", debug=False).content.decode('utf-8')
+    replaces = 0
     for line in config.splitlines():
         for replacement in replacements:
-            line = re.sub(replacement[0], replacement[1], line)
+            (line, num_replaces) = re.subn(replacement[0], replacement[1], line)
+            replaces += num_replaces
         lines.append(line)
-    return '\n'.join(lines)
+    if replaces > 0:
+        #app.logger.info("Return true for replaced.")
+        return [ True, '\n'.join(lines) ]
+    else:
+        #app.logger.info("Return false for replaced.")
+        return [ False, '\n'.join(lines) ]
 
 def save_config(plotter, config):
     try: # Validate the YAML first
