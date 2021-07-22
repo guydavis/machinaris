@@ -113,11 +113,14 @@ def plots_check():
 def alerts():
     gc = globals.load()
     if request.method == 'POST':
-        w = worker.get_worker_by_hostname(request.form.get('hostname'))
         if request.form.get('action') == 'start':
+            w = worker.get_worker_by_hostname(request.form.get('hostname'))
             chiadog.start_chiadog(w)
         elif request.form.get('action') == 'stop':
+            w = worker.get_worker_by_hostname(request.form.get('hostname'))
             chiadog.stop_chiadog(w)
+        elif request.form.get('action') == 'remove':
+            chiadog.remove_alerts(request.form.getlist('unique_id'))
         else:
             app.logger.info("Unknown alerts form: {0}".format(request.form))
         return redirect(url_for('alerts')) # Force a redirect to allow time to update status
@@ -185,8 +188,6 @@ def settings_plotting():
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
         plotman.save_config(worker.get_worker_by_hostname(selected_worker_hostname), request.form.get("config"))
-    else:
-        flash('Automatically set your public key values below. Please review and save the config at least once!', 'message')
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
     return render_template('settings/plotting.html',
@@ -245,7 +246,9 @@ def views_settings_config(path):
     elif config_type == "farming":
         response = make_response(chia.load_config(w, request.args.get('blockchain')), 200)
     elif config_type == "plotting":
-        response = make_response(plotman.load_config(w), 200)
+        [replaced, config] = plotman.load_config(w)
+        response = make_response(config, 200)
+        response.headers.set('ConfigReplacementsOccurred', replaced)
     else:
         abort("Unsupported config type: {0}".format(config_type), 400)
     response.mimetype = "application/x-yaml"
@@ -265,6 +268,12 @@ def logfile():
         return log_handler.get_log_lines(w, log_type, log_id, blockchain)
     else:
         abort(500, "Unsupported log type: {0}".format(log_type))
+
+@app.route('/worker_launch')
+def worker_launch():
+    [farmer_pk, pool_pk, pool_contract_address] = plotman.load_plotting_keys()
+    return render_template('worker_launch.html', farmer_pk=farmer_pk, 
+        pool_pk=pool_pk, pool_contract_address=pool_contract_address)
 
 @app.route('/favicon.ico')
 def favicon():

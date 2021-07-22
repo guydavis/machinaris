@@ -2,35 +2,14 @@
 
 {% block content %}
 
-<script>
-    function PlottingLogs(type, hostname, plot_id) {
-        var d = new Date();
-        var height = 600;
-        var width = 900;
-        var top = (screen.height - height) / 2;
-        var left = (screen.width - width) / 2;
-        if (typeof plot_id !== 'undefined') {
-            window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname + "&log_id=" + plot_id, 'Plotman Log ' + plot_id + ' on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
-        } else {
-            window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname, 'Plotman Log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
-        }
-    }
-    function PlottingAction(hostname, service, action, status) {
-        $("#"+hostname+"_btn").prop("disabled", true);
-        $("#"+hostname+"_btn").html(
-            '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> '+ hostname + ': ' + status + '...'
-        );
-        $('#plotman-form').append('<input type="hidden" id="action" name="action" value="' + action + '" />');
-        $('#plotman-form').append('<input type="hidden" id="service" name="service" value="' + service + '" />');
-        $('#plotman-form').append('<input type="hidden" id="hostname" name="hostname" value="' + hostname + '" />');
-        $("#plotman-form").submit();
-    }
-</script>
-
 <header class="pb-3 mb-4 border-bottom">
     <span class="fs-4">Plotting Status: {{ plotting.display_status }}
         {% if plotting.display_status == 'Active' %}
+            {% if plotting.rows|length == 1 %}
+            - {{ plotting.rows|length }} job.
+            {% else %}
             - {{ plotting.rows|length }} jobs.
+            {% endif %}
         {% endif %}
     </span>
 </header>
@@ -133,7 +112,7 @@
 
     <form method="POST" id="plotting-form">
         <div class="table-responsive">
-            <table class="table table-dark">
+            <table id="data" class="table table-dark">
                 <thead>
                     <tr>
                         <th scope="col" class="text-success"></th>
@@ -175,8 +154,34 @@
         {% endif %}
     </form>
 
+    {% endblock %}
+
+    {% block scripts %}
     <script>
+        function PlottingLogs(type, hostname, plot_id) {
+            var d = new Date();
+            var height = 600;
+            var width = 900;
+            var top = (screen.height - height) / 2;
+            var left = (screen.width - width) / 2;
+            if (typeof plot_id !== 'undefined') {
+                window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname + "&log_id=" + plot_id, 'Plotman Log ' + plot_id + ' on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+            } else {
+                window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname, 'Plotman Log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+            }
+        }
+        function PlottingAction(hostname, service, action, status) {
+            $("#"+hostname+"_btn").prop("disabled", true);
+            $("#"+hostname+"_btn").html(
+                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> '+ hostname + ': ' + status + '...'
+            );
+            $('#plotman-form').append('<input type="hidden" id="action" name="action" value="' + action + '" />');
+            $('#plotman-form').append('<input type="hidden" id="service" name="service" value="' + service + '" />');
+            $('#plotman-form').append('<input type="hidden" id="hostname" name="hostname" value="' + hostname + '" />');
+            $("#plotman-form").submit();
+        }
         $(document).ready(function () {
+            $('#data').DataTable({"ordering": false,});
             $("#btnSuspend").click(function () {
                 $(this).prop("disabled", true);
                 $(this).html(
@@ -201,7 +206,6 @@
                 $('#plotting-form').append('<input type="hidden" id="action" name="action" value="kill" />');
                 $("#plotting-form").submit();
             });
-        })
+        });
     </script>
-
     {% endblock %}

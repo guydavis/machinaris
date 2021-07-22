@@ -59,8 +59,9 @@ class ConfigByType(MethodView):
             response = make_response("Successfully saved config.", 200)
             return response
         except Exception as ex:
-            app.logger.error(traceback.format_exc())
-            abort(400, str(ex))
+            app.logger.info("Failed to save a validated Plotman config.")
+            app.logger.info(traceback.format_exc())
+            return str(ex), 400
 
     def clean_config(self, req_data):
         # First decode the bytes

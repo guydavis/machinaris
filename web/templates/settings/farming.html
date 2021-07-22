@@ -26,44 +26,13 @@
         {% else %}
         <div class="alert alert-{{ category }}" role="alert">
             {% endif %}
-            {{ message }}
+            {{ message|safe }}
         </div>
         {% endfor %}
         {% endif %}
         {% endwith %}
     </div>
 
-    <script>
-        $(document).ready(function () {
-            function load_config(worker, blockchain) {
-                $.ajax({
-                    type: "GET",
-                    url: "{{ url_for('views_settings_config') }}?type=farming&worker=" + worker + "&blockchain=" + blockchain,
-                })
-                    .done(function (data) {
-                        //console.log(data);
-                        $("#config").val(data)
-                    }).fail(function (jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR, textStatus, errorThrown);
-                    });
-            }
-            //Call the function when #input is clicked
-            $(document).on("change", "#worker", function (e) {
-                load_config($("#worker").val(), $("#blockchain").val())
-            });
-            $(document).on("change", "#blockchain", function (e) {
-                load_config($("#worker").val(), $("#blockchain").val())
-            });
-            //Call the function when the page loads
-            load_config("{{selected_worker.hostname}}", "{{selected_blockchain}}");
-        });
-        
-        function downloadConfig() {
-            worker = $("#worker").val()
-            blockchain = $("#blockchain").val()
-            window.location.href = '/settings/config/' + worker + '_' + blockchain + '_config.yaml?type=farming&worker=' + worker + "&blockchain=" + blockchain
-        }
-    </script>
     <form method="POST">
         <fieldset>
             <div class="row mb-3">
@@ -100,4 +69,38 @@
         </fieldset>
     </form>
 
+    {% endblock %}
+
+    {% block scripts %}
+    <script>
+        $(document).ready(function () {
+            function load_config(worker, blockchain) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url_for('views_settings_config') }}?type=farming&worker=" + worker + "&blockchain=" + blockchain,
+                })
+                    .done(function (data) {
+                        //console.log(data);
+                        $("#config").val(data)
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR, textStatus, errorThrown);
+                    });
+            }
+            //Call the function when #input is clicked
+            $(document).on("change", "#worker", function (e) {
+                load_config($("#worker").val(), $("#blockchain").val())
+            });
+            $(document).on("change", "#blockchain", function (e) {
+                load_config($("#worker").val(), $("#blockchain").val())
+            });
+            //Call the function when the page loads
+            load_config("{{selected_worker.hostname}}", "{{selected_blockchain}}");
+        });
+        
+        function downloadConfig() {
+            worker = $("#worker").val()
+            blockchain = $("#blockchain").val()
+            window.location.href = '/settings/config/' + worker + '_' + blockchain + '_config.yaml?type=farming&worker=' + worker + "&blockchain=" + blockchain
+        }
+    </script>
     {% endblock %}

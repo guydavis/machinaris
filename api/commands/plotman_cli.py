@@ -41,10 +41,9 @@ def load_plotting_summary():
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
-        abort(500, description="The timeout is expired!")
+        raise Exception("The timeout expired during plotman status.")
     if errs:
-        app.logger.error(errs.decode('utf-8'))
-        abort(500, description=errs.decode('utf-8'))
+        raise Exception("Errors during plotman status:\n {0}".format(errs.decode('utf-8')))
     cli_stdout = outs.decode('utf-8')
     return plotman.PlottingSummary(cli_stdout.splitlines(), get_plotman_pid())
 
@@ -76,14 +75,16 @@ def action_plots(job):
     #app.logger.info("About to {0} plots: {1}".format(action, plot_ids))
     for plot_id in plot_ids:
         try:
-            prefix = ""
+            param = ""
             if action == "kill":
-                prefix = "printf 'y\n' |"
+                param = "--force"
             logfile = "/root/.chia/plotman/logs/plotman.log"
             log_fd = os.open(logfile, os.O_RDWR | os.O_CREAT)
             log_fo = os.fdopen(log_fd, "a+")
-            proc = Popen("{0} {1} {2} {3}".format(prefix, PLOTMAN_SCRIPT, action, plot_id),
+            proc = Popen("{0} {1} {2} {3}".format(PLOTMAN_SCRIPT, action, param, plot_id),
                          shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
+            # Plotman regressed on cleaning temp after kill so do it here:
+            clean_tmp_dirs_after_kill(plot_id)
         except:
             app.logger.info('Failed to {0} selected plot {1}.'.format(action, plot_id))
             app.logger.info(traceback.format_exc())
@@ -98,36 +99,52 @@ def get_plotman_pid():
 def start_plotman():
     app.logger.info("Starting Plotman run...")
     check_config()
-    try:
-        if len(load_plotting_summary().rows) == 0:  # No plots running
-            clean_tmp_dirs_before_run()  
-        logfile = "/root/.chia/plotman/logs/plotman.log"
-        proc = Popen("nohup {0} {1} < /dev/tty >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'plot', logfile),
-                     shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
-        app.logger.info("Completed launch of plotman.")
-    except:
-        app.logger.info('Failed to start Plotman plotting run!')
-        app.logger.info(traceback.format_exc())
+    if len(load_plotting_summary().rows) == 0:  # No plots running
+        clean_tmp_dirs_before_run()  
+    logfile = "/root/.chia/plotman/logs/plotman.log"
+    proc = Popen("nohup {0} {1} < /dev/tty >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'plot', logfile),
+                    shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
+    app.logger.info("Completed launch of plotman.")
 
 def clean_tmp_dirs_before_run():
     try:
         with open("/root/.chia/plotman/plotman.yaml") as f:
             config = yaml.safe_load(f)
-            for tmp_dir in config['directories']['tmp']:
-                app.logger.info("No running plot jobs found so deleting {0}/*.tmp before starting plotman.".format(tmp_dir))
-                for p in pathlib.Path(tmp_dir).glob("*.tmp"):
-                    p.unlink()
+            if 'directories' in config:
+                if 'tmp' in config['directories']:
+                    for tmp_dir in config['directories']['tmp']:
+                        app.logger.info("No running plot jobs found so deleting {0}/*.tmp before starting plotman.".format(tmp_dir))
+                        for p in pathlib.Path(tmp_dir).glob("*.tmp"):
+                            p.unlink()
+                if 'tmp2' in config['directories']:
+                    tmp_dir = config['directories']['tmp2']
+                    app.logger.info("No running plot jobs found so deleting {0}/*.tmp before starting plotman.".format(tmp_dir))
+                    for p in pathlib.Path(tmp_dir).glob("*.tmp"):
+                        p.unlink()
     except Exception as ex:
-        app.logger.info(traceback.format_exc())
-        raise Exception('Updated plotman.yaml failed validation!\n' + str(ex))
+        app.logger.info("Skipping deletion of temp files due to {0}.".format(traceback.format_exc()))
+    
+def clean_tmp_dirs_after_kill(plot_id):
+    try:
+        with open("/root/.chia/plotman/plotman.yaml") as f:
+            config = yaml.safe_load(f)
+            if 'directories' in config:
+                if 'tmp' in config['directories']:
+                    for tmp_dir in config['directories']['tmp']:
+                        for p in pathlib.Path(tmp_dir).glob("*{0}*.tmp".format(plot_id)):
+                            app.logger.info("After kill, deleting stale tmp file: {0}".format(p))
+                            p.unlink()
+                if 'tmp2' in config['directories']:
+                    tmp_dir = config['directories']['tmp2']
+                    for p in pathlib.Path(tmp_dir).glob("*{0}*.tmp".format(plot_id)):
+                        app.logger.info("After kill, deleting stale tmp file: {0}".format(p))
+                        p.unlink()
+    except Exception as ex:
+        app.logger.info("Skipping deletion of temp files due to {0}.".format(traceback.format_exc()))
 
 def stop_plotman():
     app.logger.info("Stopping Plotman run...")
-    try:
-        os.kill(get_plotman_pid(), signal.SIGTERM)
-    except:
-        app.logger.info('Failed to stop Plotman plotting run!')
-        app.logger.info(traceback.format_exc())
+    os.kill(get_plotman_pid(), signal.SIGTERM)
 
 def get_archiver_pid():
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
@@ -138,49 +155,39 @@ def get_archiver_pid():
 def start_archiver():
     app.logger.info("Starting archiver run...")
     check_config()
-    try:
-        logfile = "/root/.chia/plotman/logs/archiver.log"
-        app.logger.info("About to start archiver...")
-        proc = Popen("nohup {0} {1} < /dev/tty >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'archive', logfile),
-                     shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
-        app.logger.info("Completed launch of archiver.")
-    except:
-        app.logger.info('Failed to start Plotman archiving run!')
-        app.logger.info(traceback.format_exc())
+    logfile = "/root/.chia/plotman/logs/archiver.log"
+    app.logger.info("About to start archiver...")
+    proc = Popen("nohup {0} {1} < /dev/tty >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'archive', logfile),
+                    shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
+    app.logger.info("Completed launch of archiver.")
 
 def stop_archiver():
     app.logger.info("Stopping Archiver run...")
-    try:
-        os.kill(get_archiver_pid(), signal.SIGTERM)
-    except:
-        app.logger.info('Failed to stop Plotman archiving run!')
-        app.logger.info(traceback.format_exc())
+    os.kill(get_archiver_pid(), signal.SIGTERM)
 
 def load_config():
     return open('/root/.chia/plotman/plotman.yaml','r').read()
 
 def save_config(config):
-    try:
-        # Validate the YAML first
-        yaml.safe_load(config)
-        # Save a copy of the old config file
-        src = "/root/.chia/plotman/plotman.yaml"
-        dst = "/root/.chia/plotman/plotman." + \
-            time.strftime("%Y%m%d-%H%M%S")+".yaml"
-        shutil.copy(src, dst)
-        # Now save the new contents to main config file
-        with open(src, 'w') as writer:
-            writer.write(config)
-    except Exception as ex:
-        app.logger.info(traceback.format_exc())
-        raise Exception('Updated plotman.yaml failed validation!\n' + str(ex))
-    else: # Restart services if running
-        if get_plotman_pid():
-            stop_plotman()
-            start_plotman()
-        if get_archiver_pid():
-            stop_archiver()
-            start_archiver()
+    # Validate the YAML first
+    yaml.safe_load(config)
+    # Save a copy of the old config file
+    src = "/root/.chia/plotman/plotman.yaml"
+    dst = "/root/.chia/plotman/plotman." + \
+        time.strftime("%Y%m%d-%H%M%S")+".yaml"
+    shutil.copy(src, dst)
+    # Now save the new contents to main config file
+    with open(src, 'w') as writer:
+        writer.write(config)
+    # Now try to validate config by calling plotman status
+    load_plotting_summary()
+    # Finally restart plotman and archiver if they are running
+    if get_plotman_pid():
+        stop_plotman()
+        start_plotman()
+    if get_archiver_pid():
+        stop_archiver()
+        start_archiver()
 
 def find_plotting_job_log(plot_id):
     dir_path = '/root/.chia/plotman/logs'

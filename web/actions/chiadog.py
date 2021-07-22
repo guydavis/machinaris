@@ -49,7 +49,12 @@ def save_config(farmer, blockchain, config):
         flash('Nice! Chiadog\'s config.yaml validated and saved successfully.', 'success')
 
 def get_notifications():
-    return db.session.query(a.Alert).order_by(a.Alert.created_at.desc()).limit(25).all()
+    return db.session.query(a.Alert).order_by(a.Alert.created_at.desc()).all()
+
+def remove_alerts(unique_ids):
+    app.logger.info("Removing {0} alerts: {1}".format(len(unique_ids), unique_ids))
+    db.session.query(a.Alert).filter(a.Alert.unique_id.in_(unique_ids)).delete()
+    db.session.commit()
 
 def start_chiadog(farmer):
     app.logger.info("Starting Chiadog monitoring...")

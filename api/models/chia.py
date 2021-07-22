@@ -15,6 +15,7 @@ class FarmSummary:
     def __init__(self, cli_stdout=None, farm_plots=None):
         if cli_stdout:
             next_line_local_harvester = False
+            self.plot_count = 0
             self.plots_size = None
             for line in cli_stdout:
                 if next_line_local_harvester:

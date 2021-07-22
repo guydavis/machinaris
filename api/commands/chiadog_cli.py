@@ -15,7 +15,6 @@ import yaml
 from flask import Flask, jsonify, abort, request, flash, g
 from subprocess import Popen, TimeoutExpired, PIPE
 
-from api.models import chiadog
 from api import app
 
 def load_config(blockchain):
@@ -46,10 +45,6 @@ def get_chiadog_pid(blockchain):
             return proc.info['pid']
     return None
 
-def get_notifications(since):
-    return chiadog.Notification.query.filter(chiadog.Notification.created_at >= since). \
-        order_by(chiadog.Notification.created_at.desc()).limit(20).all()
-
 def dispatch_action(job):
     service = job['service']
     if service != 'monitoring':
@@ -72,6 +67,9 @@ def start_chiadog():
     for blockchain in blockchains:
         try:
             workdir = "/{0}dog".format(blockchain)
+            offset_file = "{0}/debug.log.offset".format(workdir)
+            if os.path.exists(offset_file):
+                os.remove(offset_file)
             configfile = "/root/.chia/{0}dog/config.yaml".format(blockchain)
             logfile = "/root/.chia/{0}dog/logs/{0}dog.log".format(blockchain)
             proc = Popen("nohup /{0}-blockchain/venv/bin/python3 -u main.py --config {1} >> {2} 2>&1 &".format(blockchain, configfile, logfile), \
