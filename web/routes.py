@@ -246,7 +246,9 @@ def views_settings_config(path):
     elif config_type == "farming":
         response = make_response(chia.load_config(w, request.args.get('blockchain')), 200)
     elif config_type == "plotting":
-        response = make_response(plotman.load_config(w), 200)
+        [replaced, config] = plotman.load_config(w)
+        response = make_response(config, 200)
+        response.headers.set('ConfigReplacementsOccurred', replaced)
     else:
         abort("Unsupported config type: {0}".format(config_type), 400)
     response.mimetype = "application/x-yaml"

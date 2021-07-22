@@ -92,26 +92,28 @@ scheduling:
 
 # Configure the plotter.  See: https://github.com/guydavis/machinaris/wiki/Plotman#plotting
 plotting:
-        # Your farmer public key is always required for plotting
-        # farmer_pk: YOUR_FARMER_PUBLIC_KEY (always required)
-        # Your pool public key is only required for solo plotting, else comment it out!
-        #pool_pk: YOUR_POOL_PUBLIC_KEY (comment this out if portable pool plotting)
-        # Your pool contract address is only required for portable pool plotting, else comment it out!
-        #pool_contract_address: YOUR_POOL_CONTRACT_ADDRESS (comment this out if solo plotting)
+        # See Keys page, for 'Farmer public key' value
+        farmer_pk: REPLACE_WITH_THE_REAL_VALUE
+        # ONLY FOR OLD SOLO PLOTS, COMMENT OUT IF PORTABLE PLOTTING!!!
+        pool_pk: REPLACE_WITH_THE_REAL_VALUE
+        # See 'Settings | Pools' page, for 'P2 singleton address' value, UNCOMMENT IF PORTABLE PLOTTING!!!
+        #pool_contract_address: REPLACE_WITH_THE_REAL_VALUE
 
         # If you enable 'chia', plot in *parallel* with higher tmpdir_max_jobs and global_max_jobs
         # If you enable 'madmax', plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
         type: chia
 
-        # The chia plotter: https://github.com/Chia-Network/chia-blockchain
         chia:
+                # The stock plotter: https://github.com/Chia-Network/chia-blockchain
                 k: 32                # k-size of plot, leave at 32 most of the time
-                e: False             # Disable bitfield back sorting (default is True) 
+                e: False             # Use -e plotting option
                 n_threads: 2         # Threads per job
                 n_buckets: 128       # Number of buckets to split data into
                 job_buffer: 3389     # Per job memory
 
-        # The madmax plotter: https://github.com/madMAx43v3r/chia-plotter
         madmax:
+                # madMAx plotter: https://github.com/madMAx43v3r/chia-plotter
                 n_threads: 4          # Default is 4, SLOWLY crank up if you have many cores
                 n_buckets: 256        # Default is 256
+                n_buckets3: 256       # Default is 256
+                n_rmulti2: 1          # Default is 1 
