@@ -104,7 +104,6 @@ ENV controller_api_port=8927
 ENV PATH="${PATH}:/chia-blockchain/venv/bin:/flax-blockchain/venv/bin"
 ENV TZ=Etc/UTC
 ENV FLASK_ENV=production
-ENV FLASK_APP=/machinaris/main.py
 ENV XDG_CONFIG_HOME=/root/.chia
 ENV AUTO_PLOT=false
 

@@ -19,7 +19,6 @@
   </div>
 
   <div class="row align-items-md-stretch">
-    {% if global_config.plotting_enabled %}
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-20 p-2 bg-light border rounded-3">
         <h6 class="display-6 text-center">Plotting:
@@ -29,8 +28,6 @@
         </h6>
       </div>
     </div>
-    {% endif %}
-    {% if global_config.farming_enabled %}
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-20 p-2 bg-light border rounded-3">
         <h6 class="display-6 text-center">Farming:
@@ -40,84 +37,115 @@
         </h6>
       </div>
     </div>
-    {% endif %}
   </div>
 
   <div class="row align-items-md-stretch">
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+    <div class="col-md-3" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
         <h4 class="display-4 text-center text-success">{{ farming.plot_count }}</h4>
         <h6 class="display-6 text-center">Total Plots</h6>
       </div>
     </div>
-    {% if global_config.farming_enabled %}
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+    <div class="col-md-3" style="margin-top:5px; margin-bottom:5px;">
+      <div class="h-100 p-2 text-white bg-dark rounded-3">
+        <h4 class="display-4 text-center text-success">{{ daily_diff.plot_count }}</h4>
+        <h6 class="display-6 text-center">In Last Day</h6>
+      </div>
+    </div>
+    <div class="col-md-3" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
         <h4 class="display-4 text-center text-success">{{ farming.plots_display_size }}</h4>
         <h6 class="display-6 text-center">Total Plots Size</h6>
       </div>
     </div>
-    {% endif %}
-  </div>
-
-  {% if farming.expected_time_to_win != 'Unknown' %}
-  <div class="row align-items-md-stretch" style="margin-top:5px; margin-bottom:5px;">
-    <div class="col-md-12">
-      <div class="h-30 p-2 text-white bg-dark rounded-3">
-        <h4 class="text-center">Chia - Expected Time to Win:
-          <span class="text-success">{{ farming.expected_time_to_win }}</span>
-        </h4>
+    <div class="col-md-3" style="margin-top:5px; margin-bottom:5px;">
+      <div class="h-100 p-2 text-white bg-dark rounded-3">
+        <h4 class="display-4 text-center text-success">{{ daily_diff.plots_size }}</h4>
+        <h6 class="display-6 text-center">In Last Day</h6>
       </div>
     </div>
   </div>
-  {% endif %}
 
   <div class="row align-items-md-stretch">
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+    <div class="col-md-3" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
         <h4 class="display-4 text-center text-success">{{ farming.total_chia }}</h4>
-        <h6 class="display-6 text-center">Chia Total Farmed</h6>
+        <h6 class="display-6 text-center"><a title="Estimated Time to Win: {{ farming.expected_time_to_win }}">Chia Farmed</a></h6>
       </div>
     </div>
-    {% if global_config.farming_enabled %}
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+    <div class="col-md-3" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success">{{ farming.netspace_display_size }}</h4>
-        <h6 class="display-6 text-center">Chia Netspace Size</h6>
+        <h4 class="display-4 text-center text-success">{{ daily_diff.total_chia }}</h4>
+        <h6 class="display-6 text-center">In Last Day</h6>
+      </div>
+    </div>
+    
+    {% if global_config.flax_enabled %}
+    <div class="col-md-3" style="margin-top:5px; margin-bottom:5px;">
+      <div class="h-100 p-2 text-white bg-dark rounded-3">
+        <h4 class="display-4 text-center text-success">{{ farming.total_flax }}</h4>
+        <h6 class="display-6 text-center"><a title="Estimated Time to Win: {{ farming.flax_expected_time_to_win }}">Flax Farmed</a></h6>
+      </div>
+    </div>
+    <div class="col-md-3" style="margin-top:5px; margin-bottom:5px;">
+      <div class="h-100 p-2 text-white bg-dark rounded-3">
+        <h4 class="display-4 text-center text-success">{{ daily_diff.total_flax }}</h4>
+        <h6 class="display-6 text-center">In Last Day</h6>
       </div>
     </div>
     {% endif %}
   </div>
 
-  {% if global_config.flax_enabled %}
-  {% if farming.flax_expected_time_to_win != 'Unknown' %}
-  <div class="row align-items-md-stretch" style="margin-top:5px; margin-bottom:5px;">
-    <div class="col-md-12">
-      <div class="h-30 p-2 text-white bg-dark rounded-3">
-        <h4 class="text-center">Flax - Expected Time to Win:
-          <span class="text-success">{{ farming.flax_expected_time_to_win }}</span>
-        </h4>
-      </div>
-    </div>
-  </div>
-  {% endif %}
   <div class="row align-items-md-stretch">
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+    <div class="col-md-3" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success">{{ farming.total_flax }}</h4>
-        <h6 class="display-6 text-center">Flax Total Farmed</h6>
+        <div style="white-space:pre-wrap; margin-bottom:0px; padding-bottom: 0px;">{{ daily_diff.daily_summary_chia }}</div>
       </div>
     </div>
-    {% if global_config.farming_enabled %}
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+    <div class="col-md-3" style="margin-top:5px; margin-bottom:5px;">
+      <div class="row align-items-md-stretch">
+        <div class="col" style="margin-bottom:5px;">
+          <div class="h-100 p-2 text-white bg-dark rounded-3" style="padding-top:12px !important; padding-bottom:12px !important;">
+            <h4 class="display-4 text-center text-success">{{ farming.netspace_display_size }}</h4>
+            <h6 class="display-6 text-center">Chia Netspace</h6>
+          </div>
+        </div>
+      </div>
+      <div class="row align-items-md-stretch">
+        <div class="col" style="margin-top:5px; margin-bottom:5px;">
+          <div class="h-100 p-2 text-white bg-dark rounded-3" style="padding-top:12px !important; padding-bottom:12px !important;">
+            <h4 class="display-4 text-center text-success">{{ daily_diff.netspace_chia }}</h4>
+            <h6 class="display-6 text-center">In Last Day</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if global_config.flax_enabled %}
+    <div class="col-md-3" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success">{{ farming.flax_netspace_display_size }}</h4>
-        <h6 class="display-6 text-center">Flax Netspace Size</h6>
+        <div style="white-space:pre-wrap; margin-bottom:0px; padding-bottom: 0px;">{{ daily_diff.daily_summary_flax }}</div>
+      </div>
+    </div>
+    <div class="col-md-3" style="margin-top:5px; margin-bottom:5px;">
+      <div class="row align-items-md-stretch">
+        <div class="col" style="margin-bottom:5px;">
+          <div class="h-100 p-2 text-white bg-dark rounded-3" style="padding-top:12px !important; padding-bottom:12px !important;">
+            <h4 class="display-4 text-center text-success">{{ farming.flax_netspace_display_size }}</h4>
+            <h6 class="display-6 text-center">Flax Netspace</h6>
+          </div>
+        </div>
+      </div>
+      <div class="row align-items-md-stretch">
+        <div class="col" style="margin-top:5px; margin-bottom:5px;">
+          <div class="h-100 p-2 text-white bg-dark rounded-3" style="padding-top:12px !important; padding-bottom:12px !important;">
+            <h4 class="display-4 text-center text-success">{{ daily_diff.netspace_flax }}</h4>
+            <h6 class="display-6 text-center">In Last Day</h6>
+          </div>
+        </div>
       </div>
     </div>
     {% endif %}
   </div>
-  {% endif %}
 
   {% if global_config.farming_enabled %}
   <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
