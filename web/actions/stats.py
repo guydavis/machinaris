@@ -92,6 +92,7 @@ def netspace_size_diff(since, blockchain):
     #app.logger.info("Result is: {0}".format(result))
     return result
 
+### TODO - Pull all unique hosts and then parse and combine into one summary
 def daily_notification(since, blockchain):
     result = '-'
     try:
