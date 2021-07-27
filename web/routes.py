@@ -9,7 +9,7 @@ from flask import Flask, flash, redirect, render_template, \
 
 from common.config import globals
 from web import app, utils
-from web.actions import chia, plotman, chiadog, worker, log_handler
+from web.actions import chia, plotman, chiadog, worker, log_handler, stats
 
 @app.route('/')
 def landing():
@@ -29,8 +29,10 @@ def index():
     farming = chia.load_farm_summary()
     plotting = plotman.load_plotting_summary()
     challenges = chia.recent_challenges()
+    daily_diff = stats.load_daily_diff()
     return render_template('index.html', reload_seconds=60, farming=farming.__dict__, \
-        plotting=plotting.__dict__, challenges=challenges, workers=workers, global_config=gc)
+        plotting=plotting.__dict__, challenges=challenges, workers=workers, 
+        daily_diff=daily_diff, global_config=gc)
 
 @app.route('/views/challenges')
 def views_challenges():
@@ -102,8 +104,9 @@ def farming():
     farmers = chia.load_farmers()
     farming = chia.load_farm_summary()
     plots = chia.load_plots_farming()
+    daily_notifications = stats.load_daily_notifications()
     return render_template('farming.html', farming=farming, plots=plots, 
-        farmers=farmers, global_config=gc)
+        farmers=farmers, daily_notifications=daily_notifications, global_config=gc)
 
 @app.route('/plots_check')
 def plots_check():

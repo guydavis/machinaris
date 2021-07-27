@@ -3,17 +3,13 @@
 # Installs Chiadog for log monitoring and alerting
 #
 
+CHIADOG_BRANCH=dev
+
 echo 'Installing Chiadog...'
 
 cd /
 
-git clone https://github.com/martomi/chiadog.git
-
-# Temporary patch for spam about partial proofs
-# https://github.com/martomi/chiadog/issues/252#issuecomment-877416135
-
-cd /chiadog/src/chia_log/handlers/
-sed -i 's/FoundProofs(),//g' harvester_activity_handler.py
+git clone --branch ${CHIADOG_BRANCH} https://github.com/martomi/chiadog.git
 
 cd /chia-blockchain/
 

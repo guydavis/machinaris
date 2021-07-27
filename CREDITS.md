@@ -52,6 +52,7 @@ A big thanks to all that contributed with dev and test including:
 * barkcollar
 * dartec
 * elexx
+* danicraftscz
 
 
 ## Trademark Notice

@@ -106,7 +106,7 @@ plotting:
         chia:
                 # The stock plotter: https://github.com/Chia-Network/chia-blockchain
                 k: 32                # k-size of plot, leave at 32 most of the time
-                e: False             # Use -e plotting option
+                e: False             # Disable bitfield back sorting (default is True) 
                 n_threads: 2         # Threads per job
                 n_buckets: 128       # Number of buckets to split data into
                 job_buffer: 3389     # Per job memory
