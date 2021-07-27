@@ -12,7 +12,7 @@ MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 class FarmSummary:
 
     def __init__(self, farms):
-        self.status = "Unknown"
+        self.status = "-"
         self.plot_count = 0
         self.plots_size = 0
         self.total_chia = 0

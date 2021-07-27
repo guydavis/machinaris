@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Machinaris - Daily Farming Summary now available on Farming page for both Chia and Flax.
 - Machinaris - Docker images now available for [Apple M1](https://github.com/guydavis/machinaris/issues/43) and [Raspberry Pi OS](https://github.com/guydavis/machinaris/issues/155) architectures. 
-- Chiadog - Update to dev branch to add [support for parsing partials and solo blocks](https://github.com/martomi/chiadog/pull/268).
+- Chiadog - Update to `dev` branch to add [support for parsing partials and solo blocks](https://github.com/martomi/chiadog/pull/268).
 - Chia - Update to patch release of 1.2.3.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.3).
 
 ## [0.5.1] - 2021-07-22
