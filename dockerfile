@@ -52,7 +52,6 @@ RUN \
 FROM package_stage
 # Base install of official Chia binaries at the given branch
 ARG CHIA_BRANCH
-ARG PATCH_CHIAPOS
 ARG FLAX_BRANCH
 
 # copy local files
@@ -64,7 +63,6 @@ WORKDIR /chia-blockchain
 # Install Chia, Plotman, Chiadog, Madmax, Flax, Machinaris, etc
 RUN \
 	/usr/bin/bash /machinaris/scripts/chia_install.sh ${CHIA_BRANCH} \
-    && /usr/bin/bash /machinaris/scripts/patch_chiapos.sh ${PATCH_CHIAPOS} \
 	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/plotman_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \

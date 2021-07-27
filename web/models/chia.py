@@ -38,6 +38,7 @@ class FarmSummary:
                 self.flax_netspace_display_size = '?' if not farm.flax_netspace_size else converters.gib_to_fmt(farm.flax_netspace_size)
                 self.flax_netspace_size = farm.flax_netspace_size
                 self.flax_expected_time_to_win = farm.flax_expected_time_to_win
+        app.logger.debug("ETW: {0}".format(self.expected_time_to_win))
                 
         self.plots_display_size = converters.gib_to_fmt(self.plots_size)
         self.calc_status(self.status)
@@ -59,7 +60,7 @@ class FarmSummary:
             self.flax_expected_time_to_win = converters.format_minutes(int(total_farm_etw_mins))
         except:
             app.logger.debug("Failed to calculate ETW for entire farm due to: {0}".format(traceback.format_exc()))
-            self.expected_time_to_win = "-"
+            self.flax_expected_time_to_win = "-"
 
 class FarmPlots:
 

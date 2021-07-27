@@ -14,16 +14,14 @@ from web import app, db, utils
 def load_daily_diff():
     summary = {}
     # initialize defaults
-    since = (datetime.datetime.now() - datetime.timedelta(hours=24)).strftime("%Y%m%d%H%M%S")
-    summary['plot_count'] = plot_count_diff(since)
-    summary['plots_size'] = plots_size_diff(since)
-    summary['total_chia'] = total_coin_diff(since, 'chia')
-    summary['total_flax'] = total_coin_diff(since, 'flax')
-    summary['netspace_chia'] = netspace_size_diff(since, 'chia')
-    summary['netspace_flax'] = netspace_size_diff(since, 'flax')
-    summary['daily_summary_chia'] = daily_notification(since, 'chia')
-    summary['daily_summary_flax'] = daily_notification(since, 'flax')
-    #app.logger.info(summary)
+    since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
+    since_str = since_date.strftime("%Y%m%d%H%M%S")
+    summary['plot_count'] = plot_count_diff(since_str)
+    summary['plots_size'] = plots_size_diff(since_str)
+    summary['total_chia'] = total_coin_diff(since_str, 'chia')
+    summary['total_flax'] = total_coin_diff(since_str, 'flax')
+    summary['netspace_chia'] = netspace_size_diff(since_str, 'chia')
+    summary['netspace_flax'] = netspace_size_diff(since_str, 'flax')
     return summary
 
 def plot_count_diff(since):
@@ -92,18 +90,29 @@ def netspace_size_diff(since, blockchain):
     #app.logger.info("Result is: {0}".format(result))
     return result
 
-### TODO - Pull all unique hosts and then parse and combine into one summary
-def daily_notification(since, blockchain):
-    result = '-'
+def load_daily_notifications():
+    summary = {}
+    # initialize defaults
+    since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
+    summary['daily_summary_chia'] = daily_notifications(since_date, 'chia')
+    summary['daily_summary_flax'] = daily_notifications(since_date, 'flax')
+    #app.logger.info(summary)
+    return summary
+
+def daily_notifications(since, blockchain):
+    result = []
     try:
-        result = db.session.query(Alert).filter(
+        #app.logger.info(since)
+        dailys = db.session.query(Alert).filter(
                 Alert.blockchain==blockchain, 
                 Alert.created_at >= since,
                 Alert.priority == "LOW",
-                Alert.service == "DAILY",
-                Alert.hostname == "aragorn"
-            ).order_by(Alert.created_at.desc()).limit(1).first().message
+                Alert.service == "DAILY"
+            ).order_by(Alert.created_at.desc()).all()
+        for daily in dailys:
+            #app.logger.info("{0} at {1}".format(daily.hostname, daily.created_at))
+            result.append(daily)
     except Exception as ex:
         app.logger.info("Failed to query for latest daily summary because {0}".format(str(ex)))
-    app.logger.info("Result is: {0}".format(result))
+    result.sort(key=lambda daily: daily.hostname, reverse=False)
     return result

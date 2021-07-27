@@ -104,8 +104,9 @@ def farming():
     farmers = chia.load_farmers()
     farming = chia.load_farm_summary()
     plots = chia.load_plots_farming()
+    daily_notifications = stats.load_daily_notifications()
     return render_template('farming.html', farming=farming, plots=plots, 
-        farmers=farmers, global_config=gc)
+        farmers=farmers, daily_notifications=daily_notifications, global_config=gc)
 
 @app.route('/plots_check')
 def plots_check():

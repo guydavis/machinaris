@@ -2,11 +2,18 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.2] - 2021-07-?
+
+- Machinaris - Daily Farming Summary now available on Farming page for both Chia and Flax.
+- Machinaris - Docker images now available for [Apple M1](https://github.com/guydavis/machinaris/issues/43) and [Raspberry Pi OS](https://github.com/guydavis/machinaris/issues/155) architectures. 
+- Chiadog - Update to dev branch to add [support for parsing partials and solo blocks](https://github.com/martomi/chiadog/pull/268).
+- Chia - Update to patch release of 1.2.3.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.3).
+
 ## [0.5.1] - 2021-07-22
 
 - Wizard on Workers page to create a Docker run/compose based on your settings. [Issue #97](https://github.com/guydavis/machinaris/issues/97)
-- Update to patch release of Chia 1.2.2, including a fix for harvester cache updates.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.2).
 - Latest Madmax plotter with support for n_buckets3 and n_rmulti2 settings in Plotman.
+- Update to patch release of Chia 1.2.2, including a fix for harvester cache updates.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.2).
 
 ## [0.5.0] - 2021-07-09
 
