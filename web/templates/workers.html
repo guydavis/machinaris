@@ -36,12 +36,13 @@
       <table id="data" class="table table-dark">
         <thead>
           <tr>
-            <th scope="col"></th>
+            <th scope="col" class="text-success"></th>
             <th scope="col" class="text-success">Hostname</th>
             <th scope="col" class="text-success">System Type</th>
             <th scope="col" class="text-success">Last Status Received At</th>
             <th scope="col" class="text-success">Last Ping to Worker</th>
             <th scope="col" class="text-success">Last Successful Ping to Worker</th>
+            <th scope="col" class="text-success">Version</th>
           </tr>
         </thead>
         <tbody>
@@ -53,6 +54,8 @@
             <td>{{worker.updated_at | datetimefilter}}</td>
             <td>{{worker.latest_ping_result}}</td>
             <td>{{worker.ping_success_at | datetimefilter}}</td>
+            <td><a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
+                title="{{worker.versions.components}}">{{worker.versions.machinaris}}</a></td>
           </tr>
           {% endfor %}
         </tbody>
@@ -107,6 +110,7 @@
         $('#workers-form').append('<input type="hidden" id="action" name="action" value="prune" />');
         $("#workers-form").submit();
       });
+      $('[data-toggle="tooltip"]').tooltip();
     })
   </script>
   {% endblock %}

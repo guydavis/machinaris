@@ -42,15 +42,15 @@
   <div class="row align-items-md-stretch">
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success" title="{{ daily_diff.plot_count }} in last day.">{{
-          farming.plot_count }}</h4>
+        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
+          title="{{ daily_diff.plot_count }}">{{farming.plot_count }}</h4>
         <h6 class="display-6 text-center">Total Plots</h6>
       </div>
     </div>
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success" title="{{ daily_diff.plots_size }} in last day.">{{
-          farming.plots_display_size }}</h4>
+        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
+          title="{{ daily_diff.plots_size }}">{{farming.plots_display_size }}</h4>
         <h6 class="display-6 text-center">Total Plots Size</h6>
       </div>
     </div>
@@ -71,16 +71,16 @@
   <div class="row align-items-md-stretch">
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success" title="{{ daily_diff.total_chia }} in last day.">{{
-          farming.total_chia }}</h4>
+        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
+          title="{{ daily_diff.total_chia }}">{{farming.total_chia }}</h4>
         <h6 class="display-6 text-center">Chia Farmed</h6>
       </div>
     </div>
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3"
         style="padding-top:12px !important; padding-bottom:12px !important;">
-        <h4 class="display-4 text-center text-success" title="{{ daily_diff.netspace_chia }} in last day.">{{
-          farming.netspace_display_size }}</h4>
+        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true" 
+          title="{{ daily_diff.netspace_chia }}">{{farming.netspace_display_size }}</h4>
         <h6 class="display-6 text-center">Chia Netspace</h6>
       </div>
     </div>
@@ -101,16 +101,16 @@
   <div class="row align-items-md-stretch" style="margin-top:5px; margin-bottom:5px;">
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success" title="{{ daily_diff.total_flax }} in last day.">{{
-          farming.total_flax }}</h4>
+        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
+          title="{{ daily_diff.total_flax }}">{{farming.total_flax }}</h4>
         <h6 class="display-6 text-center">Flax Farmed</h6>
       </div>
     </div>
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3"
         style="padding-top:12px !important; padding-bottom:12px !important;">
-        <h4 class="display-4 text-center text-success" title="{{ daily_diff.netspace_flax }} in last day.">{{
-          farming.flax_netspace_display_size }}</h4>
+        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
+          title="{{ daily_diff.netspace_flax }}">{{farming.flax_netspace_display_size }}</h4>
         <h6 class="display-6 text-center">Flax Netspace</h6>
       </div>
     </div>
@@ -130,18 +130,21 @@
   {% block scripts %}
   {% if global_config.farming_enabled %}
   <script>
-    setInterval(function () {
-      $.ajax({
-        type: "GET",
-        url: "{{ url_for('views_challenges') }}",
-      })
-        .done(function (data) {
-          //console.log(data);
-          $("#challenges-table-div").html(data)
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-          console.log(jqXHR, textStatus, errorThrown);
-        });
-    }, 1000 * 5);
+    $(document).ready(function () {
+      setInterval(function () {
+        $.ajax({
+          type: "GET",
+          url: "{{ url_for('views_challenges') }}",
+        })
+          .done(function (data) {
+            //console.log(data);
+            $("#challenges-table-div").html(data)
+          }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR, textStatus, errorThrown);
+          });
+      }, 1000 * 5);
+      $('[data-toggle="tooltip"]').tooltip();
+    })
   </script>
   {% endif %}
   {% endblock %}

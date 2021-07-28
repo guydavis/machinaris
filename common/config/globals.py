@@ -194,8 +194,8 @@ def load_plotman_version():
     last_plotman_version = outs.decode('utf-8').strip()
     if last_plotman_version.startswith('plotman'):
         last_plotman_version = last_plotman_version[len('plotman'):].strip()
-    if last_plotman_version.endswith('+dev'):
-        last_plotman_version = last_plotman_version[:-len('+dev')].strip()
+    #if last_plotman_version.endswith('+dev'):
+    #    last_plotman_version = last_plotman_version[:-len('+dev')].strip()
     last_plotman_version_load_time = datetime.datetime.now()
     return last_plotman_version
 
@@ -223,6 +223,8 @@ def load_chiadog_version():
     last_chiadog_version = outs.decode('utf-8').strip()
     if last_chiadog_version.startswith('v'):
         last_chiadog_version = last_chiadog_version[len('v'):].strip()
+    if '-' in last_chiadog_version:
+        last_chiadog_version = last_chiadog_version.split('-')[0] + '+dev'
     last_chiadog_version_load_time = datetime.datetime.now()
     return last_chiadog_version
 
@@ -305,7 +307,7 @@ def load_flax_version():
     if last_flax_version and last_flax_version_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_flax_version
-    proc = Popen("{0} version".format(CHIA_BINARY),
+    proc = Popen("{0} version".format(FLAX_BINARY),
                  stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
