@@ -42,8 +42,8 @@ def load_plots_farming():
     return FarmPlots(plots)
 
 def recent_challenges():
-    minute_ago = (datetime.datetime.now() - datetime.timedelta(seconds=80)).strftime("%Y-%m-%d %H:%M:%S.000")
-    challenges = db.session.query(c.Challenge).filter(c.Challenge.created_at >= minute_ago).order_by(c.Challenge.created_at.desc())
+    five_minutes_ago = (datetime.datetime.now() - datetime.timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S.000")
+    challenges = db.session.query(c.Challenge).filter(c.Challenge.created_at >= five_minutes_ago).order_by(c.Challenge.created_at.desc()).limit(20)
     return BlockchainChallenges(challenges)
 
 def load_wallets():

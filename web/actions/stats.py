@@ -25,20 +25,21 @@ def load_daily_diff():
     return summary
 
 def plot_count_diff(since):
-    result = '-'
+    result = ''
     try:
         latest = db.session.query(StatPlotCount).order_by(StatPlotCount.created_at.desc()).limit(1).first()
         #app.logger.info(latest.value)
         before = db.session.query(StatPlotCount).filter(StatPlotCount.created_at <= since).order_by(StatPlotCount.created_at.desc()).limit(1).first()
         #app.logger.info(before.value)
-        result = "%+0g" % (latest.value - before.value)
+        if (latest.value - before.value) != 0:
+            result = "%+0g in last day." % (latest.value - before.value)
     except Exception as ex:
         app.logger.info("Failed to query for day diff of plot_count because {0}".format(str(ex)))
     #app.logger.info("Result is: {0}".format(result))
     return result
 
 def plots_size_diff(since):
-    result = '-'
+    result = ''
     try:
         latest = db.session.query(StatPlotsSize).order_by(StatPlotsSize.created_at.desc()).limit(1).first()
         #app.logger.info(latest.value)
@@ -46,10 +47,10 @@ def plots_size_diff(since):
         #app.logger.info(before.value)
         gibs = (latest.value - before.value)
         fmtted = converters.gib_to_fmt(gibs)
-        if fmtted == "0.0 B":
-            result = "+0"
+        if fmtted == "0.000 B":
+            result = ""
         elif not fmtted.startswith('-'):
-            result = "+{0}".format(fmtted)
+            result = "+{0} in last day.".format(fmtted)
         else:
             result = fmtted
     except Exception as ex:
@@ -58,20 +59,21 @@ def plots_size_diff(since):
     return result
 
 def total_coin_diff(since, blockchain):
-    result = '-'
+    result = ''
     try:
         latest = db.session.query(StatTotalChia).filter(StatTotalChia.blockchain==blockchain).order_by(StatTotalChia.created_at.desc()).limit(1).first()
         #app.logger.info(latest.value)
         before = db.session.query(StatTotalChia).filter(StatTotalChia.blockchain==blockchain, StatTotalChia.created_at <= since).order_by(StatTotalChia.created_at.desc()).limit(1).first()
         #app.logger.info(before.value)
-        result = "%+6g" % (latest.value - before.value)
+        if (latest.value - before.value) != 0:
+            result = "%+6g in last day." % (latest.value - before.value)
     except Exception as ex:
         app.logger.info("Failed to query for day diff of total_chia because {0}".format(str(ex)))
     #app.logger.info("Result is: {0}".format(result))
     return result
 
 def netspace_size_diff(since, blockchain):
-    result = '-'
+    result = ''
     try:
         latest = db.session.query(StatNetspaceSize).filter(StatNetspaceSize.blockchain==blockchain).order_by(StatNetspaceSize.created_at.desc()).limit(1).first()
         #app.logger.info(latest.value)
@@ -80,11 +82,11 @@ def netspace_size_diff(since, blockchain):
         gibs = (latest.value - before.value)
         fmtted = converters.gib_to_fmt(gibs)
         if fmtted == "0.000 B":
-            result = "+0"
+            result = ""
         elif not fmtted.startswith('-'):
-            result = "+{0}".format(fmtted)
+            result = "+{0} in last day.".format(fmtted)
         else:
-            result = fmtted
+            result = "{0} in last day.".format(fmtted)
     except Exception as ex:
         app.logger.info("Failed to query for day diff of netspace_size because {0}".format(str(ex)))
     #app.logger.info("Result is: {0}".format(result))
