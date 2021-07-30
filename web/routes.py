@@ -278,6 +278,12 @@ def worker_launch():
     return render_template('worker_launch.html', farmer_pk=farmer_pk, 
         pool_pk=pool_pk, pool_contract_address=pool_contract_address)
 
+@app.route('/pools')
+def pools():
+    gc = globals.load()
+    pools = chia.load_pools()
+    return render_template('pools.html', pools=pools, global_config=gc)
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),

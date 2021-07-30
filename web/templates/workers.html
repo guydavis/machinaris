@@ -49,7 +49,12 @@
           {% for worker in workers.workers %}
           <tr>
             <td class="text-center"><input type="checkbox" name="hostname" value="{{ worker.hostname }}" />
-            <td>{{worker.hostname}}</td>
+            {% if worker.hostname == worker.displayname %}
+              <td>{{worker.displayname}}</td>
+            {% else %} 
+              <td><a data-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
+                title="Pinged at: {{worker.hostname}}">{{worker.displayname}}</a></td>
+            {% endif %}
             <td>{{worker.mode}}</td>
             <td>{{worker.updated_at | datetimefilter}}</td>
             <td>{{worker.latest_ping_result}}</td>

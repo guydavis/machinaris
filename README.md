@@ -1,10 +1,10 @@
 # machinaris
 
-A Docker image for plotting and farming the Chia™ cryptocurrency on [one computer](https://github.com/guydavis/machinaris/wiki/Docker) or across [many](https://github.com/guydavis/machinaris/wiki/Workers). Now with [official Pool support](https://github.com/guydavis/machinaris/wiki/Pooling)!
+A Docker image for plotting and farming the Chia™ cryptocurrency on [one computer](https://github.com/guydavis/machinaris/wiki/Docker) or across [many](https://github.com/guydavis/machinaris/wiki/Workers).  Try the easy install using [Launch Wizard](https://machinaris.app).
 
 ![Home](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_home.png)
 
-To get started with Machinaris, follow an install guide for your platform: [Windows](https://github.com/guydavis/machinaris/wiki/Windows), [Linux](https://github.com/guydavis/machinaris/wiki/Linux), [Macintosh](https://github.com/guydavis/machinaris/wiki/MacOS), [Unraid](https://github.com/guydavis/machinaris/wiki/Unraid), and [others](https://github.com/guydavis/machinaris/wiki/Docker).
+For details, see your particular platform: [Windows](https://github.com/guydavis/machinaris/wiki/Windows), [Linux](https://github.com/guydavis/machinaris/wiki/Linux), [Macintosh](https://github.com/guydavis/machinaris/wiki/MacOS), [Unraid](https://github.com/guydavis/machinaris/wiki/Unraid), and [others](https://github.com/guydavis/machinaris/wiki/Docker).
 
 ## Plotting View
 

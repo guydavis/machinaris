@@ -27,8 +27,10 @@ ALL_TABLES_BY_HOSTNAME = [
     'connections',
     'farms', 
     'keys',
+    'plotnfts',
     'plots',
     'plottings',
+    'pools',
     'wallets',
     'workers'
 ]

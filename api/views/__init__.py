@@ -12,6 +12,7 @@ from . import ping
 from . import plotnfts
 from . import plots
 from . import plottings
+from . import pools
 from . import wallets
 from . import workers
 
@@ -31,6 +32,7 @@ MODULES = (
     plotnfts,
     plots,
     plottings,
+    pools,
     wallets,
     workers,
 )
