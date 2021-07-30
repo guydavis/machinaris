@@ -65,3 +65,9 @@ def plotnameshortener(value):
     return value
 
 app.jinja_env.filters['plotnameshortener'] = plotnameshortener
+
+def launcheridshortener(value):
+    #app.logger.info("Shorten: {0}".format(value))
+    return value[:12] + '...'
+
+app.jinja_env.filters['launcheridshortener'] = launcheridshortener

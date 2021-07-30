@@ -24,10 +24,11 @@ from os import path
 
 from web import app, db, utils
 from common.models import farms as f, plots as p, challenges as c, wallets as w, \
-    blockchains as b, connections as co, keys as k, plotnfts as pn, pools as po
+    blockchains as b, connections as co, keys as k, plotnfts as pn, pools as po, \
+    partials as pr
 from common.config import globals
 from web.models.chia import FarmSummary, FarmPlots, BlockchainChallenges, Wallets, \
-    Blockchains, Connections, Keys, Plotnfts, Pools
+    Blockchains, Connections, Keys, Plotnfts, Pools, Partials
 from . import worker as wk
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
@@ -45,6 +46,10 @@ def recent_challenges():
     five_minutes_ago = (datetime.datetime.now() - datetime.timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S.000")
     challenges = db.session.query(c.Challenge).filter(c.Challenge.created_at >= five_minutes_ago).order_by(c.Challenge.created_at.desc()).limit(20)
     return BlockchainChallenges(challenges)
+
+def load_partials():
+    partials = db.session.query(pr.Partial).order_by(pr.Partial.created_at.desc()).limit(10)
+    return Partials(partials)
 
 def load_wallets():
     wallets = db.session.query(w.Wallet).all()

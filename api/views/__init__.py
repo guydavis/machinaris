@@ -8,6 +8,7 @@ from . import connections
 from . import farms
 from . import keys
 from . import logs
+from . import partials
 from . import ping
 from . import plotnfts
 from . import plots
@@ -28,6 +29,7 @@ MODULES = (
     farms,
     keys,
     logs,
+    partials,
     ping,
     plotnfts,
     plots,

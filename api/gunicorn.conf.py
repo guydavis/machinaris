@@ -10,7 +10,7 @@ def on_starting(server):
     from api.schedules import status_worker, status_farm, status_plotting, \
         status_plots, status_challenges, status_wallets, status_blockchains, \
         status_connections, status_keys, status_alerts, status_controller, \
-        status_plotnfts, status_points, status_pools
+        status_plotnfts, status_points, status_pools, status_partials
     from api.schedules import stats_disk, stats_farm
 
     scheduler = BackgroundScheduler()
@@ -36,7 +36,9 @@ def on_starting(server):
     scheduler.add_job(func=status_connections.update, trigger='interval', seconds=60, jitter=30) 
     scheduler.add_job(func=status_keys.update, trigger='interval', seconds=60, jitter=30) 
     scheduler.add_job(func=status_alerts.update, trigger='interval', seconds=60, jitter=30) 
-    scheduler.add_job(func=status_pools.update, trigger='interval', seconds=60, jitter=30) 
+    scheduler.add_job(func=status_pools.update, trigger='interval', seconds=60, jitter=30)
+    scheduler.add_job(func=status_partials.update, trigger='interval', seconds=60, jitter=30) 
+        
     #scheduler.add_job(func=status_points.update, trigger='interval', seconds=10, jitter=0) 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()

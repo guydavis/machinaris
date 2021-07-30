@@ -10,7 +10,7 @@ from common.utils import converters
 
 class Challenges:
 
-    # Parse the provided most recent 5 lines of grepped output for challenges
+    # Parse the provided most recent lines of grepped output for challenges
     def __init__(self, cli_stdout):
         self.columns = [ 'challenge_id', 'plots_past_filter', 'proofs_found', 'time_taken', 'created_at']
         self.rows = []
@@ -27,5 +27,31 @@ class Challenges:
                 })
             except:
                 app.logger.info("Failed to parse challenge line: {0}".format(line))
+                app.logger.info(traceback.format_exc())
+        self.rows.reverse()
+
+class Partials:
+
+    # Parse the provided most recent lines for partials.  Grep grabs 2 lines (partial submit and response) per.
+    def __init__(self, cli_stdout):
+        self.columns = [ 'challenge_id', 'plots_past_filter', 'proofs_found', 'time_taken', 'created_at']
+        self.rows = []
+        for line in cli_stdout:
+            try:
+                if "Submitting partial" in line:
+                    app.logger.debug(line)
+                    created_at = line.split()[0].replace('T', ' ')
+                    launcher_id = re.search('partial for (\w+) to', line, re.IGNORECASE).group(1)
+                    pool_url = re.search('to (.*)$', line, re.IGNORECASE).group(1)
+                elif "Pool response" in line:
+                    pool_response = line[line.index('{'):]
+                    self.rows.append({
+                        'launcher_id': launcher_id,
+                        'pool_url': pool_url.strip(),
+                        'pool_response': pool_response,
+                        'created_at': created_at
+                    })
+            except:
+                app.logger.info("Failed to parse partial line: {0}".format(line))
                 app.logger.info(traceback.format_exc())
         self.rows.reverse()
