@@ -71,6 +71,10 @@
                         {% endif %}
                         {% if global_config.is_controller %}
                         <li>
+                            <a href="{{ url_for('pools') }}" class="nav-link px-0 align-middle text-success">
+                                <i class="fs-4 bi-x-diamond"></i> <span class="ms-1 d-none d-sm-inline">Pools</span></a>
+                        </li>
+                        <li>
                             <a href="{{ url_for('workers') }}" class="nav-link px-0 align-middle text-success">
                                 <i class="fs-4 bi-diagram-3"></i> <span class="ms-1 d-none d-sm-inline">Workers</span></a>
                         </li>
@@ -116,6 +120,8 @@
                             <i class="fs-4 bi-github"></i>&nbsp;<span class="ms-1 d-none d-sm-inline">About</span> </a>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                            <li><a class="dropdown-item" target="_blank"
+                                href="https://machinaris.app">Product</a></li>
                             <li><a class="dropdown-item" target="_blank"
                                     href="https://github.com/guydavis/machinaris">Project</a></li>
                             <li><a class="dropdown-item" target="_blank"

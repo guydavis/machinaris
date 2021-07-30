@@ -24,10 +24,10 @@ from os import path
 
 from web import app, db, utils
 from common.models import farms as f, plots as p, challenges as c, wallets as w, \
-    blockchains as b, connections as co, keys as k, plotnfts as pn
+    blockchains as b, connections as co, keys as k, plotnfts as pn, pools as po
 from common.config import globals
 from web.models.chia import FarmSummary, FarmPlots, BlockchainChallenges, Wallets, \
-    Blockchains, Connections, Keys, Plotnfts
+    Blockchains, Connections, Keys, Plotnfts, Pools
 from . import worker as wk
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
@@ -66,6 +66,11 @@ def load_plotnfts():
     plotnfts = db.session.query(pn.Plotnft).all()
     return Plotnfts(plotnfts)
 
+def load_pools():
+    plotnfts = db.session.query(pn.Plotnft).all()
+    pools = db.session.query(po.Pool).all()
+    return Pools(pools, plotnfts)
+
 def load_farmers():
     worker_summary = wk.load_worker_summary()
     farmers = []
@@ -73,11 +78,13 @@ def load_farmers():
         if farmer in worker_summary.farmers:
             farmers.append({
                 'hostname': farmer.hostname,
+                'displayname': farmer.displayname,
                 'farming_status': farmer.farming_status().lower()
             })
         elif farmer in worker_summary.harvesters:
             farmers.append({
                 'hostname': farmer.hostname,
+                'displayname': farmer.displayname,
                 'farming_status': 'harvesting'
             })
     return farmers

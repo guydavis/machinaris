@@ -96,7 +96,7 @@ plotting:
         farmer_pk: REPLACE_WITH_THE_REAL_VALUE
         # ONLY FOR OLD SOLO PLOTS, COMMENT OUT IF PORTABLE PLOTTING!!!
         pool_pk: REPLACE_WITH_THE_REAL_VALUE
-        # See 'Settings | Pools' page, for 'P2 singleton address' value, UNCOMMENT IF PORTABLE PLOTTING!!!
+        # See 'Settings | Pools' page, for 'Pool contract address' value, UNCOMMENT IF PORTABLE PLOTTING!!!
         #pool_contract_address: REPLACE_WITH_THE_REAL_VALUE
 
         # If you enable 'chia', plot in *parallel* with higher tmpdir_max_jobs and global_max_jobs

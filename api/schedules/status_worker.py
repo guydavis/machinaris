@@ -23,10 +23,12 @@ def update():
     with app.app_context():
         try:
             hostname = utils.get_hostname()
-            config = globals.load();
+            displayname = utils.get_displayname()
+            config = globals.load()
             del config['now']
             payload = {
                 "hostname": hostname,
+                "displayname": displayname,
                 "mode": os.environ['mode'],
                 "services": gather_services_status(),
                 "url": utils.get_remote_url(),

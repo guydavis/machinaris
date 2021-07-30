@@ -1,3 +1,4 @@
+import json
 import os
 import traceback
 
@@ -207,3 +208,43 @@ class Plotnfts:
                 elif "Target state: SELF_POOLING" in line:
                     return None  # Switching back to self-pooling, no pool_url
         return pool_url
+
+class Pools:
+
+    def __init__(self, pools, plotnfts):
+        self.columns = ['hostname', 'blockchain', 'pool_state', 'updated_at']
+        self.rows = []
+        for pool in pools:
+            launcher_id = pool.launcher_id
+            plotnft = self.find_plotnft(plotnfts, launcher_id)
+            updated_at = pool.updated_at or datetime.now()
+            pool_state = json.loads(pool.pool_state)
+            if plotnft:
+                status = self.extract_plotnft_value(plotnft, "Current state:")
+                points_successful_last_24h = self.extract_plotnft_value(plotnft, "Percent Successful Points (24h)")
+            else:
+                status = "-"
+                pool_errors_24h = len(pool_state['pool_errors_24h'])
+                points_found_24h = len(pool_state['points_found_24h'])
+                points_successful_last_24h = "%.2f"% ( (points_found_24h - pool_errors_24h) / points_found_24h * 100)
+            self.rows.append({ 
+                'hostname': pool.hostname,
+                'launcher_id': pool.launcher_id, 
+                'blockchain': pool.blockchain, 
+                'pool_state': pool_state,
+                'updated_at': pool.updated_at,
+                'status': status,
+                'points_successful_last_24h': points_successful_last_24h
+            })
+    
+    def find_plotnft(self, plotnfts, launcher_id):
+        for plotnft in plotnfts:
+            if launcher_id in plotnft.details:
+                return plotnft
+        return None
+
+    def extract_plotnft_value(self, plotnft, key):
+        for line in plotnft.details.splitlines():
+            if line.startswith(key):
+                return line[line.index(':'):].strip()
+        return None

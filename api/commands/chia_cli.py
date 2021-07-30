@@ -2,6 +2,7 @@
 # CLI interactions with the chia binary.
 #
 
+import asyncio
 import datetime
 import os
 import pexpect

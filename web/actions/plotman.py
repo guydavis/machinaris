@@ -35,6 +35,7 @@ def load_plotters():
     for plotter in w.load_worker_summary().plotters:
         plotters.append({
             'hostname': plotter.hostname,
+            'displayname': plotter.displayname,
             'plotting_status': plotter.plotting_status(),
             'archiving_status': plotter.archiving_status(),
             'archiving_enabled': plotter.archiving_enabled()
@@ -145,11 +146,11 @@ def load_key_pk(type):
 def load_pool_contract_address():
     plotnfts = c.load_plotnfts()
     if len(plotnfts.rows) == 1:
-        m = re.search('P2 singleton address .*: (\w+)'.format(type), plotnfts.rows[0]['details'])
+        m = re.search('Pool contract address .*: (\w+)'.format(type), plotnfts.rows[0]['details'])
         if m:
             return m.group(1)
     elif len(plotnfts.rows) > 1:
-        app.logger.info("Did not find a unique P2 singleton address as multiple plotnfts exist.  Not replacing in plotman.yaml.")
+        app.logger.info("Did not find a unique Pool contract address as multiple plotnfts exist.  Not replacing in plotman.yaml.")
     return None
 
 def load_config_replacements():
