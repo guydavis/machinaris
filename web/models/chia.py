@@ -135,7 +135,7 @@ class Keys:
 class Blockchains:
 
     def __init__(self, blockchains):
-        self.columns = ['hostname', 'details', 'updated_at']
+        self.columns = ['hostname', 'blockchain', 'details', 'updated_at']
         self.rows = []
         for blockchain in blockchains:
             self.rows.append({ 
@@ -143,6 +143,20 @@ class Blockchains:
                 'blockchain': blockchain.blockchain, 
                 'details': blockchain.details,
                 'updated_at': blockchain.updated_at }) 
+            
+class Partials:
+
+    def __init__(self, partials):
+        self.columns = ['hostname', 'blockchain', 'launcher_id', 'pool_url', 'pool_response', 'created_at']
+        self.rows = []
+        for partial in partials:
+            self.rows.append({ 
+                'hostname': partial.hostname, 
+                'blockchain': partial.blockchain, 
+                'launcher_id': partial.launcher_id,
+                'pool_url': partial.pool_url,
+                'pool_response': partial.pool_response,
+                'created_at': partial.created_at }) 
 
 class Connections:
 
@@ -246,5 +260,5 @@ class Pools:
     def extract_plotnft_value(self, plotnft, key):
         for line in plotnft.details.splitlines():
             if line.startswith(key):
-                return line[line.index(':'):].strip()
+                return line[line.index(':')+1:].strip()
         return None

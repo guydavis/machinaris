@@ -79,7 +79,7 @@
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3"
         style="padding-top:12px !important; padding-bottom:12px !important;">
-        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true" 
+        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
           title="{{ daily_diff.netspace_chia }}">{{farming.netspace_display_size }}</h4>
         <h6 class="display-6 text-center">Chia Netspace</h6>
       </div>
@@ -123,6 +123,32 @@
       {% include 'views/challenges.html' %}
     </div>
   </div>
+  {% endif %}
+
+  {% if partials.rows|length > 0 %}
+  <table class="table table-dark">
+    <thead>
+      <tr>
+        <th scope="col">Blockchain</th>
+        <th scope="col">Pool</th>
+        <th scope="col">Response</th>
+        <th scope="col">Launcher</th>
+        <th scope="col">Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for partial in partials.rows %}
+      <tr>
+        <td>{{partial.blockchain}}</td>
+        <td>{{partial.pool_url}}</td>
+        <td>{{partial.pool_response}}</td>
+        <td>{{partial.launcher_id|launcheridshortener}}</td>
+        <td>{{partial.created_at}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
   {% endif %}
 
   {% endblock %}

@@ -29,6 +29,7 @@ def load_farmers():
         if (farmer in worker_summary.farmers) or (farmer in worker_summary.harvesters):
             farmers.append({
                 'hostname': farmer.hostname,
+                'displayname': farmer.displayname,
                 'monitoring_status': farmer.monitoring_status().lower()
             })
     return farmers
