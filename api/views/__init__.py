@@ -2,6 +2,7 @@ from . import actions
 from . import analysis
 from . import alerts
 from . import blockchains
+from . import certificates
 from . import challenges
 from . import configs
 from . import connections
@@ -24,6 +25,7 @@ MODULES = (
     alerts,
     blockchains,
     challenges,
+    certificates,
     configs,
     connections,
     farms,
