@@ -46,9 +46,8 @@ def bytesfilter(num, suffix='B'):
 app.jinja_env.filters['bytesfilter'] = bytesfilter
 
 def datetimefilter(value, format="%Y-%m-%d %H:%M"):
-    tz = pytz.timezone(os.environ['TZ'])
-    utc = pytz.timezone('UTC')
     if value:
+        #app.logger.info("{0} => {1}".format(value, value.strftime(format)))
         return value.strftime(format)
     else:
         return ""

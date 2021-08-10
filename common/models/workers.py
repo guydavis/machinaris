@@ -19,7 +19,7 @@ class Worker(db.Model):
     latest_ping_result = sa.Column(sa.String) # Holds status of most recent ping
     ping_success_at = sa.Column(sa.DateTime()) # Time of last successful ping
     created_at = sa.Column(sa.DateTime(), server_default=func.now())
-    updated_at = sa.Column(sa.DateTime(), onupdate=func.now())
+    updated_at = sa.Column(sa.DateTime())
 
     def farming_status(self):
         return j.loads(self.services)['chia_farm_status']

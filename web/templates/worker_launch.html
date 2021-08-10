@@ -250,10 +250,10 @@
             cmd += "        image: ghcr.io/guydavis/machinaris" + line_end;
             cmd += "        container_name: machinaris" + line_end;
             if (document.getElementById("worker_hostname").value) {
-                cmd += '            hostname:' + document.getElementById("worker_hostname").value + line_end;
+                cmd += '        hostname: ' + document.getElementById("worker_hostname").value + line_end;
             }
             if (document.getElementById("dns_ip_addr").value) {
-                cmd += '        dns:' + document.getElementById("dns_ip_addr").value + line_end;
+                cmd += '        dns: ' + document.getElementById("dns_ip_addr").value + line_end;
             }
             cmd += '        restart: always' + line_end;
             cmd += '        tty: true' + line_end;

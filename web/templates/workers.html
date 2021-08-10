@@ -56,7 +56,8 @@
                 title="Pinged at: {{worker.hostname}}">{{worker.displayname}}</a></td>
             {% endif %}
             <td>{{worker.mode}}</td>
-            <td>{{worker.updated_at | datetimefilter}}</td>
+            <td data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
+              title="Time on Worker:<br/> {{worker.time_on_worker}}">{{worker.updated_at | datetimefilter}}</td>
             <td>{{worker.latest_ping_result}}</td>
             <td>{{worker.ping_success_at | datetimefilter}}</td>
             <td><a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
