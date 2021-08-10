@@ -48,6 +48,10 @@ class WorkerSummary:
             if 'plotman_version' in config:
                 other_versions += "Plotman: " + config['plotman_version']
             worker.versions['components'] = other_versions
+            if 'now' in config:
+                worker.time_on_worker = config['now']
+            else:
+                worker.time_on_worker = '?'
 
     def set_ping_response(self, response):
         self.ping_response = response

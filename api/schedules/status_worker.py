@@ -25,7 +25,6 @@ def update():
             hostname = utils.get_hostname()
             displayname = utils.get_displayname()
             config = globals.load()
-            del config['now']
             payload = {
                 "hostname": hostname,
                 "displayname": displayname,
