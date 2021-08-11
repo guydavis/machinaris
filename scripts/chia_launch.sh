@@ -46,15 +46,23 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
-    if [ -d /root/.chia/farmer_ca ]; then
+    if [ ! -f /root/.chia/farmer_ca/chia_ca.crt ]; then
+      mkdir -p /root/.chia/farmer_ca
+      response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8927/certificates/?type=chia --output /tmp/certs.zip)
+      if [ $response == '200' ]; then
+        unzip /tmp/certs.zip -d /root/.chia/farmer_ca
+      fi
+      rm -f /tmp/certs.zip 
+    fi
+    if [ -f /root/.chia/farmer_ca/chia_ca.crt ]; then
       chia init -c /root/.chia/farmer_ca 2>&1 > /root/.chia/mainnet/log/init.log
+      chia configure --set-farmer-peer ${farmer_address}:${farmer_port}
+      chia configure --enable-upnp false
+      chia start harvester -r
     else
-      echo "Did not find your farmer's ca folder at /root/.chia/farmer_ca."
+      echo "Did not find your farmer's certificates within /root/.chia/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
-    chia configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    chia configure --enable-upnp false
-    chia start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then
     echo "Starting in Plotter-only mode.  Run Plotman from either CLI or WebUI."
