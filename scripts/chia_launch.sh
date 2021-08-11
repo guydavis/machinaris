@@ -46,7 +46,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
-    if [ ! -d /root/.chia/farmer_ca ]; then
+    if [ ! -f /root/.chia/farmer_ca/chia_ca.crt ]; then
       mkdir -p /root/.chia/farmer_ca
       response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8927/certificates/?type=chia --output /tmp/certs.zip)
       if [ $response == '200' ]; then

@@ -56,7 +56,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
-    if [ ! -d /root/.flax/farmer_ca ]; then
+    if [ ! -f /root/.flax/farmer_ca/flax_ca.crt ]; then
       mkdir -p /root/.flax/farmer_ca
       response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8927/certificates/?type=flax --output /tmp/certs.zip)
       if [ $response == '200' ]; then
