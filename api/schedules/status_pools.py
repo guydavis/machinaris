@@ -37,7 +37,6 @@ def update():
                 for pool in pools:
                     launcher_id = pool['pool_config']['launcher_id']
                     login_link = chia_cli.get_pool_login_link(launcher_id)
-                    app.logger.info("Pool login: {0}".format(login_link))
                     if launcher_id.startswith('0x'):
                         launcher_id = launcher_id[2:]
                     payload.append({

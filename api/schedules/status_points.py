@@ -37,7 +37,8 @@ def update():
                     "blockchain": blockchain,
                     "details": points,
                 }
-                #app.logger.info(payload)
+                for point in points:
+                    app.logger.info(point)
                 #utils.send_post('/plotnfts/', payload, debug=False)
         except:
             app.logger.info("Failed to load and send recent signage points.")

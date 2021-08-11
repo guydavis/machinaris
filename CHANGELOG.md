@@ -2,12 +2,17 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.5.2] - 2021-07-?
+## [0.5.2] - 2021-08-13
 
-- Machinaris - Daily Farming Summary now available on Farming page for both Chia and Flax.
 - Machinaris - Docker images now available for [Apple M1](https://github.com/guydavis/machinaris/issues/43) and [Raspberry Pi OS](https://github.com/guydavis/machinaris/issues/155) architectures. 
-- Chiadog - Update to `dev` branch to add [support for parsing partials and solo blocks](https://github.com/martomi/chiadog/pull/268).
+- Chiadog - Update to new v0.7.0 to [support for parsing partials and solo blocks](https://github.com/martomi/chiadog/pull/268).
 - Chia - Update to patch release of 1.2.3.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.3).
+- TrueNAS - Support for Machinaris deployment via helm chart. [Issue #78](https://github.com/guydavis/machinaris/issues/78) - Big thanks to @kmoore134 for this!
+- Machinaris - Daily Farming Summary now available on Farming page for both Chia and Flax.  Add new plot type column.
+- Machinaris - Pools - Show each Pool's status including link to your pool provider.  List pool point events on Summary page.
+- Machinaris - Workers - Use hostname for Worker display name, even when using IP addresses behind the scenes. Also show versions. Automated harvester setup. 
+- Machinaris - Connections page has link to test your router port forward for farming.
+- Machinaris - New [public website](http://www.machinaris.app) with launch Wizard for generating first Docker run/compose of Machinaris.
 
 ## [0.5.1] - 2021-07-22
 

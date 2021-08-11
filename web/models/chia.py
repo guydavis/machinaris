@@ -66,7 +66,7 @@ class FarmSummary:
 class FarmPlots:
 
      def __init__(self, plots):
-        self.columns = ['worker', 'plot_id',  'dir', 'plot', 'create_date', 'size']
+        self.columns = ['worker', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size' ]
         self.rows = []
         plots_by_id = {}
         for plot in plots:
@@ -82,7 +82,8 @@ class FarmPlots:
                     'dir': plot.dir,  \
                     'plot': plot.file,  \
                     'create_date': plot.created_at, \
-                    'size': plot.size }) 
+                    'size': plot.size, \
+                    'type': plot.type if plot.type else "" }) 
 
 
 class BlockchainChallenges:
