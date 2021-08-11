@@ -48,6 +48,11 @@
         {% if connections.rows|length > 0 %}
         {% for connection in connections.rows %}
         <div class="container-fluid">
+            <span style="float:right">
+                <a href="https://www.yougetsignal.com/tools/open-ports/?port={{connection.protocol_port}}" target="_blank" class="text-white">
+                    Check Port Forwarding
+                </a>
+            </span>
             <h3>{{connection.hostname}} - {{connection.blockchain}}</h3>
             <pre>{{connection.details}}</pre>
         </div>

@@ -165,7 +165,8 @@ class Connections:
         for connection in connections:
             self.rows.append({
                 'hostname': connection.hostname,
-                'blockchain': connection.blockchain, 
+                'blockchain': connection.blockchain,
+                'protocol_port': '8444' if connection.blockchain == 'chia' else '6888',
                 'details': connection.details
             })
     
@@ -244,6 +245,7 @@ class Pools:
             self.rows.append({ 
                 'hostname': pool.hostname,
                 'launcher_id': pool.launcher_id, 
+                'login_link': pool.login_link, 
                 'blockchain': pool.blockchain, 
                 'pool_state': pool_state,
                 'updated_at': pool.updated_at,

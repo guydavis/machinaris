@@ -47,7 +47,13 @@
           <li>Points Successful in Last 24 Hours: {{ pool.points_successful_last_24h }}</li>
         </ul>
         <b>Launcher ID:</b>
-        <span>{{ pool.launcher_id }}</span>
+        <span>
+          {% if pool.login_link %}
+          <a target="_blank" class="text-white" href="{{ pool.login_link }}">{{ pool.launcher_id }}</a>
+          {% else %}
+          {{ pool.launcher_id }}
+          {% endif %}
+        </span>
       </div>
     </div>
     {% endfor %}
