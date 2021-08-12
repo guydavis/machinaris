@@ -16,30 +16,30 @@ def on_starting(server):
     scheduler = BackgroundScheduler()
 
     # Statistics gathering locally
-    scheduler.add_job(func=stats_farm.collect, trigger='cron', minute=0)  # Hourly
-    scheduler.add_job(func=stats_disk.collect, trigger='cron', minute="*/5") # Every 5 minutes
+    scheduler.add_job(func=stats_farm.collect, name="stats_farm", trigger='cron', minute=0)  # Hourly
+    scheduler.add_job(func=stats_disk.collect, name="stats_disk", trigger='cron', minute="*/5") # Every 5 minutes
 
     # Testing only
     #scheduler.add_job(func=stats_farm.collect, trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=stats_disk.collect, trigger='interval', seconds=10) # Test immediately
 
     # Status gathering - reported via API
-    scheduler.add_job(func=status_challenges.update, trigger='interval', seconds=5)
-    scheduler.add_job(func=status_worker.update, trigger='interval', seconds=60, jitter=30) 
-    scheduler.add_job(func=status_controller.update, trigger='interval', seconds=60, jitter=30) 
-    scheduler.add_job(func=status_farm.update, trigger='interval', seconds=60, jitter=30) 
-    scheduler.add_job(func=status_plotting.update, trigger='interval', seconds=60, jitter=30) 
-    scheduler.add_job(func=status_plots.update, trigger='interval', seconds=60, jitter=30)  
-    scheduler.add_job(func=status_wallets.update, trigger='interval', seconds=60, jitter=30) 
-    scheduler.add_job(func=status_plotnfts.update, trigger='interval', seconds=60, jitter=30) 
-    scheduler.add_job(func=status_blockchains.update, trigger='interval', seconds=60, jitter=30) 
-    scheduler.add_job(func=status_connections.update, trigger='interval', seconds=60, jitter=30) 
-    scheduler.add_job(func=status_keys.update, trigger='interval', seconds=60, jitter=30) 
-    scheduler.add_job(func=status_alerts.update, trigger='interval', seconds=60, jitter=30) 
-    scheduler.add_job(func=status_pools.update, trigger='interval', seconds=60, jitter=30)
-    scheduler.add_job(func=status_partials.update, trigger='interval', seconds=60, jitter=30) 
+    scheduler.add_job(func=status_challenges.update, name="challenges", trigger='interval', seconds=5)
+    scheduler.add_job(func=status_worker.update, name="workers", trigger='interval', seconds=60, jitter=30) 
+    scheduler.add_job(func=status_controller.update, name="controller", trigger='interval', seconds=60, jitter=30) 
+    scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=60, jitter=30) 
+    scheduler.add_job(func=status_plotting.update, name="plottings", trigger='interval', seconds=60, jitter=30) 
+    scheduler.add_job(func=status_plots.update, name="plots", trigger='interval', seconds=60, jitter=30)  
+    scheduler.add_job(func=status_wallets.update, name="wallets", trigger='interval', seconds=60, jitter=30) 
+    scheduler.add_job(func=status_plotnfts.update, name="plotnfts", trigger='interval', seconds=60, jitter=30) 
+    scheduler.add_job(func=status_blockchains.update, name="blockchains", trigger='interval', seconds=60, jitter=30) 
+    scheduler.add_job(func=status_connections.update, name="connections", trigger='interval', seconds=60, jitter=30) 
+    scheduler.add_job(func=status_keys.update, name="keys", trigger='interval', seconds=60, jitter=30) 
+    scheduler.add_job(func=status_alerts.update, name="alerts", trigger='interval', seconds=60, jitter=30) 
+    scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=60, jitter=30)
+    scheduler.add_job(func=status_partials.update, name="partials", trigger='interval', seconds=60, jitter=30) 
         
-    #scheduler.add_job(func=status_points.update, trigger='interval', seconds=10, jitter=0) 
+    #scheduler.add_job(func=status_points.update, name="points", trigger='interval', seconds=10, jitter=0) 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()
 

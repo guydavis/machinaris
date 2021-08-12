@@ -33,8 +33,8 @@ class Plots(MethodView):
     @blp.arguments(BatchOfPlotSchema)
     @blp.response(201, PlotSchema(many=True))
     def post(self, new_items):
-        # Collect plot info via RPC to determine type: solo or portable
-        plots_via_rpc = asyncio.run(chia.get_all_plots())
+        # Get plot info via RPC to determine type: solo or portable
+        plots_via_rpc = chia.get_all_plots()
         # Now delete all old plots by hostname of first new plotting
         db.session.query(Plot).filter(Plot.hostname==new_items[0]['hostname']).delete()
         items = []
