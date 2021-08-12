@@ -11,12 +11,13 @@ cd /code/machinaris
 if [ $FLASK_ENV == "development" ];
 then
     LOG_LEVEL='debug'
+    RELOAD='--reload'
 else
     LOG_LEVEL='info'
+    RELOAD='--preload'
 fi
 
-/chia-blockchain/venv/bin/gunicorn \
-    --reload \
+/chia-blockchain/venv/bin/gunicorn ${RELOAD} \
     --bind 0.0.0.0:8926 \
     --timeout 90 \
     --log-level=$LOG_LEVEL \
