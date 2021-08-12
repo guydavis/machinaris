@@ -53,7 +53,7 @@ then
     RELOAD='--reload'
 else
     LOG_LEVEL='info'
-    RELOAD=''
+    RELOAD='--preload'
 fi
 
 # Kill gunicorn if already running to allow restart
@@ -62,7 +62,7 @@ if [ ! -z $api_pid ]; then
     kill $api_pid
 fi
 echo 'Starting Machinaris API server...'
-/chia-blockchain/venv/bin/gunicorn --preload ${RELOAD} \
+/chia-blockchain/venv/bin/gunicorn ${RELOAD} \
     --bind 0.0.0.0:8927 --timeout 90 \
     --log-level=${LOG_LEVEL} \
     --workers=2 \
