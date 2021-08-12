@@ -19,7 +19,7 @@ fi
     #--certfile=/root/.chia/mainnet/config/ssl/ca/chia_ca.crt \
     #--keyfile=/root/.chia/mainnet/config/ssl/ca/chia_ca.key \
 
-/chia-blockchain/venv/bin/gunicorn --reload \
+/chia-blockchain/venv/bin/gunicorn --preload --reload \
     --bind 0.0.0.0:8927 --timeout 90 \
     --log-level=${LOG_LEVEL} \
     --workers=2 \

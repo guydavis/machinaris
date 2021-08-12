@@ -62,7 +62,7 @@ if [ ! -z $api_pid ]; then
     kill $api_pid
 fi
 echo 'Starting Machinaris API server...'
-/chia-blockchain/venv/bin/gunicorn ${RELOAD} \
+/chia-blockchain/venv/bin/gunicorn --preload ${RELOAD} \
     --bind 0.0.0.0:8927 --timeout 90 \
     --log-level=${LOG_LEVEL} \
     --workers=2 \
