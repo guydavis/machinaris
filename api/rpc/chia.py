@@ -2,6 +2,9 @@
 # RPC interactions with Chia
 #
 
+import asyncio
+import datetime
+
 from chia.rpc.full_node_rpc_client import FullNodeRpcClient
 from chia.rpc.farmer_rpc_client import FarmerRpcClient
 from chia.util.default_root import DEFAULT_ROOT_PATH
@@ -55,7 +58,19 @@ async def get_pool_state(blockchain):
     return pools
 
 # Used to load plot type (solo or portable) via RPC
-async def get_all_plots():
+plots_via_rpc = None
+last_plots_via_rpc = None
+def get_all_plots():
+    global plots_via_rpc
+    global last_plots_via_rpc
+    if plots_via_rpc and last_plots_via_rpc >= (datetime.datetime.now() - datetime.timedelta(minutes=3)):
+        return plots_via_rpc
+    #app.logger.info("Reloading all plots on all harvesters via RPC")
+    plots_via_rpc = asyncio.run(load_all_plots())
+    last_plots_via_rpc  = datetime.datetime.now()
+    return plots_via_rpc
+
+async def load_all_plots():
     all_plots = []
     try:
         config = load_chia_config(DEFAULT_ROOT_PATH, 'config.yaml')

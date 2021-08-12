@@ -56,13 +56,13 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     fi
     if [ -f /root/.chia/farmer_ca/chia_ca.crt ]; then
       chia init -c /root/.chia/farmer_ca 2>&1 > /root/.chia/mainnet/log/init.log
-      chia configure --set-farmer-peer ${farmer_address}:${farmer_port}
-      chia configure --enable-upnp false
-      chia start harvester -r
     else
       echo "Did not find your farmer's certificates within /root/.chia/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
+    chia configure --set-farmer-peer ${farmer_address}:${farmer_port}
+    chia configure --enable-upnp false
+    chia start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then
     echo "Starting in Plotter-only mode.  Run Plotman from either CLI or WebUI."

@@ -66,13 +66,13 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     fi
     if [ -f /root/.flax/farmer_ca/flax_ca.crt ]; then
       flax init -c /root/.flax/farmer_ca 2>&1 > /root/.flax/mainnet/log/init.log
-      flax configure --set-farmer-peer ${farmer_address}:${flax_farmer_port}
-      flax configure --enable-upnp false
-      flax start harvester -r
     else
       echo "Did not find your farmer's certificates within /root/.flax/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
+    flax configure --set-farmer-peer ${farmer_address}:${flax_farmer_port}
+    flax configure --enable-upnp false
+    flax start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then
     echo "Starting in Plotter-only mode.  Run Plotman from either CLI or WebUI."
