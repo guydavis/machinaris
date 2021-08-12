@@ -13,6 +13,7 @@ class Pool(db.Model):
     hostname = sa.Column(sa.String(length=255), nullable=False)
     blockchain = sa.Column(sa.String(length=64), nullable=True)
     launcher_id = sa.Column(sa.String(length=255), nullable=False)
+    login_link = sa.Column(sa.String, nullable=True)
     pool_state = sa.Column(sa.String, nullable=False)
     updated_at = sa.Column(sa.String(length=64), nullable=False)
     

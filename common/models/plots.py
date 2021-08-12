@@ -11,6 +11,7 @@ class Plot(db.Model):
 
     hostname = sa.Column(sa.String(length=255), primary_key=True)
     plot_id = sa.Column(sa.String(length=16), primary_key=True)
+    type = sa.Column(sa.String(length=32), nullable=True)
     dir = sa.Column(sa.String(length=255), nullable=False)
     file = sa.Column(sa.String(length=255), nullable=False)
     size = sa.Column(sa.Integer, nullable=False)
