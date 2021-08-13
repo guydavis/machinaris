@@ -181,7 +181,7 @@
                 } else if (!volume_container_path) {
                     errors.push("Empty container path provided for volume at '" + volume_host_path + "'. Please provide a container path.");
                 }
-                cmd += '    -v ' + volume_host_path + ':' + volume_container_path + line_end;
+                cmd += '    -v "' + volume_host_path + ':' + volume_container_path + '"' + line_end;
                 if ($('#volume_type' + index).val() == 'plots') {
                     plots_dir.push(volume_container_path)
                 }
@@ -260,7 +260,7 @@
             $('#volumes').children().each((index, element) => {
                 volume_host_path = document.getElementById("volume_host_path" + index).value;
                 volume_container_path = document.getElementById("volume_container_path" + index).value;
-                cmd += '            - ' + volume_host_path + ':' + volume_container_path + line_end;
+                cmd += '            - "' + volume_host_path + ':' + volume_container_path + '"' + line_end;
                 if ($('#volume_type' + index).val() == 'plots') {
                     plots_dir.push(volume_container_path)
                 }
