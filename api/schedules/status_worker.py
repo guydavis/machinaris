@@ -23,12 +23,15 @@ def update():
     with app.app_context():
         try:
             hostname = utils.get_hostname()
+            displayname = utils.get_displayname()
+            config = globals.load()
             payload = {
                 "hostname": hostname,
+                "displayname": displayname,
                 "mode": os.environ['mode'],
                 "services": gather_services_status(),
                 "url": utils.get_remote_url(),
-                "config": json.dumps(globals.load()),
+                "config": json.dumps(config),
             }
             utils.send_post('/workers/', payload, debug=False)
         except:

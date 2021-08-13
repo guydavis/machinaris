@@ -27,8 +27,10 @@ ALL_TABLES_BY_HOSTNAME = [
     'connections',
     'farms', 
     'keys',
+    'plotnfts',
     'plots',
     'plottings',
+    'pools',
     'wallets',
     'workers'
 ]
@@ -44,6 +46,8 @@ def get_worker_by_hostname(hostname):
 
 def prune_workers_status(hostnames):
     for hostname in hostnames:
+        worker = get_worker_by_hostname(hostname)
         for table in ALL_TABLES_BY_HOSTNAME:
-            db.session.execute("DELETE FROM " + table + " WHERE hostname = :hostname", {"hostname":hostname})
+            db.session.execute("DELETE FROM " + table + " WHERE hostname = :hostname OR hostname = :displayname", 
+                {"hostname":hostname, "displayname":worker.displayname})
             db.session.commit()

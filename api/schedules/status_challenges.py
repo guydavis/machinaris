@@ -19,7 +19,7 @@ def update():
         return
     with app.app_context():
         try:
-            hostname = utils.get_hostname()
+            hostname = utils.get_displayname()
             blockchains = ['chia']
             if globals.flax_enabled():
                 blockchains.append('flax')

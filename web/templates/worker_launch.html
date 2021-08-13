@@ -155,11 +155,7 @@
                 cmd += '    -h ' + document.getElementById("worker_hostname").value + line_end;
             }
             else {
-                if (os == 'windows') {
-                    cmd += '    -h (hostname)' + line_end;
-                } else {
-                    cmd += '    -h $(hostname -s)' + line_end;
-                }
+                errors.push("Missing worker hostname. Please <b>also</b> provide an IP address if the hostname won't resolve on your LAN.");
             }
             if (document.getElementById("dns_ip_addr").value) {
                 cmd += '    --dns ' + document.getElementById("dns_ip_addr").value + line_end;
@@ -185,7 +181,7 @@
                 } else if (!volume_container_path) {
                     errors.push("Empty container path provided for volume at '" + volume_host_path + "'. Please provide a container path.");
                 }
-                cmd += '    -v ' + volume_host_path + ':' + volume_container_path + line_end;
+                cmd += '    -v "' + volume_host_path + ':' + volume_container_path + '"' + line_end;
                 if ($('#volume_type' + index).val() == 'plots') {
                     plots_dir.push(volume_container_path)
                 }
@@ -250,10 +246,10 @@
             cmd += "        image: ghcr.io/guydavis/machinaris" + line_end;
             cmd += "        container_name: machinaris" + line_end;
             if (document.getElementById("worker_hostname").value) {
-                cmd += '            hostname:' + document.getElementById("worker_hostname").value + line_end;
+                cmd += '        hostname: ' + document.getElementById("worker_hostname").value + line_end;
             }
             if (document.getElementById("dns_ip_addr").value) {
-                cmd += '        dns:' + document.getElementById("dns_ip_addr").value + line_end;
+                cmd += '        dns: ' + document.getElementById("dns_ip_addr").value + line_end;
             }
             cmd += '        restart: always' + line_end;
             cmd += '        tty: true' + line_end;
@@ -264,7 +260,7 @@
             $('#volumes').children().each((index, element) => {
                 volume_host_path = document.getElementById("volume_host_path" + index).value;
                 volume_container_path = document.getElementById("volume_container_path" + index).value;
-                cmd += '            - ' + volume_host_path + ':' + volume_container_path + line_end;
+                cmd += '            - "' + volume_host_path + ':' + volume_container_path + '"' + line_end;
                 if ($('#volume_type' + index).val() == 'plots') {
                     plots_dir.push(volume_container_path)
                 }
@@ -312,14 +308,14 @@
                 cmd += '            - AUTO_PLOT=' + auto_plot + line_end;
             }
             cmd += '        ports:' + line_end;
-            cmd += '            - 8926' + line_end;
-            cmd += '            - 8927' + line_end;
+            cmd += '            - 8926:8926' + line_end;
+            cmd += '            - 8927:8927' + line_end;
             if (!mode) {  // Defaults to fullnode
-                cmd += '            - 8444' + line_end;
-                cmd += '            - 8447' + line_end;
+                cmd += '            - 8444:8444' + line_end;
+                cmd += '            - 8447:8447' + line_end;
                 if (document.getElementById("blockchain-flax").checked) {
-                    cmd += '            - 6888' + line_end;
-                    cmd += '            - 6885' + line_end;
+                    cmd += '            - 6888:6888' + line_end;
+                    cmd += '            - 6885:6885' + line_end;
                 }
             }
             return cmd;
@@ -338,6 +334,9 @@
     <form>
         <div class="rounded-2">
             <h2>Machinaris Worker - Launch Config</h2>
+            <p>Complete the form below to create a launch command to run on a new computer. 
+                Either paste the Docker run into a shell/terminal OR save a docker-compose.yml 
+                and then run "docker-compose up".</p>
             <div class="alert alert-warning" role="alert" id='errors'></div>
             <div class="row mb-3">
                 <div class="col offset">
@@ -464,7 +463,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col offset">
-                    <label for="worker_hostname" class="form-label">Worker Hostname (Optional)</label>
+                    <label for="worker_hostname" class="form-label">Worker Hostname</label>
                     <input type="text" class="form-control" placeholder="myhostname" aria-label="worker_hostname"
                         id='worker_hostname' onkeyup="updateDocker()">
                 </div>

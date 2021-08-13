@@ -1,3 +1,4 @@
+import json
 import os
 import traceback
 
@@ -12,17 +13,17 @@ MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 class FarmSummary:
 
     def __init__(self, farms):
-        self.status = "Unknown"
+        self.status = "-"
         self.plot_count = 0
         self.plots_size = 0
         self.total_chia = 0
         self.total_flax = 0
         self.netspace_size = 0
         self.flax_netspace_size = 0
-        self.netspace_display_size = "?"
-        self.flax_netspace_display_size = "?"
-        self.expected_time_to_win = "Unknown"
-        self.flax_expected_time_to_win = "Unknown"
+        self.netspace_display_size = "-"
+        self.flax_netspace_display_size = "-"
+        self.expected_time_to_win = "-"
+        self.flax_expected_time_to_win = "-"
         fullnode_plots_size = 0
         for farm in farms:
             self.plot_count += farm.plot_count
@@ -38,6 +39,7 @@ class FarmSummary:
                 self.flax_netspace_display_size = '?' if not farm.flax_netspace_size else converters.gib_to_fmt(farm.flax_netspace_size)
                 self.flax_netspace_size = farm.flax_netspace_size
                 self.flax_expected_time_to_win = farm.flax_expected_time_to_win
+        app.logger.debug("ETW: {0}".format(self.expected_time_to_win))
                 
         self.plots_display_size = converters.gib_to_fmt(self.plots_size)
         self.calc_status(self.status)
@@ -59,12 +61,12 @@ class FarmSummary:
             self.flax_expected_time_to_win = converters.format_minutes(int(total_farm_etw_mins))
         except:
             app.logger.debug("Failed to calculate ETW for entire farm due to: {0}".format(traceback.format_exc()))
-            self.expected_time_to_win = "Unknown"
+            self.flax_expected_time_to_win = "-"
 
 class FarmPlots:
 
      def __init__(self, plots):
-        self.columns = ['worker', 'plot_id',  'dir', 'plot', 'create_date', 'size']
+        self.columns = ['worker', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size' ]
         self.rows = []
         plots_by_id = {}
         for plot in plots:
@@ -80,7 +82,8 @@ class FarmPlots:
                     'dir': plot.dir,  \
                     'plot': plot.file,  \
                     'create_date': plot.created_at, \
-                    'size': plot.size }) 
+                    'size': plot.size, \
+                    'type': plot.type if plot.type else "" }) 
 
 
 class BlockchainChallenges:
@@ -133,7 +136,7 @@ class Keys:
 class Blockchains:
 
     def __init__(self, blockchains):
-        self.columns = ['hostname', 'details', 'updated_at']
+        self.columns = ['hostname', 'blockchain', 'details', 'updated_at']
         self.rows = []
         for blockchain in blockchains:
             self.rows.append({ 
@@ -141,6 +144,20 @@ class Blockchains:
                 'blockchain': blockchain.blockchain, 
                 'details': blockchain.details,
                 'updated_at': blockchain.updated_at }) 
+            
+class Partials:
+
+    def __init__(self, partials):
+        self.columns = ['hostname', 'blockchain', 'launcher_id', 'pool_url', 'pool_response', 'created_at']
+        self.rows = []
+        for partial in partials:
+            self.rows.append({ 
+                'hostname': partial.hostname, 
+                'blockchain': partial.blockchain, 
+                'launcher_id': partial.launcher_id,
+                'pool_url': partial.pool_url,
+                'pool_response': partial.pool_response,
+                'created_at': partial.created_at }) 
 
 class Connections:
 
@@ -149,7 +166,8 @@ class Connections:
         for connection in connections:
             self.rows.append({
                 'hostname': connection.hostname,
-                'blockchain': connection.blockchain, 
+                'blockchain': connection.blockchain,
+                'protocol_port': '8444' if connection.blockchain == 'chia' else '6888',
                 'details': connection.details
             })
     
@@ -206,3 +224,44 @@ class Plotnfts:
                 elif "Target state: SELF_POOLING" in line:
                     return None  # Switching back to self-pooling, no pool_url
         return pool_url
+
+class Pools:
+
+    def __init__(self, pools, plotnfts):
+        self.columns = ['hostname', 'blockchain', 'pool_state', 'updated_at']
+        self.rows = []
+        for pool in pools:
+            launcher_id = pool.launcher_id
+            plotnft = self.find_plotnft(plotnfts, launcher_id)
+            updated_at = pool.updated_at or datetime.now()
+            pool_state = json.loads(pool.pool_state)
+            if plotnft:
+                status = self.extract_plotnft_value(plotnft, "Current state:")
+                points_successful_last_24h = self.extract_plotnft_value(plotnft, "Percent Successful Points (24h)")
+            else:
+                status = "-"
+                pool_errors_24h = len(pool_state['pool_errors_24h'])
+                points_found_24h = len(pool_state['points_found_24h'])
+                points_successful_last_24h = "%.2f"% ( (points_found_24h - pool_errors_24h) / points_found_24h * 100)
+            self.rows.append({ 
+                'hostname': pool.hostname,
+                'launcher_id': pool.launcher_id, 
+                'login_link': pool.login_link, 
+                'blockchain': pool.blockchain, 
+                'pool_state': pool_state,
+                'updated_at': pool.updated_at,
+                'status': status,
+                'points_successful_last_24h': points_successful_last_24h
+            })
+    
+    def find_plotnft(self, plotnfts, launcher_id):
+        for plotnft in plotnfts:
+            if launcher_id in plotnft.details:
+                return plotnft
+        return None
+
+    def extract_plotnft_value(self, plotnft, key):
+        for line in plotnft.details.splitlines():
+            if line.startswith(key):
+                return line[line.index(':')+1:].strip()
+        return None

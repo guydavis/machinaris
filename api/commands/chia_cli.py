@@ -2,6 +2,7 @@
 # CLI interactions with the chia binary.
 #
 
+import asyncio
 import datetime
 import os
 import pexpect
@@ -313,3 +314,11 @@ def check_plots(first_load):
         ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
         proc = Popen(['tail', '-n', str(MAX_LOG_LINES), output_file], stdout=PIPE)
         return  class_escape.sub('', ansi_escape.sub('', proc.stdout.read().decode("utf-8")))
+
+def get_pool_login_link(launcher_id):
+    try:
+        stream = os.popen("chia plotnft get_login_link -l {0}".format(launcher_id))
+        return stream.read()
+    except Exception as ex:
+        app.logger.info("Failed to get_login_link: {0}".format(str(ex)))
+    return ""

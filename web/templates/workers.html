@@ -36,39 +36,42 @@
       <table id="data" class="table table-dark">
         <thead>
           <tr>
-            <th scope="col"></th>
+            <th scope="col" class="text-success"></th>
             <th scope="col" class="text-success">Hostname</th>
             <th scope="col" class="text-success">System Type</th>
             <th scope="col" class="text-success">Last Status Received At</th>
             <th scope="col" class="text-success">Last Ping to Worker</th>
             <th scope="col" class="text-success">Last Successful Ping to Worker</th>
+            <th scope="col" class="text-success">Version</th>
           </tr>
         </thead>
         <tbody>
           {% for worker in workers.workers %}
           <tr>
             <td class="text-center"><input type="checkbox" name="hostname" value="{{ worker.hostname }}" />
-            <td>{{worker.hostname}}</td>
+            {% if worker.hostname == worker.displayname %}
+              <td>{{worker.displayname}}</td>
+            {% else %} 
+              <td><a data-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
+                title="Pinged at: {{worker.hostname}}">{{worker.displayname}}</a></td>
+            {% endif %}
             <td>{{worker.mode}}</td>
-            <td>{{worker.updated_at | datetimefilter}}</td>
+            <td data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
+              title="Time on Worker:<br/> {{worker.time_on_worker}}">{{worker.updated_at | datetimefilter}}</td>
             <td>{{worker.latest_ping_result}}</td>
             <td>{{worker.ping_success_at | datetimefilter}}</td>
+            <td><a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
+                title="{{worker.versions.components}}">{{worker.versions.machinaris}}</a></td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
 
       <fieldset>
-        <div class="row g-3">
-          <div class="col-sm">
             <button form="workers-form" type="submit" name="action" value="prune" class="btn btn-outline-success"
               id="btnPrune" title="Only deletes status of selected worker(s).">Prune Selected</button>
-          </div>
-          <div class="col-sm-1">
-            <button type="button" class="text-right btn btn-outline-success"
-              onclick="WorkerLaunch(); return false">New</button>
-          </div>
-        </div>
+            <button type="button" class="btn btn-outline-success"
+              onclick="WorkerLaunch(); return false">New Worker</button>
       </fieldset>
   </form>
 
@@ -107,6 +110,7 @@
         $('#workers-form').append('<input type="hidden" id="action" name="action" value="prune" />');
         $("#workers-form").submit();
       });
+      $('[data-toggle="tooltip"]').tooltip();
     })
   </script>
   {% endblock %}

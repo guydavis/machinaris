@@ -4,9 +4,11 @@ from .challenges import Challenge
 from .connections import Connection
 from .farms import Farm 
 from .keys import Key
+from .partials import Partial
 from .plots import Plot 
 from .plotnfts import Plotnft
 from .plottings import Plotting 
+from .pools import Pool
 from .stats import StatPlotCount, StatPlotsSize, StatTotalChia, StatNetspaceSize, StatTimeToWin, \
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \
         StatPlottingDiskUsed, StatPlottingDiskFree

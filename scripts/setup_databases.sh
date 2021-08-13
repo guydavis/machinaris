@@ -11,7 +11,6 @@ mkdir -p /root/.chia/chiadog/dbs
 if [[ $1 == "reset" ]]; then
     mv /root/.chia/machinaris/dbs/machinaris.db /root/.chia/machinaris/dbs/machinaris.db.bak
     mv /root/.chia/machinaris/dbs/stats.db /root/.chia/machinaris/dbs/stats.db.bak
-    mv /root/.chia/chiadog/dbs/chiadog.db /root/.chia/chiadog/dbs/chiadog.db.bak
 fi
 
 # If old databases not managed by flask-migrate yet
@@ -19,10 +18,6 @@ if [ ! -f /root/.chia/machinaris/dbs/.managed ] && [ -f /root/.chia/machinaris/d
     cd /root/.chia/machinaris/dbs
     rm -f machinaris.db
     mv stats.db stats.db.old
-fi
-if [ ! -f /root/.chia/chiadog/dbs/.managed ] && [ -f /root/.chia/chiadog/dbs/chiadog.db ]; then
-    cd /root/.chia/chiadog/dbs
-    mv chiadog.db chiadog.db.old
 fi
 
 # Perform database migration, if any
@@ -48,10 +43,5 @@ EOF
 fi
 touch /root/.chia/machinaris/dbs/.managed
 
-if [ ! -f /root/.chia/chiadog/dbs/.managed ] && [ -f /root/.chia/chiadog/dbs/chiadog.db.old ]; then
-    sqlite3 /root/.chia/chiadog/dbs/chiadog.db.old <<EOF
-    ATTACH DATABASE '/root/.chia/chiadog/dbs/chiadog.db' AS new_db;
-    INSERT INTO new_db.notification SELECT * FROM notification;
-EOF
-fi
-touch /root/.chia/chiadog/dbs/.managed
+# Delete old chiadog.db if present as now unused
+rm -rf /root/.chia/chiadog/dbs

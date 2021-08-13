@@ -3,6 +3,7 @@
 #
 
 import datetime
+import os
 import shutil
 import sqlite3
 import socket
@@ -53,6 +54,9 @@ def store_disk_stats(db, current_datetime, disk_type):
     cur = db.cursor()
     disks = globals.get_disks(disk_type)
     for disk in disks:
+        if not os.path.exists(disk):
+            app.logger.info("Skipping disk stat collection for non-existant path: {0}".format(disk))
+            continue
         try:
             total, used, free = shutil.disk_usage(disk)
             cur.execute("INSERT INTO stat_{0}_disk_used (hostname, path, value, created_at) VALUES (?,?,?,?)".format(disk_type),

@@ -27,6 +27,9 @@ FLAX_LOG = '/root/.flax/mainnet/log/debug.log'
 # Roughly 1 minutes worth of challenges
 CHALLENGES_TO_LOAD = 8
 
+# Most recent partial proofs, actually double as 2 log lines per partial
+PARTIALS_TO_LOAD = 50
+
 # When reading tail of a log, only send this many lines
 MAX_LOG_LINES = 250
 
@@ -55,6 +58,34 @@ def recent_challenges(blockchain):
     challenges = log.Challenges(cli_stdout.splitlines())
     # app.logger.debug(challenges)
     return challenges
+
+def recent_partials(blockchain):
+    log_file = CHIA_LOG
+    if blockchain == 'flax':
+        log_file = FLAX_LOG
+    if not os.path.exists(log_file):
+        app.logger.debug(
+            "Skipping partials parsing as no such log file: {0}".format(log_file))
+        return []
+    rotated_log_file = ''
+    if os.path.exists(log_file + '.1'):
+        rotated_log_file = log_file + '.1'
+    proc = Popen("grep -h --text -C1 -i partial {0} {1} | tail -n {2}".format(rotated_log_file, log_file, PARTIALS_TO_LOAD),
+                 stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        abort(500, description="The timeout is expired!")
+    if errs:
+        app.logger.error(errs.decode('utf-8'))
+        abort(500, description=errs.decode('utf-8'))
+    cli_stdout = outs.decode('utf-8')
+    #app.logger.debug("Partials grep: {0}".format(cli_stdout))
+    partials = log.Partials(cli_stdout.splitlines())
+    # app.logger.debug(partials)
+    return partials
 
 
 def find_plotting_job_log(plot_id):

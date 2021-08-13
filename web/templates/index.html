@@ -19,7 +19,6 @@
   </div>
 
   <div class="row align-items-md-stretch">
-    {% if global_config.plotting_enabled %}
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-20 p-2 bg-light border rounded-3">
         <h6 class="display-6 text-center">Plotting:
@@ -29,8 +28,6 @@
         </h6>
       </div>
     </div>
-    {% endif %}
-    {% if global_config.farming_enabled %}
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-20 p-2 bg-light border rounded-3">
         <h6 class="display-6 text-center">Farming:
@@ -40,27 +37,26 @@
         </h6>
       </div>
     </div>
-    {% endif %}
   </div>
 
   <div class="row align-items-md-stretch">
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success">{{ farming.plot_count }}</h4>
+        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
+          title="{{ daily_diff.plot_count }}">{{farming.plot_count }}</h4>
         <h6 class="display-6 text-center">Total Plots</h6>
       </div>
     </div>
-    {% if global_config.farming_enabled %}
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success">{{ farming.plots_display_size }}</h4>
+        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
+          title="{{ daily_diff.plots_size }}">{{farming.plots_display_size }}</h4>
         <h6 class="display-6 text-center">Total Plots Size</h6>
       </div>
     </div>
-    {% endif %}
   </div>
 
-  {% if farming.expected_time_to_win != 'Unknown' %}
+  {% if farming.expected_time_to_win != '-' %}
   <div class="row align-items-md-stretch" style="margin-top:5px; margin-bottom:5px;">
     <div class="col-md-12">
       <div class="h-30 p-2 text-white bg-dark rounded-3">
@@ -75,22 +71,23 @@
   <div class="row align-items-md-stretch">
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success">{{ farming.total_chia }}</h4>
-        <h6 class="display-6 text-center">Chia Total Farmed</h6>
+        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
+          title="{{ daily_diff.total_chia }}">{{farming.total_chia }}</h4>
+        <h6 class="display-6 text-center">Chia Farmed</h6>
       </div>
     </div>
-    {% if global_config.farming_enabled %}
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-      <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success">{{ farming.netspace_display_size }}</h4>
-        <h6 class="display-6 text-center">Chia Netspace Size</h6>
+      <div class="h-100 p-2 text-white bg-dark rounded-3"
+        style="padding-top:12px !important; padding-bottom:12px !important;">
+        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
+          title="{{ daily_diff.netspace_chia }}">{{farming.netspace_display_size }}</h4>
+        <h6 class="display-6 text-center">Chia Netspace</h6>
       </div>
     </div>
-    {% endif %}
   </div>
 
   {% if global_config.flax_enabled %}
-  {% if farming.flax_expected_time_to_win != 'Unknown' %}
+  {% if farming.flax_expected_time_to_win != '-' %}
   <div class="row align-items-md-stretch" style="margin-top:5px; margin-bottom:5px;">
     <div class="col-md-12">
       <div class="h-30 p-2 text-white bg-dark rounded-3">
@@ -101,21 +98,22 @@
     </div>
   </div>
   {% endif %}
-  <div class="row align-items-md-stretch">
+  <div class="row align-items-md-stretch" style="margin-top:5px; margin-bottom:5px;">
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success">{{ farming.total_flax }}</h4>
-        <h6 class="display-6 text-center">Flax Total Farmed</h6>
+        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
+          title="{{ daily_diff.total_flax }}">{{farming.total_flax }}</h4>
+        <h6 class="display-6 text-center">Flax Farmed</h6>
       </div>
     </div>
-    {% if global_config.farming_enabled %}
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-      <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success">{{ farming.flax_netspace_display_size }}</h4>
-        <h6 class="display-6 text-center">Flax Netspace Size</h6>
+      <div class="h-100 p-2 text-white bg-dark rounded-3"
+        style="padding-top:12px !important; padding-bottom:12px !important;">
+        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
+          title="{{ daily_diff.netspace_flax }}">{{farming.flax_netspace_display_size }}</h4>
+        <h6 class="display-6 text-center">Flax Netspace</h6>
       </div>
     </div>
-    {% endif %}
   </div>
   {% endif %}
 
@@ -127,23 +125,56 @@
   </div>
   {% endif %}
 
+  {% if partials.rows|length > 0 %}
+  <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
+    <div class="h-100 p-2 text-white bg-dark rounded-3" id="challenges-table-div">
+      <table class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col">Blockchain</th>
+            <th scope="col">Pool</th>
+            <th scope="col">Response</th>
+            <th scope="col">Launcher</th>
+            <th scope="col">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for partial in partials.rows %}
+          <tr>
+            <td>{{partial.blockchain}}</td>
+            <td>{{partial.pool_url}}</td>
+            <td>{{partial.pool_response}}</td>
+            <td>{{partial.launcher_id|launcheridshortener}}</td>
+            <td>{{partial.created_at}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% endif %}
+
   {% endblock %}
 
   {% block scripts %}
   {% if global_config.farming_enabled %}
   <script>
-    setInterval(function () {
-      $.ajax({
-        type: "GET",
-        url: "{{ url_for('views_challenges') }}",
-      })
-        .done(function (data) {
-          //console.log(data);
-          $("#challenges-table-div").html(data)
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-          console.log(jqXHR, textStatus, errorThrown);
-        });
-    }, 1000 * 5);
+    $(document).ready(function () {
+      setInterval(function () {
+        $.ajax({
+          type: "GET",
+          url: "{{ url_for('views_challenges') }}",
+        })
+          .done(function (data) {
+            //console.log(data);
+            $("#challenges-table-div").html(data)
+          }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR, textStatus, errorThrown);
+          });
+      }, 1000 * 5);
+      $('[data-toggle="tooltip"]').tooltip();
+    })
   </script>
   {% endif %}
   {% endblock %}

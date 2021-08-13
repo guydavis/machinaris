@@ -96,7 +96,7 @@ plotting:
         farmer_pk: REPLACE_WITH_THE_REAL_VALUE
         # ONLY FOR OLD SOLO PLOTS, COMMENT OUT IF PORTABLE PLOTTING!!!
         pool_pk: REPLACE_WITH_THE_REAL_VALUE
-        # See 'Settings | Pools' page, for 'P2 singleton address' value, UNCOMMENT IF PORTABLE PLOTTING!!!
+        # See 'Settings | Pools' page, for 'Pool contract address' value, UNCOMMENT IF PORTABLE PLOTTING!!!
         #pool_contract_address: REPLACE_WITH_THE_REAL_VALUE
 
         # If you enable 'chia', plot in *parallel* with higher tmpdir_max_jobs and global_max_jobs
@@ -106,7 +106,7 @@ plotting:
         chia:
                 # The stock plotter: https://github.com/Chia-Network/chia-blockchain
                 k: 32                # k-size of plot, leave at 32 most of the time
-                e: False             # Use -e plotting option
+                e: False             # Disable bitfield back sorting (default is True) 
                 n_threads: 2         # Threads per job
                 n_buckets: 128       # Number of buckets to split data into
                 job_buffer: 3389     # Per job memory

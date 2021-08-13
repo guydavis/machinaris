@@ -4,12 +4,14 @@
 
 import datetime
 import os
+import pexpect
 import psutil
 import re
 import requests
 import signal
 import shutil
 import socket
+import sys
 import time
 import traceback
 import urllib
@@ -22,10 +24,11 @@ from os import path
 
 from web import app, db, utils
 from common.models import farms as f, plots as p, challenges as c, wallets as w, \
-    blockchains as b, connections as co, keys as k, plotnfts as pn
+    blockchains as b, connections as co, keys as k, plotnfts as pn, pools as po, \
+    partials as pr
 from common.config import globals
 from web.models.chia import FarmSummary, FarmPlots, BlockchainChallenges, Wallets, \
-    Blockchains, Connections, Keys, Plotnfts
+    Blockchains, Connections, Keys, Plotnfts, Pools, Partials
 from . import worker as wk
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
@@ -40,9 +43,13 @@ def load_plots_farming():
     return FarmPlots(plots)
 
 def recent_challenges():
-    minute_ago = (datetime.datetime.now() - datetime.timedelta(seconds=80)).strftime("%Y-%m-%d %H:%M:%S.000")
-    challenges = db.session.query(c.Challenge).filter(c.Challenge.created_at >= minute_ago).order_by(c.Challenge.created_at.desc())
+    five_minutes_ago = (datetime.datetime.now() - datetime.timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S.000")
+    challenges = db.session.query(c.Challenge).filter(c.Challenge.created_at >= five_minutes_ago).order_by(c.Challenge.created_at.desc()).limit(20)
     return BlockchainChallenges(challenges)
+
+def load_partials():
+    partials = db.session.query(pr.Partial).order_by(pr.Partial.created_at.desc()).limit(10)
+    return Partials(partials)
 
 def load_wallets():
     wallets = db.session.query(w.Wallet).all()
@@ -64,6 +71,11 @@ def load_plotnfts():
     plotnfts = db.session.query(pn.Plotnft).all()
     return Plotnfts(plotnfts)
 
+def load_pools():
+    plotnfts = db.session.query(pn.Plotnft).all()
+    pools = db.session.query(po.Pool).all()
+    return Pools(pools, plotnfts)
+
 def load_farmers():
     worker_summary = wk.load_worker_summary()
     farmers = []
@@ -71,11 +83,13 @@ def load_farmers():
         if farmer in worker_summary.farmers:
             farmers.append({
                 'hostname': farmer.hostname,
+                'displayname': farmer.displayname,
                 'farming_status': farmer.farming_status().lower()
             })
         elif farmer in worker_summary.harvesters:
             farmers.append({
                 'hostname': farmer.hostname,
+                'displayname': farmer.displayname,
                 'farming_status': 'harvesting'
             })
     return farmers
@@ -312,25 +326,24 @@ def process_pool_save(choice, pool_url, current_pool_url):
             return False
         return process_pool_join(choice, pool_url, pool_wallet_id)
 
-def process_pool_leave(choice, wallet_id):
-    app.logger.info("Attempting to leave pool.")
-    proc = Popen("{0} plotnft leave -y -i {1}".format(CHIA_BINARY, wallet_id), stdout=PIPE, stderr=PIPE, shell=True)
+def process_pool_leave(choice, wallet_index):
+    cmd = "{0} plotnft leave -y -i {1}".format(CHIA_BINARY, wallet_index)
+    app.logger.info("Attempting to leave pool: {0}".format(cmd))
+    result = ""
     try:
-        outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-        app.logger.info(traceback.format_exc())
-        flash('Timed out while leaving Chia pool!', 'danger')
-        flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash('Error while leaving Chia pool.', 'danger')
-        flash(errs.decode('utf-8'), 'warning')
-        return False
-    if outs:  # Chia outputs their errors to stdout, not stderr, so must check.
-        stdout_lines = outs.decode('utf-8').splitlines()
+        child = pexpect.spawn(cmd)
+        child.logfile = sys.stdout.buffer
+        while True:
+            i = child.expect(["Choose wallet key:.*\r\n", pexpect.EOF])
+            if i == 0:
+                app.logger.info("plotnft got index prompt so selecting #{0}".format(wallet_index))
+                child.sendline("{0}".format(wallet_index))
+            elif i==1:
+                app.logger.info("plotnft end of output...")
+                result += child.before.decode("utf-8") + child.read().decode("utf-8")
+                break
+        if result:  # Chia outputs their errors to stdout, not stderr, so must check.
+            stdout_lines = result.splitlines()
         out_file = '/root/.chia/mainnet/log/plotnft.log'
         with open(out_file, 'a') as f:
             f.write("\nchia plotnft plotnft leave -y -i 1 --> Executed at: {0}\n".format(time.strftime("%Y%m%d-%H%M%S")))
@@ -342,6 +355,11 @@ def process_pool_leave(choice, wallet_id):
                 flash('Error while leaving Chia pool.', 'danger')
                 flash(line, 'warning')
                 return False
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+        print(str(child))
+        flash(str(ex), 'danger')
+        return False
     time.sleep(15)
     try: # Trigger a status update
         requests.get("http://localhost:8927/plotnfts/", timeout=5)
@@ -356,6 +374,8 @@ def process_pool_join(choice, pool_url, pool_wallet_id):
     try:
         if not pool_url.strip():
             raise Exception("Empty pool URL provided.")
+        if not pool_url.startswith('https://') and not pool_url.startswith('http://'):
+            pool_url = "https://" + pool_url
         result = urllib.parse.urlparse(pool_url)
         if result.scheme != 'https':
             raise Exception("Non-HTTPS scheme provided.")
@@ -367,37 +387,42 @@ def process_pool_join(choice, pool_url, pool_wallet_id):
         return False
     if pool_wallet_id: # Just joining a pool with existing NFT
         cmd = "{0} plotnft join -y -u {1} -i {2}".format(CHIA_BINARY, pool_url, pool_wallet_id)
+        wallet_index = pool_wallet_id
     else:  # Both creating NFT and joining pool in one setp
         cmd = "{0} plotnft create -y -u {1} -s pool".format(CHIA_BINARY, pool_url)
+        wallet_index = 1
     app.logger.info("Executing: {0}".format(cmd))
-    proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
+    result = ""
     try:
-        outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-        app.logger.info(traceback.format_exc())
-        flash('Timed out while joining Chia pool!', 'danger')
-        flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash('Error while joining Chia pool. Please double-check pool URL: {0}'.format(pool_url), 'danger')
-        flash(errs.decode('utf-8'), 'warning')
-        return False
-    if outs:  # Chia outputs their errors to stdout, not stderr, so must check.
-        stdout_lines = outs.decode('utf-8').splitlines()
-        out_file = '/root/.chia/mainnet/log/plotnft.log'
-        with open(out_file, 'a') as f:
-            f.write("\n{0} --> Executed at: {1}\n".format(cmd, time.strftime("%Y%m%d-%H%M%S")))
+        child = pexpect.spawn(cmd)
+        child.logfile = sys.stdout.buffer
+        while True:
+            i = child.expect(["Choose wallet key:.*\r\n", pexpect.EOF])
+            if i == 0:
+                app.logger.info("plotnft got index prompt so selecting #{0}".format(wallet_index))
+                child.sendline("{0}".format(wallet_index))
+            elif i==1:
+                app.logger.info("plotnft end of output...")
+                result += child.before.decode("utf-8") + child.read().decode("utf-8")
+                break
+        if result:  # Chia outputs their errors to stdout, not stderr, so must check.
+            stdout_lines = result.splitlines()
+            out_file = '/root/.chia/mainnet/log/plotnft.log'
+            with open(out_file, 'a') as f:
+                f.write("\n{0} --> Executed at: {1}\n".format(cmd, time.strftime("%Y%m%d-%H%M%S")))
+                for line in stdout_lines:
+                    f.write(line)
+                f.write("\n**********************************************************************\n")
             for line in stdout_lines:
-                f.write(line)
-            f.write("\n**********************************************************************\n")
-        for line in stdout_lines:
-            if "Error" in line:
-                flash('Error while joining Chia pool. Please double-check pool URL: {0}'.format(pool_url), 'danger')
-                flash(line, 'warning')
-                return False
+                if "Error" in line:
+                    flash('Error while joining Chia pool. Please double-check pool URL: {0}'.format(pool_url), 'danger')
+                    flash(line, 'warning')
+                    return False
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+        print(str(child))
+        flash(str(ex), 'danger')
+        return False
     time.sleep(15)
     try: # Trigger a status update
         requests.get("http://localhost:8927/plotnfts/", timeout=5)
@@ -408,26 +433,23 @@ def process_pool_join(choice, pool_url, pool_wallet_id):
     return True
 
 def process_self_pool():
-    app.logger.info("Attempting to create NFT for self-pooling.")
     cmd = "{0} plotnft create -y -s local".format(CHIA_BINARY)
-    app.logger.info("Executing: {0}".format(cmd))
-    proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
+    app.logger.info("Attempting to create NFT for self-pooling. {0}".format(cmd))
+    result = ""
     try:
-        outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-        app.logger.info(traceback.format_exc())
-        flash('Timed out while creating NFT!', 'danger')
-        flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash('Error while creating NFT.', 'danger')
-        flash(errs.decode('utf-8'), 'warning')
-        return False
-    if outs:  # Chia outputs their errors to stdout, not stderr, so must check.
-        stdout_lines = outs.decode('utf-8').splitlines()
+        child = pexpect.spawn(cmd)
+        child.logfile = sys.stdout.buffer
+        while True:
+            i = child.expect(["Choose wallet key:.*\r\n", pexpect.EOF])
+            if i == 0:
+                app.logger.info("plotnft got index prompt so selecting #{0}".format(wallet_index))
+                child.sendline("{0}".format(wallet_index))
+            elif i==1:
+                app.logger.info("plotnft end of output...")
+                result += child.before.decode("utf-8") + child.read().decode("utf-8")
+                break
+        if result:  # Chia outputs their errors to stdout, not stderr, so must check.
+            stdout_lines = result.splitlines()
         out_file = '/root/.chia/mainnet/log/plotnft.log'
         with open(out_file, 'a') as f:
             f.write("\n{0} --> Executed at: {1}\n".format(cmd, time.strftime("%Y%m%d-%H%M%S")))
@@ -439,6 +461,11 @@ def process_self_pool():
                 flash('Error while creating self-pooling NFT', 'danger')
                 flash(line, 'warning')
                 return False
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+        print(str(child))
+        flash(str(ex), 'danger')
+        return False
     time.sleep(15)
     try: # Trigger a status update
         requests.get("http://localhost:8927/plotnfts/", timeout=5)

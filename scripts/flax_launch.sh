@@ -56,10 +56,18 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
-    if [ -d /root/.flax/farmer_ca ]; then
+    if [ ! -f /root/.flax/farmer_ca/flax_ca.crt ]; then
+      mkdir -p /root/.flax/farmer_ca
+      response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8927/certificates/?type=flax --output /tmp/certs.zip)
+      if [ $response == '200' ]; then
+        unzip /tmp/certs.zip -d /root/.flax/farmer_ca
+      fi
+      rm -f /tmp/certs.zip 
+    fi
+    if [ -f /root/.flax/farmer_ca/flax_ca.crt ]; then
       flax init -c /root/.flax/farmer_ca 2>&1 > /root/.flax/mainnet/log/init.log
     else
-      echo "Did not find your farmer's ca folder at /root/.flax/farmer_ca."
+      echo "Did not find your farmer's certificates within /root/.flax/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     flax configure --set-farmer-peer ${farmer_address}:${flax_farmer_port}

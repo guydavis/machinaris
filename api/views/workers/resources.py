@@ -1,4 +1,6 @@
 import datetime as dt
+import pytz
+import os
 
 from flask.views import MethodView
 
@@ -33,6 +35,8 @@ class Workers(MethodView):
     @blp.response(201, WorkerSchema)
     def post(self, new_item):
         item = Worker.query.get(new_item['hostname'])
+        if not 'displayname' in new_item:  # Old clients use hostname
+            new_item['displayname'] = new_item['hostname']
         if item: # update
             new_item['created_at'] = item.created_at
             new_item['updated_at'] = dt.datetime.now()

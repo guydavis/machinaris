@@ -56,5 +56,8 @@ def get_hostname():
         hostname = socket.gethostname()
     return hostname
 
+def get_displayname():
+    return socket.gethostname()
+
 def is_controller():
     return app.config['CONTROLLER_HOST'] == "localhost"

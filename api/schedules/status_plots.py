@@ -37,7 +37,7 @@ def update():
                         "dir": plot['dir'],
                         "file": plot['file'],
                         "created_at": plot['created_at'],
-                        "size": plot['size'],
+                        "size": plot['size']
                     })
             if len(payload) > 0:
                 utils.send_post('/plots/', payload, debug=False)

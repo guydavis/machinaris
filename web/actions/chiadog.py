@@ -17,6 +17,7 @@ from subprocess import Popen, TimeoutExpired, PIPE
 
 from common.models import alerts as a
 from web import app, db, utils
+from web.models.chiadog import Alerts
 from . import worker as wk
 
 def load_config(farmer, blockchain):
@@ -29,6 +30,7 @@ def load_farmers():
         if (farmer in worker_summary.farmers) or (farmer in worker_summary.harvesters):
             farmers.append({
                 'hostname': farmer.hostname,
+                'displayname': farmer.displayname,
                 'monitoring_status': farmer.monitoring_status().lower()
             })
     return farmers
@@ -49,7 +51,8 @@ def save_config(farmer, blockchain, config):
         flash('Nice! Chiadog\'s config.yaml validated and saved successfully.', 'success')
 
 def get_notifications():
-    return db.session.query(a.Alert).order_by(a.Alert.created_at.desc()).all()
+    alerts = db.session.query(a.Alert).order_by(a.Alert.created_at.desc()).all()
+    return Alerts(alerts)
 
 def remove_alerts(unique_ids):
     app.logger.info("Removing {0} alerts: {1}".format(len(unique_ids), unique_ids))

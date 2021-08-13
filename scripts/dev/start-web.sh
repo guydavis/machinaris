@@ -8,10 +8,18 @@ echo 'Starting Machinaris...'
 mkdir -p /root/.chia/machinaris/logs
 cd /code/machinaris
 
-/chia-blockchain/venv/bin/gunicorn \
-    --reload \
+if [ $FLASK_ENV == "development" ];
+then
+    LOG_LEVEL='debug'
+    RELOAD='--reload'
+else
+    LOG_LEVEL='info'
+    RELOAD='--preload'
+fi
+
+/chia-blockchain/venv/bin/gunicorn ${RELOAD} \
     --bind 0.0.0.0:8926 \
     --timeout 90 \
-    --log-level=info \
+    --log-level=$LOG_LEVEL \
     --workers=2 \
     web:app
