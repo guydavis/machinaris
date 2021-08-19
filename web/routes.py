@@ -32,7 +32,7 @@ def index():
     challenges = chia.recent_challenges()
     partials = chia.load_partials()
     daily_diff = stats.load_daily_diff()
-    return render_template('index.html', reload_seconds=60, farming=farming.__dict__, \
+    return render_template('index.html', reload_seconds=120, farming=farming.__dict__, \
         plotting=plotting.__dict__, challenges=challenges, workers=workers, 
         daily_diff=daily_diff, partials=partials, global_config=gc)
 
@@ -62,8 +62,8 @@ def setup():
 def controller():
     return render_template('controller.html', controller_url = utils.get_controller_web())
 
-@app.route('/plotting', methods=['GET', 'POST'])
-def plotting():
+@app.route('/plotting/jobs', methods=['GET', 'POST'])
+def plotting_jobs():
     gc = globals.load()
     if request.method == 'POST':
         if request.form.get('action') == 'start':
@@ -89,11 +89,18 @@ def plotting():
         return redirect(url_for('plotting')) # Force a redirect to allow time to update status
     plotters = plotman.load_plotters()
     plotting = plotman.load_plotting_summary()
-    return render_template('plotting.html', reload_seconds=60,  plotting=plotting, 
+    return render_template('plotting/jobs.html', reload_seconds=120,  plotting=plotting, 
         plotters=plotters, global_config=gc)
 
-@app.route('/farming')
-def farming():
+@app.route('/plotting/workers')
+def plotting_workers():
+    gc = globals.load()
+    plotters = plotman.load_plotters()
+    disk_usage = stats.load_disk_usage('plotting')
+    return render_template('plotting/workers.html', plotters=plotters, disk_usage=disk_usage, global_config=gc)
+
+@app.route('/farming/plots')
+def farming_plots():
     if request.args.get('analyze'):  # Xhr with a plot filename
         plot_file = request.args.get('analyze')
         plotters = worker.load_worker_summary().plotters
@@ -104,11 +111,18 @@ def farming():
         return chia.check_plots(w, first_load)
     gc = globals.load()
     farmers = chia.load_farmers()
-    farming = chia.load_farm_summary()
     plots = chia.load_plots_farming()
-    daily_notifications = stats.load_daily_notifications()
-    return render_template('farming.html', farming=farming, plots=plots, 
-        farmers=farmers, daily_notifications=daily_notifications, global_config=gc)
+    return render_template('farming/plots.html', plots=plots, 
+        farmers=farmers, global_config=gc)
+
+@app.route('/farming/workers')
+def farming_workers():
+    gc = globals.load()
+    farmers = chia.load_farmers()
+    daily_summaries = stats.load_daily_farming_summaries()
+    disk_usage = stats.load_disk_usage('plots')
+    return render_template('farming/workers.html', farmers=farmers, 
+        daily_summaries=daily_summaries, disk_usage=disk_usage, global_config=gc)
 
 @app.route('/plots_check')
 def plots_check():
@@ -131,7 +145,7 @@ def alerts():
         return redirect(url_for('alerts')) # Force a redirect to allow time to update status
     farmers = chiadog.load_farmers()
     notifications = chiadog.get_notifications()
-    return render_template('alerts.html', reload_seconds=60, farmers=farmers,
+    return render_template('alerts.html', reload_seconds=120, farmers=farmers,
         notifications=notifications, global_config=gc)
 
 @app.route('/wallet')    
@@ -156,14 +170,14 @@ def workers():
         if request.form.get('action') == "prune":
             worker.prune_workers_status(request.form.getlist('hostname'))
     workers = worker.load_worker_summary()
-    return render_template('workers.html', reload_seconds=60, 
+    return render_template('workers.html', reload_seconds=120, 
         workers=workers, global_config=gc, now=gc['now'])
 
 @app.route('/network/blockchain')
 def network_blockchain():
     gc = globals.load()
     blockchains = chia.load_blockchain_show()
-    return render_template('network/blockchain.html', reload_seconds=60, 
+    return render_template('network/blockchain.html', reload_seconds=120, 
         blockchains=blockchains, global_config=gc, now=gc['now'])
 
 @app.route('/network/connections', methods=['GET', 'POST'])
@@ -175,7 +189,7 @@ def network_connections():
         else:
             app.logger.info("Unknown form action: {0}".format(request.form))
     connections = chia.load_connections_show()
-    return render_template('network/connections.html', reload_seconds=60, 
+    return render_template('network/connections.html', reload_seconds=120, 
         connections=connections, global_config=gc, now=gc['now'])
 
 def find_selected_worker(workers_summary, hostname):

@@ -24,19 +24,25 @@ def update():
             if globals.flax_enabled():
                 blockchains.append('flax')
             payload = []
+            partials_so_far = {}
             for blockchain in blockchains:
                 recent_partials = log_parser.recent_partials(blockchain)
                 for partial in recent_partials.rows:
                     app.logger.debug(partial)
-                    payload.append({
-                        "unique_id": hostname + '_' + partial['launcher_id'] + '_' + partial['created_at'],
-                        "hostname": hostname,
-                        "blockchain": blockchain,
-                        "launcher_id": partial['launcher_id'],
-                        "pool_url": partial['pool_url'],
-                        "pool_response": partial['pool_response'],
-                        "created_at": partial['created_at'],
-                    })
+                    unique_id = hostname + '_' + partial['launcher_id'] + '_' + partial['created_at']
+                    if unique_id in partials_so_far:
+                        app.logger.debug("Skipping duplicate partial: {0}".format(unique_id))
+                    else:
+                        partials_so_far[unique_id] = partial
+                        payload.append({
+                            "unique_id": unique_id,
+                            "hostname": hostname,
+                            "blockchain": blockchain,
+                            "launcher_id": partial['launcher_id'],
+                            "pool_url": partial['pool_url'],
+                            "pool_response": partial['pool_response'],
+                            "created_at": partial['created_at'],
+                        })
             app.logger.debug(payload)
             utils.send_post('/partials/', payload, debug=False)
         except:

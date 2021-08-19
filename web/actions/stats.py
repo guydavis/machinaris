@@ -3,6 +3,10 @@
 #
 
 import datetime
+from shutil import disk_usage
+import sqlite3
+
+from flask import g
 
 from common.utils import converters
 from common.models.alerts import Alert
@@ -10,6 +14,21 @@ from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalChia, Sta
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \
         StatPlottingDiskUsed, StatPlottingDiskFree
 from web import app, db, utils
+from web.actions import chia
+
+DATABASE = '/root/.chia/machinaris/dbs/stats.db'
+
+def get_stats_db():
+    db = getattr(g, '_stats_database', None)
+    if db is None:
+        db = g._stats_database = sqlite3.connect(DATABASE)
+    return db
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_stats_database', None)
+    if db is not None:
+        db.close()
 
 def load_daily_diff():
     summary = {}
@@ -92,29 +111,67 @@ def netspace_size_diff(since, blockchain):
     #app.logger.info("Result is: {0}".format(result))
     return result
 
-def load_daily_notifications():
-    summary = {}
-    # initialize defaults
-    since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
-    summary['daily_summary_chia'] = daily_notifications(since_date, 'chia')
-    summary['daily_summary_flax'] = daily_notifications(since_date, 'flax')
-    #app.logger.info(summary)
-    return summary
+class DailyWorker:
+    def __init__(self, chia_daily, flax_daily):
+        self.chia_daily = chia_daily
+        self.flax_daily = flax_daily
 
-def daily_notifications(since, blockchain):
-    result = []
+def load_daily_farming_summaries():
+    summary_by_worker = {}
+    since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
+    for wk in chia.load_farmers():
+        hostname = wk['hostname']
+        summary_by_worker[hostname] = DailyWorker(
+            daily_summaries(since_date, hostname, 'chia'), 
+            daily_summaries(since_date, hostname, 'flax'))
+    return summary_by_worker
+
+def daily_summaries(since, hostname, blockchain):
+    result = None
     try:
         #app.logger.info(since)
-        dailys = db.session.query(Alert).filter(
-                Alert.blockchain==blockchain, 
+        result = db.session.query(Alert).filter(
+                Alert.hostname==hostname, 
+                Alert.blockchain==blockchain,
                 Alert.created_at >= since,
                 Alert.priority == "LOW",
                 Alert.service == "DAILY"
-            ).order_by(Alert.created_at.desc()).all()
-        for daily in dailys:
-            #app.logger.info("{0} at {1}".format(daily.hostname, daily.created_at))
-            result.append(daily)
+            ).order_by(Alert.created_at.desc()).first()
     except Exception as ex:
-        app.logger.info("Failed to query for latest daily summary because {0}".format(str(ex)))
-    result.sort(key=lambda daily: daily.hostname, reverse=False)
+        app.logger.info("Failed to query for latest daily summary for {0} - {1} because {2}".format(
+            hostname, blockchain, str(ex)))
     return result
+
+def load_disk_usage(disk_type):
+    db = get_stats_db()
+    cur = db.cursor()
+    summary_by_worker = {}
+    value_factor = "" # Leave at GB for plotting disks
+    if disk_type == "plots":
+        value_factor = "/1024"  # Divide to TB for plots disks
+    for wk in chia.load_farmers():
+        hostname = wk['hostname']
+        paths = []
+        used = []
+        free = []
+        sql = "select path, value{0}, created_at from stat_{1}_disk_used where hostname = ? group by path having max(created_at)".format(value_factor, disk_type)
+        used_result = cur.execute(sql, [ wk['hostname'], ]).fetchall()
+        sql = "select path, value{0}, created_at from stat_{1}_disk_free where hostname = ? group by path having max(created_at)".format(value_factor, disk_type)
+        free_result =cur.execute(sql, [ wk['hostname'], ]).fetchall()
+        if len(used_result) != len(free_result):
+            app.logger.info("Found mismatched count of disk used/free stats for {0}".format(disk_type))
+        else:
+            for i in range(len(used_result)):
+                paths.append(used_result[i][0])
+                used.append(used_result[i][1])
+                if used_result[i][0] != free_result[i][0]:
+                    app.logger.info("Found misordered paths for {0} disk used/free stats: {1} and {2}".format(disk_type, used_result[i][0], free_result[i][0]))
+                    continue
+                if used_result[i][2] != free_result[i][2]:
+                    app.logger.info("Found misordered created_at for {0} disk used/free stats: {1} and {2}".format(disk_type, used_result[i][2], free_result[i][2]))
+                    continue
+                free.append(free_result[i][1])
+            if len(paths):
+                summary_by_worker[hostname] = { "paths": paths, "used": used, "free": free}
+    #app.logger.info(summary_by_worker.keys())
+    return summary_by_worker

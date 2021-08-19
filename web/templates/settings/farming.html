@@ -40,7 +40,8 @@
                 <div class="col-sm-3">
                     <select id="worker" name="worker" class="form-select">
                         {% for worker in workers %}
-                        <option {% if worker==selected_worker %}selected{% endif %}>{{ worker.hostname }}</option>
+                        <option {% if worker==selected_worker %}selected{% endif %}
+                            value="{{ worker.hostname }}">{{ worker.displayname }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -57,15 +58,9 @@
                 <textarea style="background: #D3D3D3;" class="form-control fs-6" id="config" name="config" rows="18"
                     style="height:100%;"></textarea>
             </div>
-            <div class="row g-3">
-                <div class="col-sm">
-                    <button type="submit" class="btn btn-outline-success">Save</button>
-                </div>
-                <div class="col-sm-2">
-                    <button type="button" class="text-right btn btn-outline-success"
-                        onclick="downloadConfig(); return false">Download</button>
-                </div>
-            </div>
+            <button type="submit" class="btn btn-outline-success">Save</button>
+            <button type="button" class="btn btn-outline-success"
+                onclick="downloadConfig(); return false">Download</button>
         </fieldset>
     </form>
 
@@ -96,7 +91,7 @@
             //Call the function when the page loads
             load_config("{{selected_worker.hostname}}", "{{selected_blockchain}}");
         });
-        
+
         function downloadConfig() {
             worker = $("#worker").val()
             blockchain = $("#blockchain").val()

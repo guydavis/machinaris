@@ -19,6 +19,7 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Boostrap Sidebars](https://dev.to/codeply/bootstrap-5-sidebar-examples-38pb): Used for sidebar menu layout.
 * [Toplevel](https://github.com/and-semakin/marshmallow-toplevel): Used for list of objects sent to REST API.
 * [DataTables.js](https://datatables.net/): Filter/search/pagination of dynamic tables, as per [this tutorial](https://blog.miguelgrinberg.com/post/beautiful-interactive-tables-for-your-flask-templates).
+* [Charts.js](https://www.chartjs.org/): dynamic charting library.
 
 ## Blockchain Forks
 * [Flax](https://github.com/Flax-Network/flax-blockchain)

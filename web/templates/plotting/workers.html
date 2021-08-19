@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    a.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+</style>
+<nav class="navbar navbar-dark" style="padding-bottom: 0px;">
+    <div class="container-fluid">
+        <ul class="nav nav-tabs bg-dark">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('plotting_jobs') }}">Plots</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('plotting_workers') }}">Workers</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+        {% else %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {% endif %}
+            {{ message|safe }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="p-1 mb-4 bg-light border rounded-3">
+        {% for plotter in plotters %}
+        <div class="row">
+            <div class="col" style="margin-top:5px; margin-bottom:5px;">
+                <div class="h-100 p-2 text-white">
+                    <h6 class="display-6 text-center">{{ plotter.hostname }}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12" style="margin-top:5px; margin-bottom:5px;">
+                <canvas id="disk_{{plotter.hostname}}"></canvas>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% endblock %}
+
+    {% block scripts %}
+    {% for plotter in plotters %}
+    {% if disk_usage[plotter.hostname] %}
+    <script>
+        var ctx = document.getElementById('disk_{{plotter.hostname}}');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ disk_usage[plotter.hostname].paths|safe }},
+                datasets: [{
+                    label: "Disk Space Used (GB)",
+                    data: {{ disk_usage[plotter.hostname].used|safe }},
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                },
+                {
+                    label: 'Disk Space Free (GB)',
+                    data: {{ disk_usage[plotter.hostname].free|safe }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                }],
+            },
+            borderWidth: 1,
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+    {% endif %}
+    {% endfor %}
+    {% endblock %}
