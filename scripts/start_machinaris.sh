@@ -53,7 +53,7 @@ then
     RELOAD='--reload'
 else
     LOG_LEVEL='info'
-    RELOAD='--preload'
+    RELOAD=''
 fi
 
 # Kill gunicorn if already running to allow restart

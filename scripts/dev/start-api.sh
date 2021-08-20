@@ -14,7 +14,7 @@ then
     RELOAD='--reload'
 else
     LOG_LEVEL='info'
-    RELOAD='--preload'
+    RELOAD=''
 fi
 
 # To enable SSL, use the Chia self-signed cert

@@ -191,9 +191,22 @@ def load_config(plotter):
         #app.logger.info("Return false for replaced.")
         return [ False, '\n'.join(lines) ]
 
+def inspect_config(hostname, config):
+    if 'plotting' in config:
+        if 'pool_contract_address' in config['plotting']:
+            app.logger.info("Saving config to {0}, found pool_contract_address {1}".format(
+                hostname, config['plotting']['pool_contract_address']))
+        elif 'pool_pk' in config['plotting']:
+            app.logger.info("Saving config to {0}, found pool_pk {1}".format(
+                hostname, config['plotting']['pool_pk']))
+            flash('Current configuration will plot <b>SOLO</b> plots, not <b>PORTABLE</b> plots for pooling. If this is not your choice, please see the <a href="https://github.com/guydavis/machinaris/wiki/Pooling#setup-and-config">wiki</a>.', 'message')
+    else:
+         app.logger.info("Saving config to {0}, found a malformed config without a 'plotting' section.")
+
 def save_config(plotter, config):
     try: # Validate the YAML first
-        yaml.safe_load(config)
+        c = yaml.safe_load(config)
+        inspect_config(plotter.hostname, c)
     except Exception as ex:
         app.logger.info(traceback.format_exc())
         flash('Updated plotman.yaml failed validation! Fix and save or refresh page.', 'danger')

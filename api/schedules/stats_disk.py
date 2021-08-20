@@ -12,7 +12,8 @@ import traceback
 from flask import g
 
 from common.config import globals
-from api import app
+from common.models import stats
+from api import app, utils
 
 DATABASE = '/root/.chia/machinaris/dbs/stats.db'
 
@@ -89,3 +90,25 @@ def collect():
         store_disk_stats(db, current_datetime, 'plots')
         if gc['plotting_enabled']:
             store_disk_stats(db, current_datetime, 'plotting')
+            if not gc['is_controller']: 
+                send_stats(stats.StatPlottingDiskUsed, '/stats/plottingdiskused')
+                send_stats(stats.StatPlottingDiskFree, '/stats/plottingdiskfree')
+                send_stats(stats.StatPlotsDiskUsed, '/stats/plotsdiskused')
+                send_stats(stats.StatPlotsDiskFree, '/stats/plotsdiskfree')
+
+def send_stats(model, endpoint):
+    from api import db
+    try:
+        hostname = utils.get_displayname()
+        payload = []
+        for stat in db.session.query(model).all():
+            payload.append({
+                "hostname": stat.hostname,
+                "path": stat.path,
+                "value": stat.value,
+                "created_at": stat.created_at,
+            })
+        utils.send_post(endpoint, payload, debug=False)
+    except:
+        app.logger.info("Failed to load recent {0} stats and send.".format(endpoint))
+        app.logger.info(traceback.format_exc())

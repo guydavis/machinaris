@@ -36,6 +36,7 @@ class Partials:
     def __init__(self, cli_stdout):
         self.columns = [ 'challenge_id', 'plots_past_filter', 'proofs_found', 'time_taken', 'created_at']
         self.rows = []
+        launcher_id = None
         for line in cli_stdout:
             try:
                 if "Submitting partial" in line:
@@ -43,7 +44,7 @@ class Partials:
                     created_at = line.split()[0].replace('T', ' ')
                     launcher_id = re.search('partial for (\w+) to', line, re.IGNORECASE).group(1)
                     pool_url = re.search('to (.*)$', line, re.IGNORECASE).group(1)
-                elif "Pool response" in line:
+                elif "Pool response" in line and launcher_id:
                     pool_response = line[line.index('{'):]
                     self.rows.append({
                         'launcher_id': launcher_id,
@@ -51,6 +52,9 @@ class Partials:
                         'pool_response': pool_response,
                         'created_at': created_at
                     })
+                    created_at = None
+                    launcher_id = None
+                    pool_url = None
             except:
                 app.logger.info("Failed to parse partial line: {0}".format(line))
                 app.logger.info(traceback.format_exc())

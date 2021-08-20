@@ -14,7 +14,7 @@ then
     RELOAD='--reload'
 else
     LOG_LEVEL='info'
-    RELOAD='--preload'
+    RELOAD=''
 fi
 
 /chia-blockchain/venv/bin/gunicorn ${RELOAD} \
