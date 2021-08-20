@@ -56,37 +56,51 @@
     {% endblock %}
 
     {% block scripts %}
+    <script>
+        const COLORS = [
+        '#3aac59',
+        '#4dc9f6',
+        '#f67019',
+        '#f53794',
+        '#537bc4',
+        '#acc236',
+        '#166a8f',
+        '#00a950',
+        '#58595b',
+        '#8549ba'
+        ];
+
+        function color(index) {
+        return COLORS[index % COLORS.length];
+        }
+    </script>
     {% for plotter in plotters %}
     {% if disk_usage[plotter.hostname] %}
     <script>
         var ctx = document.getElementById('disk_{{plotter.hostname}}');
         var myChart = new Chart(ctx, {
-            type: 'bar',
+            type: 'line',
             data: {
-                labels: {{ disk_usage[plotter.hostname].paths|safe }},
-                datasets: [{
-                    label: "Disk Space Used (GB)",
-                    data: {{ disk_usage[plotter.hostname].used|safe }},
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                },
+                labels: {{ disk_usage[plotter.hostname].dates|safe }},
+                datasets: [
+                {% for path in disk_usage[plotter.hostname].paths %}
                 {
-                    label: 'Disk Space Free (GB)',
-                    data: {{ disk_usage[plotter.hostname].free|safe }},
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                }],
+                    label: "{{path}}",
+                    data: {{ disk_usage[plotter.hostname][path]|safe }},
+                    backgroundColor: color({{loop.index-1}}),
+                },
+                {% endfor %}
+                ],
             },
             borderWidth: 1,
             options: {
-                responsive: true,
                 scales: {
-                    x: {
-                        stacked: true,
-                    },
                     y: {
-                        stacked: true,
-                        beginAtZero: true
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "Plotting Disk Usage (GB)",
+                        }
                     }
                 }
             }

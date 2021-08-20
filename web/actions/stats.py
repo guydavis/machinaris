@@ -142,7 +142,40 @@ def daily_summaries(since, hostname, blockchain):
             hostname, blockchain, str(ex)))
     return result
 
-def load_disk_usage(disk_type):
+def load_recent_disk_usage(disk_type):
+    db = get_stats_db()
+    cur = db.cursor()
+    summary_by_worker = {}
+    value_factor = "" # Leave at GB for plotting disks
+    if disk_type == "plots":
+        value_factor = "/1024"  # Divide to TB for plots disks
+    for wk in chia.load_farmers():
+        hostname = wk['hostname']
+        dates = []
+        paths = {}
+        sql = "select path, value{0}, created_at from stat_{1}_disk_used where hostname = ? order by created_at, path".format(value_factor, disk_type)
+        used_result = cur.execute(sql, [ wk['hostname'], ]).fetchall()
+        for used_row in used_result:
+            if not used_row[2] in dates:
+                dates.append(used_row[2])
+            if not used_row[0] in paths:
+                paths[used_row[0]] = {}
+            values = paths[used_row[0]]
+            values[used_row[2]] = used_row[1]
+        if len(dates) > 0:
+            summary_by_worker[hostname] = { "dates": dates, "paths": paths.keys(),  }
+            for path in paths.keys():
+                path_values = []
+                for date in dates:
+                    if path in paths:
+                        path_values.append(paths[path][date])
+                    else:
+                        path_values.append('null')
+                summary_by_worker[hostname][path] = path_values
+    app.logger.info(summary_by_worker.keys())
+    return summary_by_worker
+
+def load_current_disk_usage(disk_type):
     db = get_stats_db()
     cur = db.cursor()
     summary_by_worker = {}
@@ -161,16 +194,13 @@ def load_disk_usage(disk_type):
         if len(used_result) != len(free_result):
             app.logger.info("Found mismatched count of disk used/free stats for {0}".format(disk_type))
         else:
-            for i in range(len(used_result)):
-                paths.append(used_result[i][0])
-                used.append(used_result[i][1])
-                if used_result[i][0] != free_result[i][0]:
-                    app.logger.info("Found misordered paths for {0} disk used/free stats: {1} and {2}".format(disk_type, used_result[i][0], free_result[i][0]))
-                    continue
-                if used_result[i][2] != free_result[i][2]:
-                    app.logger.info("Found misordered created_at for {0} disk used/free stats: {1} and {2}".format(disk_type, used_result[i][2], free_result[i][2]))
-                    continue
-                free.append(free_result[i][1])
+            for used_row in used_result:
+                paths.append(used_row[0])
+                used.append(used_row[1])
+                for free_row in free_result:
+                    if used_row[0] == free_row[0]:
+                        free.append(free_row[1])
+                        continue
             if len(paths):
                 summary_by_worker[hostname] = { "paths": paths, "used": used, "free": free}
     #app.logger.info(summary_by_worker.keys())

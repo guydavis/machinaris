@@ -96,7 +96,7 @@ def plotting_jobs():
 def plotting_workers():
     gc = globals.load()
     plotters = plotman.load_plotters()
-    disk_usage = stats.load_disk_usage('plotting')
+    disk_usage = stats.load_recent_disk_usage('plotting')
     return render_template('plotting/workers.html', plotters=plotters, disk_usage=disk_usage, global_config=gc)
 
 @app.route('/farming/plots')
@@ -120,7 +120,7 @@ def farming_workers():
     gc = globals.load()
     farmers = chia.load_farmers()
     daily_summaries = stats.load_daily_farming_summaries()
-    disk_usage = stats.load_disk_usage('plots')
+    disk_usage = stats.load_current_disk_usage('plots')
     return render_template('farming/workers.html', farmers=farmers, 
         daily_summaries=daily_summaries, disk_usage=disk_usage, global_config=gc)
 
