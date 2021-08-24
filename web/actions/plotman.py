@@ -26,8 +26,12 @@ PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 # Don't query plotman unless at least this long since last time.
 RELOAD_MINIMUM_SECS = 30
 
-def load_plotting_summary():
-    plottings = db.session.query(pl.Plotting).all()
+def load_plotting_summary(hostname=None):
+    query = db.session.query(pl.Plotting)
+    if hostname:
+        plottings = query.filter(pl.Plotting.hostname==hostname)
+    else:
+        plottings = query.all()
     return PlottingSummary(plottings)
 
 def load_plotters():

@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="position-relative">
+  <div class="position-absolute top-0 end-0">
+    <a href="https://github.com/guydavis/machinaris/wiki/Workers" target="_blank">
+      <i class="fs-4 bi-question-circle"></i>
+    </a>
+  </div>
+</div>
+
+<header class="pb-3 mb-4 border-bottom">
+  <span class="fs-4">Worker - {{ worker.hostname }}</span>
+</header>
+
+<div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  {% if category == 'message' %}
+  <div class="alert alert-warning" role="alert">
+    {% else %}
+    <div class="alert alert-{{ category }}" role="alert">
+      {% endif %}
+      {{ message|safe }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+  </div>
+
+  <div class="row" style="padding-left: 1em; padding-right: 1em; ">
+    <div class="col mb-4 bg-light border rounded-3" style="margin-right: 1em">
+      <div class="fs-4">Details</div>
+      <table id="worker" class="table table-dark">
+        <tbody>
+          <tr>
+            <th scope="col" class="text-success">Hostname</th>
+            <td>{{worker.hostname}}</td>
+          </tr>
+          <tr>
+            <th scope="col" class="text-success">Display Name</th>
+            <td>{{worker.displayname}}</td>
+          </tr>
+          <tr>
+            <th scope="col" class="text-success">System Type</th>
+            <td>{{worker.mode}}</td>
+          </tr>
+          <tr>
+            <th scope="col" class="text-success">Last Status Received At</th>
+            <td>{{worker.updated_at | datetimefilter}}</td>
+          </tr>
+          <tr>
+            <th scope="col" class="text-success">Time on Worker</th>
+            <td>{{worker.time_on_worker}}</td>
+          </tr>
+          <tr>
+            <th scope="col" class="text-success">Last Ping to Worker</th>
+            <td>{{worker.latest_ping_result}}</td>
+          </tr>
+          <tr>
+            <th scope="col" class="text-success">Last Successful Ping to Worker</th>
+            <td>{{worker.ping_success_at | datetimefilter}}</td>
+          </tr>
+          <tr>
+            <th scope="col" class="text-success">Version</th>
+            <td><a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true"
+                title="{{worker.versions.components}}">{{worker.versions.machinaris}}</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col mb-4 bg-light border rounded-3">
+      <div class="fs-4">Recent Warnings</div>
+      <table id="worker" class="table table-dark">
+        <tbody>
+          {% if warnings|length > 0 %}
+          {% for warning in warnings %}
+          <tr>
+            <td>{{warning.title}} {{warning.message|safe}}</td>
+          </tr>
+          {% endfor %}
+          {% else %}
+          <tr>
+            <td>Yay! No warnings currently.</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="p-3 mb-4 bg-light border rounded-3">
+    <div class="fs-4">Plots</div>
+    <canvas id="plots_disk" width="400" style="padding-bottom:10px"></canvas>
+    <div class="table-responsive">
+      <table id="plots" class="table table-dark">
+        <thead>
+          <tr>
+            {% for column in plots.columns %}
+            <th scope="col" class="text-success">{{ column }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in plots.rows %}
+          <tr>
+            {% for column in plots.columns %}
+            {% if column == "size" %}
+            <td>{{ row[column] | bytesfilter}}</td>
+            {% elif column == "plot" %}
+            <td>{{ row[column] | plotnameshortener}}</td>
+            {% else %}
+            <td>{{ row[column] }}</td>
+            {% endif %}
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="p-3 mb-4 bg-light border rounded-3">
+    <div class="fs-4">Plotting</div>
+    <canvas id="plotting_disk" width="400" style="padding-bottom:10px"></canvas>
+    <div class="table-responsive">
+      <table id="plotting" class="table table-dark">
+        <thead>
+          <tr>
+            {% for column in plotting.columns %}
+            <th scope="col" class="text-success">{{ column }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in plotting.rows %}
+          <tr>
+            {% for column in plotting.columns %}
+            <td>{{ row[column] }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% endblock %}
+
+  {% block scripts %}
+  <script>
+    $(document).ready(function () {
+      $('#plots').DataTable({
+        "pageLength": 10,
+        "order": [[5, "desc"]]
+      });
+      $('#plotting').DataTable({ "ordering": false, });
+      $('[data-toggle="tooltip"]').tooltip();
+    })
+    {% if plots_disk_usage[worker.hostname] %}
+    var ctx = document.getElementById('plots_disk');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{ plots_disk_usage[worker.hostname].paths | safe }},
+    datasets: [{
+      label: "Disk Space Used (TB)",
+      data: {{ plots_disk_usage[worker.hostname].used | safe }},
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgba(255, 99, 132, 1)',
+                },
+    {
+      label: 'Disk Space Free (TB)',
+      data: {{ plots_disk_usage[worker.hostname].free | safe }},
+      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      borderColor: 'rgba(54, 162, 235, 1)',
+                }],
+            },
+    borderWidth: 1,
+      options: {
+      responsive: true,
+        scales: {
+        x: {
+          stacked: true,
+                        },
+        y: {
+          stacked: true,
+            beginAtZero: true
+        }
+      }
+    }
+    });
+    {% endif %}
+    {% if plotting_disk_usage[worker.hostname] %}
+    var ctx = document.getElementById('plotting_disk');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{ plotting_disk_usage[worker.hostname].paths | safe }},
+    datasets: [{
+      label: "Disk Space Used (TB)",
+      data: {{ plotting_disk_usage[worker.hostname].used | safe }},
+      backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      borderColor: 'rgba(255, 99, 132, 1)',
+                },
+    {
+      label: 'Disk Space Free (TB)',
+      data: {{ plotting_disk_usage[worker.hostname].free | safe }},
+      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      borderColor: 'rgba(54, 162, 235, 1)',
+                }],
+            },
+    borderWidth: 1,
+      options: {
+      responsive: true,
+        scales: {
+        x: {
+          stacked: true,
+                        },
+        y: {
+          stacked: true,
+            beginAtZero: true
+        }
+      }
+    }
+    });
+    {% endif %}
+  </script>
+  {% endblock %}
