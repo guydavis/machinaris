@@ -169,9 +169,23 @@ def workers():
     if request.method == 'POST':
         if request.form.get('action') == "prune":
             worker.prune_workers_status(request.form.getlist('hostname'))
-    workers = worker.load_worker_summary()
+    wkrs = worker.load_worker_summary()
     return render_template('workers.html', reload_seconds=120, 
-        workers=workers, global_config=gc, now=gc['now'])
+        workers=wkrs, global_config=gc, now=gc['now'])
+
+@app.route('/worker', methods=['GET'])
+def worker_route():
+    gc = globals.load()
+    hostname=request.args.get('hostname')
+    wkr = worker.load_worker_summary(hostname=hostname).workers[0]
+    plots = chia.load_plots_farming(hostname=hostname)
+    plotting = plotman.load_plotting_summary(hostname=hostname)
+    plots_disk_usage = stats.load_current_disk_usage('plots',hostname=hostname)
+    plotting_disk_usage = stats.load_current_disk_usage('plotting',hostname=hostname)
+    warnings = worker.generate_warnings(wkr, plots)
+    return render_template('worker.html', worker=wkr, 
+        plots=plots, plotting=plotting, plots_disk_usage=plots_disk_usage, 
+        plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc)
 
 @app.route('/network/blockchain')
 def network_blockchain():

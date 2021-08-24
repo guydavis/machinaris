@@ -38,7 +38,7 @@
         function load_plots_check(first_load=false) {
             var output = document.getElementById('output');
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', "{{ url_for('farming') }}?hostname="+ get('hostname') + "&check=plots&first_load="+first_load);
+            xhr.open('GET', "{{ url_for('farming_plots') }}?hostname="+ get('hostname') + "&check=plots&first_load="+first_load);
             xhr.send();
             xhr.onload = function () {
                 output.textContent = xhr.responseText;

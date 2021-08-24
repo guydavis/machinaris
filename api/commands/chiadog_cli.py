@@ -61,9 +61,12 @@ def dispatch_action(job):
     else:
         raise Exception("Unsupported action {0} for monitoring.".format(action))
 
-def start_chiadog():
+def start_chiadog(chain = None):
     #app.logger.info("Starting monitoring....")
-    blockchains = [ b.strip() for b in os.environ['blockchains'].split(',') ]
+    if chain:
+        blockchains = [ chain ]
+    else:
+        blockchains = [ b.strip() for b in os.environ['blockchains'].split(',') ]
     for blockchain in blockchains:
         try:
             workdir = "/{0}dog".format(blockchain)

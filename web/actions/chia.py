@@ -38,8 +38,12 @@ def load_farm_summary():
     farms = db.session.query(f.Farm).order_by(f.Farm.hostname).all()
     return FarmSummary(farms)
 
-def load_plots_farming():
-    plots = db.session.query(p.Plot).order_by(p.Plot.created_at.desc()).all()
+def load_plots_farming(hostname=None):
+    query = db.session.query(p.Plot).order_by(p.Plot.created_at.desc())
+    if hostname:
+        plots = query.filter(p.Plot.hostname==hostname)
+    else:
+        plots = query.all()
     return FarmPlots(plots)
 
 def recent_challenges():

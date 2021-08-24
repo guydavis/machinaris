@@ -50,9 +50,9 @@
           <tr>
             <td class="text-center"><input type="checkbox" name="hostname" value="{{ worker.hostname }}" />
             {% if worker.hostname == worker.displayname %}
-              <td>{{worker.displayname}}</td>
+              <td><a class="text-white" href="{{ url_for('worker_route') }}?hostname={{worker.hostname}}">{{worker.displayname}}</a></td>
             {% else %} 
-              <td><a data-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
+              <td><a class="text-white" href="{{ url_for('worker_route') }}?hostname={{worker.hostname}}" data-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
                 title="Pinged at: {{worker.hostname}}">{{worker.displayname}}</a></td>
             {% endif %}
             <td>{{worker.mode}}</td>

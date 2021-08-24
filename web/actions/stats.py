@@ -47,23 +47,23 @@ def plot_count_diff(since):
     result = ''
     try:
         latest = db.session.query(StatPlotCount).order_by(StatPlotCount.created_at.desc()).limit(1).first()
-        #app.logger.info(latest.value)
+        #app.logger.debug(latest.value)
         before = db.session.query(StatPlotCount).filter(StatPlotCount.created_at <= since).order_by(StatPlotCount.created_at.desc()).limit(1).first()
-        #app.logger.info(before.value)
+        #app.logger.debug(before.value)
         if (latest.value - before.value) != 0:
             result = "%+0g in last day." % (latest.value - before.value)
     except Exception as ex:
-        app.logger.info("Failed to query for day diff of plot_count because {0}".format(str(ex)))
-    #app.logger.info("Result is: {0}".format(result))
+        app.logger.debug("Failed to query for day diff of plot_count because {0}".format(str(ex)))
+    #app.logger.debug("Result is: {0}".format(result))
     return result
 
 def plots_size_diff(since):
     result = ''
     try:
         latest = db.session.query(StatPlotsSize).order_by(StatPlotsSize.created_at.desc()).limit(1).first()
-        #app.logger.info(latest.value)
+        #app.logger.debug(latest.value)
         before = db.session.query(StatPlotsSize).filter(StatPlotsSize.created_at <= since).order_by(StatPlotsSize.created_at.desc()).limit(1).first()
-        #app.logger.info(before.value)
+        #app.logger.debug(before.value)
         gibs = (latest.value - before.value)
         fmtted = converters.gib_to_fmt(gibs)
         if fmtted == "0.000 B":
@@ -73,31 +73,31 @@ def plots_size_diff(since):
         else:
             result = fmtted
     except Exception as ex:
-        app.logger.info("Failed to query for day diff of plots_size because {0}".format(str(ex)))
-    #app.logger.info("Result is: {0}".format(result))
+        app.logger.debug("Failed to query for day diff of plots_size because {0}".format(str(ex)))
+    #app.logger.debug("Result is: {0}".format(result))
     return result
 
 def total_coin_diff(since, blockchain):
     result = ''
     try:
         latest = db.session.query(StatTotalChia).filter(StatTotalChia.blockchain==blockchain).order_by(StatTotalChia.created_at.desc()).limit(1).first()
-        #app.logger.info(latest.value)
+        #app.logger.debug(latest.value)
         before = db.session.query(StatTotalChia).filter(StatTotalChia.blockchain==blockchain, StatTotalChia.created_at <= since).order_by(StatTotalChia.created_at.desc()).limit(1).first()
-        #app.logger.info(before.value)
+        #app.logger.debug(before.value)
         if (latest.value - before.value) != 0:
             result = "%+6g in last day." % (latest.value - before.value)
     except Exception as ex:
-        app.logger.info("Failed to query for day diff of total_chia because {0}".format(str(ex)))
-    #app.logger.info("Result is: {0}".format(result))
+        app.logger.debug("Failed to query for day diff of total_chia because {0}".format(str(ex)))
+    #app.logger.debug("Result is: {0}".format(result))
     return result
 
 def netspace_size_diff(since, blockchain):
     result = ''
     try:
         latest = db.session.query(StatNetspaceSize).filter(StatNetspaceSize.blockchain==blockchain).order_by(StatNetspaceSize.created_at.desc()).limit(1).first()
-        #app.logger.info(latest.value)
+        #app.logger.debug(latest.value)
         before = db.session.query(StatNetspaceSize).filter(StatNetspaceSize.blockchain==blockchain, StatNetspaceSize.created_at <= since).order_by(StatNetspaceSize.created_at.desc()).limit(1).first()
-        #app.logger.info(before.value)
+        #app.logger.debug(before.value)
         gibs = (latest.value - before.value)
         fmtted = converters.gib_to_fmt(gibs)
         if fmtted == "0.000 B":
@@ -107,8 +107,8 @@ def netspace_size_diff(since, blockchain):
         else:
             result = "{0} in last day.".format(fmtted)
     except Exception as ex:
-        app.logger.info("Failed to query for day diff of netspace_size because {0}".format(str(ex)))
-    #app.logger.info("Result is: {0}".format(result))
+        app.logger.debug("Failed to query for day diff of netspace_size because {0}".format(str(ex)))
+    #app.logger.debug("Result is: {0}".format(result))
     return result
 
 class DailyWorker:
@@ -129,7 +129,7 @@ def load_daily_farming_summaries():
 def daily_summaries(since, hostname, blockchain):
     result = None
     try:
-        #app.logger.info(since)
+        #app.logger.debug(since)
         result = db.session.query(Alert).filter(
                 Alert.hostname==hostname, 
                 Alert.blockchain==blockchain,
@@ -138,7 +138,7 @@ def daily_summaries(since, hostname, blockchain):
                 Alert.service == "DAILY"
             ).order_by(Alert.created_at.desc()).first()
     except Exception as ex:
-        app.logger.info("Failed to query for latest daily summary for {0} - {1} because {2}".format(
+        app.logger.debug("Failed to query for latest daily summary for {0} - {1} because {2}".format(
             hostname, blockchain, str(ex)))
     return result
 
@@ -172,10 +172,10 @@ def load_recent_disk_usage(disk_type):
                     else:
                         path_values.append('null')
                 summary_by_worker[hostname][path] = path_values
-    app.logger.info(summary_by_worker.keys())
+    app.logger.debug(summary_by_worker.keys())
     return summary_by_worker
 
-def load_current_disk_usage(disk_type):
+def load_current_disk_usage(disk_type, hostname=None):
     db = get_stats_db()
     cur = db.cursor()
     summary_by_worker = {}
@@ -183,7 +183,8 @@ def load_current_disk_usage(disk_type):
     if disk_type == "plots":
         value_factor = "/1024"  # Divide to TB for plots disks
     for wk in chia.load_farmers():
-        hostname = wk['hostname']
+        if hostname and hostname != wk['hostname']:
+            continue
         paths = []
         used = []
         free = []
@@ -192,7 +193,7 @@ def load_current_disk_usage(disk_type):
         sql = "select path, value{0}, created_at from stat_{1}_disk_free where hostname = ? group by path having max(created_at)".format(value_factor, disk_type)
         free_result =cur.execute(sql, [ wk['hostname'], ]).fetchall()
         if len(used_result) != len(free_result):
-            app.logger.info("Found mismatched count of disk used/free stats for {0}".format(disk_type))
+            app.logger.debug("Found mismatched count of disk used/free stats for {0}".format(disk_type))
         else:
             for used_row in used_result:
                 paths.append(used_row[0])
@@ -202,6 +203,6 @@ def load_current_disk_usage(disk_type):
                         free.append(free_row[1])
                         continue
             if len(paths):
-                summary_by_worker[hostname] = { "paths": paths, "used": used, "free": free}
-    #app.logger.info(summary_by_worker.keys())
+                summary_by_worker[wk['hostname']] = { "paths": paths, "used": used, "free": free}
+    #app.logger.debug(summary_by_worker.keys())
     return summary_by_worker
