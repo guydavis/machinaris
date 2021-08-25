@@ -28,7 +28,7 @@ from common.models import farms as f, plots as p, challenges as c, wallets as w,
     partials as pr
 from common.config import globals
 from web.models.chia import FarmSummary, FarmPlots, Wallets, \
-    Blockchains, Connections, Keys, Plotnfts, Pools, Partials, \
+    Blockchains, Connections, Keys, Plotnfts, Pools, PartialsChartData, \
     ChallengesChartData
 from . import worker as wk
 
@@ -51,9 +51,10 @@ def challenges_chart_data():
     challenges = db.session.query(c.Challenge).order_by(c.Challenge.created_at.desc(), c.Challenge.hostname, c.Challenge.blockchain).all()
     return ChallengesChartData(challenges)
 
-def load_partials():
-    partials = db.session.query(pr.Partial).order_by(pr.Partial.created_at.desc()).limit(10)
-    return Partials(partials)
+def partials_chart_data():
+    day_ago = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:00:00.000")
+    partials = db.session.query(pr.Partial).filter(pr.Partial.created_at >= day_ago).order_by(pr.Partial.created_at.desc()).limit(10)
+    return PartialsChartData(partials)
 
 def load_wallets():
     wallets = db.session.query(w.Wallet).all()

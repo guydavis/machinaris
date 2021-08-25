@@ -8,10 +8,22 @@ import traceback
 from flask import g
 
 from common.config import globals
+from common.models import partials as p
 from common.utils import converters
 from api import app
 from api.commands import log_parser
 from api import utils
+
+def delete_old_partials(db):
+    try:
+        cutoff = datetime.datetime.now() - datetime.timedelta(days=1)
+        cutoff_str = "{0}".format(cutoff.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3])
+        #app.logger.info("Purging old partials earlier than {0}".format(cutoff_str))
+        db.session.query(p.Partial).filter(p.Partial.created_at < cutoff_str).delete()
+        db.session.commit()
+    except:
+        app.logger.info("Failed to delete old partials.")
+        app.logger.info(traceback.format_exc())
 
 def update():
     if not globals.farming_enabled() and not globals.harvesting_enabled():
@@ -19,6 +31,9 @@ def update():
         return
     with app.app_context():
         try:
+            from api import db
+            if globals.load()['is_controller']:
+                delete_old_partials(db)
             hostname = utils.get_hostname()
             blockchains = ['chia']
             if globals.flax_enabled():

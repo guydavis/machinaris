@@ -30,11 +30,12 @@ def index():
     farming = chia.load_farm_summary()
     plotting = plotman.load_plotting_summary()
     challenges_chart_data = chia.challenges_chart_data()
-    partials = chia.load_partials()
+    partials_chart_data = chia.partials_chart_data()
     daily_diff = stats.load_daily_diff()
     return render_template('index.html', reload_seconds=120, farming=farming.__dict__, \
-        plotting=plotting.__dict__, workers=workers, daily_diff=daily_diff, partials=partials, 
-        challenges_chart_data=challenges_chart_data, global_config=gc)
+        plotting=plotting.__dict__, workers=workers, daily_diff=daily_diff, \
+        partials_chart_data=partials_chart_data, challenges_chart_data=challenges_chart_data, \
+        global_config=gc)
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
