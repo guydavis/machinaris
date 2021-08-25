@@ -48,8 +48,7 @@ def load_farm_summary(blockchain):
             proc.communicate()
             abort(500, description="The timeout is expired!")
         if errs:
-            app.logger.info("Failed to load chia farm summary at.")
-            app.logger.info(traceback.format_exc())
+            app.logger.debug("Error from {0} farm summary because {1}".format(blockchain, outs.decode('utf-8')))
         farm_summary = chia.FarmSummary(cli_stdout=outs.decode('utf-8').splitlines())
     else:  # Just get plot count and size
         farm_summary = chia.FarmSummary(farm_plots=load_plots_farming())

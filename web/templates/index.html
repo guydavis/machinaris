@@ -163,7 +163,7 @@
           data: {
               labels: {{ challenges_chart_data.labels | safe }},
               datasets: [
-              {% for key in challenges_chart_data.data %}
+              {% for key in challenges_chart_data.data | sort %}
                   {
                       label: "{{key}}",
                       data: {{ challenges_chart_data.data[key] | safe }},

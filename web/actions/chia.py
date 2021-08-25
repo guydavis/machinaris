@@ -193,7 +193,7 @@ def generate_key(key_path):
                 return False
         flash('Welcome! A new key has been generated at {0} within the container filesystem. See the '.format(key_path) + \
         '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
-            'details.', 'success')
+            'details.  Please allow 5-10 minutes for Chia to begin syncing to peers...', 'success')
         flash('{0}'.format(" ".join(mnemonic_words)), 'info')
     if os.environ['mode'].startswith('farmer'):
         cmd = 'farmer-only'
