@@ -32,6 +32,12 @@ def str_to_gibs(str):
         print(traceback.format_exc())
         return None
 
+def convert_date_for_luxon(datestr):
+    year = datestr[:4]
+    month = datestr[4:6]
+    day = datestr[6:8]
+    time = datestr[8:]
+    return "{0}-{1}-{2}T{3}".format(year, month, day, time)
 
 
 

@@ -120,7 +120,7 @@
   {% if global_config.farming_enabled %}
   <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
     <div class="h-100 p-2 text-white bg-dark rounded-3" id="challenges-table-div">
-      {% include 'views/challenges.html' %}
+      <canvas id="challenges_chart"></canvas>
     </div>
   </div>
   {% endif %}
@@ -160,20 +160,70 @@
   {% block scripts %}
   {% if global_config.farming_enabled %}
   <script>
+    const COLORS = [
+        '#3aac59',
+        '#4dc9f6',
+        '#f67019',
+        '#f53794',
+        '#537bc4',
+        '#acc236',
+        '#166a8f',
+        '#00a950',
+        '#58595b',
+        '#8549ba'
+    ];
+
+    function color(index) {
+        return COLORS[index % COLORS.length];
+    }
+
     $(document).ready(function () {
-      setInterval(function () {
-        $.ajax({
-          type: "GET",
-          url: "{{ url_for('views_challenges') }}",
-        })
-          .done(function (data) {
-            //console.log(data);
-            $("#challenges-table-div").html(data)
-          }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR, textStatus, errorThrown);
-          });
-      }, 1000 * 5);
       $('[data-toggle="tooltip"]').tooltip();
+
+      var ctx = document.getElementById('challenges_chart');
+      var myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+              labels: {{ challenges_chart_data.labels | safe }},
+              datasets: [
+              {% for key in challenges_chart_data.data %}
+                  {
+                      label: "{{key}}",
+                      data: {{ challenges_chart_data.data[key] | safe }},
+                      backgroundColor: color({{ loop.index - 1 }}),
+                  },
+              {% endfor %}
+              ],
+          },
+          borderWidth: 1,
+          options: {
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Blockchain Challenges',
+                }
+              },
+              scales: {
+                  x: {
+                      type: 'time',
+                      time: {
+                          tooltipFormat: 'DD T'
+                      },
+                      title: {
+                          display: true,
+                          text: 'Time - Last Hour'
+                      }
+                  },
+                  y: {
+                      beginAtZero: true,
+                      title: {
+                          display: true,
+                          text: "Time Taken (seconds)",
+                      }
+                  }
+              }
+          }
+        });
     })
   </script>
   {% endif %}

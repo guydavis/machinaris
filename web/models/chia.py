@@ -109,6 +109,32 @@ class BlockchainChallenges:
                 'created_at': challenge.created_at,
             })
 
+
+class ChallengesChartData:
+
+    def __init__(self, challenges):
+        self.labels = []
+        datasets = {}
+        for challenge in challenges:
+            created_at = challenge.created_at.replace(' ', 'T')
+            if not created_at in self.labels:
+                self.labels.append(created_at)
+            host_chain = challenge.hostname + '_' + challenge.blockchain
+            if not host_chain in datasets:
+                datasets[host_chain] = {}
+            dataset = datasets[host_chain]
+            dataset[created_at] = float(challenge.time_taken.split()[0]) # Drop off the 'secs'
+        # Now build a sparse array with null otherwise
+        self.data = {}
+        for key in datasets.keys():
+            self.data[key] = [] 
+        for label in self.labels:
+            for key in datasets.keys():
+                if label in datasets[key]:
+                    self.data[key].append(datasets[key][label])
+                else:
+                    self.data[key].append('null') # Javascript null
+
 class Wallets:
 
     def __init__(self, wallets):

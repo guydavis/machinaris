@@ -2,6 +2,7 @@
 # Performs a REST call to controller (possibly localhost) of latest blockchain challenges.
 #
 
+import datetime
 import os
 import traceback
 
@@ -13,11 +14,25 @@ from api import app
 from api.commands import log_parser
 from api import utils
 
+def delete_old_challenges(db):
+    try:
+        cutoff = datetime.datetime.now() - datetime.timedelta(hours=1)
+        cur = db.cursor()
+        cur.execute("DELETE FROM challenges WHERE created_at < {1}".format(
+                table, cutoff.strftime("%Y%m%d%H%M")))
+        db.commit()
+    except:
+        app.logger.info("Failed to delete old challenges.")
+        app.logger.info(traceback.format_exc())
+
 def update():
     if not globals.farming_enabled() and not globals.harvesting_enabled():
         #app.logger.info("Skipping recent challenges collection on plotting-only instance.")
         return
     with app.app_context():
+        from api import db
+        if globals.load()['is_controller']:
+            delete_old_challenges(db)
         try:
             hostname = utils.get_displayname()
             blockchains = ['chia']

@@ -20,7 +20,7 @@ DATABASE = '/root/.chia/machinaris/dbs/stats.db'
 TABLES = ['stat_plots_total_used', 'stat_plots_disk_used', 'stat_plots_disk_free',
           'stat_plotting_total_used', 'stat_plotting_disk_used', 'stat_plotting_disk_free']
 
-DELETE_OLD_STATS_AFTER_DAYS = 2
+DELETE_OLD_STATS_AFTER_DAYS = 1
 
 def get_db():
     db = getattr(g, '_stats_database', None)
