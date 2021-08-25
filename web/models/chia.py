@@ -86,30 +86,6 @@ class FarmPlots:
                     'type': plot.type if plot.type else "" }) 
 
 
-class BlockchainChallenges:
-
-    def __init__(self, challenges):
-        self.columns = ['hostname',
-                        'blockchain',
-                        'challenge_id',
-                        'plots_past_filter',
-                        'proofs_found',
-                        'time_taken',
-                        'created_at',
-                        ]
-        self.rows = []
-        for challenge in challenges:
-            self.rows.append({
-                'hostname': challenge.hostname,
-                'blockchain': challenge.blockchain,
-                'challenge_id': challenge.challenge_id,
-                'plots_past_filter': challenge.plots_past_filter,
-                'proofs_found': challenge.proofs_found,
-                'time_taken': challenge.time_taken,
-                'created_at': challenge.created_at,
-            })
-
-
 class ChallengesChartData:
 
     def __init__(self, challenges):

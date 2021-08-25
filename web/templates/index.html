@@ -182,7 +182,7 @@
 
       var ctx = document.getElementById('challenges_chart');
       var myChart = new Chart(ctx, {
-          type: 'line',
+          type: 'scatter',
           data: {
               labels: {{ challenges_chart_data.labels | safe }},
               datasets: [
