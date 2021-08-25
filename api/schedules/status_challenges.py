@@ -8,6 +8,7 @@ import traceback
 
 from flask import g
 
+from common.models import challenges as c
 from common.config import globals
 from common.utils import converters
 from api import app
@@ -17,10 +18,9 @@ from api import utils
 def delete_old_challenges(db):
     try:
         cutoff = datetime.datetime.now() - datetime.timedelta(hours=1)
-        cur = db.cursor()
-        cur.execute("DELETE FROM challenges WHERE created_at < {1}".format(
-                table, cutoff.strftime("%Y%m%d%H%M")))
-        db.commit()
+        db.session.query(c.Challenge).filter(c.Challenge.created_at < "{0}".format(
+                cutoff.strftime("%Y%m%d%H%M"))).delete()
+        db.session.commit()
     except:
         app.logger.info("Failed to delete old challenges.")
         app.logger.info(traceback.format_exc())
