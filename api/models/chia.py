@@ -34,6 +34,11 @@ class FarmSummary:
                     next_line_local_harvester = True
                 elif not self.plots_size and "Total size of plots" in line:
                     self.plots_size = line.split(':')[1].strip()
+                    try:
+                        float(self.plots_size)
+                    except:
+                        app.logger.info("Plots size was {0} so resetting to zero.".format(self.plots_size))
+                        self.plots_size = 0
                 elif "Estimated network space" in line:
                     self.calc_netspace_size(line.split(':')[1].strip())
                 elif "Expected time to win" in line:
