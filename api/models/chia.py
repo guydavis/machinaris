@@ -16,7 +16,7 @@ class FarmSummary:
         if cli_stdout:
             next_line_local_harvester = False
             self.plot_count = 0
-            self.plots_size = None
+            self.plots_size = 0
             for line in cli_stdout:
                 if next_line_local_harvester:
                     self.plot_count = line.strip().split(' ')[0]
