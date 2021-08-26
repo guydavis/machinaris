@@ -28,8 +28,6 @@ class FarmSummary:
                     self.total_chia = line.split(':')[1].strip()
                 elif "Total flax farmed" in line:
                     self.total_chia = line.split(':')[1].strip()
-                elif "Plot count:" in line:
-                    self.plot_count = line.split(':')[1].strip()
                 elif "Local Harvester" in line:
                     next_line_local_harvester = True
                 elif "Estimated network space" in line:
