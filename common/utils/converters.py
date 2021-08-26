@@ -22,7 +22,9 @@ def gib_to_fmt(gibs):
 def str_to_gibs(str):
     try:
         val,unit = str.split(' ')
-        if unit.lower().strip().endswith('gib'):
+        if unit.lower().strip().endswith('mib'):
+            return float(val) / 1024
+        elif unit.lower().strip().endswith('gib'):
             return float(val)
         elif unit.lower().strip().endswith('tib'):
             return float(val) * 1024
