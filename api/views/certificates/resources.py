@@ -49,6 +49,6 @@ class Certificates(MethodView):
         worker_setup_marker = "/root/.chia/machinaris/tmp/worker_launch.tmp"
         if os.path.exists(worker_setup_marker):
             last_modified_date = datetime.datetime.fromtimestamp(os.path.getmtime(worker_setup_marker))
-            fifteen_minutes_ago = datetime.datetime.now() - datetime.timedelta(minutes=15)
+            fifteen_minutes_ago = datetime.datetime.now() - datetime.timedelta(minutes=30)
             return last_modified_date >= fifteen_minutes_ago
         return False

@@ -82,7 +82,7 @@ def generate_warnings(worker, plots):
     warnings = []
     worker_plot_file_count = len(plots.rows)
     worker_summary_plot_count = plot_count_from_summary(worker.hostname)
-    if not worker_summary_plot_count:
+    if not worker_summary_plot_count and worker_plot_file_count > 0:
         warnings.append(WorkerWarning("Disconnected harvester!", 
         "Farm summary reports no harvester for {0}, but Machinaris found {1} plots on disk. Further <a href='https://github.com/guydavis/machinaris/wiki/FAQ#farming-summary-and-file-listing-report-different-plot-counts' target='_blank' class='text-white'>investigation of the worker harvesting service</a> is recommended.".format(
             worker.hostname, worker_plot_file_count)))

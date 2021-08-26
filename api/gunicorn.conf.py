@@ -24,7 +24,7 @@ def on_starting(server):
     #scheduler.add_job(func=stats_disk.collect, trigger='interval', seconds=10) # Test immediately
 
     # Status gathering - reported via API
-    scheduler.add_job(func=status_challenges.update, name="challenges", trigger='interval', seconds=5)
+    scheduler.add_job(func=status_challenges.update, name="challenges", trigger='interval', seconds=90, jitter=45)
     scheduler.add_job(func=status_worker.update, name="workers", trigger='interval', seconds=120, jitter=60) 
     scheduler.add_job(func=status_controller.update, name="controller", trigger='interval', seconds=120, jitter=60) 
     scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=120, jitter=60) 

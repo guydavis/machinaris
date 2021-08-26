@@ -27,8 +27,9 @@ from common.models import farms as f, plots as p, challenges as c, wallets as w,
     blockchains as b, connections as co, keys as k, plotnfts as pn, pools as po, \
     partials as pr
 from common.config import globals
-from web.models.chia import FarmSummary, FarmPlots, BlockchainChallenges, Wallets, \
-    Blockchains, Connections, Keys, Plotnfts, Pools, Partials
+from web.models.chia import FarmSummary, FarmPlots, Wallets, \
+    Blockchains, Connections, Keys, Plotnfts, Pools, PartialsChartData, \
+    ChallengesChartData
 from . import worker as wk
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
@@ -46,14 +47,14 @@ def load_plots_farming(hostname=None):
         plots = query.all()
     return FarmPlots(plots)
 
-def recent_challenges():
-    five_minutes_ago = (datetime.datetime.now() - datetime.timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S.000")
-    challenges = db.session.query(c.Challenge).filter(c.Challenge.created_at >= five_minutes_ago).order_by(c.Challenge.created_at.desc()).limit(20)
-    return BlockchainChallenges(challenges)
+def challenges_chart_data():
+    challenges = db.session.query(c.Challenge).order_by(c.Challenge.created_at.desc(), c.Challenge.hostname, c.Challenge.blockchain).all()
+    return ChallengesChartData(challenges)
 
-def load_partials():
-    partials = db.session.query(pr.Partial).order_by(pr.Partial.created_at.desc()).limit(10)
-    return Partials(partials)
+def partials_chart_data():
+    day_ago = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:00:00.000")
+    partials = db.session.query(pr.Partial).filter(pr.Partial.created_at >= day_ago).order_by(pr.Partial.created_at.desc()).limit(10)
+    return PartialsChartData(partials)
 
 def load_wallets():
     wallets = db.session.query(w.Wallet).all()
@@ -192,7 +193,7 @@ def generate_key(key_path):
                 return False
         flash('Welcome! A new key has been generated at {0} within the container filesystem. See the '.format(key_path) + \
         '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
-            'details.', 'success')
+            'details.  Please allow 5-10 minutes for Chia to begin syncing to peers...', 'success')
         flash('{0}'.format(" ".join(mnemonic_words)), 'info')
     if os.environ['mode'].startswith('farmer'):
         cmd = 'farmer-only'

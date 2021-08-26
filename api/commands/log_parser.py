@@ -24,8 +24,8 @@ from api import app
 CHIA_LOG = '/root/.chia/mainnet/log/debug.log'
 FLAX_LOG = '/root/.flax/mainnet/log/debug.log'
 
-# Roughly 1 minutes worth of challenges
-CHALLENGES_TO_LOAD = 8
+# Roughly 2 minutes worth of challenges, sent 90 seconds, for overlap
+CHALLENGES_TO_LOAD = 16
 
 # Most recent partial proofs, actually double as 2 log lines per partial
 PARTIALS_TO_LOAD = 50

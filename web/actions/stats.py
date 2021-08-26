@@ -156,12 +156,13 @@ def load_recent_disk_usage(disk_type):
         sql = "select path, value{0}, created_at from stat_{1}_disk_used where hostname = ? order by created_at, path".format(value_factor, disk_type)
         used_result = cur.execute(sql, [ wk['hostname'], ]).fetchall()
         for used_row in used_result:
-            if not used_row[2] in dates:
-                dates.append(used_row[2])
+            converted_date = converters.convert_date_for_luxon(used_row[2])
+            if not converted_date in dates:
+                dates.append(converted_date)
             if not used_row[0] in paths:
                 paths[used_row[0]] = {}
             values = paths[used_row[0]]
-            values[used_row[2]] = used_row[1]
+            values[converted_date] = used_row[1]
         if len(dates) > 0:
             summary_by_worker[hostname] = { "dates": dates, "paths": paths.keys(),  }
             for path in paths.keys():

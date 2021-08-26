@@ -58,20 +58,20 @@
     {% block scripts %}
     <script>
         const COLORS = [
-        '#3aac59',
-        '#4dc9f6',
-        '#f67019',
-        '#f53794',
-        '#537bc4',
-        '#acc236',
-        '#166a8f',
-        '#00a950',
-        '#58595b',
-        '#8549ba'
+            '#3aac59',
+            '#4dc9f6',
+            '#f67019',
+            '#f53794',
+            '#537bc4',
+            '#acc236',
+            '#166a8f',
+            '#00a950',
+            '#58595b',
+            '#8549ba'
         ];
 
         function color(index) {
-        return COLORS[index % COLORS.length];
+            return COLORS[index % COLORS.length];
         }
     </script>
     {% for plotter in plotters %}
@@ -81,20 +81,30 @@
         var myChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: {{ disk_usage[plotter.hostname].dates|safe }},
+                labels: {{ disk_usage[plotter.hostname].dates | safe }},
                 datasets: [
                 {% for path in disk_usage[plotter.hostname].paths %}
-                {
-                    label: "{{path}}",
-                    data: {{ disk_usage[plotter.hostname][path]|safe }},
-                    backgroundColor: color({{loop.index-1}}),
-                },
+                    {
+                        label: "{{path}}",
+                        data: {{ disk_usage[plotter.hostname][path] | safe }},
+                        backgroundColor: color({{ loop.index - 1 }}),
+                    },
                 {% endfor %}
                 ],
             },
             borderWidth: 1,
             options: {
                 scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            tooltipFormat: 'DD T'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Time - Last 24 Hours'
+                        }
+                    },
                     y: {
                         beginAtZero: true,
                         title: {
@@ -104,7 +114,7 @@
                     }
                 }
             }
-        });
+    });
     </script>
     {% endif %}
     {% endfor %}
