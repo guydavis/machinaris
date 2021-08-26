@@ -33,7 +33,7 @@ def str_to_gibs(str):
     except:
         print("Failed to convert to GiB: {0}".format(str))
         print(traceback.format_exc())
-        return None
+        return 0.0
 
 def convert_date_for_luxon(datestr):
     year = datestr[:4]
