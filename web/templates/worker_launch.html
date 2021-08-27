@@ -155,17 +155,10 @@
                 cmd += '    -h ' + document.getElementById("worker_hostname").value + line_end;
             }
             else {
-                errors.push("Missing worker hostname. Please <b>also</b> provide an IP address if the hostname won't resolve on your LAN.");
+                errors.push("Missing worker hostname.  Please provide a short name to identify your worker.");
             }
             if (document.getElementById("dns_ip_addr").value) {
                 cmd += '    --dns ' + document.getElementById("dns_ip_addr").value + line_end;
-            }
-            else {
-                if (os == 'windows') {
-                    cmd += '    --dns (Get-DnsClientServerAddress -AddressFamily IPv4 | Select-Object -ExpandProperty ServerAddresses)' + line_end;
-                } else {
-                    //cmd += "    --dns $(cat /etc/resolv.conf | grep nameserver | cut -d ' ' -f 2)" + line_end;
-                }
             }
             cmd += '    -v ' + document.getElementById("appdata").value + ':/root/.chia' + line_end;
             var cur_vols = $('#volumes').children().length
@@ -216,6 +209,9 @@
             }
             if (document.getElementById("ip_addr").value) {
                 cmd += '    -e worker_address=' + document.getElementById("ip_addr").value + line_end;
+            }
+            else {
+                errors.push("Missing worker IP address.  Please provide the IP the conntroller will connect to for commands.");
             }
             cmd += '    -e plots_dir=' + plots_dir.join(':') + line_end;
             var blockchains = 'chia'
@@ -387,7 +383,7 @@
             </div>
             <div class="row mb-3" id="farmer_address_row">
                 <div class="col-6">
-                    <label for="farmer_address" class="form-label">Farmer Hostname</label>
+                    <label for="farmer_address" class="form-label">Farmer Hostname/IP</label>
                     <input type="text" class="form-control" aria-label="farmer_address" id="farmer_address"
                         onkeyup="updateDocker()">
                 </div>
@@ -398,7 +394,7 @@
                 </div>
                 <div class="col-3">
                     <label for="flax_farmer_port" class="form-label">Flax Farmer Port</label>
-                    <input type="text" class="form-control" aria-label="flax_farmer_port" value="6888"
+                    <input type="text" class="form-control" aria-label="flax_farmer_port" value="6885"
                         id="flax_farmer_port" onkeyup="updateDocker()">
                 </div>
             </div>
@@ -451,7 +447,7 @@
             </div>
             <div class="row mb-3" id="controller_address_row">
                 <div class="col offset">
-                    <label for="controller_host" class="form-label">Controller Hostname</label>
+                    <label for="controller_host" class="form-label">Controller Hostname/IP</label>
                     <input type="text" class="form-control" placeholder="" aria-label="controller_host"
                         id='controller_host' onkeyup="updateDocker()">
                 </div>
@@ -463,12 +459,12 @@
             </div>
             <div class="row mb-3">
                 <div class="col offset">
-                    <label for="worker_hostname" class="form-label">Worker Hostname</label>
+                    <label for="worker_hostname" class="form-label">Worker Hostname/IP</label>
                     <input type="text" class="form-control" placeholder="myhostname" aria-label="worker_hostname"
                         id='worker_hostname' onkeyup="updateDocker()">
                 </div>
                 <div class="col">
-                    <label for="ip_addr" class="form-label">Worker IP Address (Optional)</label>
+                    <label for="ip_addr" class="form-label">Worker IP Address</label>
                     <input type="text" class="form-control" placeholder="192.168.1.100" aria-label="ip_addr"
                         id='ip_addr' onkeyup="updateDocker()">
                 </div>

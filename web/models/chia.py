@@ -2,7 +2,7 @@ import json
 import os
 import traceback
 
-from datetime import datetime
+import datetime
 
 from web import app
 from common.utils import converters
@@ -86,28 +86,30 @@ class FarmPlots:
                     'type': plot.type if plot.type else "" }) 
 
 
-class BlockchainChallenges:
+class ChallengesChartData:
 
     def __init__(self, challenges):
-        self.columns = ['hostname',
-                        'blockchain',
-                        'challenge_id',
-                        'plots_past_filter',
-                        'proofs_found',
-                        'time_taken',
-                        'created_at',
-                        ]
-        self.rows = []
+        self.labels = []
+        datasets = {}
         for challenge in challenges:
-            self.rows.append({
-                'hostname': challenge.hostname,
-                'blockchain': challenge.blockchain,
-                'challenge_id': challenge.challenge_id,
-                'plots_past_filter': challenge.plots_past_filter,
-                'proofs_found': challenge.proofs_found,
-                'time_taken': challenge.time_taken,
-                'created_at': challenge.created_at,
-            })
+            created_at = challenge.created_at.replace(' ', 'T')
+            if not created_at in self.labels:
+                self.labels.append(created_at)
+            host_chain = challenge.hostname + '_' + challenge.blockchain
+            if not host_chain in datasets:
+                datasets[host_chain] = {}
+            dataset = datasets[host_chain]
+            dataset[created_at] = float(challenge.time_taken.split()[0]) # Drop off the 'secs'
+        # Now build a sparse array with null otherwise
+        self.data = {}
+        for key in datasets.keys():
+            self.data[key] = [] 
+        for label in self.labels:
+            for key in datasets.keys():
+                if label in datasets[key]:
+                    self.data[key].append(datasets[key][label])
+                else:
+                    self.data[key].append('null') # Javascript null
 
 class Wallets:
 
@@ -115,7 +117,7 @@ class Wallets:
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
         for wallet in wallets:
-            updated_at = wallet.updated_at or datetime.now()
+            updated_at = wallet.updated_at or datetime.datetime.now()
             self.rows.append({ 
                 'hostname': wallet.hostname, 
                 'blockchain': wallet.blockchain, 
@@ -145,20 +147,25 @@ class Blockchains:
                 'details': blockchain.details,
                 'updated_at': blockchain.updated_at }) 
             
-class Partials:
+class PartialsChartData:
 
     def __init__(self, partials):
-        self.columns = ['hostname', 'blockchain', 'launcher_id', 'pool_url', 'pool_response', 'created_at']
-        self.rows = []
+        self.labels = []
+        label_index_by_hour = {}
+        for i in range(1,25):
+            start_time = datetime.datetime.now().replace(microsecond=0, second=0, minute=0) - datetime.timedelta(hours=24-i)
+            self.labels.append(start_time.strftime("%I %p"))
+            label_index_by_hour[start_time.strftime("%H")] = len(self.labels) - 1
+        self.data = {}
         for partial in partials:
-            self.rows.append({ 
-                'hostname': partial.hostname, 
-                'blockchain': partial.blockchain, 
-                'launcher_id': partial.launcher_id,
-                'pool_url': partial.pool_url,
-                'pool_response': partial.pool_response,
-                'created_at': partial.created_at }) 
-
+            created_at = partial.created_at
+            pool_launcher = partial.pool_url.replace('https://', '') + ' (' + partial.launcher_id[:8] + '...)'
+            if not pool_launcher in self.data:
+                self.data[pool_launcher] = [0] * 24 # Initialize as list of zeros
+            dataset = self.data[pool_launcher]
+            partial_hour_at = created_at[11:13]
+            dataset[label_index_by_hour[partial_hour_at]] += 1 
+    
 class Connections:
 
     def __init__(self, connections):
@@ -192,8 +199,8 @@ class Connections:
                         'ip': vals[1],
                         'ports': vals[2],
                         'nodeid': vals[3].replace('...',''),
-                        'last_connect': datetime.strptime( \
-                            str(datetime.today().year) + ' ' + vals[4] + ' ' + vals[5] + ' ' + vals[6], 
+                        'last_connect': datetime.datetime.strptime( \
+                            str(datetime.datetime.today().year) + ' ' + vals[4] + ' ' + vals[5] + ' ' + vals[6], 
                             '%Y %b %d %H:%M:%S'),
                         'mib_up': float(vals[7].split('|')[0]),
                         'mib_down': float(vals[7].split('|')[1])
@@ -208,7 +215,7 @@ class Plotnfts:
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
         for plotnft in plotnfts:
-            updated_at = plotnft.updated_at or datetime.now()
+            updated_at = plotnft.updated_at or datetime.datetime.now()
             self.rows.append({ 
                 'hostname': plotnft.hostname, 
                 'blockchain': plotnft.blockchain, 
@@ -233,7 +240,7 @@ class Pools:
         for pool in pools:
             launcher_id = pool.launcher_id
             plotnft = self.find_plotnft(plotnfts, launcher_id)
-            updated_at = pool.updated_at or datetime.now()
+            updated_at = pool.updated_at or datetime.datetime.now()
             pool_state = json.loads(pool.pool_state)
             if plotnft:
                 status = self.extract_plotnft_value(plotnft, "Current state:")

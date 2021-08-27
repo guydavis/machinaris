@@ -13,6 +13,21 @@ from api import app
 from api.commands import chia_cli
 from api import utils
 
+# On initialization Chia outputs 
+def safely_gather_plots_size_gibs(plots_size):
+    plots_size_gibs = 0
+    try:
+        plots_size_gibs = converters.str_to_gibs(plots_size)
+    except:
+        app.logger.info("Unconvertable plots size: {0}  Using zero.".format(plots_size))
+        plots_size_gibs = 0
+    try:
+        float(plots_size_gibs)
+    except: 
+        app.logger.info("Unfloatable plots size: {0}  Using zero.".format(plots_size))
+        plots_size_gibs = 0
+    return plots_size_gibs
+
 def update():
     if not globals.farming_enabled() and not globals.harvesting_enabled():
         #app.logger.info("Skipping farm summary status collection on plotting-only instance.")
@@ -26,7 +41,7 @@ def update():
                 "mode": os.environ['mode'],
                 "status": "" if not hasattr(farm_summary, 'status') else farm_summary.status,
                 "plot_count": farm_summary.plot_count,
-                "plots_size": converters.str_to_gibs(farm_summary.plots_size),
+                "plots_size": safely_gather_plots_size_gibs(farm_summary.plots_size),
                 "total_chia": 0 if not hasattr(farm_summary, 'total_chia') else farm_summary.total_chia,
                 "netspace_size": 0 if not hasattr(farm_summary, 'netspace_size') else converters.str_to_gibs(farm_summary.netspace_size),
                 "expected_time_to_win": "" if not hasattr(farm_summary, 'time_to_win') else farm_summary.time_to_win,

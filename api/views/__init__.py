@@ -18,6 +18,7 @@ from . import pools
 from . import wallets
 from . import workers
 
+from .stats import plottingdiskused,plottingdiskfree,plotsdiskused,plotsdiskfree
 
 MODULES = (
     actions,
@@ -39,6 +40,11 @@ MODULES = (
     pools,
     wallets,
     workers,
+
+    plottingdiskused,
+    plottingdiskfree,
+    plotsdiskused,
+    plotsdiskfree
 )
 
 

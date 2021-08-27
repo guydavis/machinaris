@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="modal fade" id="analyzeModal" tabindex="-1" aria-labelledby="analyzeModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3 modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="analyzeModalLabel">Plotting Analysis</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+                <p>Analysis of the plotting job log shows time (seconds) spent in each phase:</p>
+                <pre id="plotAnalyzeContent"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    a.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+</style>
+
+<nav class="navbar navbar-dark" style="padding-bottom: 0px;">
+    <div class="container-fluid">
+        <ul class="nav nav-tabs bg-dark">
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('farming_plots') }}">Plots</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('farming_workers') }}">Workers</a>
+            </li>
+        </ul>
+        <form class="d-flex" method="POST" style="padding-bottom:5px" id="main-form">
+            <fieldset>
+                    {% for farmer in farmers %}
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
+                            aria-expanded="false" id="{{ farmer.hostname }}_btn">
+                            {{ farmer.displayname }}: {{farmer.farming_status}}
+                        </button>
+                        <ul class="dropdown-menu bg-dark btn-outline-success">
+                            <li>
+                                <a class="dropdown-item text-white text-decoration-none" href="#"
+                                    onclick='ViewLogs("{{ farmer.hostname }}","chia");return false;'>
+                                    <i class="fs-4 bi-text-indent-left"></i>
+                                    <span class="align-text-bottom"></span>View Chia Log</span>
+                                </a>
+                            </li>
+                            {% if global_config.flax_enabled %}
+                            <li>
+                                <a class="dropdown-item text-white text-decoration-none" href="#"
+                                    onclick='ViewLogs("{{ farmer.hostname }}","flax");return false;'>
+                                    <i class="fs-4 bi-text-indent-left"></i>
+                                    <span class="align-text-bottom"></span>View Flax Log</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                            <li>
+                                <a class="dropdown-item text-white text-decoration-none" href="#"
+                                    onclick='CheckPlots("{{ farmer.hostname }}");return false;'>
+                                    <i class="fs-4 bi-text-indent-left"></i>
+                                    <span class="align-text-bottom"></span>Check Plots</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% endfor %}
+                <fieldset>
+        </form>
+    </div>
+</nav>
+
+<div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+        {% else %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {% endif %}
+            {{ message|safe }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="p-3 mb-4 bg-light border rounded-3">
+        <div class="table-responsive">
+            <table id="data" class="table table-dark">
+                <thead>
+                    <tr>
+                        {% for column in plots.columns %}
+                        <th scope="col" class="text-success">{{ column }}</th>
+                        {% endfor %}
+                        <th scope="col" class="text-success"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in plots.rows %}
+                    <tr>
+                        {% for column in plots.columns %}
+                        {% if column == "size" %}
+                        <td>{{ row[column] | bytesfilter}}</td>
+                        {% elif column == "plot" %}
+                        <td>{{ row[column] | plotnameshortener}}</td>
+                        {% else %}
+                        <td>{{ row[column] }}</td>
+                        {% endif %}
+                        {% endfor %}
+                        <td class="align-middle" style="padding:0px 5px 0px 0px">
+                            <!-- Careful, VS Code likes to format a space into 'plot' quotes for some reason -->
+                            <a href="#" title="Analyze Plotting Job" data-bs-toggle="modal"
+                                data-bs-target="#analyzeModal" onclick='PlotJobAnalyze("{{ row['plot'] }}");return false;'>
+                                <i class="fs-4 bi-stopwatch"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block scripts %}
+    <script>
+        function ViewLogs(hostname, blockchain) {
+            var d = new Date();
+            var height = 600;
+            var width = 900;
+            var top = (screen.height - height) / 2;
+            var left = (screen.width - width) / 2;
+            window.open("{{ url_for('logs') }}?log=farming" + "&hostname=" + hostname + "&blockchain=" + blockchain, 'Farming Log for ' + blockchain + ' on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        }
+        function CheckPlots(hostname) {
+            var d = new Date();
+            var height = 600;
+            var width = 900;
+            var top = (screen.height - height) / 2;
+            var left = (screen.width - width) / 2;
+            window.open("{{ url_for('plots_check') }}?hostname=" + hostname, 'Plots Check on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        }
+        function PlotJobAnalyze(plot) {
+            var output = document.getElementById('plotAnalyzeContent');
+            output.textContent = ""; // Clear any old analysis before requesting
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', "{{ url_for('farming_plots') }}?analyze=" + plot);
+            xhr.send();
+            xhr.onload = function () {
+                output.textContent = xhr.responseText;
+            };
+        }
+        $(document).ready(function () {
+            $('#data').DataTable({
+                "pageLength": 25,
+                "order": [[5, "desc"]],
+                "columnDefs": [{ "orderable": false, targets: [7] }],
+            });
+        });
+    </script>
+    {% endblock %}

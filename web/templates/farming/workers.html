@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    a.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+    button.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+</style>
+<nav class="navbar navbar-dark" style="padding-bottom: 0px;">
+    <div class="container-fluid">
+        <ul class="nav nav-tabs bg-dark">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('farming_plots') }}">Plots</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('farming_workers') }}">Workers</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+        {% else %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {% endif %}
+            {{ message|safe }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="p-1 mb-4 bg-light border rounded-3">
+        {% for farmer in farmers %}
+        <div class="row">
+            <div class="col" style="margin-top:5px; margin-bottom:5px;">
+                <div class="h-100 p-2 text-white">
+                    <h6 class="display-6 text-center">{{ farmer.hostname }}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4" style="margin-top:5px; margin-bottom:5px;">
+                <div class="h-100 p-2 text-white">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="{{ farmer.hostname }}-chia-tab" data-bs-toggle="tab" data-bs-target="#{{ farmer.hostname }}-chia"
+                                type="button" role="tab" aria-controls="{{ farmer.hostname }}-chia" aria-selected="true">Chia</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="{{ farmer.hostname }}-flax-tab" data-bs-toggle="tab" data-bs-target="#{{ farmer.hostname }}-flax"
+                                type="button" role="tab" aria-controls="{{ farmer.hostname }}-flax" aria-selected="false">Flax</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="{{ farmer.hostname }}-chia" role="tabpanel" aria-labelledby="{{ farmer.hostname }}-chia-tab">
+                            {% if daily_summaries[farmer.hostname].chia_daily %}
+                            <div style="white-space:pre-wrap; margin-bottom:0px; padding-bottom: 0px;">{{
+                                daily_summaries[farmer.hostname].chia_daily.message }}</div>
+                            {% else %}
+                            <p>Chia Daily Summary not yet found. Check Alerts configuration if missing more than 24
+                                hours.</p>
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane" id="{{ farmer.hostname }}-flax" role="tabpanel" aria-labelledby="{{ farmer.hostname }}-flax-tab">
+                            {% if daily_summaries[farmer.hostname].flax_daily %}
+                            <div style="white-space:pre-wrap; margin-bottom:0px; padding-bottom: 0px;">{{
+                                daily_summaries[farmer.hostname].flax_daily.message }}</div>
+                            {% else %}
+                            <p>Flax Daily Summary not yet found. Check Alerts configuration if missing more than 24
+                                hours.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8" style="margin-top:5px; margin-bottom:5px;">
+                <canvas id="disk_{{farmer.hostname}}" width="400"></canvas>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% endblock %}
+
+    {% block scripts %}
+    {% for farmer in farmers %}
+    {% if disk_usage[farmer.hostname] %}
+    <script>
+        var ctx = document.getElementById('disk_{{farmer.hostname}}');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ disk_usage[farmer.hostname].paths | safe }},
+                datasets: [{
+                    label: "Disk Space Used (TB)",
+                    data: {{ disk_usage[farmer.hostname].used | safe }},
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                },
+                {
+                    label: 'Disk Space Free (TB)',
+                    data: {{ disk_usage[farmer.hostname].free | safe }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                }],
+            },
+            borderWidth: 1,
+            options: {
+                plugins: {  
+                    legend: {
+                        labels: {
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        }
+                    }
+                },
+                responsive: true,
+                scales: {
+                    x: {
+                        stacked: true,
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
+                    }
+                }
+            }
+        });
+    </script>
+    {% endif %}
+    {% endfor %}
+    {% endblock %}

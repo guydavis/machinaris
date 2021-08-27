@@ -11,7 +11,10 @@ def sizeof_fmt(num, suffix='B'):
         if abs(num) < 1024.0:
             return "%3.3f %s%s" % (num, unit, suffix)
         num /= 1024.0
-    return "%.3f %s%s" % (num, 'Yi', suffix)
+    value = "%.3f %s%s" % (num, 'Yi', suffix)
+    if value == "0.000 B":
+        return "0"
+    return value
 
 def gib_to_fmt(gibs):
     return sizeof_fmt(gibs * 1024 * 1024 * 1024)
@@ -19,7 +22,9 @@ def gib_to_fmt(gibs):
 def str_to_gibs(str):
     try:
         val,unit = str.split(' ')
-        if unit.lower().strip().endswith('gib'):
+        if unit.lower().strip().endswith('mib'):
+            return float(val) / 1024
+        elif unit.lower().strip().endswith('gib'):
             return float(val)
         elif unit.lower().strip().endswith('tib'):
             return float(val) * 1024
@@ -30,8 +35,14 @@ def str_to_gibs(str):
     except:
         print("Failed to convert to GiB: {0}".format(str))
         print(traceback.format_exc())
-        return None
+        return 0.0
 
+def convert_date_for_luxon(datestr):
+    year = datestr[:4]
+    month = datestr[4:6]
+    day = datestr[6:8]
+    time = datestr[8:]
+    return "{0}-{1}-{2}T{3}".format(year, month, day, time)
 
 
 

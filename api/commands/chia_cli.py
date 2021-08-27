@@ -48,8 +48,7 @@ def load_farm_summary(blockchain):
             proc.communicate()
             abort(500, description="The timeout is expired!")
         if errs:
-            app.logger.info("Failed to load chia farm summary at.")
-            app.logger.info(traceback.format_exc())
+            app.logger.debug("Error from {0} farm summary because {1}".format(blockchain, outs.decode('utf-8')))
         farm_summary = chia.FarmSummary(cli_stdout=outs.decode('utf-8').splitlines())
     else:  # Just get plot count and size
         farm_summary = chia.FarmSummary(farm_plots=load_plots_farming())
@@ -98,7 +97,7 @@ def load_wallet_show(blockchain):
     child = pexpect.spawn("{0} wallet show".format(chia_binary))
     wallet_index = 1
     while True:
-        i = child.expect(["Wallet height:.*\r\n", "Choose wallet key:.*\r\n", "No online backup file found.*\r\n"])
+        i = child.expect(["Wallet height:.*\r\n", "Choose wallet key:.*\r\n", "No online backup file found.*\r\n"], timeout=120)
         if i == 0:
             app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
             wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
@@ -120,7 +119,7 @@ def load_plotnft_show(blockchain):
     child = pexpect.spawn("{0} plotnft show".format(chia_binary))
     wallet_index = 1
     while True:
-        i = child.expect(["Wallet height:.*\r\n", "Choose wallet key:.*\r\n", "No online backup file found.*\r\n"])
+        i = child.expect(["Wallet height:.*\r\n", "Choose wallet key:.*\r\n", "No online backup file found.*\r\n"], timeout=120)
         if i == 0:
             app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
             wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")

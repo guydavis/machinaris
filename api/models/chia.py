@@ -16,7 +16,7 @@ class FarmSummary:
         if cli_stdout:
             next_line_local_harvester = False
             self.plot_count = 0
-            self.plots_size = None
+            self.plots_size = 0
             for line in cli_stdout:
                 if next_line_local_harvester:
                     self.plot_count = line.strip().split(' ')[0]
@@ -28,12 +28,8 @@ class FarmSummary:
                     self.total_chia = line.split(':')[1].strip()
                 elif "Total flax farmed" in line:
                     self.total_chia = line.split(':')[1].strip()
-                elif "Plot count:" in line:
-                    self.plot_count = line.split(':')[1].strip()
                 elif "Local Harvester" in line:
                     next_line_local_harvester = True
-                elif not self.plots_size and "Total size of plots" in line:
-                    self.plots_size = line.split(':')[1].strip()
                 elif "Estimated network space" in line:
                     self.calc_netspace_size(line.split(':')[1].strip())
                 elif "Expected time to win" in line:

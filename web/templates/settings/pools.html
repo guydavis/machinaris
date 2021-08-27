@@ -114,6 +114,7 @@
         {% if plotnfts.rows|length > 0 %}
         {% for plotnft in plotnfts.rows %}
         <div class="container-fluid">
+            <span style="float:right">Updated at: {{plotnft.updated_at|datetimefilter}}</span>
             <h3>{{plotnft.hostname}} - {{plotnft.blockchain}}</h3>
             <pre>{{plotnft.details}}</pre>
         </div>
