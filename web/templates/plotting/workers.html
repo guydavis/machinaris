@@ -94,6 +94,16 @@
             },
             borderWidth: 1,
             options: {
+                plugins: {  
+                    legend: {
+                        labels: {
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        }
+                    }
+                },
                 scales: {
                     x: {
                         type: 'time',
@@ -102,15 +112,35 @@
                         },
                         title: {
                             display: true,
-                            text: 'Time - Last 24 Hours'
-                        }
+                            text: 'Time - Last 24 Hours',
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        },
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
                     },
                     y: {
                         beginAtZero: true,
                         title: {
                             display: true,
                             text: "Plotting Disk Usage (GB)",
-                        }
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        },
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
                     }
                 }
             }

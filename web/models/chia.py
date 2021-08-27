@@ -152,7 +152,7 @@ class PartialsChartData:
     def __init__(self, partials):
         self.labels = []
         label_index_by_hour = {}
-        for i in range(24):
+        for i in range(1,25):
             start_time = datetime.datetime.now().replace(microsecond=0, second=0, minute=0) - datetime.timedelta(hours=24-i)
             self.labels.append(start_time.strftime("%I %p"))
             label_index_by_hour[start_time.strftime("%H")] = len(self.labels) - 1
