@@ -52,7 +52,7 @@ def challenges_chart_data():
     return ChallengesChartData(challenges)
 
 def partials_chart_data():
-    day_ago = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:00:00.000")
+    day_ago = (datetime.datetime.now() - datetime.timedelta(hours=23)).strftime("%Y-%m-%d %H:00:00.000")
     partials = db.session.query(pr.Partial).filter(pr.Partial.created_at >= day_ago).order_by(pr.Partial.created_at.desc()).limit(10)
     return PartialsChartData(partials)
 

@@ -116,14 +116,36 @@
             },
             borderWidth: 1,
             options: {
+                plugins: {  
+                    legend: {
+                        labels: {
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        }
+                    }
+                },
                 responsive: true,
                 scales: {
                     x: {
                         stacked: true,
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
                         },
+                    },
                     y: {
                         stacked: true,
-                            beginAtZero: true
+                        beginAtZero: true,
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
                     }
                 }
             }
