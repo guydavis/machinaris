@@ -139,7 +139,7 @@ last_chia_version_load_time = None
 def load_chia_version():
     global last_chia_version
     global last_chia_version_load_time
-    if last_chia_version and last_chia_version_load_time >= \
+    if last_chia_version and last_chia_version_load_time and last_chia_version_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_chia_version
     proc = Popen("{0} version".format(CHIA_BINARY),
