@@ -38,8 +38,10 @@ sed -i 's/localhost/127.0.0.1/g' ~/.chia/mainnet/config/config.yaml
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
+  chmod -R 0600 ~/.chia/mainnet/config/ssl 
   chia start farmer
 elif [[ ${mode} =~ ^farmer.* ]]; then
+  chmod -R 0600 ~/.chia/mainnet/config/ssl 
   chia start farmer-only
 elif [[ ${mode} =~ ^harvester.* ]]; then
   if [[ -z ${farmer_address} || -z ${farmer_port} ]]; then
@@ -64,6 +66,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     fi
     chia configure --set-farmer-peer ${farmer_address}:${farmer_port}
     chia configure --enable-upnp false
+    chmod -R 0600 ~/.chia/mainnet/config/ssl 
     chia start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then
