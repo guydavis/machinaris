@@ -53,7 +53,7 @@ def update():
                     "flax_netspace_size": 0 if not hasattr(flax_farm_summary, 'netspace_size') else converters.str_to_gibs(flax_farm_summary.netspace_size),
                     "flax_expected_time_to_win": "" if not hasattr(flax_farm_summary, 'time_to_win') else flax_farm_summary.time_to_win,
                 })  
-            utils.send_post('/farms/', payload, debug=True)
+            utils.send_post('/farms/', payload, debug=False)
         except:
             app.logger.info("Failed to load farm summary and send.")
             app.logger.info(traceback.format_exc())

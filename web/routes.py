@@ -82,7 +82,7 @@ def plotting_jobs():
             plotman.action_plots(action, plot_ids)
         else:
             app.logger.info("Unknown plotting form: {0}".format(request.form))
-        return redirect(url_for('plotting')) # Force a redirect to allow time to update status
+        return redirect(url_for('plotting_jobs')) # Force a redirect to allow time to update status
     plotters = plotman.load_plotters()
     plotting = plotman.load_plotting_summary()
     return render_template('plotting/jobs.html', reload_seconds=120,  plotting=plotting, 
