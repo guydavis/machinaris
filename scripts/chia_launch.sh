@@ -36,12 +36,13 @@ done
 
 sed -i 's/localhost/127.0.0.1/g' ~/.chia/mainnet/config/config.yaml
 
+chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
+chia init --fix-ssl-permissions > /dev/null 
+
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  chmod -R 0600 ~/.chia/mainnet/config/ssl 
   chia start farmer
 elif [[ ${mode} =~ ^farmer.* ]]; then
-  chmod -R 0600 ~/.chia/mainnet/config/ssl 
   chia start farmer-only
 elif [[ ${mode} =~ ^harvester.* ]]; then
   if [[ -z ${farmer_address} || -z ${farmer_port} ]]; then
@@ -60,13 +61,14 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     fi
     if [ -f /root/.chia/farmer_ca/chia_ca.crt ]; then
       chia init -c /root/.chia/farmer_ca 2>&1 > /root/.chia/mainnet/log/init.log
+      chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
+      chia init --fix-ssl-permissions > /dev/null 
     else
       echo "Did not find your farmer's certificates within /root/.chia/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     chia configure --set-farmer-peer ${farmer_address}:${farmer_port}
     chia configure --enable-upnp false
-    chmod -R 0600 ~/.chia/mainnet/config/ssl 
     chia start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then
