@@ -52,8 +52,7 @@ def challenges_chart_data():
     return ChallengesChartData(challenges)
 
 def partials_chart_data():
-    day_ago = (datetime.datetime.now() - datetime.timedelta(hours=23)).strftime("%Y-%m-%d %H:00:00.000")
-    partials = db.session.query(pr.Partial).filter(pr.Partial.created_at >= day_ago).order_by(pr.Partial.created_at.desc()).limit(10)
+    partials = db.session.query(pr.Partial).order_by(pr.Partial.created_at.desc()).all()
     return PartialsChartData(partials)
 
 def load_wallets():
@@ -61,8 +60,12 @@ def load_wallets():
     return Wallets(wallets)
 
 def load_blockchain_show():
-    blockchains = db.session.query(b.Blockchain).all()
-    return Blockchains(blockchains)
+    try:  # Sparkly had an error here once with malformed data
+        blockchains = db.session.query(b.Blockchain).all()
+        return Blockchains(blockchains)
+    except:
+        traceback.print_exc()
+    return None
 
 def load_connections_show():
     connections = db.session.query(co.Connection).all()

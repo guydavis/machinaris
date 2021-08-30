@@ -43,7 +43,7 @@ class Partials(MethodView):
                 items.append(item)
                 db.session.add(item)
             else:
-                app.logger.info("Skipping insert of existing partial: {0}".format(new_item['unique_id']))
+                app.logger.debug("Skipping insert of existing partial: {0}".format(new_item['unique_id']))
         db.session.commit()
         return items
 

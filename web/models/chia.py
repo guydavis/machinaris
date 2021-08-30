@@ -156,6 +156,7 @@ class PartialsChartData:
             start_time = datetime.datetime.now().replace(microsecond=0, second=0, minute=0) - datetime.timedelta(hours=24-i)
             self.labels.append(start_time.strftime("%I %p"))
             label_index_by_hour[start_time.strftime("%H")] = len(self.labels) - 1
+            #app.logger.info("At {0} is label: {1}".format((len(self.labels) - 1), start_time.strftime("%I %p")))
         self.data = {}
         for partial in partials:
             created_at = partial.created_at
@@ -164,7 +165,9 @@ class PartialsChartData:
                 self.data[pool_launcher] = [0] * 24 # Initialize as list of zeros
             dataset = self.data[pool_launcher]
             partial_hour_at = created_at[11:13]
-            dataset[label_index_by_hour[partial_hour_at]] += 1 
+            #app.logger.info("{0}: partial_hour_at={1} -> slot {2}".format(created_at, partial_hour_at, label_index_by_hour[partial_hour_at]))
+            dataset[label_index_by_hour[partial_hour_at]] += 1
+
     
 class Connections:
 
