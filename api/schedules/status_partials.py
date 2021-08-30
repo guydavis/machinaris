@@ -19,7 +19,7 @@ def delete_old_partials(db):
     try:
         cutoff = datetime.datetime.now() - datetime.timedelta(days=1)
         cutoff_str = "{0}".format(cutoff.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3])
-        app.logger.info("Purging old partials earlier than {0}".format(cutoff_str))
+        app.logger.debug("Purging old partials earlier than {0}".format(cutoff_str))
         db.session.query(p.Partial).filter(p.Partial.created_at < cutoff_str).delete()
         db.session.commit()
     except:
@@ -47,7 +47,7 @@ def update():
                     app.logger.debug(partial)
                     unique_id = hostname + '_' + partial['launcher_id'] + '_' + partial['created_at']
                     if unique_id in partials_so_far:
-                        app.logger.info("Skipping duplicate partial: {0}".format(unique_id))
+                        app.logger.debug("Skipping duplicate partial: {0}".format(unique_id))
                     else:
                         partials_so_far[unique_id] = partial
                         payload.append({

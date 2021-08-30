@@ -67,21 +67,33 @@ class WorkerWarning:
         elif level == "error":
             self.icon = "exclamation-circle"
 
-def plot_count_from_summary(hostname):
+def plot_count_from_summary(orig_hostname, worker_plot_file_count):
+    app.logger.info("Searching for warnings on: {0}.".format(orig_hostname))
     try:
-        hostname = socket.gethostbyname(hostname)
+        hostname = socket.gethostbyname(orig_hostname)
+    except Exception as ex:
+        app.logger.info("Can't resolve original hostname: {0}".format(orig_hostname))
+    try:    
         harvesters = asyncio.run(chia.load_plots_per_harvester())
         #app.logger.info(harvesters.keys())
         if hostname in harvesters:
+            app.logger.info("Found hostname match for {0}".format(hostname))
             return len(harvesters[hostname])
+        else:
+            for harvester in harvesters:
+                #app.logger.info("Harvester {0} has count: {1}".format(harvester, harvesters[harvester]))
+                if worker_plot_file_count == len(harvesters[harvester]):
+                    app.logger.info("No hostname match for {0} but found matching counts {1}".format(hostname, worker_plot_file_count))
+                    return len(harvesters[harvester])
     except Exception as ex:
         app.logger.info("Failed to get harvester plot count for {0} due to {1}.".format(hostname, str(ex)))
+    app.logger.info("Failed to find any match for hostname {0}".format(hostname))
     return None
 
 def generate_warnings(worker, plots):
     warnings = []
     worker_plot_file_count = len(plots.rows)
-    worker_summary_plot_count = plot_count_from_summary(worker.hostname)
+    worker_summary_plot_count = plot_count_from_summary(worker.hostname, worker_plot_file_count)
     if not worker_summary_plot_count and worker_plot_file_count > 0:
         warnings.append(WorkerWarning("Disconnected harvester!", 
         "Farm summary reports no harvester for {0}, but Machinaris found {1} plots on disk. Further <a href='https://github.com/guydavis/machinaris/wiki/FAQ#farming-summary-and-file-listing-report-different-plot-counts' target='_blank' class='text-white'>investigation of the worker harvesting service</a> is recommended.".format(
