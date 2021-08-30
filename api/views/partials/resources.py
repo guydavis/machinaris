@@ -35,12 +35,15 @@ class Partials(MethodView):
     def post(self, new_items):
         if len(new_items) == 0:
             return "No partials provided.", 400
-        db.session.query(Partial).filter(Partial.hostname==new_items[0]['hostname']).delete()
         items = []
         for new_item in new_items:
-            item = Partial(**new_item)
-            items.append(item)
-            db.session.add(item)
+            item = Partial.query.get(new_item['unique_id'])
+            if not item:  # Request contains previously received challenges, only add new
+                item = Partial(**new_item)
+                items.append(item)
+                db.session.add(item)
+            else:
+                app.logger.info("Skipping insert of existing partial: {0}".format(new_item['unique_id']))
         db.session.commit()
         return items
 
@@ -57,12 +60,13 @@ class PartialByHostname(MethodView):
     @blp.arguments(BatchOfPartialSchema)
     @blp.response(200, PartialSchema(many=True))
     def put(self, new_items, hostname, blockchain):
-        db.session.query(Partial).filter(Partial.hostname==hostname, Partial.blockchain==blockchain).delete()
         items = []
         for new_item in new_items:
-            item = Partial(**new_item)
-            items.append(item)
-            db.session.add(item)
+            item = Partial.query.get(new_item['unique_id'])
+            if not item:  # Request contains previously received challenges, only add new
+                item = Partial(**new_item)
+                items.append(item)
+                db.session.add(item)
         db.session.commit()
         return items
 
