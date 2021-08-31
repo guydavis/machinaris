@@ -24,7 +24,7 @@ from api import app
 CHIA_LOG = '/root/.chia/mainnet/log/debug.log'
 FLAX_LOG = '/root/.flax/mainnet/log/debug.log'
 
-# Roughly 2 minutes worth of challenges, sent 90 seconds, for overlap
+# Roughly 2 minutes worth of challenges, sent every 60 seconds, for overlap
 CHALLENGES_TO_LOAD = 16
 
 # Most recent partial proofs, actually double as 2 log lines per partial
@@ -96,7 +96,7 @@ def find_plotting_job_log(plot_id):
         try:
             if filename.endswith(".log") and not filename.startswith('plotman.'):
                 with open(os.path.join(str(dir_path), filename)) as logfile:
-                    for line in itertools.islice(logfile, 0, 15):
+                    for line in itertools.islice(logfile, 0, 20):
                         if plot_id in line:
                             return os.path.join(str(dir_path), filename)
                 continue

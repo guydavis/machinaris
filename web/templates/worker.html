@@ -180,14 +180,36 @@
             },
     borderWidth: 1,
       options: {
-      responsive: true,
+        plugins: {  
+            legend: {
+                labels: {
+                    color: "#c7c7c7",  
+                    font: {
+                        size: 18 
+                    }
+                }
+            }
+        },
+        responsive: true,
         scales: {
         x: {
           stacked: true,
-                        },
+          ticks: {
+            color: "#c7c7c7",
+            font: {
+              size: 16 
+            }  
+          },
+        },
         y: {
           stacked: true,
-            beginAtZero: true
+          beginAtZero: true,
+          ticks: {
+            color: "#c7c7c7",
+            font: {
+              size: 16 
+            }  
+          },
         }
       }
     }
@@ -200,13 +222,13 @@
       data: {
         labels: {{ plotting_disk_usage[worker.hostname].paths | safe }},
     datasets: [{
-      label: "Disk Space Used (TB)",
+      label: "Disk Space Used (GB)",
       data: {{ plotting_disk_usage[worker.hostname].used | safe }},
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
       borderColor: 'rgba(255, 99, 132, 1)',
                 },
     {
-      label: 'Disk Space Free (TB)',
+      label: 'Disk Space Free (GB)',
       data: {{ plotting_disk_usage[worker.hostname].free | safe }},
       backgroundColor: 'rgba(54, 162, 235, 0.2)',
       borderColor: 'rgba(54, 162, 235, 1)',
@@ -214,14 +236,36 @@
             },
     borderWidth: 1,
       options: {
-      responsive: true,
+        plugins: {  
+            legend: {
+                labels: {
+                    color: "#c7c7c7",  
+                    font: {
+                        size: 18 
+                    }
+                }
+            }
+        },
+        responsive: true,
         scales: {
         x: {
           stacked: true,
-                        },
+          ticks: {
+            color: "#c7c7c7",
+            font: {
+              size: 16 
+            }  
+          },
+        },
         y: {
           stacked: true,
-            beginAtZero: true
+          beginAtZero: true,
+          ticks: {
+            color: "#c7c7c7",
+            font: {
+              size: 16 
+            }  
+          },
         }
       }
     }

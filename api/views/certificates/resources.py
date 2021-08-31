@@ -28,7 +28,13 @@ class Certificates(MethodView):
     def get(self):
         if not self.allow_download():
             abort(401)
-        blockchain = request.args.get('type')
+        type = request.args.get('type')
+        if type == "chia":
+            blockchain = "chia"
+        elif type == "flax":
+            blockchain = "flax"
+        else:
+            abort(400) # Bad blockchain type passed
         dir = "/root/.{0}/mainnet/config/ssl/ca".format(blockchain)
         zip = "/tmp/certs".format(blockchain)
         zipname = "{0}.zip".format(zip)
