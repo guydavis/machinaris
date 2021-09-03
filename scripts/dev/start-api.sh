@@ -25,6 +25,7 @@ fi
     --bind 0.0.0.0:8927 \
     --timeout 90 \
     --log-level=${LOG_LEVEL} \
-    --workers=4 \
+    --workers=2 \
     --config api/gunicorn.conf.py \
+    --access-logfile - \
     api:app
