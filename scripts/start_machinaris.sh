@@ -67,7 +67,8 @@ echo 'Starting Machinaris API server...'
     --log-level=${LOG_LEVEL} \
     --workers=4 \
     --config api/gunicorn.conf.py \
-    api:app > /root/.chia/machinaris/logs/apisrv.log 2>&1 &
+    --log-config api/log.conf \
+    api:app &
 
 # Kill gunicorn if already running to allow restart
 web_pid=$(pidof 'gunicorn: master [web:app]')
@@ -79,7 +80,8 @@ echo 'Starting Machinaris Web server...'
     --bind 0.0.0.0:8926 --timeout 90 \
     --log-level=${LOG_LEVEL} \
     --workers=2 \
-    web:app > /root/.chia/machinaris/logs/webui.log 2>&1 &
+    --log-config web/log.conf \
+    web:app &
 
 echo 'Completed startup.  Browse to port 8926.'
 

@@ -31,10 +31,11 @@ def update():
         #app.logger.info("Skipping recent partials collection on plotting-only instance.")
         return
     with app.app_context():
+        if not globals.load()['is_controller']:
+            return # No partial proofs on harvesters
         try:
             from api import db
-            if globals.load()['is_controller']:
-                delete_old_partials(db)
+            delete_old_partials(db)
             hostname = utils.get_hostname()
             blockchains = ['chia']
             if globals.flax_enabled():
