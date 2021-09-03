@@ -26,7 +26,7 @@ class Plots(MethodView):
     @blp.response(200, PlotSchema(many=True))
     @blp.paginate(SQLCursorPage)
     def get(self, args):
-        ret = Plot.query.filter_by(**args)
+        ret = db.session.query(Plot).filter_by(**args)
         return ret
 
     @blp.etag

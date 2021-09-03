@@ -26,13 +26,13 @@ class Farms(MethodView):
     @blp.response(200, FarmSchema(many=True))
     @blp.paginate(SQLCursorPage)
     def get(self, args):
-        return Farm.query.filter_by(**args)
+        return db.session.query(Farm).filter_by(**args)
 
     @blp.etag
     @blp.arguments(FarmSchema)
     @blp.response(201, FarmSchema)
     def post(self, new_item):
-        item = Farm.query.get(new_item['hostname'])
+        item = db.session.query(Farm).get(new_item['hostname'])
         if item: # upsert
             new_item['created_at'] = item.created_at
             new_item['updated_at'] = dt.datetime.now()
@@ -50,13 +50,13 @@ class FarmsByHostname(MethodView):
     @blp.etag
     @blp.response(200, FarmSchema)
     def get(self, hostname):
-        return Farm.query.get_or_404(hostname)
+        return db.session.query(Farm).get_or_404(hostname)
 
     @blp.etag
     @blp.arguments(FarmSchema)
     @blp.response(200, FarmSchema)
     def put(self, new_item, hostname):
-        item = Farm.query.get_or_404(hostname)
+        item = db.session.query(Farm).get_or_404(hostname)
         new_item['hostname'] = item.hostname
         new_item['created_at'] = item.created_at
         new_item['updated_at'] = dt.datetime.now()
@@ -69,7 +69,7 @@ class FarmsByHostname(MethodView):
     @blp.etag
     @blp.response(204)
     def delete(self, hostname):
-        item = Farm.query.get_or_404(hostname)
+        item = db.session.query(Farm).get_or_404(hostname)
         blp.check_etag(item, FarmSchema)
         db.session.delete(item)
         db.session.commit()

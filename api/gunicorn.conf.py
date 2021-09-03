@@ -17,7 +17,7 @@ def on_starting(server):
 
     # Statistics gathering locally
     scheduler.add_job(func=stats_farm.collect, name="stats_farm", trigger='cron', minute=0)  # Hourly
-    scheduler.add_job(func=stats_disk.collect, name="stats_disk", trigger='cron', minute="*/5") # Every 5 minutes
+    scheduler.add_job(func=stats_disk.collect, name="stats_disk", trigger='cron', minute="*/10") # Every 10 minutes
 
     # Testing only
     #scheduler.add_job(func=stats_farm.collect, trigger='interval', seconds=10) # Test immediately

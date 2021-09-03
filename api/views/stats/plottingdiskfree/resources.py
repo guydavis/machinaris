@@ -26,7 +26,7 @@ class StatPlottingDiskFrees(MethodView):
     @blp.response(200, StatPlottingDiskFreeSchema(many=True))
     @blp.paginate(SQLCursorPage)
     def get(self, args):
-        ret = StatPlottingDiskFree.query.filter_by(**args)
+        ret = db.session.query(StatPlottingDiskFree).filter_by(**args)
         return ret
 
     @blp.etag

@@ -98,10 +98,11 @@ def collect():
 
 def send_stats(model, endpoint):
     from api import db
+    since = (datetime.datetime.now() - datetime.timedelta(minutes=15)).strftime("%Y-%m-%d %H:%M:%S.000")
     try:
         hostname = utils.get_displayname()
         payload = []
-        for stat in db.session.query(model).all():
+        for stat in db.session.query(model).filter(model.created_at >= since).all():
             payload.append({
                 "hostname": stat.hostname,
                 "path": stat.path,

@@ -26,13 +26,13 @@ class Wallets(MethodView):
     @blp.response(200, WalletSchema(many=True))
     @blp.paginate(SQLCursorPage)
     def get(self, args):
-        return Wallet.query.filter_by(**args)
+        return db.session.query(Wallet).filter_by(**args)
 
     @blp.etag
     @blp.arguments(WalletSchema)
     @blp.response(201, WalletSchema)
     def post(self, new_item):
-        item = Wallet.query.filter(Wallet.hostname==new_item['hostname'], \
+        item = db.session.query(Wallet).filter(Wallet.hostname==new_item['hostname'], \
             Wallet.blockchain==new_item['blockchain']).first()
         if item: # upsert
             new_item['created_at'] = item.created_at
@@ -51,13 +51,13 @@ class WalletsByHostname(MethodView):
     @blp.etag
     @blp.response(200, WalletSchema)
     def get(self, hostname, blockchain):
-        return Wallet.query.get_or_404(hostname)
+        return db.session.query(Wallet).get_or_404(hostname)
 
     @blp.etag
     @blp.arguments(WalletSchema)
     @blp.response(200, WalletSchema)
     def put(self, new_item, hostname, blockchain):
-        item = Wallet.query.filter(Wallet.hostname==hostname, Wallet.blockchain==blockchain)
+        item = db.session.query(Wallet).filter(Wallet.hostname==hostname, Wallet.blockchain==blockchain)
         new_item['hostname'] = item.hostname
         new_item['created_at'] = item.created_at
         new_item['updated_at'] = dt.datetime.now()
@@ -70,7 +70,7 @@ class WalletsByHostname(MethodView):
     @blp.etag
     @blp.response(204)
     def delete(self, hostname):
-        item = Wallet.query.get_or_404(hostname)
+        item = db.session.query(Wallet).get_or_404(hostname)
         blp.check_etag(item, WalletSchema)
         db.session.delete(item)
         db.session.commit()

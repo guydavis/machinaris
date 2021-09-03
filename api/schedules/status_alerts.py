@@ -36,8 +36,8 @@ def update():
             if first_run:  # On first launch, load last week of notifications
                 since = (datetime.datetime.now() - datetime.timedelta(weeks=1)).strftime("%Y-%m-%d %H:%M:%S.000")
                 first_run = False
-            else: # On subsequent schedules, load only last 5 minutes.
-                since = (datetime.datetime.now() - datetime.timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S.000")
+            else: # On subsequent schedules, load only last 15 minutes.
+                since = (datetime.datetime.now() - datetime.timedelta(minutes=15)).strftime("%Y-%m-%d %H:%M:%S.000")
             alerts = db.session.query(a.Alert).filter(a.Alert.created_at >= since, a.Alert.hostname == hostname).order_by(a.Alert.created_at.desc()).limit(20).all()
             payload = []
             for alert in alerts:
