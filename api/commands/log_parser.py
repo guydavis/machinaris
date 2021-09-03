@@ -127,9 +127,9 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         else:
             log_file = "/root/.chia/mainnet/log/debug.log"
     elif log_type == "webui":
-        log_file = "/root/.chia/machinaris/logs/webui-errors.log"
+        log_file = "/root/.chia/machinaris/logs/webui.log"
     elif log_type == "apisrv":
-        log_file = "/root/.chia/machinaris/logs/apisrv-errors.log"
+        log_file = "/root/.chia/machinaris/logs/apisrv.log"
     if not log_file or not os.path.exists(log_file):
         app.logger.info("No log file found at {0}".format(log_file))
         return 'No log file found!'
