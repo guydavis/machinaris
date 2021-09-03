@@ -26,13 +26,13 @@ class Keys(MethodView):
     @blp.response(200, KeySchema(many=True))
     @blp.paginate(SQLCursorPage)
     def get(self, args):
-        return Key.query.filter_by(**args)
+        return db.session.query(Key).filter_by(**args)
 
     @blp.etag
     @blp.arguments(KeySchema)
     @blp.response(201, KeySchema)
     def post(self, new_item):
-        item = Key.query.get(new_item['hostname'])
+        item = db.session.query(Key).get(new_item['hostname'])
         if item: # upsert
             new_item['created_at'] = item.created_at
             new_item['updated_at'] = dt.datetime.now()
@@ -50,13 +50,13 @@ class KeysByHostname(MethodView):
     @blp.etag
     @blp.response(200, KeySchema)
     def get(self, hostname):
-        return Key.query.get_or_404(hostname)
+        return db.session.query(Key).get_or_404(hostname)
 
     @blp.etag
     @blp.arguments(KeySchema)
     @blp.response(200, KeySchema)
     def put(self, new_item, hostname):
-        item = Key.query.get_or_404(hostname)
+        item = db.session.query(Key).get_or_404(hostname)
         new_item['hostname'] = item.hostname
         new_item['created_at'] = item.created_at
         new_item['updated_at'] = dt.datetime.now()
@@ -69,7 +69,7 @@ class KeysByHostname(MethodView):
     @blp.etag
     @blp.response(204)
     def delete(self, hostname):
-        item = Key.query.get_or_404(hostname)
+        item = db.session.query(Key).get_or_404(hostname)
         blp.check_etag(item, KeySchema)
         db.session.delete(item)
         db.session.commit()

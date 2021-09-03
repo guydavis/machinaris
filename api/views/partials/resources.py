@@ -26,7 +26,7 @@ class Partials(MethodView):
     @blp.response(200, PartialSchema(many=True))
     @blp.paginate(SQLCursorPage)
     def get(self, args):
-        ret = Partial.query.filter_by(**args)
+        ret = db.session.query(Partial).filter_by(**args)
         return ret
 
     @blp.etag
@@ -37,7 +37,7 @@ class Partials(MethodView):
             return "No partials provided.", 400
         items = []
         for new_item in new_items:
-            item = Partial.query.get(new_item['unique_id'])
+            item = db.session.query(Partial).get(new_item['unique_id'])
             if not item:  # Request contains previously received challenges, only add new
                 item = Partial(**new_item)
                 items.append(item)
@@ -62,7 +62,7 @@ class PartialByHostname(MethodView):
     def put(self, new_items, hostname, blockchain):
         items = []
         for new_item in new_items:
-            item = Partial.query.get(new_item['unique_id'])
+            item = db.session.query(Partial).get(new_item['unique_id'])
             if not item:  # Request contains previously received challenges, only add new
                 item = Partial(**new_item)
                 items.append(item)

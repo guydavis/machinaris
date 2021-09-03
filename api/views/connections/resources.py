@@ -26,13 +26,13 @@ class Connections(MethodView):
     @blp.response(200, ConnectionSchema(many=True))
     @blp.paginate(SQLCursorPage)
     def get(self, args):
-        return Connection.query.filter_by(**args)
+        return db.session.query(Connection).filter_by(**args)
 
     @blp.etag
     @blp.arguments(ConnectionSchema)
     @blp.response(201, ConnectionSchema)
     def post(self, new_item):
-        item = Connection.query.filter(Connection.hostname==new_item['hostname'], \
+        item = db.session.query(Connection).filter(Connection.hostname==new_item['hostname'], \
             Connection.blockchain==new_item['blockchain']).first()
         if item: # upsert
             new_item['created_at'] = item.created_at
@@ -51,13 +51,13 @@ class ConnectionsByHostname(MethodView):
     @blp.etag
     @blp.response(200, ConnectionSchema)
     def get(self, hostname):
-        return Connection.query.get_or_404(hostname)
+        return db.session.query(Connection).get_or_404(hostname)
 
     @blp.etag
     @blp.arguments(ConnectionSchema)
     @blp.response(200, ConnectionSchema)
     def put(self, new_item, hostname):
-        item = Connection.query.get_or_404(hostname)
+        item = db.session.query(Connection).get_or_404(hostname)
         new_item['hostname'] = item.hostname
         new_item['created_at'] = item.created_at
         new_item['updated_at'] = dt.datetime.now()
@@ -70,7 +70,7 @@ class ConnectionsByHostname(MethodView):
     @blp.etag
     @blp.response(204)
     def delete(self, hostname):
-        item = Connection.query.get_or_404(hostname)
+        item = db.session.query(Connection).get_or_404(hostname)
         blp.check_etag(item, ConnectionSchema)
         db.session.delete(item)
         db.session.commit()

@@ -26,13 +26,13 @@ class Blockchains(MethodView):
     @blp.response(200, BlockchainSchema(many=True))
     @blp.paginate(SQLCursorPage)
     def get(self, args):
-        return Blockchain.query.filter_by(**args)
+        return db.session.query(Blockchain).filter_by(**args)
 
     @blp.etag
     @blp.arguments(BlockchainSchema)
     @blp.response(201, BlockchainSchema)
     def post(self, new_item):
-        item = Blockchain.query.filter(Blockchain.hostname==new_item['hostname'], \
+        item = db.session.query(Blockchain).filter(Blockchain.hostname==new_item['hostname'], \
             Blockchain.blockchain==new_item['blockchain']).first()
         if item: # upsert
             new_item['created_at'] = item.created_at
@@ -51,13 +51,13 @@ class BlockchainsByHostname(MethodView):
     @blp.etag
     @blp.response(200, BlockchainSchema)
     def get(self, hostname):
-        return Blockchain.query.get_or_404(hostname)
+        return db.session.query(Blockchain).get_or_404(hostname)
 
     @blp.etag
     @blp.arguments(BlockchainSchema)
     @blp.response(200, BlockchainSchema)
     def put(self, new_item, hostname, blockchain):
-        item = Blockchain.query.get_or_404(hostname)
+        item = db.session.query(Blockchain).get_or_404(hostname)
         new_item['hostname'] = item.hostname
         new_item['created_at'] = item.created_at
         new_item['updated_at'] = dt.datetime.now()
@@ -70,7 +70,7 @@ class BlockchainsByHostname(MethodView):
     @blp.etag
     @blp.response(204)
     def delete(self, hostname):
-        item = Blockchain.query.get_or_404(hostname)
+        item = db.session.query(Blockchain).get_or_404(hostname)
         blp.check_etag(item, BlockchainSchema)
         db.session.delete(item)
         db.session.commit()

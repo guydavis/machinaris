@@ -35,7 +35,7 @@ class Alerts(MethodView):
     def post(self, new_items):
         items = []
         for new_item in new_items:
-            item = Alert.query.get(new_item['unique_id'])
+            item = db.session.query(Alert).get(new_item['unique_id'])
             if not item:  # Request contains previously received alerts, only add new
                 item = Alert(**new_item)
                 items.append(item)
@@ -58,7 +58,7 @@ class AlertByHostname(MethodView):
     def put(self, new_items, hostname):
         items = []
         for new_item in new_items:
-            item = Alert.query.get(new_item['unique_id'])
+            item = db.session.query(Alert).get(new_item['unique_id'])
             if not item:  # Request contains previously received alerts, only add new
                 item = Alert(**new_item)
                 items.append(item)

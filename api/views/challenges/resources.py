@@ -26,7 +26,7 @@ class Challenges(MethodView):
     @blp.response(200, ChallengeSchema(many=True))
     @blp.paginate(SQLCursorPage)
     def get(self, args):
-        ret = Challenge.query.filter_by(**args)
+        ret = db.session.query(Challenge).filter_by(**args)
         return ret
 
     @blp.etag
@@ -37,7 +37,7 @@ class Challenges(MethodView):
             return "No challenges provided.", 400
         items = []
         for new_item in new_items:
-            item = Challenge.query.get(new_item['unique_id'])
+            item = db.session.query(Challenge).get(new_item['unique_id'])
             if not item:  # Request contains previously received challenges, only add new
                 item = Challenge(**new_item)
                 items.append(item)
@@ -60,7 +60,7 @@ class ChallengeByHostname(MethodView):
     def put(self, new_items, hostname, blockchain):
         items = []
         for new_item in new_items:
-            item = Challenge.query.get(new_item['unique_id'])
+            item = db.session.query(Challenge).get(new_item['unique_id'])
             if not item:  # Request contains previously received challenges, only add new
                 item = Challenge(**new_item)
                 items.append(item)
