@@ -68,7 +68,7 @@ class WorkerWarning:
             self.icon = "exclamation-circle"
 
 def plot_count_from_summary(orig_hostname, worker_plot_file_count):
-    app.logger.info("Searching for warnings on: {0}.".format(orig_hostname))
+    #app.logger.info("Searching for warnings on: {0}.".format(orig_hostname))
     try:
         hostname = socket.gethostbyname(orig_hostname)
     except Exception as ex:
@@ -77,7 +77,7 @@ def plot_count_from_summary(orig_hostname, worker_plot_file_count):
         harvesters = asyncio.run(chia.load_plots_per_harvester())
         #app.logger.info(harvesters.keys())
         if hostname in harvesters:
-            app.logger.info("Found hostname match for {0}".format(hostname))
+            #app.logger.info("Found hostname match for {0}".format(hostname))
             return len(harvesters[hostname])
         else:
             for harvester in harvesters:
