@@ -84,11 +84,6 @@
             toggleControllerAddressVisibility();
         }
         function toggleFarmerAddressVisibility() {
-            if (document.getElementById('mode-harvester').checked) {
-                $('#farmer_address_row').show()
-            } else {
-                $('#farmer_address_row').hide()
-            }
             toggleControllerAddressVisibility();
         }
         function toggleControllerAddressVisibility() {
@@ -106,18 +101,15 @@
                 }
             }
         }
-        function updateAppData() {
+        function updateVolumes() {
             var os = getRadioButtonValue('os')
             if (os == 'windows') {
-                document.getElementById('appdata').value = '${APPDATA}/.machinaris';
                 document.getElementById('volume_host_path0').placeholder = "C:/my_chia_plots";
                 document.getElementById('volume_host_path1').placeholder = "C:/my_chia_plotting";
             } else if (os == 'macintosh') {
-                document.getElementById('appdata').value = '~/.machinaris';
                 document.getElementById('volume_host_path0').placeholder = "/Volumes/disk1";
                 document.getElementById('volume_host_path1').placeholder = "/Volumes/temp1";
             } else {
-                document.getElementById('appdata').value = '~/.machinaris';
                 document.getElementById('volume_host_path0').placeholder = "/mnt/disk1";
                 document.getElementById('volume_host_path1').placeholder = "/mnt/temp1";
             }
@@ -160,7 +152,11 @@
             if (document.getElementById("dns_ip_addr").value) {
                 cmd += '    --dns ' + document.getElementById("dns_ip_addr").value + line_end;
             }
-            cmd += '    -v ' + document.getElementById("appdata").value + ':/root/.chia' + line_end;
+            if (os == 'windows') {
+                cmd += '    -v $HOME/.machinaris:/root/.chia' + line_end;
+            } else {
+                cmd += '    -v ~/.machinaris:/root/.chia' + line_end;
+            }
             var cur_vols = $('#volumes').children().length
             var plots_dir = []
             $('#volumes').children().each((index, element) => {
@@ -183,10 +179,10 @@
             var mode = ""
             if (document.getElementById('mode-harvester').checked) {
                 mode = "harvester";
-                cmd += '    -e farmer_address=' + document.getElementById("farmer_address").value + line_end;
-                cmd += '    -e farmer_port=' + document.getElementById("farmer_port").value + line_end;
+                cmd += '    -e farmer_address=' + document.getElementById("controller_host").value + line_end;
+                cmd += '    -e farmer_port=8447' + line_end;
                 if (document.getElementById("blockchain-flax").checked) {
-                    cmd += '    -e flax_farmer_port=' + document.getElementById("flax_farmer_port").value + line_end;
+                    cmd += '    -e flax_farmer_port=6885' + line_end;
                 }
             }
             if (document.getElementById('mode-plotter').checked) {
@@ -250,7 +246,7 @@
             cmd += '        restart: always' + line_end;
             cmd += '        tty: true' + line_end;
             cmd += '        volumes:' + line_end;
-            cmd += '            - ' + document.getElementById("appdata").value + ':/root/.chia' + line_end;
+            cmd += '            - ~/.machinaris:/root/.chia' + line_end;
             var cur_vols = $('#volumes').children().length
             var plots_dir = []
             $('#volumes').children().each((index, element) => {
@@ -266,10 +262,10 @@
             var mode = ""
             if (document.getElementById('mode-harvester').checked) {
                 mode = "harvester";
-                cmd += '            - farmer_address=' + document.getElementById("farmer_address").value + line_end;
-                cmd += '            - farmer_port=' + document.getElementById("farmer_port").value + line_end;
+                cmd += '            - farmer_address=' + document.getElementById("controller_host").value + line_end;
+                cmd += '            - farmer_port=8447' + line_end;
                 if (document.getElementById("blockchain-flax").checked) {
-                    cmd += '            - flax_farmer_port=' + document.getElementById("flax_farmer_port").value + line_end;
+                    cmd += '            - flax_farmer_port=6885' + line_end;
                 }
             }
             if (document.getElementById('mode-plotter').checked) {
@@ -340,21 +336,21 @@
                     <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="radio" name="os" id="os-linux" value="linux" checked
-                                onclick="updateAppData(); updateDocker()">
+                                onclick="updateVolumes(); updateDocker()">
                             <label class="form-check-label" for="os-linux">
                                 Linux
                             </label>
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="radio" name="os" id="os-windows" value="windows"
-                                onclick="updateAppData(); updateDocker()">
+                                onclick="updateVolumes(); updateDocker()">
                             <label class="form-check-label" for="os-windows">
                                 Windows
                             </label>
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="radio" name="os" id="os-macintosh" value="macintosh"
-                                onclick="updateAppData(); updateDocker()">
+                                onclick="updateVolumes(); updateDocker()">
                             <label class="form-check-label" for="os-macintosh">
                                 Macintosh
                             </label>
@@ -379,23 +375,6 @@
                             </label>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row mb-3" id="farmer_address_row">
-                <div class="col-6">
-                    <label for="farmer_address" class="form-label">Farmer Hostname/IP</label>
-                    <input type="text" class="form-control" aria-label="farmer_address" id="farmer_address"
-                        onkeyup="updateDocker()">
-                </div>
-                <div class="col-3">
-                    <label for="farmer_port" class="form-label">Chia Farmer Port</label>
-                    <input type="text" class="form-control" aria-label="farmer_port" value="8447" id="farmer_port"
-                        onkeyup="updateDocker()">
-                </div>
-                <div class="col-3">
-                    <label for="flax_farmer_port" class="form-label">Flax Farmer Port</label>
-                    <input type="text" class="form-control" aria-label="flax_farmer_port" value="6885"
-                        id="flax_farmer_port" onkeyup="updateDocker()">
                 </div>
             </div>
             <div class="row mb-3" id="plotting_keys_row">
@@ -434,20 +413,9 @@
                     </div>
                 </div>
             </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <label for="appdata" class="form-label">Application Data Path</label>
-                    <input type="text" id='appdata' class="form-control" value='~/.machinaris' aria-label="appdata"
-                        onkeyup="updateDocker()">
-                </div>
-                <div class="col">
-                    <label for="timezone" class="form-label">Timezone</label>
-                    {% include 'views/timezones_select.html' %}
-                </div>
-            </div>
             <div class="row mb-3" id="controller_address_row">
                 <div class="col offset">
-                    <label for="controller_host" class="form-label">Controller Hostname/IP</label>
+                    <label for="controller_host" class="form-label">Controller IP Address</label>
                     <input type="text" class="form-control" placeholder="" aria-label="controller_host"
                         id='controller_host' onkeyup="updateDocker()">
                 </div>
@@ -459,7 +427,7 @@
             </div>
             <div class="row mb-3">
                 <div class="col offset">
-                    <label for="worker_hostname" class="form-label">Worker Hostname/IP</label>
+                    <label for="worker_hostname" class="form-label">Worker Hostname</label>
                     <input type="text" class="form-control" placeholder="myhostname" aria-label="worker_hostname"
                         id='worker_hostname' onkeyup="updateDocker()">
                 </div>
@@ -467,6 +435,17 @@
                     <label for="ip_addr" class="form-label">Worker IP Address</label>
                     <input type="text" class="form-control" placeholder="192.168.1.100" aria-label="ip_addr"
                         id='ip_addr' onkeyup="updateDocker()">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="timezone" class="form-label">Timezone</label>
+                    {% include 'views/timezones_select.html' %}
+                </div>
+                <div class="col">
+                    <label for="dns_ip_addr" class="form-label">DNS Server IP Address (Optional)</label>
+                    <input type="text" class="form-control" placeholder="192.168.1.1" aria-label="dns_ip_addr"
+                        id='dns_ip_addr' onkeyup="updateDocker()">
                 </div>
             </div>
             <div class="row mb-3">
@@ -490,9 +469,6 @@
                     </div>
                 </div>
                 <div class="col">
-                    <label for="dns_ip_addr" class="form-label">DNS Server IP Address (Optional)</label>
-                    <input type="text" class="form-control" placeholder="192.168.1.1" aria-label="dns_ip_addr"
-                        id='dns_ip_addr' onkeyup="updateDocker()">
                 </div>
             </div>
             <h4>Volume Mounts</h4>
