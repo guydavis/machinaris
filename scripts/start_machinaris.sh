@@ -30,7 +30,7 @@ _EOF
 fi
 # Start plotting automatically if requested (not the default)
 if [ ${AUTO_PLOT,,} = "true" ]; then
-    nohup plotman plot < /dev/tty >> /root/.chia/plotman/logs/plotman.log 2>&1 &
+    nohup plotman plot >> /root/.chia/plotman/logs/plotman.log 2>&1 &
 fi
 
 # Start the log monitors
