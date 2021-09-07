@@ -86,8 +86,8 @@ def plot_count_from_summary(orig_hostname, worker_plot_file_count):
                     app.logger.info("No hostname match for {0} but found matching counts {1}".format(hostname, worker_plot_file_count))
                     return len(harvesters[harvester])
     except Exception as ex:
-        app.logger.info("Failed to get harvester plot count for {0} due to {1}.".format(hostname, str(ex)))
-    app.logger.info("Failed to find any match for hostname {0}".format(hostname))
+        app.logger.info("Failed to get harvester plot count for {0} due to {1}.".format(orig_hostname, str(ex)))
+    app.logger.info("Failed to find any match for hostname {0}".format(orig_hostname))
     return None
 
 def generate_warnings(worker, plots):

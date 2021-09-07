@@ -34,7 +34,7 @@ def check_config():
 
 def load_plotting_summary():
     check_config()
-    proc = Popen("{0} {1} < /dev/tty".format(PLOTMAN_SCRIPT,
+    proc = Popen("{0} {1}".format(PLOTMAN_SCRIPT,
                  'status'), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -102,7 +102,7 @@ def start_plotman():
     if len(load_plotting_summary().rows) == 0:  # No plots running
         clean_tmp_dirs_before_run()  
     logfile = "/root/.chia/plotman/logs/plotman.log"
-    proc = Popen("nohup {0} {1} < /dev/tty >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'plot', logfile),
+    proc = Popen("nohup {0} {1} >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'plot', logfile),
                     shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
     app.logger.info("Completed launch of plotman.")
 
@@ -157,7 +157,7 @@ def start_archiver():
     check_config()
     logfile = "/root/.chia/plotman/logs/archiver.log"
     app.logger.info("About to start archiver...")
-    proc = Popen("nohup {0} {1} < /dev/tty >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'archive', logfile),
+    proc = Popen("nohup {0} {1} >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'archive', logfile),
                     shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
     app.logger.info("Completed launch of archiver.")
 
@@ -214,7 +214,7 @@ def analyze(plot_file):
         return "Invalid plot file name provided: {0}".format(plot_file)
     plot_log_file = find_plotting_job_log(groups[7])
     if plot_log_file:
-        proc = Popen("{0} {1} {2} < /dev/tty".format(
+        proc = Popen("{0} {1} {2}".format(
             PLOTMAN_SCRIPT,'analyze', plot_log_file), stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=90)

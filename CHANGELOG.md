@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.5.5] - 2021-09-? 
 
-- 
+- Plotman - Avoid use of tty for container platforms such as TrueNAS to allow plotting without `-t` docker flag.
+- Machinaris - Improved status reporting efficiency and better logging.
 
 ## [0.5.4] - 2021-08-31 
 
