@@ -14,22 +14,19 @@ class FarmSummary:
 
     def __init__(self, cli_stdout=None, farm_plots=None):
         if cli_stdout:
-            next_line_local_harvester = False
             self.plot_count = 0
             self.plots_size = 0
             for line in cli_stdout:
-                if next_line_local_harvester:
-                    self.plot_count = line.strip().split(' ')[0]
+                if "Plot count for all" in line: 
+                    self.plot_count = line.strip().split(':')[1].strip()
+                elif "Total size of plots" in line:
                     self.plots_size = line.strip().split(':')[1].strip()
-                    next_line_local_harvester = False
                 elif "status" in line: 
                     self.calc_status(line.split(':')[1].strip())
                 elif "Total chia farmed" in line:
                     self.total_chia = line.split(':')[1].strip()
                 elif "Total flax farmed" in line:
                     self.total_chia = line.split(':')[1].strip()
-                elif "Local Harvester" in line:
-                    next_line_local_harvester = True
                 elif "Estimated network space" in line:
                     self.calc_netspace_size(line.split(':')[1].strip())
                 elif "Expected time to win" in line:
@@ -43,9 +40,6 @@ class FarmSummary:
                 if plot['size'] > MINIMUM_K32_PLOT_SIZE_BYTES:
                     self.plot_count += 1
                     bytes_size += int(plot['size'])
-                else:
-                    app.logger.debug("Skipping inclusion of {0} size plot: {1}".format( \
-                        converters.sizeof_fmt(plot['size'], plot['path'])))
             self.plots_size = converters.sizeof_fmt(bytes_size)
         else:
             raise Exception("Not provided either chia stdout lines or a list of plots.")
