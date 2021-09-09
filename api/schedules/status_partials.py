@@ -27,12 +27,7 @@ def delete_old_partials(db):
         app.logger.info(traceback.format_exc())
 
 def update():
-    if not globals.farming_enabled() and not globals.harvesting_enabled():
-        #app.logger.info("Skipping recent partials collection on plotting-only instance.")
-        return
     with app.app_context():
-        if not globals.load()['is_controller']:
-            return # No partial proofs on harvesters
         try:
             from api import db
             delete_old_partials(db)

@@ -27,9 +27,6 @@ def delete_old_challenges(db):
         app.logger.info(traceback.format_exc())
 
 def update():
-    if not globals.farming_enabled() and not globals.harvesting_enabled():
-        #app.logger.info("Skipping recent challenges collection on plotting-only instance.")
-        return
     with app.app_context():
         from api import db
         if globals.load()['is_controller']:

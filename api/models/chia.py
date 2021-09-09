@@ -43,9 +43,6 @@ class FarmSummary:
                 if plot['size'] > MINIMUM_K32_PLOT_SIZE_BYTES:
                     self.plot_count += 1
                     bytes_size += int(plot['size'])
-                else:
-                    app.logger.debug("Skipping inclusion of {0} size plot: {1}".format( \
-                        converters.sizeof_fmt(plot['size'], plot['path'])))
             self.plots_size = converters.sizeof_fmt(bytes_size)
         else:
             raise Exception("Not provided either chia stdout lines or a list of plots.")

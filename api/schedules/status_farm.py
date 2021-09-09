@@ -29,8 +29,7 @@ def safely_gather_plots_size_gibs(plots_size):
     return plots_size_gibs
 
 def update():
-    if not globals.farming_enabled() and not globals.harvesting_enabled():
-        #app.logger.info("Skipping farm summary status collection on plotting-only instance.")
+    if not globals.farming_enabled():
         return
     with app.app_context():
         try:

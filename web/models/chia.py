@@ -24,13 +24,9 @@ class FarmSummary:
         self.flax_netspace_display_size = "-"
         self.expected_time_to_win = "-"
         self.flax_expected_time_to_win = "-"
-        fullnode_plots_size = 0
-        for farm in farms:
-            self.plot_count += farm.plot_count
-            self.plots_size += farm.plots_size
+        for farm in farms:  # Only consider farm info from fullnode
             if farm.mode == "fullnode":
                 self.status = farm.status
-                fullnode_plots_size = farm.plots_size
                 self.total_chia = '0.0' if not farm.total_chia else round(farm.total_chia, 6)
                 self.netspace_display_size = '?' if not farm.netspace_size else converters.gib_to_fmt(farm.netspace_size)
                 self.netspace_size = farm.netspace_size
@@ -39,12 +35,8 @@ class FarmSummary:
                 self.flax_netspace_display_size = '?' if not farm.flax_netspace_size else converters.gib_to_fmt(farm.flax_netspace_size)
                 self.flax_netspace_size = farm.flax_netspace_size
                 self.flax_expected_time_to_win = farm.flax_expected_time_to_win
-        app.logger.debug("ETW: {0}".format(self.expected_time_to_win))
-                
         self.plots_display_size = converters.gib_to_fmt(self.plots_size)
         self.calc_status(self.status)
-        if fullnode_plots_size != self.plots_size: # Calculate for full farm including harvesters
-            self.calc_entire_farm_flax_etw(fullnode_plots_size, self.flax_expected_time_to_win, self.plots_size)
 
     def calc_status(self, status):
         self.status = status
@@ -52,16 +44,6 @@ class FarmSummary:
             self.display_status = "Active"
         else:
             self.display_status = self.status
-
-    # Only needed for older Flax code-base which reports ETW of plots only on fullnode
-    def calc_entire_farm_flax_etw(self, fullnode_plots_size, expected_time_to_win, total_farm_plots_size):
-        try:
-            fullnode_etw_mins = converters.etw_to_minutes(expected_time_to_win)
-            total_farm_etw_mins = (fullnode_plots_size / total_farm_plots_size) * fullnode_etw_mins
-            self.flax_expected_time_to_win = converters.format_minutes(int(total_farm_etw_mins))
-        except:
-            app.logger.debug("Failed to calculate ETW for entire farm due to: {0}".format(traceback.format_exc()))
-            self.flax_expected_time_to_win = "-"
 
 class FarmPlots:
 
