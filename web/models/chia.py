@@ -5,6 +5,7 @@ import traceback
 import datetime
 
 from web import app
+from web.actions import worker as w
 from common.utils import converters
 
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
@@ -26,6 +27,8 @@ class FarmSummary:
         self.flax_expected_time_to_win = "-"
         for farm in farms:  # Only consider farm info from fullnode
             if farm.mode == "fullnode":
+                self.plot_count = farm.plot_count
+                self.plots_size = farm.plots_size
                 self.status = farm.status
                 self.total_chia = '0.0' if not farm.total_chia else round(farm.total_chia, 6)
                 self.netspace_display_size = '?' if not farm.netspace_size else converters.gib_to_fmt(farm.netspace_size)
@@ -50,22 +53,26 @@ class FarmPlots:
      def __init__(self, plots):
         self.columns = ['worker', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size' ]
         self.rows = []
-        plots_by_id = {}
+        displaynames = {}
         for plot in plots:
-            if plot.plot_id in plots_by_id:
-                other_plot = plots_by_id[plot.plot_id]
-                app.logger.info("Skipping listing of plot on {0} at {1}/{2} because same plot_id found on {3} at {4}/{5}".format(
-                    plot.hostname, plot.dir, plot.file, other_plot.hostname, other_plot.dir, other_plot.file))
-            else: # No conflict so add it to plots list
-                plots_by_id[plot.plot_id] = plot
-                self.rows.append({ \
-                    'worker': plot.hostname, \
-                    'plot_id': plot.plot_id, \
-                    'dir': plot.dir,  \
-                    'plot': plot.file,  \
-                    'create_date': plot.created_at, \
-                    'size': plot.size, \
-                    'type': plot.type if plot.type else "" }) 
+            if plot.hostname in displaynames:
+                displayname = displaynames[plot.hostname]
+            else: # Look up displayname
+                try:
+                    app.logger.debug("Found worker with hostname with hostname '{0}'".format(plot.hostname))
+                    displayname = w.get_worker_by_hostname(plot.hostname).displayname
+                except:
+                    app.logger.info("Unable to find a worker with hostname '{0}'".format(plot.hostname))
+                    displayname = plot.hostname
+                displaynames[plot.hostname] = displayname
+            self.rows.append({ \
+                'worker': displayname, \
+                'plot_id': plot.plot_id, \
+                'dir': plot.dir,  \
+                'plot': plot.file,  \
+                'create_date': plot.created_at, \
+                'size': plot.size, \
+                'type': plot.type if plot.type else "" }) 
 
 
 class ChallengesChartData:
