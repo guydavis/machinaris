@@ -21,7 +21,7 @@
         <tbody>
             {% for wallet in wallets.rows %}
             <tr>
-                <td>{{wallet.hostname}}</td>
+                <td>{{wallet.displayname}}</td>
                 <td>{{wallet.blockchain}}</td>
                 <td style="white-space: pre-wrap;">{{wallet.details}}</td>
                 <td>{{wallet.updated_at | datetimefilter}}</td>

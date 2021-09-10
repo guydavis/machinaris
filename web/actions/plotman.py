@@ -44,7 +44,7 @@ def load_plotters():
             'archiving_status': plotter.archiving_status(),
             'archiving_enabled': plotter.archiving_enabled()
         })
-    return plotters
+    return sorted(plotters, key=lambda p: p['displayname'])
 
 def start_plotman(plotter):
     app.logger.info("Starting Plotman run...")

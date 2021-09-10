@@ -100,7 +100,7 @@ def load_farmers():
                 'displayname': farmer.displayname,
                 'farming_status': 'harvesting'
             })
-    return farmers
+    return sorted(farmers, key=lambda f: f['displayname'])
 
 def load_config(farmer, blockchain):
     return utils.send_get(farmer, "/configs/farming?blockchain=" + blockchain, debug=False).content
