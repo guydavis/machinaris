@@ -56,7 +56,6 @@ class WorkerSummary:
         self.farmers.sort(key=lambda w: w.displayname)
         self.harvesters.sort(key=lambda w: w.displayname)
         self.fullnodes.sort(key=lambda w: w.displayname)
-        self.workers.sort(key=lambda w: w.displayname)
 
     def set_ping_response(self, response):
         self.ping_response = response
