@@ -7,6 +7,7 @@ from shutil import disk_usage
 import sqlite3
 
 from flask import g
+from sqlalchemy import or_
 
 from common.utils import converters
 from common.models.alerts import Alert
@@ -121,17 +122,18 @@ def load_daily_farming_summaries():
     since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
     for wk in chia.load_farmers():
         hostname = wk['hostname']
+        app.logger.info("Storing daily for {0}".format(wk['hostname']))
         summary_by_worker[hostname] = DailyWorker(
-            daily_summaries(since_date, hostname, 'chia'), 
-            daily_summaries(since_date, hostname, 'flax'))
+            daily_summaries(since_date, hostname, wk['displayname'], 'chia'), 
+            daily_summaries(since_date, hostname, wk['displayname'], 'flax'))
     return summary_by_worker
 
-def daily_summaries(since, hostname, blockchain):
+def daily_summaries(since, hostname, displayname, blockchain):
     result = None
     try:
         #app.logger.debug(since)
         result = db.session.query(Alert).filter(
-                Alert.hostname==hostname, 
+                or_(Alert.hostname==hostname,Alert.hostname==displayname), 
                 Alert.blockchain==blockchain,
                 Alert.created_at >= since,
                 Alert.priority == "LOW",
@@ -153,8 +155,8 @@ def load_recent_disk_usage(disk_type):
         hostname = wk['hostname']
         dates = []
         paths = {}
-        sql = "select path, value{0}, created_at from stat_{1}_disk_used where hostname = ? order by created_at, path".format(value_factor, disk_type)
-        used_result = cur.execute(sql, [ wk['hostname'], ]).fetchall()
+        sql = "select path, value{0}, created_at from stat_{1}_disk_used where (hostname = ? or hostname = ?) order by created_at, path".format(value_factor, disk_type)
+        used_result = cur.execute(sql, [ wk['hostname'], wk['displayname'], ]).fetchall()
         for used_row in used_result:
             converted_date = converters.convert_date_for_luxon(used_row[2])
             if not converted_date in dates:
@@ -184,15 +186,15 @@ def load_current_disk_usage(disk_type, hostname=None):
     if disk_type == "plots":
         value_factor = "/1024"  # Divide to TB for plots disks
     for wk in chia.load_farmers():
-        if hostname and hostname != wk['hostname']:
+        if hostname and not (hostname == wk['hostname'] or hostname == wk['displayname']) :
             continue
         paths = []
         used = []
         free = []
-        sql = "select path, value{0}, created_at from stat_{1}_disk_used where hostname = ? group by path having max(created_at)".format(value_factor, disk_type)
-        used_result = cur.execute(sql, [ wk['hostname'], ]).fetchall()
-        sql = "select path, value{0}, created_at from stat_{1}_disk_free where hostname = ? group by path having max(created_at)".format(value_factor, disk_type)
-        free_result =cur.execute(sql, [ wk['hostname'], ]).fetchall()
+        sql = "select path, value{0}, created_at from stat_{1}_disk_used where (hostname = ? or hostname = ?) group by path having max(created_at)".format(value_factor, disk_type)
+        used_result = cur.execute(sql, [ wk['hostname'], wk['displayname'], ]).fetchall()
+        sql = "select path, value{0}, created_at from stat_{1}_disk_free where (hostname = ? or hostname = ?) group by path having max(created_at)".format(value_factor, disk_type)
+        free_result =cur.execute(sql, [ wk['hostname'], wk['displayname'], ]).fetchall()
         if len(used_result) != len(free_result):
             app.logger.debug("Found mismatched count of disk used/free stats for {0}".format(disk_type))
         else:

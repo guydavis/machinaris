@@ -28,7 +28,7 @@
     {% if blockchains.rows|length > 0 %}
     {% for blockchain in blockchains.rows %}
     <div class="container-fluid">
-        <h3>{{blockchain.hostname}} - {{blockchain.blockchain}}</h3>
+        <h3>{{blockchain.displayname}} - {{blockchain.blockchain}}</h3>
         <pre>{{ blockchain.details}}</pre>
     </div>
     {% endfor %}

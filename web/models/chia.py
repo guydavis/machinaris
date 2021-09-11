@@ -59,20 +59,22 @@ class FarmPlots:
                 displayname = displaynames[plot.hostname]
             else: # Look up displayname
                 try:
-                    app.logger.debug("Found worker with hostname with hostname '{0}'".format(plot.hostname))
+                    app.logger.debug("Found worker with hostname '{0}'".format(plot.hostname))
                     displayname = w.get_worker_by_hostname(plot.hostname).displayname
                 except:
                     app.logger.info("Unable to find a worker with hostname '{0}'".format(plot.hostname))
                     displayname = plot.hostname
                 displaynames[plot.hostname] = displayname
-            self.rows.append({ \
-                'worker': displayname, \
-                'plot_id': plot.plot_id, \
-                'dir': plot.dir,  \
-                'plot': plot.file,  \
-                'create_date': plot.created_at, \
-                'size': plot.size, \
-                'type': plot.type if plot.type else "" }) 
+            self.rows.append({ 
+                'hostname': plot.hostname, 
+                'worker': displayname, 
+                'plot_id': plot.plot_id, 
+                'dir': plot.dir,  
+                'plot': plot.file,  
+                'create_date': plot.created_at, 
+                'size': plot.size, 
+                'type': plot.type if plot.type else "" 
+            }) 
 
 
 class ChallengesChartData:
@@ -106,9 +108,15 @@ class Wallets:
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
         for wallet in wallets:
-            updated_at = wallet.updated_at or datetime.datetime.now()
+            try:
+                app.logger.debug("Found worker with hostname '{0}'".format(wallet.hostname))
+                displayname = w.get_worker_by_hostname(wallet.hostname).displayname
+            except:
+                app.logger.info("Unable to find a worker with hostname '{0}'".format(wallet.hostname))
+                displayname = wallet.hostname
             self.rows.append({ 
-                'hostname': wallet.hostname, 
+                'displayname': displayname, 
+                'hostname': wallet.hostname,
                 'blockchain': wallet.blockchain, 
                 'details': wallet.details, 
                 'updated_at': wallet.updated_at }) 
@@ -119,8 +127,15 @@ class Keys:
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
         for key in keys:
+            try:
+                app.logger.debug("Found worker with hostname '{0}'".format(key.hostname))
+                displayname = w.get_worker_by_hostname(key.hostname).displayname
+            except:
+                app.logger.info("Unable to find a worker with hostname '{0}'".format(key.hostname))
+                displayname = key.hostname
             self.rows.append({ 
-                'hostname': key.hostname, 
+                'displayname': displayname, 
+                'hostname': key.hostname,
                 'details': key.details,
                 'updated_at': key.updated_at }) 
 
@@ -130,8 +145,15 @@ class Blockchains:
         self.columns = ['hostname', 'blockchain', 'details', 'updated_at']
         self.rows = []
         for blockchain in blockchains:
+            try:
+                app.logger.debug("Found worker with hostname '{0}'".format(blockchain.hostname))
+                displayname = w.get_worker_by_hostname(blockchain.hostname).displayname
+            except:
+                app.logger.info("Unable to find a worker with hostname '{0}'".format(blockchain.hostname))
+                displayname = blockchain.hostname
             self.rows.append({ 
-                'hostname': blockchain.hostname, 
+                'displayname': displayname, 
+                'hostname': blockchain.hostname,
                 'blockchain': blockchain.blockchain, 
                 'details': blockchain.details,
                 'updated_at': blockchain.updated_at }) 
@@ -163,14 +185,21 @@ class Connections:
     def __init__(self, connections):
         self.rows = []
         for connection in connections:
+            try:
+                app.logger.debug("Found worker with hostname '{0}'".format(connection.hostname))
+                displayname = w.get_worker_by_hostname(connection.hostname).displayname
+            except:
+                app.logger.info("Unable to find a worker with hostname '{0}'".format(connection.hostname))
+                displayname = connection.hostname
             self.rows.append({
+                'displayname': displayname, 
                 'hostname': connection.hostname,
                 'blockchain': connection.blockchain,
                 'protocol_port': '8444' if connection.blockchain == 'chia' else '6888',
                 'details': connection.details
             })
     
-    def parse(connections):
+    def parse(self, connections):
         # TODO Deal with connection listing from multiple machines
         connection = connections[0]
         self.conns = []
