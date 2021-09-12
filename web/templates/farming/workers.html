@@ -84,7 +84,17 @@
                 </div>
             </div>
             <div class="col-8" style="margin-top:5px; margin-bottom:5px;">
+                {% if disk_usage[farmer.hostname] %}
                 <canvas id="disk_{{farmer.hostname}}" width="400"></canvas>
+                {% else %}
+                <p>
+                    No plots disk stats recorded recently for {{farmer.hostname}}. 
+                    Please ensure all paths containing plots have been 
+                    <a target="_blank" href="https://github.com/guydavis/machinaris/wiki/FAQ#can-i-use-two-or-more-final-destination-directories-to-hold-my-plots">configured</a>. 
+                    Also ensure the worker is reporting into the controller on the
+                    Workers page.
+                </p>
+                {% endif %}
             </div>
         </div>
         {% endfor %}

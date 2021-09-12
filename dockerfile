@@ -38,6 +38,7 @@ RUN \
 		cmake \
 		rsync \
 		libsodium-dev \
+		libnuma-dev \
 		g++ \
 		iputils-ping \
 	\
@@ -66,6 +67,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/plotman_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \
+	&& /usr/bin/bash /machinaris/scripts/bladebit_clone.sh \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/flax_install.sh ${FLAX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/flaxdog_install.sh \
