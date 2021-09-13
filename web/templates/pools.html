@@ -36,7 +36,13 @@
     <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
       <div class="h-20 p-2 bg-light border rounded-3">
         <h6 class="display-7">Pool:
-          <span class="text-success">{{ pool.pool_state.pool_config.pool_url }}</span>
+          <span class="text-success">
+            {% if pool.pool_state.pool_config.pool_url %}
+              {{ pool.pool_state.pool_config.pool_url }}
+            {% else %}
+              SELF_POOL
+            {% endif %}
+          </span>
         </h6>
         <ul>
           <li>Status: {{pool.status}}</li>

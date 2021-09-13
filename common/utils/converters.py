@@ -20,6 +20,8 @@ def gib_to_fmt(gibs):
     return sizeof_fmt(gibs * 1024 * 1024 * 1024)
 
 def str_to_gibs(str):
+    if str == "Unknown":
+        return 0.0
     try:
         val,unit = str.split(' ')
         if unit.lower().strip().endswith('mib'):

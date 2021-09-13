@@ -33,11 +33,13 @@ class WorkerSummary:
             if 'machinaris_version' in config:
                 worker.versions['machinaris'] = config['machinaris_version']
             other_versions = ""
+            gc = globals.load()
+            if 'bladebit_version' in config:
+                other_versions += "Bladebit: " + config['bladebit_version'] + "<br/>"
             if 'chia_version' in config:
                 other_versions += "Chia: " + config['chia_version'] + "<br/>"
             if 'chiadog_version' in config:
                 other_versions += "Chiadog: " + config['chiadog_version'] + "<br/>"
-            gc = globals.load()
             if gc['flax_enabled']:
                 if 'flax_version' in config:
                     other_versions += "Flax: " + config['flax_version'] + "<br/>"

@@ -73,4 +73,8 @@ def generate_warnings(worker, plots):
     # TODO - Warning for harvester not responding quickly enough
     # TODO - Warning for harvester not responding often enough
     # TODO - Warning for plotter disk usage too high?
+    # TODO - Warning if any blockchain challenges are higher than 5 seconds (show both hostname AND drive)
+    # TODO - Warning if any blockchain challenges are missing in last hour (some percentage like that chart)
+    # TODO - Warning if worker's Machinaris version does not match that of the fullnode
+    # TODO - Warning if worker's time drifts more than 3 minutes off fullnode's WHEN responding with ping seconds ago
     return warnings

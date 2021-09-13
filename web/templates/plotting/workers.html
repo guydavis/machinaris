@@ -47,7 +47,17 @@
         </div>
         <div class="row">
             <div class="col-12" style="margin-top:5px; margin-bottom:5px;">
+                {% if disk_usage[plotter.hostname] %}
                 <canvas id="disk_{{plotter.hostname}}"></canvas>
+                {% else %}
+                <p>
+                    No plotting disk stats recorded recently for {{plotter.hostname}}. 
+                    Please check that valid plotting paths (aka "tmp") are set 
+                    in the worker's Plotman config on the Settings | Plotting page. 
+                    Also ensure the worker is reporting into the controller on the
+                    Workers page.
+                </p>
+                {% endif %}
             </div>
         </div>
         {% endfor %}

@@ -236,9 +236,15 @@ class Plotnfts:
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
         for plotnft in plotnfts:
-            updated_at = plotnft.updated_at or datetime.datetime.now()
+            try:
+                app.logger.debug("Found worker with hostname '{0}'".format(plotnft.hostname))
+                displayname = w.get_worker_by_hostname(plotnft.hostname).displayname
+            except:
+                app.logger.info("Unable to find a worker with hostname '{0}'".format(plotnft.hostname))
+                displayname = plotnft.hostname
             self.rows.append({ 
-                'hostname': plotnft.hostname, 
+                'displayname': displayname, 
+                'hostname': plotnft.hostname,
                 'blockchain': plotnft.blockchain, 
                 'details': plotnft.details, 
                 'updated_at': plotnft.updated_at })
@@ -259,9 +265,14 @@ class Pools:
         self.columns = ['hostname', 'blockchain', 'pool_state', 'updated_at']
         self.rows = []
         for pool in pools:
+            try:
+                app.logger.debug("Found worker with hostname '{0}'".format(pool.hostname))
+                displayname = w.get_worker_by_hostname(pool.hostname).displayname
+            except:
+                app.logger.info("Unable to find a worker with hostname '{0}'".format(pool.hostname))
+                displayname = pool.hostname
             launcher_id = pool.launcher_id
             plotnft = self.find_plotnft(plotnfts, launcher_id)
-            updated_at = pool.updated_at or datetime.datetime.now()
             pool_state = json.loads(pool.pool_state)
             if plotnft:
                 status = self.extract_plotnft_value(plotnft, "Current state:")
@@ -272,6 +283,7 @@ class Pools:
                 points_found_24h = len(pool_state['points_found_24h'])
                 points_successful_last_24h = "%.2f"% ( (points_found_24h - pool_errors_24h) / points_found_24h * 100)
             self.rows.append({ 
+                'displayname': displayname, 
                 'hostname': pool.hostname,
                 'launcher_id': pool.launcher_id, 
                 'login_link': pool.login_link, 
