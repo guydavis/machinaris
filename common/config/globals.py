@@ -196,9 +196,9 @@ def load_plotman_version():
     last_plotman_version = outs.decode('utf-8').strip()
     if last_plotman_version.startswith('plotman'):
         last_plotman_version = last_plotman_version[len('plotman'):].strip()
-    if last_plotman_version.endswith('+dev'): # 2021-09-13 v0.5.2 released but dev branch had wrong version 
+    if last_plotman_version.endswith('+dev'):
         sem_ver = last_plotman_version.split('.')
-        last_plotman_version = sem_ver[0] + '.' + sem_ver[1] + '.' + str(int(sem_ver[2][:-4])+1)
+        last_plotman_version = sem_ver[0] + '.' + sem_ver[1] + '.' + sem_ver[2][:-4]
     last_plotman_version_load_time = datetime.datetime.now()
     return last_plotman_version
 
