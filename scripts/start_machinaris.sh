@@ -65,7 +65,7 @@ echo 'Starting Machinaris API server...'
 /chia-blockchain/venv/bin/gunicorn ${RELOAD} \
     --bind 0.0.0.0:8927 --timeout 90 \
     --log-level=${LOG_LEVEL} \
-    --workers=4 \
+    --workers=2 \
     --config api/gunicorn.conf.py \
     --log-config api/log.conf \
     api:app &
