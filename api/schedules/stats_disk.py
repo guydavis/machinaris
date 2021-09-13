@@ -91,17 +91,18 @@ def collect():
         if gc['plotting_enabled']:
             store_disk_stats(db, current_datetime, 'plotting')
             if not gc['is_controller']: 
-                send_stats(stats.StatPlottingDiskUsed, '/stats/plottingdiskused')
-                send_stats(stats.StatPlottingDiskFree, '/stats/plottingdiskfree')
-                send_stats(stats.StatPlotsDiskUsed, '/stats/plotsdiskused')
-                send_stats(stats.StatPlotsDiskFree, '/stats/plotsdiskfree')
+                send_stats(stats.StatPlottingDiskUsed, '/stats/plottingdiskused/')
+                send_stats(stats.StatPlottingDiskFree, '/stats/plottingdiskfree/')
+                send_stats(stats.StatPlotsDiskUsed, '/stats/plotsdiskused/')
+                send_stats(stats.StatPlotsDiskFree, '/stats/plotsdiskfree/')
 
 def send_stats(model, endpoint):
     from api import db
+    since = (datetime.datetime.now() - datetime.timedelta(minutes=15)).strftime("%Y-%m-%d %H:%M:%S.000")
     try:
         hostname = utils.get_displayname()
         payload = []
-        for stat in db.session.query(model).all():
+        for stat in db.session.query(model).filter(model.created_at >= since).all():
             payload.append({
                 "hostname": stat.hostname,
                 "path": stat.path,

@@ -43,6 +43,7 @@
             <th scope="col" class="text-success">Last Ping to Worker</th>
             <th scope="col" class="text-success">Last Successful Ping to Worker</th>
             <th scope="col" class="text-success">Version</th>
+            <th scope="col" class="text-success">Logs</th>
           </tr>
         </thead>
         <tbody>
@@ -62,6 +63,12 @@
             <td>{{worker.ping_success_at | datetimefilter}}</td>
             <td><a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
                 title="{{worker.versions.components}}">{{worker.versions.machinaris}}</a></td>
+            <td style="padding:0px">
+              <a href="#" title="View Server Log" onclick='MachinarisLog("apisrv","{{ worker.hostname }}");return false;'><i class="fs-4 bi-text-indent-left"></i></a>
+              {% if worker.mode == "fullnode" %}
+              <a href="#" title="View Web Log" onclick='MachinarisLog("webui","{{ worker.hostname }}");return false;'><i class="fs-4 bi-laptop"></i></a>
+              {% endif %}
+            </td>
           </tr>
           {% endfor %}
         </tbody>
@@ -100,8 +107,20 @@
         var left = (screen.width - width) / 2;
         window.open("{{ url_for('worker_launch') }}", 'Worker Launch Config', 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
     }
+    function MachinarisLog(type, hostname) {
+        var d = new Date();
+        var height = 600;
+        var width = 900;
+        var top = (screen.height - height) / 2;
+        var left = (screen.width - width) / 2;
+        window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname, 'Machinaris ' + type + '.log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+    }
     $(document).ready(function () {
-      $('#data').DataTable();
+      $('#data').DataTable({
+          "pageLength": 25,
+          "order": [[1, "asc"]],
+          "columnDefs": [{ "orderable": false, targets: [0,7] }],
+      });
       $("#btnPrune").click(function () {
         $(this).prop("disabled", true);
         $(this).html(

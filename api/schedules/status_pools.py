@@ -21,9 +21,6 @@ from api import app
 from api import utils
 
 def update():
-    if not globals.farming_enabled():
-        #app.logger.info("Skipping recent pools state collection on non-farming instance.")
-        return
     with app.app_context():
         try:
             blockchains = ['chia']

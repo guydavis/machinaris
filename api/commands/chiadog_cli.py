@@ -36,8 +36,8 @@ def save_config(config, blockchain):
         raise Exception('Updated config.yaml failed validation!\n' + str(ex))
     else:
         if get_chiadog_pid(blockchain):
-            stop_chiadog(blockchain)
-            start_chiadog(blockchain)
+            stop_chiadog()
+            start_chiadog()
 
 def get_chiadog_pid(blockchain):
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):

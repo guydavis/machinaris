@@ -43,5 +43,10 @@ EOF
 fi
 touch /root/.chia/machinaris/dbs/.managed
 
+# Temporarily clear all from workers table on each start - v0.5.5
+sqlite3 /root/.chia/machinaris/dbs/machinaris.db <<EOF
+DELETE FROM workers WHERE hostname == displayname AND mode != 'fullnode'; 
+EOF
+
 # Delete old chiadog.db if present as now unused
 rm -rf /root/.chia/chiadog/dbs

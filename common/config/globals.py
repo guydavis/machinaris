@@ -23,6 +23,7 @@ PLOTMAN_CONFIG = '/root/.chia/plotman/plotman.yaml'
 PLOTMAN_SAMPLE = '/machinaris/config/plotman.sample.yaml'
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 MADMAX_BINARY = '/usr/bin/chia_plot'
+BLADEBIT_BINARY = '/usr/bin/bladebit'
 CHIADOG_PATH = '/chiadog'
 FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
 FLAXDOG_PATH = '/flaxdog'
@@ -46,6 +47,7 @@ def load():
     cfg['flax_version'] = load_flax_version()
     cfg['flaxdog_version'] = load_flaxdog_version()
     cfg['madmax_version'] = load_madmax_version()
+    cfg['bladebit_version'] = load_bladebit_version()
     cfg['is_controller'] = "localhost" == (
         os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost')
     return cfg
@@ -194,8 +196,9 @@ def load_plotman_version():
     last_plotman_version = outs.decode('utf-8').strip()
     if last_plotman_version.startswith('plotman'):
         last_plotman_version = last_plotman_version[len('plotman'):].strip()
-    #if last_plotman_version.endswith('+dev'):
-    #    last_plotman_version = last_plotman_version[:-len('+dev')].strip()
+    if last_plotman_version.endswith('+dev'): # 2021-09-13 v0.5.2 released but dev branch had wrong version 
+        sem_ver = last_plotman_version.split('.')
+        last_plotman_version = sem_ver[0] + '.' + sem_ver[1] + '.' + str(int(sem_ver[2][:-4])+1)
     last_plotman_version_load_time = datetime.datetime.now()
     return last_plotman_version
 
@@ -257,6 +260,35 @@ def load_madmax_version():
             last_madmax_version = m.group(1)
     last_madmax_version_load_time = datetime.datetime.now()
     return last_madmax_version
+
+
+last_bladebit_version = None
+last_bladebit_version_load_time = None
+
+
+def load_bladebit_version():
+    global last_bladebit_version
+    global last_bladebit_version_load_time
+    if last_bladebit_version and last_bladebit_version_load_time >= \
+            (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
+        return last_bladebit_version
+    proc = Popen("{0} --version".format(BLADEBIT_BINARY),
+                 stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        abort(500, description="The timeout is expired!")
+    if errs:
+        abort(500, description=errs.decode('utf-8'))
+    last_bladebit_version = outs.decode('utf-8').strip()
+    if last_bladebit_version.startswith('v'):
+        last_bladebit_version = last_bladebit_version[len('v'):].strip()
+    if '-' in last_bladebit_version:
+        last_bladebit_version = last_bladebit_version.split('-')[0] + '+dev'
+    last_bladebit_version_load_time = datetime.datetime.now()
+    return last_bladebit_version
 
 
 last_machinaris_version = None

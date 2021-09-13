@@ -26,7 +26,7 @@ class Pools(MethodView):
     @blp.response(200, PoolSchema(many=True))
     @blp.paginate(SQLCursorPage)
     def get(self, args):
-        ret = Pool.query.filter_by(**args)
+        ret = db.session.query(Pool).filter_by(**args)
         return ret
 
     @blp.etag

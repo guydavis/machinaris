@@ -27,4 +27,6 @@ fi
     --log-level=${LOG_LEVEL} \
     --workers=2 \
     --config api/gunicorn.conf.py \
+    --error-logfile - \
+    --access-logfile - \
     api:app

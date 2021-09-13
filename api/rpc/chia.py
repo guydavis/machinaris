@@ -58,14 +58,7 @@ async def get_pool_state(blockchain):
     return pools
 
 # Used to load plot type (solo or portable) via RPC
-plots_via_rpc = None
-last_plots_via_rpc = None
 def get_all_plots():
-    global plots_via_rpc
-    global last_plots_via_rpc
-    if plots_via_rpc and last_plots_via_rpc >= (datetime.datetime.now() - datetime.timedelta(minutes=3)):
-        return plots_via_rpc
-    #app.logger.info("Reloading all plots on all harvesters via RPC")
     plots_via_rpc = asyncio.run(load_all_plots())
     last_plots_via_rpc  = datetime.datetime.now()
     return plots_via_rpc
@@ -82,6 +75,8 @@ async def load_all_plots():
         farmer.close()
         await farmer.await_closed()
         for harvester in result["harvesters"]:
+            # app.logger.info(harvester.keys()) Returns: ['connection', 'failed_to_open_filenames', 'no_key_filenames', 'plots']
+            # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
             host = harvester["connection"]["host"]
             plots = harvester["plots"]
             for plot in plots:

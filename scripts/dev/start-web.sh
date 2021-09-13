@@ -22,4 +22,6 @@ fi
     --timeout 90 \
     --log-level=$LOG_LEVEL \
     --workers=2 \
+    --access-logfile - \
+    --error-logfile - \
     web:app

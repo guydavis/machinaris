@@ -30,7 +30,7 @@ _EOF
 fi
 # Start plotting automatically if requested (not the default)
 if [ ${AUTO_PLOT,,} = "true" ]; then
-    nohup plotman plot < /dev/tty >> /root/.chia/plotman/logs/plotman.log 2>&1 &
+    nohup plotman plot >> /root/.chia/plotman/logs/plotman.log 2>&1 &
 fi
 
 # Start the log monitors
@@ -67,7 +67,8 @@ echo 'Starting Machinaris API server...'
     --log-level=${LOG_LEVEL} \
     --workers=2 \
     --config api/gunicorn.conf.py \
-    api:app > /root/.chia/machinaris/logs/apisrv.log 2>&1 &
+    --log-config api/log.conf \
+    api:app &
 
 # Kill gunicorn if already running to allow restart
 web_pid=$(pidof 'gunicorn: master [web:app]')
@@ -79,7 +80,8 @@ echo 'Starting Machinaris Web server...'
     --bind 0.0.0.0:8926 --timeout 90 \
     --log-level=${LOG_LEVEL} \
     --workers=2 \
-    web:app > /root/.chia/machinaris/logs/webui.log 2>&1 &
+    --log-config web/log.conf \
+    web:app &
 
 echo 'Completed startup.  Browse to port 8926.'
 

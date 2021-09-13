@@ -26,7 +26,7 @@ class StatPlottingDiskUseds(MethodView):
     @blp.response(200, StatPlottingDiskUsedSchema(many=True))
     @blp.paginate(SQLCursorPage)
     def get(self, args):
-        ret = StatPlottingDiskUsed.query.filter_by(**args)
+        ret = db.session.query(StatPlottingDiskUsed).filter_by(**args)
         return ret
 
     @blp.etag

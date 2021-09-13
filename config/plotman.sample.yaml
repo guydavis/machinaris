@@ -117,3 +117,8 @@ plotting:
                 n_buckets: 256        # Default is 256
                 n_buckets3: 256       # Default is 256
                 n_rmulti2: 1          # Default is 1 
+
+        bladebit:
+                # BladeBit plotter: https://github.com/harold-b/bladebit
+                threads: 2            # Threads per job
+                no_numa: false        # Whether to disable NUMA memory support or not

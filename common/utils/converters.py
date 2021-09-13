@@ -20,6 +20,8 @@ def gib_to_fmt(gibs):
     return sizeof_fmt(gibs * 1024 * 1024 * 1024)
 
 def str_to_gibs(str):
+    if str == "Unknown":
+        return 0.0
     try:
         val,unit = str.split(' ')
         if unit.lower().strip().endswith('mib'):
@@ -55,7 +57,7 @@ def convert_date_for_luxon(datestr):
 # Convert expected time to win back to minutes.  
 # See https://github.com/Chia-Network/chia-blockchain/blob/9e21716965f6f6250f6fe4b3449a66f20794d3d9/chia/util/misc.py#L18
 def etw_to_minutes(etw):
-    logging.info("ETW='{0}'".format(etw))
+    #logging.info("ETW='{0}'".format(etw))
     etw_total_minutes = 0
     hour_minutes = 60
     day_minutes = 24 * hour_minutes

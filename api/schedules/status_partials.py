@@ -27,14 +27,10 @@ def delete_old_partials(db):
         app.logger.info(traceback.format_exc())
 
 def update():
-    if not globals.farming_enabled() and not globals.harvesting_enabled():
-        #app.logger.info("Skipping recent partials collection on plotting-only instance.")
-        return
     with app.app_context():
         try:
             from api import db
-            if globals.load()['is_controller']:
-                delete_old_partials(db)
+            delete_old_partials(db)
             hostname = utils.get_hostname()
             blockchains = ['chia']
             if globals.flax_enabled():

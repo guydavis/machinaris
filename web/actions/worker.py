@@ -38,7 +38,7 @@ ALL_TABLES_BY_HOSTNAME = [
 ]
 
 def load_worker_summary(hostname = None):
-    query = db.session.query(w.Worker).order_by(w.Worker.hostname)
+    query = db.session.query(w.Worker).order_by(w.Worker.displayname)
     if hostname:
         workers = query.filter(w.Worker.hostname==hostname)
     else:
@@ -67,39 +67,14 @@ class WorkerWarning:
         elif level == "error":
             self.icon = "exclamation-circle"
 
-def plot_count_from_summary(orig_hostname, worker_plot_file_count):
-    app.logger.info("Searching for warnings on: {0}.".format(orig_hostname))
-    try:
-        hostname = socket.gethostbyname(orig_hostname)
-    except Exception as ex:
-        app.logger.info("Can't resolve original hostname: {0}".format(orig_hostname))
-    try:    
-        harvesters = asyncio.run(chia.load_plots_per_harvester())
-        #app.logger.info(harvesters.keys())
-        if hostname in harvesters:
-            app.logger.info("Found hostname match for {0}".format(hostname))
-            return len(harvesters[hostname])
-        else:
-            for harvester in harvesters:
-                #app.logger.info("Harvester {0} has count: {1}".format(harvester, harvesters[harvester]))
-                if worker_plot_file_count == len(harvesters[harvester]):
-                    app.logger.info("No hostname match for {0} but found matching counts {1}".format(hostname, worker_plot_file_count))
-                    return len(harvesters[harvester])
-    except Exception as ex:
-        app.logger.info("Failed to get harvester plot count for {0} due to {1}.".format(hostname, str(ex)))
-    app.logger.info("Failed to find any match for hostname {0}".format(hostname))
-    return None
-
 def generate_warnings(worker, plots):
     warnings = []
-    worker_plot_file_count = len(plots.rows)
-    worker_summary_plot_count = plot_count_from_summary(worker.hostname, worker_plot_file_count)
-    if not worker_summary_plot_count and worker_plot_file_count > 0:
-        warnings.append(WorkerWarning("Disconnected harvester!", 
-        "Farm summary reports no harvester for {0}, but Machinaris found {1} plots on disk. Further <a href='https://github.com/guydavis/machinaris/wiki/FAQ#farming-summary-and-file-listing-report-different-plot-counts' target='_blank' class='text-white'>investigation of the worker harvesting service</a> is recommended.".format(
-            worker.hostname, worker_plot_file_count)))
-    elif abs(worker_summary_plot_count - worker_plot_file_count) > 2:
-        warnings.append(WorkerWarning("Mismatched plot counts!", 
-        "Farm summary reports {0} plots for {1}, but Machinaris found {2} plots on disk. Further <a href='https://github.com/guydavis/machinaris/wiki/FAQ#farming-summary-and-file-listing-report-different-plot-counts' target='_blank' class='text-white'>investigation of the worker harvesting service</a> is recommended.".format(
-            worker_summary_plot_count, worker.hostname, worker_plot_file_count)))
+    # TODO - Warning for harvester not connected (worker but not in farm summary)
+    # TODO - Warning for harvester not responding quickly enough
+    # TODO - Warning for harvester not responding often enough
+    # TODO - Warning for plotter disk usage too high?
+    # TODO - Warning if any blockchain challenges are higher than 5 seconds (show both hostname AND drive)
+    # TODO - Warning if any blockchain challenges are missing in last hour (some percentage like that chart)
+    # TODO - Warning if worker's Machinaris version does not match that of the fullnode
+    # TODO - Warning if worker's time drifts more than 3 minutes off fullnode's WHEN responding with ping seconds ago
     return warnings

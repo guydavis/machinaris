@@ -5,6 +5,7 @@ import traceback
 import datetime
 
 from web import app
+from web.actions import worker as w
 from common.utils import converters
 
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
@@ -24,13 +25,11 @@ class FarmSummary:
         self.flax_netspace_display_size = "-"
         self.expected_time_to_win = "-"
         self.flax_expected_time_to_win = "-"
-        fullnode_plots_size = 0
-        for farm in farms:
-            self.plot_count += farm.plot_count
-            self.plots_size += farm.plots_size
+        for farm in farms:  # Only consider farm info from fullnode
             if farm.mode == "fullnode":
+                self.plot_count = farm.plot_count
+                self.plots_size = farm.plots_size
                 self.status = farm.status
-                fullnode_plots_size = farm.plots_size
                 self.total_chia = '0.0' if not farm.total_chia else round(farm.total_chia, 6)
                 self.netspace_display_size = '?' if not farm.netspace_size else converters.gib_to_fmt(farm.netspace_size)
                 self.netspace_size = farm.netspace_size
@@ -39,12 +38,8 @@ class FarmSummary:
                 self.flax_netspace_display_size = '?' if not farm.flax_netspace_size else converters.gib_to_fmt(farm.flax_netspace_size)
                 self.flax_netspace_size = farm.flax_netspace_size
                 self.flax_expected_time_to_win = farm.flax_expected_time_to_win
-        app.logger.debug("ETW: {0}".format(self.expected_time_to_win))
-                
         self.plots_display_size = converters.gib_to_fmt(self.plots_size)
         self.calc_status(self.status)
-        if fullnode_plots_size != self.plots_size: # Calculate for full farm including harvesters
-            self.calc_entire_farm_flax_etw(fullnode_plots_size, self.flax_expected_time_to_win, self.plots_size)
 
     def calc_status(self, status):
         self.status = status
@@ -53,37 +48,33 @@ class FarmSummary:
         else:
             self.display_status = self.status
 
-    # Only needed for older Flax code-base which reports ETW of plots only on fullnode
-    def calc_entire_farm_flax_etw(self, fullnode_plots_size, expected_time_to_win, total_farm_plots_size):
-        try:
-            fullnode_etw_mins = converters.etw_to_minutes(expected_time_to_win)
-            total_farm_etw_mins = (fullnode_plots_size / total_farm_plots_size) * fullnode_etw_mins
-            self.flax_expected_time_to_win = converters.format_minutes(int(total_farm_etw_mins))
-        except:
-            app.logger.debug("Failed to calculate ETW for entire farm due to: {0}".format(traceback.format_exc()))
-            self.flax_expected_time_to_win = "-"
-
 class FarmPlots:
 
      def __init__(self, plots):
         self.columns = ['worker', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size' ]
         self.rows = []
-        plots_by_id = {}
+        displaynames = {}
         for plot in plots:
-            if plot.plot_id in plots_by_id:
-                other_plot = plots_by_id[plot.plot_id]
-                app.logger.info("Skipping listing of plot on {0} at {1}/{2} because same plot_id found on {3} at {4}/{5}".format(
-                    plot.hostname, plot.dir, plot.file, other_plot.hostname, other_plot.dir, other_plot.file))
-            else: # No conflict so add it to plots list
-                plots_by_id[plot.plot_id] = plot
-                self.rows.append({ \
-                    'worker': plot.hostname, \
-                    'plot_id': plot.plot_id, \
-                    'dir': plot.dir,  \
-                    'plot': plot.file,  \
-                    'create_date': plot.created_at, \
-                    'size': plot.size, \
-                    'type': plot.type if plot.type else "" }) 
+            if plot.hostname in displaynames:
+                displayname = displaynames[plot.hostname]
+            else: # Look up displayname
+                try:
+                    app.logger.debug("Found worker with hostname '{0}'".format(plot.hostname))
+                    displayname = w.get_worker_by_hostname(plot.hostname).displayname
+                except:
+                    app.logger.info("Unable to find a worker with hostname '{0}'".format(plot.hostname))
+                    displayname = plot.hostname
+                displaynames[plot.hostname] = displayname
+            self.rows.append({ 
+                'hostname': plot.hostname, 
+                'worker': displayname, 
+                'plot_id': plot.plot_id, 
+                'dir': plot.dir,  
+                'plot': plot.file,  
+                'create_date': plot.created_at, 
+                'size': plot.size, 
+                'type': plot.type if plot.type else "" 
+            }) 
 
 
 class ChallengesChartData:
@@ -117,9 +108,15 @@ class Wallets:
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
         for wallet in wallets:
-            updated_at = wallet.updated_at or datetime.datetime.now()
+            try:
+                app.logger.debug("Found worker with hostname '{0}'".format(wallet.hostname))
+                displayname = w.get_worker_by_hostname(wallet.hostname).displayname
+            except:
+                app.logger.info("Unable to find a worker with hostname '{0}'".format(wallet.hostname))
+                displayname = wallet.hostname
             self.rows.append({ 
-                'hostname': wallet.hostname, 
+                'displayname': displayname, 
+                'hostname': wallet.hostname,
                 'blockchain': wallet.blockchain, 
                 'details': wallet.details, 
                 'updated_at': wallet.updated_at }) 
@@ -130,8 +127,15 @@ class Keys:
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
         for key in keys:
+            try:
+                app.logger.debug("Found worker with hostname '{0}'".format(key.hostname))
+                displayname = w.get_worker_by_hostname(key.hostname).displayname
+            except:
+                app.logger.info("Unable to find a worker with hostname '{0}'".format(key.hostname))
+                displayname = key.hostname
             self.rows.append({ 
-                'hostname': key.hostname, 
+                'displayname': displayname, 
+                'hostname': key.hostname,
                 'details': key.details,
                 'updated_at': key.updated_at }) 
 
@@ -141,8 +145,15 @@ class Blockchains:
         self.columns = ['hostname', 'blockchain', 'details', 'updated_at']
         self.rows = []
         for blockchain in blockchains:
+            try:
+                app.logger.debug("Found worker with hostname '{0}'".format(blockchain.hostname))
+                displayname = w.get_worker_by_hostname(blockchain.hostname).displayname
+            except:
+                app.logger.info("Unable to find a worker with hostname '{0}'".format(blockchain.hostname))
+                displayname = blockchain.hostname
             self.rows.append({ 
-                'hostname': blockchain.hostname, 
+                'displayname': displayname, 
+                'hostname': blockchain.hostname,
                 'blockchain': blockchain.blockchain, 
                 'details': blockchain.details,
                 'updated_at': blockchain.updated_at }) 
@@ -174,14 +185,21 @@ class Connections:
     def __init__(self, connections):
         self.rows = []
         for connection in connections:
+            try:
+                app.logger.debug("Found worker with hostname '{0}'".format(connection.hostname))
+                displayname = w.get_worker_by_hostname(connection.hostname).displayname
+            except:
+                app.logger.info("Unable to find a worker with hostname '{0}'".format(connection.hostname))
+                displayname = connection.hostname
             self.rows.append({
+                'displayname': displayname, 
                 'hostname': connection.hostname,
                 'blockchain': connection.blockchain,
                 'protocol_port': '8444' if connection.blockchain == 'chia' else '6888',
                 'details': connection.details
             })
     
-    def parse(connections):
+    def parse(self, connections):
         # TODO Deal with connection listing from multiple machines
         connection = connections[0]
         self.conns = []
@@ -218,9 +236,15 @@ class Plotnfts:
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
         for plotnft in plotnfts:
-            updated_at = plotnft.updated_at or datetime.datetime.now()
+            try:
+                app.logger.debug("Found worker with hostname '{0}'".format(plotnft.hostname))
+                displayname = w.get_worker_by_hostname(plotnft.hostname).displayname
+            except:
+                app.logger.info("Unable to find a worker with hostname '{0}'".format(plotnft.hostname))
+                displayname = plotnft.hostname
             self.rows.append({ 
-                'hostname': plotnft.hostname, 
+                'displayname': displayname, 
+                'hostname': plotnft.hostname,
                 'blockchain': plotnft.blockchain, 
                 'details': plotnft.details, 
                 'updated_at': plotnft.updated_at })
@@ -241,9 +265,14 @@ class Pools:
         self.columns = ['hostname', 'blockchain', 'pool_state', 'updated_at']
         self.rows = []
         for pool in pools:
+            try:
+                app.logger.debug("Found worker with hostname '{0}'".format(pool.hostname))
+                displayname = w.get_worker_by_hostname(pool.hostname).displayname
+            except:
+                app.logger.info("Unable to find a worker with hostname '{0}'".format(pool.hostname))
+                displayname = pool.hostname
             launcher_id = pool.launcher_id
             plotnft = self.find_plotnft(plotnfts, launcher_id)
-            updated_at = pool.updated_at or datetime.datetime.now()
             pool_state = json.loads(pool.pool_state)
             if plotnft:
                 status = self.extract_plotnft_value(plotnft, "Current state:")
@@ -254,6 +283,7 @@ class Pools:
                 points_found_24h = len(pool_state['points_found_24h'])
                 points_successful_last_24h = "%.2f"% ( (points_found_24h - pool_errors_24h) / points_found_24h * 100)
             self.rows.append({ 
+                'displayname': displayname, 
                 'hostname': pool.hostname,
                 'launcher_id': pool.launcher_id, 
                 'login_link': pool.login_link, 

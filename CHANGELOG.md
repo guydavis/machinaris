@@ -2,11 +2,20 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.5.4] - 2021-08-28 
+## [0.5.5] - 2021-09-13 
+
+- Chia - Update to version 1.2.6.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.6).
+- Plotman - Update to version 0.5.2 with support for the [Bladebit](https://github.com/harold-b/bladebit) in-memory plotter.
+- Plotman - Avoid use of tty for container platforms such as TrueNAS to allow plotting without `-t` docker flag.
+- Machinaris - Improved status reporting efficiency and better logging.
+
+## [0.5.4] - 2021-08-31 
 
 - Chia - Update to version 1.2.5.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.5).
 - Machinaris - Fix for Chia 1.2.4 SSL issue seen on plotter-only systems.
 - Machinaris - Displayname for Workers tabs of Plotting and Farming pages.
+- Machinaris - Fix for partials chart on Summary page.
+- Machinaris - Fix for plotting log view.
 
 ## [0.5.3] - 2021-08-27
 
