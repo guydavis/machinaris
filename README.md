@@ -8,7 +8,7 @@ For details, see your particular platform: [Windows](https://github.com/guydavis
 
 ## Plotting View
 
-Plotting with both [MadMax](https://github.com/madMAx43v3r/chia-plotter) and [Chia™](https://github.com/Chia-Network/chia-blockchain) plotters is managed by [Plotman](https://github.com/ericaltendorf/plotman) through the Machinaris WebUI.
+Plotting with the [MadMax](https://github.com/madMAx43v3r/chia-plotter), [Bladebit](https://github.com/harold-b/bladebit), and [Chia™](https://github.com/Chia-Network/chia-blockchain) plotters is managed by [Plotman](https://github.com/ericaltendorf/plotman) through the Machinaris WebUI.
 
 ![Plotting](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_plotting.png)
 

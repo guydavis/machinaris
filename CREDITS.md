@@ -8,6 +8,7 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Plotman](https://github.com/ericaltendorf/plotman): a parallel plotting manager.
 * [Chiadog](https://github.com/martomi/chiadog): a log monitor with alerting.
 * [Madmax](https://github.com/madMAx43v3r/chia-plotter): a pipelined, multi-threaded plotter.
+* [Bladebit](https://github.com/harold-b/bladebit): an in-memory plotter.
 
 ## Web Application
 * [Flask](https://flask.palletsprojects.com/en/2.0.x/): Web UI application server.
@@ -57,6 +58,7 @@ A big thanks to all that contributed with dev and test including:
 * Kris Moore
 * depasseg
 * sonicaj
+* OlivierLA75
 
 ## Trademark Notice
 CHIA NETWORK INC, CHIA™, the CHIA BLOCKCHAIN™, the CHIA PROTOCOL™, CHIALISP™ and the “leaf Logo” (including the leaf logo alone when it refers to or indicates Chia), are trademarks or registered trademarks of Chia Network, Inc., a Delaware corporation.  *There is no affliation between this Machinaris project and the main Chia Network project.*
