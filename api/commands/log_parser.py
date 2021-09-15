@@ -41,7 +41,7 @@ def recent_challenges(blockchain):
     if not os.path.exists(log_file):
         app.logger.debug(
             "Skipping challenges parsing as no such log file: {0}".format(log_file))
-        return []
+        return None
     proc = Popen("grep --text -i eligible {0} | tail -n {1}".format(log_file, CHALLENGES_TO_LOAD),
                  stdout=PIPE, stderr=PIPE, shell=True)
     try:
