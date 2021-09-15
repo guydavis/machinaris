@@ -39,6 +39,8 @@ def update():
             payload = []
             for blockchain in blockchains:
                 recent_challenges = log_parser.recent_challenges(blockchain)
+                if not recent_challenges:
+                    return
                 for challenge in recent_challenges.rows:
                     payload.append({
                         "unique_id": hostname + '_' + challenge['challenge_id'] + '_' + challenge['created_at'],
