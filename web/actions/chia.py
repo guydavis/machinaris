@@ -47,13 +47,15 @@ def load_plots_farming(hostname=None):
         plots = query.all()
     return FarmPlots(plots)
 
-def challenges_chart_data():
-    challenges = db.session.query(c.Challenge).order_by(c.Challenge.created_at.desc(), c.Challenge.hostname, c.Challenge.blockchain).all()
-    return ChallengesChartData(challenges)
+def challenges_chart_data(farm_summary):
+    for blockchain in farm_summary.farms:
+        challenges = db.session.query(c.Challenge).filter(c.Challenge.blockchain==blockchain).order_by(c.Challenge.created_at.desc(), c.Challenge.hostname).all()
+        farm_summary.farms[blockchain]['challenges'] = ChallengesChartData(challenges)
 
-def partials_chart_data():
-    partials = db.session.query(pr.Partial).order_by(pr.Partial.created_at.desc()).all()
-    return PartialsChartData(partials)
+def partials_chart_data(farm_summary):
+    for blockchain in farm_summary.farms:
+        partials = db.session.query(pr.Partial).filter(pr.Partial.blockchain==blockchain).order_by(pr.Partial.created_at.desc()).all()
+        farm_summary.farms[blockchain]['partials'] =  PartialsChartData(partials)
 
 def load_wallets():
     wallets = db.session.query(w.Wallet).all()

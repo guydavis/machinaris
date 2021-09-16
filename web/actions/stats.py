@@ -31,18 +31,17 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
-def load_daily_diff():
-    summary = {}
-    # initialize defaults
-    since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
-    since_str = since_date.strftime("%Y%m%d%H%M%S")
-    summary['plot_count'] = plot_count_diff(since_str)
-    summary['plots_size'] = plots_size_diff(since_str)
-    summary['total_chia'] = total_coin_diff(since_str, 'chia')
-    summary['total_flax'] = total_coin_diff(since_str, 'flax')
-    summary['netspace_chia'] = netspace_size_diff(since_str, 'chia')
-    summary['netspace_flax'] = netspace_size_diff(since_str, 'flax')
-    return summary
+def load_daily_diff(farm_summary):
+    for blockchain in farm_summary.farms:
+        summary = {}
+        # initialize defaults
+        since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
+        since_str = since_date.strftime("%Y%m%d%H%M%S")
+        summary['plot_count'] = plot_count_diff(since_str)
+        summary['plots_size'] = plots_size_diff(since_str)
+        summary['total_coin'] = total_coin_diff(since_str, blockchain)
+        summary['netspace_size'] = netspace_size_diff(since_str, blockchain)
+        farm_summary.farms[blockchain]['daily_diff'] = summary
 
 def plot_count_diff(since):
     result = ''

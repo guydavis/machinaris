@@ -10,18 +10,15 @@ class Farm(db.Model):
     __tablename__ = "farms"
 
     hostname = sa.Column(sa.String(length=255), primary_key=True,)
+    blockchain = sa.Column(sa.String(length=64),  primary_key=True)
     mode = sa.Column(sa.String(length=32), nullable=False)
     status = sa.Column(sa.String(length=128), nullable=False)
     plot_count = sa.Column(sa.Integer, nullable=False)
     plots_size = sa.Column(sa.REAL, nullable=False)  # GiB
 
-    total_chia = sa.Column(sa.REAL, nullable=False) 
+    total_coins = sa.Column(sa.REAL, nullable=False) 
     netspace_size = sa.Column(sa.REAL, nullable=False)  # GiB
     expected_time_to_win = sa.Column(sa.String(length=64), nullable=False)
-
-    total_flax = sa.Column(sa.REAL, nullable=True) 
-    flax_netspace_size = sa.Column(sa.REAL, nullable=True)  # GiB
-    flax_expected_time_to_win = sa.Column(sa.String(length=64), nullable=True)
 
     created_at = sa.Column(sa.DateTime(), server_default=func.now())
     updated_at = sa.Column(sa.DateTime(), onupdate=func.now())

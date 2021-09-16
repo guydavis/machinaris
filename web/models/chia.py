@@ -14,40 +14,29 @@ MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
 class FarmSummary:
 
-    def __init__(self, farms):
-        self.status = "-"
-        self.plot_count = 0
-        self.plots_size = 0
-        self.total_chia = 0
-        self.total_flax = 0
-        self.netspace_size = 0
-        self.flax_netspace_size = 0
-        self.netspace_display_size = "-"
-        self.flax_netspace_display_size = "-"
-        self.expected_time_to_win = "-"
-        self.flax_expected_time_to_win = "-"
-        for farm in farms:  # Only consider farm info from fullnode
-            if farm.mode == "fullnode":
-                self.plot_count = farm.plot_count
-                self.plots_size = farm.plots_size
-                self.status = farm.status
-                self.total_chia = '0.0' if not farm.total_chia else round(farm.total_chia, 6)
-                self.netspace_display_size = '?' if not farm.netspace_size else converters.gib_to_fmt(farm.netspace_size)
-                self.netspace_size = farm.netspace_size
-                self.expected_time_to_win = farm.expected_time_to_win
-                self.total_flax =  '0.0' if not farm.total_flax else round(farm.total_flax, 6)
-                self.flax_netspace_display_size = '?' if not farm.flax_netspace_size else converters.gib_to_fmt(farm.flax_netspace_size)
-                self.flax_netspace_size = farm.flax_netspace_size
-                self.flax_expected_time_to_win = farm.flax_expected_time_to_win
-        self.plots_display_size = converters.gib_to_fmt(self.plots_size)
-        self.calc_status(self.status)
-
-    def calc_status(self, status):
-        self.status = status
-        if self.status == "Farming":
-            self.display_status = "Active"
-        else:
-            self.display_status = self.status
+    def __init__(self, farm_recs):
+        self.farms = {}
+        for farm_rec in farm_recs: 
+            if farm_rec.mode == "fullnode":
+                farm = {
+                    "plot_count": farm_rec.plot_count,
+                    "plots_size": farm_rec.plots_size,
+                    "plots_display_size": converters.gib_to_fmt(farm_rec.plots_size),
+                    "status": farm_rec.status,
+                    "display_status": "Active" if farm_rec.status == "Farming" else farm_rec.status,
+                    "total_coins": '0.0' if not farm_rec.total_coins else round(farm_rec.total_coins, 6),
+                    "netspace_display_size": '?' if not farm_rec.netspace_size else converters.gib_to_fmt(farm_rec.netspace_size),
+                    "netspace_size": farm_rec.netspace_size,
+                    "expected_time_to_win": farm_rec.expected_time_to_win,
+                }
+                if not farm_rec.blockchain in self.farms:
+                    self.farms[farm_rec.blockchain] = farm
+                else:
+                    app.logger.info("Discarding duplicate fullnode blockchain status from {0} - {1}".format(farm_rec.hostname, farm_rec.blockchain))    
+            else:
+                app.logger.info("Stale farm status for {0} - {1}".format(farm_rec.hostname, farm_rec.blockchain))
+        if len(self.farms) == 0:  # Handle completely missing farm summary info 
+            self.farms['chia'] = {} # with empty chia farm
 
 class FarmPlots:
 
@@ -87,7 +76,7 @@ class ChallengesChartData:
             created_at = challenge.created_at.replace(' ', 'T')
             if not created_at in self.labels:
                 self.labels.append(created_at)
-            host_chain = challenge.hostname + '_' + challenge.blockchain
+            host_chain = challenge.hostname
             if not host_chain in datasets:
                 datasets[host_chain] = {}
             dataset = datasets[host_chain]
