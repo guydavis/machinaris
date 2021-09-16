@@ -122,7 +122,7 @@ def load_daily_farming_summaries():
     since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
     for wk in chia.load_farmers():
         hostname = wk['hostname']
-        app.logger.info("Storing daily for {0}".format(wk['hostname']))
+        #app.logger.info("Storing daily for {0}".format(wk['hostname']))
         summary_by_worker[hostname] = DailyWorker(
             daily_summaries(since_date, hostname, wk['displayname'], 'chia'), 
             daily_summaries(since_date, hostname, wk['displayname'], 'flax'))

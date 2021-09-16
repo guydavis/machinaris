@@ -157,6 +157,7 @@
             } else {
                 cmd += '    -v ~/.machinaris:/root/.chia' + line_end;
             }
+            cmd += '    --restart always' + line_end;
             var cur_vols = $('#volumes').children().length
             var plots_dir = []
             $('#volumes').children().each((index, element) => {

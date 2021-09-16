@@ -54,8 +54,50 @@
                 </a>
             </span>
             <h3>{{connection.displayname}} - {{connection.blockchain}}</h3>
-            <pre>{{connection.details}}</pre>
+            <form method="POST" id="form_{{connection.displayname}}_{{connection.blockchain}}">
+            <div class="table-responsive">
+                <table id="conns_{{connection.displayname}}_{{connection.blockchain}}" class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-success"></th>
+                            <th scope="col" class="text-success">Type</th>
+                            <th scope="col" class="text-success">IP Address</th>
+                            <th scope="col" class="text-success">Ports</th>
+                            <th scope="col" class="text-success">Node ID</th>
+                            <th scope="col" class="text-success">SB Height</th>
+                            <th scope="col" class="text-success">Last Connect</th>
+                            <th scope="col" class="text-success">MiB Up</th>
+                            <th scope="col" class="text-success">MiB Down</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in connections.blockchains[connection.blockchain] %}
+                        <tr>
+                            <td class="text-center">
+                            {% if row.type == "FULL_NODE" or (row.type == "WALLET" and row.ip != "127.0.0.1") %}
+                                <input type="checkbox" name="nodeid" value="{{ row.nodeid }}" />
+                            {% endif %}
+                            </td>
+                            <td>{{row.type}}</td>
+                            <td>{{row.ip}}</td>
+                            <td>{{row.ports}}</td>
+                            <td>{{row.nodeid}}</td>
+                            <td>{{row.height}}</td>
+                            <td>{{row.last_connect}}</td>
+                            <td>{{row.mib_up}}</td>
+                            <td>{{row.mib_down}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            </form>
+            <fieldset>
+                <button form="form_{{connection.displayname}}_{{connection.blockchain}}" type="submit" name="action" value="remove" class="btn btn-outline-success"
+                    id="btnRemove">Remove Selected Connections</button>
+            </fieldset>
         </div>
+        <hr/>
         {% endfor %}
     </div>
     {% else %}
@@ -65,9 +107,16 @@
     </div>
     {% endif %}
     
+    {% endblock %}
 
+    {% block scripts %}
     <script>
         $(document).ready(function () {
+            {% for connection in connections.rows %}
+            $('#conns_{{connection.displayname}}_{{connection.blockchain}}').DataTable({
+                "columnDefs": [{ "orderable": false, targets: [0] }],
+            });
+            {% endfor %}
             $("#btnAdd").click(function () {
                 $(this).prop("disabled", true);
                 $(this).html(
@@ -78,5 +127,4 @@
             });
         })
     </script>
-
     {% endblock %}

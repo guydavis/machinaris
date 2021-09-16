@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import traceback
 
 import datetime
@@ -184,6 +185,7 @@ class Connections:
 
     def __init__(self, connections):
         self.rows = []
+        self.blockchains = {}
         for connection in connections:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(connection.hostname))
@@ -198,11 +200,10 @@ class Connections:
                 'protocol_port': '8444' if connection.blockchain == 'chia' else '6888',
                 'details': connection.details
             })
+            self.blockchains[connection.blockchain] = self.parse(connection)
     
-    def parse(self, connections):
-        # TODO Deal with connection listing from multiple machines
-        connection = connections[0]
-        self.conns = []
+    def parse(self, connection):
+        conns = []
         for line in connection.details.split('\n'):
             try:
                 if line.strip().startswith('Connections:'):
@@ -211,24 +212,38 @@ class Connections:
                     self.columns = line.lower().replace('last connect', 'last_connect') \
                         .replace('mib up|down', 'mib_up mib_down').strip().split()
                 elif line.strip().startswith('-SB Height'):
+                    groups = re.search("-SB Height:   (\d+)    -Hash: (\w+)...", line.strip())
+                    if not groups:
+                        app.logger.info("Malformed SB Height line: {0}".format(line))
+                    else:
+                        height = groups[1]
+                        hash = groups[2]
+                        connection['height'] = height
+                        connection['hash'] = hash
+                        conns.append(connection)
+                elif len(line.strip()) == 0:
                     pass
                 else:
                     vals = line.strip().split()
-                    #app.logger.debug(vals)
-                    self.conns.append({
-                        'type': vals[0],
-                        'ip': vals[1],
-                        'ports': vals[2],
-                        'nodeid': vals[3].replace('...',''),
-                        'last_connect': datetime.datetime.strptime( \
-                            str(datetime.datetime.today().year) + ' ' + vals[4] + ' ' + vals[5] + ' ' + vals[6], 
-                            '%Y %b %d %H:%M:%S'),
-                        'mib_up': float(vals[7].split('|')[0]),
-                        'mib_down': float(vals[7].split('|')[1])
-                    })
+                    if len(vals) > 7:
+                        connection = {
+                            'type': vals[0],
+                            'ip': vals[1],
+                            'ports': vals[2],
+                            'nodeid': vals[3].replace('...',''),
+                            'last_connect': datetime.datetime.strptime( \
+                                str(datetime.datetime.today().year) + ' ' + vals[4] + ' ' + vals[5] + ' ' + vals[6], 
+                                '%Y %b %d %H:%M:%S'),
+                            'mib_up': float(vals[7].split('|')[0]),
+                            'mib_down': float(vals[7].split('|')[1])
+                        }
+                        if vals[0] != "FULL_NODE":
+                            conns.append(connection)
+                    else:
+                        app.logger.info("Bad connection line: {0}".format(line))
             except:
                 app.logger.info(traceback.format_exc())
-
+        return conns
 
 class Plotnfts:
 

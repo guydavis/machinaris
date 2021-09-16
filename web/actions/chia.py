@@ -274,25 +274,25 @@ def import_key(key_path, mnemonic):
             'details.', 'success')
     return True
 
-def remove_connection(node_id, ip):
-    try:
-        proc = Popen("{0} show --remove-connection {1}".format(CHIA_BINARY, node_id), stdout=PIPE, stderr=PIPE, shell=True)
+def remove_connection(node_ids):
+    app.logger.debug("About to remove connection for nodeid: {0}".format(node_ids))
+    for node_id in node_ids:
         try:
-            outs, errs = proc.communicate(timeout=90)
-        except TimeoutExpired:
-            proc.kill()
-            proc.communicate()
-            app.logger.info("The timeout is expired!")
-            return False
-        if errs:
-            app.logger.info(errs.decode('utf-8'))
-            return False
-        if outs:
-            app.logger.info(outs.decode('utf-8'))
-    except Exception as ex:
-        app.logger.info(traceback.format_exc())
-    app.logger.info("Successfully removed connection to {0}".format(ip))
-    return True
+            proc = Popen("{0} show --remove-connection {1}".format(CHIA_BINARY, node_id), stdout=PIPE, stderr=PIPE, shell=True)
+            try:
+                outs, errs = proc.communicate(timeout=5)
+            except TimeoutExpired:
+                proc.kill()
+                proc.communicate()
+                flash("Timeout attempting to remove selected fullnode connections. See server log.", 'error')
+            if errs:
+                app.logger.error(errs.decode('utf-8'))
+                flash("Error attempting to remove selected fullnode connections. See server log.", 'error')
+            if outs:
+                app.logger.debug(outs.decode('utf-8'))
+        except Exception as ex:
+            app.logger.info(traceback.format_exc())
+    flash("Successfully removed selected connections.", 'success')
 
 def check_plots(worker, first_load):
     try:

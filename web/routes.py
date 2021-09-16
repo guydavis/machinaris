@@ -196,6 +196,8 @@ def network_connections():
     if request.method == 'POST':
         if request.form.get('action') == "add":
             chia.add_connection(request.form.get("connection"))
+        elif request.form.get('action') == 'remove':
+            chia.remove_connection(request.form.getlist('nodeid'))
         else:
             app.logger.info("Unknown form action: {0}".format(request.form))
     connections = chia.load_connections_show()
