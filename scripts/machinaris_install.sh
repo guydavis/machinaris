@@ -7,7 +7,7 @@ echo 'Installing Machinaris...'
 
 cd /chia-blockchain
 
-venv/bin/pip3 install -r /machinaris/requirements.txt
+venv/bin/pip3 install -r /machinaris/docker/requirements.txt
 
 cp -f /machinaris/entrypoint.sh /chia-blockchain/ 
 
