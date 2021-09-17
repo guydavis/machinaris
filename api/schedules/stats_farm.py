@@ -57,7 +57,7 @@ def collect():
         if chia_farm_summary.status == "Farming":  # Only collect if fully synced
             try:
                 cur.execute("INSERT INTO stat_total_chia (blockchain, value, created_at) VALUES ('chia',?,?)",
-                            (chia_farm_summary.total_chia,current_datetime,))
+                            (chia_farm_summary.total_coins,current_datetime,))
             except:
                 app.logger.info(traceback.format_exc())
             try:
@@ -73,7 +73,7 @@ def collect():
         if flax_farm_summary and flax_farm_summary.status == "Farming":  # Only collect if fully synced
             try:
                 cur.execute("INSERT INTO stat_total_chia (blockchain, value, created_at) VALUES ('flax',?,?)",
-                            (flax_farm_summary.total_chia,current_datetime,))
+                            (flax_farm_summary.total_coins,current_datetime,))
             except:
                 app.logger.info(traceback.format_exc())
             try:
