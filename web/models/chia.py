@@ -19,7 +19,7 @@ class FarmSummary:
         for farm_rec in farm_recs: 
             if farm_rec.mode == "fullnode":
                 farm = {
-                    "plot_count": farm_rec.plot_count,
+                    "plot_count": int(farm_rec.plot_count),
                     "plots_size": farm_rec.plots_size,
                     "plots_display_size": converters.gib_to_fmt(farm_rec.plots_size),
                     "status": farm_rec.status,
