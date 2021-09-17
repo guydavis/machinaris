@@ -302,7 +302,8 @@ def load_flax_version():
         last_flax_version = outs.decode('utf-8').strip()
         # Flax version with .dev is actually one # to high
         # See: https://github.com/Chia-Network/flax-blockchain/issues/5655
-        if last_flax_version.endswith('dev0') or last_flax_version.endswith('dev1'):
+        if last_flax_version.endswith('dev0') \
+            or last_flax_version.endswith('dev1'):
             sem_ver = last_flax_version.split('.')
             last_flax_version = sem_ver[0] + '.' + \
                 sem_ver[1] + '.' + str(int(sem_ver[2])-1)
