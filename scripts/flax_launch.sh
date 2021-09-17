@@ -46,6 +46,9 @@ fi
 
 sed -i 's/localhost/127.0.0.1/g' ~/.flax/mainnet/config/config.yaml
 
+chmod 755 -R /root/.flax/mainnet/config/ssl/ &> /dev/null
+flax init --fix-ssl-permissions > /dev/null 
+
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
   flax start farmer
@@ -68,6 +71,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     fi
     if [ -f /root/.flax/farmer_ca/flax_ca.crt ]; then
       flax init -c /root/.flax/farmer_ca 2>&1 > /root/.flax/mainnet/log/init.log
+      chmod 755 -R /root/.flax/mainnet/config/ssl/ &> /dev/null
+      flax init --fix-ssl-permissions > /dev/null 
     else
       echo "Did not find your farmer's certificates within /root/.flax/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
