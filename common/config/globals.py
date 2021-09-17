@@ -180,9 +180,9 @@ def load_plotman_version():
         last_plotman_version = outs.decode('utf-8').strip()
         if last_plotman_version.startswith('plotman'):
             last_plotman_version = last_plotman_version[len('plotman'):].strip()
-        if last_plotman_version.endswith('+dev'):
-            sem_ver = last_plotman_version.split('.')
-            last_plotman_version = sem_ver[0] + '.' + sem_ver[1] + '.' + sem_ver[2][:-4]
+        #if last_plotman_version.endswith('+dev'):
+        #    sem_ver = last_plotman_version.split('.')
+        #    last_plotman_version = sem_ver[0] + '.' + sem_ver[1] + '.' + sem_ver[2][:-4]
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
@@ -300,9 +300,10 @@ def load_flax_version():
     try:
         outs, errs = proc.communicate(timeout=90)
         last_flax_version = outs.decode('utf-8').strip()
-        # Chia version with .dev is actually one # to high
+        # Flax version with .dev is actually one # to high
         # See: https://github.com/Chia-Network/flax-blockchain/issues/5655
-        if last_flax_version.endswith('dev0'):
+        if last_flax_version.endswith('dev0') \
+            or last_flax_version.endswith('dev1'):
             sem_ver = last_flax_version.split('.')
             last_flax_version = sem_ver[0] + '.' + \
                 sem_ver[1] + '.' + str(int(sem_ver[2])-1)
