@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import traceback
 
 import datetime
@@ -13,40 +14,29 @@ MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
 class FarmSummary:
 
-    def __init__(self, farms):
-        self.status = "-"
-        self.plot_count = 0
-        self.plots_size = 0
-        self.total_chia = 0
-        self.total_flax = 0
-        self.netspace_size = 0
-        self.flax_netspace_size = 0
-        self.netspace_display_size = "-"
-        self.flax_netspace_display_size = "-"
-        self.expected_time_to_win = "-"
-        self.flax_expected_time_to_win = "-"
-        for farm in farms:  # Only consider farm info from fullnode
-            if farm.mode == "fullnode":
-                self.plot_count = farm.plot_count
-                self.plots_size = farm.plots_size
-                self.status = farm.status
-                self.total_chia = '0.0' if not farm.total_chia else round(farm.total_chia, 6)
-                self.netspace_display_size = '?' if not farm.netspace_size else converters.gib_to_fmt(farm.netspace_size)
-                self.netspace_size = farm.netspace_size
-                self.expected_time_to_win = farm.expected_time_to_win
-                self.total_flax =  '0.0' if not farm.total_flax else round(farm.total_flax, 6)
-                self.flax_netspace_display_size = '?' if not farm.flax_netspace_size else converters.gib_to_fmt(farm.flax_netspace_size)
-                self.flax_netspace_size = farm.flax_netspace_size
-                self.flax_expected_time_to_win = farm.flax_expected_time_to_win
-        self.plots_display_size = converters.gib_to_fmt(self.plots_size)
-        self.calc_status(self.status)
-
-    def calc_status(self, status):
-        self.status = status
-        if self.status == "Farming":
-            self.display_status = "Active"
-        else:
-            self.display_status = self.status
+    def __init__(self, farm_recs):
+        self.farms = {}
+        for farm_rec in farm_recs: 
+            if farm_rec.mode == "fullnode":
+                farm = {
+                    "plot_count": int(farm_rec.plot_count),
+                    "plots_size": farm_rec.plots_size,
+                    "plots_display_size": converters.gib_to_fmt(farm_rec.plots_size),
+                    "status": farm_rec.status,
+                    "display_status": "Active" if farm_rec.status == "Farming" else farm_rec.status,
+                    "total_coins": '0.0' if not farm_rec.total_coins else round(farm_rec.total_coins, 6),
+                    "netspace_display_size": '?' if not farm_rec.netspace_size else converters.gib_to_fmt(farm_rec.netspace_size),
+                    "netspace_size": farm_rec.netspace_size,
+                    "expected_time_to_win": farm_rec.expected_time_to_win,
+                }
+                if not farm_rec.blockchain in self.farms:
+                    self.farms[farm_rec.blockchain] = farm
+                else:
+                    app.logger.info("Discarding duplicate fullnode blockchain status from {0} - {1}".format(farm_rec.hostname, farm_rec.blockchain))    
+            else:
+                app.logger.info("Stale farm status for {0} - {1}".format(farm_rec.hostname, farm_rec.blockchain))
+        if len(self.farms) == 0:  # Handle completely missing farm summary info 
+            self.farms['chia'] = {} # with empty chia farm
 
 class FarmPlots:
 
@@ -86,7 +76,7 @@ class ChallengesChartData:
             created_at = challenge.created_at.replace(' ', 'T')
             if not created_at in self.labels:
                 self.labels.append(created_at)
-            host_chain = challenge.hostname + '_' + challenge.blockchain
+            host_chain = challenge.hostname
             if not host_chain in datasets:
                 datasets[host_chain] = {}
             dataset = datasets[host_chain]
@@ -184,6 +174,7 @@ class Connections:
 
     def __init__(self, connections):
         self.rows = []
+        self.blockchains = {}
         for connection in connections:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(connection.hostname))
@@ -198,11 +189,10 @@ class Connections:
                 'protocol_port': '8444' if connection.blockchain == 'chia' else '6888',
                 'details': connection.details
             })
+            self.blockchains[connection.blockchain] = self.parse(connection)
     
-    def parse(self, connections):
-        # TODO Deal with connection listing from multiple machines
-        connection = connections[0]
-        self.conns = []
+    def parse(self, connection):
+        conns = []
         for line in connection.details.split('\n'):
             try:
                 if line.strip().startswith('Connections:'):
@@ -211,24 +201,38 @@ class Connections:
                     self.columns = line.lower().replace('last connect', 'last_connect') \
                         .replace('mib up|down', 'mib_up mib_down').strip().split()
                 elif line.strip().startswith('-SB Height'):
+                    groups = re.search("-SB Height:   (\d+)    -Hash: (\w+)...", line.strip())
+                    if not groups:
+                        app.logger.info("Malformed SB Height line: {0}".format(line))
+                    else:
+                        height = groups[1]
+                        hash = groups[2]
+                        connection['height'] = height
+                        connection['hash'] = hash
+                        conns.append(connection)
+                elif len(line.strip()) == 0:
                     pass
                 else:
                     vals = line.strip().split()
-                    #app.logger.debug(vals)
-                    self.conns.append({
-                        'type': vals[0],
-                        'ip': vals[1],
-                        'ports': vals[2],
-                        'nodeid': vals[3].replace('...',''),
-                        'last_connect': datetime.datetime.strptime( \
-                            str(datetime.datetime.today().year) + ' ' + vals[4] + ' ' + vals[5] + ' ' + vals[6], 
-                            '%Y %b %d %H:%M:%S'),
-                        'mib_up': float(vals[7].split('|')[0]),
-                        'mib_down': float(vals[7].split('|')[1])
-                    })
+                    if len(vals) > 7:
+                        connection = {
+                            'type': vals[0],
+                            'ip': vals[1],
+                            'ports': vals[2],
+                            'nodeid': vals[3].replace('...',''),
+                            'last_connect': datetime.datetime.strptime( \
+                                str(datetime.datetime.today().year) + ' ' + vals[4] + ' ' + vals[5] + ' ' + vals[6], 
+                                '%Y %b %d %H:%M:%S'),
+                            'mib_up': float(vals[7].split('|')[0]),
+                            'mib_down': float(vals[7].split('|')[1])
+                        }
+                        if vals[0] != "FULL_NODE":
+                            conns.append(connection)
+                    else:
+                        app.logger.info("Bad connection line: {0}".format(line))
             except:
                 app.logger.info(traceback.format_exc())
-
+        return conns
 
 class Plotnfts:
 

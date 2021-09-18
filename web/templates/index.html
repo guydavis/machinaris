@@ -18,298 +18,115 @@
     {% endwith %}
   </div>
 
-  <div class="row align-items-md-stretch">
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-      <div class="h-20 p-2 bg-light border rounded-3">
-        <h6 class="display-6 text-center">Plotting:
-          <span {% if plotting.display_status=='Active' %} class="text-success" {% endif %}>
-            {{ plotting.display_status }}
-          </span>
-        </h6>
-      </div>
-    </div>
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-      <div class="h-20 p-2 bg-light border rounded-3">
-        <h6 class="display-6 text-center">Farming:
-          <span {% if farming.display_status=='Active' %} class="text-success" {% endif %}>
-            {{ farming.display_status }}
-          </span>
-        </h6>
-      </div>
-    </div>
-  </div>
+  <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      {% for blockchain in farms %}
+      <div class="carousel-item {% if blockchain == 'chia' %} active {% endif %}" data-bs-interval="10000">
 
-  <div class="row align-items-md-stretch">
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-      <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
-          title="{{ daily_diff.plot_count }}">{{farming.plot_count }}</h4>
-        <h6 class="display-6 text-center">Total Plots</h6>
-      </div>
-    </div>
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-      <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
-          title="{{ daily_diff.plots_size }}">{{farming.plots_display_size }}</h4>
-        <h6 class="display-6 text-center">Total Plots Size</h6>
-      </div>
-    </div>
-  </div>
+        {% if farms[blockchain].expected_time_to_win != '-' %}
+        <div class="row align-items-md-stretch" style="margin-top:0px; margin-bottom:5px;">
+          <div class="col-md-12">
+            <div class="h-30 p-2 text-white bg-dark rounded-3">
+              <h4 class="text-center">{{ blockchain|capitalize }} - Expected Time to Win:
+                <span class="text-success">{{ farms[blockchain].expected_time_to_win }}</span>
+              </h4>
+            </div>
+          </div>
+        </div>
+        {% endif %}
 
-  {% if farming.expected_time_to_win != '-' %}
-  <div class="row align-items-md-stretch" style="margin-top:5px; margin-bottom:5px;">
-    <div class="col-md-12">
-      <div class="h-30 p-2 text-white bg-dark rounded-3">
-        <h4 class="text-center">Chia - Expected Time to Win:
-          <span class="text-success">{{ farming.expected_time_to_win }}</span>
-        </h4>
-      </div>
-    </div>
-  </div>
-  {% endif %}
+        <div class="row align-items-md-stretch">
+          <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+            <div class="h-100 p-2 text-white bg-dark rounded-3">
+              <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
+                data-html="true" title="{{ farms[blockchain].daily_diff.total_coins }}">{{farms[blockchain].total_coins }}</h4>
+              <h6 class="display-6 text-center">{{ blockchain|capitalize }} Farmed</h6>
+            </div>
+          </div>
+          <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+            <div class="h-100 p-2 text-white bg-dark rounded-3"
+              style="padding-top:12px !important; padding-bottom:12px !important;">
+              <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
+                data-html="true" title="{{ farms[blockchain].daily_diff.netspace_size }}">{{farms[blockchain].netspace_display_size }}
+              </h4>
+              <h6 class="display-6 text-center">{{ blockchain|capitalize }} Netspace</h6>
+            </div>
+          </div>
+        </div>
 
-  <div class="row align-items-md-stretch">
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-      <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
-          title="{{ daily_diff.total_chia }}">{{farming.total_chia }}</h4>
-        <h6 class="display-6 text-center">Chia Farmed</h6>
-      </div>
-    </div>
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-      <div class="h-100 p-2 text-white bg-dark rounded-3"
-        style="padding-top:12px !important; padding-bottom:12px !important;">
-        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
-          title="{{ daily_diff.netspace_chia }}">{{farming.netspace_display_size }}</h4>
-        <h6 class="display-6 text-center">Chia Netspace</h6>
-      </div>
-    </div>
-  </div>
+        <div class="row align-items-md-stretch">
+          <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+            <div class="h-100 p-2 text-white bg-dark rounded-3">
+              <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
+                data-html="true" title="{{ farms[blockchain].daily_diff.plot_count }}">{{farms[blockchain].plot_count }}</h4>
+              <h6 class="display-6 text-center">Total Plots</h6>
+            </div>
+          </div>
+          <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+            <div class="h-100 p-2 text-white bg-dark rounded-3">
+              <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
+                data-html="true" title="{{ farms[blockchain].daily_diff.plots_size }}">{{farms[blockchain].plots_display_size }}</h4>
+              <h6 class="display-6 text-center">Total Plots Size</h6>
+            </div>
+          </div>
+        </div>
 
-  {% if global_config.flax_enabled %}
-  {% if farming.flax_expected_time_to_win != '-' %}
-  <div class="row align-items-md-stretch" style="margin-top:5px; margin-bottom:5px;">
-    <div class="col-md-12">
-      <div class="h-30 p-2 text-white bg-dark rounded-3">
-        <h4 class="text-center">Flax - Expected Time to Win:
-          <span class="text-success">{{ farming.flax_expected_time_to_win }}</span>
-        </h4>
-      </div>
-    </div>
-  </div>
-  {% endif %}
-  <div class="row align-items-md-stretch" style="margin-top:5px; margin-bottom:5px;">
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-      <div class="h-100 p-2 text-white bg-dark rounded-3">
-        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
-          title="{{ daily_diff.total_flax }}">{{farming.total_flax }}</h4>
-        <h6 class="display-6 text-center">Flax Farmed</h6>
-      </div>
-    </div>
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-      <div class="h-100 p-2 text-white bg-dark rounded-3"
-        style="padding-top:12px !important; padding-bottom:12px !important;">
-        <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left" data-html="true"
-          title="{{ daily_diff.netspace_flax }}">{{farming.flax_netspace_display_size }}</h4>
-        <h6 class="display-6 text-center">Flax Netspace</h6>
-      </div>
-    </div>
-  </div>
-  {% endif %}
+        <div class="row align-items-md-stretch">
+          <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+            <div class="h-20 p-2 bg-light border rounded-3">
+              <h6 class="display-6 text-center">Plotting:
+                <span {% if plotting.display_status=='Active' %} class="text-success" {% endif %}>
+                  {{ plotting.display_status }}
+                </span>
+              </h6>
+            </div>
+          </div>
+          <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+            <div class="h-20 p-2 bg-light border rounded-3">
+              <h6 class="display-6 text-center">Farming:
+                <span {% if farms[blockchain].display_status=='Active' %} class="text-success" {% endif %}>
+                  {{ farms[blockchain].display_status }}
+                </span>
+              </h6>
+            </div>
+          </div>
+        </div>
 
-  {% if global_config.farming_enabled %}
-  <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
-    <div class="h-100 p-2 text-white bg-dark rounded-3">
-      <h6 class="display-6 text-center">Blockchain Challenges to Harvesters</h6>
-      <canvas id="challenges_chart"></canvas>
+        <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
+          <div class="h-100 p-2 text-white bg-dark rounded-3">
+            <h6 class="display-6 text-center">{{blockchain|capitalize}} - Challenges from Harvesters</h6>
+            <canvas id="{{blockchain}}_challenges_chart"></canvas>
+          </div>
+        </div>
+
+        {% if farms[blockchain].partials.data|length > 0 %}
+        <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
+          <div class="h-100 p-2 text-white bg-dark rounded-3">
+            <h6 class="display-6 text-center">{{blockchain|capitalize}} - Partial Proofs for Pools</h6>
+            <canvas id="{{blockchain}}_partials_chart"></canvas>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
     </div>
+
+    <button class="carousel-control-prev" style="align-items: initial; justify-content: left; padding-top: 10px; width: 5%; height: 60px;" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" style="align-items: initial; justify-content: right; padding-top: 10px; width: 5%; height: 60px;" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
   </div>
-  <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
-    <div class="h-100 p-2 text-white bg-dark rounded-3">
-      <h6 class="display-6 text-center">Partial Proofs to Pools</h6>
-      <canvas id="partials_chart"></canvas>
-    </div>
-  </div>
-  {% endif %}
 
   {% endblock %}
 
   {% block scripts %}
   {% if global_config.farming_enabled %}
   <script>
-    const COLORS = [
-        '#3aac59',
-        // https://www.chartjs.org/docs/master/samples/utils.html
-        //'#4dc9f6',
-        '#f67019',
-        '#f53794',
-        //'#537bc4',
-        '#acc236',
-        //'#166a8f',
-        //'#00a950',
-        //'#58595b',
-        '#8549ba',
-        // https://colorbrewer2.org/#type=qualitative&scheme=Paired&n=9
-        '#a6cee3',
-        '#1f78b4',
-        '#b2df8a',
-        '#33a02c',
-        '#fb9a99',
-        '#e31a1c',
-        '#fdbf6f',
-        '#ff7f00',
-        '#cab2d6',
-        // https://learnui.design/tools/data-color-picker.html#palette
-        '#003f5c',
-        '#2f4b7c',
-        '#665191',
-        '#a05195',
-        '#d45087',
-        '#f95d6a',
-        '#ff7c43',
-        '#ffa600',
-    ];
-
-    function color(index) {
-        return COLORS[index % COLORS.length];
-    }
-
-    $(document).ready(function () {
-      $('[data-toggle="tooltip"]').tooltip();
-
-      var ctx = document.getElementById('challenges_chart');
-      var myChart = new Chart(ctx, {
-          type: 'scatter',
-          data: {
-              labels: {{ challenges_chart_data.labels | safe }},
-              datasets: [
-              {% for key in challenges_chart_data.data | sort %}
-                  {
-                      label: "{{key}}",
-                      data: {{ challenges_chart_data.data[key] | safe }},
-                      backgroundColor: color({{ loop.index - 1 }}),
-                  },
-              {% endfor %}
-              ],
-          },
-          borderWidth: 1,
-          options: {
-              plugins: {  
-                legend: {
-                    labels: {
-                    color: "#c7c7c7",  
-                    font: {
-                      size: 18 
-                    }
-                  }
-                }
-              },
-              scales: {
-                  x: {
-                      type: 'time',
-                      time: {
-                          tooltipFormat: 'DD T'
-                      },
-                      ticks: {
-                          color: "#c7c7c7",
-                          font: {
-                            size: 16 
-                          }  
-                      },
-                      title: {
-                          display: true,
-                          text: 'Time - Last Hour',
-                          color: "#c7c7c7",  
-                          font: {
-                            size: 18 
-                          }
-                      }
-                  },
-                  y: {
-                      ticks: {
-                          color: "#c7c7c7",  
-                          font: {
-                            size: 16 
-                          },
-                          beginAtZero: true
-                      },
-                      title: {
-                          display: true,
-                          text: "Time Taken (seconds)",
-                          color: "#c7c7c7",  
-                          font: {
-                            size: 18 
-                          }
-                      }
-                  }
-              }
-          }
-        });
-      var ctx = document.getElementById('partials_chart');
-      var myChart = new Chart(ctx, {
-          type: 'bar',
-          data: {
-              labels: {{ partials_chart_data.labels | safe }},
-              datasets: [
-              {% for key in partials_chart_data.data %}
-                  {
-                      label: "{{key}}",
-                      data: {{ partials_chart_data.data[key] | safe }},
-                      backgroundColor: color({{ loop.index - 1 }}),
-                  },
-              {% endfor %}
-              ],
-          },
-          borderWidth: 1,
-          options: {
-              plugins: {  
-                legend: {
-                    labels: {
-                    color: "#c7c7c7",  
-                    font: {
-                      size: 18 
-                    }
-                  }
-                }
-              },
-              scales: {
-                  x: {
-                      ticks: {
-                          color: "#c7c7c7",
-                          font: {
-                            size: 16 
-                          }  
-                      },
-                      title: {
-                          display: true,
-                          text: 'Time - Last 24 Hours',
-                          color: "#c7c7c7",  
-                          font: {
-                            size: 18 
-                          }
-                      }
-                  },
-                  y: {
-                      ticks: {
-                          color: "#c7c7c7",
-                          font: {
-                            size: 16 
-                          }  
-                      },
-                      beginAtZero: true,
-                      title: {
-                          display: true,
-                          text: "Partials Submitted",
-                          color: "#c7c7c7",  
-                          font: {
-                            size: 18 
-                          }
-                      }
-                  }
-              }
-          }
-        });
-    })
+    {% include 'views/index_script_block.js' %}
   </script>
   {% endif %}
   {% endblock %}

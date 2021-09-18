@@ -32,7 +32,8 @@ class Farms(MethodView):
     @blp.arguments(FarmSchema)
     @blp.response(201, FarmSchema)
     def post(self, new_item):
-        item = db.session.query(Farm).get(new_item['hostname'])
+        item = db.session.query(Farm).filter(Farm.hostname==new_item['hostname'], \
+            Farm.blockchain==new_item['blockchain']).first()
         if item: # upsert
             new_item['created_at'] = item.created_at
             new_item['updated_at'] = dt.datetime.now()

@@ -27,15 +27,13 @@ def index():
     if not utils.is_controller():
         return redirect(url_for('controller'))
     workers = worker.load_worker_summary()
-    farming = chia.load_farm_summary()
     plotting = plotman.load_plotting_summary()
-    challenges_chart_data = chia.challenges_chart_data()
-    partials_chart_data = chia.partials_chart_data()
-    daily_diff = stats.load_daily_diff()
-    return render_template('index.html', reload_seconds=120, farming=farming.__dict__, \
-        plotting=plotting.__dict__, workers=workers, daily_diff=daily_diff, \
-        partials_chart_data=partials_chart_data, challenges_chart_data=challenges_chart_data, \
-        global_config=gc)
+    farm_summary = chia.load_farm_summary()
+    chia.challenges_chart_data(farm_summary)
+    chia.partials_chart_data(farm_summary)
+    stats.load_daily_diff(farm_summary)
+    return render_template('index.html', reload_seconds=120, farms=farm_summary.farms, \
+        plotting=plotting.__dict__, workers=workers, global_config=gc)
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
@@ -196,6 +194,8 @@ def network_connections():
     if request.method == 'POST':
         if request.form.get('action') == "add":
             chia.add_connection(request.form.get("connection"))
+        elif request.form.get('action') == 'remove':
+            chia.remove_connection(request.form.getlist('nodeid'))
         else:
             app.logger.info("Unknown form action: {0}".format(request.form))
     connections = chia.load_connections_show()

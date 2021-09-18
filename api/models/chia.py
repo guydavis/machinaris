@@ -24,9 +24,9 @@ class FarmSummary:
                 elif "status" in line: 
                     self.calc_status(line.split(':')[1].strip())
                 elif "Total chia farmed" in line:
-                    self.total_chia = line.split(':')[1].strip()
+                    self.total_coins = line.split(':')[1].strip()
                 elif "Total flax farmed" in line:
-                    self.total_chia = line.split(':')[1].strip()
+                    self.total_coins = line.split(':')[1].strip()
                 elif "Estimated network space" in line:
                     self.calc_netspace_size(line.split(':')[1].strip())
                 elif "Expected time to win" in line:
