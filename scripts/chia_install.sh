@@ -5,8 +5,6 @@
 
 CHIA_BRANCH=$1
 
-echo "CHIA_BRANCH=${CHIA_BRANCH}"
-
 if [ -z ${CHIA_BRANCH} ]; then
 	echo 'Skipping Chia install as not requested.'
 else

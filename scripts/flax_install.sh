@@ -4,8 +4,6 @@
 #
 FLAX_BRANCH=$1
 
-echo "FLAX_BRANCH=${FLAX_BRANCH}"
-
 if [ -z ${FLAX_BRANCH} ]; then
 	echo 'Skipping Flax install as not requested.'
 else

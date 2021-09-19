@@ -5,7 +5,7 @@
 
 CHIA_BRANCH=$1
 
-if [ -z ${CHIA_BRANCH+x} ]; then
+if [ -z ${CHIA_BRANCH} ]; then
 	echo 'Skipping Chiadog install as not requested.'
 else
 

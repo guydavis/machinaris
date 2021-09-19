@@ -5,7 +5,7 @@
 
 FLAX_BRANCH=$1
 
-if [ -z ${FLAX_BRANCH+x} ]; then
+if [ -z ${FLAX_BRANCH} ]; then
 	echo 'Skipping Flaxdog install as not requested.'
 else
 
