@@ -5,7 +5,9 @@
 
 CHIA_BRANCH=$1
 
-if [ -z ${CHIA_BRANCH+x} ]; then
+echo "CHIA_BRANCH=${CHIA_BRANCH}"
+
+if [ -z ${CHIA_BRANCH} ]; then
 	echo 'Skipping Chia install as not requested.'
 else
 	git clone --branch ${CHIA_BRANCH} --recurse-submodules https://github.com/Chia-Network/chia-blockchain.git /chia-blockchain \
