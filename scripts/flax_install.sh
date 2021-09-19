@@ -8,7 +8,6 @@ FLAX_BRANCH=$1
 if [ -z ${FLAX_BRANCH} ]; then
 	echo 'Skipping Flax install as not requested.'
 else
-	cd /
 	rm -rf /root/.cache
 	git clone --branch ${FLAX_BRANCH} --single-branch https://github.com/Flax-Network/flax-blockchain.git /flax-blockchain \
 		&& cd /flax-blockchain \
@@ -19,8 +18,10 @@ else
 	echo "FLAX_FINISHED: checking root directory"
 	ls -al /
 
-	if [ ! -d /chia-blockchain]; then
+	if [ ! -d /chia-blockchain/venv ]; then
+		cd /
 		echo "Trying to link chia-blockchain"
+		rmdir /chia-blockchain
 		ln -s /flax-blockchain /chia-blockchain
 	fi
 
