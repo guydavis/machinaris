@@ -3,7 +3,9 @@
 # Installs Flaxdog for log monitoring and alerting
 #
 
-if [ -z ${$1} ]; then
+FLAX_BRANCH=$1
+
+if [ -z ${FLAX_BRANCH+x} ]; then
 	echo 'Skipping Flaxdog install as not requested.'
 else
 

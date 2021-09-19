@@ -3,7 +3,9 @@
 # Installs Chiadog for log monitoring and alerting
 #
 
-if [ -z ${$1} ]; then
+CHIA_BRANCH=$1
+
+if [ -z ${CHIA_BRANCH+x} ]; then
 	echo 'Skipping Chiadog install as not requested.'
 else
 
