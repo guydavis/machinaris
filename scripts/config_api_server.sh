@@ -14,5 +14,4 @@ if [ ! -f "${API_SETTINGS_FILE}" ]; then
             echo "STATUS_EVERY_X_MINUTES = 2" > ${API_SETTINGS_FILE}
         fi
     fi
-    cat ${API_SETTINGS_FILE}
 fi

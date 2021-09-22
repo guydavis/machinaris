@@ -3,6 +3,10 @@
 # Configures Chia and Plotman, then launches Machinaris web server
 #
 
+echo 'Checking working directory...'
+ls -al /
+ls -al /chia-blockchain
+
 echo 'Configuring Plotman...'
 mkdir -p /root/.chia/plotman/logs
 # Check for existing, old versions of plotman.yaml and migrate them, else use default
@@ -35,10 +39,9 @@ fi
 
 # Start the log monitors
 if [ "${mode}" != "plotter" ]; then
-    . /machinaris/scripts/chiadog_launch.sh
-fi
-if [[ "${mode}" != "plotter" ]] && [[ ${blockchains} =~ flax ]]; then
-    . /machinaris/scripts/flaxdog_launch.sh
+    for fork in ${blockchains//,/ }; do
+        . /machinaris/scripts/${fork}dog_launch.sh
+    done
 fi
 
 # Even standalone plotting mode needs database setup
