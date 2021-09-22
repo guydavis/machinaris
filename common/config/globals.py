@@ -18,6 +18,10 @@ from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
 from subprocess import Popen, TimeoutExpired, PIPE
 from os import environ, path
 
+SUPPORTED_BLOCKCHAINS = [
+    'chia',
+    'flax',
+]
 
 PLOTMAN_CONFIG = '/root/.chia/plotman/plotman.yaml'
 PLOTMAN_SAMPLE = '/machinaris/config/plotman.sample.yaml'
@@ -38,7 +42,7 @@ def load():
     cfg['archiving_enabled'] = archiving_enabled()
     cfg['farming_enabled'] = farming_enabled()
     cfg['harvesting_enabled'] = harvesting_enabled()
-    cfg['flax_enabled'] = flax_enabled()
+    cfg['enabled_blockchains'] = enabled_blockchains()
     cfg['now'] = datetime.datetime.now(tz=None).strftime("%Y-%m-%d %H:%M:%S")
     cfg['machinaris_version'] = load_machinaris_version()
     cfg['machinaris_mode'] = os.environ['mode']
@@ -112,8 +116,13 @@ def harvesting_enabled():
 def plotting_enabled():
     return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode'])
 
-def flax_enabled():
-    return "blockchains" in os.environ and "flax" in os.environ['blockchains']
+def enabled_blockchains():
+    blockchains = []
+    if "blockchains" in os.environ:
+        for blockchain in os.environ['blockchains'].split():
+            if blockchain.lower() in SUPPORTED_BLOCKCHAINS:
+                blockchains.append(blockchain.lower())
+    return blockchains
 
 def archiving_enabled():
     if not plotting_enabled():

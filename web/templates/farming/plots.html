@@ -42,22 +42,15 @@
                             {{ farmer.displayname }}: {{farmer.farming_status}}
                         </button>
                         <ul class="dropdown-menu bg-dark btn-outline-success">
+                            {% for blockchain in farm.config.enabled_blockchains %}
                             <li>
                                 <a class="dropdown-item text-white text-decoration-none" href="#"
-                                    onclick='ViewLogs("{{ farmer.hostname }}","chia");return false;'>
+                                    onclick='ViewLogs("{{ farmer.hostname }}","{{blockchain}}");return false;'>
                                     <i class="fs-4 bi-text-indent-left"></i>
-                                    <span class="align-text-bottom"></span>View Chia Log</span>
+                                    <span class="align-text-bottom"></span>View {{blockchain|capitalize}} Log</span>
                                 </a>
                             </li>
-                            {% if global_config.flax_enabled %}
-                            <li>
-                                <a class="dropdown-item text-white text-decoration-none" href="#"
-                                    onclick='ViewLogs("{{ farmer.hostname }}","flax");return false;'>
-                                    <i class="fs-4 bi-text-indent-left"></i>
-                                    <span class="align-text-bottom"></span>View Flax Log</span>
-                                </a>
-                            </li>
-                            {% endif %}
+                            {% endfor %}
                             <li>
                                 <a class="dropdown-item text-white text-decoration-none" href="#"
                                     onclick='CheckPlots("{{ farmer.hostname }}");return false;'>

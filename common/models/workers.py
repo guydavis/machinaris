@@ -11,6 +11,7 @@ class Worker(db.Model):
     __tablename__ = "workers"
 
     hostname = sa.Column(sa.String(length=255), primary_key=True)
+    port = sa.Column(sa.Integer, nullable=True)
     displayname = sa.Column(sa.String(length=255), nullable=True)
     mode = sa.Column(sa.String(length=64), nullable=False)
     services = sa.Column(sa.String, nullable=False)
@@ -22,19 +23,28 @@ class Worker(db.Model):
     updated_at = sa.Column(sa.DateTime())
 
     def farming_status(self):
-        return j.loads(self.services)['chia_farm_status']
-    
-    def flax_farming_status(self):
-        return j.loads(self.services)['flax_farm_status']
+        try:
+            return j.loads(self.services)['farming_status']
+        except: # Old key
+            return j.loads(self.services)['farm_status']
     
     def plotting_status(self):
-        return j.loads(self.services)['plotman_status']
+        try:
+            return j.loads(self.services)['plotting_status']
+        except: # Old key
+            return j.loads(self.services)['plotman_status']
 
     def archiving_status(self):
-        return j.loads(self.services)['archiver_status'] 
+        try:
+            return j.loads(self.services)['archiving_status']
+        except: # Old key
+            return j.loads(self.services)['archiver_status'] 
 
     def archiving_enabled(self):
         return j.loads(self.config)['archiving_enabled'] 
     
     def monitoring_status(self):
-        return j.loads(self.services)['chiadog_status'] 
+        try:
+            return j.loads(self.services)['monitoring_status']
+        except: # Old key
+            return j.loads(self.services)['chiadog_status'] 

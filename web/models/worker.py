@@ -36,15 +36,11 @@ class WorkerSummary:
             gc = globals.load()
             if 'bladebit_version' in config:
                 other_versions += "Bladebit: " + config['bladebit_version'] + "<br/>"
-            if 'chia_version' in config:
-                other_versions += "Chia: " + config['chia_version'] + "<br/>"
-            if 'chiadog_version' in config:
-                other_versions += "Chiadog: " + config['chiadog_version'] + "<br/>"
-            if gc['flax_enabled']:
-                if 'flax_version' in config:
-                    other_versions += "Flax: " + config['flax_version'] + "<br/>"
-                if 'flaxdog_version' in config:
-                    other_versions += "Flaxdog: " + config['flaxdog_version'] + "<br/>"
+            for blockchain in config['enabled_blockchains']:
+                if '{0}_version' in config:
+                    other_versions += blockchain.capitalize() + ": " + config['{0}_version'] + "<br/>"
+                if '{0}dog_version' in config:
+                    other_versions += blockchain.capitalize() + "dog: " + config['{0}dog_version'] + "<br/>"
             if 'madmax_version' in config:
                 other_versions += "Madmax: " + config['madmax_version'] + "<br/>"
             if 'plotman_version' in config:
@@ -54,6 +50,8 @@ class WorkerSummary:
                 worker.time_on_worker = config['now']
             else:
                 worker.time_on_worker = '?'
+            if not worker.port:  # Old records
+                worker.port = 8927
         self.plotters.sort(key=lambda w: w.displayname)
         self.farmers.sort(key=lambda w: w.displayname)
         self.harvesters.sort(key=lambda w: w.displayname)

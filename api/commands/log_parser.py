@@ -24,8 +24,7 @@ from api import app
 CHIA_LOG = '/root/.chia/mainnet/log/debug.log'
 FLAX_LOG = '/root/.flax/mainnet/log/debug.log'
 
-# Roughly 2 minutes worth of challenges, sent every 60 seconds, for overlap
-CHALLENGES_TO_LOAD = 16
+CHALLENGES_PER_MINUTE = 8 
 
 # Most recent partial proofs, actually double as 2 log lines per partial
 PARTIALS_TO_LOAD = 50
@@ -33,8 +32,12 @@ PARTIALS_TO_LOAD = 50
 # When reading tail of a log, only send this many lines
 MAX_LOG_LINES = 250
 
-
 def recent_challenges(blockchain):
+    try:
+        schedule_every_x_minutes = app.config['STATUS_EVERY_X_MINUTES']
+        CHALLENGES_TO_LOAD = CHALLENGES_PER_MINUTE * int(schedule_every_x_minutes) + CHALLENGES_PER_MINUTE
+    except:
+        CHALLENGES_TO_LOAD = CHALLENGES_PER_MINUTE * 2 + CHALLENGES_PER_MINUTE
     log_file = CHIA_LOG
     if blockchain == 'flax':
         log_file = FLAX_LOG

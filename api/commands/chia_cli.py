@@ -243,9 +243,6 @@ def generate_key(key_path):
         flash('Welcome! A new key has been generated at {0}. Keep it secret! Keep it safe!'.format(key_path), 'success')
         flash('{0}'.format(" ".join(mnemonic_words)), 'info')
         start_farmer('chia')
-        if globals.flax_enabled():
-            # TODO 'flax keys add' the new key
-            start_farmer('flax')
 
 def start_farmer(blockchain):
     chia_binary = get_binary(blockchain)

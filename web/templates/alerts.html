@@ -46,22 +46,15 @@
                             {% endif %}
                         </a>
                     </li>
+                    {% for blockchain in farmer.config.enabled_blockchains %}
                     <li>
                         <a class="dropdown-item text-white text-decoration-none" href="#"
-                            onclick='MonitoringLogs("{{ farmer.hostname }}", "chia");return false;'>
+                            onclick='MonitoringLogs("{{ farmer.hostname }}", "{{blockchain}}");return false;'>
                             <i class="fs-4 bi-text-indent-left"></i>
-                            <span class="align-text-bottom"></span>View Chia Monitoring Logs</span>
+                            <span class="align-text-bottom"></span>View {{blockchain|capitalize}} Monitoring Logs</span>
                         </a>
                     </li>
-                    {% if global_config.flax_enabled %}
-                    <li>
-                        <a class="dropdown-item text-white text-decoration-none" href="#"
-                            onclick='MonitoringLogs("{{ farmer.hostname }}", "flax");return false;'>
-                            <i class="fs-4 bi-text-indent-left"></i>
-                            <span class="align-text-bottom"></span>View Flax Monitoring Logs</span>
-                        </a>
-                    </li>
-                    {% endif %}
+                    {% endfor %}
                 </ul>
             </div>
             {% endfor %}
