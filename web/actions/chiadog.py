@@ -3,6 +3,7 @@
 #
 
 import datetime
+import json
 import os
 import psutil
 import signal
@@ -31,7 +32,8 @@ def load_farmers():
             farmers.append({
                 'hostname': farmer.hostname,
                 'displayname': farmer.displayname,
-                'monitoring_status': farmer.monitoring_status().lower()
+                'monitoring_status': farmer.monitoring_status().lower(),
+                'config': json.loads(farmer.config),
             })
     return farmers
 

@@ -36,6 +36,8 @@ class WorkerSummary:
             gc = globals.load()
             if 'bladebit_version' in config:
                 other_versions += "Bladebit: " + config['bladebit_version'] + "<br/>"
+            if not 'enabled_blockchains' in config:  # Default if missing from old records
+                config['enabled_blockchains'] = 'chia'
             for blockchain in config['enabled_blockchains']:
                 if '{0}_version' in config:
                     other_versions += blockchain.capitalize() + ": " + config['{0}_version'] + "<br/>"

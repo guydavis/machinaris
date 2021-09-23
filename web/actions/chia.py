@@ -3,6 +3,7 @@
 #
 
 import datetime
+import json
 import os
 import pexpect
 import psutil
@@ -94,13 +95,15 @@ def load_farmers():
             farmers.append({
                 'hostname': farmer.hostname,
                 'displayname': farmer.displayname,
-                'farming_status': farmer.farming_status().lower()
+                'farming_status': farmer.farming_status().lower(),
+                'config': json.loads(farmer.config),
             })
         elif farmer in worker_summary.harvesters:
             farmers.append({
                 'hostname': farmer.hostname,
                 'displayname': farmer.displayname,
-                'farming_status': 'harvesting'
+                'farming_status': 'harvesting',
+                'config': json.loads(farmer.config),
             })
     return sorted(farmers, key=lambda f: f['displayname'])
 

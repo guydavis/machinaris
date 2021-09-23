@@ -3,6 +3,7 @@
 #
 
 import datetime
+import json
 import os
 from flask.helpers import make_response
 import psutil
@@ -42,7 +43,8 @@ def load_plotters():
             'displayname': plotter.displayname,
             'plotting_status': plotter.plotting_status(),
             'archiving_status': plotter.archiving_status(),
-            'archiving_enabled': plotter.archiving_enabled()
+            'archiving_enabled': plotter.archiving_enabled(),
+            'config': json.loads(plotter.config),
         })
     return sorted(plotters, key=lambda p: p['displayname'])
 

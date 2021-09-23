@@ -42,7 +42,7 @@
                             {{ farmer.displayname }}: {{farmer.farming_status}}
                         </button>
                         <ul class="dropdown-menu bg-dark btn-outline-success">
-                            {% for blockchain in farm.config.enabled_blockchains %}
+                            {% for blockchain in farmer.config.enabled_blockchains %}
                             <li>
                                 <a class="dropdown-item text-white text-decoration-none" href="#"
                                     onclick='ViewLogs("{{ farmer.hostname }}","{{blockchain}}");return false;'>
