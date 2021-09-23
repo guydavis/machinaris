@@ -31,7 +31,7 @@ def update():
                 "displayname": displayname,
                 "mode": os.environ['mode'],
                 "services": gather_services_status(),
-                "url": utils.get_remote_url(),
+                "url": utils.get_worker_url(),
                 "config": json.dumps(config),
             }
             utils.send_post('/workers/', payload, debug=False)

@@ -20,5 +20,7 @@ class DefaultConfig:
     CONTROLLER_SCHEME = 'http'
     CONTROLLER_HOST = os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost'
     CONTROLLER_PORT = os.environ['controller_api_port'] if 'controller_api_port' in os.environ else '8927'
+    WORKER_SCHEME = 'http'
+    WORKER_PORT = os.environ['worker_api_port'] if 'worker_api_port' in os.environ else '8927'
 
     STATUS_EVERY_X_MINUTES = 1  # Run status collection once a minute by default
