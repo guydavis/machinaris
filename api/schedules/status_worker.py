@@ -27,14 +27,15 @@ def update():
             config = globals.load()
             payload = {
                 "hostname": hostname,
-                "port": app.config['CONTROLLER_PORT'],
+                "blockchain": os.environ['blockchains'],
+                "port": app.config['WORKER_PORT'],
                 "displayname": displayname,
                 "mode": os.environ['mode'],
                 "services": gather_services_status(),
                 "url": utils.get_worker_url(),
                 "config": json.dumps(config),
             }
-            utils.send_post('/workers/', payload, debug=False)
+            utils.send_post('/workers/{0}/{1}'.format(hostname, app.config['WORKER_PORT']), payload, debug=False)
         except:
             app.logger.info("Failed to load and send worker status.")
             app.logger.info(traceback.format_exc())
