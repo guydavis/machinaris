@@ -3,10 +3,6 @@
 # Configures Chia and Plotman, then launches Machinaris web server
 #
 
-echo 'Checking working directory...'
-ls -al /
-ls -al /chia-blockchain
-
 echo 'Configuring Plotman...'
 mkdir -p /root/.chia/plotman/logs
 # Check for existing, old versions of plotman.yaml and migrate them, else use default
