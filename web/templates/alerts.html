@@ -29,29 +29,19 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
                     aria-expanded="false" id="{{ farmer.hostname }}_btn">
-                    {{ farmer.displayname }}: {{farmer.monitoring_status}}
+                    {{ farmer.displayname }}
                 </button>
                 <ul class="dropdown-menu bg-dark btn-outline-success">
-                    <li>
-                        <a class="dropdown-item text-white text-decoration-none" href="#" {% if
-                            farmer.monitoring_status=='stopped' %}
-                            onclick='MonitoringAction("{{ farmer.hostname }}","monitoring","start", "starting");return false;'>
-                            <i class="fs-4 bi-text-indent-left"></i>
-                            <span class="align-text-bottom">Start Monitoring</span>
-                            {% else %}
-                            onclick='MonitoringAction("{{ farmer.hostname }}","monitoring","stop", "stopping");return
-                            false;'>
-                            <i class="fs-4 bi-text-indent-left"></i>
-                            <span class="align-text-bottom">Stop Monitoring</span>
-                            {% endif %}
-                        </a>
-                    </li>
-                    {% for blockchain in farmer.config.enabled_blockchains %}
+                    {% for worker in farmer.workers %}
                     <li>
                         <a class="dropdown-item text-white text-decoration-none" href="#"
                             onclick='MonitoringLogs("{{ farmer.hostname }}", "{{blockchain}}");return false;'>
-                            <i class="fs-4 bi-text-indent-left"></i>
-                            <span class="align-text-bottom"></span>View {{blockchain|capitalize}} Monitoring Logs</span>
+                            <span class="align-text-bottom" style="padding-right:5px">{{worker.blockchain|capitalize}}</span>
+                            {% if worker.monitoring_status == 'running' %}
+                                <i class="fs-4 bi-emoji-smile"></i>
+                            {% else %}
+                                <i class="fs-4 bi-exclamation-triangle"></i>
+                            {% endif %}
                         </a>
                     </li>
                     {% endfor %}

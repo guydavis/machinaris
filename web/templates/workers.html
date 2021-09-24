@@ -63,7 +63,7 @@
                 title="{{worker.versions.components}}">{{worker.versions.machinaris}}</a></td>
             <td style="padding:0px">
               <a href="#" title="View Server Log" onclick='MachinarisLog("apisrv","{{ worker.hostname }}");return false;'><i class="fs-4 bi-text-indent-left"></i></a>
-              {% if worker.mode == "fullnode" %}
+              {% if worker.mode == "fullnode" and worker.blockchain == "chia" %}
               <a href="#" title="View Web Log" onclick='MachinarisLog("webui","{{ worker.hostname }}");return false;'><i class="fs-4 bi-laptop"></i></a>
               {% endif %}
             </td>

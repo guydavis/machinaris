@@ -27,9 +27,10 @@ def on_starting(server):
         JOB_JITTER = 30 # 30 seconds
     app.logger.info("Scheduler frequency will be once every {0} seconds.".format(JOB_FREQUENCY))
 
-    # Status for all types of workers including fullnodes
-    scheduler.add_job(func=stats_disk.collect, name="stats_disk", trigger='cron', minute="*/10") # Every 10 minutes
-    scheduler.add_job(func=status_worker.update, name="workers", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+    # Status for all types of workers including fullnodes, only for blockchain=chia though
+    if 'chia' in globals.enabled_blockchains():
+        scheduler.add_job(func=stats_disk.collect, name="stats_disk", trigger='cron', minute="*/10") # Every 10 minutes
+        scheduler.add_job(func=status_worker.update, name="workers", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
 
     # Status for both farmers and harvesters (includes fullnodes)
     if globals.farming_enabled() or globals.harvesting_enabled():

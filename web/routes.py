@@ -5,7 +5,7 @@ import os
 import time
 
 from datetime import datetime
-from flask import Flask, flash, redirect, render_template, \
+from flask import Flask, flash, redirect, render_template, abort, \
         request, session, url_for, send_from_directory, make_response
 
 from common.config import globals
@@ -62,14 +62,14 @@ def plotting_jobs():
     if request.method == 'POST':
         if request.form.get('action') == 'start':
             hostname= request.form.get('hostname')
-            plotter = worker.get_worker_by_hostname(hostname)
+            plotter = worker.get_worker(hostname)
             if request.form.get('service') == 'plotting':
                 plotman.start_plotman(plotter)
             elif request.form.get('service') == 'archiving':
                 plotman.start_archiving(plotter)
         elif request.form.get('action') == 'stop':
             hostname= request.form.get('hostname')
-            plotter = worker.get_worker_by_hostname(hostname)
+            plotter = worker.get_worker(hostname)
             if request.form.get('service') == 'plotting':
                 plotman.stop_plotman(plotter)
             elif request.form.get('service') == 'archiving':
@@ -100,7 +100,7 @@ def farming_plots():
         plotters = worker.load_worker_summary().plotters
         return plotman.analyze(plot_file, plotters)
     elif request.args.get('check'):  # Xhr calling for check output
-        w = worker.get_worker_by_hostname(request.args.get('hostname'))
+        w = worker.get_worker(request.args.get('hostname'))
         first_load = request.args.get("first_load")
         return chia.check_plots(w, first_load)
     gc = globals.load()
@@ -127,10 +127,10 @@ def alerts():
     gc = globals.load()
     if request.method == 'POST':
         if request.form.get('action') == 'start':
-            w = worker.get_worker_by_hostname(request.form.get('hostname'))
+            w = worker.get_worker(request.form.get('hostname'))
             chiadog.start_chiadog(w)
         elif request.form.get('action') == 'stop':
-            w = worker.get_worker_by_hostname(request.form.get('hostname'))
+            w = worker.get_worker(request.form.get('hostname'))
             chiadog.stop_chiadog(w)
         elif request.form.get('action') == 'remove':
             chiadog.remove_alerts(request.form.getlist('unique_id'))
@@ -216,7 +216,7 @@ def settings_plotting():
     gc = globals.load()
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
-        plotman.save_config(worker.get_worker_by_hostname(selected_worker_hostname), request.form.get("config"))
+        plotman.save_config(worker.get_worker(selected_worker_hostname), request.form.get("config"))
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
     return render_template('settings/plotting.html',
@@ -231,7 +231,7 @@ def settings_farming():
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
         selected_blockchain = request.form.get('blockchain')
-        chia.save_config(worker.get_worker_by_hostname(selected_worker_hostname), selected_blockchain, request.form.get("config"))
+        chia.save_config(worker.get_worker(selected_worker_hostname), selected_blockchain, request.form.get("config"))
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
     return render_template('settings/farming.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
@@ -246,7 +246,7 @@ def settings_alerts():
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
         selected_blockchain = request.form.get('blockchain')
-        chiadog.save_config(worker.get_worker_by_hostname(selected_worker_hostname), selected_blockchain, request.form.get("config"))
+        chiadog.save_config(worker.get_worker(selected_worker_hostname), selected_blockchain, request.form.get("config"))
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
     return render_template('settings/alerts.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
@@ -268,7 +268,7 @@ def settings_pools():
 @app.route('/settings/config', defaults={'path': ''})
 @app.route('/settings/config/<path:path>')
 def views_settings_config(path):
-    w = worker.get_worker_by_hostname(request.args.get('worker'))
+    w = worker.get_worker(request.args.get('worker'))
     config_type = request.args.get('type')
     if config_type == "alerts":
         response = make_response(chiadog.load_config(w, request.args.get('blockchain')), 200)
@@ -289,7 +289,7 @@ def logs():
 
 @app.route('/logfile')
 def logfile():
-    w = worker.get_worker_by_hostname(request.args.get('hostname'))
+    w = worker.get_worker(request.args.get('hostname'), request.args.get('blockchain'))
     log_type = request.args.get("log")
     if log_type in [ 'alerts', 'farming', 'plotting', 'archiving', 'apisrv', 'webui']:
         log_id = request.args.get("log_id")

@@ -4,19 +4,28 @@
 
 import asyncio
 import datetime
+import importlib
 
-from chia.rpc.full_node_rpc_client import FullNodeRpcClient
-from chia.rpc.farmer_rpc_client import FarmerRpcClient
-from chia.util.default_root import DEFAULT_ROOT_PATH
-from chia.util.ints import uint16
-from chia.util.config import load_config as load_chia_config
-
+if importlib.util.find_spec("chia"):
+    from chia.rpc.full_node_rpc_client import FullNodeRpcClient
+    from chia.rpc.farmer_rpc_client import FarmerRpcClient
+    from chia.util.default_root import DEFAULT_ROOT_PATH
+    from chia.util.ints import uint16
+    from chia.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("flax"):
+    from flax.rpc.full_node_rpc_client import FullNodeRpcClient
+    from flax.rpc.farmer_rpc_client import FarmerRpcClient
+    from flax.util.default_root import DEFAULT_ROOT_PATH
+    from flax.util.ints import uint16
+    from flax.util.config import load_config as load_fork_config
+else:
+    raise Exception("Neither chia or flax found on pythonpath!")
 from web import app
 
 async def load_plots_per_harvester():
     harvesters = {}
     try:
-        config = load_chia_config(DEFAULT_ROOT_PATH, 'config.yaml')
+        config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
         farmer_rpc_port = config["farmer"]["rpc_port"]
         farmer = await FarmerRpcClient.create(
             'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config

@@ -88,24 +88,7 @@ def load_pools():
     return Pools(pools, plotnfts)
 
 def load_farmers():
-    worker_summary = wk.load_worker_summary()
-    farmers = []
-    for farmer in worker_summary.workers:
-        if farmer in worker_summary.farmers:
-            farmers.append({
-                'hostname': farmer.hostname,
-                'displayname': farmer.displayname,
-                'farming_status': farmer.farming_status().lower(),
-                'config': json.loads(farmer.config),
-            })
-        elif farmer in worker_summary.harvesters:
-            farmers.append({
-                'hostname': farmer.hostname,
-                'displayname': farmer.displayname,
-                'farming_status': 'harvesting',
-                'config': json.loads(farmer.config),
-            })
-    return sorted(farmers, key=lambda f: f['displayname'])
+    return wk.load_worker_summary().farmers_harvesters()
 
 def load_config(farmer, blockchain):
     return utils.send_get(farmer, "/configs/farming?blockchain=" + blockchain, debug=False).content

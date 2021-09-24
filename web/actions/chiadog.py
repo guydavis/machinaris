@@ -25,6 +25,7 @@ def load_config(farmer, blockchain):
     return utils.send_get(farmer, "/configs/alerts?blockchain=" + blockchain, debug=False).content
 
 def load_farmers():
+    return wk.load_worker_summary().farmers_harvesters()
     worker_summary = wk.load_worker_summary()
     farmers = []
     for farmer in worker_summary.workers:

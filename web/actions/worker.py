@@ -45,13 +45,13 @@ def load_worker_summary(hostname = None):
         workers = query.all()
     return WorkerSummary(workers)
 
-def get_worker_by_hostname(hostname):
-    #app.logger.info("Searching for worker with hostname: {0}".format(hostname))
-    return db.session.query(w.Worker).get(hostname)
+def get_worker(hostname, blockchain='chia'):
+    app.logger.info("Searching for worker with hostname: {0} and blockchain: {1}".format(hostname, blockchain))
+    return db.session.query(w.Worker).filter(w.Worker.hostname==hostname, w.Worker.blockchain==blockchain).first()
 
 def prune_workers_status(hostnames):
     for hostname in hostnames:
-        worker = get_worker_by_hostname(hostname)
+        worker = get_worker(hostname)
         for table in ALL_TABLES_BY_HOSTNAME:
             db.session.execute("DELETE FROM " + table + " WHERE hostname = :hostname OR hostname = :displayname", 
                 {"hostname":hostname, "displayname":worker.displayname})

@@ -50,7 +50,7 @@ class FarmPlots:
             else: # Look up displayname
                 try:
                     app.logger.debug("Found worker with hostname '{0}'".format(plot.hostname))
-                    displayname = w.get_worker_by_hostname(plot.hostname).displayname
+                    displayname = w.get_worker(plot.hostname).displayname
                 except:
                     app.logger.info("Unable to find a worker with hostname '{0}'".format(plot.hostname))
                     displayname = plot.hostname
@@ -100,7 +100,7 @@ class Wallets:
         for wallet in wallets:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(wallet.hostname))
-                displayname = w.get_worker_by_hostname(wallet.hostname).displayname
+                displayname = w.get_worker(wallet.hostname).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(wallet.hostname))
                 displayname = wallet.hostname
@@ -119,7 +119,7 @@ class Keys:
         for key in keys:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(key.hostname))
-                displayname = w.get_worker_by_hostname(key.hostname).displayname
+                displayname = w.get_worker(key.hostname).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(key.hostname))
                 displayname = key.hostname
@@ -137,7 +137,7 @@ class Blockchains:
         for blockchain in blockchains:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(blockchain.hostname))
-                displayname = w.get_worker_by_hostname(blockchain.hostname).displayname
+                displayname = w.get_worker(blockchain.hostname).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(blockchain.hostname))
                 displayname = blockchain.hostname
@@ -178,7 +178,7 @@ class Connections:
         for connection in connections:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(connection.hostname))
-                displayname = w.get_worker_by_hostname(connection.hostname).displayname
+                displayname = w.get_worker(connection.hostname).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(connection.hostname))
                 displayname = connection.hostname
@@ -242,7 +242,7 @@ class Plotnfts:
         for plotnft in plotnfts:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(plotnft.hostname))
-                displayname = w.get_worker_by_hostname(plotnft.hostname).displayname
+                displayname = w.get_worker(plotnft.hostname).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(plotnft.hostname))
                 displayname = plotnft.hostname
@@ -271,7 +271,7 @@ class Pools:
         for pool in pools:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(pool.hostname))
-                displayname = w.get_worker_by_hostname(pool.hostname).displayname
+                displayname = w.get_worker(pool.hostname).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(pool.hostname))
                 displayname = pool.hostname
