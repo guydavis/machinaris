@@ -32,6 +32,7 @@ class Farms(MethodView):
     @blp.arguments(FarmSchema)
     @blp.response(201, FarmSchema)
     def post(self, new_item):
+        app.logger.info("Searching farm for: {0}".format(new_item['blockchain']))
         item = db.session.query(Farm).filter(Farm.hostname==new_item['hostname'], \
             Farm.blockchain==new_item['blockchain']).first()
         if item: # upsert

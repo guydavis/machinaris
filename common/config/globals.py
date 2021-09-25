@@ -46,11 +46,13 @@ def load():
     cfg['now'] = datetime.datetime.now(tz=None).strftime("%Y-%m-%d %H:%M:%S")
     cfg['machinaris_version'] = load_machinaris_version()
     cfg['machinaris_mode'] = os.environ['mode']
-    cfg['chiadog_version'] = load_chiadog_version()
     cfg['plotman_version'] = load_plotman_version()
-    cfg['chia_version'] = load_chia_version()
-    cfg['flax_version'] = load_flax_version()
-    cfg['flaxdog_version'] = load_flaxdog_version()
+    if 'chia' in cfg['enabled_blockchains']:
+        cfg['chia_version'] = load_chia_version()
+        cfg['chiadog_version'] = load_chiadog_version()
+    if 'flax' in cfg['enabled_blockchains']:
+        cfg['flax_version'] = load_flax_version()
+        cfg['flaxdog_version'] = load_flaxdog_version()
     cfg['madmax_version'] = load_madmax_version()
     cfg['bladebit_version'] = load_bladebit_version()
     cfg['is_controller'] = "localhost" == (
