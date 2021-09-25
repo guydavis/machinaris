@@ -50,7 +50,7 @@
         <tbody>
           {% for worker in workers.workers %}
           <tr>
-            <td class="text-center"><input type="checkbox" name="hostname" value="{{ worker.hostname }}" />
+            <td class="text-center"><input type="checkbox" name="worker" value="{{ worker.hostname }}|{{ worker.blockchain }}" />
               <td><a class="text-white" href="{{ url_for('worker_route') }}?hostname={{worker.hostname}}" data-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
                 title="{{worker.hostname}}:{{worker.port}}">{{worker.displayname}}</a></td>
             <td>{{worker.blockchain}}</td>

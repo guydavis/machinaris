@@ -184,8 +184,9 @@ def add_connection(connection, blockchain):
         app.logger.info("{0}".format(outs.decode('utf-8')))
         flash('Nice! Connection added to Chia and sync engaging!', 'success')
 
-def load_keys_show():
-    proc = Popen("{0} keys show".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+def load_keys_show(blockchain):
+    chia_binary = get_binary(blockchain)
+    proc = Popen("{0} keys show".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:

@@ -162,7 +162,7 @@ def workers():
     gc = globals.load()
     if request.method == 'POST':
         if request.form.get('action') == "prune":
-            worker.prune_workers_status(request.form.getlist('hostname'))
+            worker.prune_workers_status(request.form.getlist('worker'))
     wkrs = worker.load_worker_summary()
     return render_template('workers.html', reload_seconds=120, 
         workers=wkrs, global_config=gc, now=gc['now'])

@@ -19,6 +19,20 @@ from web.actions import chia
 
 DATABASE = '/root/.chia/machinaris/dbs/stats.db'
 
+ALL_TABLES_BY_HOSTNAME = [
+    'stat_plots_disk_used',
+    'stat_plotting_disk_used',
+    'stat_netspace_size',
+    'stat_plots_size',
+    'stat_plotting_total_used', 
+    'stat_plot_count',
+    'stat_plots_total_used',
+    'stat_time_to_win',
+    'stat_plots_disk_free',
+    'stat_plotting_disk_free',
+    'stat_total_chia',
+]
+
 def get_stats_db():
     db = getattr(g, '_stats_database', None)
     if db is None:
@@ -201,3 +215,10 @@ def load_current_disk_usage(disk_type, hostname=None):
                 summary_by_worker[host.hostname] = { "paths": paths, "used": used, "free": free}
     #app.logger.debug(summary_by_worker.keys())
     return summary_by_worker
+
+def prune_workers_status(hostname, displayname, blockchain):
+    db = get_stats_db()
+    for table in ALL_TABLES_BY_HOSTNAME:
+        db.session.execute("DELETE FROM " + table + " WHERE (hostname = :hostname OR hostname = :displayname) AND blockchain = :blockchain", 
+            {"hostname":hostname, "displayname":displayname, "blockchain":blockchain})
+        db.session.commit()
