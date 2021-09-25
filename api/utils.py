@@ -63,4 +63,4 @@ def is_controller():
     return app.config['CONTROLLER_HOST'] == "localhost"
 
 def is_fullnode():
-    return app.config['mode'] == "fullnode"
+    return os.environ['mode'] == "fullnode"

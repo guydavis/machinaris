@@ -60,9 +60,9 @@ def on_starting(server):
     if utils.is_controller():
         scheduler.add_job(func=status_controller.update, name="controller", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
 
-        # Testing only
-        #scheduler.add_job(func=stats_farm.collect, trigger='interval', seconds=10) # Test immediately
-        #scheduler.add_job(func=stats_disk.collect, trigger='interval', seconds=10) # Test immediately
+    # Testing only
+    #scheduler.add_job(func=stats_farm.collect, trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=stats_disk.collect, trigger='interval', seconds=10) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()
