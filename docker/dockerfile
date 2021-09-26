@@ -51,9 +51,9 @@ RUN \
 
 ######## build/runtime stage #########
 FROM package_stage
-# Base install of official Chia binaries at the given branch
 ARG CHIA_BRANCH
 ARG FLAX_BRANCH
+ARG NCHAIN_BRANCH
 
 # copy local files
 COPY . /machinaris/
