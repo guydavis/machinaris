@@ -8,16 +8,16 @@ cd /ext9-blockchain
 
 . ./activate
 
-mkdir -p /root/.chia/mainnet/log
-chia init >> /root/.chia/mainnet/log/init.log 2>&1 
+mkdir -p /root/.chia/ext9/mainnet/log
+chia init >> /root/.chia/ext9/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Chia...'
-while [ ! -f /root/.chia/mainnet/config/config.yaml ]; do
-  echo "Waiting for creation of /root/.chia/mainnet/config/config.yaml..."
+while [ ! -f /root/.chia/ext9/mainnet/config/config.yaml ]; do
+  echo "Waiting for creation of /root/.chia/ext9/mainnet/config/config.yaml..."
   sleep 1
 done
-sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/mainnet/config/config.yaml
-sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/config.yaml
+sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/ext9/mainnet/config/config.yaml
+sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/ext9/mainnet/config/config.yaml
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
@@ -34,9 +34,9 @@ for p in ${plots_dir//:/ }; do
     chia plots add -d ${p}
 done
 
-sed -i 's/localhost/127.0.0.1/g' ~/.chia/mainnet/config/config.yaml
+sed -i 's/localhost/127.0.0.1/g' ~/.chia/ext9/mainnet/config/config.yaml
 
-chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
+chmod 755 -R /root/.chia/ext9/mainnet/config/ssl/ &> /dev/null
 chia init --fix-ssl-permissions > /dev/null 
 
 # Start services based on mode selected. Default is 'fullnode'
@@ -49,19 +49,19 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
-    if [ ! -f /root/.chia/farmer_ca/chia_ca.crt ]; then
-      mkdir -p /root/.chia/farmer_ca
+    if [ ! -f /root/.chia/ext9/farmer_ca/chia_ca.crt ]; then
+      mkdir -p /root/.chia/ext9/farmer_ca
       response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8927/certificates/?type=chia --output /tmp/certs.zip)
       if [ $response == '200' ]; then
-        unzip /tmp/certs.zip -d /root/.chia/farmer_ca
+        unzip /tmp/certs.zip -d /root/.chia/ext9/farmer_ca
       else
         echo "Certificates response of ${response} from http://${controller_host}:8927/certificates/?type=chia.  Try clicking 'New Worker' button on 'Workers' page first."
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.chia/farmer_ca/chia_ca.crt ]; then
-      chia init -c /root/.chia/farmer_ca 2>&1 > /root/.chia/mainnet/log/init.log
-      chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
+    if [ -f /root/.chia/ext9/farmer_ca/chia_ca.crt ]; then
+      chia init -c /root/.chia/ext9/farmer_ca 2>&1 > /root/.chia/mainnet/log/init.log
+      chmod 755 -R /root/.chia/ext9/mainnet/config/ssl/ &> /dev/null
       chia init --fix-ssl-permissions > /dev/null 
     else
       echo "Did not find your farmer's certificates within /root/.chia/farmer_ca."
