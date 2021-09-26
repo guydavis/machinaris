@@ -100,7 +100,7 @@ class Wallets:
         for wallet in wallets:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(wallet.hostname))
-                displayname = w.get_worker(wallet.hostname).displayname
+                displayname = w.get_worker(wallet.hostname, wallet.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(wallet.hostname))
                 displayname = wallet.hostname
@@ -119,7 +119,7 @@ class Keys:
         for key in keys:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(key.hostname))
-                displayname = w.get_worker(key.hostname).displayname
+                displayname = w.get_worker(key.hostname, key.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(key.hostname))
                 displayname = key.hostname
@@ -137,7 +137,7 @@ class Blockchains:
         for blockchain in blockchains:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(blockchain.hostname))
-                displayname = w.get_worker(blockchain.hostname).displayname
+                displayname = w.get_worker(blockchain.hostname, blockchain.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(blockchain.hostname))
                 displayname = blockchain.hostname
@@ -178,7 +178,7 @@ class Connections:
         for connection in connections:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(connection.hostname))
-                displayname = w.get_worker(connection.hostname).displayname
+                displayname = w.get_worker(connection.hostname, connection.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(connection.hostname))
                 displayname = connection.hostname
@@ -271,7 +271,7 @@ class Pools:
         for pool in pools:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(pool.hostname))
-                displayname = w.get_worker(pool.hostname).displayname
+                displayname = w.get_worker(pool.hostname, pools.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(pool.hostname))
                 displayname = pool.hostname

@@ -35,7 +35,7 @@
                     {% for worker in farmer.workers %}
                     <li>
                         <a class="dropdown-item text-white text-decoration-none" href="#"
-                            onclick='MonitoringLogs("{{ farmer.hostname }}", "{{blockchain}}");return false;'>
+                            onclick='MonitoringLogs("{{ farmer.hostname }}", "{{worker.blockchain}}");return false;'>
                             <span class="align-text-bottom" style="padding-right:5px">{{worker.blockchain|capitalize}}</span>
                             {% if worker.monitoring_status == 'running' %}
                                 <i class="fs-4 bi-emoji-smile"></i>
