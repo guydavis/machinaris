@@ -4,7 +4,6 @@
 #
 FLAX_BRANCH=$1
 
-
 if [ -z ${FLAX_BRANCH} ]; then
 	echo 'Skipping Flax install as not requested.'
 else
@@ -15,15 +14,10 @@ else
 		&& chmod +x install.sh \
 		&& /usr/bin/sh ./install.sh
 
-	echo "FLAX_FINISHED: checking root directory"
-	ls -al /
-
 	if [ ! -d /chia-blockchain/venv ]; then
 		cd /
 		echo "Trying to link chia-blockchain"
 		rmdir /chia-blockchain
 		ln -s /flax-blockchain /chia-blockchain
 	fi
-
-	ls -al /
 fi

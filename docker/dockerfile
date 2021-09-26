@@ -67,6 +67,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh ${CHIA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/flax_install.sh ${FLAX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/flaxdog_install.sh ${FLAX_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/nchain_install.sh ${NCHAIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/plotman_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/bladebit_clone.sh \
