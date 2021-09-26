@@ -16,7 +16,6 @@ else
 
 	if [ ! -d /chia-blockchain/venv ]; then
 		cd /
-		echo "Trying to link chia-blockchain"
 		rmdir /chia-blockchain
 		ln -s /flax-blockchain /chia-blockchain
 	fi
