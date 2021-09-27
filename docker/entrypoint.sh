@@ -6,7 +6,7 @@ echo "Welcome to Machinaris!"
 
 # Start selected forks
 for fork in ${blockchains//,/ }; do
-  /usr/bin/bash /machinaris/scripts/${fork}_launch.sh
+  /usr/bin/bash /machinaris/scripts/forks/${fork}_launch.sh
 done
 
 # Launch Machinaris web server and other services

@@ -113,10 +113,7 @@ def find_plotting_job_log(plot_id):
 
 def get_log_lines(log_type, log_id=None, blockchain=None):
     if log_type == "alerts":
-        if blockchain == 'flax':
-            log_file = "/root/.chia/flaxdog/logs/flaxdog.log"       
-        else:
-            log_file = "/root/.chia/chiadog/logs/chiadog.log"
+        log_file = "/root/.chia/chiadog/logs/chiadog.log"
     elif log_type == "plotting":
         if log_id:
             log_file = find_plotting_job_log(log_id)
@@ -127,6 +124,12 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
     elif log_type == "farming":
         if blockchain == 'flax':
             log_file = "/root/.flax/mainnet/log/debug.log"
+        elif blockchain == 'chives':
+            log_file = "/root/.chives/mainnet/log/debug.log"
+        elif blockchain == 'nchain':
+            log_file = "/root/.chia/ext9/mainnet/log/debug.log"
+        elif blockchain == 'hddcoin':
+            log_file = "/root/.hddcoin/mainnet/log/debug.log"
         else:
             log_file = "/root/.chia/mainnet/log/debug.log"
     elif log_type == "webui":

@@ -24,7 +24,9 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 
 ## Blockchain Forks
 * [Flax](https://github.com/Flax-Network/flax-blockchain)
-* [Flaxdog](https://github.com/langhorst/flaxdog)
+* [NChain](https://gitee.com/ext9/ext9-blockchain)
+* [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain)
+* [Chives](https://github.com/HiveProject2021/chives-blockchain)
 
 ## Testers and Developers
 

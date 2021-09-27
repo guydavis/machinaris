@@ -49,10 +49,15 @@ def load():
     cfg['plotman_version'] = load_plotman_version()
     if 'chia' in cfg['enabled_blockchains']:
         cfg['chia_version'] = load_chia_version()
-        cfg['chiadog_version'] = load_chiadog_version()
     if 'flax' in cfg['enabled_blockchains']:
         cfg['flax_version'] = load_flax_version()
-        cfg['flaxdog_version'] = load_flaxdog_version()
+    if 'nchain' in cfg['enabled_blockchains']:
+        cfg['nchain_version'] = load_nchain_version()
+    if 'hddcoin' in cfg['enabled_blockchains']:
+        cfg['hddcoin_version'] = load_hddcoin_version()
+    if 'chives' in cfg['enabled_blockchains']:
+        cfg['chives_version'] = load_chives_version()
+    cfg['chiadog_version'] = load_chiadog_version()
     cfg['madmax_version'] = load_madmax_version()
     cfg['bladebit_version'] = load_bladebit_version()
     cfg['is_controller'] = "localhost" == (
@@ -332,31 +337,6 @@ def load_flax_version():
         proc.communicate()
     last_flax_version_load_time = datetime.datetime.now()
     return last_flax_version
-
-last_flaxdog_version = None
-last_flaxdog_version_load_time = None
-def load_flaxdog_version():
-    global last_flaxdog_version
-    global last_flaxdog_version_load_time
-    if last_flaxdog_version_load_time and last_flaxdog_version_load_time >= \
-            (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
-        return last_flaxdog_version
-    last_flaxdog_version = ""
-    try:
-        proc = Popen("/flax-blockchain/venv/bin/python3 -u main.py --version",
-                stdout=PIPE, stderr=PIPE, shell=True, cwd=FLAXDOG_PATH)
-        outs, errs = proc.communicate(timeout=90)
-        last_flaxdog_version = outs.decode('utf-8').strip()
-        if last_flaxdog_version.startswith('v'):
-            last_flaxdog_version = last_flaxdog_version[len('v'):].strip()
-        last_flaxdog_version = last_flaxdog_version.split('-')[0]
-        last_flaxdog_version_load_time = datetime.datetime.now()
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-    except:
-        logging.info(traceback.format_exc())
-    return last_flaxdog_version
 
 def get_disks(disk_type):
     if disk_type == "plots":
