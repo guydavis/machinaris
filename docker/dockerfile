@@ -70,7 +70,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/flax_install.sh ${FLAX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh ${CHIA_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/plotman_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/bladebit_clone.sh \

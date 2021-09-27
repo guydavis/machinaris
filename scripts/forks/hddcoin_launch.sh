@@ -11,7 +11,7 @@ cd /hddcoin-blockchain
 mkdir -p /root/.hddcoin/mainnet/log
 chia init >> /root/.hddcoin/mainnet/log/init.log 2>&1 
 
-echo 'Configuring Chia...'
+echo 'Configuring HDDCoin...'
 while [ ! -f /root/.hddcoin/mainnet/config/config.yaml ]; do
   echo "Waiting for creation of /root/.hddcoin/mainnet/config/config.yaml..."
   sleep 1

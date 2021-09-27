@@ -11,7 +11,7 @@ cd /chives-blockchain
 mkdir -p /root/.chives/mainnet/log
 chives init >> /root/.chives/mainnet/log/init.log 2>&1 
 
-echo 'Configuring Chia...'
+echo 'Configuring Chives...'
 while [ ! -f /root/.chives/mainnet/config/config.yaml ]; do
   echo "Waiting for creation of /root/.chives/mainnet/config/config.yaml..."
   sleep 1

@@ -3,30 +3,22 @@
 # Installs Chiadog for log monitoring and alerting
 #
 
-CHIA_BRANCH=$1
+CHIADOG_BRANCH=main
 
-if [ -z ${CHIA_BRANCH} ]; then
-	echo 'Skipping Chiadog install as not requested.'
-else
+echo 'Installing Chiadog...'
 
-    CHIADOG_BRANCH=main
+cd /
 
-    echo 'Installing Chiadog...'
+git clone --branch ${CHIADOG_BRANCH} https://github.com/guydavis/chiadog.git
 
-    cd /
+cd /chia-blockchain/
 
-    git clone --branch ${CHIADOG_BRANCH} https://github.com/guydavis/chiadog.git
+# Chia-blockchain needs PyYAML=5.4.1 but Chiadog wants exactly 5.4
+sed -i 's/==5.4/~=5.4/g' /chiadog/requirements.txt
 
-    cd /chia-blockchain/
+# Also, as per Chiadog integrations page, the MQTT integration needs
+# https://github.com/martomi/chiadog/blob/main/INTEGRATIONS.md
+printf "\npaho-mqtt" >> /chiadog/requirements.txt
 
-    # Chia-blockchain needs PyYAML=5.4.1 but Chiadog wants exactly 5.4
-    sed -i 's/==5.4/~=5.4/g' /chiadog/requirements.txt
-
-    # Also, as per Chiadog integrations page, the MQTT integration needs
-    # https://github.com/martomi/chiadog/blob/main/INTEGRATIONS.md
-    printf "\npaho-mqtt" >> /chiadog/requirements.txt
-
-    # Now install Chiadog python dependencies
-    venv/bin/pip3 install -r /chiadog/requirements.txt
-
-fi
+# Now install Chiadog python dependencies
+venv/bin/pip3 install -r /chiadog/requirements.txt
