@@ -13,4 +13,10 @@ else
 		&& git submodule update --init mozilla-ca \
 		&& chmod +x install.sh \
 		&& /usr/bin/sh ./install.sh
+
+	if [ ! -d /chia-blockchain/venv ]; then
+		cd /
+		rmdir /chia-blockchain
+		ln -s /chives-blockchain /chia-blockchain
+	fi
 fi

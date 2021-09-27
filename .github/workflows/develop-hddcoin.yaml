@@ -1,4 +1,4 @@
-name: develop
+name: develop-hddcoin
 
 on:
   push:
