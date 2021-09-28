@@ -27,25 +27,40 @@ class Worker(db.Model):
         try:
             return j.loads(self.services)['farming_status']
         except: # Old key
-            return j.loads(self.services)['farm_status']
+            try:
+                return j.loads(self.services)['farm_status']
+            except:
+                return "Unkown"
     
     def plotting_status(self):
         try:
             return j.loads(self.services)['plotting_status']
         except: # Old key
-            return j.loads(self.services)['plotman_status']
+            try:
+                return j.loads(self.services)['plotman_status']
+            except:
+                return "Unkown"
 
     def archiving_status(self):
         try:
             return j.loads(self.services)['archiving_status']
         except: # Old key
-            return j.loads(self.services)['archiver_status'] 
+            try:
+                return j.loads(self.services)['archiver_status']
+            except:
+                return "Unkown"
 
     def archiving_enabled(self):
-        return j.loads(self.config)['archiving_enabled'] 
+        try:
+            return j.loads(self.config)['archiving_enabled']
+        except:
+            return "Unkown"
     
     def monitoring_status(self):
         try:
             return j.loads(self.services)['monitoring_status']
         except: # Old key
-            return j.loads(self.services)['chiadog_status'] 
+            try:
+                return j.loads(self.services)['chiadog_status'] 
+            except:
+                return "Unkown"

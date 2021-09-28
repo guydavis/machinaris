@@ -63,9 +63,7 @@ def recent_challenges(blockchain):
     return challenges
 
 def recent_partials(blockchain):
-    log_file = CHIA_LOG
-    if blockchain == 'flax':
-        log_file = FLAX_LOG
+    log_file = get_farming_log_file(blockchain)
     if not os.path.exists(log_file):
         app.logger.debug(
             "Skipping partials parsing as no such log file: {0}".format(log_file))
@@ -110,6 +108,18 @@ def find_plotting_job_log(plot_id):
             app.logger.info(traceback.format_exc())
     return None
 
+def get_farming_log_file(blockchain):
+    if blockchain == 'flax':
+        return "/root/.flax/mainnet/log/debug.log"
+    if blockchain == 'chives':
+        return "/root/.chives/mainnet/log/debug.log"
+    if blockchain == 'nchain':
+        return "/root/.chia/ext9/mainnet/log/debug.log"
+    if blockchain == 'hddcoin':
+        return "/root/.hddcoin/mainnet/log/debug.log"
+    if blockchain == 'chia':
+        return "/root/.chia/mainnet/log/debug.log"
+    raise Exception("No farming log for unknown blockchain: {0}".format(blockchain))
 
 def get_log_lines(log_type, log_id=None, blockchain=None):
     if log_type == "alerts":
@@ -122,16 +132,7 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
     elif log_type == "archiving":
         log_file = "/root/.chia/plotman/logs/archiver.log"
     elif log_type == "farming":
-        if blockchain == 'flax':
-            log_file = "/root/.flax/mainnet/log/debug.log"
-        elif blockchain == 'chives':
-            log_file = "/root/.chives/mainnet/log/debug.log"
-        elif blockchain == 'nchain':
-            log_file = "/root/.chia/ext9/mainnet/log/debug.log"
-        elif blockchain == 'hddcoin':
-            log_file = "/root/.hddcoin/mainnet/log/debug.log"
-        else:
-            log_file = "/root/.chia/mainnet/log/debug.log"
+        log_file= get_farming_log_file(blockchain)
     elif log_type == "webui":
         log_file = "/root/.chia/machinaris/logs/webui.log"
     elif log_type == "apisrv":

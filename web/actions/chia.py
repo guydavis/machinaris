@@ -33,9 +33,6 @@ from web.models.chia import FarmSummary, FarmPlots, Wallets, \
     ChallengesChartData
 from . import worker as wk
 
-CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
-FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
-
 def load_farm_summary():
     farms = db.session.query(f.Farm).order_by(f.Farm.hostname).all()
     return FarmSummary(farms)
@@ -59,12 +56,12 @@ def partials_chart_data(farm_summary):
         farm_summary.farms[blockchain]['partials'] =  PartialsChartData(partials)
 
 def load_wallets():
-    wallets = db.session.query(w.Wallet).all()
+    wallets = db.session.query(w.Wallet).order_by(w.Wallet.blockchain).all()
     return Wallets(wallets)
 
 def load_blockchain_show():
     try:  # Sparkly had an error here once with malformed data
-        blockchains = db.session.query(b.Blockchain).all()
+        blockchains = db.session.query(b.Blockchain).order_by(b.Blockchain.blockchain).all()
         return Blockchains(blockchains)
     except:
         traceback.print_exc()
@@ -75,7 +72,7 @@ def load_connections_show():
     return Connections(connections)
 
 def load_keys_show():
-    keys = db.session.query(k.Key).all()
+    keys = db.session.query(k.Key).order_by(k.Key.blockchain).all()
     return Keys(keys)
 
 def load_plotnfts():
@@ -108,15 +105,10 @@ def save_config(farmer, blockchain, config):
     else:
         flash('Nice! Chia\'s config.yaml validated and saved successfully.', 'success')
 
-def add_connection(connection):
+def add_connection(connection, blockchain):
+    binary = globals.get_chia_binary(blockchain)
     try:
         hostname,port = connection.split(':')
-        binary = CHIA_BINARY
-        try:
-            if int(port) == 6888:
-                binary = FLAX_BINARY
-        except:
-            app.logger.info("Bad port provided.")
         if socket.gethostbyname(hostname) == hostname:
             app.logger.info('{} is a valid IP address'.format(hostname))
         elif socket.gethostbyname(hostname) != hostname:
@@ -138,13 +130,14 @@ def add_connection(connection):
         app.logger.info("{0}".format(outs.decode('utf-8')))
         flash('Nice! Connection added to Chia and sync engaging!', 'success')
 
-def generate_key(key_path):
+def generate_key(key_path, blockchain):
+    chia_binary = globals.get_chia_binary(blockchain)
     if os.path.exists(key_path) and os.stat(key_path).st_size > 0:
         app.logger.info('Skipping key generation as file exists and is NOT empty! {0}'.format(key_path))
         flash('Skipping key generation as file exists and is NOT empty!', 'danger')
         flash('In-container path: {0}'.format(key_path), 'warning')
         return False
-    proc = Popen("{0} keys generate".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} keys generate".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -158,7 +151,7 @@ def generate_key(key_path):
         app.logger.info("{0}".format(errs.decode('utf-8')))
         flash('Unable to generate keys!', 'danger')
         return False
-    proc = Popen("{0} keys show --show-mnemonic-seed | tail -n 1 > {1}".format(CHIA_BINARY, key_path), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} keys show --show-mnemonic-seed | tail -n 1 > {1}".format(chia_binary, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -190,10 +183,10 @@ def generate_key(key_path):
         cmd = 'farmer-only'
     else:
         cmd = 'farmer'
-    proc = Popen("{0} start {1}".format(CHIA_BINARY, cmd), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} start {1}".format(chia_binary, cmd), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
+    except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
@@ -203,11 +196,11 @@ def generate_key(key_path):
     if errs:
         app.logger.info("{0}".format(errs.decode('utf-8')))
         flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
-        flash(str(ex), 'warning')
         return False
     return True
 
-def import_key(key_path, mnemonic):
+def import_key(key_path, mnemonic, blockchain):
+    chia_binary = globals.get_chia_binary(blockchain)
     if len(mnemonic.strip().split()) != 24:
         flash('Did not receive a 24-word mnemonic seed phrase!', 'danger')
         return False
@@ -219,7 +212,7 @@ def import_key(key_path, mnemonic):
     with open(key_path, 'w') as keyfile:
         keyfile.write('{0}\n'.format(mnemonic))
     time.sleep(3)
-    proc = Popen("{0} keys add -f {1}".format(CHIA_BINARY, key_path), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} keys add -f {1}".format(chia_binary, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -240,10 +233,10 @@ def import_key(key_path, mnemonic):
         cmd = 'farmer-only'
     else:
         cmd = 'farmer'
-    proc = Popen("{0} start {1} -r".format(CHIA_BINARY, cmd), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} start {1} -r".format(chia_binary, cmd), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
+    except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
@@ -253,7 +246,6 @@ def import_key(key_path, mnemonic):
     if errs:
         app.logger.info("{0}".format(errs.decode('utf-8')))
         flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
-        flash(str(ex), 'warning')
         return False
     if outs:
         app.logger.debug(outs.decode('utf-8'))
@@ -262,11 +254,12 @@ def import_key(key_path, mnemonic):
             'details.', 'success')
     return True
 
-def remove_connection(node_ids):
+def remove_connection(node_ids, blockchain):
+    chia_binary = globals.get_chia_binary(blockchain)
     app.logger.debug("About to remove connection for nodeid: {0}".format(node_ids))
     for node_id in node_ids:
         try:
-            proc = Popen("{0} show --remove-connection {1}".format(CHIA_BINARY, node_id), stdout=PIPE, stderr=PIPE, shell=True)
+            proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
             try:
                 outs, errs = proc.communicate(timeout=5)
             except TimeoutExpired:

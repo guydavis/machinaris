@@ -44,9 +44,9 @@ def setup():
     show_setup = True
     if request.method == 'POST':
         if request.form.get('action') == 'generate':
-            show_setup = not chia.generate_key(key_paths[0])
+            show_setup = not chia.generate_key(key_paths[0], globals.enabled_blockchains()[0])
         elif request.form.get('action') == 'import':
-            show_setup = not chia.import_key(key_paths[0], request.form.get('mnemonic'))
+            show_setup = not chia.import_key(key_paths[0], request.form.get('mnemonic'), globals.enabled_blockchains()[0])
     if show_setup:
         return render_template('setup.html', key_paths = key_paths)
     else:
@@ -181,25 +181,25 @@ def worker_route():
         plots=plots, plotting=plotting, plots_disk_usage=plots_disk_usage, 
         plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc)
 
-@app.route('/network/blockchain')
-def network_blockchain():
+@app.route('/blockchains')
+def blockchains():
     gc = globals.load()
     blockchains = chia.load_blockchain_show()
-    return render_template('network/blockchain.html', reload_seconds=120, 
+    return render_template('blockchains.html', reload_seconds=120, 
         blockchains=blockchains, global_config=gc, now=gc['now'])
 
-@app.route('/network/connections', methods=['GET', 'POST'])
-def network_connections():
+@app.route('/connections', methods=['GET', 'POST'])
+def connections():
     gc = globals.load()
     if request.method == 'POST':
         if request.form.get('action') == "add":
-            chia.add_connection(request.form.get("connection"))
+            chia.add_connection(request.form.get("connection"), request.form.get('blockchain'))
         elif request.form.get('action') == 'remove':
-            chia.remove_connection(request.form.getlist('nodeid'))
+            chia.remove_connection(request.form.getlist('nodeid'), request.form.get('blockchain'))
         else:
             app.logger.info("Unknown form action: {0}".format(request.form))
     connections = chia.load_connections_show()
-    return render_template('network/connections.html', reload_seconds=120, 
+    return render_template('connections.html', reload_seconds=120, 
         connections=connections, global_config=gc, now=gc['now'])
 
 def find_selected_worker(workers_summary, hostname, blockchain='chia'):
@@ -225,7 +225,7 @@ def settings_plotting():
 @app.route('/settings/farming', methods=['GET', 'POST'])
 def settings_farming():
     selected_worker_hostname = None
-    blockchains = os.environ['blockchains'].split(',')
+    blockchains = globals.enabled_blockchains()
     selected_blockchain = blockchains[0]
     gc = globals.load()
     if request.method == 'POST':
@@ -240,7 +240,7 @@ def settings_farming():
 @app.route('/settings/alerts', methods=['GET', 'POST'])
 def settings_alerts():
     selected_worker_hostname = None
-    blockchains = os.environ['blockchains'].split(',')
+    blockchains = globals.enabled_blockchains()
     selected_blockchain = blockchains[0]
     gc = globals.load()
     if request.method == 'POST':

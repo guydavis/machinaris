@@ -24,21 +24,11 @@ from common.config import globals
 from api import app
 from api.models import chia
 
-CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
-FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
-
 # When reading tail of chia plots check output, limit to this many lines
 MAX_LOG_LINES = 2000
 
-def get_binary(blockchain):
-    if blockchain == "chia":
-        return CHIA_BINARY
-    if blockchain == "flax":
-        return FLAX_BINARY
-    raise Exception("Invalid blockchain: ".format(blockchain))
-
 def load_farm_summary(blockchain):
-    chia_binary = get_binary(blockchain)
+    chia_binary = globals.get_blockchain_binary(blockchain)
     if globals.farming_enabled(): # Load from chia farm summary
         proc = Popen("{0} farm summary".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
         try:
@@ -90,7 +80,7 @@ def save_config(config, blockchain):
         pass
 
 def load_wallet_show(blockchain):
-    chia_binary = get_binary(blockchain)
+    chia_binary = globals.get_blockchain_binary(blockchain)
     wallet_show = ""
     child = pexpect.spawn("{0} wallet show".format(chia_binary))
     wallet_index = 1
@@ -112,7 +102,7 @@ def load_wallet_show(blockchain):
     return chia.Wallet(wallet_show)
 
 def load_plotnft_show(blockchain):
-    chia_binary = get_binary(blockchain)
+    chia_binary = globals.get_blockchain_binary(blockchain)
     wallet_show = ""
     child = pexpect.spawn("{0} plotnft show".format(chia_binary))
     wallet_index = 1
@@ -134,7 +124,7 @@ def load_plotnft_show(blockchain):
     return chia.Wallet(wallet_show)
 
 def load_blockchain_show(blockchain):
-    chia_binary = get_binary(blockchain)
+    chia_binary = globals.get_blockchain_binary(blockchain)
     proc = Popen("{0} show --state".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -147,7 +137,7 @@ def load_blockchain_show(blockchain):
     return chia.Blockchain(outs.decode('utf-8').splitlines())
 
 def load_connections_show(blockchain):
-    chia_binary = get_binary(blockchain)
+    chia_binary = globals.get_blockchain_binary(blockchain)
     proc = Popen("{0} show --connections".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -160,7 +150,7 @@ def load_connections_show(blockchain):
     return chia.Connections(outs.decode('utf-8').splitlines())
 
 def add_connection(connection, blockchain):
-    chia_binary = get_binary(blockchain)
+    chia_binary = globals.get_blockchain_binary(blockchain)
     try:
         hostname,port = connection.split(':')
         if socket.gethostbyname(hostname) == hostname:
@@ -185,7 +175,7 @@ def add_connection(connection, blockchain):
         flash('Nice! Connection added to Chia and sync engaging!', 'success')
 
 def load_keys_show(blockchain):
-    chia_binary = get_binary(blockchain)
+    chia_binary = globals.get_blockchain_binary(blockchain)
     proc = Popen("{0} keys show".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -197,7 +187,8 @@ def load_keys_show(blockchain):
         abort(500, description=errs.decode('utf-8'))
     return chia.Keys(outs.decode('utf-8').splitlines())
 
-def generate_key(key_path):
+def generate_key(key_path, blockchain):
+    chia_binary = globals.get_blockchain_binary(blockchain)
     if os.path.exists(key_path) and os.stat(key_path).st_size > 0:
         app.logger.info('Skipping key generation as file exists and is NOT empty! {0}'.format(key_path))
         flash('Skipping key generation as file exists and is NOT empty!', 'danger')
@@ -246,7 +237,7 @@ def generate_key(key_path):
         start_farmer('chia')
 
 def start_farmer(blockchain):
-    chia_binary = get_binary(blockchain)
+    chia_binary = globals.get_blockchain_binary(blockchain)
     proc = Popen("{0} start farmer".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -265,7 +256,7 @@ def start_farmer(blockchain):
     return True
 
 def remove_connection(node_id, ip, blockchain):
-    chia_binary = get_binary(blockchain)
+    chia_binary = globals.get_blockchain_binary(blockchain)
     try:
         proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
         try:

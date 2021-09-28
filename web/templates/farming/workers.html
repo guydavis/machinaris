@@ -56,7 +56,7 @@
                         {% for blockchain, summary in daily_summaries[farmer.hostname].items() %}
                         <li class="nav-item" role="presentation">
                             <button class="nav-link active" id="{{ farmer.displayname }}-{{ blockchain }}-tab" data-bs-toggle="tab" data-bs-target="#{{ farmer.displayname }}-{{ blockchain }}"
-                                type="button" role="tab" aria-controls="{{ farmer.displayname }}-{{ blockchain }}" aria-selected="true">Chia</button>
+                                type="button" role="tab" aria-controls="{{ farmer.displayname }}-{{ blockchain }}" aria-selected="true">{{ blockchain }}</button>
                         </li>
                         {% endfor %}
                     </ul>

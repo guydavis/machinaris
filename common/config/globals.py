@@ -21,20 +21,39 @@ from os import environ, path
 SUPPORTED_BLOCKCHAINS = [
     'chia',
     'flax',
+    'nchain',
+    'hddcoin',
+    'chives'
 ]
 
 PLOTMAN_CONFIG = '/root/.chia/plotman/plotman.yaml'
 PLOTMAN_SAMPLE = '/machinaris/config/plotman.sample.yaml'
 
-CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 MADMAX_BINARY = '/usr/bin/chia_plot'
 BLADEBIT_BINARY = '/usr/bin/bladebit'
 CHIADOG_PATH = '/chiadog'
+
+CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
-FLAXDOG_PATH = '/flaxdog'
+NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
+HDDCOIN_BINARY = '/hddcoin-blockchain/venv/bin/chia'
+CHIVES_BINARY = '/chives-blockchain/venv/bin/chia'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
+
+def get_blockchain_binary(blockchain):
+    if blockchain == "chia":
+        return CHIA_BINARY
+    if blockchain == "flax":
+        return FLAX_BINARY
+    if blockchain == "nchain":
+        return NCHAIN_BINARY
+    if blockchain == "hddcoin":
+        return HDDCOIN_BINARY
+    if blockchain == "chives":
+        return CHIVES_BINARY
+    raise Exception("Invalid blockchain: ".format(blockchain))
 
 def load():
     cfg = {}
@@ -47,16 +66,7 @@ def load():
     cfg['machinaris_version'] = load_machinaris_version()
     cfg['machinaris_mode'] = os.environ['mode']
     cfg['plotman_version'] = load_plotman_version()
-    if 'chia' in cfg['enabled_blockchains']:
-        cfg['chia_version'] = load_chia_version()
-    if 'flax' in cfg['enabled_blockchains']:
-        cfg['flax_version'] = load_flax_version()
-    if 'nchain' in cfg['enabled_blockchains']:
-        cfg['nchain_version'] = load_nchain_version()
-    if 'hddcoin' in cfg['enabled_blockchains']:
-        cfg['hddcoin_version'] = load_hddcoin_version()
-    if 'chives' in cfg['enabled_blockchains']:
-        cfg['chives_version'] = load_chives_version()
+    cfg['blockchain_version'] = load_blockchain_version(enabled_blockchains()[0])
     cfg['chiadog_version'] = load_chiadog_version()
     cfg['madmax_version'] = load_madmax_version()
     cfg['bladebit_version'] = load_bladebit_version()
@@ -144,42 +154,43 @@ def archiving_enabled():
         logging.info("Failed to read plotman.yaml so archiving_enabled=False.")
         logging.info(traceback.format_exc())
 
-last_chia_version = None
-last_chia_version_load_time = None
-def load_chia_version():
-    global last_chia_version
-    global last_chia_version_load_time
-    if last_chia_version_load_time and last_chia_version_load_time >= \
+last_blockchain_version = None
+last_blockchain_version_load_time = None
+def load_blockchain_version(blockchain):
+    chia_binary = get_blockchain_binary(blockchain)
+    global last_blockchain_version
+    global last_blockchain_version_load_time
+    if last_blockchain_version_load_time and last_blockchain_version_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
-        return last_chia_version
-    last_chia_version = ""
+        return last_blockchain_version
+    last_blockchain_version = ""
     try:
-        proc = Popen("{0} version".format(CHIA_BINARY),
+        proc = Popen("{0} version".format(chia_binary),
                 stdout=PIPE, stderr=PIPE, shell=True)
         outs, errs = proc.communicate(timeout=90)
         # Chia version with .dev is actually one # to high
         # See: https://github.com/Chia-Network/chia-blockchain/issues/5655
-        last_chia_version = outs.decode('utf-8').strip()
-        if "@@@@" in last_chia_version:  # SSL warning 
+        last_blockchain_version = outs.decode('utf-8').strip()
+        if "@@@@" in last_blockchain_version:  # SSL warning 
             try:
                 os.system("chia init --fix-ssl-permissions")
             except:
                 pass
-            last_chia_version = ""
-        if last_chia_version.endswith('dev0'):
-            sem_ver = last_chia_version.split('.')
-            last_chia_version = sem_ver[0] + '.' + \
+            last_blockchain_version = ""
+        if last_blockchain_version.endswith('dev0'):
+            sem_ver = last_blockchain_version.split('.')
+            last_blockchain_version = sem_ver[0] + '.' + \
                 sem_ver[1] + '.' + str(int(sem_ver[2])-1)
-        elif '.dev' in last_chia_version:
-            sem_ver = last_chia_version.split('.')
-            last_chia_version = sem_ver[0] + '.' + sem_ver[1] + '.' + sem_ver[2]
+        elif '.dev' in last_blockchain_version:
+            sem_ver = last_blockchain_version.split('.')
+            last_blockchain_version = sem_ver[0] + '.' + sem_ver[1] + '.' + sem_ver[2]
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
     except:
         logging.info(traceback.format_exc())
-    last_chia_version_load_time = datetime.datetime.now()
-    return last_chia_version
+    last_blockchain_version_load_time = datetime.datetime.now()
+    return last_blockchain_version
 
 last_plotman_version = None
 last_plotman_version_load_time = None
@@ -307,36 +318,6 @@ def load_machinaris_version():
         logging.info(traceback.format_exc())
     last_machinaris_version_load_time = datetime.datetime.now()
     return last_machinaris_version
-
-last_flax_version = None
-last_flax_version_load_time = None
-def load_flax_version():
-    global last_flax_version
-    global last_flax_version_load_time
-    if last_flax_version_load_time and last_flax_version_load_time >= \
-            (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
-        return last_flax_version
-    proc = Popen("{0} version".format(FLAX_BINARY),
-                 stdout=PIPE, stderr=PIPE, shell=True)
-    last_flax_version = ""
-    try:
-        outs, errs = proc.communicate(timeout=90)
-        last_flax_version = outs.decode('utf-8').strip()
-        # Flax version with .dev is actually one # to high
-        # See: https://github.com/Chia-Network/flax-blockchain/issues/5655
-        if last_flax_version.endswith('dev0') \
-            or last_flax_version.endswith('dev1'):
-            sem_ver = last_flax_version.split('.')
-            last_flax_version = sem_ver[0] + '.' + \
-                sem_ver[1] + '.' + str(int(sem_ver[2])-1)
-        elif '.dev' in last_flax_version:
-            sem_ver = last_flax_version.split('.')
-            last_flax_version = sem_ver[0] + '.' + sem_ver[1] + '.' + sem_ver[2]
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-    last_flax_version_load_time = datetime.datetime.now()
-    return last_flax_version
 
 def get_disks(disk_type):
     if disk_type == "plots":

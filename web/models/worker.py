@@ -42,10 +42,10 @@ class WorkerSummary:
         if not 'enabled_blockchains' in config:  # Default if missing from old records
             config['enabled_blockchains'] = 'chia'
         for blockchain in config['enabled_blockchains']:
-            if '{0}_version' in config:
-                other_versions += blockchain.capitalize() + ": " + config['{0}_version'] + "<br/>"
-            if '{0}dog_version' in config:
-                other_versions += blockchain.capitalize() + "dog: " + config['{0}dog_version'] + "<br/>"
+            if 'blockchain_version' in config:
+                other_versions += blockchain.capitalize() + ": " + config['blockchain_version'] + "<br/>"
+        if 'chiadog_version' in config:
+            other_versions += "Chiadog: " + config['chiadog_version'] + "<br/>"
         if 'madmax_version' in config:
             other_versions += "Madmax: " + config['madmax_version'] + "<br/>"
         if 'plotman_version' in config:

@@ -186,11 +186,37 @@ class Connections:
                 'displayname': displayname, 
                 'hostname': connection.hostname,
                 'blockchain': connection.blockchain,
-                'protocol_port': '8444' if connection.blockchain == 'chia' else '6888',
-                'details': connection.details
+                'protocol_port': self.blockchain_port(connection.blockchain),
+                'details': connection.details,
+                'add_exmample': self.get_add_connection_example(connection.blockchain)
             })
             self.blockchains[connection.blockchain] = self.parse(connection)
     
+    def get_add_connection_example(self, blockchain):
+        if blockchain == 'chia':
+            return "node.chia.net:8444"
+        if blockchain == 'flax':
+            return "143.198.76.157:6888"
+        if blockchain == 'nchain':
+            return "218.88.205.216:58445"
+        if blockchain == 'hddcoin':
+            return "145.1.235.18:28444"
+        if blockchain == 'chives':
+            return "106.225.229.73:9699"
+        
+    def blockchain_port(self,blockchain):
+        if blockchain == 'chia':
+            return 8927
+        elif blockchain == 'flax':
+            return 8928
+        elif blockchain == 'nchain':
+            return 8929
+        elif blockchain == 'hddcoin':
+            return 8930
+        elif blockchain == 'chives':
+            return 8931
+        raise("Unknown blockchain fork of selected: " + blockchain)
+
     def parse(self, connection):
         conns = []
         for line in connection.details.split('\n'):
