@@ -18,6 +18,12 @@ elif importlib.util.find_spec("flax"):
     from flax.util.default_root import DEFAULT_ROOT_PATH
     from flax.util.ints import uint16
     from flax.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("hddcoin"):
+    from hddcoin.rpc.full_node_rpc_client import FullNodeRpcClient
+    from hddcoin.rpc.farmer_rpc_client import FarmerRpcClient
+    from hddcoin.util.default_root import DEFAULT_ROOT_PATH
+    from hddcoin.util.ints import uint16
+    from hddcoin.util.config import load_config as load_fork_config
 else:
     raise Exception("Neither chia or flax found on pythonpath!")
 
