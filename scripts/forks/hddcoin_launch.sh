@@ -8,8 +8,13 @@ cd /hddcoin-blockchain
 
 . ./activate
 
+# Only the /root/.chia folder is volume-mounted so store hddcoin within
+mkdir -p /root/.chia/hddcoin
+rm -f /root/.hddcoin
+ln -s /root/.chia/hddcoin /root/.hddcoin
+
 mkdir -p /root/.hddcoin/mainnet/log
-hddcoin init >> /root/.hddcoin/mainnet/log/init.log 2>&1 
+hddcoin init >> /root/.hddcoin/mainnet/log/init.log 2>&1
 
 echo 'Configuring HDDCoin...'
 while [ ! -f /root/.hddcoin/mainnet/config/config.yaml ]; do

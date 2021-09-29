@@ -8,6 +8,11 @@ cd /chives-blockchain
 
 . ./activate
 
+# Only the /root/.chia folder is volume-mounted so store chives within
+mkdir -p /root/.chia/chives
+rm -f /root/.chives
+ln -s /root/.chia/chives /root/.chives
+
 mkdir -p /root/.chives/mainnet/log
 chives init >> /root/.chives/mainnet/log/init.log 2>&1 
 
@@ -38,6 +43,7 @@ sed -i 's/localhost/127.0.0.1/g' ~/.chives/mainnet/config/config.yaml
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
+  if [ ! -f /root/.chives/farmer_ca/chives_ca.crt ]; then
   chives start farmer
 elif [[ ${mode} =~ ^farmer.* ]]; then
   chives start farmer-only

@@ -38,7 +38,7 @@ CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
 NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
 HDDCOIN_BINARY = '/hddcoin-blockchain/venv/bin/hddcoin'
-CHIVES_BINARY = '/chives-blockchain/venv/bin/chia'
+CHIVES_BINARY = '/chives-blockchain/venv/bin/chives'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
 

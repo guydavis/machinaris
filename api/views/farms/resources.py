@@ -32,16 +32,16 @@ class Farms(MethodView):
     @blp.arguments(FarmSchema)
     @blp.response(201, FarmSchema)
     def post(self, new_item):
-        app.logger.info("Farm incoming: {0}".format(new_item))
+        #app.logger.info("Farm incoming: {0}".format(new_item))
         item = db.session.query(Farm).filter(Farm.hostname==new_item['hostname'], \
             Farm.blockchain==new_item['blockchain']).first()
         if item: # upsert
-            app.logger.info("Upserting an existing farm...")
+            #app.logger.info("Upserting an existing farm...")
             new_item['created_at'] = item.created_at
             new_item['updated_at'] = dt.datetime.now()
             FarmSchema().update(item, new_item)
         else: # insert
-            app.logger.info("Inserting a new farm...")
+            #app.logger.info("Inserting a new farm...")
             item = Farm(**new_item)
         db.session.add(item)
         db.session.commit()
