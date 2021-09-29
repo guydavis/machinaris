@@ -17,6 +17,7 @@ import yaml
 from flask import Flask, jsonify, abort, request, flash
 from subprocess import Popen, TimeoutExpired, PIPE
 
+from common.config import globals
 from api.models import log
 from api import app
 
@@ -86,7 +87,6 @@ def recent_partials(blockchain):
     # app.logger.debug(partials)
     return partials
 
-
 def find_plotting_job_log(plot_id):
     dir_path = '/root/.chia/plotman/logs'
     directory = os.fsencode(dir_path)
@@ -107,17 +107,8 @@ def find_plotting_job_log(plot_id):
     return None
 
 def get_farming_log_file(blockchain):
-    if blockchain == 'flax':
-        return "/root/.flax/mainnet/log/debug.log"
-    if blockchain == 'chives':
-        return "/root/.chives/mainnet/log/debug.log"
-    if blockchain == 'nchain':
-        return "/root/.chia/ext9/mainnet/log/debug.log"
-    if blockchain == 'hddcoin':
-        return "/root/.hddcoin/mainnet/log/debug.log"
-    if blockchain == 'chia':
-        return "/root/.chia/mainnet/log/debug.log"
-    raise Exception("No farming log for unknown blockchain: {0}".format(blockchain))
+    mainnet_folder = globals.get_blockchain_mainnet(blockchain)
+    return mainnet_folder + '/log/debug.log'
 
 def get_log_lines(log_type, log_id=None, blockchain=None):
     if log_type == "alerts":
@@ -141,7 +132,11 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
     #app.logger.info("Log file found at {0}".format(log_file))
     if blockchain == "flax":
         class_escape = re.compile(r' flax.plotting.(\w+)(\s+): ')
-    else:
+    elif blockchain == "chives":
+        class_escape = re.compile(r' chives.plotting.(\w+)(\s+): ')
+    elif blockchain == "hddcoin":
+        class_escape = re.compile(r' hddcoin.plotting.(\w+)(\s+): ')
+    else: # Chia and NChain both
         class_escape = re.compile(r' chia.plotting.(\w+)(\s+): ')
     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
     proc = Popen(['tail', '-n', str(MAX_LOG_LINES), log_file], stdout=PIPE)

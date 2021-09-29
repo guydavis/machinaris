@@ -41,9 +41,17 @@ chia init --fix-ssl-permissions > /dev/null
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  chia start farmer
+  if [ ! -f ~/.chia/ext9/config/ssl/wallet/public_wallet.ky ]; then
+    echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+  else
+    chia start farmer
+  fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
-  chia start farmer-only
+  if [ ! -f ~/.chia/ext9/config/ssl/wallet/public_wallet.ky ]; then
+    echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+  else
+    chia start farmer-only
+  fi
 elif [[ ${mode} =~ ^harvester.* ]]; then
   if [[ -z ${farmer_address} || -z ${farmer_port} ]]; then
     echo "A farmer peer address and port are required."

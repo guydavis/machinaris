@@ -46,9 +46,17 @@ hddcoin init --fix-ssl-permissions > /dev/null
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  hddcoin start farmer
+  if [ ! -f ~/.hddcoin/mainnet/config/ssl/wallet/public_wallet.ky ]; then
+    echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+  else
+    hddcoin start farmer
+  fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
-  hddcoin start farmer-only
+  if [ ! -f ~/.hddcoin/mainnet/config/ssl/wallet/public_wallet.ky ]; then
+    echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+  else
+    hddcoin start farmer-only
+  fi
 elif [[ ${mode} =~ ^harvester.* ]]; then
   if [[ -z ${farmer_address} || -z ${farmer_port} ]]; then
     echo "A farmer peer address and port are required."

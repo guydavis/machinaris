@@ -55,6 +55,19 @@ def get_blockchain_binary(blockchain):
         return CHIVES_BINARY
     raise Exception("Invalid blockchain: ".format(blockchain))
 
+def get_blockchain_mainnet(blockchain):
+    if blockchain == 'flax':
+        return "/root/.flax/mainnet"
+    if blockchain == 'chives':
+        return "/root/.chives/mainnet"
+    if blockchain == 'nchain':
+        return "/root/.chia/ext9"
+    if blockchain == 'hddcoin':
+        return "/root/.hddcoin/mainnet"
+    if blockchain == 'chia':
+        return "/root/.chia/mainnet"
+    raise Exception("No mainnet folder for unknown blockchain: {0}".format(blockchain))
+
 def load():
     cfg = {}
     cfg['plotting_enabled'] = plotting_enabled()
@@ -96,6 +109,12 @@ def is_setup():
     if "mode" in os.environ and 'harvester' in os.environ['mode']:
         # Harvester doesn't require a mnemonic private key as farmer's ca already imported.
         return True
+    try:
+        if os.path.exist(get_blockchain_mainnet(enabled_blockchains()[0]) + '/config/ssl/wallet/public_wallet.key'):
+            logging.info("Skipping check for mnemonic.txt as public wallet key exists on disk.")
+            return True
+    except Exception as ex:
+        logging.info("Failed to find presence of public wallet key.")
     # All other modes, we should have at least one keys path
     if "keys" not in os.environ:
         logging.info(
