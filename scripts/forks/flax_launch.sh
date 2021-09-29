@@ -51,13 +51,13 @@ flax init --fix-ssl-permissions > /dev/null
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  if [ ! -f ~/.flax/mainnet/config/ssl/wallet/public_wallet.ky ]; then
+  if [ ! -f ~/.flax/mainnet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
   else
     flax start farmer
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
-  if [ ! -f ~/.flax/mainnet/config/ssl/wallet/public_wallet.ky ]; then
+  if [ ! -f ~/.flax/mainnet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
   else
     flax start farmer-only
