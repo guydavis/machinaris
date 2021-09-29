@@ -38,9 +38,7 @@ def recent_challenges(blockchain):
         CHALLENGES_TO_LOAD = CHALLENGES_PER_MINUTE * int(schedule_every_x_minutes) + CHALLENGES_PER_MINUTE
     except:
         CHALLENGES_TO_LOAD = CHALLENGES_PER_MINUTE * 2 + CHALLENGES_PER_MINUTE
-    log_file = CHIA_LOG
-    if blockchain == 'flax':
-        log_file = FLAX_LOG
+    log_file = get_farming_log_file(blockchain)
     if not os.path.exists(log_file):
         app.logger.debug(
             "Skipping challenges parsing as no such log file: {0}".format(log_file))

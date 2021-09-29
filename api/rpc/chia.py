@@ -24,8 +24,14 @@ elif importlib.util.find_spec("hddcoin"):
     from hddcoin.util.default_root import DEFAULT_ROOT_PATH
     from hddcoin.util.ints import uint16
     from hddcoin.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("chives"):
+    from chives.rpc.full_node_rpc_client import FullNodeRpcClient
+    from chives.rpc.farmer_rpc_client import FarmerRpcClient
+    from chives.util.default_root import DEFAULT_ROOT_PATH
+    from chives.util.ints import uint16
+    from chives.util.config import load_config as load_fork_config
 else:
-    raise Exception("Neither chia or flax found on pythonpath!")
+    raise Exception("RPC modules found on pythonpath!")
 
 from api import app
 

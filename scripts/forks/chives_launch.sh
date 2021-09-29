@@ -36,9 +36,6 @@ done
 
 sed -i 's/localhost/127.0.0.1/g' ~/.chives/mainnet/config/config.yaml
 
-chmod 755 -R /root/.chives/mainnet/config/ssl/ &> /dev/null
-chives init --fix-ssl-permissions > /dev/null 
-
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
   chives start farmer
@@ -61,8 +58,6 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     fi
     if [ -f /root/.chives/farmer_ca/chives_ca.crt ]; then
       chives init -c /root/.chives/farmer_ca 2>&1 > /root/.chives/mainnet/log/init.log
-      chmod 755 -R /root/.chives/mainnet/config/ssl/ &> /dev/null
-      chives init --fix-ssl-permissions > /dev/null 
     else
       echo "Did not find your farmer's certificates within /root/.chives/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
