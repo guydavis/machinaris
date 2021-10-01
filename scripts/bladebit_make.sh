@@ -13,17 +13,19 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ ^plotter.* ]]; then
         echo "arch_name=${arch_name}"
         if [ "${arch_name}" = "x86_64" ]; then
             echo "Building bladebit on x86_64..."
-            ./build-bls
-            make clean
-            make -j$(nproc --all) 
-            ln -s /bladebit/.bin/release/bladebit /usr/bin/bladebit
+            mkdir -p bladebit && cd build
+            cmake ..
+            cmake --build . --target bladebit --config release
+            mv ./bladebit /usr/bin/Bladebit
+            cd .. && rm -r ./build
             echo "Bladebit version: "`bladebit --version`
         elif [ "${arch_name}" = "arm64" ]; then
             echo "Building bladebit on arm64..."
-            ./build-bls
-            make clean
-            make -j$(nproc --all) CONFIG=release.arm 
-            ln -s /bladebit/.bin/release.arm/bladebit /usr/bin/bladebit
+            mkdir -p bladebit && cd build
+            cmake ..
+            cmake --build . --target bladebit --config release
+            mv ./bladebit /usr/bin/Bladebit
+            cd .. && rm -r ./build
             echo "Bladebit version: "`bladebit --version`
         else
             echo "Building bladebit skipped -> unsupported architecture: ${arch_name}"
