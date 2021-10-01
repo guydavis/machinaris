@@ -16,7 +16,7 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ ^plotter.* ]]; then
             mkdir -p build && cd build
             cmake ..
             cmake --build . --target bladebit --config release
-            mv ./bladebit /usr/bin/Bladebit
+            mv ./bladebit /usr/bin/bladebit
             cd .. && rm -r ./build
             echo "Bladebit version: "`bladebit --version`
         elif [ "${arch_name}" = "arm64" ]; then
@@ -24,7 +24,7 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ ^plotter.* ]]; then
             mkdir -p build && cd build
             cmake ..
             cmake --build . --target bladebit --config release
-            mv ./bladebit /usr/bin/Bladebit
+            mv ./bladebit /usr/bin/bladebit
             cd .. && rm -r ./build
             echo "Bladebit version: "`bladebit --version`
         else
