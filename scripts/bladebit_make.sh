@@ -13,7 +13,7 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ ^plotter.* ]]; then
         echo "arch_name=${arch_name}"
         if [ "${arch_name}" = "x86_64" ]; then
             echo "Building bladebit on x86_64..."
-            mkdir -p bladebit && cd build
+            mkdir -p build && cd build
             cmake ..
             cmake --build . --target bladebit --config release
             mv ./bladebit /usr/bin/Bladebit
@@ -21,7 +21,7 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ ^plotter.* ]]; then
             echo "Bladebit version: "`bladebit --version`
         elif [ "${arch_name}" = "arm64" ]; then
             echo "Building bladebit on arm64..."
-            mkdir -p bladebit && cd build
+            mkdir -p build && cd build
             cmake ..
             cmake --build . --target bladebit --config release
             mv ./bladebit /usr/bin/Bladebit
