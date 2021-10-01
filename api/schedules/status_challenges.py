@@ -33,11 +33,8 @@ def update():
             delete_old_challenges(db)
         try:
             hostname = utils.get_displayname()
-            blockchains = ['chia']
-            if globals.flax_enabled():
-                blockchains.append('flax')
             payload = []
-            for blockchain in blockchains:
+            for blockchain in globals.enabled_blockchains():
                 recent_challenges = log_parser.recent_challenges(blockchain)
                 if not recent_challenges:
                     return

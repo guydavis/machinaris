@@ -27,10 +27,13 @@ def on_starting(server):
         JOB_JITTER = 30 # 30 seconds
     app.logger.info("Scheduler frequency will be once every {0} seconds.".format(JOB_FREQUENCY))
 
-    # Status for all types of workers including fullnodes
-    scheduler.add_job(func=stats_disk.collect, name="stats_disk", trigger='cron', minute="*/10") # Every 10 minutes
+    # Every single container should report as a worker
     scheduler.add_job(func=status_worker.update, name="workers", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
 
+    # Collect disk stats from all where blockchain is chia, avoid duplicate disks from multiple forks on same host
+    if 'chia' in globals.enabled_blockchains():
+        scheduler.add_job(func=stats_disk.collect, name="stats_disk", trigger='cron', minute="*/10") # Every 10 minutes
+        
     # Status for both farmers and harvesters (includes fullnodes)
     if globals.farming_enabled() or globals.harvesting_enabled():
         scheduler.add_job(func=status_challenges.update, name="challenges", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
@@ -40,12 +43,12 @@ def on_starting(server):
     if globals.plotting_enabled():
         scheduler.add_job(func=status_plotting.update, name="plottings", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
 
-    # Status for controller only
-    if utils.is_controller():
+    # Status for fullnodes, all different forks
+    if utils.is_fullnode():
         scheduler.add_job(func=stats_farm.collect, name="stats_farm", trigger='cron', minute=0)  # Hourly
-        scheduler.add_job(func=status_controller.update, name="controller", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_wallets.update, name="wallets", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
-        scheduler.add_job(func=status_plotnfts.update, name="plotnfts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        if 'chia' in globals.enabled_blockchains():  # Only Chia supports plotnft command now
+            scheduler.add_job(func=status_plotnfts.update, name="plotnfts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_blockchains.update, name="blockchains", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_connections.update, name="connections", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_keys.update, name="keys", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
@@ -54,9 +57,13 @@ def on_starting(server):
         scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_partials.update, name="partials", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
 
-        # Testing only
-        #scheduler.add_job(func=stats_farm.collect, trigger='interval', seconds=10) # Test immediately
-        #scheduler.add_job(func=stats_disk.collect, trigger='interval', seconds=10) # Test immediately
+    # Status for single Machinaris controller only, should be blockchain=chia
+    if utils.is_controller():
+        scheduler.add_job(func=status_controller.update, name="controller", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+
+    # Testing only
+    #scheduler.add_job(func=stats_farm.collect, trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=stats_disk.collect, trigger='interval', seconds=10) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()
