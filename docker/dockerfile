@@ -1,6 +1,17 @@
 # set ubuntu release version
 ARG UBUNTU_VER="hirsute"
 
+######## builder ###########
+FROM ubuntu:${UBUNTU_VER} as builder
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y build-essential cmake libgmp-dev libnuma-dev libsodium-dev git
+
+COPY . /machinaris/
+
+RUN /usr/bin/bash /machinaris/scripts/madmax_install.sh && /usr/bin/bash /machinaris/scripts/bladebit_install.sh
+
 ######## packages stage ###########
 FROM ubuntu:${UBUNTU_VER} as package_stage
 
@@ -9,23 +20,22 @@ ARG DEBIAN_FRONTEND=noninteractive
 # install build packages
 RUN \
 	apt-get update \
-	&& apt-get install -y \
+	&& apt-get install --no-install-recommends -y \
 		acl \
 		ansible \
 		apt \
 		bash \
 		bc \
-		build-essential \
 		ca-certificates \
 		curl \
 		git \
 		jq \
+		lsb-release \
 		nfs-common \
 		openssl \
 		python3 \
 		python3.9-distutils \
 		python3.9-venv \
-		python3-dev \
 		python3-pip \
 		python-is-python3 \
 		sqlite3 \
@@ -35,13 +45,11 @@ RUN \
 		unzip \
 		vim \
 		wget \
-		cmake \
 		rsync \
-		libsodium-dev \
-		libgmp-dev \
-		libnuma-dev \
-		g++ \
 		iputils-ping \
+		libnuma1 \
+		libsodium23 \
+		libgmp10 \
 	\
 # cleanup apt cache
 	\
@@ -64,6 +72,11 @@ COPY . /machinaris/
 # set workdir
 WORKDIR /chia-blockchain
 
+#copy compiled files/binaries
+COPY --from=builder /usr/bin/bladebit /usr/bin/bladebit 
+COPY --from=builder /usr/lib/chia-plotter /usr/lib/chia-plotter
+COPY --from=builder /usr/bin/chia_plot /usr/bin/chia_plot
+
 # Install Chia, Plotman, Chiadog, Madmax, Flax, Machinaris, etc
 RUN \
 	/usr/bin/bash /machinaris/scripts/forks/chia_install.sh ${CHIA_BRANCH} \
@@ -73,8 +86,6 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/plotman_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/bladebit_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
 	&& rm -rf \
 		/root/.cache \
