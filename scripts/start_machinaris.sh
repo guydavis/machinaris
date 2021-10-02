@@ -33,12 +33,9 @@ if [ ${AUTO_PLOT,,} = "true" ]; then
     nohup plotman plot >> /root/.chia/plotman/logs/plotman.log 2>&1 &
 fi
 
-# Start the log monitors
+# Start the farming log monitor
 if [ "${mode}" != "plotter" ]; then
     . /machinaris/scripts/chiadog_launch.sh
-fi
-if [[ "${mode}" != "plotter" ]] && [[ ${blockchains} =~ flax ]]; then
-    . /machinaris/scripts/flaxdog_launch.sh
 fi
 
 # Even standalone plotting mode needs database setup
@@ -64,7 +61,7 @@ fi
 echo 'Starting Machinaris API server...'
 . /machinaris/scripts/config_api_server.sh
 /chia-blockchain/venv/bin/gunicorn ${RELOAD} \
-    --bind 0.0.0.0:8927 --timeout 90 \
+    --bind 0.0.0.0:${worker_api_port:-8927} --timeout 90 \
     --log-level=${LOG_LEVEL} \
     --workers=2 \
     --config api/gunicorn.conf.py \

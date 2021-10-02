@@ -9,7 +9,7 @@ class Alerts:
         self.rows = []
         for alert in alerts:
             try:
-                w = worker.get_worker_by_hostname(alert.hostname)
+                w = worker.get_worker(alert.hostname)
                 displayname = w.displayname
             except:
                 app.logger.debug("Failed to find worker for hostname: {0}".format(alert.hostname))

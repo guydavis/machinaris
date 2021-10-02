@@ -52,9 +52,11 @@ RUN \
 
 ######## build/runtime stage #########
 FROM package_stage
-# Base install of official Chia binaries at the given branch
 ARG CHIA_BRANCH
+ARG CHIVES_BRANCH
 ARG FLAX_BRANCH
+ARG HDDCOIN_BRANCH
+ARG NCHAIN_BRANCH
 
 # copy local files
 COPY . /machinaris/
@@ -64,14 +66,16 @@ WORKDIR /chia-blockchain
 
 # Install Chia, Plotman, Chiadog, Madmax, Flax, Machinaris, etc
 RUN \
-	/usr/bin/bash /machinaris/scripts/chia_install.sh ${CHIA_BRANCH} \
+	/usr/bin/bash /machinaris/scripts/forks/chia_install.sh ${CHIA_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/chives_install.sh ${CHIVES_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/flax_install.sh ${FLAX_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/plotman_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/bladebit_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/flax_install.sh ${FLAX_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/flaxdog_install.sh \
 	&& rm -rf \
 		/root/.cache \
 		/tmp/* \

@@ -50,7 +50,7 @@ class FarmPlots:
             else: # Look up displayname
                 try:
                     app.logger.debug("Found worker with hostname '{0}'".format(plot.hostname))
-                    displayname = w.get_worker_by_hostname(plot.hostname).displayname
+                    displayname = w.get_worker(plot.hostname).displayname
                 except:
                     app.logger.info("Unable to find a worker with hostname '{0}'".format(plot.hostname))
                     displayname = plot.hostname
@@ -100,7 +100,7 @@ class Wallets:
         for wallet in wallets:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(wallet.hostname))
-                displayname = w.get_worker_by_hostname(wallet.hostname).displayname
+                displayname = w.get_worker(wallet.hostname, wallet.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(wallet.hostname))
                 displayname = wallet.hostname
@@ -119,7 +119,7 @@ class Keys:
         for key in keys:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(key.hostname))
-                displayname = w.get_worker_by_hostname(key.hostname).displayname
+                displayname = w.get_worker(key.hostname, key.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(key.hostname))
                 displayname = key.hostname
@@ -137,7 +137,7 @@ class Blockchains:
         for blockchain in blockchains:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(blockchain.hostname))
-                displayname = w.get_worker_by_hostname(blockchain.hostname).displayname
+                displayname = w.get_worker(blockchain.hostname, blockchain.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(blockchain.hostname))
                 displayname = blockchain.hostname
@@ -178,7 +178,7 @@ class Connections:
         for connection in connections:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(connection.hostname))
-                displayname = w.get_worker_by_hostname(connection.hostname).displayname
+                displayname = w.get_worker(connection.hostname, connection.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(connection.hostname))
                 displayname = connection.hostname
@@ -186,11 +186,37 @@ class Connections:
                 'displayname': displayname, 
                 'hostname': connection.hostname,
                 'blockchain': connection.blockchain,
-                'protocol_port': '8444' if connection.blockchain == 'chia' else '6888',
-                'details': connection.details
+                'protocol_port': self.blockchain_port(connection.blockchain),
+                'details': connection.details,
+                'add_exmample': self.get_add_connection_example(connection.blockchain)
             })
             self.blockchains[connection.blockchain] = self.parse(connection)
     
+    def get_add_connection_example(self, blockchain):
+        if blockchain == 'chia':
+            return "node.chia.net:8444"
+        if blockchain == 'flax':
+            return "143.198.76.157:6888"
+        if blockchain == 'nchain':
+            return "218.88.205.216:58445"
+        if blockchain == 'hddcoin':
+            return "145.1.235.18:28444"
+        if blockchain == 'chives':
+            return "106.225.229.73:9699"
+        
+    def blockchain_port(self,blockchain):
+        if blockchain == 'chia':
+            return 8927
+        elif blockchain == 'flax':
+            return 8928
+        elif blockchain == 'nchain':
+            return 8929
+        elif blockchain == 'hddcoin':
+            return 8930
+        elif blockchain == 'chives':
+            return 8931
+        raise("Unknown blockchain fork of selected: " + blockchain)
+
     def parse(self, connection):
         conns = []
         for line in connection.details.split('\n'):
@@ -242,7 +268,7 @@ class Plotnfts:
         for plotnft in plotnfts:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(plotnft.hostname))
-                displayname = w.get_worker_by_hostname(plotnft.hostname).displayname
+                displayname = w.get_worker(plotnft.hostname).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(plotnft.hostname))
                 displayname = plotnft.hostname
@@ -271,7 +297,7 @@ class Pools:
         for pool in pools:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(pool.hostname))
-                displayname = w.get_worker_by_hostname(pool.hostname).displayname
+                displayname = w.get_worker(pool.hostname, pools.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(pool.hostname))
                 displayname = pool.hostname

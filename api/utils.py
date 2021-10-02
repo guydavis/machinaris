@@ -42,11 +42,11 @@ def get_controller_url():
         app.config['CONTROLLER_PORT']
     )
 
-def get_remote_url():
+def get_worker_url():
     return "{0}://{1}:{2}".format(
-        app.config['CONTROLLER_SCHEME'],
+        app.config['WORKER_SCHEME'],
         get_hostname(),
-        app.config['CONTROLLER_PORT']
+        app.config['WORKER_PORT']
     )
 
 def get_hostname():
@@ -61,3 +61,6 @@ def get_displayname():
 
 def is_controller():
     return app.config['CONTROLLER_HOST'] == "localhost"
+
+def is_fullnode():
+    return os.environ['mode'] == "fullnode"

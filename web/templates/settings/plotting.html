@@ -39,7 +39,7 @@
                 <label for="worker" class="col-sm-1 col-form-label-lg text-end p-1">Worker</label>
                 <div class="col-sm-3">
                     <select id="worker" name="worker" class="form-select">
-                        {% for worker in workers %}
+                        {% for worker in workers() %}
                         <option {% if worker==selected_worker %}selected{% endif %}
                             value="{{ worker.hostname }}">{{ worker.displayname }}</option>
                         {% endfor %}

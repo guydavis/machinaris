@@ -17,6 +17,7 @@ import yaml
 from flask import Flask, jsonify, abort, request, flash
 from subprocess import Popen, TimeoutExpired, PIPE
 
+from common.config import globals
 from api.models import log
 from api import app
 
@@ -24,8 +25,7 @@ from api import app
 CHIA_LOG = '/root/.chia/mainnet/log/debug.log'
 FLAX_LOG = '/root/.flax/mainnet/log/debug.log'
 
-# Roughly 2 minutes worth of challenges, sent every 60 seconds, for overlap
-CHALLENGES_TO_LOAD = 16
+CHALLENGES_PER_MINUTE = 8 
 
 # Most recent partial proofs, actually double as 2 log lines per partial
 PARTIALS_TO_LOAD = 50
@@ -33,11 +33,13 @@ PARTIALS_TO_LOAD = 50
 # When reading tail of a log, only send this many lines
 MAX_LOG_LINES = 250
 
-
 def recent_challenges(blockchain):
-    log_file = CHIA_LOG
-    if blockchain == 'flax':
-        log_file = FLAX_LOG
+    try:
+        schedule_every_x_minutes = app.config['STATUS_EVERY_X_MINUTES']
+        CHALLENGES_TO_LOAD = CHALLENGES_PER_MINUTE * int(schedule_every_x_minutes) + CHALLENGES_PER_MINUTE
+    except:
+        CHALLENGES_TO_LOAD = CHALLENGES_PER_MINUTE * 2 + CHALLENGES_PER_MINUTE
+    log_file = get_farming_log_file(blockchain)
     if not os.path.exists(log_file):
         app.logger.debug(
             "Skipping challenges parsing as no such log file: {0}".format(log_file))
@@ -60,9 +62,7 @@ def recent_challenges(blockchain):
     return challenges
 
 def recent_partials(blockchain):
-    log_file = CHIA_LOG
-    if blockchain == 'flax':
-        log_file = FLAX_LOG
+    log_file = get_farming_log_file(blockchain)
     if not os.path.exists(log_file):
         app.logger.debug(
             "Skipping partials parsing as no such log file: {0}".format(log_file))
@@ -87,7 +87,6 @@ def recent_partials(blockchain):
     # app.logger.debug(partials)
     return partials
 
-
 def find_plotting_job_log(plot_id):
     dir_path = '/root/.chia/plotman/logs'
     directory = os.fsencode(dir_path)
@@ -107,13 +106,13 @@ def find_plotting_job_log(plot_id):
             app.logger.info(traceback.format_exc())
     return None
 
+def get_farming_log_file(blockchain):
+    mainnet_folder = globals.get_blockchain_mainnet(blockchain)
+    return mainnet_folder + '/log/debug.log'
 
 def get_log_lines(log_type, log_id=None, blockchain=None):
     if log_type == "alerts":
-        if blockchain == 'flax':
-            log_file = "/root/.chia/flaxdog/logs/flaxdog.log"       
-        else:
-            log_file = "/root/.chia/chiadog/logs/chiadog.log"
+        log_file = "/root/.chia/chiadog/logs/chiadog.log"
     elif log_type == "plotting":
         if log_id:
             log_file = find_plotting_job_log(log_id)
@@ -122,10 +121,7 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
     elif log_type == "archiving":
         log_file = "/root/.chia/plotman/logs/archiver.log"
     elif log_type == "farming":
-        if blockchain == 'flax':
-            log_file = "/root/.flax/mainnet/log/debug.log"
-        else:
-            log_file = "/root/.chia/mainnet/log/debug.log"
+        log_file= get_farming_log_file(blockchain)
     elif log_type == "webui":
         log_file = "/root/.chia/machinaris/logs/webui.log"
     elif log_type == "apisrv":
@@ -136,7 +132,11 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
     #app.logger.info("Log file found at {0}".format(log_file))
     if blockchain == "flax":
         class_escape = re.compile(r' flax.plotting.(\w+)(\s+): ')
-    else:
+    elif blockchain == "chives":
+        class_escape = re.compile(r' chives.plotting.(\w+)(\s+): ')
+    elif blockchain == "hddcoin":
+        class_escape = re.compile(r' hddcoin.plotting.(\w+)(\s+): ')
+    else: # Chia and NChain both
         class_escape = re.compile(r' chia.plotting.(\w+)(\s+): ')
     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
     proc = Popen(['tail', '-n', str(MAX_LOG_LINES), log_file], stdout=PIPE)

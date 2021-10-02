@@ -18,11 +18,15 @@ from flask import Flask, jsonify, abort, request, flash
 
 from web import app, db, utils
 from common.models import workers as w
-from common.config import globals
 from web.models.worker import WorkerSummary
-from web.rpc import chia
+from web.actions import stats
 
 ALL_TABLES_BY_HOSTNAME = [
+    'plots',
+    'plottings',
+]
+
+ALL_TABLES_BY_HOSTNAME_AND_BLOCKCHAIN = [
     'alerts',
     'blockchains',
     'challenges',
@@ -30,32 +34,40 @@ ALL_TABLES_BY_HOSTNAME = [
     'farms', 
     'keys',
     'plotnfts',
-    'plots',
-    'plottings',
     'pools',
     'wallets',
     'workers'
 ]
 
 def load_worker_summary(hostname = None):
-    query = db.session.query(w.Worker).order_by(w.Worker.displayname)
+    query = db.session.query(w.Worker).order_by(w.Worker.displayname, w.Worker.blockchain)
     if hostname:
         workers = query.filter(w.Worker.hostname==hostname)
     else:
         workers = query.all()
     return WorkerSummary(workers)
 
-def get_worker_by_hostname(hostname):
-    #app.logger.info("Searching for worker with hostname: {0}".format(hostname))
-    return db.session.query(w.Worker).get(hostname)
+def get_worker(hostname, blockchain='chia'):
+    app.logger.info("Searching for worker with hostname: {0} and blockchain: {1}".format(hostname, blockchain))
+    return db.session.query(w.Worker).filter(w.Worker.hostname==hostname, w.Worker.blockchain==blockchain).first()
 
-def prune_workers_status(hostnames):
-    for hostname in hostnames:
-        worker = get_worker_by_hostname(hostname)
-        for table in ALL_TABLES_BY_HOSTNAME:
-            db.session.execute("DELETE FROM " + table + " WHERE hostname = :hostname OR hostname = :displayname", 
-                {"hostname":hostname, "displayname":worker.displayname})
-            db.session.commit()
+def prune_workers_status(workers):
+    for id in workers:
+        [hostname,blockchain] = id.split('|')
+        worker = get_worker(hostname, blockchain)
+        if worker:
+            if 'chia' == blockchain:
+                stats.prune_workers_status(hostname, worker.displayname, worker.blockchain)
+            for table in ALL_TABLES_BY_HOSTNAME:
+                db.session.execute("DELETE FROM " + table + " WHERE (hostname = :hostname OR hostname = :displayname)", 
+                    {"hostname":hostname, "displayname":worker.displayname})
+                db.session.commit()
+            for table in ALL_TABLES_BY_HOSTNAME_AND_BLOCKCHAIN:
+                db.session.execute("DELETE FROM " + table + " WHERE (hostname = :hostname OR hostname = :displayname) AND blockchain = :blockchain", 
+                    {"hostname":hostname, "displayname":worker.displayname, "blockchain":worker.blockchain})
+                db.session.commit()
+        else:
+            app.logger.info("Found worker: {0}".format(worker))
 
 class WorkerWarning:
 

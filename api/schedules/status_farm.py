@@ -32,32 +32,13 @@ def update():
     if not globals.farming_enabled():
         return
     with app.app_context():
-        try:
-            hostname = utils.get_hostname()
-            farm_summary = chia_cli.load_farm_summary('chia')
-            payload = {
-                "hostname": hostname,
-                "blockchain": "chia",
-                "mode": os.environ['mode'],
-                "status": "" if not hasattr(farm_summary, 'status') else farm_summary.status,
-                "plot_count": farm_summary.plot_count,
-                "plots_size": safely_gather_plots_size_gibs(farm_summary.plots_size),
-                "total_coins": 0 if not hasattr(farm_summary, 'total_coins') else farm_summary.total_coins,
-                "netspace_size": 0 if not hasattr(farm_summary, 'netspace_size') else converters.str_to_gibs(farm_summary.netspace_size),
-                "expected_time_to_win": "" if not hasattr(farm_summary, 'time_to_win') else farm_summary.time_to_win,
-            }
-            utils.send_post('/farms/', payload, debug=False)
-        except:
-            app.logger.info("Failed to load Chia farm summary and send.")
-            app.logger.info(traceback.format_exc())
-
-        if globals.flax_enabled():
+        hostname = utils.get_hostname()
+        for blockchain in globals.enabled_blockchains():
             try:
-                hostname = utils.get_hostname()
-                farm_summary = chia_cli.load_farm_summary('flax')
+                farm_summary = chia_cli.load_farm_summary(blockchain)
                 payload = {
                     "hostname": hostname,
-                    "blockchain": "flax",
+                    "blockchain": blockchain,
                     "mode": os.environ['mode'],
                     "status": "" if not hasattr(farm_summary, 'status') else farm_summary.status,
                     "plot_count": farm_summary.plot_count,
@@ -65,9 +46,8 @@ def update():
                     "total_coins": 0 if not hasattr(farm_summary, 'total_coins') else farm_summary.total_coins,
                     "netspace_size": 0 if not hasattr(farm_summary, 'netspace_size') else converters.str_to_gibs(farm_summary.netspace_size),
                     "expected_time_to_win": "" if not hasattr(farm_summary, 'time_to_win') else farm_summary.time_to_win,
-                } 
+                }
                 utils.send_post('/farms/', payload, debug=False)
             except:
-                app.logger.info("Failed to load Flax farm summary and send.")
+                app.logger.info("Failed to load Chia farm summary and send.")
                 app.logger.info(traceback.format_exc())
-                

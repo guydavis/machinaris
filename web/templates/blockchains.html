@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    a.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+    button.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+</style>
+
+{% if blockchains.rows|length > 0 %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="padding-bottom: 0px;">
+    <div class="h-100 p-2 text-white">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            {% for blockchain in blockchains.rows %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link {% if loop.index == 1 %}active{% endif %}" id="{{blockchain.blockchain}}-tab" data-bs-toggle="tab" data-bs-target="#{{blockchain.blockchain}}"
+                    type="button" role="tab" aria-controls="{{blockchain.blockchain}}" aria-selected="{% if loop.index == 1 %}true{% else %}false{% endif %}">{{ blockchain.blockchain }}</button>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="tab-content">
+            {% for blockchain in blockchains.rows %}
+            <div class="tab-pane {% if loop.index == 1 %}active{% endif %}" id="{{blockchain.blockchain}}" role="tabpanel" aria-labelledby="{{blockchain.blockchain}}-tab">
+                <br/>
+                <pre>{{ blockchain.details}}</pre>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</nav>
+{% else %}
+<div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
+    <h6>No blockchains found from any farmers. Not added?</h6>
+    <h6>Try running 'chia show --state' on your farmers to verify.</h6>
+</div>
+{% endif %}
+
+{% endblock %}
