@@ -47,6 +47,9 @@ RUN \
 		wget \
 		rsync \
 		iputils-ping \
+		libnuma1 \
+		libsodium23 \
+		libgmp10 \
 	\
 # cleanup apt cache
 	\
