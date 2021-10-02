@@ -38,6 +38,7 @@ RUN \
 		cmake \
 		rsync \
 		libsodium-dev \
+		libgmp-dev \
 		libnuma-dev \
 		g++ \
 		iputils-ping \
