@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.5.7] - 2021-10-02 
  - Chia - Update to version 1.2.8.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.8).
-  - Chia - Update to version 1.2.9.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.9).
+ - Bladebit - Update to version 1.2.0.  See their [changelog for details](https://github.com/harold-b/bladebit/releases/tag/1.2.0)
+ - Chia - Update to version 1.2.9.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.9).
 
 ## [0.5.6] - 2021-09-17 
 
