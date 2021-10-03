@@ -77,7 +77,7 @@ COPY --from=builder /usr/bin/bladebit /usr/bin/bladebit
 COPY --from=builder /usr/lib/chia-plotter /usr/lib/chia-plotter
 COPY --from=builder /usr/bin/chia_plot /usr/bin/chia_plot
 
-# Install Chia, Plotman, Chiadog, Madmax, Flax, Machinaris, etc
+# Install Chia (and forks), Plotman, Chiadog, Machinaris, etc
 RUN \
 	/usr/bin/bash /machinaris/scripts/forks/chia_install.sh ${CHIA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chives_install.sh ${CHIVES_BRANCH} \
@@ -99,8 +99,8 @@ ENV keys="/root/.chia/mnemonic.txt"
 ENV plots_dir="/plots"
 # One of fullnode, farmer, harvester, plotter, farmer+plotter, harvester+plotter. Default is fullnode
 ENV mode="fullnode" 
-# Required is the 'chia' blockchain, but can optionally add 'flax' too. A comma-separated list.
-ENV blockchains="chia,flax"
+# The single blockchain to run: chia, flax, nchain, hddcoin, chives, etc
+ENV blockchains="chia"
 # If provided then these optional 3 public keys will be set in your plotman.yaml
 ENV farmer_pk="null"
 ENV pool_pk="null"
@@ -108,7 +108,6 @@ ENV pool_contract_address="null"
 # If mode=harvester, required for host and port the harvester will your farmer
 ENV farmer_address="null"
 ENV farmer_port="8447"
-ENV flax_farmer_port="6885"
 # Can override the location of default settings for api and web servers.
 ENV API_SETTINGS_FILE='/root/.chia/machinaris/config/api.cfg'
 ENV WEB_SETTINGS_FILE='/root/.chia/machinaris/config/web.cfg'
@@ -133,6 +132,18 @@ EXPOSE 8447
 EXPOSE 6888
 # Flax RPC port - DO NOT forward at router
 EXPOSE 6885
+# NChain protocol port - forward at router
+EXPOSE 58445
+# NChain RPC port - DO NOT forward at router
+EXPOSE 58448
+# HDDCoin protocol port - forward at router
+EXPOSE 28444
+# HDDCoin RPC port - DO NOT forward at router
+EXPOSE 28448
+# Chives protocol port - forward at router
+EXPOSE 9699
+# Chives RPC port - DO NOT forward at router
+EXPOSE 9647
 # Machinaris WebUI - DO NOT forward at router, proxy if needed
 EXPOSE 8926
 # Machinaris API - DO NOT forward at router
