@@ -63,7 +63,7 @@ elif [[ ${mode} =~ ^farmer.* ]]; then
     flax start farmer-only
   fi
 elif [[ ${mode} =~ ^harvester.* ]]; then
-  if [[ -z ${farmer_address} || -z ${flax_farmer_port} ]]; then
+  if [[ -z ${farmer_address} || -z ${farmer_port} ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
@@ -85,7 +85,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "Did not find your farmer's certificates within /root/.flax/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
-    flax configure --set-farmer-peer ${farmer_address}:${flax_farmer_port}
+    flax configure --set-farmer-peer ${farmer_address}:${farmer_port}
     flax configure --enable-upnp false
     flax start harvester -r
   fi
