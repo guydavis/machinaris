@@ -28,4 +28,4 @@ def get_log_lines(worker, log_type, log_id, blockchain):
         return response.content.decode('utf-8')
     except:
         app.logger.info(traceback.format_exc())
-        return 'Failed to load log file from {0}'.format(worker.hostname)
+        return 'Failed to load log file from {0}:{1} running {2}'.format(worker.hostname, worker.port, blockchain)

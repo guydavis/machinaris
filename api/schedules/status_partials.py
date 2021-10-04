@@ -32,12 +32,9 @@ def update():
             from api import db
             delete_old_partials(db)
             hostname = utils.get_hostname()
-            blockchains = ['chia']
-            if globals.flax_enabled():
-                blockchains.append('flax')
             payload = []
             partials_so_far = {}
-            for blockchain in blockchains:
+            for blockchain in globals.enabled_blockchains():
                 recent_partials = log_parser.recent_partials(blockchain)
                 for partial in recent_partials.rows:
                     app.logger.debug(partial)
