@@ -50,6 +50,7 @@ RUN \
 		libnuma1 \
 		libsodium23 \
 		libgmp10 \
+		libgmpxx4ldbl \
 	\
 # cleanup apt cache
 	\
