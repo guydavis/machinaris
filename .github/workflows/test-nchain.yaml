@@ -1,4 +1,4 @@
-name: test
+name: develop-nchain
 
 on:
   push:
@@ -37,11 +37,10 @@ jobs:
         with:
           file: docker/dockerfile
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           build-args: |
-            "CHIA_BRANCH=1.2.9"
-            "FLAX_BRANCH=main"
+            "NCHAIN_BRANCH=net9.dev"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:test
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:test
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-nchain:develop
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-nchain:develop
