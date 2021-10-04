@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.8] - 2021-10-08 
+- Bladebit - Patch for broken library dependency. 
+
 ## [0.5.7] - 2021-10-02 
  - Chia - Update to version 1.2.8.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.8).
  - Bladebit - Update to version 1.2.0.  See their [changelog for details](https://github.com/harold-b/bladebit/releases/tag/1.2.0)
