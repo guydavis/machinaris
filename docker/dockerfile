@@ -20,7 +20,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 # install build packages
 RUN \
 	apt-get update \
-	&& apt-get install --no-install-recommends -y \
+	&& apt-get install -y \
 		acl \
 		ansible \
 		apt \
@@ -49,10 +49,9 @@ RUN \
 		wget \
 		rsync \
 		iputils-ping \
-		libnuma1 \
-		libsodium23 \
-		libgmp10 \
-		libgmpxx4ldbl \
+                libgmp-dev \
+                libnuma-dev \
+		libsodium-dev \
 	\
 # cleanup apt cache
 	\
