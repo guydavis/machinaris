@@ -171,7 +171,8 @@ def workers():
 def worker_route():
     gc = globals.load()
     hostname=request.args.get('hostname')
-    wkr = worker.load_worker_summary(hostname=hostname).workers[0]
+    blockchain=request.args.get('blockchain')
+    wkr = worker.get_worker(hostname, blockchain)
     plots = chia.load_plots_farming(hostname=hostname)
     plotting = plotman.load_plotting_summary(hostname=hostname)
     plots_disk_usage = stats.load_current_disk_usage('plots',hostname=hostname)

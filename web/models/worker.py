@@ -1,8 +1,7 @@
+import datetime
 import json
 import os
 import traceback
-
-from datetime import datetime
 
 from common.config import globals
 
@@ -61,6 +60,12 @@ class WorkerSummary:
     def set_ping_response(self, response):
         self.ping_response = response
 
+    def status_if_responding(self, displayname, blockchain, connection_status, last_status):
+        if connection_status == "Responding":
+            return last_status
+        app.logger.info("Oops! {0} ({1}) last connection status: {2}".format(displayname, blockchain, connection_status))
+        return "Unknown"
+
     def fullnodes(self):
         filtered = []
         for worker in self.workers:
@@ -72,6 +77,11 @@ class WorkerSummary:
                 if not host:
                     host = Host(worker.hostname, worker.displayname)
                     filtered.append(host)
+                host.workers.append({
+                    'hostname': worker.hostname,
+                    'displayname': worker.displayname,
+                    'config': json.loads(worker.config),
+                })
         filtered.sort(key=lambda w: w.displayname)
         return filtered
 
@@ -90,8 +100,8 @@ class WorkerSummary:
                     'hostname': worker.hostname,
                     'displayname': worker.displayname,
                     'plotting_status': worker.plotting_status(),
-                    'archiving_status': worker.archiving_status(),
-                    'archiving_enabled': worker.archiving_enabled(),
+                    'archiving_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.archiving_status()),
+                    'archiving_enabled': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.archiving_enabled()),
                     'config': json.loads(worker.config),
                 })
         filtered.sort(key=lambda w: w.displayname)
@@ -113,8 +123,8 @@ class WorkerSummary:
                     'hostname': worker.hostname,
                     'displayname': worker.displayname,
                     'blockchain': worker.blockchain,
-                    'farming_status': worker.farming_status().lower(),
-                    'monitoring_status': worker.monitoring_status().lower()
+                    'farming_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.farming_status().lower()),
+                    'monitoring_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.monitoring_status().lower())
                 })
         filtered.sort(key=lambda w: w.displayname)
         return filtered
@@ -135,8 +145,8 @@ class WorkerSummary:
                     'hostname': worker.hostname,
                     'displayname': worker.displayname,
                     'blockchain': worker.blockchain,
-                    'farming_status': worker.farming_status().lower(),
-                    'monitoring_status': worker.monitoring_status().lower()
+                    'farming_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.farming_status().lower()),
+                    'monitoring_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.monitoring_status().lower())
                 })
         filtered.sort(key=lambda w: w.displayname)
         return filtered
@@ -157,8 +167,8 @@ class WorkerSummary:
                     'hostname': worker.hostname,
                     'displayname': worker.displayname,
                     'blockchain': worker.blockchain,
-                    'farming_status': worker.farming_status().lower(),
-                    'monitoring_status': worker.monitoring_status().lower()
+                    'farming_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.farming_status().lower()),
+                    'monitoring_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.monitoring_status().lower())
                 })
         filtered.sort(key=lambda w: w.displayname)
         return filtered

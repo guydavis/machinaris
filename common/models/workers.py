@@ -64,3 +64,11 @@ class Worker(db.Model):
                 return j.loads(self.services)['chiadog_status'] 
             except:
                 return "Unkown"
+    
+    def connection_status(self):
+        fifteen_mins_ago = dt.datetime.now() - dt.timedelta(minutes=15)
+        if self.ping_success_at and self.ping_success_at >= fifteen_mins_ago:
+            return self.latest_ping_result
+        elif self.latest_ping_result and self.latest_ping_result == 'Responding':
+            return "Unknown"
+        return self.latest_ping_result

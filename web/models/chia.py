@@ -18,12 +18,22 @@ class FarmSummary:
         self.farms = {}
         for farm_rec in farm_recs: 
             if farm_rec.mode == "fullnode":
+                try:
+                    app.logger.debug("Found worker with hostname '{0}'".format(farm_rec.hostname))
+                    wkr = w.get_worker(farm_rec.hostname, farm_rec.blockchain)
+                    displayname = wkr.displayname
+                    connection_status = wkr.connection_status()
+                except Exception as ex:
+                    app.logger.info(str(ex))
+                    app.logger.info("Unable to find a worker with hostname '{0}' and blockchain '{1}'".format(farm_rec.hostname, farm_rec.blockchain))
+                    displayname = farm_rec.hostname
+                    connection_status = None
                 farm = {
                     "plot_count": int(farm_rec.plot_count),
                     "plots_size": farm_rec.plots_size,
                     "plots_display_size": converters.gib_to_fmt(farm_rec.plots_size),
                     "status": farm_rec.status,
-                    "display_status": "Active" if farm_rec.status == "Farming" else farm_rec.status,
+                    "display_status": self.status_if_responding(displayname, farm_rec.blockchain, connection_status, farm_rec.status),
                     "total_coins": '0.0' if not farm_rec.total_coins else round(farm_rec.total_coins, 6),
                     "netspace_display_size": '?' if not farm_rec.netspace_size else converters.gib_to_fmt(farm_rec.netspace_size),
                     "netspace_size": farm_rec.netspace_size,
@@ -37,6 +47,12 @@ class FarmSummary:
                 app.logger.info("Stale farm status for {0} - {1}".format(farm_rec.hostname, farm_rec.blockchain))
         if len(self.farms) == 0:  # Handle completely missing farm summary info 
             self.farms['chia'] = {} # with empty chia farm
+
+    def status_if_responding(self, displayname, blockchain, connection_status, last_status):
+        if connection_status == 'Responding':
+            return "Active" if last_status == "Farming" else last_status
+        app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
+        return "Unknown"
 
 class FarmPlots:
 
@@ -126,6 +142,7 @@ class Keys:
             self.rows.append({ 
                 'displayname': displayname, 
                 'hostname': key.hostname,
+                'blockchain': key.blockchain,
                 'details': key.details,
                 'updated_at': key.updated_at }) 
 
