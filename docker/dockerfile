@@ -53,9 +53,11 @@ RUN \
 
 ######## build/runtime stage #########
 FROM package_stage
-# Base install of official Chia binaries at the given branch
 ARG CHIA_BRANCH
+ARG CHIVES_BRANCH
 ARG FLAX_BRANCH
+ARG HDDCOIN_BRANCH
+ARG NCHAIN_BRANCH
 
 # copy local files
 COPY . /machinaris/
@@ -63,16 +65,18 @@ COPY . /machinaris/
 # set workdir
 WORKDIR /chia-blockchain
 
-# Install Chia, Plotman, Chiadog, Madmax, Flax, Machinaris, etc
+# Install Chia (and forks), Plotman, Chiadog, Machinaris, etc
 RUN \
-	/usr/bin/bash /machinaris/scripts/chia_install.sh ${CHIA_BRANCH} \
+	/usr/bin/bash /machinaris/scripts/forks/chia_install.sh ${CHIA_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/chives_install.sh ${CHIVES_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/flax_install.sh ${FLAX_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/plotman_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/bladebit_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/flax_install.sh ${FLAX_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/flaxdog_install.sh \
 	&& rm -rf \
 		/root/.cache \
 		/tmp/* \
@@ -85,8 +89,8 @@ ENV keys="/root/.chia/mnemonic.txt"
 ENV plots_dir="/plots"
 # One of fullnode, farmer, harvester, plotter, farmer+plotter, harvester+plotter. Default is fullnode
 ENV mode="fullnode" 
-# Required is the 'chia' blockchain, but can optionally add 'flax' too. A comma-separated list.
-ENV blockchains="chia,flax"
+# The single blockchain to run: chia, flax, nchain, hddcoin, chives, etc
+ENV blockchains="chia"
 # If provided then these optional 3 public keys will be set in your plotman.yaml
 ENV farmer_pk="null"
 ENV pool_pk="null"
@@ -94,7 +98,6 @@ ENV pool_contract_address="null"
 # If mode=harvester, required for host and port the harvester will your farmer
 ENV farmer_address="null"
 ENV farmer_port="8447"
-ENV flax_farmer_port="6885"
 # Can override the location of default settings for api and web servers.
 ENV API_SETTINGS_FILE='/root/.chia/machinaris/config/api.cfg'
 ENV WEB_SETTINGS_FILE='/root/.chia/machinaris/config/web.cfg'
@@ -113,12 +116,24 @@ VOLUME [ "/id_rsa" ]
 
 # Chia protocol port - forward at router
 EXPOSE 8444
-# Chia RPC port - DO NOT forward at router
+# Chia farmer port - DO NOT forward at router
 EXPOSE 8447
 # Flax protocol port - forward at router
 EXPOSE 6888
-# Flax RPC port - DO NOT forward at router
+# Flax farmer port - DO NOT forward at router
 EXPOSE 6885
+# NChain protocol port - forward at router
+EXPOSE 58445
+# NChain farmer port - DO NOT forward at router
+EXPOSE 58448
+# HDDCoin protocol port - forward at router
+EXPOSE 28444
+# HDDCoin farmer port - DO NOT forward at router
+EXPOSE 28448
+# Chives protocol port - forward at router
+EXPOSE 9699
+# Chives farmer port - DO NOT forward at router
+EXPOSE 9647
 # Machinaris WebUI - DO NOT forward at router, proxy if needed
 EXPOSE 8926
 # Machinaris API - DO NOT forward at router

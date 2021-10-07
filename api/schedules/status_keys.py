@@ -23,13 +23,14 @@ def update():
     with app.app_context():
         try:
             hostname = utils.get_hostname()
-            public_keys = chia_cli.load_keys_show()
-            #app.logger.info(public_keys.text)
-            payload = {
-                "hostname": hostname,
-                "details": public_keys.text.replace('\r', ''),
-            }
-            utils.send_post('/keys/', payload, debug=False)
+            for blockchain in globals.enabled_blockchains():
+                public_keys = chia_cli.load_keys_show(blockchain)
+                payload = {
+                    "hostname": hostname,
+                    "blockchain": blockchain,
+                    "details": public_keys.text.replace('\r', ''),
+                }
+                utils.send_post('/keys/', payload, debug=False)
         except:
             app.logger.info("Failed to load and send public keys status.")
             app.logger.info(traceback.format_exc())

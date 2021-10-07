@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css">
     <title>Machinaris</title>
@@ -59,9 +59,16 @@
                         {% endif %}
                         {% if global_config.farming_enabled %}
                         <li>
-                            <a href="{{ url_for('network_blockchain') }}"
+                            <a href="{{ url_for('blockchains') }}"
                                 class="nav-link px-0 align-middle text-success">
-                                <i class="fs-4 bi-globe"></i> <span class="ms-1 d-none d-sm-inline">Network</span></a>
+                                <i class="fs-4 bi-link-45deg"></i> <span class="ms-1 d-none d-sm-inline">Blockchains</span></a>
+                        </li>
+                        {% endif %}
+                        {% if global_config.farming_enabled %}
+                        <li>
+                            <a href="{{ url_for('connections') }}"
+                                class="nav-link px-0 align-middle text-success">
+                                <i class="fs-4 bi-globe"></i> <span class="ms-1 d-none d-sm-inline">Connections</span></a>
                         </li>
                         {% endif %}
                         {% if global_config.farming_enabled %}
@@ -150,7 +157,7 @@
                             <small><i>Bladebit {{ global_config.bladebit_version }}</i></small>
                         </div>
                         <div class="col">
-                            <small><i>Chia™ {{ global_config.chia_version }}</i></small>
+                            <small><i>{{ global_config.enabled_blockchains[0] | capitalize }} {{ global_config.blockchain_version }}</i></small>
                         </div>
                         <div class="col">
                             <small><i>Chiadog {{ global_config.chiadog_version }}</i></small>
@@ -170,9 +177,8 @@
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>

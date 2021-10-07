@@ -27,54 +27,46 @@ def update():
             config = globals.load()
             payload = {
                 "hostname": hostname,
+                "blockchain": os.environ['blockchains'],
+                "port": app.config['WORKER_PORT'],
                 "displayname": displayname,
                 "mode": os.environ['mode'],
                 "services": gather_services_status(),
-                "url": utils.get_remote_url(),
+                "url": utils.get_worker_url(),
                 "config": json.dumps(config),
             }
-            utils.send_post('/workers/', payload, debug=False)
+            utils.send_post('/workers/{0}/{1}'.format(hostname, app.config['WORKER_PORT']), payload, debug=False)
         except:
             app.logger.info("Failed to load and send worker status.")
             app.logger.info(traceback.format_exc())
 
 def gather_services_status():
     gc = globals.load()
-    plotman_status = "disabled"
+    plotting_status = "disabled"
     if gc['plotting_enabled']:
         if plotman_cli.get_plotman_pid():
-            plotman_status = "running"
+            plotting_status = "running"
         else:
-            plotman_status = "stopped"
-    archiver_status = "disabled"
+            plotting_status = "stopped"
+    archiving_status = "disabled"
     if gc['archiving_enabled']:
         if plotman_cli.get_archiver_pid():
             archiver_status = "running"
         else:
             archiver_status = "stopped"
-    chia_farm_status = "disabled"
-    chiadog_status = "disabled"
-    if gc['farming_enabled']:
-        chia_farm_status = chia_cli.load_farm_summary('chia').status
-    if gc['farming_enabled'] or gc['harvesting_enabled']:
-        if chiadog_cli.get_chiadog_pid('chia'):
-            chiadog_status = "running"
-        else:
-            chiadog_status = "stopped"
-    flax_farm_status = "disabled"
-    flaxdog_status = "disabled"
-    if gc['farming_enabled'] and gc['flax_enabled']:
-        flax_farm_status = chia_cli.load_farm_summary('flax').status
-    if gc['flax_enabled'] and (gc['farming_enabled'] or gc['harvesting_enabled']):
-        if chiadog_cli.get_chiadog_pid('flax'):
-            flaxdog_status = "running"
-        else:
-            flaxdog_status = "stopped"
-    return json.dumps({
-        'plotman_status': plotman_status,
-        'archiver_status': archiver_status,
-        'chia_farm_status': chia_farm_status,
-        'chiadog_status': chiadog_status,
-        'flax_farm_status': flax_farm_status,
-        'flaxdog_status': flaxdog_status,
-    })
+    response = {
+        'plotting_status': plotting_status,
+        'archiving_status': archiving_status,
+    }
+    farming_status = "disabled"
+    monitoring_status = "disabled"
+    # Assumes a single blockchain is enabled in this container
+    for blockchain in globals.enabled_blockchains():
+        if gc['farming_enabled']:
+            response['farming_status'] = chia_cli.load_farm_summary(blockchain).status
+        if gc['farming_enabled'] or gc['harvesting_enabled']:
+            if chiadog_cli.get_chiadog_pid(blockchain):
+                response['monitoring_status'] = "running"
+            else:
+                response['monitoring_status'] = "stopped"
+    return json.dumps(response)

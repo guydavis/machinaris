@@ -24,7 +24,9 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 
 ## Blockchain Forks
 * [Flax](https://github.com/Flax-Network/flax-blockchain)
-* [Flaxdog](https://github.com/langhorst/flaxdog)
+* [NChain](https://gitee.com/ext9/ext9-blockchain)
+* [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain)
+* [Chives](https://github.com/HiveProject2021/chives-blockchain)
 
 ## Testers and Developers
 
@@ -59,6 +61,7 @@ A big thanks to all that contributed with dev and test including:
 * depasseg
 * sonicaj
 * OlivierLA75
+* jdoerrerstl1977
 
 ## Trademark Notice
 CHIA NETWORK INC, CHIA™, the CHIA BLOCKCHAIN™, the CHIA PROTOCOL™, CHIALISP™ and the “leaf Logo” (including the leaf logo alone when it refers to or indicates Chia), are trademarks or registered trademarks of Chia Network, Inc., a Delaware corporation.  *There is no affliation between this Machinaris project and the main Chia Network project.*

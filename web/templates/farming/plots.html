@@ -39,32 +39,22 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
                             aria-expanded="false" id="{{ farmer.hostname }}_btn">
-                            {{ farmer.displayname }}: {{farmer.farming_status}}
+                            {{ farmer.displayname }}
                         </button>
                         <ul class="dropdown-menu bg-dark btn-outline-success">
+                            {% for worker in farmer.workers %}
                             <li>
                                 <a class="dropdown-item text-white text-decoration-none" href="#"
-                                    onclick='ViewLogs("{{ farmer.hostname }}","chia");return false;'>
-                                    <i class="fs-4 bi-text-indent-left"></i>
-                                    <span class="align-text-bottom"></span>View Chia Log</span>
+                                    onclick='ViewLogs("{{ worker.hostname }}","{{worker.blockchain}}");return false;'>
+                                    <span class="align-text-bottom" style="padding-right:5px">{{worker.blockchain|capitalize}}</span>
+                                    {% if worker.farming_status == 'farming' %}
+                                        <i class="fs-4 bi-emoji-smile"></i>
+                                    {% else %}
+                                        <i class="fs-4 bi-exclamation-triangle"></i>
+                                    {% endif %}
                                 </a>
                             </li>
-                            {% if global_config.flax_enabled %}
-                            <li>
-                                <a class="dropdown-item text-white text-decoration-none" href="#"
-                                    onclick='ViewLogs("{{ farmer.hostname }}","flax");return false;'>
-                                    <i class="fs-4 bi-text-indent-left"></i>
-                                    <span class="align-text-bottom"></span>View Flax Log</span>
-                                </a>
-                            </li>
-                            {% endif %}
-                            <li>
-                                <a class="dropdown-item text-white text-decoration-none" href="#"
-                                    onclick='CheckPlots("{{ farmer.hostname }}");return false;'>
-                                    <i class="fs-4 bi-text-indent-left"></i>
-                                    <span class="align-text-bottom"></span>Check Plots</span>
-                                </a>
-                            </li>
+                            {% endfor %}
                         </ul>
                     </div>
                     {% endfor %}

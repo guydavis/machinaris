@@ -22,11 +22,7 @@ from api import utils
 def update():
     with app.app_context():
         try:
-            blockchains = ['chia']
-            # Flax doesn't support this yet.
-            #if globals.flax_enabled():  
-            #    blockchains.append('flax')
-            for blockchain in blockchains:
+            for blockchain in globals.enabled_blockchains():
                 hostname = utils.get_hostname()
                 points =  asyncio.run(chia.get_signage_points(blockchain))
                 payload = {

@@ -3,6 +3,7 @@
 #
 
 import datetime
+import json
 import os
 from flask.helpers import make_response
 import psutil
@@ -35,16 +36,7 @@ def load_plotting_summary(hostname=None):
     return PlottingSummary(plottings)
 
 def load_plotters():
-    plotters = []
-    for plotter in w.load_worker_summary().plotters:
-        plotters.append({
-            'hostname': plotter.hostname,
-            'displayname': plotter.displayname,
-            'plotting_status': plotter.plotting_status(),
-            'archiving_status': plotter.archiving_status(),
-            'archiving_enabled': plotter.archiving_enabled()
-        })
-    return sorted(plotters, key=lambda p: p['displayname'])
+    return w.load_worker_summary().plotters()
 
 def start_plotman(plotter):
     app.logger.info("Starting Plotman run...")
@@ -67,7 +59,7 @@ def action_plots(action, plot_ids):
     error_message = ""
     for hostname in plots_by_worker.keys():
         try:
-            plotter = w.get_worker_by_hostname(hostname)
+            plotter = w.get_worker(hostname)
             plot_ids = plots_by_worker[hostname]
             response = utils.send_post(plotter, "/actions/", debug=False,
                 payload={"service": "plotting","action": action, "plot_ids": plot_ids}

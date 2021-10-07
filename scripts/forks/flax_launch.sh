@@ -51,21 +51,29 @@ flax init --fix-ssl-permissions > /dev/null
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  flax start farmer
+  if [ ! -f ~/.flax/mainnet/config/ssl/wallet/public_wallet.key ]; then
+    echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+  else
+    flax start farmer
+  fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
-  flax start farmer-only
+  if [ ! -f ~/.flax/mainnet/config/ssl/wallet/public_wallet.key ]; then
+    echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+  else
+    flax start farmer-only
+  fi
 elif [[ ${mode} =~ ^harvester.* ]]; then
-  if [[ -z ${farmer_address} || -z ${flax_farmer_port} ]]; then
+  if [[ -z ${farmer_address} || -z ${farmer_port} ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
     if [ ! -f /root/.flax/farmer_ca/flax_ca.crt ]; then
       mkdir -p /root/.flax/farmer_ca
-      response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8927/certificates/?type=flax --output /tmp/certs.zip)
+      response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8928/certificates/?type=flax --output /tmp/certs.zip)
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.flax/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${controller_host}:8927/certificates/?type=flax.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${controller_host}:8928/certificates/?type=flax.  Try clicking 'New Worker' button on 'Workers' page first."
       fi
       rm -f /tmp/certs.zip 
     fi
@@ -77,7 +85,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "Did not find your farmer's certificates within /root/.flax/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
-    flax configure --set-farmer-peer ${farmer_address}:${flax_farmer_port}
+    flax configure --set-farmer-peer ${farmer_address}:${farmer_port}
     flax configure --enable-upnp false
     flax start harvester -r
   fi
