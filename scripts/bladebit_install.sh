@@ -13,6 +13,6 @@ cd /bladebit
 mkdir -p build && cd build
 cmake ..
 cmake --build . --target bladebit --config Release
-mv ./bladebit /usr/bin/bladebit
+make install
 cd .. && rm -r ./build
 echo "Bladebit version: "`bladebit --version`
