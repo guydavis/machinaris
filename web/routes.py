@@ -97,7 +97,7 @@ def plotting_workers():
 def farming_plots():
     if request.args.get('analyze'):  # Xhr with a plot filename
         plot_file = request.args.get('analyze')
-        plotters = worker.load_worker_summary().plotters
+        plotters = worker.load_worker_summary().plotters()
         return plotman.analyze(plot_file, plotters)
     elif request.args.get('check'):  # Xhr calling for check output
         w = worker.get_worker(request.args.get('hostname'))

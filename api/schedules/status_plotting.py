@@ -17,12 +17,14 @@ def update():
     with app.app_context():
         try:
             hostname = utils.get_hostname()
+            blockchain = globals.enabled_blockchains()[0]
             plotting_summary = plotman_cli.load_plotting_summary()
             payload = []
             for plot in plotting_summary.rows:
                 payload.append({
                     "plot_id": plot['plot_id'],
                     "hostname": hostname,
+                    "blockchain": blockchain,
                     "plotter": plot['plotter'],
                     "k": plot['k'],
                     "tmp": plot['tmp'],
@@ -38,9 +40,9 @@ def update():
                     "io": plot['io'],
                 })
             if len(payload) > 0:
-                utils.send_post('/plottings/', payload, debug=False)
+                utils.send_post('/plottings/{0}/{1}'.format(hostname, blockchain), payload, debug=False)
             else:
-                utils.send_delete('/plottings/{0}'.format(hostname), debug=False)
+                utils.send_delete('/plottings/{0}/{1}'.format(hostname, blockchain), debug=False)
         except:
             app.logger.info("Failed to load plotting summary and send.")
             app.logger.info(traceback.format_exc())

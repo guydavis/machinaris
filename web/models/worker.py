@@ -13,6 +13,25 @@ class Host:
         self.hostname = hostname 
         self.displayname = displayname
         self.workers = []
+    
+    def plotting_status(self):
+        status = "unknown"
+        for worker in self.workers:
+            if worker['plotting_status'] == 'running':
+                status = "running"
+            elif not status == 'running':
+                status = worker['plotting_status']
+        return status
+
+    def farming_status(self):
+        status = "unknown"
+        for worker in self.workers:
+            if worker['farming_status'] == 'farming':
+                status = "farming"
+            elif not status == 'farming':
+                status = worker['farming_status']
+        return status
+
 
 class WorkerSummary:
 
@@ -98,7 +117,10 @@ class WorkerSummary:
                     filtered.append(host)
                 host.workers.append({
                     'hostname': worker.hostname,
+                    'blockchain': worker.blockchain,
                     'displayname': worker.displayname,
+                    'connection_status': worker.connection_status(),
+                    'url': worker.url,
                     'plotting_status': worker.plotting_status(),
                     'archiving_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.archiving_status()),
                     'archiving_enabled': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.archiving_enabled()),

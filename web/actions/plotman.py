@@ -218,25 +218,28 @@ def save_config(plotter, config):
         else:
             flash("<pre>{0}</pre>".format(response.content.decode('utf-8')), 'danger')
 
-def analyze(plot_file, plotters):
+def analyze(plot_file, hosts):
     # Don't know which plotter might have the plot result so try them in-turn
-    for plotter in plotters:
-        if plotter.latest_ping_result != "Responding":
-            app.logger.info("Skipping analyze call to {0} as last ping was: {1}".format( \
-                plotter.hostname, plotter.latest_ping_result))
-            continue
-        try:
-            app.logger.info("Trying {0} for analyze....".format(plotter.hostname))
-            payload = {"service":"plotting", "action":"analyze", "plot_file": plot_file }
-            response = utils.send_post(plotter, "/analysis/", payload, debug=False)
-            if response.status_code == 200:
-                return response.content.decode('utf-8')
-            elif response.status_code == 404:
-                app.logger.info("Plotter on {0} did not have plot log for {1}".format(plotter.hostname, plot_file))
-            else:
-                app.logger.info("Plotter on {0} returned an unexpected error: {1}".format(plotter.hostname, response.status_code))
-        except:
-            app.logger.info(traceback.format_exc())
+    for plotter in hosts.workers:
+        if plotter.mode == 'fullmode' or 'plotter' in plotter.mode:
+            if plotter.latest_ping_result != "Responding":
+                app.logger.info("Skipping analyze call to {0} as last ping was: {1}".format( \
+                    plotter.hostname, plotter.latest_ping_result))
+                continue
+            try:
+                app.logger.info("Trying {0}:{1} for analyze....".format(plotter.hostname, plotter.port))
+                payload = {"service":"plotting", "action":"analyze", "plot_file": plot_file }
+                response = utils.send_post(plotter, "/analysis/", payload, debug=False)
+                if response.status_code == 200:
+                    return response.content.decode('utf-8')
+                elif response.status_code == 404:
+                    app.logger.info("Plotter on {0}:{1} did not have plot log for {1}".format(
+                        plotter.hostname, plotter.port, plot_file))
+                else:
+                    app.logger.info("Plotter on {0}:{1} returned an unexpected error: {1}".format(
+                        plotter.hostname, plotter.port, response.status_code))
+            except:
+                app.logger.info(traceback.format_exc())
     return make_response("Sorry, not plotting job log found.  Perhaps plot was made elsewhere?", 200)
 
 def load_plotting_keys():

@@ -22,6 +22,49 @@
     </div>
 </div>
 
+<div class="modal fade" id="startModal" tabindex="-1" aria-labelledby="startModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="startModalLabel">Start Plotting</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+                This action will start Plotman and launch a plotting run using your configured
+                plotter. Be careful about running more than one plotter on a single machine at a time. 
+                Continue?
+            </div>
+            <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" id="btnConfirmStart">
+                    Start
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="stopModal" tabindex="-1" aria-labelledby="stopModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="stopModalLabel">Stop Plotting</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+                This action will stop Plotman from launching new plotting jobs.  Running jobs will
+                run to completion. Continue?
+            </div>
+            <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" id="btnConfirmStop">
+                    Stop
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     a.active.nav-link {
         background-color: #3d3f42 !important
@@ -38,61 +81,34 @@
             </li>
         </ul>
         <form method="POST" id="plotman-form" style="padding-bottom: 10px;">
+            <input type="hidden" id="hostname" name="hostname" />
+            <input type="hidden" id="blockchain" name="blockchain" />
             <fieldset>
                 {% for plotter in plotters %}
                 <div class="btn-group">
                     <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false" id="{{ plotter.hostname }}_btn">
-                        {{ plotter.displayname }}: {{plotter.plotting_status}}
+                        {{ plotter.displayname }}: {{plotter.plotting_status()}}
                     </button>
                     <ul class="dropdown-menu bg-dark btn-outline-success">
+                        {% for worker in plotter.workers %}
                         <li>
-                            <a class="dropdown-item text-white text-decoration-none" href="#" {% if
-                                plotter.plotting_status=='stopped' %}
-                                onclick='PlottingAction("{{ plotter.hostname }}","plotting","start", "starting");return false;'>
-                                <i class="fs-4 bi-text-indent-left"></i>
-                                <span class="align-text-bottom">Start Plotting</span>
+                            <a class="dropdown-item text-white text-decoration-none" 
+                                data-bs-hostname="{{ plotter.hostname }}" 
+                                data-bs-blockchain="{{ worker.blockchain }}" 
+                                href="#" {% 
+                                if worker.plotting_status == 'stopped' %}
+                                data-bs-toggle="modal" data-bs-target="#startModal">
+                                <i class="fs-4 bi-play-circle"></i>
                                 {% else %}
-                                onclick='PlottingAction("{{ plotter.hostname }}","plotting","stop",
-                                "stopping");return false;'>
-                                <i class="fs-4 bi-text-indent-left"></i>
-                                <span class="align-text-bottom">Stop Plotting</span>
+                                data-bs-toggle="modal" data-bs-target="#stopModal">
+                                <i class="fs-4 bi-pause-circle"></i>
                                 {% endif %}
+                                &nbsp;
+                                <span class="align-text-bottom">{{ worker.blockchain }}</span>
                             </a>
                         </li>
-                        <li>
-                            <a class="dropdown-item text-white text-decoration-none" href="#"
-                                onclick='PlottingLogs("plotting", "{{ plotter.hostname }}");return false;'>
-                                <i class="fs-4 bi-text-indent-left"></i>
-                                <span class="align-text-bottom"></span>View Plotting Logs</span>
-                            </a>
-                        </li>
-                        {% if plotter.archiving_enabled %}
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li>
-                            <a class="dropdown-item text-white text-decoration-none" href="#" {% if
-                                plotter.archiving_status=='stopped' %}
-                                onclick='PlottingAction("{{ plotter.hostname }}","archiving","start", "starting");return false;'>
-                                <i class="fs-4 bi-text-indent-left"></i>
-                                <span class="align-text-bottom">Start Archiving</span>
-                                {% else %}
-                                onclick='PlottingAction("{{ plotter.hostname }}","archiving","stop",
-                                "stopping");return false;'>
-                                <i class="fs-4 bi-text-indent-left"></i>
-                                <span class="align-text-bottom">Stop Archiving</span>
-                                {% endif %}
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item text-white text-decoration-none" href="#"
-                                onclick='PlottingLogs("archiving", "{{ plotter.hostname }}");return false;'>
-                                <i class="fs-4 bi-text-indent-left"></i>
-                                <span class="align-text-bottom"></span>View Archiving Logs</span>
-                            </a>
-                        </li>
-                        {% endif %}
+                        {% endfor %}
                     </ul>
                 </div>
                 {% endfor %}
@@ -149,7 +165,6 @@
                 </table>
             </div>
 
-
             {% if plotting.rows|length > 0 %}
             <fieldset>
                 <button form="plotting-form" type="submit" name="action" value="suspend" class="btn btn-outline-success"
@@ -179,16 +194,6 @@
                 window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname, 'Plotman Log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
             }
         }
-        function PlottingAction(hostname, service, action, status) {
-            $("#" + hostname + "_btn").prop("disabled", true);
-            $("#" + hostname + "_btn").html(
-                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ' + hostname + ': ' + status + '...'
-            );
-            $('#plotman-form').append('<input type="hidden" id="action" name="action" value="' + action + '" />');
-            $('#plotman-form').append('<input type="hidden" id="service" name="service" value="' + service + '" />');
-            $('#plotman-form').append('<input type="hidden" id="hostname" name="hostname" value="' + hostname + '" />');
-            $("#plotman-form").submit();
-        }
         $(document).ready(function () {
             $('#data').DataTable({ "ordering": false, });
             $("#btnSuspend").click(function () {
@@ -214,6 +219,32 @@
                 );
                 $('#plotting-form').append('<input type="hidden" id="action" name="action" value="kill" />');
                 $("#plotting-form").submit();
+            });
+            $("#btnConfirmStart").click(function () {
+                $('#plotman-form').append('<input type="hidden" id="service" name="service" value="plotting" />');
+                $('#plotman-form').append('<input type="hidden" id="action" name="action" value="start" />');
+                $("#plotman-form").submit();
+            });
+            $("#btnConfirmStop").click(function () {
+                $('#plotman-form').append('<input type="hidden" id="service" name="service" value="plotting" />');
+                $('#plotman-form').append('<input type="hidden" id="action" name="action" value="stop" />');
+                $("#plotman-form").submit();
+            });
+            var startModal = document.getElementById('startModal')
+            startModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget
+                var hostname = button.getAttribute('data-bs-hostname')
+                var blockchain = button.getAttribute('data-bs-blockchain')
+                document.getElementById('hostname').value = hostname
+                document.getElementById('blockchain').value = blockchain
+            });
+            var stopModal = document.getElementById('stopModal')
+            stopModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget
+                var hostname = button.getAttribute('data-bs-hostname')
+                var blockchain = button.getAttribute('data-bs-blockchain')
+                document.getElementById('hostname').value = hostname
+                document.getElementById('blockchain').value = blockchain
             });
         });
     </script>

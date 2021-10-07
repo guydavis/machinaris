@@ -57,7 +57,7 @@ class FarmSummary:
 class FarmPlots:
 
      def __init__(self, plots):
-        self.columns = ['worker', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size' ]
+        self.columns = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size' ]
         self.rows = []
         displaynames = {}
         for plot in plots:
@@ -72,7 +72,8 @@ class FarmPlots:
                     displayname = plot.hostname
                 displaynames[plot.hostname] = displayname
             self.rows.append({ 
-                'hostname': plot.hostname, 
+                'hostname': plot.hostname,
+                'fork': plot.blockchain, 
                 'worker': displayname, 
                 'plot_id': plot.plot_id, 
                 'dir': plot.dir,  
@@ -223,15 +224,15 @@ class Connections:
         
     def blockchain_port(self,blockchain):
         if blockchain == 'chia':
-            return 8927
+            return 8444
         elif blockchain == 'flax':
-            return 8928
+            return 6668
         elif blockchain == 'nchain':
-            return 8929
+            return 9699
         elif blockchain == 'hddcoin':
-            return 8930
+            return 28444
         elif blockchain == 'chives':
-            return 8931
+            return 58445
         raise("Unknown blockchain fork of selected: " + blockchain)
 
     def parse(self, connection):

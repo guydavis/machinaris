@@ -44,7 +44,7 @@
             <td>{{worker.displayname}}</td>
           </tr>
           <tr>
-            <th scope="col" class="text-success">Blockchain</th>
+            <th scope="col" class="text-success">Fork</th>
             <td>{{worker.blockchain}}</td>
           </tr>
           <tr>
@@ -61,7 +61,7 @@
           </tr>
           <tr>
             <th scope="col" class="text-success">Local Time on Worker</th>
-            <td>{{worker.time_on_worker}}</td>
+            <td>{{worker.time_on_worker | timesecondstrimmer}}</td>
           </tr>
           <tr>
             <th scope="col" class="text-success">Last Ping to Worker</th>
