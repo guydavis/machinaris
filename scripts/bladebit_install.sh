@@ -7,12 +7,12 @@
 BLADEBIT_BRANCH=master
 
 cd /
-git clone --recursive --branch ${BLADEBIT_BRANCH} https://github.com/Chia-Network/bladebit.git
+git clone --recursive --branch ${BLADEBIT_BRANCH} https://github.com/harold-b/bladebit.git
 
 cd /bladebit
 mkdir -p build && cd build
 cmake ..
 cmake --build . --target bladebit --config Release
-ln -s /bladebit/build/bladebit /usr/bin/bladebit
-cd /
+make install
+cd .. && rm -r ./build
 echo "Bladebit version: "`bladebit --version`
