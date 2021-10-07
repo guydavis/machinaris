@@ -1,17 +1,6 @@
 # set ubuntu release version
 ARG UBUNTU_VER="hirsute"
 
-######## builder ###########
-FROM ubuntu:${UBUNTU_VER} as builder
-
-ARG DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update && apt-get install -y build-essential cmake libgmp-dev libnuma-dev libsodium-dev git
-
-COPY . /machinaris/
-
-RUN /usr/bin/bash /machinaris/scripts/madmax_install.sh && /usr/bin/bash /machinaris/scripts/bladebit_install.sh
-
 ######## packages stage ###########
 FROM ubuntu:${UBUNTU_VER} as package_stage
 
@@ -20,7 +9,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 # install build packages
 RUN \
 	apt-get update \
-	&& apt-get install --no-install-recommends -y \
+	&& apt-get install -y \
 		acl \
 		ansible \
 		apt \
@@ -47,12 +36,13 @@ RUN \
 		unzip \
 		vim \
 		wget \
+		cmake \
 		rsync \
 		iputils-ping \
-		libnuma1 \
-		libsodium23 \
-		libgmp10 \
-		libgmpxx4ldbl \
+		libgmp-dev \
+		libnuma-dev \
+		libsodium-dev \
+		g++ \
 	\
 # cleanup apt cache
 	\
@@ -75,14 +65,6 @@ COPY . /machinaris/
 # set workdir
 WORKDIR /chia-blockchain
 
-#copy compiled files/binaries
-COPY --from=builder /usr/bin/bladebit /usr/bin/bladebit 
-COPY --from=builder /usr/lib/chia-plotter /usr/lib/chia-plotter
-COPY --from=builder /usr/bin/chia_plot /usr/bin/chia_plot
-
-# Required for Chia blockchain install among others
-RUN apt-get update && apt-get install -y build-essential cmake
-
 # Install Chia (and forks), Plotman, Chiadog, Machinaris, etc
 RUN \
 	/usr/bin/bash /machinaris/scripts/forks/chia_install.sh ${CHIA_BRANCH} \
@@ -92,6 +74,8 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/plotman_install.sh \
+	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \
+	&& /usr/bin/bash /machinaris/scripts/bladebit_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
 	&& rm -rf \
 		/root/.cache \
@@ -132,23 +116,23 @@ VOLUME [ "/id_rsa" ]
 
 # Chia protocol port - forward at router
 EXPOSE 8444
-# Chia RPC port - DO NOT forward at router
+# Chia farmer port - DO NOT forward at router
 EXPOSE 8447
 # Flax protocol port - forward at router
 EXPOSE 6888
-# Flax RPC port - DO NOT forward at router
+# Flax farmer port - DO NOT forward at router
 EXPOSE 6885
 # NChain protocol port - forward at router
 EXPOSE 58445
-# NChain RPC port - DO NOT forward at router
+# NChain farmer port - DO NOT forward at router
 EXPOSE 58448
 # HDDCoin protocol port - forward at router
 EXPOSE 28444
-# HDDCoin RPC port - DO NOT forward at router
+# HDDCoin farmer port - DO NOT forward at router
 EXPOSE 28448
 # Chives protocol port - forward at router
 EXPOSE 9699
-# Chives RPC port - DO NOT forward at router
+# Chives farmer port - DO NOT forward at router
 EXPOSE 9647
 # Machinaris WebUI - DO NOT forward at router, proxy if needed
 EXPOSE 8926
