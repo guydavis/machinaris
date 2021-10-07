@@ -14,5 +14,6 @@ mkdir -p build && cd build
 cmake ..
 cmake --build . --target bladebit --config Release
 make install
+cp ./bladebit /usr/bin/bladebit
 cd .. && rm -r ./build
 echo "Bladebit version: "`bladebit --version`
