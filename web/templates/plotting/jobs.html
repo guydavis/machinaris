@@ -155,7 +155,7 @@
                             {% endfor %}
                             <td style="padding:0px">
                                 <!-- Careful, VS Code likes to wrap next line and break it. -->
-                                <a href="#" title="View Logs" onclick='PlottingLogs("plotting","{{ row['worker'] }}","{{ row['plot_id'] }}");return false;'>
+                                <a href="#" title="View Logs" onclick='PlottingLogs("plotting","{{ row['worker'] }}","{{ row['blockchain'] }}","{{ row['plot_id'] }}");return false;'>
                                     <i class="fs-4 bi-text-indent-left"></i>
                                 </a>
                             </td>
@@ -182,16 +182,16 @@
 
     {% block scripts %}
     <script>
-        function PlottingLogs(type, hostname, plot_id) {
+        function PlottingLogs(type, hostname, blockchain, plot_id) {
             var d = new Date();
             var height = 600;
             var width = 900;
             var top = (screen.height - height) / 2;
             var left = (screen.width - width) / 2;
             if (typeof plot_id !== 'undefined') {
-                window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname + "&log_id=" + plot_id, 'Plotman Log ' + plot_id + ' on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+                window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname + "&blockchain=" + blockchain + "&log_id=" + plot_id, 'Plotman Log ' + plot_id + ' on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
             } else {
-                window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname, 'Plotman Log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+                window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname + "&blockchain=" + blockchain, 'Plotman Log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
             }
         }
         $(document).ready(function () {

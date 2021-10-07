@@ -52,6 +52,6 @@ class PlottingByHostname(MethodView):
 
     @blp.etag
     @blp.response(204)
-    def delete(self, hostname):
-        db.session.query(Plotting).filter(Plotting.hostname==hostname).delete()
+    def delete(self, hostname, blockchain):
+        db.session.query(Plotting).filter(Plotting.hostname==hostname, Plotting.blockchain==blockchain).delete()
         db.session.commit()
