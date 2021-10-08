@@ -57,10 +57,11 @@ def action_plots(action, plot_ids):
     app.logger.info("About to {0} plots: {1}".format(action, plots_by_worker))
     error = False
     error_message = ""
-    for hostname in plots_by_worker.keys():
+    for hostname_blockchain in plots_by_worker.keys():
         try:
-            plotter = w.get_worker(hostname)
-            plot_ids = plots_by_worker[hostname]
+            [ hostname, blockchain] = hostname_blockchain.split('_')
+            plotter = w.get_worker(hostname, blockchain)
+            plot_ids = plots_by_worker[hostname_blockchain]
             response = utils.send_post(plotter, "/actions/", debug=False,
                 payload={"service": "plotting","action": action, "plot_ids": plot_ids}
             )
@@ -80,14 +81,14 @@ def group_plots_by_worker(plot_ids):
     plots_by_worker = {}
     all_plottings = load_plotting_summary()
     for plot_id in plot_ids:
-        hostname = None
+        hostname_blockchain = None
         for plot in all_plottings.rows:
             if plot['plot_id'] == plot_id:
-                hostname = plot['worker']
-        if hostname:
-            if not hostname in plots_by_worker:
-                plots_by_worker[hostname] = []
-            plots_by_worker[hostname].append(plot_id)
+                hostname_blockchain = plot['hostname'] + '_' + plot['blockchain']
+        if hostname_blockchain:
+            if not hostname_blockchain in plots_by_worker:
+                plots_by_worker[hostname_blockchain] = []
+            plots_by_worker[hostname_blockchain].append(plot_id)
     return plots_by_worker
 
 def stop_plotman(plotter):

@@ -40,9 +40,9 @@ def update():
                     "io": plot['io'],
                 })
             if len(payload) > 0:
-                utils.send_post('/plottings/{0}/{1}'.format(hostname, blockchain), payload, debug=True)
+                utils.send_post('/plottings/{0}/{1}'.format(hostname, blockchain), payload, debug=False)
             else:
-                utils.send_delete('/plottings/{0}/{1}'.format(hostname, blockchain), debug=True)
+                utils.send_delete('/plottings/{0}/{1}'.format(hostname, blockchain), debug=False)
         except:
             app.logger.info("Failed to load plotting summary and send.")
             app.logger.info(traceback.format_exc())

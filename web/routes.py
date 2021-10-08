@@ -2,6 +2,7 @@
 import pathlib
 import pytz
 import os
+import random
 import time
 
 from datetime import datetime
@@ -17,7 +18,8 @@ def landing():
     gc = globals.load()
     if not globals.is_setup():
         return redirect(url_for('setup'))
-    return render_template('landing.html')
+    msg = random.choice(list(open('web/static/landings.txt')))
+    return render_template('landing.html', random_message=msg)
 
 @app.route('/index')
 def index():

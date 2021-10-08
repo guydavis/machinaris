@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="modal fade" id="killModal" tabindex="-1" aria-labelledby="killModalLabel" aria-hidden="true">
+<div class="modal fade" id="killModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="killModalLabel" aria-hidden="true">
     <div class="modal-dialog bg-dark rounded-3">
         <div class="modal-content bg-dark">
             <div class="modal-header bg-dark">
@@ -11,10 +11,11 @@
             </div>
             <div class="modal-body bg-dark">
                 This action will terminate the selected plots, whether running or stopped, and delete all
-                their temporary files. Continue?
+                their temporary files. If Plotman is still running, another plot will be immediately started, 
+                so please stop Plotman first from the top-right. Continue?
             </div>
             <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelKill">Cancel</button>
                 <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" id="btnConfirmKill">Kill
                     Selected</button>
             </div>
@@ -22,7 +23,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="startModal" tabindex="-1" aria-labelledby="startModalLabel" aria-hidden="true">
+<div class="modal fade" id="startModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="startModalLabel" aria-hidden="true">
     <div class="modal-dialog bg-dark rounded-3">
         <div class="modal-content bg-dark">
             <div class="modal-header bg-dark">
@@ -35,8 +36,8 @@
                 Continue?
             </div>
             <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" id="btnConfirmStart">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStart">Cancel</button>
+                <button type="button" class="btn btn-outline-success" id="btnConfirmStart">
                     Start
                 </button>
             </div>
@@ -44,7 +45,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="stopModal" tabindex="-1" aria-labelledby="stopModalLabel" aria-hidden="true">
+<div class="modal fade" id="stopModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="stopModalLabel" aria-hidden="true">
     <div class="modal-dialog bg-dark rounded-3">
         <div class="modal-content bg-dark">
             <div class="modal-header bg-dark">
@@ -56,8 +57,8 @@
                 run to completion. Continue?
             </div>
             <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" id="btnConfirmStop">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStop">Cancel</button>
+                <button type="button" class="btn btn-outline-success" id="btnConfirmStop">
                     Stop
                 </button>
             </div>
@@ -194,6 +195,9 @@
                 window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname + "&blockchain=" + blockchain, 'Plotman Log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
             }
         }
+        function modal() {
+            $('#modal_spinner').modal('show');
+        }
         $(document).ready(function () {
             $('#data').DataTable({ "ordering": false, });
             $("#btnSuspend").click(function () {
@@ -213,6 +217,7 @@
                 $("#plotting-form").submit();
             });
             $("#btnConfirmKill").click(function () {
+                $("#btnCancelKill").prop("disabled", true);
                 $('#btnKill').prop("disabled", true);
                 $('#btnKill').html(
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Killing...`
@@ -221,11 +226,21 @@
                 $("#plotting-form").submit();
             });
             $("#btnConfirmStart").click(function () {
+                $("#btnCancelStart").prop("disabled", true);
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Starting...`
+                );
                 $('#plotman-form').append('<input type="hidden" id="service" name="service" value="plotting" />');
                 $('#plotman-form').append('<input type="hidden" id="action" name="action" value="start" />');
                 $("#plotman-form").submit();
             });
             $("#btnConfirmStop").click(function () {
+                $("#btnCancelStop").prop("disabled", true);
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Stopping...`
+                );
                 $('#plotman-form').append('<input type="hidden" id="service" name="service" value="plotting" />');
                 $('#plotman-form').append('<input type="hidden" id="action" name="action" value="stop" />');
                 $("#plotman-form").submit();
