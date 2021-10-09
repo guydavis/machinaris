@@ -1,4 +1,4 @@
-name: develop-flax
+name: test-flax
 
 on:
   push:

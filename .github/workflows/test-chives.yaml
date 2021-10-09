@@ -1,4 +1,4 @@
-name: develop-chives
+name: test-chives
 
 on:
   push:

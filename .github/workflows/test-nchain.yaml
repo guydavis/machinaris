@@ -1,4 +1,4 @@
-name: develop-nchain
+name: test-nchain
 
 on:
   push:
