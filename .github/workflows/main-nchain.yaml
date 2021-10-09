@@ -1,4 +1,4 @@
-name: main-nchain
+name: release-nchain
 
 on: 
   workflow_dispatch:

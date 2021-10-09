@@ -1,4 +1,4 @@
-name: main-hddcoin
+name: release-hddcoin
 
 on: 
   workflow_dispatch:
