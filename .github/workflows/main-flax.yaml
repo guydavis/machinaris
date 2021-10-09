@@ -1,4 +1,4 @@
-name: main-flax
+name: release-flax
 
 on: 
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: main-chives
+name: release-chives
 
 on: 
   workflow_dispatch:
