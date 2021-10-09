@@ -22,21 +22,10 @@ from web.models.chiadog import Alerts
 from . import worker as wk
 
 def load_config(farmer, blockchain):
-    return utils.send_get(farmer, "/configs/alerts?blockchain=" + blockchain, debug=False).content
+    return utils.send_get(farmer, "/configs/alerts/"+ blockchain, debug=False).content
 
 def load_farmers():
     return wk.load_worker_summary().farmers_harvesters()
-    worker_summary = wk.load_worker_summary()
-    farmers = []
-    for farmer in worker_summary.workers:
-        if (farmer in worker_summary.farmers) or (farmer in worker_summary.harvesters):
-            farmers.append({
-                'hostname': farmer.hostname,
-                'displayname': farmer.displayname,
-                'monitoring_status': farmer.monitoring_status().lower(),
-                'config': json.loads(farmer.config),
-            })
-    return farmers
 
 def save_config(farmer, blockchain, config):
     try: # Validate the YAML first

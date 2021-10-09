@@ -166,7 +166,7 @@ def load_config_replacements():
         replacements.append([ 'pool_contract_address:\s+REPLACE_WITH_THE_REAL_VALUE.*$', 'pool_contract_address: '+ pool_contract_address])
     return replacements
 
-def load_config(plotter):
+def load_config(plotter, blockchain):
     replacements = []
     try:
         replacements = load_config_replacements()
@@ -174,7 +174,7 @@ def load_config(plotter):
         app.logger.info("Unable to load replacements on install with mode={0}".format(os.environ['mode']))
         app.logger.info(traceback.format_exc())
     lines = []
-    config = utils.send_get(plotter, "/configs/plotting", debug=False).content.decode('utf-8')
+    config = utils.send_get(plotter, "/configs/plotting/" + blockchain, debug=False).content.decode('utf-8')
     replaces = 0
     for line in config.splitlines():
         for replacement in replacements:
@@ -200,7 +200,7 @@ def inspect_config(hostname, config):
     else:
          app.logger.info("Saving config to {0}, found a malformed config without a 'plotting' section.")
 
-def save_config(plotter, config):
+def save_config(plotter, blockchain, config):
     try: # Validate the YAML first
         c = yaml.safe_load(config)
         inspect_config(plotter.hostname, c)
@@ -209,7 +209,7 @@ def save_config(plotter, config):
         flash('Updated plotman.yaml failed validation! Fix and save or refresh page.', 'danger')
         flash(str(ex), 'warning')
     try:
-        response = utils.send_put(plotter, "/configs/plotting", config, debug=False)
+        response = utils.send_put(plotter, "/configs/plotting/" + blockchain, config, debug=False)
     except Exception as ex:
         flash('Failed to save config to plotter.  Please check log files.', 'danger')
         flash(str(ex), 'warning')
@@ -219,10 +219,11 @@ def save_config(plotter, config):
         else:
             flash("<pre>{0}</pre>".format(response.content.decode('utf-8')), 'danger')
 
-def analyze(plot_file, hosts):
+def analyze(plot_file, workers):
     # Don't know which plotter might have the plot result so try them in-turn
-    for plotter in hosts.workers:
-        if plotter.mode == 'fullmode' or 'plotter' in plotter.mode:
+    for plotter in workers:
+        #app.logger.info("{0}:{1} - {2} - {3}".format(plotter.hostname, plotter.port, plotter.blockchain, plotter.mode))
+        if plotter.mode == 'fullnode' or 'plotter' in plotter.mode:
             if plotter.latest_ping_result != "Responding":
                 app.logger.info("Skipping analyze call to {0} as last ping was: {1}".format( \
                     plotter.hostname, plotter.latest_ping_result))
@@ -234,10 +235,10 @@ def analyze(plot_file, hosts):
                 if response.status_code == 200:
                     return response.content.decode('utf-8')
                 elif response.status_code == 404:
-                    app.logger.info("Plotter on {0}:{1} did not have plot log for {1}".format(
+                    app.logger.info("Plotter on {0}:{1} did not have plot log for {2}".format(
                         plotter.hostname, plotter.port, plot_file))
                 else:
-                    app.logger.info("Plotter on {0}:{1} returned an unexpected error: {1}".format(
+                    app.logger.info("Plotter on {0}:{1} returned an unexpected error: {2}".format(
                         plotter.hostname, plotter.port, response.status_code))
             except:
                 app.logger.info(traceback.format_exc())

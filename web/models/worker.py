@@ -83,7 +83,7 @@ class WorkerSummary:
         if connection_status == "Responding":
             return last_status
         app.logger.info("Oops! {0} ({1}) last connection status: {2}".format(displayname, blockchain, connection_status))
-        return "Unknown"
+        return "Offline"
 
     def fullnodes(self):
         filtered = []
@@ -121,6 +121,7 @@ class WorkerSummary:
                     'displayname': worker.displayname,
                     'connection_status': worker.connection_status(),
                     'url': worker.url,
+                    'port': worker.port,
                     'plotting_status': worker.plotting_status(),
                     'archiving_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.archiving_status()),
                     'archiving_enabled': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.archiving_enabled()),

@@ -99,9 +99,9 @@ def plotting_workers():
 def farming_plots():
     if request.args.get('analyze'):  # Xhr with a plot filename
         plot_file = request.args.get('analyze')
-        plotters = worker.load_worker_summary().plotters()
-        return plotman.analyze(plot_file, plotters)
+        return plotman.analyze(plot_file, worker.load_worker_summary().workers)
     elif request.args.get('check'):  # Xhr calling for check output
+        # TODO Replace this with regular background plots check instead
         w = worker.get_worker(request.args.get('hostname'))
         first_load = request.args.get("first_load")
         return chia.check_plots(w, first_load)
@@ -216,13 +216,15 @@ def find_selected_worker(workers_summary, hostname, blockchain='chia'):
 @app.route('/settings/plotting', methods=['GET', 'POST'])
 def settings_plotting():
     selected_worker_hostname = None
+    blockchains = globals.enabled_blockchains()
+    selected_blockchain = blockchains[0]
     gc = globals.load()
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
-        plotman.save_config(worker.get_worker(selected_worker_hostname), request.form.get("config"))
+        plotman.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), request.form.get("config"))
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
-    return render_template('settings/plotting.html',
+    return render_template('settings/plotting.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
         workers=workers_summary.plotters, selected_worker=selected_worker, global_config=gc)
 
 @app.route('/settings/farming', methods=['GET', 'POST'])
@@ -272,15 +274,13 @@ def settings_pools():
 @app.route('/settings/config/<path:path>')
 def views_settings_config(path):
     config_type = request.args.get('type')
+    w = worker.get_worker(request.args.get('worker'), request.args.get('blockchain'))
     if config_type == "alerts":
-        w = worker.get_worker(request.args.get('worker'), request.args.get('blockchain'))
         response = make_response(chiadog.load_config(w, request.args.get('blockchain')), 200)
     elif config_type == "farming":
-        w = worker.get_worker(request.args.get('worker'), request.args.get('blockchain'))
         response = make_response(chia.load_config(w, request.args.get('blockchain')), 200)
     elif config_type == "plotting":
-        w = worker.get_worker(request.args.get('worker'))
-        [replaced, config] = plotman.load_config(w)
+        [replaced, config] = plotman.load_config(w, request.args.get('blockchain'))
         response = make_response(config, 200)
         response.headers.set('ConfigReplacementsOccurred', replaced)
     else:

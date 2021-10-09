@@ -50,23 +50,38 @@
         </div>
         <div class="row">
             <div class="col-4" style="margin-top:5px; margin-bottom:5px;">
-                {% if farmer.hostname in daily_summaries %}
-                <div class="h-100 p-2 text-white">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        {% for blockchain, summary in daily_summaries[farmer.hostname].items() %}
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="{{ farmer.displayname }}-{{ blockchain }}-tab" data-bs-toggle="tab" data-bs-target="#{{ farmer.displayname }}-{{ blockchain }}"
-                                type="button" role="tab" aria-controls="{{ farmer.displayname }}-{{ blockchain }}" aria-selected="true">{{ blockchain }}</button>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                    <div class="tab-content">
-                        {% for blockchain, summary in daily_summaries[farmer.hostname].items() %}
-                        <div class="tab-pane active" id="{{ farmer.displayname }}-{{ blockchain }}" role="tabpanel" aria-labelledby="{{ farmer.displayname }}-{{ blockchain }}-tab">
-                            <div style="white-space:pre-wrap; margin-bottom:0px; padding-bottom: 0px;">{{summary.message }}</div>
+                {% if farmer.displayname in daily_summaries %}
+                <div id="carousel-{{farmer.displayname}}" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for blockchain, summary in daily_summaries[farmer.displayname].items() %}
+                        <div class="carousel-item {% if blockchain == 'chia' %} active {% endif %}" data-bs-interval="10000">
+                            <h4 class="text-center">{{ blockchain|capitalize }} - Daily Summary</h4>
+                            {% if summary[0] %}
+                            <div style="white-space:pre-wrap;margin:10px;">{{ summary[0] }}</div>
+                            {% elif blockchain != "chia" %}
+                            <div style="margin:10px;">No daily summary found for {{ blockchain }} on {{farmer.displayname}}.
+                            <br/><br/>
+                            NOTE: During v0.6.0 development cycle, only alerts for the Chia fork are currently working.  
+                            Alerts for other forks like Flax, Chives, HDDCoin, and NChain are coming soon!
+                            </div>
+                            {% else %}
+                            <div style="margin:10px;">No daily summary found for {{ blockchain }} on {{farmer.displayname}}.
+                            <br/><br/>
+                            Please check that your Machinaris container for this fork is running. Also please verify 
+                            settings on the Alerts page.
+                            </div>
+                            {% endif %}
                         </div>
                         {% endfor %}
                     </div>
+                    <button class="carousel-control-prev" style="align-items: initial; justify-content: left; padding-top: 0px; width: 5%; height: 50px;" type="button" data-bs-target="#carousel-{{farmer.displayname}}" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                      </button>
+                      <button class="carousel-control-next" style="align-items: initial; justify-content: right; padding-top: 0px; width: 5%; height: 50px;" type="button" data-bs-target="#carousel-{{farmer.displayname}}" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                      </button>
                 </div>
                 {% endif %}
             </div>

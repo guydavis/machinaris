@@ -45,6 +45,11 @@
                         {% endfor %}
                     </select>
                 </div>
+                <label for="blockchain" class="col-sm-1 col-form-label-lg text-end p-1">Blockchain</label>
+                <div class="col-sm-3">
+                    <select id="blockchain" name="blockchain" class="form-select">
+                    </select>
+                </div>
             </div>
             <div class="mb-3" id="texteditor">
                 <textarea style="background: #D3D3D3;" class="form-control fs-6" id="config" name="config" rows="18"
@@ -62,10 +67,10 @@
     <script>
         $(document).ready(function () {
             $('#xhr_error').hide();
-            function load_config(worker) {
+            function load_config(worker, blockchain) {
                 jqxhr = $.ajax({
                     type: "GET",
-                    url: "{{ url_for('views_settings_config') }}?type=plotting&worker=" + worker,
+                    url: "{{ url_for('views_settings_config') }}?type=plotting&worker=" + worker + "&blockchain=" + blockchain,
                 })
                     .done(function (data) {
                         //console.log(data);
@@ -78,20 +83,47 @@
                         }
                         $("#config").val(data)
                     }).fail(function (jqXHR, textStatus, errorThrown) {
-                        console.log(jqXHR, textStatus, errorThrown);
+                        console.log("jqXHR, textStatus, errorThrown");
                     });
             }
+            update_blockchain_options("{{selected_worker.hostname}}");
             //Call the function when #input is clicked
             $(document).on("change", "#worker", function (e) {
-                load_config($("#worker").val())
+                load_config($("#worker").val(), $("#blockchain").val())
+            });
+            $(document).on("change", "#blockchain", function (e) {
+                load_config($("#worker").val(), $("#blockchain").val())
             });
             //Call the function when the page loads
-            load_config("{{selected_worker.hostname}}");
+            load_config("{{selected_worker.hostname}}", "{{selected_blockchain}}");
         });
 
-        function downloadConfig() {
+        function update_blockchain_options(hostname) {
+            var hostsMap = {};
+            {% for worker in workers() %}
+            hostsMap["{{worker.hostname}}"] = [
+                {% for container in worker.workers %} 
+                    "{{ container.blockchain }}",
+                {% endfor %}
+            ];
+            {% endfor %}
+
+            var $el = $("#blockchain");
+            $el.empty(); // remove old options
+            for (i in hostsMap[hostname]) {
+                var option = $("<option></option>").attr("value", hostsMap[hostname][i]);
+                if (hostsMap[hostname][i] == "{{ selected_blockchain }}") {
+                    option.attr("selected", "selected")
+                }
+                option.text(hostsMap[hostname][i]);
+                $el.append(option);
+            };
+        }
+
+       function downloadConfig() {
             worker = $("#worker").val()
-            window.location.href = '/settings/config/' + worker + '_plotman.yaml?type=plotting&worker=' + worker
+            blockchain = $("#blockchain").val()
+            window.location.href = '/settings/config/' + worker + '_' + blockchain + '_plotman.yaml?type=plotting&worker=' + worker + "&blockchain=" + blockchain
         }
     </script>
     {% endblock %}

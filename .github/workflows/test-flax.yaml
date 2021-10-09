@@ -42,5 +42,5 @@ jobs:
           build-args: |
             "FLAX_BRANCH=main"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-flax:develop
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-flax:develop
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-flax:test
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-flax:test

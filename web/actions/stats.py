@@ -126,18 +126,17 @@ def netspace_size_diff(since, blockchain):
     return result
 
 def load_daily_farming_summaries():
-    summary_by_worker = {}
+    summary_by_workers = {}
     since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
     for host in chia.load_farmers():
-        summary_by_worker[host.displayname] = {}
+        summary_by_workers[host.displayname] = {}
         for wk in host.workers:
-            summary_by_worker[wk['blockchain']] = daily_summaries(since_date, wk['hostname'], wk['displayname'], wk['blockchain']), 
-    return summary_by_worker
+            summary_by_workers[host.displayname][wk['blockchain']] = daily_summaries(since_date, wk['hostname'], wk['displayname'], wk['blockchain']), 
+    return summary_by_workers
 
 def daily_summaries(since, hostname, displayname, blockchain):
     result = None
     try:
-        #app.logger.debug(since)
         result = db.session.query(Alert).filter(
                 or_(Alert.hostname==hostname,Alert.hostname==displayname), 
                 Alert.blockchain==blockchain,
@@ -145,8 +144,11 @@ def daily_summaries(since, hostname, displayname, blockchain):
                 Alert.priority == "LOW",
                 Alert.service == "DAILY"
             ).order_by(Alert.created_at.desc()).first()
+        #app.logger.info("Daily for {0}-{1} is {2}".format(displayname, blockchain, result))
+        if result:
+            return result.message
     except Exception as ex:
-        app.logger.debug("Failed to query for latest daily summary for {0} - {1} because {2}".format(
+        app.logger.info("Failed to query for latest daily summary for {0} - {1} because {2}".format(
             hostname, blockchain, str(ex)))
     return result
 

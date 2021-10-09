@@ -70,5 +70,5 @@ class Worker(db.Model):
         if self.ping_success_at and self.ping_success_at >= fifteen_mins_ago:
             return self.latest_ping_result
         elif self.latest_ping_result and self.latest_ping_result == 'Responding':
-            return "Unknown"
+            return "Offline" # Was responding but over 15 minutes ago
         return self.latest_ping_result
