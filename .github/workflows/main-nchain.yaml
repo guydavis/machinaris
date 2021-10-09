@@ -1,9 +1,10 @@
-name: test-hddcoin
+name: main-nchain
 
-on:
-  push:
-    branches:
-      - 'integration'
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release Version' 
 
 jobs:
   docker:
@@ -40,7 +41,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
-            "HDDCOIN_BRANCH=main"
+            "NCHAIN_BRANCH=net9.dev"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-hddcoin:test
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-hddcoin:test
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-nchain
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-nchain

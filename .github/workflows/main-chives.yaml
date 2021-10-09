@@ -1,9 +1,10 @@
-name: test-hddcoin
+name: main-chives
 
-on:
-  push:
-    branches:
-      - 'integration'
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release Version' 
 
 jobs:
   docker:
@@ -40,7 +41,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
-            "HDDCOIN_BRANCH=main"
+            "CHIVES_BRANCH=main"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-hddcoin:test
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-hddcoin:test
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chives
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chives
