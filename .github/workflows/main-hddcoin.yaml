@@ -1,9 +1,10 @@
-name: test-hddcoin
+name: main-hddcoin
 
-on:
-  push:
-    branches:
-      - 'integration'
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release Version' 
 
 jobs:
   docker:
@@ -42,5 +43,5 @@ jobs:
           build-args: |
             "HDDCOIN_BRANCH=main"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-hddcoin:test
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-hddcoin:test
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-hddcoin
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-hddcoin
