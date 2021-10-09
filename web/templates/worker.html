@@ -36,16 +36,20 @@
       <table id="worker" class="table table-dark">
         <tbody>
           <tr>
-            <th scope="col" class="text-success">Hostname</th>
+            <th scope="col" class="text-success">IP Address</th>
             <td>{{worker.hostname}}</td>
+          </tr>
+          <tr>
+            <th scope="col" class="text-success">Hostname</th>
+            <td>{{worker.displayname}}</td>
+          </tr>
+          <tr>
+            <th scope="col" class="text-success">Fork</th>
+            <td>{{worker.blockchain}}</td>
           </tr>
           <tr>
             <th scope="col" class="text-success">Port</th>
             <td>{{worker.port}}</td>
-          </tr>
-          <tr>
-            <th scope="col" class="text-success">Display Name</th>
-            <td>{{worker.displayname}}</td>
           </tr>
           <tr>
             <th scope="col" class="text-success">System Type</th>
@@ -57,7 +61,7 @@
           </tr>
           <tr>
             <th scope="col" class="text-success">Local Time on Worker</th>
-            <td>{{worker.time_on_worker}}</td>
+            <td>{{worker.time_on_worker | timesecondstrimmer}}</td>
           </tr>
           <tr>
             <th scope="col" class="text-success">Last Ping to Worker</th>

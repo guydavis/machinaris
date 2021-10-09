@@ -1,4 +1,5 @@
 import json
+import locale
 import os
 import re
 import traceback
@@ -12,19 +13,44 @@ from common.utils import converters
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
 MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
+# Mapping of blockchains to currency symbols
+CURRENCY_SYMBOLS = {
+    "chia": "XCH",
+    "chives": "XCC",
+    "flax": "XFX",
+    "hddcoin": "HDD",
+    "nchain": "NCH",
+}
+
 class FarmSummary:
 
-    def __init__(self, farm_recs):
+    def __init__(self, farm_recs, wallet_recs):
         self.farms = {}
         for farm_rec in farm_recs: 
             if farm_rec.mode == "fullnode":
+                try:
+                    app.logger.debug("Found worker with hostname '{0}'".format(farm_rec.hostname))
+                    wkr = w.get_worker(farm_rec.hostname, farm_rec.blockchain)
+                    displayname = wkr.displayname
+                    connection_status = wkr.connection_status()
+                except Exception as ex:
+                    app.logger.info(str(ex))
+                    app.logger.info("Unable to find a worker with hostname '{0}' and blockchain '{1}'".format(farm_rec.hostname, farm_rec.blockchain))
+                    displayname = farm_rec.hostname
+                    connection_status = None
+                try:
+                    wallet_balance = self.sum_wallet_balance(wallet_recs, farm_rec.hostname, farm_rec.blockchain)
+                except: 
+                    wallet_balance = '?'
                 farm = {
                     "plot_count": int(farm_rec.plot_count),
                     "plots_size": farm_rec.plots_size,
                     "plots_display_size": converters.gib_to_fmt(farm_rec.plots_size),
                     "status": farm_rec.status,
-                    "display_status": "Active" if farm_rec.status == "Farming" else farm_rec.status,
+                    "display_status": self.status_if_responding(displayname, farm_rec.blockchain, connection_status, farm_rec.status),
                     "total_coins": '0.0' if not farm_rec.total_coins else round(farm_rec.total_coins, 6),
+                    "wallet_balance": wallet_balance,
+                    "currency_symbol": CURRENCY_SYMBOLS[farm_rec.blockchain],
                     "netspace_display_size": '?' if not farm_rec.netspace_size else converters.gib_to_fmt(farm_rec.netspace_size),
                     "netspace_size": farm_rec.netspace_size,
                     "expected_time_to_win": farm_rec.expected_time_to_win,
@@ -38,10 +64,36 @@ class FarmSummary:
         if len(self.farms) == 0:  # Handle completely missing farm summary info 
             self.farms['chia'] = {} # with empty chia farm
 
+    def status_if_responding(self, displayname, blockchain, connection_status, last_status):
+        if connection_status == 'Responding':
+            return "Active" if last_status == "Farming" else last_status
+        app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
+        return "Offline"
+    
+    def sum_wallet_balance(self, wallet_recs, hostname, blockchain):
+        numeric_const_pattern = '-Total\sBalance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
+        rx = re.compile(numeric_const_pattern, re.VERBOSE)
+        found_balance = False
+        sum = 0.0
+        for wallet_rec in wallet_recs:
+            if wallet_rec.hostname == hostname and wallet_rec.blockchain == blockchain:
+                try:
+                    for balance in rx.findall(wallet_rec.details):
+                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
+                        # wallet_rec.hostname, wallet_rec.blockchain))
+                        sum += locale.atof(balance)
+                        found_balance = True
+                except Exception as ex:
+                    app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
+                        wallet_rec.hostname, wallet_rec.blockchain, str(ex)))
+        if found_balance:
+            return round(sum, 6)
+        return '?'
+
 class FarmPlots:
 
      def __init__(self, plots):
-        self.columns = ['worker', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size' ]
+        self.columns = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size' ]
         self.rows = []
         displaynames = {}
         for plot in plots:
@@ -56,7 +108,8 @@ class FarmPlots:
                     displayname = plot.hostname
                 displaynames[plot.hostname] = displayname
             self.rows.append({ 
-                'hostname': plot.hostname, 
+                'hostname': plot.hostname,
+                'fork': plot.blockchain, 
                 'worker': displayname, 
                 'plot_id': plot.plot_id, 
                 'dir': plot.dir,  
@@ -126,6 +179,7 @@ class Keys:
             self.rows.append({ 
                 'displayname': displayname, 
                 'hostname': key.hostname,
+                'blockchain': key.blockchain,
                 'details': key.details,
                 'updated_at': key.updated_at }) 
 
@@ -206,15 +260,15 @@ class Connections:
         
     def blockchain_port(self,blockchain):
         if blockchain == 'chia':
-            return 8927
+            return 8444
         elif blockchain == 'flax':
-            return 8928
+            return 6668
         elif blockchain == 'nchain':
-            return 8929
+            return 9699
         elif blockchain == 'hddcoin':
-            return 8930
+            return 28444
         elif blockchain == 'chives':
-            return 8931
+            return 58445
         raise("Unknown blockchain fork of selected: " + blockchain)
 
     def parse(self, connection):

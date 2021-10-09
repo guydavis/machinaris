@@ -165,10 +165,10 @@ def stop_archiver():
     app.logger.info("Stopping Archiver run...")
     os.kill(get_archiver_pid(), signal.SIGTERM)
 
-def load_config():
+def load_config(blockchain):
     return open('/root/.chia/plotman/plotman.yaml','r').read()
 
-def save_config(config):
+def save_config(config, blockchain):
     # Validate the YAML first
     yaml.safe_load(config)
     # Save a copy of the old config file

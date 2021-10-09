@@ -37,19 +37,21 @@
 
         <div class="row align-items-md-stretch">
           <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-            <div class="h-100 p-2 text-white bg-dark rounded-3">
-              <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
-                data-html="true" title="{{ farms[blockchain].daily_diff.total_coins }}">{{farms[blockchain].total_coins }}</h4>
-              <h6 class="display-6 text-center">{{ blockchain|capitalize }} Farmed</h6>
+            <div class="h-20 p-2 bg-light border rounded-3">
+              <h6 class="display-6 text-center">Plotting:
+                <span {% if plotting.display_status=='Active' %} class="text-success" {% endif %}>
+                  {{ plotting.display_status }}
+                </span>
+              </h6>
             </div>
           </div>
           <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-            <div class="h-100 p-2 text-white bg-dark rounded-3"
-              style="padding-top:12px !important; padding-bottom:12px !important;">
-              <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
-                data-html="true" title="{{ farms[blockchain].daily_diff.netspace_size }}">{{farms[blockchain].netspace_display_size }}
-              </h4>
-              <h6 class="display-6 text-center">{{ blockchain|capitalize }} Netspace</h6>
+            <div class="h-20 p-2 bg-light border rounded-3">
+              <h6 class="display-6 text-center">Farming:
+                <span {% if farms[blockchain].display_status=='Active' %} class="text-success" {% endif %}>
+                  {{ farms[blockchain].display_status }}
+                </span>
+              </h6>
             </div>
           </div>
         </div>
@@ -72,22 +74,27 @@
         </div>
 
         <div class="row align-items-md-stretch">
-          <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-            <div class="h-20 p-2 bg-light border rounded-3">
-              <h6 class="display-6 text-center">Plotting:
-                <span {% if plotting.display_status=='Active' %} class="text-success" {% endif %}>
-                  {{ plotting.display_status }}
-                </span>
-              </h6>
+          <div class="col-md-4" style="margin-top:5px; margin-bottom:5px;">
+            <div class="h-100 p-2 text-white bg-dark rounded-3">
+              <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
+                data-html="true" title="{{ farms[blockchain].daily_diff.wallet_balance }}">{{farms[blockchain].wallet_balance }}</h4>
+              <h6 class="display-6 text-center">{{ farms[blockchain].currency_symbol }} Balance</h6>
             </div>
           </div>
-          <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-            <div class="h-20 p-2 bg-light border rounded-3">
-              <h6 class="display-6 text-center">Farming:
-                <span {% if farms[blockchain].display_status=='Active' %} class="text-success" {% endif %}>
-                  {{ farms[blockchain].display_status }}
-                </span>
-              </h6>
+          <div class="col-md-4" style="margin-top:5px; margin-bottom:5px;">
+            <div class="h-100 p-2 text-white bg-dark rounded-3">
+              <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
+                data-html="true" title="{{ farms[blockchain].daily_diff.total_coins }}">{{farms[blockchain].total_coins }}</h4>
+              <h6 class="display-6 text-center">{{ farms[blockchain].currency_symbol }} Farmed</h6>
+            </div>
+          </div>
+          <div class="col-md-4" style="margin-top:5px; margin-bottom:5px;">
+            <div class="h-100 p-2 text-white bg-dark rounded-3"
+              style="padding-top:12px !important; padding-bottom:12px !important;">
+              <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
+                data-html="true" title="{{ farms[blockchain].daily_diff.netspace_size }}">{{farms[blockchain].netspace_display_size }}
+              </h4>
+              <h6 class="display-6 text-center">{{ blockchain|capitalize }} Netspace</h6>
             </div>
           </div>
         </div>

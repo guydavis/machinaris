@@ -54,6 +54,15 @@ def datetimefilter(value, format="%Y-%m-%d %H:%M"):
 
 app.jinja_env.filters['datetimefilter'] = datetimefilter
 
+def timesecondstrimmer(value):
+    if value:
+        #app.logger.info("{0} => {1}".format(value, value.strftime(format)))
+        return value[:value.rindex(':')]
+    else:
+        return ""
+
+app.jinja_env.filters['timesecondstrimmer'] = timesecondstrimmer
+
 def plotnameshortener(value):
     #app.logger.info("Shorten: {0}".format(value))
     match = re.match("plot-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", value)

@@ -34,6 +34,7 @@ class PlottingSummary:
                 displayname = plotting.hostname
             self.rows.append({
                 'hostname': plotting.hostname,
+                'blockchain': plotting.blockchain,
                 'worker': displayname,
                 'plotter': plotting.plotter,
                 'plot_id': plotting.plot_id,

@@ -33,12 +33,20 @@ def get_plot_attrs(plot_id, filename):
 def update():
     global last_full_send_time
     with app.app_context():
+        since = (datetime.datetime.now() - datetime.timedelta(minutes=FULL_SEND_INTERVAL_MINS)).strftime("%Y-%m-%d %H:%M")
+        if not last_full_send_time or last_full_send_time <= \
+            (datetime.datetime.now() - datetime.timedelta(minutes=FULL_SEND_INTERVAL_MINS)):
+            since = None  # No since filter sends all plots, not just recent
+            last_full_send_time = datetime.datetime.now()
+        if 'chia' in globals.enabled_blockchains():
+            update_chia_plots(since)
+        elif 'chives' in globals.enabled_blockchains():
+            update_chives_plots(since)
+        else:
+            app.logger.debug("Skipping plots update from blockchains other than chia and chives as they all farm same as chia.")
+
+def update_chia_plots(since):
         try:
-            since = (datetime.datetime.now() - datetime.timedelta(minutes=FULL_SEND_INTERVAL_MINS)).strftime("%Y-%m-%d %H:%M")
-            if not last_full_send_time or last_full_send_time <= \
-                (datetime.datetime.now() - datetime.timedelta(minutes=FULL_SEND_INTERVAL_MINS)):
-                since = None  # No since filter sends all plots, not just recent
-                last_full_send_time = datetime.datetime.now()
             controller_hostname = utils.get_hostname()
             plots_farming = chia.get_all_plots()
             payload = []
@@ -47,6 +55,7 @@ def update():
                 if not since or created_at > since:
                     payload.append({
                         "plot_id": short_plot_id,
+                        "blockchain": 'chia',
                         # '172.17.0.2' was weird non-local IP on OlivierLA75's Docker setup, inside his container
                         "hostname": controller_hostname if plot['hostname'] in ['127.0.0.1' , '172.17.0.2']  else plot['hostname'],
                         "dir": dir,
@@ -65,3 +74,7 @@ def update():
         except:
             app.logger.info("Failed to load plots farming and send.")
             app.logger.info(traceback.format_exc())
+
+def update_chives_plots(since):
+    # TODO Must do old approach of looking on disk
+    pass

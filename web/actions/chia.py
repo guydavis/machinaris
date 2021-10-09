@@ -35,7 +35,8 @@ from . import worker as wk
 
 def load_farm_summary():
     farms = db.session.query(f.Farm).order_by(f.Farm.hostname).all()
-    return FarmSummary(farms)
+    wallets = db.session.query(w.Wallet).order_by(w.Wallet.blockchain).all()
+    return FarmSummary(farms, wallets)
 
 def load_plots_farming(hostname=None):
     query = db.session.query(p.Plot).order_by(p.Plot.created_at.desc())
@@ -88,7 +89,7 @@ def load_farmers():
     return wk.load_worker_summary().farmers_harvesters()
 
 def load_config(farmer, blockchain):
-    return utils.send_get(farmer, "/configs/farming?blockchain=" + blockchain, debug=False).content
+    return utils.send_get(farmer, "/configs/farming/"+ blockchain, debug=False).content
 
 def save_config(farmer, blockchain, config):
     try: # Validate the YAML first
@@ -105,6 +106,7 @@ def save_config(farmer, blockchain, config):
     else:
         flash('Nice! Chia\'s config.yaml validated and saved successfully.', 'success')
 
+# TODO Must extract this over to API-side for remote connection add on other fork fullnodes
 def add_connection(connection, blockchain):
     binary = globals.get_chia_binary(blockchain)
     try:
