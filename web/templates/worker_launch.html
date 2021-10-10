@@ -136,6 +136,45 @@
                 $('#errors').hide();
             }
         }
+
+        function lookup_worker_port(blockchain) {
+            if (blockchain == 'chia') {
+                return 8927;
+            }
+            if (blockchain == 'flax') {
+                return 8928;
+            }
+            if (blockchain == 'nchain') {
+                return 8929;
+            }
+            if (blockchain == 'hddcoin') {
+                return 8930;
+            }
+            if (blockchain == 'chives') {
+                return 8931;
+            }
+            alert("Unknown blockchain fork of selected: " + blockchain);
+        }
+
+        function lookup_farmer_port(blockchain) {
+            if (blockchain == 'chia') {
+                return 8447;
+            }
+            if (blockchain == 'flax') {
+                return 6885;
+            }
+            if (blockchain == 'nchain') {
+                return 58448;
+            }
+            if (blockchain == 'hddcoin') {
+                return 28448;
+            }
+            if (blockchain == 'chives') {
+                return 9647;
+            }
+            alert("Unknown blockchain fork of selected: " + blockchain);
+        }
+
         function updateDockerCompose(errors) {
             var line_end = '\n';
             var os = getRadioButtonValue('os')
@@ -194,7 +233,8 @@
                     if (document.getElementById('mode-harvester').checked) {
                         mode = "harvester";
                         cmd += '            - farmer_address=' + document.getElementById("controller_host").value + line_end;
-                        cmd += '            - farmer_port=8447' + line_end; // TODO Look up farmer port by blockchain type
+                        var farmer_port = lookup_farmer_port(blockchain);
+                        cmd += '            - farmer_port=' + farmer_port + line_end;
                     }
                     if (document.getElementById('mode-plotter').checked) {
                         if (mode) {
@@ -227,16 +267,11 @@
                         cmd += '            - AUTO_PLOT=' + auto_plot + line_end;
                     }
                     cmd += '        ports:' + line_end;
-                    cmd += '            - 8926:8926' + line_end;
-                    cmd += '            - 8927:8927' + line_end;
-                    if (!mode) {  // Defaults to fullnode
-                        cmd += '            - 8444:8444' + line_end;
-                        cmd += '            - 8447:8447' + line_end;
-                        if (document.getElementById("blockchain-flax").checked) {
-                            cmd += '            - 6888:6888' + line_end;
-                            cmd += '            - 6885:6885' + line_end;
-                        }
+                    if (blockchain == "chia") {
+                        cmd += '            - 8926:8926' + line_end;
                     }
+                    var worker_port = lookup_worker_port(blockchain);
+                    cmd += '            - ' + worker_port + ':' + worker_port + line_end;
                     cmd += line_end;
                 }
             }
