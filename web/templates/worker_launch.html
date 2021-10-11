@@ -260,6 +260,8 @@
                     else if (i == 0) {
                         errors.push("Missing worker IP address.  Please provide the IP the conntroller will connect to for commands.");
                     }
+                    var worker_port = lookup_worker_port(blockchain);
+                    cmd += '            - worker_api_port=' + worker_port + line_end;
                     cmd += '            - plots_dir=' + plots_dir.join(':') + line_end;
                     cmd += '            - blockchains=' + blockchain + line_end;
                     var auto_plot = getRadioButtonValue('auto_plot');
