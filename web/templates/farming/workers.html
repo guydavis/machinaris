@@ -51,7 +51,7 @@
         <div class="row">
             <div class="col-4" style="margin-top:5px; margin-bottom:5px;">
                 {% if farmer.displayname in daily_summaries %}
-                <div id="carousel-{{farmer.displayname}}" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                <div id="carousel-{{farmer.displayname}}" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         {% for blockchain, summary in daily_summaries[farmer.displayname].items() %}
                         <div class="carousel-item {% if blockchain == 'chia' %} active {% endif %}" data-bs-interval="10000">

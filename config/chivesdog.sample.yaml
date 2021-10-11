@@ -6,7 +6,7 @@ log_level: INFO
 # Only one consumer can be enabled at a time, you can
 # delete the section for the consumer which you aren't using
 # DON'T CHANGE file_path IT'S ALREADY SET IN-CONTAINER FOR MACHINARIS!
-flax_logs:
+chia_logs:
   file_log_consumer:
     enable: true
     file_path: '~/.chives/mainnet/log/debug.log'
@@ -49,7 +49,7 @@ notifier:
     daily_stats: true
     wallet_events: true
     credentials:
-      sender: 'flax@example.com'
+      sender: 'chives@example.com'
       sender_name: 'chivesdog'
       recipient: 'you@example.com'
       username_smtp: 'username'

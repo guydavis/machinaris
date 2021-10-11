@@ -221,7 +221,7 @@ def settings_plotting():
     gc = globals.load()
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
-        plotman.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), request.form.get("config"))
+        plotman.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
     return render_template('settings/plotting.html', blockchains=blockchains, selected_blockchain=selected_blockchain,

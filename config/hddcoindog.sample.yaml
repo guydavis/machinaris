@@ -49,7 +49,7 @@ notifier:
     daily_stats: true
     wallet_events: true
     credentials:
-      sender: 'flax@example.com'
+      sender: 'hddcoin@example.com'
       sender_name: 'hddcoindog'
       recipient: 'you@example.com'
       username_smtp: 'username'
