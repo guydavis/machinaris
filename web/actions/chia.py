@@ -106,32 +106,6 @@ def save_config(farmer, blockchain, config):
     else:
         flash('Nice! Chia\'s config.yaml validated and saved successfully.', 'success')
 
-# TODO Must extract this over to API-side for remote connection add on other fork fullnodes
-def add_connection(connection, blockchain):
-    binary = globals.get_chia_binary(blockchain)
-    try:
-        hostname,port = connection.split(':')
-        if socket.gethostbyname(hostname) == hostname:
-            app.logger.info('{} is a valid IP address'.format(hostname))
-        elif socket.gethostbyname(hostname) != hostname:
-            app.logger.info('{} is a valid hostname'.format(hostname))
-        proc = Popen("{0} show --add-connection {1}".format(binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
-        try:
-            outs, errs = proc.communicate(timeout=90)
-        except TimeoutExpired:
-            proc.kill()
-            proc.communicate()
-            abort(500, description="The timeout is expired!")
-        if errs:
-            abort(500, description=errs.decode('utf-8'))
-    except Exception as ex:
-        app.logger.info(traceback.format_exc())
-        flash('Invalid connection "{0}" provided.  Must be HOST:PORT.'.format(connection), 'danger')
-        flash(str(ex), 'warning')
-    else:
-        app.logger.info("{0}".format(outs.decode('utf-8')))
-        flash('Nice! Connection added to Chia and sync engaging!', 'success')
-
 def generate_key(key_path, blockchain):
     chia_binary = globals.get_chia_binary(blockchain)
     if os.path.exists(key_path) and os.stat(key_path).st_size > 0:
@@ -256,26 +230,44 @@ def import_key(key_path, mnemonic, blockchain):
             'details.', 'success')
     return True
 
-def remove_connection(node_ids, blockchain):
-    chia_binary = globals.get_chia_binary(blockchain)
-    app.logger.debug("About to remove connection for nodeid: {0}".format(node_ids))
-    for node_id in node_ids:
-        try:
-            proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
-            try:
-                outs, errs = proc.communicate(timeout=5)
-            except TimeoutExpired:
-                proc.kill()
-                proc.communicate()
-                flash("Timeout attempting to remove selected fullnode connections. See server log.", 'error')
-            if errs:
-                app.logger.error(errs.decode('utf-8'))
-                flash("Error attempting to remove selected fullnode connections. See server log.", 'error')
-            if outs:
-                app.logger.debug(outs.decode('utf-8'))
-        except Exception as ex:
-            app.logger.info(traceback.format_exc())
-    flash("Successfully removed selected connections.", 'success')
+def add_connection(connection, hostname, blockchain):
+    try:
+        host,port = connection.split(':')
+        if socket.gethostbyname(host) == host:
+            app.logger.info('{} is a valid IP address'.format(host))
+        elif socket.gethostbyname(host) != host:
+            app.logger.info('{} is a valid host'.format(hostname))
+        farmer = wk.get_worker(hostname, blockchain)
+        utils.send_post(farmer, "/actions/", \
+            { 'service': 'networking', 'action': 'add_connection', 'blockchain': blockchain, 'connection': connection}, \
+            debug=False).content
+    except requests.exceptions.RequestException as e:
+        app.logger.info(traceback.format_exc())
+        flash('Failed to connect to worker to add connection. Please check logs.', 'danger')
+        flash(str(e), 'warning')
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+        flash('Invalid connection "{0}" provided.  Must be HOST:PORT.'.format(connection), 'danger')
+        flash(str(ex), 'warning')
+    else:
+        flash('Connection added to {0} and sync engaging!'.format(blockchain), 'success')
+
+def remove_connection(node_ids, hostname, blockchain):
+    try:
+        farmer = wk.get_worker(hostname, blockchain)
+        utils.send_post(farmer, "/actions/", \
+            { 'service': 'networking', 'action':'remove_connection', 'blockchain': blockchain, 'node_ids': node_ids }, \
+            debug=False).content
+    except requests.exceptions.RequestException as e:
+        app.logger.info(traceback.format_exc())
+        flash('Failed to connect to worker to add connection. Please check logs.', 'danger')
+        flash(str(e), 'warning')
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+        flash('Unknown error occurred attempting to remove connections. Please check logs.', 'danger')
+        flash(str(ex), 'warning')
+    else:
+        flash('Connection removed from {0}!'.format(blockchain), 'success')
 
 def check_plots(worker, first_load):
     try:

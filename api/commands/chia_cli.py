@@ -53,7 +53,6 @@ def load_plots_farming():
         except:
             app.logger.info("Failed to list files at {0}".format(dir_path))
             app.logger.info(traceback.format_exc())
-            flash('Unable to list plots at {0}.  Did you mount your plots directories?'.format(dir_path), 'danger')
     all_entries = sorted(all_entries, key=lambda entry: entry[0], reverse=True)
     plots_farming = chia.FarmPlots(all_entries)
     return plots_farming
@@ -149,31 +148,6 @@ def load_connections_show(blockchain):
         abort(500, description=errs.decode('utf-8'))
     return chia.Connections(outs.decode('utf-8').splitlines())
 
-def add_connection(connection, blockchain):
-    chia_binary = globals.get_blockchain_binary(blockchain)
-    try:
-        hostname,port = connection.split(':')
-        if socket.gethostbyname(hostname) == hostname:
-            app.logger.debug('{} is a valid IP address'.format(hostname))
-        elif socket.gethostbyname(hostname) != hostname:
-            app.logger.debug('{} is a valid hostname'.format(hostname))
-        proc = Popen("{0} show --add-connection {1}".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
-        try:
-            outs, errs = proc.communicate(timeout=90)
-        except TimeoutExpired:
-            proc.kill()
-            proc.communicate()
-            abort(500, description="The timeout is expired!")
-        if errs:
-            abort(500, description=errs.decode('utf-8'))
-    except Exception as ex:
-        app.logger.info(traceback.format_exc())
-        flash('Invalid connection "{0}" provided.  Must be HOST:PORT.'.format(connection), 'danger')
-        flash(str(ex), 'warning')
-    else:
-        app.logger.info("{0}".format(outs.decode('utf-8')))
-        flash('Nice! Connection added to Chia and sync engaging!', 'success')
-
 def load_keys_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     proc = Popen("{0} keys show".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
@@ -186,55 +160,6 @@ def load_keys_show(blockchain):
     if errs:
         abort(500, description=errs.decode('utf-8'))
     return chia.Keys(outs.decode('utf-8').splitlines())
-
-def generate_key(key_path, blockchain):
-    chia_binary = globals.get_blockchain_binary(blockchain)
-    if os.path.exists(key_path) and os.stat(key_path).st_size > 0:
-        app.logger.info('Skipping key generation as file exists and is NOT empty! {0}'.format(key_path))
-        flash('Skipping key generation as file exists and is NOT empty!', 'danger')
-        flash('key_path={0}'.format(key_path), 'warning')
-        return False
-    proc = Popen("{0} keys generate".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
-    try:
-        outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-        app.logger.info(traceback.format_exc())
-        flash('Timed out while generating keys!', 'danger')
-        flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash('Unable to generate keys!', 'danger')
-        return False
-    proc = Popen("{0} keys show --show-mnemonic-seed | tail -n 1 > {1}".format(CHIA_BINARY, key_path), stdout=PIPE, stderr=PIPE, shell=True)
-    try:
-        outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-        app.logger.info(traceback.format_exc())
-        flash('Timed out while generating keys!', 'danger')
-        flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash('Unable to save mnemonic to {0}'.format(key_path), 'danger')
-        return False
-    else:
-        #app.logger.info("Store mnemonic output: {0}".format(outs.decode('utf-8')))
-        try:
-            mnemonic_words = open(key_path,'r').read().split()
-            if len(mnemonic_words) != 24:
-                flash('{0} does not contain a 24-word mnemonic!'.format(key_path), 'danger')
-                return False
-        except:
-                flash('{0} was unreadable or not found.'.format(key_path), 'danger')
-                return False
-        flash('Welcome! A new key has been generated at {0}. Keep it secret! Keep it safe!'.format(key_path), 'success')
-        flash('{0}'.format(" ".join(mnemonic_words)), 'info')
-        start_farmer('chia')
 
 def start_farmer(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
@@ -308,3 +233,58 @@ def get_pool_login_link(launcher_id):
     except Exception as ex:
         app.logger.info("Failed to get_login_link: {0}".format(str(ex)))
     return ""
+
+def dispatch_action(job):
+    service = job['service']
+    action = job['action']
+    blockchain = job['blockchain']
+    if service == 'networking':
+        if action == "add_connection":
+            add_connection(job['connection'], blockchain)
+        elif action == "remove_connection":
+            remove_connection(job['node_ids'], blockchain)
+
+def add_connection(connection, blockchain):
+    chia_binary = globals.get_blockchain_binary(blockchain)
+    try:
+        hostname,port = connection.split(':')
+        if socket.gethostbyname(hostname) == hostname:
+            app.logger.debug('{} is a valid IP address'.format(hostname))
+        elif socket.gethostbyname(hostname) != hostname:
+            app.logger.debug('{} is a valid hostname'.format(hostname))
+        proc = Popen("{0} show --add-connection {1}".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
+        try:
+            outs, errs = proc.communicate(timeout=90)
+        except TimeoutExpired:
+            proc.kill()
+            proc.communicate()
+            abort(500, description="The timeout is expired!")
+        if errs:
+            abort(500, description=errs.decode('utf-8'))
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+        app.logger.info('Invalid connection "{0}" provided.  Must be HOST:PORT.'.format(connection))
+    else:
+        app.logger.info("{0}".format(outs.decode('utf-8')))
+        app.logger.info('Connection added to Chia and sync engaging!')
+
+def remove_connection(node_ids, blockchain):
+    chia_binary = globals.get_blockchain_binary(blockchain)
+    app.logger.debug("About to remove connection for nodeid: {0}".format(node_ids))
+    for node_id in node_ids:
+        try:
+            proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
+            try:
+                outs, errs = proc.communicate(timeout=5)
+            except TimeoutExpired:
+                proc.kill()
+                proc.communicate()
+                app.logger.info("Timeout attempting to remove selected fullnode connections. See server log.")
+            if errs:
+                app.logger.error(errs.decode('utf-8'))
+                app.logger.info("Error attempting to remove selected fullnode connections. See server log.")
+            if outs:
+                app.logger.debug(outs.decode('utf-8'))
+        except Exception as ex:
+            app.logger.info(traceback.format_exc())
+    app.logger.info("Successfully removed selected connections.")

@@ -6,11 +6,8 @@ All notable changes to this project will be documented in this file. The format 
 
  - [NChain](https://gitee.com/ext9/ext9-blockchain) - cross-farming support for this blockchain fork.
  - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain) - cross-farming support for this blockchain fork.
- - [Chives](https://github.com/HiveProject2021/chives-blockchain) - support for this blockchain fork.
+ - [Chives](https://github.com/HiveProject2021/chives-blockchain) - early support for this blockchain fork.
  - [Flax](https://github.com/Flax-Network/flax-blockchain) - now farmed in a separtate Docker container.
-
-## [0.5.8] - 2021-10-08 
-- Bladebit - Patch for broken library dependency. 
 
 ## [0.5.7] - 2021-10-02 
  - Chia - Update to version 1.2.8.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.8).

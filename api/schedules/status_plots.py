@@ -46,35 +46,60 @@ def update():
             app.logger.debug("Skipping plots update from blockchains other than chia and chives as they all farm same as chia.")
 
 def update_chia_plots(since):
-        try:
-            controller_hostname = utils.get_hostname()
-            plots_farming = chia.get_all_plots()
-            payload = []
-            for plot in plots_farming:
-                short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
-                if not since or created_at > since:
-                    payload.append({
-                        "plot_id": short_plot_id,
-                        "blockchain": 'chia',
-                        # '172.17.0.2' was weird non-local IP on OlivierLA75's Docker setup, inside his container
-                        "hostname": controller_hostname if plot['hostname'] in ['127.0.0.1' , '172.17.0.2']  else plot['hostname'],
-                        "dir": dir,
-                        "file": file,
-                        "type": plot['type'],
-                        "created_at": created_at,
-                        "size": plot['file_size']
-                    })
-            if not since:  # If no filter, delete all before sending all current again
-                db.session.query(p.Plot).delete()
-            if len(payload) > 0:
-                for new_item in payload:
-                    item = p.Plot(**new_item)
-                    db.session.add(item)
-            db.session.commit()
-        except:
-            app.logger.info("Failed to load plots farming and send.")
-            app.logger.info(traceback.format_exc())
+    try:
+        controller_hostname = utils.get_hostname()
+        plots_farming = chia.get_all_plots()
+        payload = []
+        for plot in plots_farming:
+            short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
+            if not since or created_at > since:
+                payload.append({
+                    "plot_id": short_plot_id,
+                    "blockchain": 'chia',
+                    # '172.17.0.2' was weird non-local IP on OlivierLA75's Docker setup, inside his container
+                    "hostname": controller_hostname if plot['hostname'] in ['127.0.0.1', '172.17.0.2']  else plot['hostname'],
+                    "dir": dir,
+                    "file": file,
+                    "type": plot['type'],
+                    "created_at": created_at,
+                    "size": plot['file_size']
+                })
+        if not since:  # If no filter, delete all before sending all current again
+            db.session.query(p.Plot).delete()
+        if len(payload) > 0:
+            for new_item in payload:
+                item = p.Plot(**new_item)
+                db.session.add(item)
+        db.session.commit()
+    except:
+        app.logger.info("Failed to load plots farming and send.")
+        app.logger.info(traceback.format_exc())
 
 def update_chives_plots(since):
-    # TODO Must do old approach of looking on disk
-    pass
+    try:
+        controller_hostname = utils.get_hostname()
+        plots_farming = chia.get_all_plots()
+        payload = []
+        for plot in plots_farming:
+            short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
+            if not since or created_at > since:
+                payload.append({
+                    "plot_id": short_plot_id,
+                    "blockchain": 'chives',
+                    "hostname": controller_hostname if plot['hostname'] in ['127.0.0.1'] else plot['hostname'],
+                    "dir": dir,
+                    "file": file,
+                    "type": plot['type'],
+                    "created_at": created_at,
+                    "size": plot['file_size']
+                })
+        if not since:  # If no filter, delete all before sending all current again
+            db.session.query(p.Plot).delete()
+        if len(payload) > 0:
+            for new_item in payload:
+                item = p.Plot(**new_item)
+                db.session.add(item)
+        db.session.commit()
+    except:
+        app.logger.info("Failed to load plots farming and send.")
+        app.logger.info(traceback.format_exc())

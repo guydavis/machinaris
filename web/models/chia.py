@@ -244,7 +244,8 @@ class Connections:
                 'details': connection.details,
                 'add_exmample': self.get_add_connection_example(connection.blockchain)
             })
-            self.blockchains[connection.blockchain] = self.parse(connection)
+            self.blockchains[connection.blockchain] = self.parse(connection, connection.blockchain)
+        self.rows.sort(key=lambda conn: conn['blockchain'])
     
     def get_add_connection_example(self, blockchain):
         if blockchain == 'chia':
@@ -271,7 +272,7 @@ class Connections:
             return 58445
         raise("Unknown blockchain fork of selected: " + blockchain)
 
-    def parse(self, connection):
+    def parse(self, connection, blockchain):
         conns = []
         for line in connection.details.split('\n'):
             try:
@@ -281,7 +282,7 @@ class Connections:
                     self.columns = line.lower().replace('last connect', 'last_connect') \
                         .replace('mib up|down', 'mib_up mib_down').strip().split()
                 elif line.strip().startswith('-SB Height'):
-                    groups = re.search("-SB Height:   (\d+)    -Hash: (\w+)...", line.strip())
+                    groups = re.search("-SB Height:\s+(\d+)\s+-Hash:\s+(\w+)...", line.strip())
                     if not groups:
                         app.logger.info("Malformed SB Height line: {0}".format(line))
                     else:
@@ -306,7 +307,10 @@ class Connections:
                             'mib_up': float(vals[7].split('|')[0]),
                             'mib_down': float(vals[7].split('|')[1])
                         }
-                        if vals[0] != "FULL_NODE":
+                        if len(vals) > 9: # HDDCoin keeps SBHeight and Hash on same line
+                            connection['height'] = vals[8]
+                            connection['hash'] = vals[9]
+                        if blockchain == 'hddcoin' or vals[0] != "FULL_NODE":  # FARMER and WALLET only on one line 
                             conns.append(connection)
                     else:
                         app.logger.info("Bad connection line: {0}".format(line))

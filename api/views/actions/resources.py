@@ -10,7 +10,7 @@ from api import app
 from api.extensions.api import Blueprint
 
 from api.commands import chiadog_cli, chia_cli, plotman_cli
-from api.schedules import status_worker, status_plotting, status_farm, status_alerts
+from api.schedules import status_worker, status_plotting, status_farm, status_alerts, status_connections
 
 blp = Blueprint(
     'Action',
@@ -31,7 +31,7 @@ class Actions(MethodView):
         try:
             if service in ["plotting", "archiving"]:
                 plotman_cli.dispatch_action(body)
-            elif service == "farming":
+            elif service in [ "farming", "networking" ]:
                 chia_cli.dispatch_action(body)
             elif service == "monitoring":
                 chiadog_cli.dispatch_action(body)
@@ -44,7 +44,8 @@ class Actions(MethodView):
                 status_plotting.update()
             elif service == "farming":
                 status_farm.update()
-                status_plots.update()
+            elif service == "networking":
+                status_connections.update()
             elif service == "monitoring":
                 status_alerts.update()
             time.sleep(3) # Time for status update to reach database
