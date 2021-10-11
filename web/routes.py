@@ -196,9 +196,9 @@ def connections():
     gc = globals.load()
     if request.method == 'POST':
         if request.form.get('action') == "add":
-            chia.add_connection(request.form.get("connection"), request.form.get('blockchain'))
+            chia.add_connection(request.form.get("connection"), request.form.get('hostname'), request.form.get('blockchain'))
         elif request.form.get('action') == 'remove':
-            chia.remove_connection(request.form.getlist('nodeid'), request.form.get('blockchain'))
+            chia.remove_connection(request.form.getlist('nodeid'), request.form.get('hostname'), request.form.get('blockchain'))
         else:
             app.logger.info("Unknown form action: {0}".format(request.form))
     connections = chia.load_connections_show()
