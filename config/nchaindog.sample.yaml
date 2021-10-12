@@ -2,6 +2,8 @@
 # instances monitoring multiple harvesters
 notification_title_prefix: 'Machinaris-NChain'
 log_level: INFO
+coin_name: 'nchain'
+coin_symbol: 'nch'
 
 # Only one consumer can be enabled at a time, you can
 # delete the section for the consumer which you aren't using
@@ -9,6 +11,7 @@ log_level: INFO
 chia_logs:
   file_log_consumer:
     enable: true
+    prefix: 'chia'
     file_path: '~/.chia/ext9/mainnet/log/debug.log'
 
 # Enable this and nchaindog will ping a remote server every 5 minutes

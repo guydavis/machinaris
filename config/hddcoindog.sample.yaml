@@ -2,6 +2,8 @@
 # instances monitoring multiple harvesters
 notification_title_prefix: 'Machinaris-HDDCoin'
 log_level: INFO
+coin_name: "hddcoin"
+coin_symbol: "hdd"
 
 # Only one consumer can be enabled at a time, you can
 # delete the section for the consumer which you aren't using
@@ -9,6 +11,7 @@ log_level: INFO
 flax_logs:
   file_log_consumer:
     enable: true
+    prefix: 'hddcoin'
     file_path: '~/.hddcoin/mainnet/log/debug.log'
 
 # Enable this and hddcoindog will ping a remote server every 5 minutes

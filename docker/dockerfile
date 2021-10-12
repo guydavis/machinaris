@@ -125,11 +125,11 @@ EXPOSE 6885
 # NChain protocol port - forward at router
 EXPOSE 58445
 # NChain farmer port - DO NOT forward at router
-EXPOSE 58448
+EXPOSE 38447
 # HDDCoin protocol port - forward at router
 EXPOSE 28444
 # HDDCoin farmer port - DO NOT forward at router
-EXPOSE 28448
+EXPOSE 28447
 # Chives protocol port - forward at router
 EXPOSE 9699
 # Chives farmer port - DO NOT forward at router

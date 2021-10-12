@@ -3,7 +3,7 @@
 # Installs Chiadog for log monitoring and alerting
 #
 
-CHIADOG_BRANCH=main
+CHIADOG_BRANCH=forks
 
 echo 'Installing Chiadog...'
 

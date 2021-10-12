@@ -107,7 +107,7 @@ def save_config(farmer, blockchain, config):
         flash('Nice! Chia\'s config.yaml validated and saved successfully.', 'success')
 
 def generate_key(key_path, blockchain):
-    chia_binary = globals.get_chia_binary(blockchain)
+    chia_binary = globals.get_blockchain_binary(blockchain)
     if os.path.exists(key_path) and os.stat(key_path).st_size > 0:
         app.logger.info('Skipping key generation as file exists and is NOT empty! {0}'.format(key_path))
         flash('Skipping key generation as file exists and is NOT empty!', 'danger')

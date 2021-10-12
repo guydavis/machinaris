@@ -240,7 +240,7 @@ class Connections:
                 'displayname': displayname, 
                 'hostname': connection.hostname,
                 'blockchain': connection.blockchain,
-                'protocol_port': self.blockchain_port(connection.blockchain),
+                'farmer_port': self.blockchain_port(connection.blockchain),
                 'details': connection.details,
                 'add_exmample': self.get_add_connection_example(connection.blockchain)
             })
@@ -265,11 +265,11 @@ class Connections:
         elif blockchain == 'flax':
             return 6668
         elif blockchain == 'nchain':
-            return 9699
+            return 58445
         elif blockchain == 'hddcoin':
             return 28444
         elif blockchain == 'chives':
-            return 58445
+            return 9699
         raise("Unknown blockchain fork of selected: " + blockchain)
 
     def parse(self, connection, blockchain):

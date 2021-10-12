@@ -57,18 +57,18 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
-    if [ ! -f /root/.chia/ext9/farmer_ca/chia_ca.crt ]; then
-      mkdir -p /root/.chia/ext9/farmer_ca
+    if [ ! -f /root/.chia/farmer_ca/chia_ca.crt ]; then
+      mkdir -p /root/.chia/farmer_ca
       response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8929/certificates/?type=nchain --output /tmp/certs.zip)
       if [ $response == '200' ]; then
-        unzip /tmp/certs.zip -d /root/.chia/ext9/farmer_ca
+        unzip /tmp/certs.zip -d /root/.chia/farmer_ca
       else
         echo "Certificates response of ${response} from http://${controller_host}:8929/certificates/?type=nchain.  Try clicking 'New Worker' button on 'Workers' page first."
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.chia/ext9/farmer_ca/chia_ca.crt ]; then
-      chia init -c /root/.chia/ext9/farmer_ca 2>&1 > /root/.chia/log/init.log
+    if [ -f /root/.chia/farmer_ca/chia_ca.crt ]; then
+      chia init -c /root/.chia/farmer_ca 2>&1 > /root/.chia/ext9/log/init.log
       chmod 755 -R /root/.chia/ext9/config/ssl/ &> /dev/null
       chia init --fix-ssl-permissions > /dev/null 
     else
