@@ -10,4 +10,4 @@ git clone --branch ${FLAX_BRANCH} --single-branch https://github.com/Flax-Networ
 	&& cd /flax-blockchain \
 	&& git submodule update --init mozilla-ca \
 	&& chmod +x install.sh \
-	&& /usr/bin/sh ./install.sh
+	&& sh ./install.sh
