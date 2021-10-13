@@ -63,19 +63,21 @@ WORKDIR /chia-blockchain
 
 # Install Chia, Plotman, Chiadog, Madmax, Flax, Machinaris, etc
 RUN \
-	bash /machinaris/scripts/chia_install.sh ${CHIA_BRANCH} \
-	&& bash /machinaris/scripts/chiadog_install.sh \
-	&& bash /machinaris/scripts/plotman_install.sh \
-	&& bash /machinaris/scripts/madmax_install.sh \
-	&& bash /machinaris/scripts/bladebit_install.sh \
-	&& bash /machinaris/scripts/machinaris_install.sh \
-	&& bash /machinaris/scripts/flax_install.sh ${FLAX_BRANCH} \
-	&& bash /machinaris/scripts/flaxdog_install.sh \
+	/machinaris/scripts/chia_install.sh ${CHIA_BRANCH} \
+	&& /machinaris/scripts/chiadog_install.sh \
+	&& /machinaris/scripts/plotman_install.sh \
+	&& /machinaris/scripts/madmax_install.sh \
+	&& /machinaris/scripts/bladebit_install.sh \
+	&& /machinaris/scripts/machinaris_install.sh \
+	&& /machinaris/scripts/flax_install.sh ${FLAX_BRANCH} \
+	&& /machinaris/scripts/flaxdog_install.sh \
 	&& rm -rf \
 		/root/.cache \
 		/tmp/* \
 		/var/lib/apt/lists/* \
 		/var/tmp/*
+
+RUN ln -s /usr/bin/pypy3 ./venv/bin/python3
 
 # Provide a colon-separated list of in-container paths to your mnemonic keys
 ENV keys="/root/.chia/mnemonic.txt"  

@@ -6,7 +6,7 @@
 echo "Welcome! Machinaris is an easy-to-use WebUI for Chia plotting and farming. Includes Chia, Plotman, MadMax, Chiadog, Bladebit and Flax in a single Docker image."
 
 # Always launch Chia - required blockchain
-/usr/bin/bash /machinaris/scripts/chia_launch.sh
+/machinaris/scripts/chia_launch.sh
 
 # Optionally launch forked blockchains for multi-farming
 if [[ ${blockchains} =~ flax ]]; then
