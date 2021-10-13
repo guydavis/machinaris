@@ -63,14 +63,14 @@ RUN ln -s pypy3 python3 && ln -s pypy3 python
 
 # Install Chia, Plotman, Chiadog, Madmax, Flax, Machinaris, etc
 RUN \
-	bash /machinaris/scripts/chia_install.sh ${CHIA_BRANCH} \
-	&& bash /machinaris/scripts/chiadog_install.sh \
-	&& bash /machinaris/scripts/plotman_install.sh \
-	&& bash /machinaris/scripts/madmax_install.sh \
-	&& bash /machinaris/scripts/bladebit_install.sh \
-	&& bash /machinaris/scripts/machinaris_install.sh \
-	&& bash /machinaris/scripts/flax_install.sh ${FLAX_BRANCH} \
-	&& bash /machinaris/scripts/flaxdog_install.sh \
+	/usr/bin/bash /machinaris/scripts/chia_install.sh ${CHIA_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh \
+	&& /usr/bin/bash /machinaris/scripts/plotman_install.sh \
+	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \
+	&& /usr/bin/bash /machinaris/scripts/bladebit_install.sh \
+	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
+	&& /usr/bin/bash /machinaris/scripts/flax_install.sh ${FLAX_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/flaxdog_install.sh \
 	&& rm -rf \
 		/root/.cache \
 		/tmp/* \
