@@ -59,10 +59,6 @@ COPY . /machinaris/
 # set workdir
 WORKDIR /chia-blockchain
 
-#copy compiled files/binaries
-COPY --from=builder /usr/bin/bladebit /usr/bin/bladebit 
-COPY --from=builder /usr/lib/chia-plotter /usr/lib/chia-plotter
-COPY --from=builder /usr/bin/chia_plot /usr/bin/chia_plot
 RUN ln -s python3 pypy3
 
 # Required for Chia blockchain install among others
