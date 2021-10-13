@@ -25,6 +25,7 @@ RUN \
 		lsb-release \
 		nfs-common \
 		openssl \
+		sh \
 		sqlite3 \
 		sudo \
 		tar \
