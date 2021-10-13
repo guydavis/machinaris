@@ -58,12 +58,6 @@
                             <h4 class="text-center">{{ blockchain|capitalize }} - Daily Summary</h4>
                             {% if summary[0] %}
                             <div style="white-space:pre-wrap;margin:10px;">{{ summary[0] }}</div>
-                            {% elif blockchain != "chia" %}
-                            <div style="margin:10px;">No daily summary found for {{ blockchain }} on {{farmer.displayname}}.
-                            <br/><br/>
-                            NOTE: During v0.6.0 development cycle, only alerts for the Chia fork are currently working.  
-                            Alerts for other forks like Flax, Chives, HDDCoin, and NChain are coming soon!
-                            </div>
                             {% else %}
                             <div style="margin:10px;">No daily summary found for {{ blockchain }} on {{farmer.displayname}}.
                             <br/><br/>

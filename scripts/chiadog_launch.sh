@@ -1,11 +1,15 @@
 echo 'Configuring Chiadog...'
 mkdir -p /root/.chia/chiadog/logs
+
+# Temporary fixes for v0.6.0 development stream - other forks
+grep -q ' prefix:' /root/.chia/chiadog/config.yaml
+if [[ $? -ne 0 ]] && ! [[ "${blockchains}" =~ 'chia' ]]; then
+    echo 'Replacing old fork Chiadog config with latest sample.'
+    rm -f /root/.chia/chiadog/config.yaml
+fi
+
 cp -n /machinaris/config/${blockchains}dog.sample.yaml /root/.chia/chiadog/config.yaml
 cp -f /machinaris/scripts/chiadog_notifier.sh /root/.chia/chiadog/notifier.sh && chmod 755 /root/.chia/chiadog/notifier.sh
-
-# Temporary fixes for bad key in fork config.yaml during v0.6.0 development stream
-sed -i 's/flax_logs/chia_logs/g' /root/.chia/chiadog/config.yaml
-sed -i "s/flax@/${blockchains}@/g" /root/.chia/chiadog/config.yaml
 
 echo 'Starting Chiadog...'
 cd /chiadog
