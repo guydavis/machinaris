@@ -25,7 +25,6 @@ RUN \
 		lsb-release \
 		nfs-common \
 		openssl \
-		python-is-python3 \
 		sqlite3 \
 		sudo \
 		tar \
@@ -60,7 +59,7 @@ COPY . /machinaris/
 # set workdir
 WORKDIR /chia-blockchain
 
-RUN ln -s python3 pypy3
+RUN ln -s python3 pypy3 && ln -s python pypy3
 
 # Install Chia, Plotman, Chiadog, Madmax, Flax, Machinaris, etc
 RUN \
