@@ -219,8 +219,11 @@ def load_current_disk_usage(disk_type, hostname=None):
     return summary_by_worker
 
 def prune_workers_status(hostname, displayname, blockchain):
-    db = get_stats_db()
-    for table in ALL_TABLES_BY_HOSTNAME:
-        db.session.execute("DELETE FROM " + table + " WHERE (hostname = :hostname OR hostname = :displayname) AND blockchain = :blockchain", 
-            {"hostname":hostname, "displayname":displayname, "blockchain":blockchain})
-        db.session.commit()
+    try:
+        db = get_stats_db()
+        for table in ALL_TABLES_BY_HOSTNAME:
+            db.session.execute("DELETE FROM " + table + " WHERE (hostname = :hostname OR hostname = :displayname) AND blockchain = :blockchain", 
+                {"hostname":hostname, "displayname":displayname, "blockchain":blockchain})
+            db.session.commit()
+    except Exception as ex:
+        app.logger.info("Failed to remove stale stats for worker {0} - {1} because {2}".format(displayname, blockchain, str(ex)))
