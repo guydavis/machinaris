@@ -46,13 +46,13 @@
                             <li>
                                 <a class="dropdown-item text-white text-decoration-none" href="#"
                                     onclick='ViewLogs("{{ worker.hostname }}","{{worker.blockchain}}");return false;'>
+                                    <span class="align-text-bottom" style="padding-right:5px">{{worker.blockchain|capitalize}}</span>
+                                    &nbsp;
                                     {% if worker.farming_status == 'farming' %}
                                         <i class="fs-4 bi-emoji-smile"></i>
                                     {% else %}
                                         <i class="fs-4 bi-exclamation-triangle"></i>
                                     {% endif %}
-                                    &nbsp;
-                                    <span class="align-text-bottom" style="padding-right:5px">{{worker.blockchain|capitalize}}</span>
                                 </a>
                             </li>
                             {% endfor %}

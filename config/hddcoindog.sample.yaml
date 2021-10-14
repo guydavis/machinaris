@@ -8,7 +8,7 @@ coin_symbol: "hdd"
 # Only one consumer can be enabled at a time, you can
 # delete the section for the consumer which you aren't using
 # DON'T CHANGE file_path IT'S ALREADY SET IN-CONTAINER FOR MACHINARIS!
-flax_logs:
+chia_logs:
   file_log_consumer:
     enable: true
     prefix: 'hddcoin'
