@@ -64,8 +64,8 @@ def update_chia_plots(since):
                     "created_at": created_at,
                     "size": plot['file_size']
                 })
-        if not since:  # If no filter, delete all before sending all current again
-            db.session.query(p.Plot).delete()
+        if not since:  # If no filter, delete all for this blockchain before sending again
+            db.session.query(p.Plot).filter(p.Plot.blockchain=='chia').delete()
         if len(payload) > 0:
             for new_item in payload:
                 item = p.Plot(**new_item)
@@ -75,18 +75,20 @@ def update_chia_plots(since):
         app.logger.info("Failed to load plots farming and send.")
         app.logger.info(traceback.format_exc())
 
+# Sent from a separate fullnode container
 def update_chives_plots(since):
     try:
-        controller_hostname = utils.get_hostname()
-        plots_farming = chia.get_all_plots()
+        blockchain = 'chives'
+        hostname = utils.get_hostname()
+        plots_farming = chia.get_chives_plots()
         payload = []
         for plot in plots_farming:
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
             if not since or created_at > since:
                 payload.append({
                     "plot_id": short_plot_id,
-                    "blockchain": 'chives',
-                    "hostname": controller_hostname if plot['hostname'] in ['127.0.0.1'] else plot['hostname'],
+                    "blockchain": blockchain,
+                    "hostname": hostname if plot['hostname'] in ['127.0.0.1'] else plot['hostname'],
                     "dir": dir,
                     "file": file,
                     "type": plot['type'],
@@ -94,12 +96,9 @@ def update_chives_plots(since):
                     "size": plot['file_size']
                 })
         if not since:  # If no filter, delete all before sending all current again
-            db.session.query(p.Plot).delete()
+            utils.send_delete('/plots/{0}/{1}'.format(hostname, blockchain), debug=False)
         if len(payload) > 0:
-            for new_item in payload:
-                item = p.Plot(**new_item)
-                db.session.add(item)
-        db.session.commit()
+            utils.send_post('/plots/', payload, debug=False)
     except:
-        app.logger.info("Failed to load plots farming and send.")
+        app.logger.info("Failed to load Chives plots farming and send.")
         app.logger.info(traceback.format_exc())

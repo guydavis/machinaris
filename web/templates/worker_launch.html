@@ -206,7 +206,11 @@
                     }
                     cmd += '        restart: always' + line_end;
                     cmd += '        volumes:' + line_end;
-                    cmd += '            - ~/.machinaris:/root/.chia' + line_end;
+                    if (blockchain == "chia") {
+                        cmd += '            - ~/.machinaris:/root/.chia' + line_end;
+                    } else {
+                        cmd += '            - ~/.machinaris-' + blockchain + ':/root/.chia' + line_end;
+                    }
                     var cur_vols = $('#volumes').children().length
                     var plots_dir = []
                     $('#volumes').children().each((index, element) => {

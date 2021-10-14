@@ -33,29 +33,47 @@ class Plots(MethodView):
     @blp.arguments(BatchOfPlotSchema)
     @blp.response(201, PlotSchema(many=True))
     def post(self, new_items):
-        # Reworked status_plots.py to load directly on Controller after Flax updated to v0.1.1
+        # Re-enabled as Chives must send plots from each container
         items = []
+        for new_item in new_items:
+            app.logger.info(new_item)
+            # Skip any previously sent by existing plot_id
+            if not db.session.query(Plot).filter(Plot.hostname==new_item['hostname'], 
+                Plot.plot_id==new_item['plot_id']).first():
+                item = Plot(**new_item)
+                items.append(item)
+                db.session.add(item)
+        db.session.commit()
         return items
 
 
-@blp.route('/<hostname>')
+@blp.route('/<hostname>/<blockchain>')
 class PlotByHostname(MethodView):
 
     @blp.etag
     @blp.response(200, PlotSchema)
-    def get(self, hostname):
-        return db.session.query(Plot).filter(Plot.hostname==hostname)
+    def get(self, hostname, blockchain):
+        return db.session.query(Plot).filter(Plot.hostname==hostname, Plot.blockchain==blockchain)
 
     @blp.etag
     @blp.arguments(BatchOfPlotSchema)
     @blp.response(200, PlotSchema(many=True))
-    def put(self, new_items, hostname):
-        # Reworked status_plots.py to load directly on Controller after Flax updated to v0.1.1
+    def put(self, new_items, hostname, blockchain):
+        # Re-enabled as Chives must send plots from each container
         items = []
+        for new_item in new_items:
+            app.logger.info(new_item)
+            # Skip any previously sent by existing plot_id
+            if not db.session.query(Plot).filter(Plot.hostname==new_item['hostname'], 
+                Plot.plot_id==new_item['plot_id']).first():
+                item = Plot(**new_item)
+                items.append(item)
+                db.session.add(item)
+        db.session.commit()
         return items
 
     @blp.etag
     @blp.response(204)
-    def delete(self, hostname):
-        db.session.query(Plot).filter(Plot.hostname==hostname).delete()
+    def delete(self, hostname, blockchain):
+        db.session.query(Plot).filter(Plot.hostname==hostname, Plot.blockchain==blockchain).delete()
         db.session.commit()

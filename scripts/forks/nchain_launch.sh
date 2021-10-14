@@ -75,6 +75,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "Did not find your farmer's certificates within /root/.chia/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
+    echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
     chia configure --set-farmer-peer ${farmer_address}:${farmer_port}
     chia configure --enable-upnp false
     chia start harvester -r
