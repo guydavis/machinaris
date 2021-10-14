@@ -2,14 +2,17 @@
 # instances monitoring multiple harvesters
 notification_title_prefix: 'Machinaris-NChain'
 log_level: INFO
+coin_name: 'nchain'
+coin_symbol: 'nch'
 
 # Only one consumer can be enabled at a time, you can
 # delete the section for the consumer which you aren't using
 # DON'T CHANGE file_path IT'S ALREADY SET IN-CONTAINER FOR MACHINARIS!
-flax_logs:
+chia_logs:
   file_log_consumer:
     enable: true
-    file_path: '~/.chia/ext9/mainnet/log/debug.log'
+    prefix: 'chia'
+    file_path: '~/.chia/ext9/log/debug.log'
 
 # Enable this and nchaindog will ping a remote server every 5 minutes
 # That way you can know that the monitoring is running as expected
@@ -49,7 +52,7 @@ notifier:
     daily_stats: true
     wallet_events: true
     credentials:
-      sender: 'flax@example.com'
+      sender: 'nchain@example.com'
       sender_name: 'nchaindog'
       recipient: 'you@example.com'
       username_smtp: 'username'
@@ -61,7 +64,7 @@ notifier:
     enable: true
     daily_stats: true
     wallet_events: true
-    script_path: '/root/.chia/nchaindog/notifier.sh'
+    script_path: '/root/.chia/chiadog/notifier.sh'
   discord:
     enable: false
     daily_stats: true

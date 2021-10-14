@@ -24,6 +24,8 @@ def update():
     with app.app_context():
         try:
             for blockchain in globals.enabled_blockchains():
+                if blockchain == "chives":
+                    return  # Not supported in Chives
                 payload = []
                 hostname = utils.get_hostname()
                 pools =  asyncio.run(chia.get_pool_state(blockchain))

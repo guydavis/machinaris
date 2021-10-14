@@ -61,11 +61,11 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
   else
     if [ ! -f /root/.chives/farmer_ca/chives_ca.crt ]; then
       mkdir -p /root/.chives/farmer_ca
-      response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8927/certificates/?type=chives --output /tmp/certs.zip)
+      response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8931/certificates/?type=chives --output /tmp/certs.zip)
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.chives/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${controller_host}:8927/certificates/?type=chives.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${controller_host}:8931/certificates/?type=chives.  Try clicking 'New Worker' button on 'Workers' page first."
       fi
       rm -f /tmp/certs.zip 
     fi

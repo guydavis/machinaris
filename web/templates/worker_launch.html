@@ -164,10 +164,10 @@
                 return 6885;
             }
             if (blockchain == 'nchain') {
-                return 58448;
+                return 38447;
             }
             if (blockchain == 'hddcoin') {
-                return 28448;
+                return 28447;
             }
             if (blockchain == 'chives') {
                 return 9647;
@@ -206,7 +206,11 @@
                     }
                     cmd += '        restart: always' + line_end;
                     cmd += '        volumes:' + line_end;
-                    cmd += '            - ~/.machinaris:/root/.chia' + line_end;
+                    if (blockchain == "chia") {
+                        cmd += '            - ~/.machinaris:/root/.chia' + line_end;
+                    } else {
+                        cmd += '            - ~/.machinaris-' + blockchain + ':/root/.chia' + line_end;
+                    }
                     var cur_vols = $('#volumes').children().length
                     var plots_dir = []
                     $('#volumes').children().each((index, element) => {
@@ -260,6 +264,8 @@
                     else if (i == 0) {
                         errors.push("Missing worker IP address.  Please provide the IP the conntroller will connect to for commands.");
                     }
+                    var worker_port = lookup_worker_port(blockchain);
+                    cmd += '            - worker_api_port=' + worker_port + line_end;
                     cmd += '            - plots_dir=' + plots_dir.join(':') + line_end;
                     cmd += '            - blockchains=' + blockchain + line_end;
                     var auto_plot = getRadioButtonValue('auto_plot');

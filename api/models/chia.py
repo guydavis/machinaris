@@ -19,6 +19,8 @@ class FarmSummary:
             for line in cli_stdout:
                 if "Plot count for all" in line: 
                     self.plot_count = line.strip().split(':')[1].strip()
+                if "Plot count:" in line: # Just chives
+                    self.plot_count = line.strip().split(':')[1].strip()
                 elif "Total size of plots" in line:
                     self.plots_size = line.strip().split(':')[1].strip()
                 elif "status" in line: 

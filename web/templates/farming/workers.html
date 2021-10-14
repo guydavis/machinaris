@@ -51,19 +51,13 @@
         <div class="row">
             <div class="col-4" style="margin-top:5px; margin-bottom:5px;">
                 {% if farmer.displayname in daily_summaries %}
-                <div id="carousel-{{farmer.displayname}}" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                <div id="carousel-{{farmer.displayname}}" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
                         {% for blockchain, summary in daily_summaries[farmer.displayname].items() %}
                         <div class="carousel-item {% if blockchain == 'chia' %} active {% endif %}" data-bs-interval="10000">
                             <h4 class="text-center">{{ blockchain|capitalize }} - Daily Summary</h4>
                             {% if summary[0] %}
                             <div style="white-space:pre-wrap;margin:10px;">{{ summary[0] }}</div>
-                            {% elif blockchain != "chia" %}
-                            <div style="margin:10px;">No daily summary found for {{ blockchain }} on {{farmer.displayname}}.
-                            <br/><br/>
-                            NOTE: During v0.6.0 development cycle, only alerts for the Chia fork are currently working.  
-                            Alerts for other forks like Flax, Chives, HDDCoin, and NChain are coming soon!
-                            </div>
                             {% else %}
                             <div style="margin:10px;">No daily summary found for {{ blockchain }} on {{farmer.displayname}}.
                             <br/><br/>

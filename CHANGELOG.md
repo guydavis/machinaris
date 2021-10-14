@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file. The format 
  - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain) - cross-farming support for this blockchain fork.
  - [Chives](https://github.com/HiveProject2021/chives-blockchain) - early support for this blockchain fork.
  - [Flax](https://github.com/Flax-Network/flax-blockchain) - now farmed in a separtate Docker container.
+ - [Plotman](https://github.com/ericaltendorf/plotman/pull/937) - enhancement to support plotting for Chives via Madmax
+ - [Chiadog](https://github.com/martomi/chiadog/pull/302) - enhancement to support monitoring of other blockchain forks
 
 ## [0.5.7] - 2021-10-02 
  - Chia - Update to version 1.2.8.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.8).

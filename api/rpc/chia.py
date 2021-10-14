@@ -27,6 +27,7 @@ elif importlib.util.find_spec("hddcoin"):
 elif importlib.util.find_spec("chives"):
     from chives.rpc.full_node_rpc_client import FullNodeRpcClient
     from chives.rpc.farmer_rpc_client import FarmerRpcClient
+    from chives.rpc.harvester_rpc_client import HarvesterRpcClient
     from chives.util.default_root import DEFAULT_ROOT_PATH
     from chives.util.ints import uint16
     from chives.util.config import load_config as load_fork_config
@@ -34,6 +35,7 @@ else:
     raise Exception("RPC modules found on pythonpath!")
 
 from api import app
+from api import utils
 
 # Unused as I am getting signage points from debug.log as this API returns no dates
 async def get_signage_points(blockchain):
@@ -82,7 +84,6 @@ async def get_pool_state(blockchain):
 # Used to load plot type (solo or portable) via RPC
 def get_all_plots():
     plots_via_rpc = asyncio.run(load_all_plots())
-    last_plots_via_rpc  = datetime.datetime.now()
     return plots_via_rpc
 
 async def load_all_plots():
@@ -112,6 +113,37 @@ async def load_all_plots():
                     "pool_contract_puzzle_hash": plot['pool_contract_puzzle_hash'],
                     "pool_public_key": plot['pool_public_key'],
                 })
+    except Exception as ex:
+        app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
+    return all_plots
+
+def get_chives_plots():
+    plots_via_rpc = asyncio.run(load_chives_plots())
+    return plots_via_rpc
+
+async def load_chives_plots():
+    host = utils.get_hostname()
+    all_plots = []
+    try:
+        config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
+        harvester_rpc_port = config["harvester"]["rpc_port"]
+        harvester = await HarvesterRpcClient.create(
+            'localhost', uint16(harvester_rpc_port), DEFAULT_ROOT_PATH, config
+        )
+        result = await harvester.get_plots()
+        harvester.close()
+        await harvester.await_closed()
+        for plot in result['plots']:
+            all_plots.append({
+                "hostname": host,
+                "type": "solo" if (plot["pool_contract_puzzle_hash"] is None) else "portable",
+                "plot_id": plot['plot-seed'], # chives uses plot-seed instead
+                "file_size": plot['file_size'], # bytes
+                "filename": plot['filename'], # full path and name
+                "plot_public_key": plot['plot_public_key'],
+                "pool_contract_puzzle_hash": plot['pool_contract_puzzle_hash'],
+                "pool_public_key": plot['pool_public_key'],
+            })
     except Exception as ex:
         app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
     return all_plots

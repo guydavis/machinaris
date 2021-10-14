@@ -64,14 +64,16 @@ def plotting_jobs():
     if request.method == 'POST':
         if request.form.get('action') == 'start':
             hostname= request.form.get('hostname')
-            plotter = worker.get_worker(hostname)
+            blockchain = request.form.get('blockchain')
+            plotter = worker.get_worker(hostname, blockchain)
             if request.form.get('service') == 'plotting':
                 plotman.start_plotman(plotter)
             elif request.form.get('service') == 'archiving':
                 plotman.start_archiving(plotter)
         elif request.form.get('action') == 'stop':
             hostname= request.form.get('hostname')
-            plotter = worker.get_worker(hostname)
+            blockchain = request.form.get('blockchain')
+            plotter = worker.get_worker(hostname, blockchain)
             if request.form.get('service') == 'plotting':
                 plotman.stop_plotman(plotter)
             elif request.form.get('service') == 'archiving':
@@ -221,7 +223,8 @@ def settings_plotting():
     gc = globals.load()
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
-        plotman.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), request.form.get("config"))
+        selected_blockchain = request.form.get('blockchain')
+        plotman.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
     return render_template('settings/plotting.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
