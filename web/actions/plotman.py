@@ -84,7 +84,7 @@ def group_plots_by_worker(plot_ids):
         hostname_blockchain = None
         for plot in all_plottings.rows:
             if plot['plot_id'] == plot_id:
-                hostname_blockchain = plot['hostname'] + '_' + plot['blockchain']
+                hostname_blockchain = plot['hostname'] + '_' + plot['fork']
         if hostname_blockchain:
             if not hostname_blockchain in plots_by_worker:
                 plots_by_worker[hostname_blockchain] = []

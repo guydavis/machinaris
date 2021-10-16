@@ -11,6 +11,7 @@ from flask import g
 
 from common.config import globals
 from common.models import plots as p
+from common.models import workers as w
 from api import app, db
 from api.rpc import chia
 from api import utils
@@ -50,14 +51,29 @@ def update_chia_plots(since):
         controller_hostname = utils.get_hostname()
         plots_farming = chia.get_all_plots()
         payload = []
+        displaynames = {}
         for plot in plots_farming:
+            if plot['hostname'] in displaynames:
+                displayname = displaynames[plot['hostname']]
+            else: # Look up displayname
+                try:
+                    hostname = plot['hostname']
+                    if plot['hostname'] in ['127.0.0.1']:
+                        hostname = controller_hostname
+                    app.logger.debug("Found worker with hostname '{0}'".format(hostname))
+                    displayname = db.session.query(w.Worker).filter(w.Worker.hostname==hostname, 
+                        w.Worker.blockchain=='chia').first().displayname
+                except:
+                    app.logger.info("Unable to find a worker with hostname '{0}'".format(plot['hostname']))
+                    displayname = plot['hostname']
+                displaynames[plot['hostname']] = displayname
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
             if not since or created_at > since:
                 payload.append({
                     "plot_id": short_plot_id,
                     "blockchain": 'chia',
-                    # '172.17.0.2' was weird non-local IP on OlivierLA75's Docker setup, inside his container
-                    "hostname": controller_hostname if plot['hostname'] in ['127.0.0.1', '172.17.0.2']  else plot['hostname'],
+                    "hostname": controller_hostname if plot['hostname'] in ['127.0.0.1'] else plot['hostname'],
+                    "displayname": displayname,
                     "dir": dir,
                     "file": file,
                     "type": plot['type'],
@@ -80,6 +96,7 @@ def update_chives_plots(since):
     try:
         blockchain = 'chives'
         hostname = utils.get_hostname()
+        displayname = utils.get_displayname()
         plots_farming = chia.get_chives_plots()
         payload = []
         for plot in plots_farming:
@@ -89,6 +106,7 @@ def update_chives_plots(since):
                     "plot_id": short_plot_id,
                     "blockchain": blockchain,
                     "hostname": hostname if plot['hostname'] in ['127.0.0.1'] else plot['hostname'],
+                    "displayname": displayname,
                     "dir": dir,
                     "file": file,
                     "type": plot['type'],

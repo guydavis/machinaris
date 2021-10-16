@@ -4,6 +4,7 @@ import pytz
 import os
 import random
 import time
+import traceback
 
 from datetime import datetime
 from flask import Flask, flash, redirect, render_template, abort, \
@@ -110,8 +111,16 @@ def farming_plots():
     gc = globals.load()
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()
-    return render_template('farming/plots.html', plots=plots, 
-        farmers=farmers, global_config=gc)
+    return render_template('farming/plots.html', farmers=farmers, plots=plots, global_config=gc)
+
+@app.route('/farming/data')
+def farming_data():
+    try:
+        [draw, recordsTotal, recordsFiltered, data] = chia.load_plots(request.args)
+        return make_response({'draw': draw, 'recordsTotal': recordsTotal, 'recordsFiltered': recordsFiltered, "data": data}, 200)
+    except: 
+        traceback.print_exc()
+    return make_response("Error! Please see logs.", 500)
 
 @app.route('/farming/workers')
 def farming_workers():
@@ -177,13 +186,12 @@ def worker_route():
     hostname=request.args.get('hostname')
     blockchain=request.args.get('blockchain')
     wkr = worker.get_worker(hostname, blockchain)
-    plots = chia.load_plots_farming(hostname=hostname)
     plotting = plotman.load_plotting_summary(hostname=hostname)
     plots_disk_usage = stats.load_current_disk_usage('plots',hostname=hostname)
     plotting_disk_usage = stats.load_current_disk_usage('plotting',hostname=hostname)
-    warnings = worker.generate_warnings(wkr, plots)
+    warnings = worker.generate_warnings(wkr)
     return render_template('worker.html', worker=wkr, 
-        plots=plots, plotting=plotting, plots_disk_usage=plots_disk_usage, 
+        plotting=plotting, plots_disk_usage=plots_disk_usage, 
         plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc)
 
 @app.route('/blockchains')

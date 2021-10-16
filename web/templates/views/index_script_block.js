@@ -80,7 +80,7 @@ var myChart = new Chart(ctx, {
                 },
                 title: {
                     display: true,
-                    text: 'Time - Last Hour',
+                    text: 'Time - Recent',
                     color: "#c7c7c7",  
                     font: {
                       size: 18 

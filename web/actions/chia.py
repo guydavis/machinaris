@@ -21,6 +21,7 @@ import yaml
 from flask import Flask, jsonify, abort, request, flash
 from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
 from subprocess import Popen, TimeoutExpired, PIPE
+from sqlalchemy import or_
 from os import path
 
 from web import app, db, utils
@@ -30,7 +31,7 @@ from common.models import farms as f, plots as p, challenges as c, wallets as w,
 from common.config import globals
 from web.models.chia import FarmSummary, FarmPlots, Wallets, \
     Blockchains, Connections, Keys, Plotnfts, Pools, PartialsChartData, \
-    ChallengesChartData
+    ChallengesChartData, PLOT_TABLE_COLUMNS
 from . import worker as wk
 
 def load_farm_summary():
@@ -39,16 +40,71 @@ def load_farm_summary():
     return FarmSummary(farms, wallets)
 
 def load_plots_farming(hostname=None):
-    query = db.session.query(p.Plot).order_by(p.Plot.created_at.desc())
-    if hostname:
-        plots = query.filter(p.Plot.hostname==hostname)
+    return FarmPlots([])  # Only used for columns on Farming table, no data
+
+def order_plots_query(args, query):
+    column = None
+    col_idx = int(request.args.get("order[0][column]"))
+    if col_idx == 0:
+        column = p.Plot.displayname
+    elif col_idx == 1:
+        column = p.Plot.blockchain
+    elif col_idx == 2:
+        column = p.Plot.plot_id
+    elif col_idx == 3:
+        column = p.Plot.dir
+    elif col_idx == 4:
+        column = p.Plot.file
+    elif col_idx == 5:
+        column = p.Plot.type
+    elif col_idx == 6:
+        column = p.Plot.created_at
+    elif col_idx == 7:
+        column = p.Plot.size
+    if request.args.get("order[0][dir]") == "desc":
+        query = query.order_by(column.desc())
     else:
-        plots = query.all()
-    return FarmPlots(plots)
+        query = query.order_by(column.asc())
+    return query
+
+def search_plots_query(search, query):
+    app.logger.info("Searching all plots for: {0}".format(search))
+    query = query.filter(or_(
+        p.Plot.displayname.like(search),
+        p.Plot.blockchain.like(search),
+        p.Plot.plot_id.like(search),
+        p.Plot.dir.like(search),
+        p.Plot.file.like(search),
+        p.Plot.type.like(search),
+        p.Plot.created_at.like(search),
+    ))
+    return query
+
+def load_plots(args):
+    total_count = db.session.query(p.Plot).count()
+    filtered_count = total_count
+    query = db.session.query(p.Plot)
+    draw = int(request.args.get("draw"))  # Request identifier from Datatables.js
+    #columns = request.args.getlist("columns")  # Indexed list like column[0][...]
+    query = order_plots_query(args, query)
+    search = request.args.get("search[value]")
+    if search:
+        query = search_plots_query(search, query)
+        filtered_count = query.count()
+    start = int(request.args.get("start"))
+    if start > 0:
+        query = query.offset(start)
+    length = int(request.args["length"])
+    if length > 0: 
+        query = query.limit(length)
+    return [draw, total_count, filtered_count, FarmPlots(query).rows]
 
 def challenges_chart_data(farm_summary):
+    chart_start_time = (datetime.datetime.now() - datetime.timedelta(minutes=app.config['MAX_CHART_CHALLENGES_MINS'])).strftime("%Y-%m-%d %H:%M:%S.000")
     for blockchain in farm_summary.farms:
-        challenges = db.session.query(c.Challenge).filter(c.Challenge.blockchain==blockchain).order_by(c.Challenge.created_at.desc(), c.Challenge.hostname).all()
+        challenges = db.session.query(c.Challenge).filter(c.Challenge.blockchain==blockchain,
+            c.Challenge.created_at >= chart_start_time).order_by(
+            c.Challenge.created_at.desc(), c.Challenge.hostname).all()
         farm_summary.farms[blockchain]['challenges'] = ChallengesChartData(challenges)
 
 def partials_chart_data(farm_summary):
