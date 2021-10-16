@@ -11,7 +11,7 @@ if [[ "${blockchains}" == "chia,flax" ]]; then
   return 1
 fi
 
-if [[ -z ${worker_address} ]]; then
+if [[ -z "${worker_address}" ]]; then
   echo "Please set the 'worker_address' environment variable to this system's IP address on your LAN."
   echo "https://github.com/guydavis/machinaris/wiki/Unraid#how-do-i-update-from-v05x-to-v060-with-fork-support"
   return 1
