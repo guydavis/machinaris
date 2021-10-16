@@ -15,7 +15,7 @@ This creates migration based on current model.
 Run scripts/setup_databases.sh manually. (This is run on each launch of the container)
 
 ```
-cd /machinaris/api
+cd /code/machinaris/api
 FLASK_APP=__init__.py flask db upgrade
 ```
 

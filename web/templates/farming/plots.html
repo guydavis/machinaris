@@ -21,6 +21,10 @@
     a.active.nav-link {
         background-color: #3d3f42 !important
     }
+    td.analyze_cell {
+        text-align: center;
+        padding:0px 5px 0px 0px;
+    }
 </style>
 
 <nav class="navbar navbar-dark" style="padding-bottom: 0px;">
@@ -89,31 +93,9 @@
                         {% for column in plots.columns %}
                         <th scope="col" class="text-success">{{ column }}</th>
                         {% endfor %}
-                        <th scope="col" class="text-success"></th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for row in plots.rows %}
-                    <tr>
-                        {% for column in plots.columns %}
-                        {% if column == "size" %}
-                        <td>{{ row[column] | bytesfilter}}</td>
-                        {% elif column == "plot" %}
-                        <td>{{ row[column] | plotnameshortener}}</td>
-                        {% else %}
-                        <td>{{ row[column] }}</td>
-                        {% endif %}
-                        {% endfor %}
-                        <td class="align-middle" style="padding:0px 5px 0px 0px">
-                            <!-- Careful, VS Code likes to format a space into 'plot' quotes for some reason -->
-                            <a href="#" title="Analyze Plotting Job" data-bs-toggle="modal"
-                                data-bs-target="#analyzeModal" onclick='PlotJobAnalyze("{{ row['plot'] }}");return false;'>
-                                <i class="fs-4 bi-stopwatch"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>
@@ -150,8 +132,14 @@
         $(document).ready(function () {
             $('#data').DataTable({
                 "pageLength": 25,
+                "serverSide": true,
+                "ajax": '/farming/data',
                 "order": [[6, "desc"]],
-                "columnDefs": [{ "orderable": false, targets: [8] }],
+                "columnDefs": [{ targets: [8], "orderable": false, "className": 'analyze_cell',
+                    "render": function ( data, type, row, meta ) {
+                        return '<a href="#" title="Analyze Plotting Job" data-bs-toggle="modal" data-bs-target="#analyzeModal" onclick=\'PlotJobAnalyze("'+data+'");return false;\'><i class="fs-4 bi-stopwatch"></i></a>'
+                    }}  
+                ],
             });
         });
     </script>

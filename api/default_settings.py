@@ -23,4 +23,4 @@ class DefaultConfig:
     WORKER_SCHEME = 'http'
     WORKER_PORT = os.environ['worker_api_port'] if 'worker_api_port' in os.environ else '8927'
 
-    STATUS_EVERY_X_MINUTES = 1  # Run status collection once a minute by default
+    STATUS_EVERY_X_MINUTES = 2  # Run status collection once every two minutes by default

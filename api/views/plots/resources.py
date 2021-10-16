@@ -36,7 +36,6 @@ class Plots(MethodView):
         # Re-enabled as Chives must send plots from each container
         items = []
         for new_item in new_items:
-            app.logger.info(new_item)
             # Skip any previously sent by existing plot_id
             if not db.session.query(Plot).filter(Plot.hostname==new_item['hostname'], 
                 Plot.plot_id==new_item['plot_id']).first():
@@ -62,7 +61,6 @@ class PlotByHostname(MethodView):
         # Re-enabled as Chives must send plots from each container
         items = []
         for new_item in new_items:
-            app.logger.info(new_item)
             # Skip any previously sent by existing plot_id
             if not db.session.query(Plot).filter(Plot.hostname==new_item['hostname'], 
                 Plot.plot_id==new_item['plot_id']).first():

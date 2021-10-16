@@ -69,7 +69,7 @@ def plotnameshortener(value):
     if match:
         return "plot-k{0}-{1}-{2}-{3}-{4}-{5}-{6}...".format( match.group(1), 
             match.group(2), match.group(3), match.group(4), match.group(5), match.group(6),
-            match.group(7)[:20])
+            match.group(7)[:16])
     return value
 
 app.jinja_env.filters['plotnameshortener'] = plotnameshortener

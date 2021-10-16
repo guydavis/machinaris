@@ -22,6 +22,8 @@ CURRENCY_SYMBOLS = {
     "nchain": "NCH",
 }
 
+PLOT_TABLE_COLUMNS = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', '.' ]
+
 class FarmSummary:
 
     def __init__(self, farm_recs, wallet_recs):
@@ -93,31 +95,20 @@ class FarmSummary:
 class FarmPlots:
 
      def __init__(self, plots):
-        self.columns = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size' ]
+        self.columns = PLOT_TABLE_COLUMNS
         self.rows = []
-        displaynames = {}
         for plot in plots:
-            if plot.hostname in displaynames:
-                displayname = displaynames[plot.hostname]
-            else: # Look up displayname
-                try:
-                    app.logger.debug("Found worker with hostname '{0}'".format(plot.hostname))
-                    displayname = w.get_worker(plot.hostname).displayname
-                except:
-                    app.logger.info("Unable to find a worker with hostname '{0}'".format(plot.hostname))
-                    displayname = plot.hostname
-                displaynames[plot.hostname] = displayname
-            self.rows.append({ 
-                'hostname': plot.hostname,
-                'fork': plot.blockchain, 
-                'worker': displayname, 
-                'plot_id': plot.plot_id, 
-                'dir': plot.dir,  
-                'plot': plot.file,  
-                'create_date': plot.created_at, 
-                'size': plot.size, 
-                'type': plot.type if plot.type else "" 
-            }) 
+            self.rows.append([
+                plot.displayname,  
+                plot.blockchain, 
+                plot.plot_id, 
+                plot.dir,  
+                app.jinja_env.filters['plotnameshortener'](plot.file),
+                plot.type if plot.type else "", 
+                plot.created_at, 
+                app.jinja_env.filters['bytesfilter'](plot.size),
+                plot.file]
+            ) 
 
 
 class ChallengesChartData:
@@ -263,7 +254,7 @@ class Connections:
         if blockchain == 'chia':
             return 8444
         elif blockchain == 'flax':
-            return 6668
+            return 6888
         elif blockchain == 'nchain':
             return 58445
         elif blockchain == 'hddcoin':

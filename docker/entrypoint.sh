@@ -11,6 +11,12 @@ if [[ "${blockchains}" == "chia,flax" ]]; then
   return 1
 fi
 
+if [[ -z ${worker_address} ]]; then
+  echo "Please set the 'worker_address' environment variable to this system's IP address on your LAN."
+  echo "https://github.com/guydavis/machinaris/wiki/Unraid#how-do-i-update-from-v05x-to-v060-with-fork-support"
+  return 1
+fi
+
 # Start only selected fork
 for fork in ${blockchains//,/ }; do
   /usr/bin/bash /machinaris/scripts/forks/${fork}_launch.sh

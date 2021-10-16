@@ -10,6 +10,7 @@ class Plot(db.Model):
     __tablename__ = "plots"
 
     hostname = sa.Column(sa.String(length=255), primary_key=True)
+    displayname = sa.Column(sa.String(length=255), nullable=True)
     blockchain = sa.Column(sa.String(length=64), nullable=True)
     plot_id = sa.Column(sa.String(length=16), primary_key=True)
     type = sa.Column(sa.String(length=32), nullable=True)

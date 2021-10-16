@@ -79,7 +79,7 @@ class WorkerWarning:
         elif level == "error":
             self.icon = "exclamation-circle"
 
-def generate_warnings(worker, plots):
+def generate_warnings(worker):
     warnings = []
     # Check if worker is responding to pings
     app.logger.info(worker)
