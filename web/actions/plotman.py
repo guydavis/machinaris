@@ -196,7 +196,7 @@ def inspect_config(hostname, config):
         elif 'pool_pk' in config['plotting']:
             app.logger.info("Saving config to {0}, found pool_pk {1}".format(
                 hostname, config['plotting']['pool_pk']))
-            flash('Current configuration will plot <b>SOLO</b> plots, not <b>PORTABLE</b> plots for pooling. If this is not your choice, please see the <a href="https://github.com/guydavis/machinaris/wiki/Pooling#setup-and-config">wiki</a>.', 'message')
+            flash('Current configuration will plot <b>SOLO</b> plots, not <b>PORTABLE</b> plots for pooling. If this is not your choice, please see the <a target="_blank" href="https://github.com/guydavis/machinaris/wiki/Pooling#setup-and-config">wiki</a>.', 'message')
     else:
          app.logger.info("Saving config to {0}, found a malformed config without a 'plotting' section.")
 

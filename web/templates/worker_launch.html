@@ -178,7 +178,7 @@
         function updateDockerCompose(errors) {
             var line_end = '\n';
             var os = getRadioButtonValue('os')
-            cmd = "version: '3.9'" + line_end;
+            cmd = "version: '3.7'" + line_end;
             cmd += "services:"  + line_end + line_end;
 
             var blockchains = document.getElementsByName('blockchains');
@@ -247,9 +247,15 @@
                         else {
                             mode = 'plotter';
                         }
-                        cmd += '            - farmer_pk=' + document.getElementById("farmer_pk").value + line_end;
-                        cmd += '            - pool_pk=' + document.getElementById("pool_pk").value + line_end;
-                        cmd += '            - pool_contract_address=' + document.getElementById("pool_contract_address").value + line_end;
+                        if (document.getElementById("farmer_pk").value) {
+                            cmd += '            - farmer_pk=' + document.getElementById("farmer_pk").value + line_end;
+                        }
+                        if (document.getElementById("pool_pk").value) {
+                            cmd += '            - pool_pk=' + document.getElementById("pool_pk").value + line_end;
+                        }
+                        if (document.getElementById("pool_contract_address").value) {
+                            cmd += '            - pool_contract_address=' + document.getElementById("pool_contract_address").value + line_end;
+                        }
                     }
                     if (mode) { // harvester, plotter, or harvester+plotter
                         cmd += '            - mode=' + mode + line_end;
@@ -269,7 +275,7 @@
                     cmd += '            - plots_dir=' + plots_dir.join(':') + line_end;
                     cmd += '            - blockchains=' + blockchain + line_end;
                     var auto_plot = getRadioButtonValue('auto_plot');
-                    if (auto_plot == "true") {
+                    if ((blockchain == "chia") && (auto_plot == "true")) {
                         cmd += '            - AUTO_PLOT=' + auto_plot + line_end;
                     }
                     cmd += '        ports:' + line_end;

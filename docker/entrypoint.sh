@@ -25,7 +25,7 @@ done
 # Launch Machinaris web server and other services
 /machinaris/scripts/start_machinaris.sh
 
-# Check that bladebit works on local hardware
-/usr/bin/bash /machinaris/scripts/bladebit_check.sh > /tmp/bladebit_check.log 2>&1
+# Must build bladebit on target hardware on each container launch
+/usr/bin/bash /machinaris/scripts/bladebit_build.sh > /tmp/bladebit_build.log 2>&1
 
 while true; do sleep 30; done;

@@ -115,15 +115,31 @@ def clean_tmp_dirs_before_run():
                     for tmp_dir in config['directories']['tmp']:
                         app.logger.info("No running plot jobs found so deleting {0}/*.tmp before starting plotman.".format(tmp_dir))
                         for p in pathlib.Path(tmp_dir).glob("*.tmp"):
-                            p.unlink()
+                            if check_tmp_file_is_day_old(p):
+                                p.unlink()
                 if 'tmp2' in config['directories']:
                     tmp_dir = config['directories']['tmp2']
                     app.logger.info("No running plot jobs found so deleting {0}/*.tmp before starting plotman.".format(tmp_dir))
                     for p in pathlib.Path(tmp_dir).glob("*.tmp"):
-                        p.unlink()
+                        if check_tmp_file_is_day_old(p):
+                            p.unlink()
     except Exception as ex:
         app.logger.info("Skipping deletion of temp files due to {0}.".format(traceback.format_exc()))
-    
+
+def check_tmp_file_is_day_old(path):
+    try:
+        match = re.match("plot-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+)", path.name)
+        if match:
+            plot_date = datetime.datetime.strptime("{0}-{1}-{2} {3}:{4}".format(
+                match.group(2), match.group(3), match.group(4), match.group(5), match.group(6)), 
+                '%Y-%m-%d %H:%M')
+            day_ago = datetime.datetime.now() - datetime.timedelta(days=1)
+            return plot_date < day_ago  # Only safe to remove temp file if day old
+    except Exception as ex:
+        app.logger.info("Failed to check age of temp file at: {0}".format(path))
+        app.logger.info("Due to: {0}".format(str(ex)))
+    return False
+
 def clean_tmp_dirs_after_kill(plot_id):
     try:
         with open("/root/.chia/plotman/plotman.yaml") as f:
@@ -132,13 +148,15 @@ def clean_tmp_dirs_after_kill(plot_id):
                 if 'tmp' in config['directories']:
                     for tmp_dir in config['directories']['tmp']:
                         for p in pathlib.Path(tmp_dir).glob("*{0}*.tmp".format(plot_id)):
-                            app.logger.info("After kill, deleting stale tmp file: {0}".format(p))
-                            p.unlink()
+                            if check_tmp_file_is_day_old(p):
+                                app.logger.info("After kill, deleting stale tmp file: {0}".format(p))
+                                p.unlink()
                 if 'tmp2' in config['directories']:
                     tmp_dir = config['directories']['tmp2']
                     for p in pathlib.Path(tmp_dir).glob("*{0}*.tmp".format(plot_id)):
-                        app.logger.info("After kill, deleting stale tmp file: {0}".format(p))
-                        p.unlink()
+                        if check_tmp_file_is_day_old(p):
+                            app.logger.info("After kill, deleting stale tmp file: {0}".format(p))
+                            p.unlink()
     except Exception as ex:
         app.logger.info("Skipping deletion of temp files due to {0}.".format(traceback.format_exc()))
 
