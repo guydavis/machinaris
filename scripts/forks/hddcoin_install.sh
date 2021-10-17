@@ -18,5 +18,6 @@ else
 		cd /
 		rmdir /chia-blockchain
 		ln -s /hddcoin-blockchain /chia-blockchain
+		ln -s /hddcoin-blockchain/venv/bin/hddcoin /chia-blockchain/venv/bin/chia
 	fi
 fi

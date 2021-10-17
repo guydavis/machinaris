@@ -18,5 +18,6 @@ else
 		cd /
 		rmdir /chia-blockchain
 		ln -s /flax-blockchain /chia-blockchain
+		ln -s /flax-blockchain/venv/bin/flax /chia-blockchain/venv/bin/chia
 	fi
 fi
