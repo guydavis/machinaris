@@ -52,7 +52,7 @@
                                     onclick='ViewLogs("{{ worker.hostname }}","{{worker.blockchain}}");return false;'>
                                     <span class="align-text-bottom" style="padding-right:5px">{{worker.blockchain|capitalize}}</span>
                                     &nbsp;
-                                    {% if worker.farming_status == 'farming' %}
+                                    {% if worker.farming_status == 'farming' or worker.farming_status == 'harvesting' %}
                                         <i class="fs-4 bi-emoji-smile"></i>
                                     {% else %}
                                         <i class="fs-4 bi-exclamation-triangle"></i>

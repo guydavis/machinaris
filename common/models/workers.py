@@ -30,7 +30,7 @@ class Worker(db.Model):
             try:
                 return j.loads(self.services)['farm_status']
             except:
-                return "Unkown"
+                return "unknown"
     
     def plotting_status(self):
         try:
@@ -39,7 +39,7 @@ class Worker(db.Model):
             try:
                 return j.loads(self.services)['plotman_status']
             except:
-                return "Unkown"
+                return "unknown"
 
     def archiving_status(self):
         try:
@@ -48,13 +48,13 @@ class Worker(db.Model):
             try:
                 return j.loads(self.services)['archiver_status']
             except:
-                return "Unkown"
+                return "unknown"
 
     def archiving_enabled(self):
         try:
             return j.loads(self.config)['archiving_enabled']
         except:
-            return "Unkown"
+            return "unknown"
     
     def monitoring_status(self):
         try:
@@ -63,12 +63,12 @@ class Worker(db.Model):
             try:
                 return j.loads(self.services)['chiadog_status'] 
             except:
-                return "Unkown"
+                return "unknown"
     
     def connection_status(self):
         fifteen_mins_ago = dt.datetime.now() - dt.timedelta(minutes=15)
         if self.ping_success_at and self.ping_success_at >= fifteen_mins_ago:
             return self.latest_ping_result
         elif self.latest_ping_result and self.latest_ping_result == 'Responding':
-            return "Offline" # Was responding but over 15 minutes ago
+            return "offline" # Was responding but over 15 minutes ago
         return self.latest_ping_result

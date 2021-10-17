@@ -26,9 +26,12 @@ class Host:
     def farming_status(self):
         status = "unknown"
         for worker in self.workers:
+            app.logger.info("{0} {1} ==> {2}".format(worker['displayname'], worker['blockchain'], worker['farming_status']))
             if worker['farming_status'] == 'farming':
                 status = "farming"
-            elif not status == 'farming':
+            elif worker['farming_status'] == 'harvesting':
+                status = "harvesting"
+            elif not status in ['farming', 'harvesting']:
                 status = worker['farming_status']
         return status
 
@@ -83,7 +86,7 @@ class WorkerSummary:
         if connection_status == "Responding":
             return last_status
         app.logger.info("Oops! {0} ({1}) last connection status: {2}".format(displayname, blockchain, connection_status))
-        return "Offline"
+        return "offline"
 
     def fullnodes(self):
         filtered = []

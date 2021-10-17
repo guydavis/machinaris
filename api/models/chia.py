@@ -54,8 +54,6 @@ class FarmSummary:
         self.status = status
         if self.status == "Farming":
             self.display_status = "Active"
-        #elif self.status == "Not synced or not connected to peers":
-        #    self.display_status = "<span style='font-size:.6em'>" + self.status + '</span>'
         else:
             self.display_status = self.status
 
@@ -70,7 +68,12 @@ class FarmSummary:
         except:
             app.logger.info("Unable to split network size value: {0}".format(netspace_size))
             self.display_netspace_size = self.netspace_size
-        
+
+class HarvesterSummary:
+
+    def __init__(self):
+        self.status = "harvesting" # TODO Check for harvester status in debug.log
+
 class FarmPlots:
 
      def __init__(self, entries):
