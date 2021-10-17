@@ -6,7 +6,7 @@
 # runs on. 
 #
 
-if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ ^plotter.* ]]; then
+if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "plotter" ]]; then
     if [ ! -f /usr/bin/bladebit ]; then
         # Build the code, previously cloned when image was built on Github build servers
         arch_name="$(uname -m)"
