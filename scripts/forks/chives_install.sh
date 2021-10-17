@@ -18,5 +18,6 @@ else
 		cd /
 		rmdir /chia-blockchain
 		ln -s /chives-blockchain /chia-blockchain
+		ln -s /chives-blockchain/venv/bin/chives /chia-blockchain/venv/bin/chia
 	fi
 fi

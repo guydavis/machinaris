@@ -40,8 +40,10 @@ def load_farm_summary(blockchain):
         if errs:
             app.logger.debug("Error from {0} farm summary because {1}".format(blockchain, outs.decode('utf-8')))
         return chia.FarmSummary(cli_stdout=outs.decode('utf-8').splitlines())
-    elif globals.farming_enabled():
+    elif globals.harvesting_enabled():
         return chia.HarvesterSummary()
+    else:
+        raise Exception("Unable to load farm summary on non-farmer and non-harvester.")
 
 def load_plots_farming():
     all_entries = []
