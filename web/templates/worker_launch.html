@@ -188,11 +188,11 @@
                     var blockchain = blockchains[i].value
                     if (blockchain == "chia") {
                         cmd += "    machinaris:" + line_end;
-                        cmd += "        image: ghcr.io/guydavis/machinaris:test" + line_end;
+                        cmd += "        image: ghcr.io/guydavis/machinaris" + line_end;
                         cmd += "        container_name: machinaris" + line_end;
                     } else {
                         cmd += "    machinaris-" + blockchain + ":" + line_end;
-                        cmd += "        image: ghcr.io/guydavis/machinaris-" + blockchain + ":test" + line_end;
+                        cmd += "        image: ghcr.io/guydavis/machinaris-" + blockchain + "" + line_end;
                         cmd += "        container_name: machinaris-" + blockchain + line_end;
                     }
                     if (document.getElementById("worker_hostname").value) {
@@ -225,6 +225,9 @@
                             } else if (!volume_container_path) {
                                 errors.push("Empty container path provided for volume at '" + volume_host_path + "'. Please provide a container path.");
                             }
+                        }
+                        if ((blockchain == "chives") && ($('#volume_type' + index).val() == 'plots')) {
+                            volume_host_path += '/chives'
                         }
                         cmd += '            - "' + volume_host_path + ':' + volume_container_path + '"' + line_end;
                         if ($('#volume_type' + index).val() == 'plots') {
