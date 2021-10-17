@@ -22,15 +22,8 @@ DATABASE = '/root/.chia/machinaris/dbs/stats.db'
 ALL_TABLES_BY_HOSTNAME = [
     'stat_plots_disk_used',
     'stat_plotting_disk_used',
-    'stat_netspace_size',
-    'stat_plots_size',
-    'stat_plotting_total_used', 
-    'stat_plot_count',
-    'stat_plots_total_used',
-    'stat_time_to_win',
     'stat_plots_disk_free',
     'stat_plotting_disk_free',
-    'stat_total_chia',
 ]
 
 def get_stats_db():
@@ -221,9 +214,10 @@ def load_current_disk_usage(disk_type, hostname=None):
 def prune_workers_status(hostname, displayname, blockchain):
     try:
         db = get_stats_db()
+        cur = db.cursor()
         for table in ALL_TABLES_BY_HOSTNAME:
-            db.session.execute("DELETE FROM " + table + " WHERE (hostname = :hostname OR hostname = :displayname) AND blockchain = :blockchain", 
-                {"hostname":hostname, "displayname":displayname, "blockchain":blockchain})
-            db.session.commit()
+            cur.execute("DELETE FROM " + table + " WHERE (hostname = :hostname OR hostname = :displayname)", 
+                {"hostname":hostname, "displayname":displayname})
+        db.commit()
     except Exception as ex:
         app.logger.info("Failed to remove stale stats for worker {0} - {1} because {2}".format(displayname, blockchain, str(ex)))

@@ -21,11 +21,6 @@ from common.models import workers as w
 from web.models.worker import WorkerSummary
 from web.actions import stats
 
-ALL_TABLES_BY_HOSTNAME = [
-    'plots',
-    'plottings',
-]
-
 ALL_TABLES_BY_HOSTNAME_AND_BLOCKCHAIN = [
     'alerts',
     'blockchains',
@@ -33,6 +28,8 @@ ALL_TABLES_BY_HOSTNAME_AND_BLOCKCHAIN = [
     'connections',
     'farms', 
     'keys',
+    'plots',
+    'plottings',
     'plotnfts',
     'pools',
     'wallets',
@@ -58,16 +55,12 @@ def prune_workers_status(workers):
         if worker:
             if 'chia' == blockchain:
                 stats.prune_workers_status(hostname, worker.displayname, worker.blockchain)
-            for table in ALL_TABLES_BY_HOSTNAME:
-                db.session.execute("DELETE FROM " + table + " WHERE (hostname = :hostname OR hostname = :displayname)", 
-                    {"hostname":hostname, "displayname":worker.displayname})
-                db.session.commit()
             for table in ALL_TABLES_BY_HOSTNAME_AND_BLOCKCHAIN:
                 db.session.execute("DELETE FROM " + table + " WHERE (hostname = :hostname OR hostname = :displayname) AND blockchain = :blockchain", 
                     {"hostname":hostname, "displayname":worker.displayname, "blockchain":worker.blockchain})
                 db.session.commit()
         else:
-            app.logger.info("Found worker: {0}".format(worker))
+            app.logger.info("Unable to find worker: {0} - {1}".format(hostname, blockchain))
 
 class WorkerWarning:
 

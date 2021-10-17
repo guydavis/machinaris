@@ -62,9 +62,8 @@ def gather_services_status():
     monitoring_status = "disabled"
     # Assumes a single blockchain is enabled in this container
     for blockchain in globals.enabled_blockchains():
-        if gc['farming_enabled']:
-            response['farming_status'] = chia_cli.load_farm_summary(blockchain).status
         if gc['farming_enabled'] or gc['harvesting_enabled']:
+            response['farming_status'] = chia_cli.load_farm_summary(blockchain).status
             if chiadog_cli.get_chiadog_pid(blockchain):
                 response['monitoring_status'] = "running"
             else:

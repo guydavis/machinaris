@@ -39,8 +39,9 @@ def load_farm_summary(blockchain):
             abort(500, description="The timeout is expired!")
         if errs:
             app.logger.debug("Error from {0} farm summary because {1}".format(blockchain, outs.decode('utf-8')))
-        farm_summary = chia.FarmSummary(cli_stdout=outs.decode('utf-8').splitlines())
-    return farm_summary
+        return chia.FarmSummary(cli_stdout=outs.decode('utf-8').splitlines())
+    elif globals.farming_enabled():
+        return chia.HarvesterSummary()
 
 def load_plots_farming():
     all_entries = []
