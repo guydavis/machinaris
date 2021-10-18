@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+        {% else %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {% endif %}
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <style>
+        a.active.nav-link {
+            background-color: #3d3f42 !important
+        }
+
+        button.active.nav-link {
+            background-color: #3d3f42 !important
+        }
+    </style>
+
+    {% if connections.rows|length > 0 %}
+    <nav class="navbar navbar-expand-lg navbar-dark" style="padding-bottom: 0px; display: block">
+        <div class="h-100 p-2 text-white">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                {% for connection in connections.rows %}
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link {% if loop.index == 1 %}active{% endif %}"
+                        id="{{connection.blockchain}}-tab" data-bs-toggle="tab"
+                        data-bs-target="#{{connection.blockchain}}" type="button" role="tab"
+                        aria-controls="{{connection.blockchain}}"
+                        aria-selected="{% if loop.index == 1 %}true{% else %}false{% endif %}">{{ connection.blockchain
+                        }}</button>
+                </li>
+                {% endfor %}
+            </ul>
+            <div class="tab-content">
+                {% for connection in connections.rows %}
+                <div class="tab-pane {% if loop.index == 1 %}active{% endif %}" id="{{connection.blockchain}}"
+                    role="tabpanel" aria-labelledby="{{connection.blockchain}}-tab">
+                    <br />
+                    <form method="POST" id="form_{{connection.displayname}}_{{connection.blockchain}}">
+                        <input type="hidden" name="blockchain" value="{{connection.blockchain}}" />
+                        <div class="table-responsive">
+                            <table id="conns_{{connection.displayname}}_{{connection.blockchain}}"
+                                class="table table-dark">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="text-success"></th>
+                                        <th scope="col" class="text-success">Type</th>
+                                        <th scope="col" class="text-success">IP Address</th>
+                                        <th scope="col" class="text-success">Ports</th>
+                                        <th scope="col" class="text-success">Node ID</th>
+                                        <th scope="col" class="text-success">SB Height</th>
+                                        <th scope="col" class="text-success">Last Connect</th>
+                                        <th scope="col" class="text-success">MiB Up</th>
+                                        <th scope="col" class="text-success">MiB Down</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for row in connections.blockchains[connection.blockchain] %}
+                                    <tr>
+                                        <td class="text-center">
+                                            {% if row.type == "FULL_NODE" or (row.type == "WALLET" and row.ip !=
+                                            "127.0.0.1") %}
+                                            <input type="checkbox" name="nodeid" value="{{ row.nodeid }}" />
+                                            {% endif %}
+                                        </td>
+                                        <td>{{row.type}}</td>
+                                        <td>{{row.ip}}</td>
+                                        <td>{{row.ports}}</td>
+                                        <td>{{row.nodeid}}</td>
+                                        <td>{{row.height}}</td>
+                                        <td>{{row.last_connect}}</td>
+                                        <td>{{row.mib_up}}</td>
+                                        <td>{{row.mib_down}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <input type="hidden" name="hostname" value="{{connection.hostname}}" />
+                        <fieldset>
+                            <div class="row g-3 mt-2">
+                                <div class="col-sm">
+                                    <button form="form_{{connection.displayname}}_{{connection.blockchain}}"
+                                        type="submit" name="action" value="remove" class="btn btn-outline-success"
+                                        id="btnRemove_{{connection.displayname}}_{{connection.blockchain}}">Disconnect
+                                        Selected</button>
+                                </div>
+
+                                <div class="col-sm"><a class="btn btn-outline-success" role="button"
+                                        href="https://www.yougetsignal.com/tools/open-ports/?port={{connection.farmer_port}}"
+                                        target="_blank" class="text-white">
+                                        Check Port Forwarding
+                                    </a>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input class="form-control me-2"
+                                        id="connection_{{connection.displayname}}_{{connection.blockchain}}"
+                                        name="connection" type="text" placeholder="{{connection.add_exmample}}"
+                                        aria-label="Add">
+                                </div>
+                                <div class="col-sm-2">
+                                    <button class="btn btn-outline-success text-nowrap text-right" type="submit"
+                                        name="action" value="add"
+                                        id="btnAdd_{{connection.displayname}}_{{connection.blockchain}}"
+                                        form="main-form">Add New Connection</button>
+                                </div>
+                        </fieldset>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </nav>
+    {% else %}
+    <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
+        <h6>No connections found from any farmers. Not running?</h6>
+        <h6>Try running 'chia show --connections' on your farmers to verify.</h6>
+    </div>
+    {% endif %}
+
+
+    {% endblock %}
+
+    {% block scripts %}
+    <script>
+        $(document).ready(function () {
+            {% for connection in connections.rows %}
+            $('#conns_{{connection.displayname}}_{{connection.blockchain}}').DataTable({
+                "columnDefs": [{ "orderable": false, targets: [0] }],
+            });
+            $("#btnAdd_{{connection.displayname}}_{{connection.blockchain}}").click(function () {
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...`
+                );
+                $('#form_{{connection.displayname}}_{{connection.blockchain}}').append('<input type="hidden" id="action" name="action" value="add" />');
+                $("#form_{{connection.displayname}}_{{connection.blockchain}}").submit();
+            });
+            $("#btnRemove_{{connection.displayname}}_{{connection.blockchain}}").click(function () {
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Removing...`
+                );
+                $('#form_{{connection.displayname}}_{{connection.blockchain}}').append('<input type="hidden" id="action" name="action" value="remove" />');
+                $("#form_{{connection.displayname}}_{{connection.blockchain}}").submit();
+            });
+            {% endfor %}
+        })
+    </script>
+    {% endblock %}

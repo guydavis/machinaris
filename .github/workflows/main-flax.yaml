@@ -1,4 +1,4 @@
-name: release
+name: release-flax
 
 on: 
   workflow_dispatch:
@@ -41,10 +41,9 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
-            "CHIA_BRANCH=1.2.9"
             "FLAX_BRANCH=main"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:v${{ github.event.inputs.version }}
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:latest
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:v${{ github.event.inputs.version }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-flax:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-flax:v${{ github.event.inputs.version }}
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-flax:latest
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-flax:v${{ github.event.inputs.version }}

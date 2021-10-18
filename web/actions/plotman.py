@@ -3,6 +3,7 @@
 #
 
 import datetime
+import json
 import os
 from flask.helpers import make_response
 import psutil
@@ -35,16 +36,7 @@ def load_plotting_summary(hostname=None):
     return PlottingSummary(plottings)
 
 def load_plotters():
-    plotters = []
-    for plotter in w.load_worker_summary().plotters:
-        plotters.append({
-            'hostname': plotter.hostname,
-            'displayname': plotter.displayname,
-            'plotting_status': plotter.plotting_status(),
-            'archiving_status': plotter.archiving_status(),
-            'archiving_enabled': plotter.archiving_enabled()
-        })
-    return sorted(plotters, key=lambda p: p['displayname'])
+    return w.load_worker_summary().plotters()
 
 def start_plotman(plotter):
     app.logger.info("Starting Plotman run...")
@@ -65,10 +57,11 @@ def action_plots(action, plot_ids):
     app.logger.info("About to {0} plots: {1}".format(action, plots_by_worker))
     error = False
     error_message = ""
-    for hostname in plots_by_worker.keys():
+    for hostname_blockchain in plots_by_worker.keys():
         try:
-            plotter = w.get_worker_by_hostname(hostname)
-            plot_ids = plots_by_worker[hostname]
+            [ hostname, blockchain] = hostname_blockchain.split('_')
+            plotter = w.get_worker(hostname, blockchain)
+            plot_ids = plots_by_worker[hostname_blockchain]
             response = utils.send_post(plotter, "/actions/", debug=False,
                 payload={"service": "plotting","action": action, "plot_ids": plot_ids}
             )
@@ -88,14 +81,14 @@ def group_plots_by_worker(plot_ids):
     plots_by_worker = {}
     all_plottings = load_plotting_summary()
     for plot_id in plot_ids:
-        hostname = None
+        hostname_blockchain = None
         for plot in all_plottings.rows:
             if plot['plot_id'] == plot_id:
-                hostname = plot['worker']
-        if hostname:
-            if not hostname in plots_by_worker:
-                plots_by_worker[hostname] = []
-            plots_by_worker[hostname].append(plot_id)
+                hostname_blockchain = plot['hostname'] + '_' + plot['fork']
+        if hostname_blockchain:
+            if not hostname_blockchain in plots_by_worker:
+                plots_by_worker[hostname_blockchain] = []
+            plots_by_worker[hostname_blockchain].append(plot_id)
     return plots_by_worker
 
 def stop_plotman(plotter):
@@ -173,7 +166,7 @@ def load_config_replacements():
         replacements.append([ 'pool_contract_address:\s+REPLACE_WITH_THE_REAL_VALUE.*$', 'pool_contract_address: '+ pool_contract_address])
     return replacements
 
-def load_config(plotter):
+def load_config(plotter, blockchain):
     replacements = []
     try:
         replacements = load_config_replacements()
@@ -181,7 +174,7 @@ def load_config(plotter):
         app.logger.info("Unable to load replacements on install with mode={0}".format(os.environ['mode']))
         app.logger.info(traceback.format_exc())
     lines = []
-    config = utils.send_get(plotter, "/configs/plotting", debug=False).content.decode('utf-8')
+    config = utils.send_get(plotter, "/configs/plotting/" + blockchain, debug=False).content.decode('utf-8')
     replaces = 0
     for line in config.splitlines():
         for replacement in replacements:
@@ -203,11 +196,11 @@ def inspect_config(hostname, config):
         elif 'pool_pk' in config['plotting']:
             app.logger.info("Saving config to {0}, found pool_pk {1}".format(
                 hostname, config['plotting']['pool_pk']))
-            flash('Current configuration will plot <b>SOLO</b> plots, not <b>PORTABLE</b> plots for pooling. If this is not your choice, please see the <a href="https://github.com/guydavis/machinaris/wiki/Pooling#setup-and-config">wiki</a>.', 'message')
+            flash('Current configuration will plot <b>SOLO</b> plots, not <b>PORTABLE</b> plots for pooling. If this is not your choice, please see the <a target="_blank" href="https://github.com/guydavis/machinaris/wiki/Pooling#setup-and-config">wiki</a>.', 'message')
     else:
          app.logger.info("Saving config to {0}, found a malformed config without a 'plotting' section.")
 
-def save_config(plotter, config):
+def save_config(plotter, blockchain, config):
     try: # Validate the YAML first
         c = yaml.safe_load(config)
         inspect_config(plotter.hostname, c)
@@ -216,7 +209,7 @@ def save_config(plotter, config):
         flash('Updated plotman.yaml failed validation! Fix and save or refresh page.', 'danger')
         flash(str(ex), 'warning')
     try:
-        response = utils.send_put(plotter, "/configs/plotting", config, debug=False)
+        response = utils.send_put(plotter, "/configs/plotting/" + blockchain, config, debug=False)
     except Exception as ex:
         flash('Failed to save config to plotter.  Please check log files.', 'danger')
         flash(str(ex), 'warning')
@@ -226,25 +219,29 @@ def save_config(plotter, config):
         else:
             flash("<pre>{0}</pre>".format(response.content.decode('utf-8')), 'danger')
 
-def analyze(plot_file, plotters):
+def analyze(plot_file, workers):
     # Don't know which plotter might have the plot result so try them in-turn
-    for plotter in plotters:
-        if plotter.latest_ping_result != "Responding":
-            app.logger.info("Skipping analyze call to {0} as last ping was: {1}".format( \
-                plotter.hostname, plotter.latest_ping_result))
-            continue
-        try:
-            app.logger.info("Trying {0} for analyze....".format(plotter.hostname))
-            payload = {"service":"plotting", "action":"analyze", "plot_file": plot_file }
-            response = utils.send_post(plotter, "/analysis/", payload, debug=False)
-            if response.status_code == 200:
-                return response.content.decode('utf-8')
-            elif response.status_code == 404:
-                app.logger.info("Plotter on {0} did not have plot log for {1}".format(plotter.hostname, plot_file))
-            else:
-                app.logger.info("Plotter on {0} returned an unexpected error: {1}".format(plotter.hostname, response.status_code))
-        except:
-            app.logger.info(traceback.format_exc())
+    for plotter in workers:
+        #app.logger.info("{0}:{1} - {2} - {3}".format(plotter.hostname, plotter.port, plotter.blockchain, plotter.mode))
+        if plotter.mode == 'fullnode' or 'plotter' in plotter.mode:
+            if plotter.latest_ping_result != "Responding":
+                app.logger.info("Skipping analyze call to {0} as last ping was: {1}".format( \
+                    plotter.hostname, plotter.latest_ping_result))
+                continue
+            try:
+                app.logger.info("Trying {0}:{1} for analyze....".format(plotter.hostname, plotter.port))
+                payload = {"service":"plotting", "action":"analyze", "plot_file": plot_file }
+                response = utils.send_post(plotter, "/analysis/", payload, debug=False)
+                if response.status_code == 200:
+                    return response.content.decode('utf-8')
+                elif response.status_code == 404:
+                    app.logger.info("Plotter on {0}:{1} did not have plot log for {2}".format(
+                        plotter.hostname, plotter.port, plot_file))
+                else:
+                    app.logger.info("Plotter on {0}:{1} returned an unexpected error: {2}".format(
+                        plotter.hostname, plotter.port, response.status_code))
+            except:
+                app.logger.info(traceback.format_exc())
     return make_response("Sorry, not plotting job log found.  Perhaps plot was made elsewhere?", 200)
 
 def load_plotting_keys():

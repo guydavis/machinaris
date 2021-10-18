@@ -3,6 +3,7 @@
 #
 
 import datetime
+import json
 import os
 import pexpect
 import psutil
@@ -20,6 +21,7 @@ import yaml
 from flask import Flask, jsonify, abort, request, flash
 from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
 from subprocess import Popen, TimeoutExpired, PIPE
+from sqlalchemy import or_
 from os import path
 
 from web import app, db, utils
@@ -29,27 +31,80 @@ from common.models import farms as f, plots as p, challenges as c, wallets as w,
 from common.config import globals
 from web.models.chia import FarmSummary, FarmPlots, Wallets, \
     Blockchains, Connections, Keys, Plotnfts, Pools, PartialsChartData, \
-    ChallengesChartData
+    ChallengesChartData, PLOT_TABLE_COLUMNS
 from . import worker as wk
-
-CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
-FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
 
 def load_farm_summary():
     farms = db.session.query(f.Farm).order_by(f.Farm.hostname).all()
-    return FarmSummary(farms)
+    wallets = db.session.query(w.Wallet).order_by(w.Wallet.blockchain).all()
+    return FarmSummary(farms, wallets)
 
 def load_plots_farming(hostname=None):
-    query = db.session.query(p.Plot).order_by(p.Plot.created_at.desc())
-    if hostname:
-        plots = query.filter(p.Plot.hostname==hostname)
+    return FarmPlots([])  # Only used for columns on Farming table, no data
+
+def order_plots_query(args, query):
+    column = None
+    col_idx = int(request.args.get("order[0][column]"))
+    if col_idx == 0:
+        column = p.Plot.displayname
+    elif col_idx == 1:
+        column = p.Plot.blockchain
+    elif col_idx == 2:
+        column = p.Plot.plot_id
+    elif col_idx == 3:
+        column = p.Plot.dir
+    elif col_idx == 4:
+        column = p.Plot.file
+    elif col_idx == 5:
+        column = p.Plot.type
+    elif col_idx == 6:
+        column = p.Plot.created_at
+    elif col_idx == 7:
+        column = p.Plot.size
+    if request.args.get("order[0][dir]") == "desc":
+        query = query.order_by(column.desc())
     else:
-        plots = query.all()
-    return FarmPlots(plots)
+        query = query.order_by(column.asc())
+    return query
+
+def search_plots_query(search, query):
+    app.logger.info("Searching all plots for: {0}".format(search))
+    query = query.filter(or_(
+        p.Plot.displayname.like(search),
+        p.Plot.blockchain.like(search),
+        p.Plot.plot_id.like(search),
+        p.Plot.dir.like(search),
+        p.Plot.file.like(search),
+        p.Plot.type.like(search),
+        p.Plot.created_at.like(search),
+    ))
+    return query
+
+def load_plots(args):
+    total_count = db.session.query(p.Plot).count()
+    filtered_count = total_count
+    query = db.session.query(p.Plot)
+    draw = int(request.args.get("draw"))  # Request identifier from Datatables.js
+    #columns = request.args.getlist("columns")  # Indexed list like column[0][...]
+    query = order_plots_query(args, query)
+    search = request.args.get("search[value]")
+    if search:
+        query = search_plots_query(search, query)
+        filtered_count = query.count()
+    start = int(request.args.get("start"))
+    if start > 0:
+        query = query.offset(start)
+    length = int(request.args["length"])
+    if length > 0: 
+        query = query.limit(length)
+    return [draw, total_count, filtered_count, FarmPlots(query).rows]
 
 def challenges_chart_data(farm_summary):
+    chart_start_time = (datetime.datetime.now() - datetime.timedelta(minutes=app.config['MAX_CHART_CHALLENGES_MINS'])).strftime("%Y-%m-%d %H:%M:%S.000")
     for blockchain in farm_summary.farms:
-        challenges = db.session.query(c.Challenge).filter(c.Challenge.blockchain==blockchain).order_by(c.Challenge.created_at.desc(), c.Challenge.hostname).all()
+        challenges = db.session.query(c.Challenge).filter(c.Challenge.blockchain==blockchain,
+            c.Challenge.created_at >= chart_start_time).order_by(
+            c.Challenge.created_at.desc(), c.Challenge.hostname).all()
         farm_summary.farms[blockchain]['challenges'] = ChallengesChartData(challenges)
 
 def partials_chart_data(farm_summary):
@@ -58,12 +113,12 @@ def partials_chart_data(farm_summary):
         farm_summary.farms[blockchain]['partials'] =  PartialsChartData(partials)
 
 def load_wallets():
-    wallets = db.session.query(w.Wallet).all()
+    wallets = db.session.query(w.Wallet).order_by(w.Wallet.blockchain).all()
     return Wallets(wallets)
 
 def load_blockchain_show():
     try:  # Sparkly had an error here once with malformed data
-        blockchains = db.session.query(b.Blockchain).all()
+        blockchains = db.session.query(b.Blockchain).order_by(b.Blockchain.blockchain).all()
         return Blockchains(blockchains)
     except:
         traceback.print_exc()
@@ -74,7 +129,7 @@ def load_connections_show():
     return Connections(connections)
 
 def load_keys_show():
-    keys = db.session.query(k.Key).all()
+    keys = db.session.query(k.Key).order_by(k.Key.blockchain).all()
     return Keys(keys)
 
 def load_plotnfts():
@@ -87,25 +142,10 @@ def load_pools():
     return Pools(pools, plotnfts)
 
 def load_farmers():
-    worker_summary = wk.load_worker_summary()
-    farmers = []
-    for farmer in worker_summary.workers:
-        if farmer in worker_summary.farmers:
-            farmers.append({
-                'hostname': farmer.hostname,
-                'displayname': farmer.displayname,
-                'farming_status': farmer.farming_status().lower()
-            })
-        elif farmer in worker_summary.harvesters:
-            farmers.append({
-                'hostname': farmer.hostname,
-                'displayname': farmer.displayname,
-                'farming_status': 'harvesting'
-            })
-    return sorted(farmers, key=lambda f: f['displayname'])
+    return wk.load_worker_summary().farmers_harvesters()
 
 def load_config(farmer, blockchain):
-    return utils.send_get(farmer, "/configs/farming?blockchain=" + blockchain, debug=False).content
+    return utils.send_get(farmer, "/configs/farming/"+ blockchain, debug=False).content
 
 def save_config(farmer, blockchain, config):
     try: # Validate the YAML first
@@ -122,43 +162,14 @@ def save_config(farmer, blockchain, config):
     else:
         flash('Nice! Chia\'s config.yaml validated and saved successfully.', 'success')
 
-def add_connection(connection):
-    try:
-        hostname,port = connection.split(':')
-        binary = CHIA_BINARY
-        try:
-            if int(port) == 6888:
-                binary = FLAX_BINARY
-        except:
-            app.logger.info("Bad port provided.")
-        if socket.gethostbyname(hostname) == hostname:
-            app.logger.info('{} is a valid IP address'.format(hostname))
-        elif socket.gethostbyname(hostname) != hostname:
-            app.logger.info('{} is a valid hostname'.format(hostname))
-        proc = Popen("{0} show --add-connection {1}".format(binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
-        try:
-            outs, errs = proc.communicate(timeout=90)
-        except TimeoutExpired:
-            proc.kill()
-            proc.communicate()
-            abort(500, description="The timeout is expired!")
-        if errs:
-            abort(500, description=errs.decode('utf-8'))
-    except Exception as ex:
-        app.logger.info(traceback.format_exc())
-        flash('Invalid connection "{0}" provided.  Must be HOST:PORT.'.format(connection), 'danger')
-        flash(str(ex), 'warning')
-    else:
-        app.logger.info("{0}".format(outs.decode('utf-8')))
-        flash('Nice! Connection added to Chia and sync engaging!', 'success')
-
-def generate_key(key_path):
+def generate_key(key_path, blockchain):
+    chia_binary = globals.get_blockchain_binary(blockchain)
     if os.path.exists(key_path) and os.stat(key_path).st_size > 0:
         app.logger.info('Skipping key generation as file exists and is NOT empty! {0}'.format(key_path))
         flash('Skipping key generation as file exists and is NOT empty!', 'danger')
         flash('In-container path: {0}'.format(key_path), 'warning')
         return False
-    proc = Popen("{0} keys generate".format(CHIA_BINARY), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} keys generate".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -172,7 +183,7 @@ def generate_key(key_path):
         app.logger.info("{0}".format(errs.decode('utf-8')))
         flash('Unable to generate keys!', 'danger')
         return False
-    proc = Popen("{0} keys show --show-mnemonic-seed | tail -n 1 > {1}".format(CHIA_BINARY, key_path), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} keys show --show-mnemonic-seed | tail -n 1 > {1}".format(chia_binary, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -204,10 +215,10 @@ def generate_key(key_path):
         cmd = 'farmer-only'
     else:
         cmd = 'farmer'
-    proc = Popen("{0} start {1}".format(CHIA_BINARY, cmd), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} start {1}".format(chia_binary, cmd), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
+    except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
@@ -217,11 +228,11 @@ def generate_key(key_path):
     if errs:
         app.logger.info("{0}".format(errs.decode('utf-8')))
         flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
-        flash(str(ex), 'warning')
         return False
     return True
 
-def import_key(key_path, mnemonic):
+def import_key(key_path, mnemonic, blockchain):
+    chia_binary = globals.get_chia_binary(blockchain)
     if len(mnemonic.strip().split()) != 24:
         flash('Did not receive a 24-word mnemonic seed phrase!', 'danger')
         return False
@@ -233,7 +244,7 @@ def import_key(key_path, mnemonic):
     with open(key_path, 'w') as keyfile:
         keyfile.write('{0}\n'.format(mnemonic))
     time.sleep(3)
-    proc = Popen("{0} keys add -f {1}".format(CHIA_BINARY, key_path), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} keys add -f {1}".format(chia_binary, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -254,10 +265,10 @@ def import_key(key_path, mnemonic):
         cmd = 'farmer-only'
     else:
         cmd = 'farmer'
-    proc = Popen("{0} start {1} -r".format(CHIA_BINARY, cmd), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} start {1} -r".format(chia_binary, cmd), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
+    except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
@@ -267,7 +278,6 @@ def import_key(key_path, mnemonic):
     if errs:
         app.logger.info("{0}".format(errs.decode('utf-8')))
         flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
-        flash(str(ex), 'warning')
         return False
     if outs:
         app.logger.debug(outs.decode('utf-8'))
@@ -276,25 +286,44 @@ def import_key(key_path, mnemonic):
             'details.', 'success')
     return True
 
-def remove_connection(node_ids):
-    app.logger.debug("About to remove connection for nodeid: {0}".format(node_ids))
-    for node_id in node_ids:
-        try:
-            proc = Popen("{0} show --remove-connection {1}".format(CHIA_BINARY, node_id), stdout=PIPE, stderr=PIPE, shell=True)
-            try:
-                outs, errs = proc.communicate(timeout=5)
-            except TimeoutExpired:
-                proc.kill()
-                proc.communicate()
-                flash("Timeout attempting to remove selected fullnode connections. See server log.", 'error')
-            if errs:
-                app.logger.error(errs.decode('utf-8'))
-                flash("Error attempting to remove selected fullnode connections. See server log.", 'error')
-            if outs:
-                app.logger.debug(outs.decode('utf-8'))
-        except Exception as ex:
-            app.logger.info(traceback.format_exc())
-    flash("Successfully removed selected connections.", 'success')
+def add_connection(connection, hostname, blockchain):
+    try:
+        host,port = connection.split(':')
+        if socket.gethostbyname(host) == host:
+            app.logger.info('{} is a valid IP address'.format(host))
+        elif socket.gethostbyname(host) != host:
+            app.logger.info('{} is a valid host'.format(hostname))
+        farmer = wk.get_worker(hostname, blockchain)
+        utils.send_post(farmer, "/actions/", \
+            { 'service': 'networking', 'action': 'add_connection', 'blockchain': blockchain, 'connection': connection}, \
+            debug=False).content
+    except requests.exceptions.RequestException as e:
+        app.logger.info(traceback.format_exc())
+        flash('Failed to connect to worker to add connection. Please check logs.', 'danger')
+        flash(str(e), 'warning')
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+        flash('Invalid connection "{0}" provided.  Must be HOST:PORT.'.format(connection), 'danger')
+        flash(str(ex), 'warning')
+    else:
+        flash('Connection added to {0} and sync engaging!'.format(blockchain), 'success')
+
+def remove_connection(node_ids, hostname, blockchain):
+    try:
+        farmer = wk.get_worker(hostname, blockchain)
+        utils.send_post(farmer, "/actions/", \
+            { 'service': 'networking', 'action':'remove_connection', 'blockchain': blockchain, 'node_ids': node_ids }, \
+            debug=False).content
+    except requests.exceptions.RequestException as e:
+        app.logger.info(traceback.format_exc())
+        flash('Failed to connect to worker to add connection. Please check logs.', 'danger')
+        flash(str(e), 'warning')
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+        flash('Unknown error occurred attempting to remove connections. Please check logs.', 'danger')
+        flash(str(ex), 'warning')
+    else:
+        flash('Connection removed from {0}!'.format(blockchain), 'success')
 
 def check_plots(worker, first_load):
     try:

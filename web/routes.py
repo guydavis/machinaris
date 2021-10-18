@@ -2,10 +2,12 @@
 import pathlib
 import pytz
 import os
+import random
 import time
+import traceback
 
 from datetime import datetime
-from flask import Flask, flash, redirect, render_template, \
+from flask import Flask, flash, redirect, render_template, abort, \
         request, session, url_for, send_from_directory, make_response
 
 from common.config import globals
@@ -17,7 +19,8 @@ def landing():
     gc = globals.load()
     if not globals.is_setup():
         return redirect(url_for('setup'))
-    return render_template('landing.html')
+    msg = random.choice(list(open('web/static/landings.txt')))
+    return render_template('landing.html', random_message=msg)
 
 @app.route('/index')
 def index():
@@ -44,9 +47,9 @@ def setup():
     show_setup = True
     if request.method == 'POST':
         if request.form.get('action') == 'generate':
-            show_setup = not chia.generate_key(key_paths[0])
+            show_setup = not chia.generate_key(key_paths[0], globals.enabled_blockchains()[0])
         elif request.form.get('action') == 'import':
-            show_setup = not chia.import_key(key_paths[0], request.form.get('mnemonic'))
+            show_setup = not chia.import_key(key_paths[0], request.form.get('mnemonic'), globals.enabled_blockchains()[0])
     if show_setup:
         return render_template('setup.html', key_paths = key_paths)
     else:
@@ -62,14 +65,16 @@ def plotting_jobs():
     if request.method == 'POST':
         if request.form.get('action') == 'start':
             hostname= request.form.get('hostname')
-            plotter = worker.get_worker_by_hostname(hostname)
+            blockchain = request.form.get('blockchain')
+            plotter = worker.get_worker(hostname, blockchain)
             if request.form.get('service') == 'plotting':
                 plotman.start_plotman(plotter)
             elif request.form.get('service') == 'archiving':
                 plotman.start_archiving(plotter)
         elif request.form.get('action') == 'stop':
             hostname= request.form.get('hostname')
-            plotter = worker.get_worker_by_hostname(hostname)
+            blockchain = request.form.get('blockchain')
+            plotter = worker.get_worker(hostname, blockchain)
             if request.form.get('service') == 'plotting':
                 plotman.stop_plotman(plotter)
             elif request.form.get('service') == 'archiving':
@@ -97,17 +102,25 @@ def plotting_workers():
 def farming_plots():
     if request.args.get('analyze'):  # Xhr with a plot filename
         plot_file = request.args.get('analyze')
-        plotters = worker.load_worker_summary().plotters
-        return plotman.analyze(plot_file, plotters)
+        return plotman.analyze(plot_file, worker.load_worker_summary().workers)
     elif request.args.get('check'):  # Xhr calling for check output
-        w = worker.get_worker_by_hostname(request.args.get('hostname'))
+        # TODO Replace this with regular background plots check instead
+        w = worker.get_worker(request.args.get('hostname'))
         first_load = request.args.get("first_load")
         return chia.check_plots(w, first_load)
     gc = globals.load()
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()
-    return render_template('farming/plots.html', plots=plots, 
-        farmers=farmers, global_config=gc)
+    return render_template('farming/plots.html', farmers=farmers, plots=plots, global_config=gc)
+
+@app.route('/farming/data')
+def farming_data():
+    try:
+        [draw, recordsTotal, recordsFiltered, data] = chia.load_plots(request.args)
+        return make_response({'draw': draw, 'recordsTotal': recordsTotal, 'recordsFiltered': recordsFiltered, "data": data}, 200)
+    except: 
+        traceback.print_exc()
+    return make_response("Error! Please see logs.", 500)
 
 @app.route('/farming/workers')
 def farming_workers():
@@ -127,10 +140,10 @@ def alerts():
     gc = globals.load()
     if request.method == 'POST':
         if request.form.get('action') == 'start':
-            w = worker.get_worker_by_hostname(request.form.get('hostname'))
+            w = worker.get_worker(request.form.get('hostname'))
             chiadog.start_chiadog(w)
         elif request.form.get('action') == 'stop':
-            w = worker.get_worker_by_hostname(request.form.get('hostname'))
+            w = worker.get_worker(request.form.get('hostname'))
             chiadog.stop_chiadog(w)
         elif request.form.get('action') == 'remove':
             chiadog.remove_alerts(request.form.getlist('unique_id'))
@@ -162,7 +175,7 @@ def workers():
     gc = globals.load()
     if request.method == 'POST':
         if request.form.get('action') == "prune":
-            worker.prune_workers_status(request.form.getlist('hostname'))
+            worker.prune_workers_status(request.form.getlist('worker'))
     wkrs = worker.load_worker_summary()
     return render_template('workers.html', reload_seconds=120, 
         workers=wkrs, global_config=gc, now=gc['now'])
@@ -171,84 +184,87 @@ def workers():
 def worker_route():
     gc = globals.load()
     hostname=request.args.get('hostname')
-    wkr = worker.load_worker_summary(hostname=hostname).workers[0]
-    plots = chia.load_plots_farming(hostname=hostname)
+    blockchain=request.args.get('blockchain')
+    wkr = worker.get_worker(hostname, blockchain)
     plotting = plotman.load_plotting_summary(hostname=hostname)
     plots_disk_usage = stats.load_current_disk_usage('plots',hostname=hostname)
     plotting_disk_usage = stats.load_current_disk_usage('plotting',hostname=hostname)
-    warnings = worker.generate_warnings(wkr, plots)
+    warnings = worker.generate_warnings(wkr)
     return render_template('worker.html', worker=wkr, 
-        plots=plots, plotting=plotting, plots_disk_usage=plots_disk_usage, 
+        plotting=plotting, plots_disk_usage=plots_disk_usage, 
         plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc)
 
-@app.route('/network/blockchain')
-def network_blockchain():
+@app.route('/blockchains')
+def blockchains():
     gc = globals.load()
     blockchains = chia.load_blockchain_show()
-    return render_template('network/blockchain.html', reload_seconds=120, 
+    return render_template('blockchains.html', reload_seconds=120, 
         blockchains=blockchains, global_config=gc, now=gc['now'])
 
-@app.route('/network/connections', methods=['GET', 'POST'])
-def network_connections():
+@app.route('/connections', methods=['GET', 'POST'])
+def connections():
     gc = globals.load()
     if request.method == 'POST':
         if request.form.get('action') == "add":
-            chia.add_connection(request.form.get("connection"))
+            chia.add_connection(request.form.get("connection"), request.form.get('hostname'), request.form.get('blockchain'))
         elif request.form.get('action') == 'remove':
-            chia.remove_connection(request.form.getlist('nodeid'))
+            chia.remove_connection(request.form.getlist('nodeid'), request.form.get('hostname'), request.form.get('blockchain'))
         else:
             app.logger.info("Unknown form action: {0}".format(request.form))
     connections = chia.load_connections_show()
-    return render_template('network/connections.html', reload_seconds=120, 
+    return render_template('connections.html', reload_seconds=120, 
         connections=connections, global_config=gc, now=gc['now'])
 
-def find_selected_worker(workers_summary, hostname):
+def find_selected_worker(workers_summary, hostname, blockchain='chia'):
     if len(workers_summary.workers) == 0:
         return None
     for worker in workers_summary.workers:
-        if worker.hostname == hostname:
+        if worker.hostname == hostname and worker.blockchain == blockchain:
             return worker
     return workers_summary.workers[0]
 
 @app.route('/settings/plotting', methods=['GET', 'POST'])
 def settings_plotting():
     selected_worker_hostname = None
-    gc = globals.load()
-    if request.method == 'POST':
-        selected_worker_hostname = request.form.get('worker')
-        plotman.save_config(worker.get_worker_by_hostname(selected_worker_hostname), request.form.get("config"))
-    workers_summary = worker.load_worker_summary()
-    selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
-    return render_template('settings/plotting.html',
-        workers=workers_summary.plotters, selected_worker=selected_worker, global_config=gc)
-
-@app.route('/settings/farming', methods=['GET', 'POST'])
-def settings_farming():
-    selected_worker_hostname = None
-    blockchains = os.environ['blockchains'].split(',')
+    blockchains = globals.enabled_blockchains()
     selected_blockchain = blockchains[0]
     gc = globals.load()
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
         selected_blockchain = request.form.get('blockchain')
-        chia.save_config(worker.get_worker_by_hostname(selected_worker_hostname), selected_blockchain, request.form.get("config"))
+        plotman.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
+    return render_template('settings/plotting.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
+        workers=workers_summary.plotters, selected_worker=selected_worker, global_config=gc)
+
+@app.route('/settings/farming', methods=['GET', 'POST'])
+def settings_farming():
+    selected_worker_hostname = None
+    blockchains = globals.enabled_blockchains()
+    selected_blockchain = blockchains[0]
+    gc = globals.load()
+    if request.method == 'POST':
+        selected_worker_hostname = request.form.get('worker')
+        selected_blockchain = request.form.get('blockchain')
+        chia.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
+    workers_summary = worker.load_worker_summary()
+    selected_worker = find_selected_worker(workers_summary, selected_worker_hostname, selected_blockchain)
     return render_template('settings/farming.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
         workers=workers_summary.farmers_harvesters, selected_worker=selected_worker, global_config=gc)
 
 @app.route('/settings/alerts', methods=['GET', 'POST'])
 def settings_alerts():
     selected_worker_hostname = None
-    blockchains = os.environ['blockchains'].split(',')
+    blockchains = globals.enabled_blockchains()
     selected_blockchain = blockchains[0]
     gc = globals.load()
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
         selected_blockchain = request.form.get('blockchain')
-        chiadog.save_config(worker.get_worker_by_hostname(selected_worker_hostname), selected_blockchain, request.form.get("config"))
+        chiadog.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
     workers_summary = worker.load_worker_summary()
-    selected_worker = find_selected_worker(workers_summary, selected_worker_hostname)
+    selected_worker = find_selected_worker(workers_summary, selected_worker_hostname, selected_blockchain)
     return render_template('settings/alerts.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
         workers=workers_summary.farmers_harvesters, selected_worker=selected_worker, global_config=gc)
 
@@ -268,14 +284,14 @@ def settings_pools():
 @app.route('/settings/config', defaults={'path': ''})
 @app.route('/settings/config/<path:path>')
 def views_settings_config(path):
-    w = worker.get_worker_by_hostname(request.args.get('worker'))
     config_type = request.args.get('type')
+    w = worker.get_worker(request.args.get('worker'), request.args.get('blockchain'))
     if config_type == "alerts":
         response = make_response(chiadog.load_config(w, request.args.get('blockchain')), 200)
     elif config_type == "farming":
         response = make_response(chia.load_config(w, request.args.get('blockchain')), 200)
     elif config_type == "plotting":
-        [replaced, config] = plotman.load_config(w)
+        [replaced, config] = plotman.load_config(w, request.args.get('blockchain'))
         response = make_response(config, 200)
         response.headers.set('ConfigReplacementsOccurred', replaced)
     else:
@@ -289,7 +305,7 @@ def logs():
 
 @app.route('/logfile')
 def logfile():
-    w = worker.get_worker_by_hostname(request.args.get('hostname'))
+    w = worker.get_worker(request.args.get('hostname'), request.args.get('blockchain'))
     log_type = request.args.get("log")
     if log_type in [ 'alerts', 'farming', 'plotting', 'archiving', 'apisrv', 'webui']:
         log_id = request.args.get("log_id")

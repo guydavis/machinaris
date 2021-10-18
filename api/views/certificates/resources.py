@@ -26,16 +26,27 @@ blp = Blueprint(
 class Certificates(MethodView):
 
     def get(self):
-        if not self.allow_download():
-            abort(401)
+        
         type = request.args.get('type')
         if type == "chia":
             blockchain = "chia"
+            dir = "/root/.chia/mainnet/config/ssl/ca"
         elif type == "flax":
             blockchain = "flax"
+            dir = "/root/.flax/mainnet/config/ssl/ca"
+        elif type == "nchain":
+            blockchain = "nchain"
+            dir = "/root/.chia/ext9/config/ssl/ca"
+        elif type == "hddcoin":
+            blockchain = "hddcoin"
+            dir = "/root/.hddcoin/mainnet/config/ssl/ca"
+        elif type == "chives":
+            blockchain = "chives"
+            dir = "/root/.chives/mainnet/config/ssl/ca"
         else:
             abort(400) # Bad blockchain type passed
-        dir = "/root/.{0}/mainnet/config/ssl/ca".format(blockchain)
+        if blockchain == 'chia' and not self.allow_download():
+            abort(401) # Reject as not authorized
         zip = "/tmp/certs".format(blockchain)
         zipname = "{0}.zip".format(zip)
         try:

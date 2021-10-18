@@ -18,15 +18,15 @@ from subprocess import Popen, TimeoutExpired, PIPE
 from api import app
 
 def load_config(blockchain):
-    return open('/root/.chia/{0}dog/config.yaml'.format(blockchain),'r').read()
+    return open('/root/.chia/chiadog/config.yaml'.format(blockchain),'r').read()
 
 def save_config(config, blockchain):
     try:
         # Validate the YAML first
         yaml.safe_load(config)
         # Save a copy of the old config file
-        src='/root/.chia/{0}dog/config.yaml'.format(blockchain)
-        dst='/root/.chia/{0}dog/config.yaml'.format(blockchain)+time.strftime("%Y%m%d-%H%M%S")+".yaml"
+        src='/root/.chia/chiadog/config.yaml'
+        dst='/root/.chia/chiadog/config.yaml'+time.strftime("%Y%m%d-%H%M%S")+".yaml"
         shutil.copy(src,dst)
         # Now save the new contents to main config file
         with open(src, 'w') as writer:
@@ -41,7 +41,7 @@ def save_config(config, blockchain):
 
 def get_chiadog_pid(blockchain):
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-        if proc.info['name'] == 'python3' and '/root/.chia/{0}dog/config.yaml'.format(blockchain) in proc.info['cmdline']:
+        if proc.info['name'] == 'python3' and '/root/.chia/chiadog/config.yaml' in proc.info['cmdline']:
             return proc.info['pid']
     return None
 
@@ -69,14 +69,14 @@ def start_chiadog(chain = None):
         blockchains = [ b.strip() for b in os.environ['blockchains'].split(',') ]
     for blockchain in blockchains:
         try:
-            workdir = "/{0}dog".format(blockchain)
+            workdir = "/chiadog"
             offset_file = "{0}/debug.log.offset".format(workdir)
             if os.path.exists(offset_file):
                 os.remove(offset_file)
-            configfile = "/root/.chia/{0}dog/config.yaml".format(blockchain)
-            logfile = "/root/.chia/{0}dog/logs/{0}dog.log".format(blockchain)
+            configfile = "/root/.chia/chiadog/config.yaml"
+            logfile = "/root/.chia/chiadog/logs/chiadog.log"
             proc = Popen("nohup /{0}-blockchain/venv/bin/python3 -u main.py --config {1} >> {2} 2>&1 &".format(blockchain, configfile, logfile), \
-                shell=True, universal_newlines=True, stdout=None, stderr=None, cwd="/{0}dog".format(blockchain))
+                shell=True, universal_newlines=True, stdout=None, stderr=None, cwd="/chiadog")
         except:
             app.logger.info('Failed to start monitoring!')
             app.logger.info(traceback.format_exc())

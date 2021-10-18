@@ -2,34 +2,43 @@
 
 {% block content %}
 
-<div class="position-relative">
-    <div class="position-absolute top-0 end-0">
-        <a href="https://github.com/Chia-Network/chia-blockchain/wiki/CLI-Commands-Reference#other-commands-not-yet-documented"
-            target="_blank">
-            <i class="fs-4 bi-question-circle"></i>
-        </a>
-    </div>
-</div>
+<style>
+    a.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+    button.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+</style>
 
-<header class="pb-3 mb-4 border-bottom">
-    <span class="fs-4">Wallet - chia keys show </span>
-</header>
-
-<div class="p-1 mb-4 bg-light border rounded-3">
-    {% if keys.rows|length > 0 %}
-    {% for key in keys.rows %}
-    <div class="container-fluid">
-        <h3>{{key.displayname}}</h3>
-        <pre>{{ key.details}}</pre>
+{% if keys.rows|length > 0 %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="padding-bottom: 0px;">
+    <div class="h-100 p-2 text-white">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            {% for key in keys.rows %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link {% if loop.index == 1 %}active{% endif %}" id="{{key.blockchain}}-tab" data-bs-toggle="tab" data-bs-target="#{{key.blockchain}}"
+                    type="button" role="tab" aria-controls="{{key.blockchain}}" aria-selected="{% if loop.index == 1 %}true{% else %}false{% endif %}">{{ key.blockchain }}</button>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="tab-content">
+            {% for key in keys.rows %}
+            <div class="tab-pane {% if loop.index == 1 %}active{% endif %}" id="{{key.blockchain}}" role="tabpanel" aria-labelledby="{{key.blockchain}}-tab">
+                <br/>
+                <pre>{{ key.details}}</pre>
+            </div>
+            {% endfor %}
+        </div>
     </div>
-    {% endfor %}
-</div>
+</nav>
 {% else %}
 <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
     <h6>No keys found from any farmers. Not added?</h6>
-    <h6>Try running 'chia key show' on your farmers to verify.</h6>
+    <h6>Try running 'chia keys show' on your farmers to verify.</h6>
 </div>
 {% endif %}
+
 
 
 <p><b>NOTE: Machinaris will never display your private key here.</b></p>

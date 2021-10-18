@@ -38,19 +38,16 @@
             <div class="row mb-3">
                 <label for="worker" class="col-sm-1 col-form-label-lg text-end p-1">Worker</label>
                 <div class="col-sm-3">
-                    <select id="worker" name="worker" class="form-select">
-                        {% for worker in workers %}
+                    <select id="worker" name="worker" class="form-select" onchange="update_blockchain_options(this.value);">
+                        {% for worker in workers() %}
                         <option {% if worker==selected_worker %}selected{% endif %}
                             value="{{ worker.hostname }}">{{ worker.displayname }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <label for="blockchain" class="col-sm-1 col-form-label-lg text-end p-1">Blockchain</label>
+                <label for="blockchain" class="col-sm-1 col-form-label-lg text-end p-1">Fork</label>
                 <div class="col-sm-3">
                     <select id="blockchain" name="blockchain" class="form-select">
-                        {% for blockchain in blockchains %}
-                        <option {% if blockchain==selected_blockchain %}selected{% endif %}>{{ blockchain }}</option>
-                        {% endfor %}
                     </select>
                 </div>
             </div>
@@ -81,6 +78,7 @@
                         console.log(jqXHR, textStatus, errorThrown);
                     });
             }
+            update_blockchain_options("{{selected_worker.hostname}}");
             //Call the function when #input is clicked
             $(document).on("change", "#worker", function (e) {
                 load_config($("#worker").val(), $("#blockchain").val())
@@ -91,6 +89,28 @@
             //Call the function when the page loads
             load_config("{{selected_worker.hostname}}", "{{selected_blockchain}}");
         });
+
+        function update_blockchain_options(hostname) {
+            var hostsMap = {};
+            {% for worker in workers() %}
+            hostsMap["{{worker.hostname}}"] = [
+                {% for container in worker.workers %} 
+                    "{{ container.blockchain }}",
+                {% endfor %}
+            ];
+            {% endfor %}
+
+            var $el = $("#blockchain");
+            $el.empty(); // remove old options
+            for (i in hostsMap[hostname]) {
+                var option = $("<option></option>").attr("value", hostsMap[hostname][i]);
+                if (hostsMap[hostname][i] == "{{ selected_blockchain }}") {
+                    option.attr("selected", "selected")
+                }
+                option.text(hostsMap[hostname][i]);
+                $el.append(option);
+            };
+        }
 
         function downloadConfig() {
             worker = $("#worker").val()

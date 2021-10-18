@@ -22,9 +22,7 @@ from api import utils
 def update():
     with app.app_context():
         try:
-            blockchains = ['chia']
-            if globals.flax_enabled():
-                blockchains.append('flax')
+            blockchains = globals.enabled_blockchains()
             for blockchain in blockchains:
                 hostname = utils.get_hostname()
                 bc = chia_cli.load_blockchain_show(blockchain)
@@ -34,7 +32,7 @@ def update():
                     "blockchain": blockchain,
                     "details": bc.text.replace('\r', ''),
                 }
-                utils.send_post('/blockchains/', payload, debug=False)
+                utils.send_post('/blockchains', payload, debug=False)
         except:
             app.logger.info("Failed to load and send blockchains status.")
             app.logger.info(traceback.format_exc())

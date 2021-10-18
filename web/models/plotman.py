@@ -2,12 +2,14 @@ import os
 import traceback
 
 from web import app
+from web.actions import worker as w
 
 
 class PlottingSummary:
 
     def __init__(self, plottings):
         self.columns = ['worker',
+                        'fork',
                         'plotter',
                         'plot_id',
                         'k',
@@ -25,8 +27,16 @@ class PlottingSummary:
                         ]
         self.rows = []
         for plotting in plottings:
+            try:
+                app.logger.debug("Found worker with hostname '{0}'".format(plotting.hostname))
+                displayname = w.get_worker(plotting.hostname).displayname
+            except:
+                app.logger.info("Unable to find a worker with hostname '{0}'".format(plotting.hostname))
+                displayname = plotting.hostname
             self.rows.append({
-                'worker': plotting.hostname,
+                'hostname': plotting.hostname,
+                'fork': plotting.blockchain,
+                'worker': displayname,
                 'plotter': plotting.plotter,
                 'plot_id': plotting.plot_id,
                 'k': plotting.k,

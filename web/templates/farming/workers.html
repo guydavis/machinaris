@@ -50,38 +50,34 @@
         </div>
         <div class="row">
             <div class="col-4" style="margin-top:5px; margin-bottom:5px;">
-                <div class="h-100 p-2 text-white">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="{{ farmer.displayname }}-chia-tab" data-bs-toggle="tab" data-bs-target="#{{ farmer.displayname }}-chia"
-                                type="button" role="tab" aria-controls="{{ farmer.displayname }}-chia" aria-selected="true">Chia</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="{{ farmer.displayname }}-flax-tab" data-bs-toggle="tab" data-bs-target="#{{ farmer.displayname }}-flax"
-                                type="button" role="tab" aria-controls="{{ farmer.displayname }}-flax" aria-selected="false">Flax</button>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="{{ farmer.displayname }}-chia" role="tabpanel" aria-labelledby="{{ farmer.displayname }}-chia-tab">
-                            {% if farmer.hostname in daily_summaries and daily_summaries[farmer.hostname].chia_daily %}
-                            <div style="white-space:pre-wrap; margin-bottom:0px; padding-bottom: 0px;">{{
-                                daily_summaries[farmer.hostname].chia_daily.message }}</div>
+                {% if farmer.displayname in daily_summaries %}
+                <div id="carousel-{{farmer.displayname}}" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for blockchain, summary in daily_summaries[farmer.displayname].items() %}
+                        <div class="carousel-item {% if blockchain == 'chia' %} active {% endif %}" data-bs-interval="10000">
+                            <h4 class="text-center">{{ blockchain|capitalize }} - Daily Summary</h4>
+                            {% if summary[0] %}
+                            <div style="white-space:pre-wrap;margin:10px;">{{ summary[0] }}</div>
                             {% else %}
-                            <p>Chia Daily Summary not yet found. Check Alerts configuration if missing more than 24
-                                hours.</p>
+                            <div style="margin:10px;">No daily summary found for {{ blockchain }} on {{farmer.displayname}}.
+                            <br/><br/>
+                            Please check that your Machinaris container for this fork is running. Also please verify 
+                            settings on the Alerts page.
+                            </div>
                             {% endif %}
                         </div>
-                        <div class="tab-pane" id="{{ farmer.displayname }}-flax" role="tabpanel" aria-labelledby="{{ farmer.displayname }}-flax-tab">
-                            {% if farmer.hostname in daily_summaries and daily_summaries[farmer.hostname].flax_daily %}
-                            <div style="white-space:pre-wrap; margin-bottom:0px; padding-bottom: 0px;">{{
-                                daily_summaries[farmer.hostname].flax_daily.message }}</div>
-                            {% else %}
-                            <p>Flax Daily Summary not yet found. Check Alerts configuration if missing more than 24
-                                hours.</p>
-                            {% endif %}
-                        </div>
+                        {% endfor %}
                     </div>
+                    <button class="carousel-control-prev" style="align-items: initial; justify-content: left; padding-top: 0px; width: 5%; height: 50px;" type="button" data-bs-target="#carousel-{{farmer.displayname}}" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                      </button>
+                      <button class="carousel-control-next" style="align-items: initial; justify-content: right; padding-top: 0px; width: 5%; height: 50px;" type="button" data-bs-target="#carousel-{{farmer.displayname}}" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                      </button>
                 </div>
+                {% endif %}
             </div>
             <div class="col-8" style="margin-top:5px; margin-bottom:5px;">
                 {% if disk_usage[farmer.hostname] %}

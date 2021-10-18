@@ -38,10 +38,11 @@
           <tr>
             <th scope="col" class="text-success"></th>
             <th scope="col" class="text-success">Hostname</th>
-            <th scope="col" class="text-success">System Type</th>
-            <th scope="col" class="text-success">Last Status Received At</th>
-            <th scope="col" class="text-success">Last Ping to Worker</th>
-            <th scope="col" class="text-success">Last Successful Ping to Worker</th>
+            <th scope="col" class="text-success">Fork</th>
+            <th scope="col" class="text-success">Mode</th>
+            <th scope="col" class="text-success">Last Status Received</th>
+            <th scope="col" class="text-success">Last Ping</th>
+            <th scope="col" class="text-success">Last Successful Ping</th>
             <th scope="col" class="text-success">Version</th>
             <th scope="col" class="text-success">Logs</th>
           </tr>
@@ -49,13 +50,10 @@
         <tbody>
           {% for worker in workers.workers %}
           <tr>
-            <td class="text-center"><input type="checkbox" name="hostname" value="{{ worker.hostname }}" />
-            {% if worker.hostname == worker.displayname %}
-              <td><a class="text-white" href="{{ url_for('worker_route') }}?hostname={{worker.hostname}}">{{worker.displayname}}</a></td>
-            {% else %} 
-              <td><a class="text-white" href="{{ url_for('worker_route') }}?hostname={{worker.hostname}}" data-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
-                title="Pinged at: {{worker.hostname}}">{{worker.displayname}}</a></td>
-            {% endif %}
+            <td class="text-center"><input type="checkbox" name="worker" value="{{ worker.hostname }}|{{ worker.blockchain }}" />
+              <td><a class="text-white" href="{{ url_for('worker_route') }}?hostname={{worker.hostname}}&blockchain={{ worker.blockchain }}" data-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
+                title="{{worker.hostname}}:{{worker.port}}">{{worker.displayname}}</a></td>
+            <td>{{worker.blockchain}}</td>
             <td>{{worker.mode}}</td>
             <td data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
               title="Time on Worker:<br/> {{worker.time_on_worker}}">{{worker.updated_at | datetimefilter}}</td>
@@ -64,9 +62,9 @@
             <td><a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
                 title="{{worker.versions.components}}">{{worker.versions.machinaris}}</a></td>
             <td style="padding:0px">
-              <a href="#" title="View Server Log" onclick='MachinarisLog("apisrv","{{ worker.hostname }}");return false;'><i class="fs-4 bi-text-indent-left"></i></a>
-              {% if worker.mode == "fullnode" %}
-              <a href="#" title="View Web Log" onclick='MachinarisLog("webui","{{ worker.hostname }}");return false;'><i class="fs-4 bi-laptop"></i></a>
+              <a href="#" title="View Server Log" onclick='MachinarisLog("apisrv","{{ worker.hostname }}","{{ worker.blockchain }}");return false;'><i class="fs-4 bi-text-indent-left"></i></a>
+              {% if worker.mode == "fullnode" and worker.blockchain == "chia" %}
+              <a href="#" title="View Web Log" onclick='MachinarisLog("webui","{{ worker.hostname }}","{{ worker.blockchain }}");return false;'><i class="fs-4 bi-laptop"></i></a>
               {% endif %}
             </td>
           </tr>
@@ -107,19 +105,19 @@
         var left = (screen.width - width) / 2;
         window.open("{{ url_for('worker_launch') }}", 'Worker Launch Config', 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
     }
-    function MachinarisLog(type, hostname) {
+    function MachinarisLog(type, hostname, blockchain) {
         var d = new Date();
         var height = 600;
         var width = 900;
         var top = (screen.height - height) / 2;
         var left = (screen.width - width) / 2;
-        window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname, 'Machinaris ' + type + '.log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname + "&blockchain=" + blockchain, 'Machinaris ' + type + '.log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
     }
     $(document).ready(function () {
       $('#data').DataTable({
           "pageLength": 25,
           "order": [[1, "asc"]],
-          "columnDefs": [{ "orderable": false, targets: [0,7] }],
+          "columnDefs": [{ "orderable": false, targets: [0,8] }],
       });
       $("#btnPrune").click(function () {
         $(this).prop("disabled", true);

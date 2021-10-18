@@ -2,13 +2,16 @@
 # instances monitoring multiple harvesters
 notification_title_prefix: 'Machinaris-Flax'
 log_level: INFO
+coin_name: 'flax'
+coin_symbol: 'xfx'
 
 # Only one consumer can be enabled at a time, you can
 # delete the section for the consumer which you aren't using
 # DON'T CHANGE file_path IT'S ALREADY SET IN-CONTAINER FOR MACHINARIS!
-flax_logs:
+chia_logs:
   file_log_consumer:
     enable: true
+    prefix: 'flax'
     file_path: '~/.chia/flax/mainnet/log/debug.log'
 
 # Enable this and flaxdog will ping a remote server every 5 minutes
@@ -61,7 +64,7 @@ notifier:
     enable: true
     daily_stats: true
     wallet_events: true
-    script_path: '/root/.chia/flaxdog/notifier.sh'
+    script_path: '/root/.chia/chiadog/notifier.sh'
   discord:
     enable: false
     daily_stats: true

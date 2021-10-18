@@ -19,13 +19,19 @@ class FarmSummary:
             for line in cli_stdout:
                 if "Plot count for all" in line: 
                     self.plot_count = line.strip().split(':')[1].strip()
+                if "Plot count:" in line: # Just chives
+                    self.plot_count = line.strip().split(':')[1].strip()
                 elif "Total size of plots" in line:
                     self.plots_size = line.strip().split(':')[1].strip()
                 elif "status" in line: 
                     self.calc_status(line.split(':')[1].strip())
                 elif "Total chia farmed" in line:
                     self.total_coins = line.split(':')[1].strip()
+                elif "Total chives farmed" in line:
+                    self.total_coins = line.split(':')[1].strip()
                 elif "Total flax farmed" in line:
+                    self.total_coins = line.split(':')[1].strip()
+                elif "Total hddcoin farmed" in line:
                     self.total_coins = line.split(':')[1].strip()
                 elif "Estimated network space" in line:
                     self.calc_netspace_size(line.split(':')[1].strip())
@@ -48,8 +54,6 @@ class FarmSummary:
         self.status = status
         if self.status == "Farming":
             self.display_status = "Active"
-        #elif self.status == "Not synced or not connected to peers":
-        #    self.display_status = "<span style='font-size:.6em'>" + self.status + '</span>'
         else:
             self.display_status = self.status
 
@@ -64,7 +68,12 @@ class FarmSummary:
         except:
             app.logger.info("Unable to split network size value: {0}".format(netspace_size))
             self.display_netspace_size = self.netspace_size
-        
+
+class HarvesterSummary:
+
+    def __init__(self):
+        self.status = "harvesting" # TODO Check for harvester status in debug.log
+
 class FarmPlots:
 
      def __init__(self, entries):

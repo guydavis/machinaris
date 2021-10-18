@@ -1,21 +1,45 @@
 #
-# RPC interactions with Chia
+# RPC interactions with Chia/Fork
 #
 
 import asyncio
 import datetime
+import importlib
 
-from chia.rpc.full_node_rpc_client import FullNodeRpcClient
-from chia.rpc.farmer_rpc_client import FarmerRpcClient
-from chia.util.default_root import DEFAULT_ROOT_PATH
-from chia.util.ints import uint16
-from chia.util.config import load_config as load_chia_config
+if importlib.util.find_spec("chia"):
+    from chia.rpc.full_node_rpc_client import FullNodeRpcClient
+    from chia.rpc.farmer_rpc_client import FarmerRpcClient
+    from chia.util.default_root import DEFAULT_ROOT_PATH
+    from chia.util.ints import uint16
+    from chia.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("flax"):
+    from flax.rpc.full_node_rpc_client import FullNodeRpcClient
+    from flax.rpc.farmer_rpc_client import FarmerRpcClient
+    from flax.util.default_root import DEFAULT_ROOT_PATH
+    from flax.util.ints import uint16
+    from flax.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("hddcoin"):
+    from hddcoin.rpc.full_node_rpc_client import FullNodeRpcClient
+    from hddcoin.rpc.farmer_rpc_client import FarmerRpcClient
+    from hddcoin.util.default_root import DEFAULT_ROOT_PATH
+    from hddcoin.util.ints import uint16
+    from hddcoin.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("chives"):
+    from chives.rpc.full_node_rpc_client import FullNodeRpcClient
+    from chives.rpc.farmer_rpc_client import FarmerRpcClient
+    from chives.rpc.harvester_rpc_client import HarvesterRpcClient
+    from chives.util.default_root import DEFAULT_ROOT_PATH
+    from chives.util.ints import uint16
+    from chives.util.config import load_config as load_fork_config
+else:
+    raise Exception("RPC modules found on pythonpath!")
 
 from api import app
+from api import utils
 
 # Unused as I am getting signage points from debug.log as this API returns no dates
 async def get_signage_points(blockchain):
-    config = load_chia_config(DEFAULT_ROOT_PATH, 'config.yaml')
+    config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
     farmer_rpc_port = config["farmer"]["rpc_port"]
     farmer = await FarmerRpcClient.create(
         'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
@@ -23,7 +47,7 @@ async def get_signage_points(blockchain):
     points = await farmer.get_signage_points()
     farmer.close()
     await farmer.await_closed()
-    config = load_chia_config(DEFAULT_ROOT_PATH, 'config.yaml')
+    config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
     full_node_rpc_port = config["full_node"]["rpc_port"]
     fullnode = await FullNodeRpcClient.create(
         'localhost', uint16(full_node_rpc_port), DEFAULT_ROOT_PATH, config
@@ -42,7 +66,7 @@ async def get_signage_points(blockchain):
 async def get_pool_state(blockchain):
     pools = []
     try:
-        config = load_chia_config(DEFAULT_ROOT_PATH, 'config.yaml')
+        config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
         farmer_rpc_port = config["farmer"]["rpc_port"]
         farmer = await FarmerRpcClient.create(
             'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
@@ -60,13 +84,12 @@ async def get_pool_state(blockchain):
 # Used to load plot type (solo or portable) via RPC
 def get_all_plots():
     plots_via_rpc = asyncio.run(load_all_plots())
-    last_plots_via_rpc  = datetime.datetime.now()
     return plots_via_rpc
 
 async def load_all_plots():
     all_plots = []
     try:
-        config = load_chia_config(DEFAULT_ROOT_PATH, 'config.yaml')
+        config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
         farmer_rpc_port = config["farmer"]["rpc_port"]
         farmer = await FarmerRpcClient.create(
             'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
@@ -90,6 +113,37 @@ async def load_all_plots():
                     "pool_contract_puzzle_hash": plot['pool_contract_puzzle_hash'],
                     "pool_public_key": plot['pool_public_key'],
                 })
+    except Exception as ex:
+        app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
+    return all_plots
+
+def get_chives_plots():
+    plots_via_rpc = asyncio.run(load_chives_plots())
+    return plots_via_rpc
+
+async def load_chives_plots():
+    host = utils.get_hostname()
+    all_plots = []
+    try:
+        config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
+        harvester_rpc_port = config["harvester"]["rpc_port"]
+        harvester = await HarvesterRpcClient.create(
+            'localhost', uint16(harvester_rpc_port), DEFAULT_ROOT_PATH, config
+        )
+        result = await harvester.get_plots()
+        harvester.close()
+        await harvester.await_closed()
+        for plot in result['plots']:
+            all_plots.append({
+                "hostname": host,
+                "type": "solo" if (plot["pool_contract_puzzle_hash"] is None) else "portable",
+                "plot_id": plot['plot-seed'], # chives uses plot-seed instead
+                "file_size": plot['file_size'], # bytes
+                "filename": plot['filename'], # full path and name
+                "plot_public_key": plot['plot_public_key'],
+                "pool_contract_puzzle_hash": plot['pool_contract_puzzle_hash'],
+                "pool_public_key": plot['pool_public_key'],
+            })
     except Exception as ex:
         app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
     return all_plots

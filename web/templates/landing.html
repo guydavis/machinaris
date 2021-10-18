@@ -12,31 +12,47 @@
       height: 100%;
       margin: 0;
       padding: 0;
+      background-color: #ffffff;
     }
 
-    div {
+    #page_div {
       position: relative;
       height: 100%;
       width: 100%;
     }
 
-    div img {
+    #center_div {
       position: absolute;
-      top: 0;
+      top: 150px;
       left: 0;
       right: 0;
       bottom: 0;
       margin: auto;
+      text-align:center;
+      font-size: 36px;
+      color: #515253;
+      font-family: 'Roboto', 'open sans', 'Helevetica Neue', 'Helevetica', 'Arial', 'sans-serif';
+    }
+
+    #message {
+      margin: 10px;
     }
   </style>
-  <meta http-equiv="refresh" content="0;url={{ url_for('index') }}">
+  <meta http-equiv="refresh" content="3;url={{ url_for('index') }}">
 </head>
 
 <body>
-  <div>
-    <img src="{{ url_for('static', filename='landing.gif') }}" />
-  </div>
 
+  <div id="page_div">
+
+    <div id="center_div">
+      <img src="{{ url_for('static', filename='machinaris.png') }}" style="height:128px; width:128px;" />
+
+      <div id="message">{{random_message}}</div>
+
+      <img src="{{ url_for('static', filename='landing.gif') }}" style="height:56px; width:56px;"/>
+    </div>
+  </div>
 </body>
 
 </html>

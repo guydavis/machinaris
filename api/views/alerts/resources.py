@@ -44,18 +44,18 @@ class Alerts(MethodView):
         return items
 
 
-@blp.route('/<hostname>')
-class AlertByHostname(MethodView):
+@blp.route('/<hostname>/<blockchain>')
+class AlertByHostnameBlockchain(MethodView):
 
     @blp.etag
     @blp.response(200, AlertSchema)
-    def get(self, hostname):
-        return db.session.query(Alert).filter(Alert.hostname==hostname)
+    def get(self, hostname, blockchain):
+        return db.session.query(Alert).filter(Alert.hostname==hostname, Alert.blockchain==blockchain)
 
     @blp.etag
     @blp.arguments(BatchOfAlertSchema)
     @blp.response(200, AlertSchema(many=True))
-    def put(self, new_items, hostname):
+    def put(self, new_items, hostname, blockchain):
         items = []
         for new_item in new_items:
             item = db.session.query(Alert).get(new_item['unique_id'])
@@ -68,6 +68,6 @@ class AlertByHostname(MethodView):
 
     @blp.etag
     @blp.response(204)
-    def delete(self, hostname):
-        db.session.query(Alert).filter(Alert.hostname==hostname).delete()
+    def delete(self, hostname, blockchain):
+        db.session.query(Alert).filter(Alert.hostname==hostname, Alert.blockchain==blockchain).delete()
         db.session.commit()

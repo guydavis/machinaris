@@ -45,19 +45,21 @@ class Connections(MethodView):
         return item
 
 
-@blp.route('/<hostname>')
-class ConnectionsByHostname(MethodView):
+@blp.route('/<hostname>/<blockchain>')
+class ConnectionsByHostnameBlockchain(MethodView):
 
     @blp.etag
     @blp.response(200, ConnectionSchema)
-    def get(self, hostname):
-        return db.session.query(Connection).get_or_404(hostname)
+    def get(self, hostname, blockchain):
+        return db.session.query(Connection).filter(Connection.hostname==hostname, \
+            Connection.blockchain==blockchain).first()
 
     @blp.etag
     @blp.arguments(ConnectionSchema)
     @blp.response(200, ConnectionSchema)
-    def put(self, new_item, hostname):
-        item = db.session.query(Connection).get_or_404(hostname)
+    def put(self, new_item, hostname, blockchain):
+        item = db.session.query(Connection).filter(Connection.hostname==hostname, \
+            Connection.blockchain==blockchain).first()
         new_item['hostname'] = item.hostname
         new_item['created_at'] = item.created_at
         new_item['updated_at'] = dt.datetime.now()
@@ -69,8 +71,9 @@ class ConnectionsByHostname(MethodView):
 
     @blp.etag
     @blp.response(204)
-    def delete(self, hostname):
-        item = db.session.query(Connection).get_or_404(hostname)
+    def delete(self, hostname, blockchain):
+        item = db.session.query(Connection).filter(Connection.hostname==hostname, \
+            Connection.blockchain==blockchain).first()
         blp.check_etag(item, ConnectionSchema)
         db.session.delete(item)
         db.session.commit()

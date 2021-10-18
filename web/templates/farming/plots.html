@@ -21,6 +21,10 @@
     a.active.nav-link {
         background-color: #3d3f42 !important
     }
+    td.analyze_cell {
+        text-align: center;
+        padding:0px 5px 0px 0px;
+    }
 </style>
 
 <nav class="navbar navbar-dark" style="padding-bottom: 0px;">
@@ -39,32 +43,23 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
                             aria-expanded="false" id="{{ farmer.hostname }}_btn">
-                            {{ farmer.displayname }}: {{farmer.farming_status}}
+                            {{ farmer.displayname }}: {{farmer.farming_status()}}
                         </button>
                         <ul class="dropdown-menu bg-dark btn-outline-success">
+                            {% for worker in farmer.workers %}
                             <li>
                                 <a class="dropdown-item text-white text-decoration-none" href="#"
-                                    onclick='ViewLogs("{{ farmer.hostname }}","chia");return false;'>
-                                    <i class="fs-4 bi-text-indent-left"></i>
-                                    <span class="align-text-bottom"></span>View Chia Log</span>
+                                    onclick='ViewLogs("{{ worker.hostname }}","{{worker.blockchain}}");return false;'>
+                                    <span class="align-text-bottom" style="padding-right:5px">{{worker.blockchain|capitalize}}</span>
+                                    &nbsp;
+                                    {% if worker.farming_status == 'farming' or worker.farming_status == 'harvesting' %}
+                                        <i class="fs-4 bi-emoji-smile"></i>
+                                    {% else %}
+                                        <i class="fs-4 bi-exclamation-triangle"></i>
+                                    {% endif %}
                                 </a>
                             </li>
-                            {% if global_config.flax_enabled %}
-                            <li>
-                                <a class="dropdown-item text-white text-decoration-none" href="#"
-                                    onclick='ViewLogs("{{ farmer.hostname }}","flax");return false;'>
-                                    <i class="fs-4 bi-text-indent-left"></i>
-                                    <span class="align-text-bottom"></span>View Flax Log</span>
-                                </a>
-                            </li>
-                            {% endif %}
-                            <li>
-                                <a class="dropdown-item text-white text-decoration-none" href="#"
-                                    onclick='CheckPlots("{{ farmer.hostname }}");return false;'>
-                                    <i class="fs-4 bi-text-indent-left"></i>
-                                    <span class="align-text-bottom"></span>Check Plots</span>
-                                </a>
-                            </li>
+                            {% endfor %}
                         </ul>
                     </div>
                     {% endfor %}
@@ -98,31 +93,9 @@
                         {% for column in plots.columns %}
                         <th scope="col" class="text-success">{{ column }}</th>
                         {% endfor %}
-                        <th scope="col" class="text-success"></th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for row in plots.rows %}
-                    <tr>
-                        {% for column in plots.columns %}
-                        {% if column == "size" %}
-                        <td>{{ row[column] | bytesfilter}}</td>
-                        {% elif column == "plot" %}
-                        <td>{{ row[column] | plotnameshortener}}</td>
-                        {% else %}
-                        <td>{{ row[column] }}</td>
-                        {% endif %}
-                        {% endfor %}
-                        <td class="align-middle" style="padding:0px 5px 0px 0px">
-                            <!-- Careful, VS Code likes to format a space into 'plot' quotes for some reason -->
-                            <a href="#" title="Analyze Plotting Job" data-bs-toggle="modal"
-                                data-bs-target="#analyzeModal" onclick='PlotJobAnalyze("{{ row['plot'] }}");return false;'>
-                                <i class="fs-4 bi-stopwatch"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>
@@ -159,8 +132,14 @@
         $(document).ready(function () {
             $('#data').DataTable({
                 "pageLength": 25,
-                "order": [[5, "desc"]],
-                "columnDefs": [{ "orderable": false, targets: [7] }],
+                "serverSide": true,
+                "ajax": '/farming/data',
+                "order": [[6, "desc"]],
+                "columnDefs": [{ targets: [8], "orderable": false, "className": 'analyze_cell',
+                    "render": function ( data, type, row, meta ) {
+                        return '<a href="#" title="Analyze Plotting Job" data-bs-toggle="modal" data-bs-target="#analyzeModal" onclick=\'PlotJobAnalyze("'+data+'");return false;\'><i class="fs-4 bi-stopwatch"></i></a>'
+                    }}  
+                ],
             });
         });
     </script>

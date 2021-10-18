@@ -29,39 +29,22 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
                     aria-expanded="false" id="{{ farmer.hostname }}_btn">
-                    {{ farmer.displayname }}: {{farmer.monitoring_status}}
+                    {{ farmer.displayname }}
                 </button>
                 <ul class="dropdown-menu bg-dark btn-outline-success">
+                    {% for worker in farmer.workers %}
                     <li>
-                        <a class="dropdown-item text-white text-decoration-none" href="#" {% if
-                            farmer.monitoring_status=='stopped' %}
-                            onclick='MonitoringAction("{{ farmer.hostname }}","monitoring","start", "starting");return false;'>
-                            <i class="fs-4 bi-text-indent-left"></i>
-                            <span class="align-text-bottom">Start Monitoring</span>
+                        <a class="dropdown-item text-white text-decoration-none" href="#"
+                            onclick='MonitoringLogs("{{ farmer.hostname }}", "{{worker.blockchain}}");return false;'>
+                            <span class="align-text-bottom" style="padding-right:5px">{{worker.blockchain|capitalize}}</span>
+                            {% if worker.monitoring_status == 'running' %}
+                                <i class="fs-4 bi-emoji-smile"></i>
                             {% else %}
-                            onclick='MonitoringAction("{{ farmer.hostname }}","monitoring","stop", "stopping");return
-                            false;'>
-                            <i class="fs-4 bi-text-indent-left"></i>
-                            <span class="align-text-bottom">Stop Monitoring</span>
+                                <i class="fs-4 bi-exclamation-triangle"></i>
                             {% endif %}
                         </a>
                     </li>
-                    <li>
-                        <a class="dropdown-item text-white text-decoration-none" href="#"
-                            onclick='MonitoringLogs("{{ farmer.hostname }}", "chia");return false;'>
-                            <i class="fs-4 bi-text-indent-left"></i>
-                            <span class="align-text-bottom"></span>View Chia Monitoring Logs</span>
-                        </a>
-                    </li>
-                    {% if global_config.flax_enabled %}
-                    <li>
-                        <a class="dropdown-item text-white text-decoration-none" href="#"
-                            onclick='MonitoringLogs("{{ farmer.hostname }}", "flax");return false;'>
-                            <i class="fs-4 bi-text-indent-left"></i>
-                            <span class="align-text-bottom"></span>View Flax Monitoring Logs</span>
-                        </a>
-                    </li>
-                    {% endif %}
+                    {% endfor %}
                 </ul>
             </div>
             {% endfor %}
@@ -79,7 +62,7 @@
                             <input type="checkbox" name="unique_id_master" onclick="checkPage(this)"/>
                         </th>
                         <th scope="col" class="text-success">Worker</th>
-                        <th scope="col" class="text-success">Blockchain</th>
+                        <th scope="col" class="text-success">Fork</th>
                         <th scope="col" class="text-success">Service</th>
                         <th scope="col" class="text-success">Notification</th>
                         <th scope="col" class="text-success">Recorded At</th>

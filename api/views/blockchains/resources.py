@@ -46,18 +46,20 @@ class Blockchains(MethodView):
 
 
 @blp.route('/<hostname>/<blockchain>')
-class BlockchainsByHostname(MethodView):
+class BlockchainsByHostnameBlockchain(MethodView):
 
     @blp.etag
     @blp.response(200, BlockchainSchema)
-    def get(self, hostname):
-        return db.session.query(Blockchain).get_or_404(hostname)
+    def get(self, hostname, blockchain):
+        return db.session.query(Blockchain).filter(Blockchain.hostname==hostname, \
+            Blockchain.blockchain==blockchain).first()
 
     @blp.etag
     @blp.arguments(BlockchainSchema)
     @blp.response(200, BlockchainSchema)
     def put(self, new_item, hostname, blockchain):
-        item = db.session.query(Blockchain).get_or_404(hostname)
+        item = db.session.query(Blockchain).filter(Blockchain.hostname==hostname, \
+            Blockchain.blockchain==blockchain).first()
         new_item['hostname'] = item.hostname
         new_item['created_at'] = item.created_at
         new_item['updated_at'] = dt.datetime.now()
@@ -69,8 +71,9 @@ class BlockchainsByHostname(MethodView):
 
     @blp.etag
     @blp.response(204)
-    def delete(self, hostname):
-        item = db.session.query(Blockchain).get_or_404(hostname)
+    def delete(self, hostname, blockchain):
+        item = db.session.query(Blockchain).filter(Blockchain.hostname==hostname, \
+            Blockchain.blockchain==blockchain).first()
         blp.check_etag(item, BlockchainSchema)
         db.session.delete(item)
         db.session.commit()

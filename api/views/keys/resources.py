@@ -32,7 +32,8 @@ class Keys(MethodView):
     @blp.arguments(KeySchema)
     @blp.response(201, KeySchema)
     def post(self, new_item):
-        item = db.session.query(Key).get(new_item['hostname'])
+        item = db.session.query(Key).filter(Key.hostname==new_item['hostname'], \
+            Key.blockchain==new_item['blockchain']).first()
         if item: # upsert
             new_item['created_at'] = item.created_at
             new_item['updated_at'] = dt.datetime.now()

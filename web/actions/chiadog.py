@@ -3,6 +3,7 @@
 #
 
 import datetime
+import json
 import os
 import psutil
 import signal
@@ -21,19 +22,10 @@ from web.models.chiadog import Alerts
 from . import worker as wk
 
 def load_config(farmer, blockchain):
-    return utils.send_get(farmer, "/configs/alerts?blockchain=" + blockchain, debug=False).content
+    return utils.send_get(farmer, "/configs/alerts/"+ blockchain, debug=False).content
 
 def load_farmers():
-    worker_summary = wk.load_worker_summary()
-    farmers = []
-    for farmer in worker_summary.workers:
-        if (farmer in worker_summary.farmers) or (farmer in worker_summary.harvesters):
-            farmers.append({
-                'hostname': farmer.hostname,
-                'displayname': farmer.displayname,
-                'monitoring_status': farmer.monitoring_status().lower()
-            })
-    return farmers
+    return wk.load_worker_summary().farmers_harvesters()
 
 def save_config(farmer, blockchain, config):
     try: # Validate the YAML first

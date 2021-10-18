@@ -2,8 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.5.8] - 2021-10-08 
-- Bladebit - Patch for broken library dependency. 
+## [0.6.0] - 2021-10-?
+
+ - [NChain](https://gitee.com/ext9/ext9-blockchain) - cross-farming support for this blockchain fork.
+ - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain) - cross-farming support for this blockchain fork.
+ - [Chives](https://github.com/HiveProject2021/chives-blockchain) - support for this blockchain fork.
+ - [Flax](https://github.com/Flax-Network/flax-blockchain) - now farmed in a separtate Docker container.
+ - [Plotman](https://github.com/ericaltendorf/plotman/pull/937) - enhancement to support plotting for Chives via Madmax.
+ - [Chiadog](https://github.com/martomi/chiadog/pull/302) - enhancement to support monitoring of other blockchain forks.
 
 ## [0.5.7] - 2021-10-02 
  - Chia - Update to version 1.2.8.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.8).
@@ -17,8 +23,8 @@ All notable changes to this project will be documented in this file. The format 
  - Machinaris - "Disconnect Selected" feature now available on Network | Connections page.
  - Machinaris - Improve Summary page to better separate Chia and Flax blockchains.
  - Chia - Update to version 1.2.7.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.7).
-  - Flax - Update to version 0.1.2.  See their [changelog for details](https://github.com/Flax-Network/flax-blockchain/releases/tag/0.1.2).
-  - Bladebit - Update to version 1.1.1.  See their [changelog for details](https://github.com/harold-b/bladebit/releases/tag/1.1.1)
+ - Flax - Update to version 0.1.2.  See their [changelog for details](https://github.com/Flax-Network/flax-blockchain/releases/tag/0.1.2).
+ - Bladebit - Update to version 1.1.1.  See their [changelog for details](https://github.com/harold-b/bladebit/releases/tag/1.1.1)
 
 ## [0.5.5] - 2021-09-13 
 

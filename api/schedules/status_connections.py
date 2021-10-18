@@ -22,10 +22,7 @@ from api import utils
 def update():
     with app.app_context():
         try:
-            blockchains = ['chia']
-            if globals.flax_enabled():
-                blockchains.append('flax')
-            for blockchain in blockchains:
+            for blockchain in globals.enabled_blockchains():
                 hostname = utils.get_hostname()
                 connections = chia_cli.load_connections_show(blockchain)
                 #app.logger.info(connections.text)

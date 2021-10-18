@@ -1,4 +1,5 @@
 import json
+import locale
 import os
 import re
 import traceback
@@ -12,19 +13,46 @@ from common.utils import converters
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
 MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
+# Mapping of blockchains to currency symbols
+CURRENCY_SYMBOLS = {
+    "chia": "XCH",
+    "chives": "XCC",
+    "flax": "XFX",
+    "hddcoin": "HDD",
+    "nchain": "NCH",
+}
+
+PLOT_TABLE_COLUMNS = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', '.' ]
+
 class FarmSummary:
 
-    def __init__(self, farm_recs):
+    def __init__(self, farm_recs, wallet_recs):
         self.farms = {}
         for farm_rec in farm_recs: 
             if farm_rec.mode == "fullnode":
+                try:
+                    app.logger.debug("Found worker with hostname '{0}'".format(farm_rec.hostname))
+                    wkr = w.get_worker(farm_rec.hostname, farm_rec.blockchain)
+                    displayname = wkr.displayname
+                    connection_status = wkr.connection_status()
+                except Exception as ex:
+                    app.logger.info(str(ex))
+                    app.logger.info("Unable to find a worker with hostname '{0}' and blockchain '{1}'".format(farm_rec.hostname, farm_rec.blockchain))
+                    displayname = farm_rec.hostname
+                    connection_status = None
+                try:
+                    wallet_balance = self.sum_wallet_balance(wallet_recs, farm_rec.hostname, farm_rec.blockchain)
+                except: 
+                    wallet_balance = '?'
                 farm = {
                     "plot_count": int(farm_rec.plot_count),
                     "plots_size": farm_rec.plots_size,
                     "plots_display_size": converters.gib_to_fmt(farm_rec.plots_size),
                     "status": farm_rec.status,
-                    "display_status": "Active" if farm_rec.status == "Farming" else farm_rec.status,
+                    "display_status": self.status_if_responding(displayname, farm_rec.blockchain, connection_status, farm_rec.status),
                     "total_coins": '0.0' if not farm_rec.total_coins else round(farm_rec.total_coins, 6),
+                    "wallet_balance": wallet_balance,
+                    "currency_symbol": CURRENCY_SYMBOLS[farm_rec.blockchain],
                     "netspace_display_size": '?' if not farm_rec.netspace_size else converters.gib_to_fmt(farm_rec.netspace_size),
                     "netspace_size": farm_rec.netspace_size,
                     "expected_time_to_win": farm_rec.expected_time_to_win,
@@ -38,33 +66,49 @@ class FarmSummary:
         if len(self.farms) == 0:  # Handle completely missing farm summary info 
             self.farms['chia'] = {} # with empty chia farm
 
+    def status_if_responding(self, displayname, blockchain, connection_status, last_status):
+        if connection_status == 'Responding':
+            return "Active" if last_status == "Farming" else last_status
+        app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
+        return "Offline"
+    
+    def sum_wallet_balance(self, wallet_recs, hostname, blockchain):
+        numeric_const_pattern = '-Total\sBalance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
+        rx = re.compile(numeric_const_pattern, re.VERBOSE)
+        found_balance = False
+        sum = 0.0
+        for wallet_rec in wallet_recs:
+            if wallet_rec.hostname == hostname and wallet_rec.blockchain == blockchain:
+                try:
+                    for balance in rx.findall(wallet_rec.details):
+                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
+                        # wallet_rec.hostname, wallet_rec.blockchain))
+                        sum += locale.atof(balance)
+                        found_balance = True
+                except Exception as ex:
+                    app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
+                        wallet_rec.hostname, wallet_rec.blockchain, str(ex)))
+        if found_balance:
+            return round(sum, 6)
+        return '?'
+
 class FarmPlots:
 
      def __init__(self, plots):
-        self.columns = ['worker', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size' ]
+        self.columns = PLOT_TABLE_COLUMNS
         self.rows = []
-        displaynames = {}
         for plot in plots:
-            if plot.hostname in displaynames:
-                displayname = displaynames[plot.hostname]
-            else: # Look up displayname
-                try:
-                    app.logger.debug("Found worker with hostname '{0}'".format(plot.hostname))
-                    displayname = w.get_worker_by_hostname(plot.hostname).displayname
-                except:
-                    app.logger.info("Unable to find a worker with hostname '{0}'".format(plot.hostname))
-                    displayname = plot.hostname
-                displaynames[plot.hostname] = displayname
-            self.rows.append({ 
-                'hostname': plot.hostname, 
-                'worker': displayname, 
-                'plot_id': plot.plot_id, 
-                'dir': plot.dir,  
-                'plot': plot.file,  
-                'create_date': plot.created_at, 
-                'size': plot.size, 
-                'type': plot.type if plot.type else "" 
-            }) 
+            self.rows.append([
+                plot.displayname,  
+                plot.blockchain, 
+                plot.plot_id, 
+                plot.dir,  
+                app.jinja_env.filters['plotnameshortener'](plot.file),
+                plot.type if plot.type else "", 
+                plot.created_at, 
+                app.jinja_env.filters['bytesfilter'](plot.size),
+                plot.file]
+            ) 
 
 
 class ChallengesChartData:
@@ -100,7 +144,7 @@ class Wallets:
         for wallet in wallets:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(wallet.hostname))
-                displayname = w.get_worker_by_hostname(wallet.hostname).displayname
+                displayname = w.get_worker(wallet.hostname, wallet.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(wallet.hostname))
                 displayname = wallet.hostname
@@ -119,13 +163,14 @@ class Keys:
         for key in keys:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(key.hostname))
-                displayname = w.get_worker_by_hostname(key.hostname).displayname
+                displayname = w.get_worker(key.hostname, key.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(key.hostname))
                 displayname = key.hostname
             self.rows.append({ 
                 'displayname': displayname, 
                 'hostname': key.hostname,
+                'blockchain': key.blockchain,
                 'details': key.details,
                 'updated_at': key.updated_at }) 
 
@@ -137,7 +182,7 @@ class Blockchains:
         for blockchain in blockchains:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(blockchain.hostname))
-                displayname = w.get_worker_by_hostname(blockchain.hostname).displayname
+                displayname = w.get_worker(blockchain.hostname, blockchain.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(blockchain.hostname))
                 displayname = blockchain.hostname
@@ -178,7 +223,7 @@ class Connections:
         for connection in connections:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(connection.hostname))
-                displayname = w.get_worker_by_hostname(connection.hostname).displayname
+                displayname = w.get_worker(connection.hostname, connection.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(connection.hostname))
                 displayname = connection.hostname
@@ -186,12 +231,39 @@ class Connections:
                 'displayname': displayname, 
                 'hostname': connection.hostname,
                 'blockchain': connection.blockchain,
-                'protocol_port': '8444' if connection.blockchain == 'chia' else '6888',
-                'details': connection.details
+                'farmer_port': self.blockchain_port(connection.blockchain),
+                'details': connection.details,
+                'add_exmample': self.get_add_connection_example(connection.blockchain)
             })
-            self.blockchains[connection.blockchain] = self.parse(connection)
+            self.blockchains[connection.blockchain] = self.parse(connection, connection.blockchain)
+        self.rows.sort(key=lambda conn: conn['blockchain'])
     
-    def parse(self, connection):
+    def get_add_connection_example(self, blockchain):
+        if blockchain == 'chia':
+            return "node.chia.net:8444"
+        if blockchain == 'flax':
+            return "143.198.76.157:6888"
+        if blockchain == 'nchain':
+            return "218.88.205.216:58445"
+        if blockchain == 'hddcoin':
+            return "145.1.235.18:28444"
+        if blockchain == 'chives':
+            return "106.225.229.73:9699"
+        
+    def blockchain_port(self,blockchain):
+        if blockchain == 'chia':
+            return 8444
+        elif blockchain == 'flax':
+            return 6888
+        elif blockchain == 'nchain':
+            return 58445
+        elif blockchain == 'hddcoin':
+            return 28444
+        elif blockchain == 'chives':
+            return 9699
+        raise("Unknown blockchain fork of selected: " + blockchain)
+
+    def parse(self, connection, blockchain):
         conns = []
         for line in connection.details.split('\n'):
             try:
@@ -201,7 +273,7 @@ class Connections:
                     self.columns = line.lower().replace('last connect', 'last_connect') \
                         .replace('mib up|down', 'mib_up mib_down').strip().split()
                 elif line.strip().startswith('-SB Height'):
-                    groups = re.search("-SB Height:   (\d+)    -Hash: (\w+)...", line.strip())
+                    groups = re.search("-SB Height:\s+(\d+)\s+-Hash:\s+(\w+)...", line.strip())
                     if not groups:
                         app.logger.info("Malformed SB Height line: {0}".format(line))
                     else:
@@ -226,7 +298,10 @@ class Connections:
                             'mib_up': float(vals[7].split('|')[0]),
                             'mib_down': float(vals[7].split('|')[1])
                         }
-                        if vals[0] != "FULL_NODE":
+                        if len(vals) > 9: # HDDCoin keeps SBHeight and Hash on same line
+                            connection['height'] = vals[8]
+                            connection['hash'] = vals[9]
+                        if blockchain == 'hddcoin' or vals[0] != "FULL_NODE":  # FARMER and WALLET only on one line 
                             conns.append(connection)
                     else:
                         app.logger.info("Bad connection line: {0}".format(line))
@@ -242,7 +317,7 @@ class Plotnfts:
         for plotnft in plotnfts:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(plotnft.hostname))
-                displayname = w.get_worker_by_hostname(plotnft.hostname).displayname
+                displayname = w.get_worker(plotnft.hostname).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(plotnft.hostname))
                 displayname = plotnft.hostname
@@ -271,7 +346,7 @@ class Pools:
         for pool in pools:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(pool.hostname))
-                displayname = w.get_worker_by_hostname(pool.hostname).displayname
+                displayname = w.get_worker(pool.hostname, pools.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(pool.hostname))
                 displayname = pool.hostname

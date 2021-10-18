@@ -19,6 +19,13 @@ from web.actions import chia
 
 DATABASE = '/root/.chia/machinaris/dbs/stats.db'
 
+ALL_TABLES_BY_HOSTNAME = [
+    'stat_plots_disk_used',
+    'stat_plotting_disk_used',
+    'stat_plots_disk_free',
+    'stat_plotting_disk_free',
+]
+
 def get_stats_db():
     db = getattr(g, '_stats_database', None)
     if db is None:
@@ -111,26 +118,18 @@ def netspace_size_diff(since, blockchain):
     #app.logger.debug("Result is: {0}".format(result))
     return result
 
-class DailyWorker:
-    def __init__(self, chia_daily, flax_daily):
-        self.chia_daily = chia_daily
-        self.flax_daily = flax_daily
-
 def load_daily_farming_summaries():
-    summary_by_worker = {}
+    summary_by_workers = {}
     since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
-    for wk in chia.load_farmers():
-        hostname = wk['hostname']
-        #app.logger.info("Storing daily for {0}".format(wk['hostname']))
-        summary_by_worker[hostname] = DailyWorker(
-            daily_summaries(since_date, hostname, wk['displayname'], 'chia'), 
-            daily_summaries(since_date, hostname, wk['displayname'], 'flax'))
-    return summary_by_worker
+    for host in chia.load_farmers():
+        summary_by_workers[host.displayname] = {}
+        for wk in host.workers:
+            summary_by_workers[host.displayname][wk['blockchain']] = daily_summaries(since_date, wk['hostname'], wk['displayname'], wk['blockchain']), 
+    return summary_by_workers
 
 def daily_summaries(since, hostname, displayname, blockchain):
     result = None
     try:
-        #app.logger.debug(since)
         result = db.session.query(Alert).filter(
                 or_(Alert.hostname==hostname,Alert.hostname==displayname), 
                 Alert.blockchain==blockchain,
@@ -138,8 +137,11 @@ def daily_summaries(since, hostname, displayname, blockchain):
                 Alert.priority == "LOW",
                 Alert.service == "DAILY"
             ).order_by(Alert.created_at.desc()).first()
+        #app.logger.info("Daily for {0}-{1} is {2}".format(displayname, blockchain, result))
+        if result:
+            return result.message
     except Exception as ex:
-        app.logger.debug("Failed to query for latest daily summary for {0} - {1} because {2}".format(
+        app.logger.info("Failed to query for latest daily summary for {0} - {1} because {2}".format(
             hostname, blockchain, str(ex)))
     return result
 
@@ -150,12 +152,12 @@ def load_recent_disk_usage(disk_type):
     value_factor = "" # Leave at GB for plotting disks
     if disk_type == "plots":
         value_factor = "/1024"  # Divide to TB for plots disks
-    for wk in chia.load_farmers():
-        hostname = wk['hostname']
+    for host in chia.load_farmers():
+        hostname = host.hostname
         dates = []
         paths = {}
         sql = "select path, value{0}, created_at from stat_{1}_disk_used where (hostname = ? or hostname = ?) order by created_at, path".format(value_factor, disk_type)
-        used_result = cur.execute(sql, [ wk['hostname'], wk['displayname'], ]).fetchall()
+        used_result = cur.execute(sql, [ host.hostname, host.displayname, ]).fetchall()
         for used_row in used_result:
             converted_date = converters.convert_date_for_luxon(used_row[2])
             if not converted_date in dates:
@@ -184,16 +186,16 @@ def load_current_disk_usage(disk_type, hostname=None):
     value_factor = "" # Leave at GB for plotting disks
     if disk_type == "plots":
         value_factor = "/1024"  # Divide to TB for plots disks
-    for wk in chia.load_farmers():
-        if hostname and not (hostname == wk['hostname'] or hostname == wk['displayname']) :
+    for host in chia.load_farmers():
+        if hostname and not (hostname == host.hostname or hostname == host.displayname):
             continue
         paths = []
         used = []
         free = []
         sql = "select path, value{0}, created_at from stat_{1}_disk_used where (hostname = ? or hostname = ?) group by path having max(created_at)".format(value_factor, disk_type)
-        used_result = cur.execute(sql, [ wk['hostname'], wk['displayname'], ]).fetchall()
+        used_result = cur.execute(sql, [ host.hostname, host.displayname, ]).fetchall()
         sql = "select path, value{0}, created_at from stat_{1}_disk_free where (hostname = ? or hostname = ?) group by path having max(created_at)".format(value_factor, disk_type)
-        free_result =cur.execute(sql, [ wk['hostname'], wk['displayname'], ]).fetchall()
+        free_result =cur.execute(sql, [ host.hostname, host.displayname, ]).fetchall()
         if len(used_result) != len(free_result):
             app.logger.debug("Found mismatched count of disk used/free stats for {0}".format(disk_type))
         else:
@@ -205,6 +207,17 @@ def load_current_disk_usage(disk_type, hostname=None):
                         free.append(free_row[1])
                         continue
             if len(paths):
-                summary_by_worker[wk['hostname']] = { "paths": paths, "used": used, "free": free}
+                summary_by_worker[host.hostname] = { "paths": paths, "used": used, "free": free}
     #app.logger.debug(summary_by_worker.keys())
     return summary_by_worker
+
+def prune_workers_status(hostname, displayname, blockchain):
+    try:
+        db = get_stats_db()
+        cur = db.cursor()
+        for table in ALL_TABLES_BY_HOSTNAME:
+            cur.execute("DELETE FROM " + table + " WHERE (hostname = :hostname OR hostname = :displayname)", 
+                {"hostname":hostname, "displayname":displayname})
+        db.commit()
+    except Exception as ex:
+        app.logger.info("Failed to remove stale stats for worker {0} - {1} because {2}".format(displayname, blockchain, str(ex)))

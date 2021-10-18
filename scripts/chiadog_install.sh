@@ -3,13 +3,13 @@
 # Installs Chiadog for log monitoring and alerting
 #
 
-CHIADOG_BRANCH=main
+CHIADOG_BRANCH=dev
 
 echo 'Installing Chiadog...'
 
 cd /
 
-git clone --branch ${CHIADOG_BRANCH} https://github.com/martomi/chiadog.git
+git clone --branch ${CHIADOG_BRANCH} https://github.com/guydavis/chiadog.git
 
 cd /chia-blockchain/
 
