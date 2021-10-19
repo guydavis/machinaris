@@ -8,7 +8,7 @@ if [ -z ${FLORA_BRANCH} ]; then
 	echo 'Skipping Flora install as not requested.'
 else
 	rm -rf /root/.cache
-	git clone --branch ${FLAX_BRANCH} --single-branch https://github.com/Flora-Network/flora-blockchain.git /flora-blockchain \
+	git clone --branch ${FLORA_BRANCH} --single-branch https://github.com/Flora-Network/flora-blockchain.git /flora-blockchain \
 		&& cd /flora-blockchain \
 		&& git submodule update --init mozilla-ca \
 		&& chmod +x install.sh \
