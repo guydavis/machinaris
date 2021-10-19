@@ -2,7 +2,11 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.0] - 2021-10-?
+## [0.6.1] - 2021-10-?
+ - Machinaris - correctly report Chives plots from harvesters in the WebUI.  Plots were farmed, but hidden from WebUI before.
+ - Machinaris - fix error in Setup - Mnemonic Import wizard.
+
+## [0.6.0] - 2021-10-18
 
  - [NChain](https://gitee.com/ext9/ext9-blockchain) - cross-farming support for this blockchain fork.
  - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain) - cross-farming support for this blockchain fork.

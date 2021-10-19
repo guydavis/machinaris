@@ -232,7 +232,7 @@ def generate_key(key_path, blockchain):
     return True
 
 def import_key(key_path, mnemonic, blockchain):
-    chia_binary = globals.get_chia_binary(blockchain)
+    chia_binary = globals.get_blockchain_binary(blockchain)
     if len(mnemonic.strip().split()) != 24:
         flash('Did not receive a 24-word mnemonic seed phrase!', 'danger')
         return False
