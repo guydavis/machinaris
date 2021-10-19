@@ -31,18 +31,21 @@ class Certificates(MethodView):
         if type == "chia":
             blockchain = "chia"
             dir = "/root/.chia/mainnet/config/ssl/ca"
+        elif type == "chives":
+            blockchain = "chives"
+            dir = "/root/.chives/mainnet/config/ssl/ca"
         elif type == "flax":
             blockchain = "flax"
             dir = "/root/.flax/mainnet/config/ssl/ca"
+        elif type == "flora":
+            blockchain = "flora"
+            dir = "/root/.flora/mainnet/config/ssl/ca"
         elif type == "nchain":
             blockchain = "nchain"
             dir = "/root/.chia/ext9/config/ssl/ca"
         elif type == "hddcoin":
             blockchain = "hddcoin"
             dir = "/root/.hddcoin/mainnet/config/ssl/ca"
-        elif type == "chives":
-            blockchain = "chives"
-            dir = "/root/.chives/mainnet/config/ssl/ca"
         else:
             abort(400) # Bad blockchain type passed
         if blockchain == 'chia' and not self.allow_download():

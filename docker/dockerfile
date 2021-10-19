@@ -56,6 +56,7 @@ FROM package_stage
 ARG CHIA_BRANCH
 ARG CHIVES_BRANCH
 ARG FLAX_BRANCH
+ARG FLORA_BRANCH
 ARG HDDCOIN_BRANCH
 ARG NCHAIN_BRANCH
 
@@ -70,6 +71,7 @@ RUN \
 	/usr/bin/bash /machinaris/scripts/forks/chia_install.sh ${CHIA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chives_install.sh ${CHIVES_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/flax_install.sh ${FLAX_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/flora_install.sh ${FLORA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh \

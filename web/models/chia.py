@@ -18,6 +18,7 @@ CURRENCY_SYMBOLS = {
     "chia": "XCH",
     "chives": "XCC",
     "flax": "XFX",
+    "flora": "XFL",
     "hddcoin": "HDD",
     "nchain": "NCH",
 }
@@ -241,20 +242,24 @@ class Connections:
     def get_add_connection_example(self, blockchain):
         if blockchain == 'chia':
             return "node.chia.net:8444"
-        if blockchain == 'flax':
-            return "143.198.76.157:6888"
-        if blockchain == 'nchain':
-            return "218.88.205.216:58445"
-        if blockchain == 'hddcoin':
-            return "145.1.235.18:28444"
         if blockchain == 'chives':
             return "106.225.229.73:9699"
+        if blockchain == 'flax':
+            return "143.198.76.157:6888"
+        if blockchain == 'flora':
+            return "186.123.88.33:18644"
+        if blockchain == 'hddcoin':
+            return "145.1.235.18:28444"
+        if blockchain == 'nchain':
+            return "218.88.205.216:58445"
         
     def blockchain_port(self,blockchain):
         if blockchain == 'chia':
             return 8444
         elif blockchain == 'flax':
             return 6888
+        elif blockchain == 'flax':
+            return 18644
         elif blockchain == 'nchain':
             return 58445
         elif blockchain == 'hddcoin':

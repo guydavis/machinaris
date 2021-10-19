@@ -78,7 +78,6 @@ def save_config(config, blockchain):
         app.logger.info(traceback.format_exc())
         raise Exception('Updated config.yaml failed validation!\n' + str(ex))
     else:
-        # TODO restart chia or flax services
         pass
 
 def load_wallet_show(blockchain):

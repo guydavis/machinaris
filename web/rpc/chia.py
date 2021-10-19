@@ -6,30 +6,37 @@ import asyncio
 import datetime
 import importlib
 
-if importlib.util.find_spec("chia"):
+if importlib.util.find_spec("chia"): # Also Chives
     from chia.rpc.full_node_rpc_client import FullNodeRpcClient
     from chia.rpc.farmer_rpc_client import FarmerRpcClient
     from chia.util.default_root import DEFAULT_ROOT_PATH
     from chia.util.ints import uint16
     from chia.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("flax"):
-    from flax.rpc.full_node_rpc_client import FullNodeRpcClient
-    from flax.rpc.farmer_rpc_client import FarmerRpcClient
-    from flax.util.default_root import DEFAULT_ROOT_PATH
-    from flax.util.ints import uint16
-    from flax.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("hddcoin"):
-    from hddcoin.rpc.full_node_rpc_client import FullNodeRpcClient
-    from hddcoin.rpc.farmer_rpc_client import FarmerRpcClient
-    from hddcoin.util.default_root import DEFAULT_ROOT_PATH
-    from hddcoin.util.ints import uint16
-    from hddcoin.util.config import load_config as load_fork_config
 elif importlib.util.find_spec("chives"):
     from chives.rpc.full_node_rpc_client import FullNodeRpcClient
     from chives.rpc.farmer_rpc_client import FarmerRpcClient
     from chives.util.default_root import DEFAULT_ROOT_PATH
     from chives.util.ints import uint16
     from chives.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("flax"):
+    from flax.rpc.full_node_rpc_client import FullNodeRpcClient
+    from flax.rpc.farmer_rpc_client import FarmerRpcClient
+    from flax.util.default_root import DEFAULT_ROOT_PATH
+    from flax.util.ints import uint16
+    from flax.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("flora"):
+    from flora.rpc.full_node_rpc_client import FullNodeRpcClient
+    from flora.rpc.farmer_rpc_client import FarmerRpcClient
+    from flora.util.default_root import DEFAULT_ROOT_PATH
+    from flora.util.ints import uint16
+    from flora.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("hddcoin"):
+    from hddcoin.rpc.full_node_rpc_client import FullNodeRpcClient
+    from hddcoin.rpc.farmer_rpc_client import FarmerRpcClient
+    from hddcoin.util.default_root import DEFAULT_ROOT_PATH
+    from hddcoin.util.ints import uint16
+    from hddcoin.util.config import load_config as load_fork_config
+
 else:
     raise Exception("RPC modules found on pythonpath!")
 
