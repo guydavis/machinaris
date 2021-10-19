@@ -39,6 +39,10 @@ def on_starting(server):
         scheduler.add_job(func=status_challenges.update, name="challenges", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_alerts.update, name="alerts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
 
+    # Chives need to report plots from harvesters directly due to their old Chia code fork
+    if not utils.is_fullnode() and globals.harvesting_enabled() and 'chives' in globals.enabled_blockchains():
+        scheduler.add_job(func=status_plots.update, name="plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)  
+    
     # Status for plotters
     if globals.plotting_enabled():
         scheduler.add_job(func=status_plotting.update, name="plottings", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
