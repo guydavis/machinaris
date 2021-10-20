@@ -29,7 +29,7 @@ MAX_LOG_LINES = 2000
 
 def load_farm_summary(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    if globals.farming_enabled(): # Load from chia farm summary
+    if globals.farming_enabled() or (blockchain == 'chives' and globals.harvesting_enabled()):
         proc = Popen("{0} farm summary".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=90)
