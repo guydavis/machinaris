@@ -29,8 +29,6 @@ def safely_gather_plots_size_gibs(plots_size):
     return plots_size_gibs
 
 def update():
-    if not globals.farming_enabled():
-        return
     with app.app_context():
         hostname = utils.get_hostname()
         for blockchain in globals.enabled_blockchains():
@@ -47,7 +45,7 @@ def update():
                     "netspace_size": 0 if not hasattr(farm_summary, 'netspace_size') else converters.str_to_gibs(farm_summary.netspace_size),
                     "expected_time_to_win": "" if not hasattr(farm_summary, 'time_to_win') else farm_summary.time_to_win,
                 }
-                utils.send_post('/farms/', payload, debug=False)
+                utils.send_post('/farms/', payload, debug=True)
             except:
                 app.logger.info("Failed to load Chia farm summary and send.")
                 app.logger.info(traceback.format_exc())

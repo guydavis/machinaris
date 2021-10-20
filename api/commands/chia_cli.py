@@ -268,7 +268,7 @@ def add_connection(connection, blockchain):
         app.logger.info('Invalid connection "{0}" provided.  Must be HOST:PORT.'.format(connection))
     else:
         app.logger.info("{0}".format(outs.decode('utf-8')))
-        app.logger.info('Connection added to Chia and sync engaging!')
+        app.logger.info('{0} connection added to {1} and sync engaging!'.format(blockchain.capitalize(), connection))
 
 def remove_connection(node_ids, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)

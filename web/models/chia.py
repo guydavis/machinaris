@@ -29,8 +29,11 @@ class FarmSummary:
 
     def __init__(self, farm_recs, wallet_recs):
         self.farms = {}
+        chives_farm_recs = []
         for farm_rec in farm_recs: 
-            if farm_rec.mode == "fullnode":
+            if 'chives' == farm_rec.blockchain:  # Chives sends from both harvesters and fullnodes
+                chives_farm_recs.append(farm_rec) # Must later combine them together for single summary
+            elif farm_rec.mode == "fullnode":
                 try:
                     app.logger.debug("Found worker with hostname '{0}'".format(farm_rec.hostname))
                     wkr = w.get_worker(farm_rec.hostname, farm_rec.blockchain)
@@ -64,8 +67,69 @@ class FarmSummary:
                     app.logger.info("Discarding duplicate fullnode blockchain status from {0} - {1}".format(farm_rec.hostname, farm_rec.blockchain))    
             else:
                 app.logger.info("Stale farm status for {0} - {1}".format(farm_rec.hostname, farm_rec.blockchain))
+        # Now combine Chives farm records from fullnodes and harvesters
+        self.combine_chives_recs_into_summary(chives_farm_recs, wallet_recs)
         if len(self.farms) == 0:  # Handle completely missing farm summary info 
             self.farms['chia'] = {} # with empty chia farm
+
+    def combine_chives_recs_into_summary(self, chives_farm_recs, wallet_recs):
+        plot_count = 0
+        plots_size = 0
+        fullnode = None
+        wallet_balance = '?'
+        displayname = '?'
+        connection_status = '?'
+        for farm_rec in chives_farm_recs:
+            plot_count += int(farm_rec.plot_count)
+            plots_size += farm_rec.plots_size
+            if farm_rec.mode == 'fullnode':
+                fullnode = farm_rec
+                try:
+                    app.logger.debug("Found worker with hostname '{0}'".format(farm_rec.hostname))
+                    wkr = w.get_worker(farm_rec.hostname, 'chives')
+                    displayname = wkr.displayname
+                    connection_status = wkr.connection_status()
+                except Exception as ex:
+                    app.logger.info(str(ex))
+                    app.logger.info("Unable to find a worker with hostname '{0}' and blockchain '{1}'".format(farm_rec.hostname, 'chives'))
+                    displayname = farm_rec.hostname
+                    connection_status = None
+                try:
+                    wallet_balance = self.sum_wallet_balance(wallet_recs, farm_rec.hostname, 'chives')
+                except Exception as ex: 
+                    app.logger.info("Failed to sum Chives wallet balances.".format(str(ex)))
+        if fullnode:
+            if len(chives_farm_recs) > 0:
+                total_etw = self.calc_entire_farm_etw(fullnode.plots_size, fullnode.expected_time_to_win, plots_size)
+            else:
+                total_etw = fullnode.expected_time_to_win
+            farm = {
+                "plot_count": int(plot_count),
+                "plots_size": plots_size,
+                "plots_display_size": converters.gib_to_fmt(plots_size),
+                "status": fullnode.status,
+                "display_status": self.status_if_responding(displayname, 'chives', connection_status, fullnode.status),
+                "total_coins": '0.0' if not fullnode.total_coins else round(fullnode.total_coins, 6),
+                "wallet_balance": wallet_balance,
+                "currency_symbol": CURRENCY_SYMBOLS['chives'],
+                "netspace_display_size": '?' if not fullnode.netspace_size else converters.gib_to_fmt(fullnode.netspace_size),
+                "netspace_size": fullnode.netspace_size,
+                "expected_time_to_win": total_etw,
+            }
+            app.logger.info("Adding Chives farm: {0}".format(farm))
+            self.farms['chives'] = farm
+        elif len(chives_farm_recs) > 0:
+            app.logger.error("Found {0} chives farm summary records, but none were the fullnode.".format(len(chives_farm_recs)))
+
+    # Only needed for older Chives code-base which reports ETW of plots only on fullnode
+    def calc_entire_farm_etw(self, fullnode_plots_size, expected_time_to_win, total_farm_plots_size):
+        try:
+            fullnode_etw_mins = converters.etw_to_minutes(expected_time_to_win)
+            total_farm_etw_mins = (fullnode_plots_size / total_farm_plots_size) * fullnode_etw_mins
+            return converters.format_minutes(int(total_farm_etw_mins))
+        except Exception as ex:
+            app.logger.debug("Failed to calculate ETW for entire farm due to: {0}".format(str(ex)))
+            return "-"
 
     def status_if_responding(self, displayname, blockchain, connection_status, last_status):
         if connection_status == 'Responding':
@@ -258,7 +322,7 @@ class Connections:
             return 8444
         elif blockchain == 'flax':
             return 6888
-        elif blockchain == 'flax':
+        elif blockchain == 'flora':
             return 18644
         elif blockchain == 'nchain':
             return 58445
@@ -365,7 +429,10 @@ class Pools:
                 status = "-"
                 pool_errors_24h = len(pool_state['pool_errors_24h'])
                 points_found_24h = len(pool_state['points_found_24h'])
-                points_successful_last_24h = "%.2f"% ( (points_found_24h - pool_errors_24h) / points_found_24h * 100)
+                if points_found_24h == 0:
+                    points_successful_last_24h = "0"
+                else:
+                    points_successful_last_24h = "%.2f"% ( (points_found_24h - pool_errors_24h) / points_found_24h * 100)
             self.rows.append({ 
                 'displayname': displayname, 
                 'hostname': pool.hostname,

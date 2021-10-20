@@ -1,4 +1,4 @@
-# This is useful to differentiate multiple nchaindog
+# This is useful to differentiate multiple
 # instances monitoring multiple harvesters
 notification_title_prefix: 'Machinaris-NChain'
 log_level: INFO
@@ -14,7 +14,7 @@ chia_logs:
     prefix: 'chia'
     file_path: '~/.chia/ext9/log/debug.log'
 
-# Enable this and nchaindog will ping a remote server every 5 minutes
+# Enable this and chiadog will ping a remote server every 5 minutes
 # That way you can know that the monitoring is running as expected
 #keep_alive_monitor:
 #  enable_remote_ping: false
