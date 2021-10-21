@@ -24,3 +24,4 @@ class DefaultConfig:
     WORKER_PORT = os.environ['worker_api_port'] if 'worker_api_port' in os.environ else '8927'
 
     STATUS_EVERY_X_MINUTES = 2  # Run status collection once every two minutes by default
+    ALLOW_HARVESTER_CERT_LAN_DOWNLOAD = True

@@ -66,6 +66,24 @@
     </div>
 </div>
 
+<div class="modal fade" id="disabledModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="disabledModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="disabledModalLabel">Worker Offline</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+                This worker is not currently online and responding to pings from the controller.  Please
+                check the Workers page and bring the system back online.
+            </div>
+            <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnOk">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     a.active.nav-link {
         background-color: #3d3f42 !important
@@ -85,6 +103,7 @@
             <input type="hidden" id="hostname" name="hostname" />
             <input type="hidden" id="blockchain" name="blockchain" />
             <fieldset>
+                <b style="vertical-align: bottom; font-weight: 500">Plotting: </b>
                 {% for plotter in plotters %}
                 <div class="btn-group">
                     <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
@@ -98,12 +117,15 @@
                                 data-bs-hostname="{{ plotter.hostname }}" 
                                 data-bs-blockchain="{{ worker.blockchain }}" 
                                 href="#" {% 
-                                if worker.plotting_status == 'stopped' %}
-                                data-bs-toggle="modal" data-bs-target="#startModal">
-                                <i class="fs-4 bi-play-circle"></i>
-                                {% else %}
+                                if worker.plotting_status == 'offline' %}
+                                data-bs-toggle="modal" data-bs-target="#disabledModal">
+                                <i class="fs-4 bi-dash-circle"></i>
+                                {% elif worker.plotting_status == 'running' %}
                                 data-bs-toggle="modal" data-bs-target="#stopModal">
                                 <i class="fs-4 bi-pause-circle"></i>
+                                {% else %}
+                                data-bs-toggle="modal" data-bs-target="#startModal">
+                                <i class="fs-4 bi-play-circle"></i>
                                 {% endif %}
                                 &nbsp;
                                 <span class="align-text-bottom">{{ worker.blockchain }}</span>
@@ -255,6 +277,14 @@
             });
             var stopModal = document.getElementById('stopModal')
             stopModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget
+                var hostname = button.getAttribute('data-bs-hostname')
+                var blockchain = button.getAttribute('data-bs-blockchain')
+                document.getElementById('hostname').value = hostname
+                document.getElementById('blockchain').value = blockchain
+            });
+            var stopModal = document.getElementById('disabledModal')
+            disabledModal.addEventListener('show.bs.modal', function (event) {
                 var button = event.relatedTarget
                 var hostname = button.getAttribute('data-bs-hostname')
                 var blockchain = button.getAttribute('data-bs-blockchain')

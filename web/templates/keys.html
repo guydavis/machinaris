@@ -39,7 +39,7 @@
 </div>
 {% endif %}
 
-
+<br/><br/><br/>
 
 <p><b>NOTE: Machinaris will never display your private key here.</b></p>
 
@@ -51,13 +51,17 @@
 
 <br />
 
-
-<p>Also, you may view the key file(s) on the host, which you mounted within the Docker container:</p>
+<h4>Best Practices</h4>
 
 <ul>
-    {% for key_path in key_paths: %}
-    <li>{{ key_path }}</li>
-    {% endfor %}
+    <li>We recommend that you delete your mnemonic.txt after first launch. Details on the 
+        <a target="_blank" href="https://github.com/guydavis/machinaris/wiki/Keys#deleting-mnemonic-off-disk">wiki</a>.
+        Please ensure you have safely recorded your mnemonic passphrase (24 words) before deleting!
+    </li>
+    <li>Machinaris uses an online wallet for farming. It is strongly recommended that you use a cold wallet 
+        for your Chia payout instructions. Tutorial on the <a target="_blank" href="https://github.com/guydavis/machinaris/wiki/Keys#using-a-cold-wallet">wiki</a>.
+        Please add "Setup a Cold Wallet" to your To-Do list!
+    </li>
 </ul>
 
 {% endblock %}

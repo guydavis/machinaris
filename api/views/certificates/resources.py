@@ -26,7 +26,6 @@ blp = Blueprint(
 class Certificates(MethodView):
 
     def get(self):
-        
         type = request.args.get('type')
         if type == "chia":
             blockchain = "chia"
@@ -66,9 +65,15 @@ class Certificates(MethodView):
         })
 
     def allow_download(self):
+        allow_harvester_cert_lan_download = app.config['ALLOW_HARVESTER_CERT_LAN_DOWNLOAD']
+        if not allow_harvester_cert_lan_download: # Override if set in configuration file
+            app.logger.info("Harvester cert download over LAN disallowed as per api.cfg.")
+            return False
         worker_setup_marker = "/root/.chia/machinaris/tmp/worker_launch.tmp"
         if os.path.exists(worker_setup_marker):
             last_modified_date = datetime.datetime.fromtimestamp(os.path.getmtime(worker_setup_marker))
             fifteen_minutes_ago = datetime.datetime.now() - datetime.timedelta(minutes=30)
-            return last_modified_date >= fifteen_minutes_ago
+            if last_modified_date >= fifteen_minutes_ago:
+                return True
+            app.logger.info("Harvester cert download over LAN disallowed due to timeout guard on New Worker page launch.")
         return False

@@ -23,6 +23,15 @@ class Host:
                 status = worker['plotting_status']
         return status
 
+    def archiving_status(self):
+        status = "unknown"
+        for worker in self.workers:
+            if worker['archiving_status'] == 'running':
+                status = "running"
+            elif not status == 'running':
+                status = worker['archiving_status']
+        return status
+
     def farming_status(self):
         status = "unknown"
         for worker in self.workers:
@@ -125,7 +134,7 @@ class WorkerSummary:
                     'connection_status': worker.connection_status(),
                     'url': worker.url,
                     'port': worker.port,
-                    'plotting_status': worker.plotting_status(),
+                    'plotting_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.plotting_status()),
                     'archiving_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.archiving_status()),
                     'archiving_enabled': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.archiving_enabled()),
                     'config': json.loads(worker.config),
