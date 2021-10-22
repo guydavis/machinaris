@@ -29,7 +29,7 @@
             <div class="btn-group">
                 <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
                     aria-expanded="false" id="{{ farmer.hostname }}_btn">
-                    {{ farmer.displayname }}
+                    {{ farmer.displayname }}: {{farmer.monitoring_status()}}
                 </button>
                 <ul class="dropdown-menu bg-dark btn-outline-success">
                     {% for worker in farmer.workers %}

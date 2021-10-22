@@ -28,4 +28,7 @@ done
 # Must build bladebit on target hardware on each container launch
 /usr/bin/bash /machinaris/scripts/bladebit_build.sh > /tmp/bladebit_build.log 2>&1
 
+# Cleanly stop Chia services on container stop/kill
+trap "chia stop all -d; exit 0" SIGINT SIGTERM
+
 while true; do sleep 30; done;

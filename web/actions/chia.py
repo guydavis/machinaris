@@ -172,7 +172,7 @@ def generate_key(key_path, blockchain):
     proc = Popen("{0} keys generate".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
+    except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
@@ -186,7 +186,7 @@ def generate_key(key_path, blockchain):
     proc = Popen("{0} keys show --show-mnemonic-seed | tail -n 1 > {1}".format(chia_binary, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
+    except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
@@ -207,9 +207,9 @@ def generate_key(key_path, blockchain):
         except:
                 flash('{0} was unreadable or not found.'.format(key_path), 'danger')
                 return False
-        flash('Welcome! A new key has been generated at {0} within the container filesystem. See the '.format(key_path) + \
+        flash('Welcome! A new key has been generated. If also running blockchain forks like Flax, you must copy this mnemonic.txt file over to them. See the ' + \
         '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
-            'details.  Please allow 5-10 minutes for Chia to begin syncing to peers...', 'success')
+            'details.  Please allow 5-10 minutes for Chia to begin syncing with peers...', 'success')
         flash('{0}'.format(" ".join(mnemonic_words)), 'info')
     if os.environ['mode'].startswith('farmer'):
         cmd = 'farmer-only'
@@ -247,7 +247,7 @@ def import_key(key_path, mnemonic, blockchain):
     proc = Popen("{0} keys add -f {1}".format(chia_binary, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
+    except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())

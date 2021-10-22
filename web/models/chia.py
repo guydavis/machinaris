@@ -116,7 +116,6 @@ class FarmSummary:
                 "netspace_size": fullnode.netspace_size,
                 "expected_time_to_win": total_etw,
             }
-            app.logger.info("Adding Chives farm: {0}".format(farm))
             self.farms['chives'] = farm
         elif len(chives_farm_recs) > 0:
             app.logger.error("Found {0} chives farm summary records, but none were the fullnode.".format(len(chives_farm_recs)))

@@ -44,6 +44,15 @@ class Host:
                 status = worker['farming_status']
         return status
 
+    def monitoring_status(self):
+        status = "unknown"
+        for worker in self.workers:
+            if worker['monitoring_status'] == 'running':
+                status = "running"
+            elif not status == 'running':
+                status = worker['monitoring_status']
+        return status
+
 
 class WorkerSummary:
 
