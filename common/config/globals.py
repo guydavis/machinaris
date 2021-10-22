@@ -121,7 +121,7 @@ def is_setup():
             logging.info("Skipping check for mnemonic.txt as public wallet key exists on disk.")
             return True
     except Exception as ex:
-        logging.info("Failed to find presence of public wallet key.")
+        logging.info("Failed to find presence of public wallet key due to {0}".format(str(ex)))
     # All other modes, we should have at least one keys path
     if "keys" not in os.environ:
         logging.info(
