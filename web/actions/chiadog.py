@@ -51,6 +51,11 @@ def remove_alerts(unique_ids):
     db.session.query(a.Alert).filter(a.Alert.unique_id.in_(unique_ids)).delete()
     db.session.commit()
 
+def remove_all_alerts():
+    app.logger.info("Removing all alerts!")
+    db.session.query(a.Alert).delete()
+    db.session.commit()
+
 def start_chiadog(farmer):
     app.logger.info("Starting Chiadog monitoring...")
     try:

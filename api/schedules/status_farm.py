@@ -45,7 +45,7 @@ def update():
                     "netspace_size": 0 if not hasattr(farm_summary, 'netspace_size') else converters.str_to_gibs(farm_summary.netspace_size),
                     "expected_time_to_win": "" if not hasattr(farm_summary, 'time_to_win') else farm_summary.time_to_win,
                 }
-                utils.send_post('/farms/', payload, debug=True)
+                utils.send_post('/farms/', payload, debug=False)
             except:
                 app.logger.info("Failed to load Chia farm summary and send.")
                 app.logger.info(traceback.format_exc())

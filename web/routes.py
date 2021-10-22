@@ -148,6 +148,8 @@ def alerts():
             chiadog.stop_chiadog(w)
         elif request.form.get('action') == 'remove':
             chiadog.remove_alerts(request.form.getlist('unique_id'))
+        elif request.form.get('action') == 'purge':
+            chiadog.remove_all_alerts()
         else:
             app.logger.info("Unknown alerts form: {0}".format(request.form))
         return redirect(url_for('alerts')) # Force a redirect to allow time to update status

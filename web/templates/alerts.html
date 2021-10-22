@@ -89,6 +89,8 @@
     <fieldset>
         <button form="alerts-form" type="submit" name="action" value="remove" class="btn btn-outline-success"
             id="btnRemove">Remove Selected</button>
+        <button form="alerts-form" type="submit" name="action" value="purge" class="btn btn-outline-success"
+            id="btnPurge">Remove All</button>
     </fieldset>
     {% else %}
     <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
@@ -144,6 +146,14 @@
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Removing...`
                 );
                 $('#alerts-form').append('<input type="hidden" id="action" name="action" value="remove" />');
+                $("#alerts-form").submit();
+            });
+            $("#btnPurge").click(function () {
+                $('#btnPurge').prop("disabled", true);
+                $('#btnPurge').html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Purging...`
+                );
+                $('#alerts-form').append('<input type="hidden" id="action" name="action" value="purge" />');
                 $("#alerts-form").submit();
             });
         });

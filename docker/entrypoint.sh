@@ -8,13 +8,13 @@ echo "Welcome to Machinaris!"
 if [[ "${blockchains}" == "chia,flax" ]]; then
   echo "Only one blockchain allowed per container in Machinaris."
   echo "Please remove second value from 'blockchains' variable and restart."
-  return 1
+  exit 1
 fi
 
 if [[ -z "${worker_address}" ]]; then
   echo "Please set the 'worker_address' environment variable to this system's IP address on your LAN."
   echo "https://github.com/guydavis/machinaris/wiki/Unraid#how-do-i-update-from-v05x-to-v060-with-fork-support"
-  return 1
+  exit 1
 fi
 
 # Start only selected fork
