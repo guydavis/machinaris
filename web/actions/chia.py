@@ -281,9 +281,9 @@ def import_key(key_path, mnemonic, blockchain):
         return False
     if outs:
         app.logger.debug(outs.decode('utf-8'))
-    flash('Welcome! Your mnemonic was imported as {0} within the container filesystem. see the '.format(key_path) + \
+    flash('Welcome! Your mnemonic key was imported. If also running blockchain forks like Flax, you must copy this mnemonic.txt file over to them. See the ' + \
         '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
-            'details.', 'success')
+            'details.  Please allow 5-10 minutes for Chia to begin syncing with peers...', 'success')
     return True
 
 def add_connection(connection, hostname, blockchain):
