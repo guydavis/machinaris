@@ -141,18 +141,22 @@
             if (blockchain == 'chia') {
                 return 8927;
             }
+            if (blockchain == 'chives') {
+                return 8931;
+            }
+            if (blockchain == 'flora') {
+                return 8932;
+            }
             if (blockchain == 'flax') {
                 return 8928;
-            }
-            if (blockchain == 'nchain') {
-                return 8929;
             }
             if (blockchain == 'hddcoin') {
                 return 8930;
             }
-            if (blockchain == 'chives') {
-                return 8931;
+            if (blockchain == 'nchain') {
+                return 8929;
             }
+            // Next available is 8933
             alert("Unknown blockchain fork of selected: " + blockchain);
         }
 
@@ -162,6 +166,9 @@
             }
             if (blockchain == 'flax') {
                 return 6885;
+            }
+            if (blockchain == 'flora') {
+                return 18647;
             }
             if (blockchain == 'nchain') {
                 return 38447;
@@ -443,6 +450,13 @@
                                 id="blockchain-flax" onclick="updateDocker()" value="flax">
                             <label class="form-check-label" for="blockchain-flax">
                                 Flax
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" checked name="blockchains"
+                                id="blockchain-flora" onclick="updateDocker()" value="flora">
+                            <label class="form-check-label" for="blockchain-flora">
+                                Flora
                             </label>
                         </div>
                         <div class="col">

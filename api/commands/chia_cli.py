@@ -29,7 +29,7 @@ MAX_LOG_LINES = 2000
 
 def load_farm_summary(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    if globals.farming_enabled(): # Load from chia farm summary
+    if globals.farming_enabled() or (blockchain == 'chives' and globals.harvesting_enabled()):
         proc = Popen("{0} farm summary".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=90)
@@ -78,7 +78,6 @@ def save_config(config, blockchain):
         app.logger.info(traceback.format_exc())
         raise Exception('Updated config.yaml failed validation!\n' + str(ex))
     else:
-        # TODO restart chia or flax services
         pass
 
 def load_wallet_show(blockchain):
@@ -269,7 +268,7 @@ def add_connection(connection, blockchain):
         app.logger.info('Invalid connection "{0}" provided.  Must be HOST:PORT.'.format(connection))
     else:
         app.logger.info("{0}".format(outs.decode('utf-8')))
-        app.logger.info('Connection added to Chia and sync engaging!')
+        app.logger.info('{0} connection added to {1} and sync engaging!'.format(blockchain.capitalize(), connection))
 
 def remove_connection(node_ids, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)

@@ -26,23 +26,25 @@ blp = Blueprint(
 class Certificates(MethodView):
 
     def get(self):
-        
         type = request.args.get('type')
         if type == "chia":
             blockchain = "chia"
             dir = "/root/.chia/mainnet/config/ssl/ca"
+        elif type == "chives":
+            blockchain = "chives"
+            dir = "/root/.chives/mainnet/config/ssl/ca"
         elif type == "flax":
             blockchain = "flax"
             dir = "/root/.flax/mainnet/config/ssl/ca"
+        elif type == "flora":
+            blockchain = "flora"
+            dir = "/root/.flora/mainnet/config/ssl/ca"
         elif type == "nchain":
             blockchain = "nchain"
             dir = "/root/.chia/ext9/config/ssl/ca"
         elif type == "hddcoin":
             blockchain = "hddcoin"
             dir = "/root/.hddcoin/mainnet/config/ssl/ca"
-        elif type == "chives":
-            blockchain = "chives"
-            dir = "/root/.chives/mainnet/config/ssl/ca"
         else:
             abort(400) # Bad blockchain type passed
         if blockchain == 'chia' and not self.allow_download():
@@ -63,9 +65,15 @@ class Certificates(MethodView):
         })
 
     def allow_download(self):
+        allow_harvester_cert_lan_download = app.config['ALLOW_HARVESTER_CERT_LAN_DOWNLOAD']
+        if not allow_harvester_cert_lan_download: # Override if set in configuration file
+            app.logger.info("Harvester cert download over LAN disallowed as per api.cfg.")
+            return False
         worker_setup_marker = "/root/.chia/machinaris/tmp/worker_launch.tmp"
         if os.path.exists(worker_setup_marker):
             last_modified_date = datetime.datetime.fromtimestamp(os.path.getmtime(worker_setup_marker))
             fifteen_minutes_ago = datetime.datetime.now() - datetime.timedelta(minutes=30)
-            return last_modified_date >= fifteen_minutes_ago
+            if last_modified_date >= fifteen_minutes_ago:
+                return True
+            app.logger.info("Harvester cert download over LAN disallowed due to timeout guard on New Worker page launch.")
         return False

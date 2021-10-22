@@ -31,6 +31,8 @@ class FarmSummary:
                     self.total_coins = line.split(':')[1].strip()
                 elif "Total flax farmed" in line:
                     self.total_coins = line.split(':')[1].strip()
+                elif "Total flora farmed" in line:
+                    self.total_coins = line.split(':')[1].strip()
                 elif "Total hddcoin farmed" in line:
                     self.total_coins = line.split(':')[1].strip()
                 elif "Estimated network space" in line:

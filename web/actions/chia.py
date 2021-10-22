@@ -18,7 +18,7 @@ import traceback
 import urllib
 import yaml
 
-from flask import Flask, jsonify, abort, request, flash
+from flask import Flask, jsonify, abort, request, flash, url_for
 from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
 from subprocess import Popen, TimeoutExpired, PIPE
 from sqlalchemy import or_
@@ -172,7 +172,7 @@ def generate_key(key_path, blockchain):
     proc = Popen("{0} keys generate".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
+    except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
@@ -186,7 +186,7 @@ def generate_key(key_path, blockchain):
     proc = Popen("{0} keys show --show-mnemonic-seed | tail -n 1 > {1}".format(chia_binary, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
+    except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
@@ -207,9 +207,9 @@ def generate_key(key_path, blockchain):
         except:
                 flash('{0} was unreadable or not found.'.format(key_path), 'danger')
                 return False
-        flash('Welcome! A new key has been generated at {0} within the container filesystem. See the '.format(key_path) + \
+        flash('Welcome! A new key has been generated. If also running blockchain forks like Flax, you must copy this mnemonic.txt file over to them. See the ' + \
         '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
-            'details.  Please allow 5-10 minutes for Chia to begin syncing to peers...', 'success')
+            'details.  Please allow 5-10 minutes for Chia to begin syncing with peers...', 'success')
         flash('{0}'.format(" ".join(mnemonic_words)), 'info')
     if os.environ['mode'].startswith('farmer'):
         cmd = 'farmer-only'
@@ -247,7 +247,7 @@ def import_key(key_path, mnemonic, blockchain):
     proc = Popen("{0} keys add -f {1}".format(chia_binary, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
+    except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
@@ -281,9 +281,9 @@ def import_key(key_path, mnemonic, blockchain):
         return False
     if outs:
         app.logger.debug(outs.decode('utf-8'))
-    flash('Welcome! Your mnemonic was imported as {0} within the container filesystem. see the '.format(key_path) + \
+    flash('Welcome! Your mnemonic key was imported. If also running blockchain forks like Flax, you must copy this mnemonic.txt file over to them. See the ' + \
         '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
-            'details.', 'success')
+            'details.  Please allow 5-10 minutes for Chia to begin syncing with peers...', 'success')
     return True
 
 def add_connection(connection, hostname, blockchain):
@@ -366,7 +366,8 @@ def process_pool_save(choice, pool_url, current_pool_url):
         return process_pool_join(choice, pool_url, pool_wallet_id)
 
 def process_pool_leave(choice, wallet_index):
-    cmd = "{0} plotnft leave -y -i {1}".format(CHIA_BINARY, wallet_index)
+    chia_binary = globals.get_blockchain_binary('chia')
+    cmd = "{0} plotnft leave -y -i {1}".format(chia_binary, wallet_index)
     app.logger.info("Attempting to leave pool: {0}".format(cmd))
     result = ""
     try:
@@ -409,6 +410,7 @@ def process_pool_leave(choice, wallet_index):
     return True
 
 def process_pool_join(choice, pool_url, pool_wallet_id):
+    chia_binary = globals.get_blockchain_binary('chia')
     app.logger.info("Attempting to join pool at URL: {0} with wallet_id: {1}".format(pool_url, pool_wallet_id))
     try:
         if not pool_url.strip():
@@ -425,10 +427,10 @@ def process_pool_join(choice, pool_url, pool_wallet_id):
         flash('{0}'.format(str(ex)), 'danger')
         return False
     if pool_wallet_id: # Just joining a pool with existing NFT
-        cmd = "{0} plotnft join -y -u {1} -i {2}".format(CHIA_BINARY, pool_url, pool_wallet_id)
+        cmd = "{0} plotnft join -y -u {1} -i {2}".format(chia_binary, pool_url, pool_wallet_id)
         wallet_index = pool_wallet_id
     else:  # Both creating NFT and joining pool in one setp
-        cmd = "{0} plotnft create -y -u {1} -s pool".format(CHIA_BINARY, pool_url)
+        cmd = "{0} plotnft create -y -u {1} -s pool".format(chia_binary, pool_url)
         wallet_index = 1
     app.logger.info("Executing: {0}".format(cmd))
     result = ""
@@ -471,8 +473,9 @@ def process_pool_join(choice, pool_url, pool_wallet_id):
     flash('Successfully joined {0} pool by creating Chia NFT.  Please wait a while to complete, then refresh page. See below for details.'.format(pool_url), 'success')
     return True
 
-def process_self_pool():
-    cmd = "{0} plotnft create -y -s local".format(CHIA_BINARY)
+def process_self_pool(wallet_index=1):
+    chia_binary = globals.get_blockchain_binary('chia')
+    cmd = "{0} plotnft create -y -s local".format(chia_binary)
     app.logger.info("Attempting to create NFT for self-pooling. {0}".format(cmd))
     result = ""
     try:

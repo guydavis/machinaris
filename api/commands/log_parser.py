@@ -21,10 +21,7 @@ from common.config import globals
 from api.models import log
 from api import app
 
-# Location of the auto-rotating logs in container
-CHIA_LOG = '/root/.chia/mainnet/log/debug.log'
-FLAX_LOG = '/root/.flax/mainnet/log/debug.log'
-
+# Rough number of challenges arriving per minute on a blockchain
 CHALLENGES_PER_MINUTE = 8 
 
 # Most recent partial proofs, actually double as 2 log lines per partial
@@ -130,10 +127,12 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         app.logger.info("No log file found at {0}".format(log_file))
         return 'No log file found!'
     #app.logger.info("Log file found at {0}".format(log_file))
-    if blockchain == "flax":
-        class_escape = re.compile(r' flax.plotting.(\w+)(\s+): ')
-    elif blockchain == "chives":
+    if blockchain == "chives":
         class_escape = re.compile(r' chives.plotting.(\w+)(\s+): ')
+    elif blockchain == "flax":
+        class_escape = re.compile(r' flax.plotting.(\w+)(\s+): ')
+    elif blockchain == "flora":
+        class_escape = re.compile(r' flora.plotting.(\w+)(\s+): ')
     elif blockchain == "hddcoin":
         class_escape = re.compile(r' hddcoin.plotting.(\w+)(\s+): ')
     else: # Chia and NChain both

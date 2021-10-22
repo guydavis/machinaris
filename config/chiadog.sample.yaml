@@ -1,9 +1,9 @@
-# This is useful to differentiate multiple chiadog
+# This is useful to differentiate multiple
 # instances monitoring multiple harvesters
 notification_title_prefix: 'Machinaris-Chia'
 log_level: INFO
 coin_name: 'chia'
-coin_symbol: "xch"
+coin_symbol: 'xch'
 
 # Only one consumer can be enabled at a time, you can
 # delete the section for the consumer which you aren't using
