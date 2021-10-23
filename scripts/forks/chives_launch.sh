@@ -44,13 +44,13 @@ sed -i 's/localhost/127.0.0.1/g' ~/.chives/mainnet/config/config.yaml
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
   if [ ! -f ~/.chives/mainnet/config/ssl/wallet/public_wallet.key ]; then
-    echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+    echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
   else
     chives start farmer
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.chives/mainnet/config/ssl/wallet/public_wallet.key ]; then
-    echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+    echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
   else
     chives start farmer-only
   fi

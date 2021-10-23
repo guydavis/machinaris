@@ -45,14 +45,14 @@ hddcoin init --fix-ssl-permissions > /dev/null
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
   if [ ! -f ~/.hddcoin/mainnet/config/ssl/wallet/public_wallet.key ]; then
-    echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+    echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
     exit 1
   else
     hddcoin start farmer
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.hddcoin/mainnet/config/ssl/wallet/public_wallet.key ]; then
-    echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+    echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
   else
     hddcoin start farmer-only
   fi
