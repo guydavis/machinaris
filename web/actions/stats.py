@@ -48,6 +48,7 @@ def load_daily_diff(farm_summary):
         summary['plots_size'] = plots_size_diff(since_str)
         summary['total_coin'] = total_coin_diff(since_str, blockchain)
         summary['netspace_size'] = netspace_size_diff(since_str, blockchain)
+        #app.logger.info("{0} -> {1}".format(blockchain, summary))
         farm_summary.farms[blockchain]['daily_diff'] = summary
 
 def plot_count_diff(since):

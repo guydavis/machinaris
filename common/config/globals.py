@@ -20,10 +20,11 @@ from os import environ, path
 
 SUPPORTED_BLOCKCHAINS = [
     'chia',
+    'chives',
     'flax',
+    'flora',
     'nchain',
     'hddcoin',
-    'chives'
 ]
 
 PLOTMAN_CONFIG = '/root/.chia/plotman/plotman.yaml'
@@ -35,37 +36,43 @@ BLADEBIT_BINARY = '/usr/bin/bladebit'
 CHIADOG_PATH = '/chiadog'
 
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
+CHIVES_BINARY = '/chives-blockchain/venv/bin/chives'
 FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
+FLORA_BINARY = '/flora-blockchain/venv/bin/flora'
 NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
 HDDCOIN_BINARY = '/hddcoin-blockchain/venv/bin/hddcoin'
-CHIVES_BINARY = '/chives-blockchain/venv/bin/chives'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
 
 def get_blockchain_binary(blockchain):
     if blockchain == "chia":
         return CHIA_BINARY
+    if blockchain == "chives":
+        return CHIVES_BINARY
     if blockchain == "flax":
         return FLAX_BINARY
+    if blockchain == "flora":
+        return FLORA_BINARY
     if blockchain == "nchain":
         return NCHAIN_BINARY
     if blockchain == "hddcoin":
         return HDDCOIN_BINARY
-    if blockchain == "chives":
-        return CHIVES_BINARY
     raise Exception("Invalid blockchain: ".format(blockchain))
 
 def get_blockchain_mainnet(blockchain):
-    if blockchain == 'flax':
-        return "/root/.flax/mainnet"
-    if blockchain == 'chives':
-        return "/root/.chives/mainnet"
-    if blockchain == 'nchain':
-        return "/root/.chia/ext9"
-    if blockchain == 'hddcoin':
-        return "/root/.hddcoin/mainnet"
     if blockchain == 'chia':
         return "/root/.chia/mainnet"
+    if blockchain == 'chives':
+        return "/root/.chives/mainnet"
+    if blockchain == 'flax':
+        return "/root/.flax/mainnet"
+    if blockchain == 'flora':
+        return "/root/.flora/mainnet"
+    if blockchain == 'hddcoin':
+        return "/root/.hddcoin/mainnet"
+    if blockchain == 'nchain':
+        return "/root/.chia/ext9"
+
     raise Exception("No mainnet folder for unknown blockchain: {0}".format(blockchain))
 
 def load():
@@ -114,7 +121,7 @@ def is_setup():
             logging.info("Skipping check for mnemonic.txt as public wallet key exists on disk.")
             return True
     except Exception as ex:
-        logging.info("Failed to find presence of public wallet key.")
+        logging.info("Failed to find presence of public wallet key due to {0}".format(str(ex)))
     # All other modes, we should have at least one keys path
     if "keys" not in os.environ:
         logging.info(

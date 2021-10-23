@@ -12,7 +12,7 @@ from flask import Flask, flash, redirect, render_template, abort, \
 
 from common.config import globals
 from web import app, utils
-from web.actions import chia, plotman, chiadog, worker, log_handler, stats
+from web.actions import chia, plotman, chiadog, worker, log_handler, stats, warnings
 
 @app.route('/')
 def landing():
@@ -35,6 +35,7 @@ def index():
     chia.challenges_chart_data(farm_summary)
     chia.partials_chart_data(farm_summary)
     stats.load_daily_diff(farm_summary)
+    warnings.check_warnings(request.args)
     return render_template('index.html', reload_seconds=120, farms=farm_summary.farms, \
         plotting=plotting.__dict__, workers=workers, global_config=gc)
 
@@ -147,6 +148,8 @@ def alerts():
             chiadog.stop_chiadog(w)
         elif request.form.get('action') == 'remove':
             chiadog.remove_alerts(request.form.getlist('unique_id'))
+        elif request.form.get('action') == 'purge':
+            chiadog.remove_all_alerts()
         else:
             app.logger.info("Unknown alerts form: {0}".format(request.form))
         return redirect(url_for('alerts')) # Force a redirect to allow time to update status

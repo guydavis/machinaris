@@ -29,7 +29,7 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
-
+# TODO: Currently only Chia stats are saved to local DB.  This needs to flow via REST API from fullnodes to controller.
 def collect():
     if not globals.farming_enabled():
         app.logger.debug(

@@ -29,8 +29,6 @@ def safely_gather_plots_size_gibs(plots_size):
     return plots_size_gibs
 
 def update():
-    if not globals.farming_enabled():
-        return
     with app.app_context():
         hostname = utils.get_hostname()
         for blockchain in globals.enabled_blockchains():
