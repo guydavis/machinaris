@@ -12,12 +12,10 @@ mkdir -p /root/.chia/mainnet/log
 chia init >> /root/.chia/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Silicoin...'
-while [ ! -f /root/.chia/mainnet/config/config.yaml ]; do
-  echo "Waiting for creation of /root/.chia/mainnet/config/config.yaml..."
-  sleep 1
-done
-sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/mainnet/config/config.yaml
-sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/config.yaml
+if [ -f /root/.chia/mainnet/config/config.yaml ]; then
+  sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/mainnet/config/config.yaml
+  sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/config.yaml
+fi
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
@@ -43,6 +41,7 @@ chia init --fix-ssl-permissions > /dev/null
 if [[ ${mode} == 'fullnode' ]]; then
   if [ ! -f ~/.chia/mainnet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+    exit 1
   else
     chia start farmer
   fi

@@ -12,12 +12,10 @@ mkdir -p /root/.chia/ext9/log
 chia init >> /root/.chia/ext9/log/init.log 2>&1 
 
 echo 'Configuring NChain...'
-while [ ! -f /root/.chia/ext9/config/config.yaml ]; do
-  echo "Waiting for creation of /root/.chia/ext9/config/config.yaml..."
-  sleep 1
-done
-sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/ext9/config/config.yaml
-sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/ext9/config/config.yaml
+if [ -f /root/.chia/ext9/config/config.yaml ]; then
+  sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/ext9/config/config.yaml
+  sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/ext9/config/config.yaml
+fi
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
@@ -43,6 +41,7 @@ chia init --fix-ssl-permissions > /dev/null
 if [[ ${mode} == 'fullnode' ]]; then
   if [ ! -f ~/.chia/ext9/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+    exit 1
   else
     chia start farmer
   fi

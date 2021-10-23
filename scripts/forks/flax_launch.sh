@@ -16,12 +16,10 @@ mkdir -p /root/.flax/mainnet/log
 flax init >> /root/.flax/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Flax...'
-while [ ! -f /root/.flax/mainnet/config/config.yaml ]; do
-  echo "Waiting for creation of /root/.flax/mainnet/config/config.yaml..."
-  sleep 1
-done
-sed -i 's/log_stdout: true/log_stdout: false/g' /root/.flax/mainnet/config/config.yaml
-sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.flax/mainnet/config/config.yaml
+if [ -f /root/.flax/mainnet/config/config.yaml ]; then
+  sed -i 's/log_stdout: true/log_stdout: false/g' /root/.flax/mainnet/config/config.yaml
+  sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.flax/mainnet/config/config.yaml
+fi
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
@@ -53,6 +51,7 @@ flax init --fix-ssl-permissions > /dev/null
 if [[ ${mode} == 'fullnode' ]]; then
   if [ ! -f ~/.flax/mainnet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+    exit 1
   else
     flax start farmer
   fi
