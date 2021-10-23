@@ -4,7 +4,7 @@
 #
 
 
-cd /mainnet-blockchain
+cd /silicoin-blockchain
 
 . ./activate
 
