@@ -17,10 +17,10 @@ if [[ -z "${worker_address}" ]]; then
   exit 1
 fi
 
-# Start only selected fork
-for fork in ${blockchains//,/ }; do
-  /usr/bin/bash /machinaris/scripts/forks/${fork}_launch.sh
-done
+# Start the selected fork
+if ! /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
+  exit 1
+fi
 
 # Launch Machinaris web server and other services
 /machinaris/scripts/start_machinaris.sh
