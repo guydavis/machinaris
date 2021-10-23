@@ -59,6 +59,7 @@ ARG FLAX_BRANCH
 ARG FLORA_BRANCH
 ARG HDDCOIN_BRANCH
 ARG NCHAIN_BRANCH
+ARG SILICOIN_BRANCH
 
 # copy local files
 COPY . /machinaris/
@@ -74,6 +75,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/flora_install.sh ${FLORA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/silicoin_install.sh ${SILICOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/plotman_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \

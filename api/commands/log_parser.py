@@ -135,7 +135,7 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         class_escape = re.compile(r' flora.plotting.(\w+)(\s+): ')
     elif blockchain == "hddcoin":
         class_escape = re.compile(r' hddcoin.plotting.(\w+)(\s+): ')
-    else: # Chia and NChain both
+    else: # Chia, NChain, Silicoin all use default package name
         class_escape = re.compile(r' chia.plotting.(\w+)(\s+): ')
     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
     proc = Popen(['tail', '-n', str(MAX_LOG_LINES), log_file], stdout=PIPE)

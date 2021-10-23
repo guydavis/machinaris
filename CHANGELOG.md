@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.2] - 2021-10-?
+ - [Silicoin](https://github.com/silicoin-network/silicoin-blockchain) - cross-farming support for this blockchain fork.
+
 ## [0.6.1] - 2021-10-23
  - [Flora](https://github.com/Flora-Network/flora-blockchain) - cross-farming support for this blockchain fork.
  - ChiaDog - improved support for forks, fix coin symbol in certain alerts, Chives decimal placement, etc.

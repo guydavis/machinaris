@@ -21,6 +21,7 @@ CURRENCY_SYMBOLS = {
     "flora": "XFL",
     "hddcoin": "HDD",
     "nchain": "NCH",
+    "silicoin": "SIT",
 }
 
 PLOT_TABLE_COLUMNS = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', '.' ]
@@ -315,20 +316,25 @@ class Connections:
             return "145.1.235.18:28444"
         if blockchain == 'nchain':
             return "218.88.205.216:58445"
+        if blockchain == 'silicoin':
+            return "114.32.109.48:10444"
         
     def blockchain_port(self,blockchain):
         if blockchain == 'chia':
             return 8444
+        elif blockchain == 'chives':
+            return 9699
         elif blockchain == 'flax':
             return 6888
         elif blockchain == 'flora':
             return 18644
-        elif blockchain == 'nchain':
-            return 58445
         elif blockchain == 'hddcoin':
             return 28444
-        elif blockchain == 'chives':
-            return 9699
+        elif blockchain == 'nchain':
+            return 58445
+        elif blockchain == 'silicoin':
+            return 10444
+
         raise("Unknown blockchain fork of selected: " + blockchain)
 
     def parse(self, connection, blockchain):
