@@ -17,13 +17,11 @@ mkdir -p /root/.chives/mainnet/log
 chives init >> /root/.chives/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Chives...'
-while [ ! -f /root/.chives/mainnet/config/config.yaml ]; do
-  echo "Waiting for creation of /root/.chives/mainnet/config/config.yaml..."
-  sleep 1
-done
-sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chives/mainnet/config/config.yaml
-sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chives/mainnet/config/config.yaml
-
+if [ -f /root/.chives/mainnet/config/config.yaml ]; then
+  sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chives/mainnet/config/config.yaml
+  sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chives/mainnet/config/config.yaml
+  sed -i 's/localhost/127.0.0.1/g' /root/.chives/mainnet/config/config.yaml
+fi
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
   if [ -f ${k} ]; then
@@ -38,8 +36,6 @@ done
 for p in ${plots_dir//:/ }; do
     chives plots add -d ${p}
 done
-
-sed -i 's/localhost/127.0.0.1/g' ~/.chives/mainnet/config/config.yaml
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then

@@ -19,6 +19,7 @@ echo 'Configuring Flora...'
 if [ -f /root/.flora/mainnet/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.flora/mainnet/config/config.yaml
   sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.flora/mainnet/config/config.yaml
+  sed -i 's/localhost/127.0.0.1/g' /root/.flora/mainnet/config/config.yaml
 fi
 
 # Loop over provided list of key paths
@@ -41,8 +42,6 @@ else
     flora plots add -d ${p}
   done
 fi
-
-sed -i 's/localhost/127.0.0.1/g' ~/.flora/mainnet/config/config.yaml
 
 chmod 755 -R /root/.flora/mainnet/config/ssl/ &> /dev/null
 flora init --fix-ssl-permissions > /dev/null 

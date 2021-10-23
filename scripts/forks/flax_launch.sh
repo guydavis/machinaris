@@ -19,6 +19,7 @@ echo 'Configuring Flax...'
 if [ -f /root/.flax/mainnet/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.flax/mainnet/config/config.yaml
   sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.flax/mainnet/config/config.yaml
+  sed -i 's/localhost/127.0.0.1/g' /root/.flax/mainnet/config/config.yaml
 fi
 
 # Loop over provided list of key paths
@@ -41,8 +42,6 @@ else
     flax plots add -d ${p}
   done
 fi
-
-sed -i 's/localhost/127.0.0.1/g' ~/.flax/mainnet/config/config.yaml
 
 chmod 755 -R /root/.flax/mainnet/config/ssl/ &> /dev/null
 flax init --fix-ssl-permissions > /dev/null 

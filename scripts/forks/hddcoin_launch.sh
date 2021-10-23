@@ -20,6 +20,7 @@ echo 'Configuring HDDCoin...'
 if [ -f /root/.hddcoin/mainnet/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.hddcoin/mainnet/config/config.yaml
   sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.hddcoin/mainnet/config/config.yaml
+  sed -i 's/localhost/127.0.0.1/g' /root/.hddcoin/mainnet/config/config.yaml
 fi
 
 # Loop over provided list of key paths
@@ -36,8 +37,6 @@ done
 for p in ${plots_dir//:/ }; do
     hddcoin plots add -d ${p}
 done
-
-sed -i 's/localhost/127.0.0.1/g' ~/.hddcoin/mainnet/config/config.yaml
 
 chmod 755 -R /root/.hddcoin/mainnet/config/ssl/ &> /dev/null
 hddcoin init --fix-ssl-permissions > /dev/null 

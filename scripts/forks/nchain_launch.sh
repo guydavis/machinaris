@@ -15,6 +15,7 @@ echo 'Configuring NChain...'
 if [ -f /root/.chia/ext9/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/ext9/config/config.yaml
   sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/ext9/config/config.yaml
+  sed -i 's/localhost/127.0.0.1/g' /root/.chia/ext9/config/config.yaml
 fi
 
 # Loop over provided list of key paths
@@ -31,8 +32,6 @@ done
 for p in ${plots_dir//:/ }; do
     chia plots add -d ${p}
 done
-
-sed -i 's/localhost/127.0.0.1/g' ~/.chia/ext9/config/config.yaml
 
 chmod 755 -R /root/.chia/ext9/config/ssl/ &> /dev/null
 chia init --fix-ssl-permissions > /dev/null 

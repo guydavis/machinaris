@@ -18,6 +18,7 @@ fi
 if [ -f /root/.chia/mainnet/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/mainnet/config/config.yaml
   sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/config.yaml
+  sed -i 's/localhost/127.0.0.1/g' /root/.chia/mainnet/config/config.yaml
 fi
 
 # Loop over provided list of key paths
@@ -34,8 +35,6 @@ done
 for p in ${plots_dir//:/ }; do
     chia plots add -d ${p}
 done
-
-sed -i 's/localhost/127.0.0.1/g' ~/.chia/mainnet/config/config.yaml
 
 chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
 chia init --fix-ssl-permissions > /dev/null 
