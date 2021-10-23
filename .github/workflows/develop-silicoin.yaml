@@ -40,7 +40,7 @@ jobs:
           platforms: linux/amd64
           push: true
           build-args: |
-            "NCHAIN_BRANCH=main"
+            "SILICOIN_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-silicoin:develop
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-silicoin:develop
