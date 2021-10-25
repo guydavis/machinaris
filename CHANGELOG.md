@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.6.2] - 2021-10-?
  - [Silicoin](https://github.com/silicoin-network/silicoin-blockchain) - cross-farming support for this blockchain fork.
+ - Machinaris - correctly show daily difference tooltips on Summary page statistics for all blockchains
 
 ## [0.6.1] - 2021-10-23
  - [Flora](https://github.com/Flora-Network/flora-blockchain) - cross-farming support for this blockchain fork.
