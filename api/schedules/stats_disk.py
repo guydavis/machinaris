@@ -15,12 +15,12 @@ from common.config import globals
 from common.models import stats
 from api import app, utils
 
+DELETE_OLD_STATS_AFTER_DAYS = 1
+
 DATABASE = '/root/.chia/machinaris/dbs/stats.db'
 
 TABLES = ['stat_plots_total_used', 'stat_plots_disk_used', 'stat_plots_disk_free',
           'stat_plotting_total_used', 'stat_plotting_disk_used', 'stat_plotting_disk_free']
-
-DELETE_OLD_STATS_AFTER_DAYS = 1
 
 def get_db():
     db = getattr(g, '_stats_database', None)
@@ -28,13 +28,11 @@ def get_db():
         db = g._stats_database = sqlite3.connect(DATABASE)
     return db
 
-
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_stats_database', None)
     if db is not None:
         db.close()
-
 
 def delete_old_stats(db):
     try:
@@ -47,7 +45,6 @@ def delete_old_stats(db):
     except:
         app.logger.info("Failed to delete old statistics.")
         app.logger.info(traceback.format_exc())
-
 
 def store_disk_stats(db, current_datetime, disk_type):
     hostname = socket.gethostname()
@@ -100,7 +97,6 @@ def send_stats(model, endpoint):
     from api import db
     since = (datetime.datetime.now() - datetime.timedelta(minutes=15)).strftime("%Y-%m-%d %H:%M:%S.000")
     try:
-        hostname = utils.get_displayname()
         payload = []
         for stat in db.session.query(model).filter(model.created_at >= since).all():
             payload.append({

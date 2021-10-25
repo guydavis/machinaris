@@ -45,6 +45,9 @@ class Certificates(MethodView):
         elif type == "hddcoin":
             blockchain = "hddcoin"
             dir = "/root/.hddcoin/mainnet/config/ssl/ca"
+        elif type == "silicoin":
+            blockchain = "silicoin"
+            dir = "/root/.chia/mainnet/config/ssl/ca"
         else:
             abort(400) # Bad blockchain type passed
         if blockchain == 'chia' and not self.allow_download():

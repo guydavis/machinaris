@@ -156,6 +156,9 @@
             if (blockchain == 'nchain') {
                 return 8929;
             }
+            if (blockchain == 'silicoin') {
+                return 8933;
+            }
             // Next available is 8933
             alert("Unknown blockchain fork of selected: " + blockchain);
         }
@@ -164,20 +167,20 @@
             if (blockchain == 'chia') {
                 return 8447;
             }
+            if (blockchain == 'chives') {
+                return 9647;
+            }
             if (blockchain == 'flax') {
                 return 6885;
             }
             if (blockchain == 'flora') {
                 return 18647;
             }
-            if (blockchain == 'nchain') {
-                return 38447;
-            }
             if (blockchain == 'hddcoin') {
                 return 28447;
             }
-            if (blockchain == 'chives') {
-                return 9647;
+            if (blockchain == 'silicoin') {
+                return 10447;
             }
             alert("Unknown blockchain fork of selected: " + blockchain);
         }
@@ -195,7 +198,7 @@
                     var blockchain = blockchains[i].value
                     if (blockchain == "chia") {
                         cmd += "    machinaris:" + line_end;
-                        cmd += "        image: ghcr.io/guydavis/machinaris" + line_end;
+                        cmd += "        image: ghcr.io/guydavis/machinaris:latest" + line_end;
                         cmd += "        container_name: machinaris" + line_end;
                     } else {
                         cmd += "    machinaris-" + blockchain + ":" + line_end;
@@ -447,6 +450,13 @@
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" checked name="blockchains"
+                                id="blockchain-chives" onclick="updateDocker()" value="chives">
+                            <label class="form-check-label" for="blockchain-chives">
+                                Chives
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" checked name="blockchains"
                                 id="blockchain-flax" onclick="updateDocker()" value="flax">
                             <label class="form-check-label" for="blockchain-flax">
                                 Flax
@@ -461,6 +471,13 @@
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" checked name="blockchains"
+                                id="blockchain-hddcoin" onclick="updateDocker()" value="hddcoin">
+                            <label class="form-check-label" for="blockchain-hddcoin">
+                                HDDCoin
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" checked name="blockchains"
                                 id="blockchain-nchain" onclick="updateDocker()" value="nchain">
                             <label class="form-check-label" for="blockchain-nchain">
                                 N-Chain
@@ -468,16 +485,9 @@
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" checked name="blockchains"
-                                id="blockchain-chives" onclick="updateDocker()" value="chives">
-                            <label class="form-check-label" for="blockchain-chives">
-                                Chives
-                            </label>
-                        </div>
-                        <div class="col">
-                            <input class="form-check-input" type="checkbox" checked name="blockchains"
-                                id="blockchain-hddcoin" onclick="updateDocker()" value="hddcoin">
-                            <label class="form-check-label" for="blockchain-hddcoin">
-                                HDDCoin
+                                id="blockchain-silicoin" onclick="updateDocker()" value="silicoin">
+                            <label class="form-check-label" for="blockchain-silicoin">
+                                Silicoin
                             </label>
                         </div>
                     </div>
