@@ -77,8 +77,7 @@ def get_blockchain_mainnet(blockchain):
     if blockchain == 'nchain':
         return "/root/.chia/ext9"
     if blockchain == 'silicoin':
-        return "/root/.chia/mainnet"
-
+        return "/root/.silicoin/mainnet"
     raise Exception("No mainnet folder for unknown blockchain: {0}".format(blockchain))
 
 def load():

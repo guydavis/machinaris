@@ -18,7 +18,8 @@ from . import pools
 from . import wallets
 from . import workers
 
-from .stats import plottingdiskused,plottingdiskfree,plotsdiskused,plotsdiskfree
+from .stats import plottingdiskused,plottingdiskfree,plotsdiskused, \
+    plotsdiskfree,plotcount,plotssize,totalchia,netspacesize,timetowin
 
 MODULES = (
     actions,
@@ -44,7 +45,12 @@ MODULES = (
     plottingdiskused,
     plottingdiskfree,
     plotsdiskused,
-    plotsdiskfree
+    plotsdiskfree,
+    plotcount,
+    plotssize,
+    totalchia,
+    netspacesize,
+    timetowin,
 )
 
 

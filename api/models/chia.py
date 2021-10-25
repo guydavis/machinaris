@@ -12,8 +12,7 @@ MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
 class FarmSummary:
 
-    def __init__(self, cli_stdout=None, farm_plots=None):
-        if cli_stdout:
+    def __init__(self, cli_stdout, blockchain, harvesting):
             self.plot_count = 0
             self.plots_size = 0
             for line in cli_stdout:
@@ -41,16 +40,8 @@ class FarmSummary:
                     self.time_to_win = line.split(':')[1].strip()
                 elif "User transaction fees" in line:
                     self.transaction_fees = line.split(':')[1].strip()
-        elif farm_plots:
-            self.plot_count = 0
-            bytes_size = 0
-            for plot in farm_plots.rows:
-                if plot['size'] > MINIMUM_K32_PLOT_SIZE_BYTES:
-                    self.plot_count += 1
-                    bytes_size += int(plot['size'])
-            self.plots_size = converters.sizeof_fmt(bytes_size)
-        else:
-            raise Exception("Not provided either chia stdout lines or a list of plots.")
+            if blockchain == 'chives' and harvesting and self.plot_count > 0:
+                self.status = "harvesting"
 
     def calc_status(self, status):
         self.status = status

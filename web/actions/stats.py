@@ -44,19 +44,19 @@ def load_daily_diff(farm_summary):
         # initialize defaults
         since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
         since_str = since_date.strftime("%Y%m%d%H%M%S")
-        summary['plot_count'] = plot_count_diff(since_str)
-        summary['plots_size'] = plots_size_diff(since_str)
+        summary['plot_count'] = plot_count_diff(since_str, blockchain)
+        summary['plots_size'] = plots_size_diff(since_str, blockchain)
         summary['total_coin'] = total_coin_diff(since_str, blockchain)
         summary['netspace_size'] = netspace_size_diff(since_str, blockchain)
         #app.logger.info("{0} -> {1}".format(blockchain, summary))
         farm_summary.farms[blockchain]['daily_diff'] = summary
 
-def plot_count_diff(since):
+def plot_count_diff(since, blockchain):
     result = ''
     try:
-        latest = db.session.query(StatPlotCount).order_by(StatPlotCount.created_at.desc()).limit(1).first()
+        latest = db.session.query(StatPlotCount).order_by(StatPlotCount.blockchain==blockchain, StatPlotCount.created_at.desc()).limit(1).first()
         #app.logger.debug(latest.value)
-        before = db.session.query(StatPlotCount).filter(StatPlotCount.created_at <= since).order_by(StatPlotCount.created_at.desc()).limit(1).first()
+        before = db.session.query(StatPlotCount).filter(StatPlotCount.blockchain==blockchain, StatPlotCount.created_at <= since).order_by(StatPlotCount.created_at.desc()).limit(1).first()
         #app.logger.debug(before.value)
         if (latest.value - before.value) != 0:
             result = "%+0g in last day." % (latest.value - before.value)
@@ -65,12 +65,12 @@ def plot_count_diff(since):
     #app.logger.debug("Result is: {0}".format(result))
     return result
 
-def plots_size_diff(since):
+def plots_size_diff(since, blockchain):
     result = ''
     try:
-        latest = db.session.query(StatPlotsSize).order_by(StatPlotsSize.created_at.desc()).limit(1).first()
+        latest = db.session.query(StatPlotsSize).order_by(StatPlotsSize.blockchain==blockchain, StatPlotsSize.created_at.desc()).limit(1).first()
         #app.logger.debug(latest.value)
-        before = db.session.query(StatPlotsSize).filter(StatPlotsSize.created_at <= since).order_by(StatPlotsSize.created_at.desc()).limit(1).first()
+        before = db.session.query(StatPlotsSize).filter(StatPlotsSize.blockchain==blockchain, StatPlotsSize.created_at <= since).order_by(StatPlotsSize.created_at.desc()).limit(1).first()
         #app.logger.debug(before.value)
         gibs = (latest.value - before.value)
         fmtted = converters.gib_to_fmt(gibs)
@@ -125,7 +125,8 @@ def load_daily_farming_summaries():
     for host in chia.load_farmers():
         summary_by_workers[host.displayname] = {}
         for wk in host.workers:
-            summary_by_workers[host.displayname][wk['blockchain']] = daily_summaries(since_date, wk['hostname'], wk['displayname'], wk['blockchain']), 
+            summary_by_workers[host.displayname][wk['blockchain']] = daily_summaries(since_date, wk['hostname'], wk['displayname'], wk['blockchain']) 
+            #app.logger.info("{0}-{1}: {2}".format(host.displayname, wk['blockchain'], summary_by_workers[host.displayname][wk['blockchain']]))
     return summary_by_workers
 
 def daily_summaries(since, hostname, displayname, blockchain):
