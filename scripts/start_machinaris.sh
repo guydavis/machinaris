@@ -6,7 +6,15 @@
 echo 'Configuring Plotman...'
 mkdir -p /root/.chia/plotman/logs
 # Check for existing, old versions of plotman.yaml and migrate them, else use default
-/chia-blockchain/venv/bin/python3 /machinaris/scripts/plotman_migrate.py
+#/chia-blockchain/venv/bin/python3 /machinaris/scripts/plotman_migrate.py
+if [[ "${blockchains}" == 'chives' ]]; then
+    cp -f /machinaris/config/plotman.sample-chives.yaml /root/.chia/plotman/plotman.sample.yaml
+    cp -n /machinaris/config/plotman.sample-chives.yaml /root/.chia/plotman/plotman.yaml
+else
+    cp -f /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.sample.yaml
+    cp -n /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.yaml
+fi
+
 if [ ${farmer_pk} != 'null' ]; then
     sed -i "s/^.*farmer_pk:.*$/        farmer_pk: ${farmer_pk}/g" /root/.chia/plotman/plotman.yaml
 fi
