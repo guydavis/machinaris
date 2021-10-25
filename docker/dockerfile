@@ -80,6 +80,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/plotman_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/bladebit_clone.sh \
+	&& /usr/bin/bash /machinaris/scripts/fd-cli_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
 	&& rm -rf \
 		/root/.cache \
