@@ -41,12 +41,13 @@ class FarmSummary:
                     self.time_to_win = line.split(':')[1].strip()
                 elif "User transaction fees" in line:
                     self.transaction_fees = line.split(':')[1].strip()
-            if blockchain == 'chives' and globals.harvesting_enabled():
+            if blockchain == 'chives' and 'harvester' in os.environ['mode']:
                 try:
                     if int(self.plot_count) > 0:
-                        self.status = "harvesting"
+                        app.logger.debug("On a Chives Harvester, setting farm status to Harvesting.")
+                        self.status = "Harvesting"
                 except:
-                    app.logger.debug("Non-numeric chives plot count so not setting status to harvesting.")
+                    app.logger.debug("Non-numeric chives plot count so not setting status to Harvesting.")
 
     def calc_status(self, status):
         self.status = status
@@ -70,7 +71,7 @@ class FarmSummary:
 class HarvesterSummary:
 
     def __init__(self):
-        self.status = "harvesting" # TODO Check for harvester status in debug.log
+        self.status = "Harvesting" # TODO Check for harvester status in debug.log
 
 class FarmPlots:
 
