@@ -38,16 +38,11 @@ def execute():
                     app.logger.info("Found no pool contract address, so skipping NFT 7/8 win recovery on plotnft: {0}".format(plotnft))
                     continue
                 vars = {}
-                vars['FD_CLI_BC_DB_PATH'] = '/.chia/mainnet/db/blockchain_v1_mainnet.sqlite'
-                vars['FD_CLI_WT_DB_PATH'] = '/.chia/mainnet/wallet/db/blockchain_wallet_v1_mainnet_{0}.sqlite'.format(wallet_id)
+                vars['FD_CLI_BC_DB_PATH'] = '/root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite'
+                vars['FD_CLI_WT_DB_PATH'] = '/root/.chia/mainnet/wallet/db/blockchain_wallet_v1_mainnet_{0}.sqlite'.format(wallet_id)
                 fd_env = os.environ.copy()
                 fd_env.update(vars)
-                cmd = ["/usr/local/bin/fd-cli", "nft-recover"
-                    "-l", launcher_id, "-p", pool_contract_address,
-                    "-nh", "127.0.0.1", "-np", "18755",
-                    "-ct", "/root/.chia/mainnet/config/ssl/full_node/private_full_node.crt"
-                    "-ck", "/root/.chia/mainnet/config/ssl/full_node/private_full_node.key"
-                    ]
+                cmd = f"/usr/local/bin/fd-cli nft-recover -l {launcher_id} -p {pool_contract_address} -nh 127.0.0.1 -np 18755 -ct /root/.chia/mainnet/config/ssl/full_node/private_full_node.crt -ck /root/.chia/mainnet/config/ssl/full_node/private_full_node.key"
                 app.logger.info("Executing NFT 1/8 win recovery: {0}".format(cmd))
                 proc = Popen(cmd,cwd="/fd-cli", env=fd_env, shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
                 try:
