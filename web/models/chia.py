@@ -317,7 +317,7 @@ class Connections:
         if blockchain == 'nchain':
             return "218.88.205.216:58445"
         if blockchain == 'silicoin':
-            return "114.32.109.48:10444"
+            return "218.80.75.23:11444"
         
     def blockchain_port(self,blockchain):
         if blockchain == 'chia':
@@ -333,7 +333,7 @@ class Connections:
         elif blockchain == 'nchain':
             return 58445
         elif blockchain == 'silicoin':
-            return 10444
+            return 11444
 
         raise("Unknown blockchain fork of selected: " + blockchain)
 
