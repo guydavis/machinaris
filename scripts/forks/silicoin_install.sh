@@ -18,6 +18,7 @@ else
 		cd /
 		rmdir /chia-blockchain
 		ln -s /silicoin-blockchain /chia-blockchain
-		ln -s /silicoin-blockchain/venv/bin/silicoin /chia-blockchain/venv/bin/chia
+		ln -s /silicoin-blockchain/venv/bin/sit /silicoin-blockchain/venv/bin/silicoin
+		ln -s /silicoin-blockchain/venv/bin/sit /chia-blockchain/venv/bin/chia
 	fi
 fi
