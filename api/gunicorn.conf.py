@@ -11,7 +11,7 @@ def on_starting(server):
         status_plots, status_challenges, status_wallets, status_blockchains, \
         status_connections, status_keys, status_alerts, status_controller, \
         status_plotnfts, status_points, status_pools, status_partials
-    from api.schedules import stats_disk, stats_farm
+    from api.schedules import stats_disk, stats_farm, nft_recover
     from common.config import globals
 
     scheduler = BackgroundScheduler()
@@ -65,6 +65,7 @@ def on_starting(server):
     # Status for single Machinaris controller only, should be blockchain=chia
     if utils.is_controller():
         scheduler.add_job(func=status_controller.update, name="controller", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        #scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', seconds=15)
 
     # Testing only
     #scheduler.add_job(func=stats_farm.collect, trigger='interval', seconds=10) # Test immediately

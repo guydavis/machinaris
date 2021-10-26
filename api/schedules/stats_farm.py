@@ -45,7 +45,6 @@ def delete_old_stats(db):
         app.logger.info("Failed to delete old statistics.")
         app.logger.info(traceback.format_exc())
 
-# TODO: Currently only Chia stats are saved to local DB.  This needs to flow via REST API from fullnodes to controller.
 def collect():
     with app.app_context():
         gc = globals.load()
