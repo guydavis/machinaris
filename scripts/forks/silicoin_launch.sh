@@ -10,8 +10,9 @@ cd /silicoin-blockchain
 
 # Only the /root/.chia folder is volume-mounted so store silicoin within
 mkdir -p /root/.chia/silicoin
-rm -f /root/.silicoin
+rm -f /root/.sit
 ln -s /root/.chia/silicoin /root/.silicoin 
+ln -s /root/.chia/silicoin /root/.sit 
 
 mkdir -p /root/.silicoin/mainnet/log
 silicoin init >> /root/.silicoin/mainnet/log/init.log 2>&1 
