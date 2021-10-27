@@ -26,6 +26,14 @@ def send_post(path, payload, debug=False):
     http.client.HTTPConnection.debuglevel = 0
     return response
 
+def send_worker_post(worker, path, payload, debug=False):
+    headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+    if debug:
+        http.client.HTTPConnection.debuglevel = 1
+    response = requests.post(worker.url + path, headers = headers, data = json.dumps(payload))
+    http.client.HTTPConnection.debuglevel = 0
+    return response
+
 def send_delete(path, debug=False):
     controller_url = get_controller_url()
     headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
