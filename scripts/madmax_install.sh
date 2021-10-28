@@ -19,6 +19,7 @@ git submodule update --init
 mkdir -p /usr/lib/chia-plotter
 cp -r ./build/* /usr/lib/chia-plotter
 ln -s /usr/lib/chia-plotter/chia_plot /usr/bin/chia_plot
+ln -s /usr/lib/chia-plotter/chia_plot_k34 /usr/bin/chia_plot_k34
 cd /
 rm -rf chia-plotter
 
