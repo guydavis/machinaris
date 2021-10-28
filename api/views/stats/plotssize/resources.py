@@ -35,8 +35,6 @@ class StatPlotsSizes(MethodView):
     def post(self, new_items):
         if len(new_items) == 0:
             return "No stats provided.", 400
-        db.session.query(StatPlotsSize).filter(StatPlotsSize.hostname==new_items[0]['hostname'],
-            StatPlotsSize.blockchain==new_items[0]['blockchain']).delete()
         items = []
         for new_item in new_items:
             item = StatPlotsSize(**new_item)
