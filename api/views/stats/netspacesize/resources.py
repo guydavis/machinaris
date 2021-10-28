@@ -35,8 +35,6 @@ class StatNetspaceSizes(MethodView):
     def post(self, new_items):
         if len(new_items) == 0:
             return "No stats provided.", 400
-        db.session.query(StatNetspaceSize).filter(StatNetspaceSize.hostname==new_items[0]['hostname'],
-            StatNetspaceSize.blockchain==new_items[0]['blockchain']).delete()
         items = []
         for new_item in new_items:
             item = StatNetspaceSize(**new_item)

@@ -51,43 +51,44 @@ def collect():
         db = get_db()
         delete_old_stats(db)
         if not gc['farming_enabled']:
-            app.logger.debug(
+            app.logger.info(
                 "Skipping farm summary stats collection as not farming on this Machinaris instance.")
             return
-        app.logger.debug("Collecting stats about the farm.")
+        app.logger.info("Collecting stats about the farm.")
         current_datetime = datetime.datetime.now().strftime("%Y%m%d%H%M")
         for blockchain in globals.enabled_blockchains():
             farm_summary = chia_cli.load_farm_summary(blockchain)
-            store_locally(db, farm_summary, current_datetime)
+            store_locally(db, blockchain, farm_summary, current_datetime)
             if not gc['is_controller']:
                 send_to_controller(blockchain, farm_summary, current_datetime)
 
-def store_locally(db, farm_summary, current_datetime):
+def store_locally(db, blockchain, farm_summary, current_datetime):
+    hostname = utils.get_hostname()
     cur = db.cursor()
     try:
-        cur.execute("INSERT INTO stat_plot_count (value, created_at) VALUES (?,?)",
-                    (farm_summary.plot_count,current_datetime,))
+        cur.execute("INSERT INTO stat_plot_count (hostname, blockchain, value, created_at) VALUES (?,?,?,?)",
+                    (hostname, blockchain, farm_summary.plot_count,current_datetime,))
     except:
         app.logger.info(traceback.format_exc())
     try:
-        cur.execute("INSERT INTO stat_plots_size (value, created_at) VALUES (?,?)",
-                    (converters.str_to_gibs(farm_summary.plots_size),current_datetime,))
+        cur.execute("INSERT INTO stat_plots_size (hostname, blockchain, value, created_at) VALUES (?,?,?,?)",
+                    (hostname, blockchain, converters.str_to_gibs(farm_summary.plots_size),current_datetime,))
     except:
         app.logger.info(traceback.format_exc())
     if farm_summary.status == "Farming":  # Only collect if fully synced
         try:
-            cur.execute("INSERT INTO stat_total_chia (blockchain, value, created_at) VALUES ('chia',?,?)",
-                        (farm_summary.total_coins,current_datetime,))
+            cur.execute("INSERT INTO stat_total_chia (hostname, blockchain, value, created_at) VALUES (?,?,?,?)",
+                        (hostname, blockchain, farm_summary.total_coins,current_datetime,))
         except:
             app.logger.info(traceback.format_exc())
         try:
-            cur.execute("INSERT INTO stat_netspace_size (blockchain, value, created_at) VALUES ('chia',?,?)",
-                        (converters.str_to_gibs(farm_summary.netspace_size),current_datetime,))
+            cur.execute("INSERT INTO stat_netspace_size (hostname, blockchain,  value, created_at) VALUES (?,?,?,?)",
+                        (hostname, blockchain, converters.str_to_gibs(farm_summary.netspace_size),current_datetime,))
         except:
             app.logger.info(traceback.format_exc())
         try:
-            cur.execute("INSERT INTO stat_time_to_win (blockchain, value, created_at) VALUES ('chia',?,?)",
-                        (converters.etw_to_minutes(farm_summary.time_to_win),current_datetime,))
+            cur.execute("INSERT INTO stat_time_to_win (hostname, blockchain, value, created_at) VALUES (?,?,?,?)",
+                        (hostname, blockchain, converters.etw_to_minutes(farm_summary.time_to_win),current_datetime,))
         except:
             app.logger.info(traceback.format_exc())
     db.commit()
@@ -109,7 +110,7 @@ def send_stat(blockchain, endpoint, value, current_datetime):
             "value": value,
             "created_at": current_datetime,
         })
-        utils.send_post(endpoint, payload, debug=False)
+        utils.send_post(endpoint, payload, debug=True)
     except:
         app.logger.info("Failed to send latest stat to {0}.".format(endpoint))
         app.logger.info(traceback.format_exc())

@@ -15,6 +15,7 @@ from . import plotnfts
 from . import plots
 from . import plottings
 from . import pools
+from . import rewards
 from . import wallets
 from . import workers
 
@@ -39,6 +40,7 @@ MODULES = (
     plots,
     plottings,
     pools,
+    rewards,
     wallets,
     workers,
 

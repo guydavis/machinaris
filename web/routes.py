@@ -70,16 +70,12 @@ def plotting_jobs():
             plotter = worker.get_worker(hostname, blockchain)
             if request.form.get('service') == 'plotting':
                 plotman.start_plotman(plotter)
-            elif request.form.get('service') == 'archiving':
-                plotman.start_archiving(plotter)
         elif request.form.get('action') == 'stop':
             hostname= request.form.get('hostname')
             blockchain = request.form.get('blockchain')
             plotter = worker.get_worker(hostname, blockchain)
             if request.form.get('service') == 'plotting':
                 plotman.stop_plotman(plotter)
-            elif request.form.get('service') == 'archiving':
-                plotman.stop_archiving(plotter)
         elif request.form.get('action') in ['suspend', 'resume', 'kill']:
             action = request.form.get('action')
             plot_ids = request.form.getlist('plot_id')
@@ -92,9 +88,22 @@ def plotting_jobs():
     return render_template('plotting/jobs.html', reload_seconds=120,  plotting=plotting, 
         plotters=plotters, global_config=gc)
 
-@app.route('/plotting/workers')
+@app.route('/plotting/workers', methods=['GET', 'POST'])
 def plotting_workers():
     gc = globals.load()
+    if request.method == 'POST':
+        if request.form.get('action') == 'start':
+            hostname= request.form.get('hostname')
+            blockchain = request.form.get('blockchain')
+            plotter = worker.get_worker(hostname, blockchain)
+            if request.form.get('service') == 'archiving':
+                plotman.start_archiving(plotter)
+        elif request.form.get('action') == 'stop':
+            hostname= request.form.get('hostname')
+            blockchain = request.form.get('blockchain')
+            plotter = worker.get_worker(hostname, blockchain)
+            if request.form.get('service') == 'archiving':
+                plotman.stop_archiving(plotter)
     plotters = plotman.load_plotters()
     disk_usage = stats.load_recent_disk_usage('plotting')
     return render_template('plotting/workers.html', plotters=plotters, disk_usage=disk_usage, global_config=gc)

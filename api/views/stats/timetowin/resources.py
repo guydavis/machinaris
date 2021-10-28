@@ -35,8 +35,6 @@ class StatTimeToWins(MethodView):
     def post(self, new_items):
         if len(new_items) == 0:
             return "No stats provided.", 400
-        db.session.query(StatTimeToWin).filter(StatTimeToWin.hostname==new_items[0]['hostname'],
-            StatTimeToWin.blockchain==new_items[0]['blockchain']).delete()
         items = []
         for new_item in new_items:
             item = StatTimeToWin(**new_item)
