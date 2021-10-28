@@ -26,6 +26,7 @@ class Rewards(MethodView):
         try:
             body = json.loads(request.data)
             blockchain = body['blockchain']
+            wallet_id = body['wallet_id']
             launcher_id = body['launcher_id']
             pool_contract_address = body['pool_contract_address']
         except:
@@ -37,12 +38,13 @@ class Rewards(MethodView):
         try:
             thread = threading.Thread(target=fd_cli.reward_recovery, 
                 kwargs={
-                    'blockchain': blockchain, 
+                    'wallet_id': wallet_id, 
                     'launcher_id': launcher_id, 
                     'pool_contract_address': pool_contract_address
                 }
             )
             thread.start()
+            return make_response("Recovery started.", 200)
         except Exception as ex:
             app.logger.info(traceback.format_exc())
             return str(ex), 400

@@ -10,6 +10,7 @@ import traceback
 
 from subprocess import Popen, TimeoutExpired, PIPE
 
+from common.config import globals
 from api import app
 
 # No need to reward recover for either Chia or Chives

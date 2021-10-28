@@ -39,6 +39,7 @@ def execute():
                 continue
             for fullnode in fullnodes:
                 payload = {
+                    'blockchain': fullnode.blockchain,
                     'wallet_id': wallet_id,
                     'launcher_id': launcher_id,
                     'pool_contract_address': pool_contract_address
