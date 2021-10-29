@@ -28,7 +28,7 @@ class Host:
         for worker in self.workers:
             if worker['archiving_status'] == 'running':
                 status = "running"
-            elif not status == 'running':
+            elif not status in ['running', 'stopped']:
                 status = worker['archiving_status']
         return status
 

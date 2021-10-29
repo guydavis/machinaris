@@ -12,12 +12,14 @@ mkdir -p /root/.chia/mainnet/log
 chia init >> /root/.chia/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Chia...'
-while [ ! -f /root/.chia/mainnet/config/config.yaml ]; do
-  echo "Waiting for creation of /root/.chia/mainnet/config/config.yaml..."
-  sleep 1
-done
-sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/mainnet/config/config.yaml
-sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/config.yaml
+if [ ! -f /root/.chia/mainnet/config/config.yaml ]; then
+  sleep 10
+fi
+if [ -f /root/.chia/mainnet/config/config.yaml ]; then
+  sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/mainnet/config/config.yaml
+  sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/config.yaml
+  sed -i 's/localhost/127.0.0.1/g' /root/.chia/mainnet/config/config.yaml
+fi
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
@@ -34,8 +36,6 @@ for p in ${plots_dir//:/ }; do
     chia plots add -d ${p}
 done
 
-sed -i 's/localhost/127.0.0.1/g' ~/.chia/mainnet/config/config.yaml
-
 chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
 chia init --fix-ssl-permissions > /dev/null 
 
@@ -47,7 +47,7 @@ elif [[ ${mode} =~ ^farmer.* ]]; then
 elif [[ ${mode} =~ ^harvester.* ]]; then
   if [[ -z ${farmer_address} || -z ${farmer_port} ]]; then
     echo "A farmer peer address and port are required."
-    exit
+    exit 1
   else
     if [ ! -f /root/.chia/farmer_ca/chia_ca.crt ]; then
       mkdir -p /root/.chia/farmer_ca

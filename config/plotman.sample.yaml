@@ -101,7 +101,7 @@ plotting:
 
         # If you enable 'chia', plot in *parallel* with higher tmpdir_max_jobs and global_max_jobs
         # If you enable 'madmax', plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
-        type: chia
+        type: madmax
 
         chia:
                 # The stock plotter: https://github.com/Chia-Network/chia-blockchain
@@ -113,13 +113,12 @@ plotting:
 
         madmax:
                 # madMAx plotter: https://github.com/madMAx43v3r/chia-plotter
-                k: 32                 # Default is 32 for Chia, but use 29,30,31 for Chives
+                k: 32                 # Default is 32 for Chia, but can do 33 or 34. Use 29,30,31 for Chives
                 n_threads: 4          # Default is 4, SLOWLY crank up if you have many cores
                 n_buckets: 256        # Default is 256
                 n_buckets3: 256       # Default is 256
                 n_rmulti2: 1          # Default is 1
                 network_port: 8444    # Default is 8444, but use 9699 for Chives
-                waitforcopy: False    # Whether to wait for copy, default is False
 
         bladebit:
                 # BladeBit plotter: https://github.com/harold-b/bladebit

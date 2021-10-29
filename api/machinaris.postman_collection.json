@@ -23,14 +23,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"actions"
+								"actions",
+								""
 							]
 						},
 						"description": "Add a new Alert."
@@ -52,14 +53,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"actions"
+								"actions",
+								""
 							]
 						},
 						"description": "Add a new Alert."
@@ -81,14 +83,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"actions"
+								"actions",
+								""
 							]
 						},
 						"description": "Add a new Alert."
@@ -110,14 +113,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"actions"
+								"actions",
+								""
 							]
 						},
 						"description": "Add a new Alert."
@@ -139,14 +143,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"actions"
+								"actions",
+								""
 							]
 						},
 						"description": "Add a new Alert."
@@ -168,14 +173,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"actions"
+								"actions",
+								""
 							]
 						},
 						"description": "Add a new Alert."
@@ -197,14 +203,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/actions",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/actions/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"actions"
+								"actions",
+								""
 							]
 						},
 						"description": "Add a new Alert."
@@ -231,14 +238,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/analysis",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/analysis/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"analysis"
+								"analysis",
+								""
 							]
 						},
 						"description": "Add a new Alert."
@@ -260,14 +268,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/analysis",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/analysis/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"analysis"
+								"analysis",
+								""
 							]
 						},
 						"description": "Add a new Alert."
@@ -285,14 +294,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/farms",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/alerts/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"farms"
+								"alerts",
+								""
 							]
 						},
 						"description": "Get all alerts from all workers."
@@ -314,14 +324,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/alerts",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/alerts/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"alerts"
+								"alerts",
+								""
 							]
 						},
 						"description": "Add a new Alert."
@@ -334,14 +345,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/alerts",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/alerts/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"alerts"
+								"alerts",
+								""
 							]
 						},
 						"description": "Get an alert by id."
@@ -419,14 +431,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"blockchains"
+								"blockchains",
+								""
 							]
 						},
 						"description": "Get all workers reporting in with their status."
@@ -448,14 +461,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"blockchains"
+								"blockchains",
+								""
 							]
 						},
 						"description": "Add a new Worker."
@@ -468,7 +482,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains/aragorn",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains/aragorn/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -476,7 +490,8 @@
 							"port": "{{port}}",
 							"path": [
 								"blockchains",
-								"aragorn"
+								"aragorn",
+								""
 							]
 						},
 						"description": "Get a worker by hostname."
@@ -498,7 +513,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains/aragorn",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains/aragorn/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -506,7 +521,8 @@
 							"port": "{{port}}",
 							"path": [
 								"blockchains",
-								"aragorn"
+								"aragorn",
+								""
 							]
 						},
 						"description": "Update a worker's status by hostname."
@@ -528,7 +544,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains/aragorn",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/blockchains/aragorn/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -536,10 +552,120 @@
 							"port": "{{port}}",
 							"path": [
 								"blockchains",
-								"aragorn"
+								"aragorn",
+								""
 							]
 						},
 						"description": "Delete a worker's status by hostname."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Certificates",
+			"item": [
+				{
+					"name": "Certificates - Chia",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/certificates/?type=chia",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"certificates",
+								""
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "chia"
+								}
+							]
+						},
+						"description": "Get all alerts from all workers."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Challenges",
+			"item": [
+				{
+					"name": "Challenges",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/challenges/",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"challenges",
+								""
+							]
+						},
+						"description": "Get all plotting jobs from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Challenges",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"unique_id\": \"aragorn_9334b36cad_2021-06-09 13:14:58.026\",\r\n        \"hostname\": \"aragorn\",\r\n        \"challenge_id\": \"9334b36cad\",\r\n        \"plots_past_filter\": \"1/279\",\r\n        \"proofs_found\": 0,\r\n        \"time_taken\": \"0.02874 s\",\r\n        \"created_at\": \"2021-06-09 13:14:58.026\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/challenges/",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"challenges",
+								""
+							]
+						},
+						"description": "Creates the current plottings for the given hostname (of first plotting).  Deletes any old plottings."
+					},
+					"response": []
+				},
+				{
+					"name": "Challenges",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/challenges/aragorn",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"challenges",
+								"aragorn"
+							]
+						},
+						"description": "Delete a plotting job's status."
 					},
 					"response": []
 				}
@@ -554,14 +680,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/configs",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"configs"
+								"configs",
+								""
 							]
 						},
 						"description": "Get all workers reporting in with their status."
@@ -574,7 +701,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/plotting",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/plotting/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -582,7 +709,8 @@
 							"port": "{{port}}",
 							"path": [
 								"configs",
-								"plotting"
+								"plotting",
+								""
 							]
 						},
 						"description": "Get the config by type (farming, alerts, plotting) of a particular worker by hostname."
@@ -595,7 +723,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/farming?blockchain=chia",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/farming/?blockchain=chia",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -603,7 +731,8 @@
 							"port": "{{port}}",
 							"path": [
 								"configs",
-								"farming"
+								"farming",
+								""
 							],
 							"query": [
 								{
@@ -622,7 +751,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/farming?blockchain=flax",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/farming/?blockchain=flax",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -630,7 +759,8 @@
 							"port": "{{port}}",
 							"path": [
 								"configs",
-								"farming"
+								"farming",
+								""
 							],
 							"query": [
 								{
@@ -649,7 +779,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/alerts?blockchain=chia",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/alerts/?blockchain=chia",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -657,7 +787,8 @@
 							"port": "{{port}}",
 							"path": [
 								"configs",
-								"alerts"
+								"alerts",
+								""
 							],
 							"query": [
 								{
@@ -676,7 +807,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/alerts?blockchain=flax",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/alerts/?blockchain=flax",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -684,7 +815,8 @@
 							"port": "{{port}}",
 							"path": [
 								"configs",
-								"alerts"
+								"alerts",
+								""
 							],
 							"query": [
 								{
@@ -723,7 +855,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/plotting",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/configs/plotting/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -731,7 +863,8 @@
 							"port": "{{port}}",
 							"path": [
 								"configs",
-								"plotting"
+								"plotting",
+								""
 							]
 						},
 						"description": "Update a worker's status by hostname."
@@ -771,14 +904,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/connections",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/connections/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"connections"
+								"connections",
+								""
 							]
 						},
 						"description": "Get all workers reporting in with their status."
@@ -946,27 +1080,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/farms",
-							"protocol": "{{proto}}",
-							"host": [
-								"{{hostname}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"farms"
-							]
-						},
-						"description": "Add a new Farm, or update an existing."
-					},
-					"response": []
-				},
-				{
-					"name": "Farm",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/farms/aragorn",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/farms/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -974,10 +1088,10 @@
 							"port": "{{port}}",
 							"path": [
 								"farms",
-								"aragorn"
+								""
 							]
 						},
-						"description": "Get a farm by hostname."
+						"description": "Add a new Farm, or update an existing."
 					},
 					"response": []
 				},
@@ -1306,14 +1420,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/plots",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plots/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"plots"
+								"plots",
+								""
 							]
 						},
 						"description": "Get all completed plots from all workers."
@@ -1456,14 +1571,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/plottings",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plottings/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"plottings"
+								"plottings",
+								""
 							]
 						},
 						"description": "Get all plotting jobs from all workers."
@@ -1523,36 +1639,16 @@
 			]
 		},
 		{
-			"name": "Challenges",
+			"name": "Rewards",
 			"item": [
 				{
-					"name": "Challenges",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/challenges",
-							"protocol": "{{proto}}",
-							"host": [
-								"{{hostname}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"challenges"
-							]
-						},
-						"description": "Get all plotting jobs from all workers."
-					},
-					"response": []
-				},
-				{
-					"name": "Challenges",
+					"name": "Rewards - Request Recovery",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"unique_id\": \"aragorn_9334b36cad_2021-06-09 13:14:58.026\",\r\n        \"hostname\": \"aragorn\",\r\n        \"challenge_id\": \"9334b36cad\",\r\n        \"plots_past_filter\": \"1/279\",\r\n        \"proofs_found\": 0,\r\n        \"time_taken\": \"0.02874 s\",\r\n        \"created_at\": \"2021-06-09 13:14:58.026\"\r\n    }\r\n]",
+							"raw": "{\r\n    \"blockchain\": \"flora\",\r\n    \"wallet_id\": \"1601234564\",\r\n    \"launcher_id\": \"0bf90046f-REDACTED-78f3d6\",\r\n    \"pool_contract_address\": \"xch1tu5yjwqcak-REDACTED-ax6d\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1560,40 +1656,102 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/challenges",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/rewards/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"challenges"
+								"rewards",
+								""
 							]
 						},
-						"description": "Creates the current plottings for the given hostname (of first plotting).  Deletes any old plottings."
+						"description": "Add a new Alert."
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Stats",
+			"item": [
 				{
-					"name": "Challenges",
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/challenges/aragorn",
-							"protocol": "{{proto}}",
-							"host": [
-								"{{hostname}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"challenges",
-								"aragorn"
-							]
+					"name": "PlottingDiskUsed",
+					"item": [
+						{
+							"name": "PlottingDiskUsed",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{proto}}://{{hostname}}:{{port}}/stats/plottingdiskused",
+									"protocol": "{{proto}}",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"stats",
+										"plottingdiskused"
+									]
+								},
+								"description": "Get all plotting jobs from all workers."
+							},
+							"response": []
 						},
-						"description": "Delete a plotting job's status."
-					},
-					"response": []
+						{
+							"name": "PlottingDiskUsed",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    {\r\n        \"hostname\": \"aragorn\",\r\n        \"value\": 0.0,\r\n        \"path\": \"/plotting\",\r\n        \"created_at\": \"202108171751\"\r\n    }\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{proto}}://{{hostname}}:{{port}}/stats/plottingdiskused",
+									"protocol": "{{proto}}",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"stats",
+										"plottingdiskused"
+									]
+								},
+								"description": "Creates the current plottings for the given hostname (of first plotting).  Deletes any old plottings."
+							},
+							"response": []
+						},
+						{
+							"name": "PlottingDiskUsed",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{proto}}://{{hostname}}:{{port}}/stats/plottingdiskused",
+									"protocol": "{{proto}}",
+									"host": [
+										"{{hostname}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"stats",
+										"plottingdiskused"
+									]
+								},
+								"description": "Delete a plotting job's status."
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -1606,14 +1764,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/wallets",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/wallets/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"wallets"
+								"wallets",
+								""
 							]
 						},
 						"description": "Get all workers reporting in with their status."

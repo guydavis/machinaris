@@ -5,6 +5,7 @@ import traceback
 from datetime import datetime
 
 from api import app
+from common.config import globals
 from common.utils import converters
 
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
@@ -12,8 +13,7 @@ MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
 class FarmSummary:
 
-    def __init__(self, cli_stdout=None, farm_plots=None):
-        if cli_stdout:
+    def __init__(self, cli_stdout, blockchain):
             self.plot_count = 0
             self.plots_size = 0
             for line in cli_stdout:
@@ -41,16 +41,13 @@ class FarmSummary:
                     self.time_to_win = line.split(':')[1].strip()
                 elif "User transaction fees" in line:
                     self.transaction_fees = line.split(':')[1].strip()
-        elif farm_plots:
-            self.plot_count = 0
-            bytes_size = 0
-            for plot in farm_plots.rows:
-                if plot['size'] > MINIMUM_K32_PLOT_SIZE_BYTES:
-                    self.plot_count += 1
-                    bytes_size += int(plot['size'])
-            self.plots_size = converters.sizeof_fmt(bytes_size)
-        else:
-            raise Exception("Not provided either chia stdout lines or a list of plots.")
+            if blockchain == 'chives' and 'harvester' in os.environ['mode']:
+                try:
+                    if int(self.plot_count) > 0:
+                        app.logger.debug("On a Chives Harvester, setting farm status to Harvesting.")
+                        self.status = "Harvesting"
+                except:
+                    app.logger.debug("Non-numeric chives plot count so not setting status to Harvesting.")
 
     def calc_status(self, status):
         self.status = status
@@ -74,7 +71,7 @@ class FarmSummary:
 class HarvesterSummary:
 
     def __init__(self):
-        self.status = "harvesting" # TODO Check for harvester status in debug.log
+        self.status = "Harvesting" # TODO Check for harvester status in debug.log
 
 class FarmPlots:
 

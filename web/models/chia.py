@@ -21,6 +21,7 @@ CURRENCY_SYMBOLS = {
     "flora": "XFL",
     "hddcoin": "HDD",
     "nchain": "NCH",
+    "silicoin": "SIT",
 }
 
 PLOT_TABLE_COLUMNS = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', '.' ]
@@ -48,13 +49,17 @@ class FarmSummary:
                     wallet_balance = self.sum_wallet_balance(wallet_recs, farm_rec.hostname, farm_rec.blockchain)
                 except: 
                     wallet_balance = '?'
+                if farm_rec.total_coins:
+                    total_coins = self.round_balance(farm_rec.total_coins)
+                else:
+                    total_coins = self.round_balance(0)
                 farm = {
                     "plot_count": int(farm_rec.plot_count),
                     "plots_size": farm_rec.plots_size,
                     "plots_display_size": converters.gib_to_fmt(farm_rec.plots_size),
                     "status": farm_rec.status,
                     "display_status": self.status_if_responding(displayname, farm_rec.blockchain, connection_status, farm_rec.status),
-                    "total_coins": '0.0' if not farm_rec.total_coins else round(farm_rec.total_coins, 6),
+                    "total_coins": total_coins,
                     "wallet_balance": wallet_balance,
                     "currency_symbol": CURRENCY_SYMBOLS[farm_rec.blockchain],
                     "netspace_display_size": '?' if not farm_rec.netspace_size else converters.gib_to_fmt(farm_rec.netspace_size),
@@ -136,11 +141,20 @@ class FarmSummary:
         app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
         return "Offline"
     
+    def round_balance(self, value):
+        if value > 100:
+            value = '{:.6g}'.format(value)
+        else:
+            value = '{:.6f}'.format(value)
+        if value.endswith(".000000"):
+            return value[:-5]
+        return value
+
     def sum_wallet_balance(self, wallet_recs, hostname, blockchain):
         numeric_const_pattern = '-Total\sBalance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
         rx = re.compile(numeric_const_pattern, re.VERBOSE)
         found_balance = False
-        sum = 0.0
+        sum = 0
         for wallet_rec in wallet_recs:
             if wallet_rec.hostname == hostname and wallet_rec.blockchain == blockchain:
                 try:
@@ -153,7 +167,7 @@ class FarmSummary:
                     app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
                         wallet_rec.hostname, wallet_rec.blockchain, str(ex)))
         if found_balance:
-            return round(sum, 6)
+            return self.round_balance(sum)
         return '?'
 
 class FarmPlots:
@@ -315,20 +329,25 @@ class Connections:
             return "145.1.235.18:28444"
         if blockchain == 'nchain':
             return "218.88.205.216:58445"
+        if blockchain == 'silicoin':
+            return "218.80.75.23:11444"
         
     def blockchain_port(self,blockchain):
         if blockchain == 'chia':
             return 8444
+        elif blockchain == 'chives':
+            return 9699
         elif blockchain == 'flax':
             return 6888
         elif blockchain == 'flora':
             return 18644
-        elif blockchain == 'nchain':
-            return 58445
         elif blockchain == 'hddcoin':
             return 28444
-        elif blockchain == 'chives':
-            return 9699
+        elif blockchain == 'nchain':
+            return 58445
+        elif blockchain == 'silicoin':
+            return 11444
+
         raise("Unknown blockchain fork of selected: " + blockchain)
 
     def parse(self, connection, blockchain):

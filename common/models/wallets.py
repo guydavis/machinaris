@@ -14,3 +14,9 @@ class Wallet(db.Model):
     details = sa.Column(sa.String, nullable=False)
     created_at = sa.Column(sa.DateTime(), server_default=func.now())
     updated_at = sa.Column(sa.DateTime(), onupdate=func.now())
+
+    def wallet_id(self):
+        for line in self.details.split('\n'):
+            if line.startswith("Balances, fingerprint:"):
+                return line.split(':')[1].strip()
+        return None

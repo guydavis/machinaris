@@ -16,12 +16,11 @@ mkdir -p /root/.flora/mainnet/log
 flora init >> /root/.flora/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Flora...'
-while [ ! -f /root/.flora/mainnet/config/config.yaml ]; do
-  echo "Waiting for creation of /root/.flora/mainnet/config/config.yaml..."
-  sleep 1
-done
-sed -i 's/log_stdout: true/log_stdout: false/g' /root/.flora/mainnet/config/config.yaml
-sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.flora/mainnet/config/config.yaml
+if [ -f /root/.flora/mainnet/config/config.yaml ]; then
+  sed -i 's/log_stdout: true/log_stdout: false/g' /root/.flora/mainnet/config/config.yaml
+  sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.flora/mainnet/config/config.yaml
+  sed -i 's/localhost/127.0.0.1/g' /root/.flora/mainnet/config/config.yaml
+fi
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
@@ -44,21 +43,20 @@ else
   done
 fi
 
-sed -i 's/localhost/127.0.0.1/g' ~/.flora/mainnet/config/config.yaml
-
 chmod 755 -R /root/.flora/mainnet/config/ssl/ &> /dev/null
 flora init --fix-ssl-permissions > /dev/null 
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
   if [ ! -f ~/.flora/mainnet/config/ssl/wallet/public_wallet.key ]; then
-    echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+    echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
+    exit 1
   else
     flora start farmer
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.flora/mainnet/config/ssl/wallet/public_wallet.key ]; then
-    echo "No wallet key found, so not starting farming services.  Please add your mnemonic.txt to /root/.chia and restart."
+    echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
   else
     flora start farmer-only
   fi

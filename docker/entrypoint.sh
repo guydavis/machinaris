@@ -17,18 +17,18 @@ if [[ -z "${worker_address}" ]]; then
   exit 1
 fi
 
-# Start only selected fork
-for fork in ${blockchains//,/ }; do
-  /usr/bin/bash /machinaris/scripts/forks/${fork}_launch.sh
-done
+# Start the selected fork, then start Machinaris WebUI
+if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
 
-# Launch Machinaris web server and other services
-/machinaris/scripts/start_machinaris.sh
+  # Launch Machinaris web server and other services
+  /machinaris/scripts/start_machinaris.sh
 
-# Must build bladebit on target hardware on each container launch
-/usr/bin/bash /machinaris/scripts/bladebit_build.sh > /tmp/bladebit_build.log 2>&1
+  # Must build bladebit on target hardware on each container launch
+  /usr/bin/bash /machinaris/scripts/bladebit_build.sh > /tmp/bladebit_build.log 2>&1
 
-# Cleanly stop Chia services on container stop/kill
-trap "chia stop all -d; exit 0" SIGINT SIGTERM
+  # Cleanly stop Chia services on container stop/kill
+  trap "chia stop all -d; exit 0" SIGINT SIGTERM
+
+fi
 
 while true; do sleep 30; done;
