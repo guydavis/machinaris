@@ -2,9 +2,10 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.2] - 2021-10-?
+## [0.6.2] - 2021-10-29
  - [Silicoin](https://github.com/silicoin-network/silicoin-blockchain) - cross-farming support for this blockchain fork.
  - [fd-cli](https://github.com/Flora-Network/flora-dev-cli) - Daily scheduled 7/8 coin win recovery for those farming NFT plots on other blockchains.
+ - [Madmax](https://github.com/madMAx43v3r/chia-plotter/commit/8332d625220b9a54c097d85d6eb4c6b0c9464214) - support for plotting k33 and k34 plot sizes.
  - Machinaris - correctly show daily difference tooltips on Summary page statistics for all blockchains
 
 ## [0.6.1] - 2021-10-23

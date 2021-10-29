@@ -56,8 +56,8 @@
                         {% for blockchain, summary in daily_summaries[farmer.displayname].items() %}
                         <div class="carousel-item {% if blockchain == 'chia' %} active {% endif %}" data-bs-interval="10000">
                             <h4 class="text-center">{{ blockchain|capitalize }} - Daily Summary</h4>
-                            {% if summary[0] %}
-                            <div style="white-space:pre-wrap;margin:10px;">{{ summary[0] }}</div>
+                            {% if summary %}
+                            <div style="white-space:pre-wrap;margin:10px;">{{ summary }}</div>
                             {% else %}
                             <div style="margin:10px;">No daily summary found for {{ blockchain }} on {{farmer.displayname}}.
                             <br/><br/>
@@ -84,10 +84,10 @@
                 <canvas id="disk_{{farmer.hostname}}" width="400"></canvas>
                 {% else %}
                 <p>
-                    No plots disk stats recorded recently for {{farmer.hostname}}. 
+                    No plots disk stats recorded recently for {{farmer.hostname}} with Chia blockchain. 
                     Please ensure all paths containing plots have been 
                     <a target="_blank" href="https://github.com/guydavis/machinaris/wiki/FAQ#can-i-use-two-or-more-final-destination-directories-to-hold-my-plots">configured</a>. 
-                    Also ensure the worker is reporting into the controller on the
+                    Also ensure the Chia worker is reporting into the controller on the
                     Workers page.
                 </p>
                 {% endif %}
