@@ -110,7 +110,7 @@ def send_stat(blockchain, endpoint, value, current_datetime):
             "value": value,
             "created_at": current_datetime,
         })
-        utils.send_post(endpoint, payload, debug=True)
+        utils.send_post(endpoint, payload, debug=False)
     except:
         app.logger.info("Failed to send latest stat to {0}.".format(endpoint))
         app.logger.info(traceback.format_exc())
