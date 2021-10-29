@@ -7,7 +7,7 @@
 #
 
 if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "plotter" ]]; then
-    if [ ! -f /usr/bin/bladebit ]; then
+    if [ ! -f /usr/bin/bladebit ] && [[ -z "${bladebit_skip_build}" ]]; then
         # Build the code, previously cloned when image was built on Github build servers
         arch_name="$(uname -m)"
         echo "arch_name=${arch_name}"
