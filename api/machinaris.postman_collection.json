@@ -1648,7 +1648,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"blockchain\": \"flora\",\r\n    \"wallet_id\": \"1606814864\",\r\n    \"launcher_id\": \"0bf90046f2eeff6a22c7bf44f22dad8b84583c7c08cf6973ce246e16c378f3d6\",\r\n    \"pool_contract_address\": \"xch1tu5yjwqcakt3867u07ln7w2wkfe3dqyazh4ac00vfy4v8mu3xq6qa9ax6d\"\r\n}",
+							"raw": "{\r\n    \"blockchain\": \"flora\",\r\n    \"wallet_id\": \"1601234564\",\r\n    \"launcher_id\": \"0bf90046f-REDACTED-78f3d6\",\r\n    \"pool_contract_address\": \"xch1tu5yjwqcak-REDACTED-ax6d\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
