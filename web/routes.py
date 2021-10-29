@@ -104,6 +104,7 @@ def plotting_workers():
             plotter = worker.get_worker(hostname, blockchain)
             if request.form.get('service') == 'archiving':
                 plotman.stop_archiving(plotter)
+        return redirect(url_for('plotting_workers')) # Force a redirect to allow time to update status
     plotters = plotman.load_plotters()
     disk_usage = stats.load_recent_disk_usage('plotting')
     return render_template('plotting/workers.html', plotters=plotters, disk_usage=disk_usage, global_config=gc)
