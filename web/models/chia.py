@@ -333,7 +333,7 @@ class Connections:
         if blockchain == 'silicoin':
             return "218.80.75.23:11444"
         if blockchain == 'staicoin':
-            return "112.98.99.13:1999"
+            return "173.54.12.193:1999"
         
     def blockchain_port(self,blockchain):
         if blockchain == 'chia':

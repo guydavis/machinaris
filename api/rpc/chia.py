@@ -5,6 +5,7 @@
 import asyncio
 import datetime
 import importlib
+import os
 
 if importlib.util.find_spec("chia"):
     from chia.rpc.full_node_rpc_client import FullNodeRpcClient
@@ -37,9 +38,15 @@ elif importlib.util.find_spec("hddcoin"):
     from hddcoin.util.default_root import DEFAULT_ROOT_PATH
     from hddcoin.util.ints import uint16
     from hddcoin.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("staicoin"):
+    from staicoin.rpc.full_node_rpc_client import FullNodeRpcClient
+    from staicoin.rpc.farmer_rpc_client import FarmerRpcClient
+    from staicoin.util.default_root import DEFAULT_ROOT_PATH
+    from staicoin.util.ints import uint16
+    from staicoin.util.config import load_config as load_fork_config
 
 else:
-    raise Exception("RPC modules found on pythonpath!")
+    raise Exception("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ('blockchains')))
 
 from api import app
 from api import utils
