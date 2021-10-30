@@ -40,7 +40,7 @@ jobs:
           platforms: linux/amd64
           push: true
           build-args: |
-            "SILICOIN_BRANCH=main"
+            "STAICOIN_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-staicoin:develop
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-staicoin:develop
