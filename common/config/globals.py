@@ -25,7 +25,8 @@ SUPPORTED_BLOCKCHAINS = [
     'flora',
     'nchain',
     'hddcoin',
-    'silicoin'
+    'silicoin',
+    'staicoin',
 ]
 
 PLOTMAN_CONFIG = '/root/.chia/plotman/plotman.yaml'
@@ -42,7 +43,8 @@ FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
 FLORA_BINARY = '/flora-blockchain/venv/bin/flora'
 NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
 HDDCOIN_BINARY = '/hddcoin-blockchain/venv/bin/hddcoin'
-SILICOIN_BINARY = '/silicoin-blockchain/venv/bin/chia'
+SILICOIN_BINARY = '/silicoin-blockchain/venv/bin/sit'
+STAICOIN_BINARY = '/staicoin-blockchain/venv/bin/staicoin'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
 
@@ -61,6 +63,8 @@ def get_blockchain_binary(blockchain):
         return NCHAIN_BINARY
     if blockchain == "silicoin":
         return SILICOIN_BINARY
+    if blockchain == "staicoin":
+        return STAICOIN_BINARY
     raise Exception("Invalid blockchain: ".format(blockchain))
 
 def get_blockchain_mainnet(blockchain):
@@ -78,6 +82,8 @@ def get_blockchain_mainnet(blockchain):
         return "/root/.chia/ext9"
     if blockchain == 'silicoin':
         return "/root/.silicoin/mainnet"
+    if blockchain == 'staicoin':
+        return "/root/.staicoin/mainnet"
     raise Exception("No mainnet folder for unknown blockchain: {0}".format(blockchain))
 
 def load():

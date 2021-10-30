@@ -25,6 +25,8 @@ def get_rpc_port(blockchain):
         return 38559
     if blockchain == 'silicoin':
         return 11559
+    if blockchain == 'staicoin':
+        return 1999
     raise Exception(f"Unknown rpc_port for blockchain: {blockchain}")
 
 def reward_recovery(wallet_id, launcher_id, pool_contract_address):
