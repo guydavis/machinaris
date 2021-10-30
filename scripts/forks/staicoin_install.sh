@@ -8,7 +8,7 @@ if [ -z ${STAICOIN_BRANCH} ]; then
 	echo 'Skipping Staicoin install as not requested.'
 else
 	rm -rf /root/.cache
-	git clone --branch ${STAICOIN_BRANCH} --single-branch https://github.com/staicoin-network/staicoin-blockchain.git /staicoin-blockchain \
+	git clone --branch ${STAICOIN_BRANCH} --single-branch https://github.com/STATION-I/staicoin-blockchain.git /staicoin-blockchain \
 		&& cd /staicoin-blockchain \
 		&& git submodule update --init mozilla-ca \
 		&& chmod +x install.sh \
