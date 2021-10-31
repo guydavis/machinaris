@@ -13,6 +13,11 @@ mkdir -p /root/.chia/hddcoin
 rm -f /root/.hddcoin
 ln -s /root/.chia/hddcoin /root/.hddcoin
 
+if [ ! -f /root/.hddcoin/mainnet/db/blockchain_v1_mainnet.sqlite ]; then
+  echo "Downloading HDDCoin blockchain DB on first launch..."
+  mkdir -p /root/.hddcoin/mainnet/db/
+  curl -L https://hddcoin.org/downloads/blockchain_v1_mainnet.sqlite -o /root/.hddcoin/mainnet/db/blockchain_v1_mainnet.sqlite
+fi
 mkdir -p /root/.hddcoin/mainnet/log
 hddcoin init >> /root/.hddcoin/mainnet/log/init.log 2>&1
 

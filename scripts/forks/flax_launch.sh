@@ -12,6 +12,13 @@ mkdir -p /root/.chia/flax
 rm -f /root/.flax
 ln -s /root/.chia/flax /root/.flax 
 
+if [ ! -f /root/.flax/mainnet/db/blockchain_v1_mainnet.sqlite ]; then
+  echo "Downloading Flax blockchain DB on first launch..."
+  mkdir -p /root/.flax/mainnet/db/
+  curl -L https://flax.evokevoke.co.uk/files/flax_blockchain_v1_mainnet.zip -o /tmp/flax_blockchain_v1_mainnet.zip 
+  unzip /tmp/flax_blockchain_v1_mainnet.zip -d /root/.flax/mainnet/db/
+fi
+
 mkdir -p /root/.flax/mainnet/log
 flax init >> /root/.flax/mainnet/log/init.log 2>&1 
 

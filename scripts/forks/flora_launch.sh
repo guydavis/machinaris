@@ -12,6 +12,18 @@ mkdir -p /root/.chia/flora
 rm -f /root/.flora
 ln -s /root/.chia/flora /root/.flora 
 
+# Check for first launch (missing mainnet folder and download)
+if [ ! -d /root/.flora/mainnet ]; then
+  echo "Downloading HDDCoin blockchain DB on first launch..."
+  mkdir -p /root/.flora/mainnet/db/
+  cd /tmp
+  curl -s https://api.github.com/repos/Flora-Network/flora-blockchain/releases/latest |
+	  jq -r '.assets[].browser_download_url | select(test("deb"))' |
+	  xargs curl -fsLJO
+  apt install ./flora-blockchain_*_amd64.deb
+  ls -al /root/.flora/mainnet/db/
+fi
+
 mkdir -p /root/.flora/mainnet/log
 flora init >> /root/.flora/mainnet/log/init.log 2>&1 
 
