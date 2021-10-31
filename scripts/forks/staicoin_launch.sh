@@ -38,8 +38,8 @@ for p in ${plots_dir//:/ }; do
     staicoin plots add -d ${p}
 done
 
-chmod 755 -R /root/.staicoin/mainnet/config/ssl/ &> /dev/null
-staicoin init --fix-ssl-permissions > /dev/null 
+#chmod 755 -R /root/.staicoin/mainnet/config/ssl/ &> /dev/null
+#staicoin init --fix-ssl-permissions > /dev/null 
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
@@ -72,8 +72,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     fi
     if [ -f /root/.staicoin/farmer_ca/chia_ca.crt ]; then
       staicoin init -c /root/.staicoin/farmer_ca 2>&1 > /root/.staicoin/mainnet/log/init.log
-      chmod 755 -R /root/.staicoin/mainnet/config/ssl/ &> /dev/null
-      staicoin init --fix-ssl-permissions > /dev/null 
+      #chmod 755 -R /root/.staicoin/mainnet/config/ssl/ &> /dev/null
+      #staicoin init --fix-ssl-permissions > /dev/null 
     else
       echo "Did not find your farmer's certificates within /root/.staicoin/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
