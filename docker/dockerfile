@@ -8,8 +8,11 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # install build packages
 RUN \
-	apt-get update \
+	echo 'deb https://mega.nz/linux/MEGAsync/xUbuntu_21.04/ ./' > /etc/apt/sources.list.d/mega-nz.list \
+	&& curl -fsSL https://mega.nz/keys/MEGA_signing.key | sudo apt-key add - \
+	&& apt-get update \
 	&& apt-get install -y \
+		megacmd \
 		acl \
 		ansible \
 		apt \

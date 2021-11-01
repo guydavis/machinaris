@@ -17,6 +17,14 @@ ln -s /root/.chia/silicoin /root/.sit
 mkdir -p /root/.silicoin/mainnet/log
 silicoin init >> /root/.silicoin/mainnet/log/init.log 2>&1 
 
+if [[ ! -z "${blockchain_skip_download}" ]] && [[! -f /root/.silicoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+  echo "Downloading Silicoin blockchain DB on first launch..."
+  mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
+  # Mega links for Silicoin blockchain DB from: https://chiaforksblockchain.com/
+  mega-get https://mega.nz/folder/qJhmkDwA#l2qGAIdfkuiDxW9QUp4g_Q/file/yFhRyI5B
+  mega-get https://mega.nz/folder/qJhmkDwA#l2qGAIdfkuiDxW9QUp4g_Q/file/vRxDQY4Z
+fi
+
 echo 'Configuring Silicoin...'
 if [ -f /root/.silicoin/mainnet/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.silicoin/mainnet/config/config.yaml

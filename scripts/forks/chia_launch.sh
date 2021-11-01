@@ -11,6 +11,14 @@ cd /chia-blockchain
 mkdir -p /root/.chia/mainnet/log
 chia init >> /root/.chia/mainnet/log/init.log 2>&1 
 
+if [[ ! -z "${blockchain_skip_download}" ]] && [[! -f /root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+  echo "Downloading Chia blockchain DB on first launch..."
+  mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
+  # Mega links for Chia blockchain DB from: https://chiaforksblockchain.com/
+  mega-get https://mega.nz/folder/eQIhCSjD#PcfxQS0QZUSU9lQgwmmlqA/file/nVBURRLT
+  mega-get https://mega.nz/folder/eQIhCSjD#PcfxQS0QZUSU9lQgwmmlqA/file/uZJQTJZb
+fi
+
 echo 'Configuring Chia...'
 if [ ! -f /root/.chia/mainnet/config/config.yaml ]; then
   sleep 10

@@ -12,8 +12,11 @@ mkdir -p /root/.chia/flora
 rm -f /root/.flora
 ln -s /root/.chia/flora /root/.flora 
 
+mkdir -p /root/.flora/mainnet/log
+flora init >> /root/.flora/mainnet/log/init.log 2>&1 
+
 # Check for first launch (missing mainnet folder and download)
-if [ ! -d /root/.flora/mainnet ]; then
+if [[ ! -z "${blockchain_skip_download}" ]] && [[ ! -d /root/.flora/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading HDDCoin blockchain DB on first launch..."
   mkdir -p /root/.flora/mainnet/db/
   cd /tmp
@@ -23,9 +26,6 @@ if [ ! -d /root/.flora/mainnet ]; then
   apt install ./flora-blockchain_*_amd64.deb
   ls -al /root/.flora/mainnet/db/
 fi
-
-mkdir -p /root/.flora/mainnet/log
-flora init >> /root/.flora/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Flora...'
 if [ -f /root/.flora/mainnet/config/config.yaml ]; then

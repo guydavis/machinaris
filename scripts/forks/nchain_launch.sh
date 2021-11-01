@@ -11,6 +11,14 @@ cd /ext9-blockchain
 mkdir -p /root/.chia/ext9/log
 chia init >> /root/.chia/ext9/log/init.log 2>&1 
 
+if [[ ! -z "${blockchain_skip_download}" ]] && [[! -f /root/.chia/ext9/db/blockchain_v1_ext9.sqlite ]]; then
+  echo "Downloading N-Chain blockchain DB on first launch..."
+  mkdir -p /root/.chia/ext9/db/ && cd /root/.chia/ext9/db/
+  # Mega links for N-Chain blockchain DB from: https://chiaforksblockchain.com/
+  mega-get https://mega.nz/folder/OEwFASDT#grirFveyT3kNRw7ZWkw56A/file/aFZUVRCK
+  mega-get https://mega.nz/folder/OEwFASDT#grirFveyT3kNRw7ZWkw56A/file/aQ4kXQxS
+fi
+
 echo 'Configuring NChain...'
 if [ -f /root/.chia/ext9/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/ext9/config/config.yaml
