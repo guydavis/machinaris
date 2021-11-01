@@ -16,7 +16,7 @@ ln -s /root/.chia/staicoin /root/.staicoin
 mkdir -p /root/.staicoin/mainnet/log
 staicoin init >> /root/.staicoin/mainnet/log/init.log 2>&1 
 
-if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[! -f /root/.staicoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.staicoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading Staicoin blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.staicoin/mainnet/db/ && cd /root/.staicoin/mainnet/db/

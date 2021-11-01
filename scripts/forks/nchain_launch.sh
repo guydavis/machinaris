@@ -11,7 +11,7 @@ cd /ext9-blockchain
 mkdir -p /root/.chia/ext9/log
 chia init >> /root/.chia/ext9/log/init.log 2>&1 
 
-if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[! -f /root/.chia/ext9/db/blockchain_v1_ext9.sqlite ]]; then
+if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.chia/ext9/db/blockchain_v1_ext9.sqlite ]]; then
   echo "Downloading N-Chain blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/ext9/db/ && cd /root/.chia/ext9/db/
