@@ -15,7 +15,7 @@ ln -s /root/.chia/flax /root/.flax
 mkdir -p /root/.flax/mainnet/log
 flax init >> /root/.flax/mainnet/log/init.log 2>&1 
 
-if [[ ! -z "${blockchain_skip_download}" ]] && [[ ! -f /root/.flax/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+if [[ ! -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.flax/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading Flax blockchain DB on first launch..."
   mkdir -p /root/.flax/mainnet/db/
   curl -L https://flax.evokevoke.co.uk/files/flax_blockchain_v1_mainnet.zip -o /tmp/flax_blockchain_v1_mainnet.zip 

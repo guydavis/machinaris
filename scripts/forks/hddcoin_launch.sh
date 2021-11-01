@@ -16,7 +16,7 @@ ln -s /root/.chia/hddcoin /root/.hddcoin
 mkdir -p /root/.hddcoin/mainnet/log
 hddcoin init >> /root/.hddcoin/mainnet/log/init.log 2>&1
 
-if [[ ! -z "${blockchain_skip_download}" ]] && [[ ! -f /root/.hddcoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+if [[ ! -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.hddcoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading HDDCoin blockchain DB on first launch..."
   mkdir -p /root/.hddcoin/mainnet/db/
   curl -L https://hddcoin.org/downloads/blockchain_v1_mainnet.sqlite -o /root/.hddcoin/mainnet/db/blockchain_v1_mainnet.sqlite

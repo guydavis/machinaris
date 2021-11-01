@@ -16,7 +16,7 @@ mkdir -p /root/.flora/mainnet/log
 flora init >> /root/.flora/mainnet/log/init.log 2>&1 
 
 # Check for first launch (missing mainnet folder and download)
-if [[ ! -z "${blockchain_skip_download}" ]] && [[ ! -d /root/.flora/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+if [[ ! -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -d /root/.flora/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading HDDCoin blockchain DB on first launch..."
   mkdir -p /root/.flora/mainnet/db/
   cd /tmp
