@@ -27,8 +27,8 @@ if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
   # Mega links for Chia blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/eQIhCSjD#PcfxQS0QZUSU9lQgwmmlqA/file/nVBURRLT
-  mega-get https://mega.nz/folder/eQIhCSjD#PcfxQS0QZUSU9lQgwmmlqA/file/uZJQTJZb
+  mega-get https://mega.nz/folder/eQIhCSjD#PcfxQS0QZUSU9lQgwmmlqA
+  mv chia/*.sqlite . && rm -rf chia
 fi
 
 echo 'Configuring Chia...'

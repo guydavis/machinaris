@@ -22,8 +22,8 @@ if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
   # Mega links for Silicoin blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/qJhmkDwA#l2qGAIdfkuiDxW9QUp4g_Q/file/yFhRyI5B
-  mega-get https://mega.nz/folder/qJhmkDwA#l2qGAIdfkuiDxW9QUp4g_Q/file/vRxDQY4Z
+  mega-get https://mega.nz/folder/qJhmkDwA#l2qGAIdfkuiDxW9QUp4g_Q
+  mv silicoin/*mainnet.sqlite silicoin/*node.sqlite . && rm -rf silicoin
 fi
 
 echo 'Configuring Silicoin...'

@@ -16,8 +16,8 @@ if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/ext9/db/ && cd /root/.chia/ext9/db/
   # Mega links for N-Chain blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/OEwFASDT#grirFveyT3kNRw7ZWkw56A/file/aFZUVRCK
-  mega-get https://mega.nz/folder/OEwFASDT#grirFveyT3kNRw7ZWkw56A/file/aQ4kXQxS
+  mega-get https://mega.nz/folder/OEwFASDT#grirFveyT3kNRw7ZWkw56A
+  mv nchain/*.sqlite . && rm -rf nchain
 fi
 
 echo 'Configuring NChain...'
@@ -26,6 +26,9 @@ if [ -f /root/.chia/ext9/config/config.yaml ]; then
   sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/ext9/config/config.yaml
   sed -i 's/localhost/127.0.0.1/g' /root/.chia/ext9/config/config.yaml
 fi
+
+# Fix for chia binaries complaining about missing mainnet folder 
+ln -s /root/.chia/ext9 /root/.chia/mainnet 
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do

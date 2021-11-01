@@ -21,8 +21,8 @@ if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.staicoin/mainnet/db/ && cd /root/.staicoin/mainnet/db/
   # Mega links for Staicoin blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/PYIzQKiJ#ku33SR7_2uUzv3cY9cQo7Q/file/CABGDZBT
-  mega-get https://mega.nz/folder/PYIzQKiJ#ku33SR7_2uUzv3cY9cQo7Q/file/WYRE3RAT
+  mega-get https://mega.nz/folder/PYIzQKiJ#ku33SR7_2uUzv3cY9cQo7Q
+  mv staicoin/*.sqlite . && rm -rf silicoin
 fi
 
 echo 'Configuring Staicoin...'
