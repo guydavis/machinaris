@@ -17,7 +17,8 @@ mkdir -p /root/.staicoin/mainnet/log
 staicoin init >> /root/.staicoin/mainnet/log/init.log 2>&1 
 
 if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[! -f /root/.staicoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
-  echo "Downloading Staicoin blockchain DB on first launch..."
+  echo "Downloading Staicoin blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.staicoin/mainnet/db/ && cd /root/.staicoin/mainnet/db/
   # Mega links for Staicoin blockchain DB from: https://chiaforksblockchain.com/
   mega-get https://mega.nz/folder/PYIzQKiJ#ku33SR7_2uUzv3cY9cQo7Q/file/CABGDZBT

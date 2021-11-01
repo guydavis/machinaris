@@ -11,7 +11,7 @@ cd /chia-blockchain
 mkdir -p /root/.chia/mainnet/log
 chia init >> /root/.chia/mainnet/log/init.log 2>&1 
 
-if [[ ! -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[! -f /root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[! -f /root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   # Create machinaris dbs and launch web only while blockchain database downloads
   . /machinaris/scripts/setup_databases.sh
   mkdir -p /root/.chia/machinaris/config
@@ -23,7 +23,8 @@ if [[ ! -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && 
       --workers=2 \
       --log-config web/log.conf \
       web:app &
-  echo "Downloading Chia blockchain DB on first launch..."
+  echo "Downloading Chia blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
   # Mega links for Chia blockchain DB from: https://chiaforksblockchain.com/
   mega-get https://mega.nz/folder/eQIhCSjD#PcfxQS0QZUSU9lQgwmmlqA/file/nVBURRLT

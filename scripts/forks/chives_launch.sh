@@ -17,7 +17,8 @@ mkdir -p /root/.chives/mainnet/log
 chives init >> /root/.chives/mainnet/log/init.log 2>&1 
 
 if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[! -f /root/.chives/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
-  echo "Downloading Chives blockchain DB on first launch..."
+  echo "Downloading Chives blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chives/mainnet/db/ && cd /root/.chives/mainnet/db/
   # Mega links for Chives blockchain DB from: https://chiaforksblockchain.com/
   mega-get https://mega.nz/folder/rQpDTaCS#bXNL-QmeGQfcTIXLpbBB6Q/file/KUZQUZ6T

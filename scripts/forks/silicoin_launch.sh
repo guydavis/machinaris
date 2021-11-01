@@ -18,7 +18,8 @@ mkdir -p /root/.silicoin/mainnet/log
 silicoin init >> /root/.silicoin/mainnet/log/init.log 2>&1 
 
 if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[! -f /root/.silicoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
-  echo "Downloading Silicoin blockchain DB on first launch..."
+  echo "Downloading Silicoin blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
   # Mega links for Silicoin blockchain DB from: https://chiaforksblockchain.com/
   mega-get https://mega.nz/folder/qJhmkDwA#l2qGAIdfkuiDxW9QUp4g_Q/file/yFhRyI5B

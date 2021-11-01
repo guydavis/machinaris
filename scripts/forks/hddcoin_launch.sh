@@ -17,9 +17,10 @@ mkdir -p /root/.hddcoin/mainnet/log
 hddcoin init >> /root/.hddcoin/mainnet/log/init.log 2>&1
 
 if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.hddcoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
-  echo "Downloading HDDCoin blockchain DB on first launch..."
+  echo "Downloading HDDCoin blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.hddcoin/mainnet/db/
-  curl -L https://hddcoin.org/downloads/blockchain_v1_mainnet.sqlite -o /root/.hddcoin/mainnet/db/blockchain_v1_mainnet.sqlite
+  curl -s -L https://hddcoin.org/downloads/blockchain_v1_mainnet.sqlite -o /root/.hddcoin/mainnet/db/blockchain_v1_mainnet.sqlite
 fi
 
 echo 'Configuring HDDCoin...'
