@@ -16,7 +16,7 @@ ln -s /root/.chia/chives /root/.chives
 mkdir -p /root/.chives/mainnet/log
 chives init >> /root/.chives/mainnet/log/init.log 2>&1 
 
-if [[ ! -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[! -f /root/.chives/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[! -f /root/.chives/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading Chives blockchain DB on first launch..."
   mkdir -p /root/.chives/mainnet/db/ && cd /root/.chives/mainnet/db/
   # Mega links for Chives blockchain DB from: https://chiaforksblockchain.com/
