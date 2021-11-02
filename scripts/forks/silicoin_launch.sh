@@ -70,7 +70,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
-    if [ ! -f /root/.silicoin/farmer_ca/chia_ca.crt ]; then
+    if [ ! -f /root/.silicoin/farmer_ca/private_ca.crt ]; then
       mkdir -p /root/.silicoin/farmer_ca
       response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8933/certificates/?type=silicoin --output /tmp/certs.zip)
       if [ $response == '200' ]; then
@@ -80,7 +80,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.silicoin/farmer_ca/chia_ca.crt ]; then
+    if [ -f /root/.silicoin/farmer_ca/private_ca.crt ]; then
       silicoin init -c /root/.silicoin/farmer_ca 2>&1 > /root/.silicoin/mainnet/log/init.log
       chmod 755 -R /root/.silicoin/mainnet/config/ssl/ &> /dev/null
       silicoin init --fix-ssl-permissions > /dev/null 

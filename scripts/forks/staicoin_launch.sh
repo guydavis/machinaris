@@ -22,7 +22,7 @@ if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[
   mkdir -p /root/.staicoin/mainnet/db/ && cd /root/.staicoin/mainnet/db/
   # Mega links for Staicoin blockchain DB from: https://chiaforksblockchain.com/
   mega-get https://mega.nz/folder/PYIzQKiJ#ku33SR7_2uUzv3cY9cQo7Q
-  mv staicoin/*.sqlite . && rm -rf silicoin
+  mv staicoin/*.sqlite . && rm -rf staicoin
 fi
 
 echo 'Configuring Staicoin...'
@@ -69,7 +69,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
-    if [ ! -f /root/.staicoin/farmer_ca/chia_ca.crt ]; then
+    if [ ! -f /root/.staicoin/farmer_ca/private_ca.crt ]; then
       mkdir -p /root/.staicoin/farmer_ca
       response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8934/certificates/?type=staicoin --output /tmp/certs.zip)
       if [ $response == '200' ]; then
@@ -79,7 +79,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.staicoin/farmer_ca/chia_ca.crt ]; then
+    if [ -f /root/.staicoin/farmer_ca/private_ca.crt ]; then
       staicoin init -c /root/.staicoin/farmer_ca 2>&1 > /root/.staicoin/mainnet/log/init.log
       #chmod 755 -R /root/.staicoin/mainnet/config/ssl/ &> /dev/null
       #staicoin init --fix-ssl-permissions > /dev/null 

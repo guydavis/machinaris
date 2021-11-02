@@ -19,10 +19,10 @@ hddcoin init >> /root/.hddcoin/mainnet/log/init.log 2>&1
 if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.hddcoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading HDDCoin blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
-  mkdir -p /root/.hddcoin/mainnet/db/hddcoin/ && cd /root/.hddcoin/mainnet/db/hddcoin/
-  curl -s -L https://hddcoin.org/downloads/blockchain_v1_mainnet.sqlite -o blockchain_v1_mainnet.sqlite
-  mv *.sqlite ..
-  cd / && rm -rf /root/.hddcoin/mainnet/db/hddcoin
+  mkdir -p /root/.hddcoin/mainnet/db/ && cd /root/.hddcoin/mainnet/db/
+  # Mega links for Staicoin blockchain DB from: https://chiaforksblockchain.com/
+  mega-get https://mega.nz/folder/6IpSyDBJ#NbGmW1GuV_JXzqzki8TbeA
+  mv hddcoin/*.sqlite . && rm -rf hddcoin
 fi
 
 echo 'Configuring HDDCoin...'
@@ -69,7 +69,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
-    if [ ! -f /root/.hddcoin/farmer_ca/hddcoin_ca.crt ]; then
+    if [ ! -f /root/.hddcoin/farmer_ca/private_ca.crt ]; then
       mkdir -p /root/.hddcoin/farmer_ca
       response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8930/certificates/?type=hddcoin --output /tmp/certs.zip)
       if [ $response == '200' ]; then
@@ -79,7 +79,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.hddcoin/farmer_ca/hddcoin_ca.crt ]; then
+    if [ -f /root/.hddcoin/farmer_ca/private_ca.crt ]; then
       hddcoin init -c /root/.hddcoin/farmer_ca 2>&1 > /root/.hddcoin/mainnet/log/init.log
       chmod 755 -R /root/.hddcoin/mainnet/config/ssl/ &> /dev/null
       hddcoin init --fix-ssl-permissions > /dev/null 

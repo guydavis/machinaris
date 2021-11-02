@@ -19,13 +19,10 @@ flora init >> /root/.flora/mainnet/log/init.log 2>&1
 if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -d /root/.flora/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading Flora blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
-  mkdir -p /root/.flora/mainnet/db/
-  cd /tmp
-  curl -s https://api.github.com/repos/Flora-Network/flora-blockchain/releases/latest |
-	  jq -r '.assets[].browser_download_url | select(test("deb"))' |
-	  xargs curl -fsLJO
-  apt install ./flora-blockchain_*_amd64.deb
-  ls -al /root/.flora/mainnet/db/
+  mkdir -p /root/.flora/mainnet/db/ && cd /root/.flora/mainnet/db/
+  # Mega links for Staicoin blockchain DB from: https://chiaforksblockchain.com/
+  mega-get https://mega.nz/folder/PNhQhBKA#ERigrZQ6zg3CJeI10sXuzQ
+  mv flora/*.sqlite . && rm -rf flora
 fi
 
 echo 'Configuring Flora...'
@@ -78,7 +75,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
-    if [ ! -f /root/.flora/farmer_ca/flora_ca.crt ]; then
+    if [ ! -f /root/.flora/farmer_ca/private_ca.crt ]; then
       mkdir -p /root/.flora/farmer_ca
       response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8932/certificates/?type=flora --output /tmp/certs.zip)
       if [ $response == '200' ]; then
@@ -88,7 +85,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.flora/farmer_ca/flora_ca.crt ]; then
+    if [ -f /root/.flora/farmer_ca/private_ca.crt ]; then
       flora init -c /root/.flora/farmer_ca 2>&1 > /root/.flora/mainnet/log/init.log
       chmod 755 -R /root/.flora/mainnet/config/ssl/ &> /dev/null
       flora init --fix-ssl-permissions > /dev/null 
