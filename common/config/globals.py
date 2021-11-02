@@ -18,6 +18,8 @@ from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
 from subprocess import Popen, TimeoutExpired, PIPE
 from os import environ, path
 
+from common.utils import converters
+
 SUPPORTED_BLOCKCHAINS = [
     'chia',
     'chives',
@@ -153,6 +155,19 @@ def is_setup():
             except:
                 logging.info(traceback.format_exc())
     return foundKey
+
+# On very first launch of the main Chia container, blockchain DB is being downloaded so must wait.
+CHIA_BLOCKCHAIN_DB_SIZE = 30 * 1024 * 1024 * 1024 # Approaching 30 GBs in late 2021
+def blockchain_downloading():
+    if not path.exists('/root/.chia/mainnet/db'):
+        logging.info("No folder at /root/.chia/mainnet/db yet...")
+        return [0, "0 GB"]
+    # Mega download goes to `chia` folder in the db one as temporary space.
+    tmp_dl = '/root/.chia/mainnet/db/chia/blockchain_v1_mainnet.sqlite'
+    if path.exists(tmp_dl): 
+        bytes = os.path.getsize(tmp_dl) * 1024 
+        return [ 100*bytes/CHIA_BLOCKCHAIN_DB_SIZE, converters.convert_size(bytes) ]
+    return [0, None]
 
 def get_key_paths():
     if "keys" not in os.environ:

@@ -10,6 +10,9 @@
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <title>Machinaris</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    {% if blockchain_download_size %}
+    <meta http-equiv="refresh" content="10">
+    {% endif %}
 </head>
 
 <body>
@@ -44,6 +47,40 @@
                             {% endwith %}
                         </div>
 
+                        {% if blockchain_download_size %}
+                        <br />
+                        <p style="text-center"><b>Blockchain Download Status: {{ blockchain_download_size }} so far...</b></p>
+                        <br />
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                                role="progressbar" aria-valuenow="{{download_percentage}}" aria-valuemin="0" aria-valuemax="100" 
+                                style="width: {{download_percentage}}%"></div>
+                        </div>
+                        <br />
+                        <br />
+
+                        <p>On very first launch, the Chia blockchain database is being 
+                        <a target="_blank" href="https://chiaforksblockchain.com/">downloaded</a>.  At nearly 30 GB in 
+                        size, this will take a while.</p>
+
+                        <p>However minutes of download now, will save you multiple days of blockchain syncing later. 
+                            Please be patient!</p>
+
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+
+                        <p class="small">NOTE: If you would prefer to allow Chia to sync the blockchain over many days,
+                            see the <a href="https://github.com/guydavis/machinaris/wiki/Keys#blockchain-syncing"
+                                target="_blank">Wiki</a> for details.</p>
+
+                        {% else %}
+
                         <p>To get started with Machinaris as a Chia™ fullnode, either import your existing
                             24-word
                             mnemonic seed phrase: </p>
@@ -77,6 +114,8 @@
                             at the command-line,
                             see the <a href="https://github.com/guydavis/machinaris/wiki/Keys"
                                 target="_blank">Wiki</a> for details.</p>
+
+                        {% endif %}
                     </div>
                 </div>
             </div>
