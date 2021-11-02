@@ -5,6 +5,7 @@
 import datetime
 import logging
 import os
+import pathlib
 import re
 import shutil
 import socket
@@ -159,15 +160,15 @@ def is_setup():
 # On very first launch of the main Chia container, blockchain DB is being downloaded so must wait.
 CHIA_BLOCKCHAIN_DB_SIZE = 30 * 1024 * 1024 * 1024 # Approaching 30 GBs in late 2021
 def blockchain_downloading():
-    if not path.exists('/root/.chia/mainnet/db'):
-        logging.info("No folder at /root/.chia/mainnet/db yet...")
+    db_path = '/root/.chia/mainnet/db'
+    if path.exists(f"{db_path}/blockchain_v1_mainnet.sqlite"):
+        return [100, None]
+    tmp_path =  f"{db_path}/chia"
+    if not path.exists(tmp_path):
+        logging.info("No folder at {0} yet...".format(tmp_path))
         return [0, "0 GB"]
-    # Mega download goes to `chia` folder in the db one as temporary space.
-    tmp_dl = '/root/.chia/mainnet/db/chia/blockchain_v1_mainnet.sqlite'
-    if path.exists(tmp_dl): 
-        bytes = os.path.getsize(tmp_dl) * 1024 
-        return [ 100*bytes/CHIA_BLOCKCHAIN_DB_SIZE, converters.convert_size(bytes) ]
-    return [0, None]
+    bytes = sum(f.stat().st_size for f in pathlib.Path(tmp_path).glob('**/*') if f.is_file())
+    return [ round(100*bytes/CHIA_BLOCKCHAIN_DB_SIZE, 2), converters.convert_size(bytes) ]
 
 def get_key_paths():
     if "keys" not in os.environ:
@@ -253,9 +254,12 @@ def load_plotman_version():
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_plotman_version
     if not os.path.exists(PLOTMAN_CONFIG):
-        logging.info("No existing plotman config found, so copying sample to: {0}" \
+        try:
+            logging.info("No existing plotman config found, so copying sample to: {0}" \
                 .format(PLOTMAN_CONFIG))
-        shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_CONFIG)
+            shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_CONFIG)
+        except:
+            pass
     last_plotman_version = ""
     try:
         proc = Popen("{0} version".format(PLOTMAN_SCRIPT),
