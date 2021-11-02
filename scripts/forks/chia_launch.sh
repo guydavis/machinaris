@@ -23,6 +23,7 @@ if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[
       --workers=2 \
       --log-config web/log.conf \
       web:app &
+  echo 'Starting web server...  Browse to port 8926.'
   echo "Downloading Chia blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
