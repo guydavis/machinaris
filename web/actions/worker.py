@@ -79,8 +79,10 @@ def generate_warnings(worker):
     if worker.connection_status() != "Responding":
         warnings.append(WorkerWarning("Worker not responding to pings.",  
             "Please check the worker container and restart if necessary."))
+    # TODO - Warning for fullnode without a working key
+    # TODO - Warning for farmer too slow on pool partials: "Error in pooling: (2, 'The partial is too late."
     # TODO - Warning for harvester not connected (worker but not in farm summary)
-    # TODO - Warning for harvester not responding quickly enough
+    # TODO - Warning for harvester not responding quickly enough - 
     # TODO - Warning for harvester not responding often enough
     # TODO - Warning for plotter disk usage too high?
     # TODO - Warning if any blockchain challenges are higher than 5 seconds (show both hostname AND drive)

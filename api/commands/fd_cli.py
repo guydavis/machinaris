@@ -36,9 +36,10 @@ def reward_recovery(wallet_id, launcher_id, pool_contract_address):
     log_fo = os.fdopen(log_fd, "a+")
     vars = {}
     blockchain = globals.enabled_blockchains()[0]
-    mainnet = globals.get_blockchain_mainnet(blockchain)
-    vars['FD_CLI_BC_DB_PATH'] = f'{mainnet}/db/blockchain_v1_mainnet.sqlite'
-    vars['FD_CLI_WT_DB_PATH'] = f'{mainnet}/wallet/db/blockchain_wallet_v1_mainnet_{wallet_id}.sqlite'
+    network_path = globals.get_blockchain_network_path(blockchain)
+    network_name = globals.get_blockchain_network_name(blockchain)
+    vars['FD_CLI_BC_DB_PATH'] = f'{network_path}/db/blockchain_v1_{network_name}.sqlite'
+    vars['FD_CLI_WT_DB_PATH'] = f'{network_path}/wallet/db/blockchain_wallet_v1_{network_name}_{wallet_id}.sqlite'
     fd_env = os.environ.copy()
     fd_env.update(vars)
     rpc_port = get_rpc_port(blockchain)
