@@ -16,7 +16,10 @@ ln -s /root/.chia/chives /root/.chives
 mkdir -p /root/.chives/mainnet/log
 chives init >> /root/.chives/mainnet/log/init.log 2>&1 
 
-if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.chives/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+if [[ -z "${blockchain_skip_download}" ]] \
+  && [[ "${mode}" == 'fullnode' ]] \
+  && [[ -f /usr/bin/mega-get ]] \
+  && [[ ! -f /root/.chives/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading Chives blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chives/mainnet/db/ && cd /root/.chives/mainnet/db/
@@ -48,11 +51,15 @@ done
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  if [ ! -f ~/.chives/mainnet/config/ssl/wallet/public_wallet.key ]; then
-    echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
-  else
-    chives start farmer
-  fi
+  while [ ! -f ~/.chives/mainnet/config/ssl/wallet/public_wallet.key ]; do
+    echo 'Waiting for mnemonic key to be created/imported into ~/.machinaris/mnemonic.txt on host OS. See: http://localhost:8926'
+    sleep 10  # Wait 10 seconds before checking for mnemonic.txt presence
+    if [ -s /root/.chia/mnemonic.txt ]; then
+      chives keys add -f /root/.chia/mnemonic.txt
+      sleep 10
+    fi
+  done
+  chives start farmer
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.chives/mainnet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."

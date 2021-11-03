@@ -64,7 +64,7 @@ notifier:
     enable: true
     daily_stats: true
     wallet_events: true
-    script_path: '/root/.chia/chivesdog/notifier.sh'
+    script_path: '/root/.chia/chiadog/notifier.sh'
   discord:
     enable: false
     daily_stats: true

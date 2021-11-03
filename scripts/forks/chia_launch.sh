@@ -3,6 +3,10 @@
 # Initialize Chia service, depending on mode of system requested
 #
 
+# Ensure Chia keyring is held on a persistent volume
+mkdir -p /root/.chia/.chia_keys
+rm -f /root/.chia_keys
+ln -s /root/.chia/.chia_keys /root/.chia_keys
 
 cd /chia-blockchain
 

@@ -16,7 +16,10 @@ mkdir -p /root/.flora/mainnet/log
 flora init >> /root/.flora/mainnet/log/init.log 2>&1 
 
 # Check for first launch (missing mainnet folder and download)
-if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.flora/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+if [[ -z "${blockchain_skip_download}" ]] \
+  && [[ "${mode}" == 'fullnode' ]] \
+  && [[ -f /usr/bin/mega-get ]] \
+  && [[ ! -f /root/.flora/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading Flora blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.flora/mainnet/db/ && cd /root/.flora/mainnet/db/
@@ -58,12 +61,15 @@ flora init --fix-ssl-permissions > /dev/null
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  if [ ! -f ~/.flora/mainnet/config/ssl/wallet/public_wallet.key ]; then
-    echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
-    exit 1
-  else
-    flora start farmer
-  fi
+  while [ ! -f ~/.flora/mainnet/config/ssl/wallet/public_wallet.key ]; do
+    echo 'Waiting for mnemonic key to be created/imported into ~/.machinaris/mnemonic.txt on host OS. See: http://localhost:8926'
+    sleep 10  # Wait 10 seconds before checking for mnemonic.txt presence
+    if [ -s /root/.chia/mnemonic.txt ]; then
+      flora keys add -f /root/.chia/mnemonic.txt
+      sleep 10
+    fi
+  done
+  flora start farmer
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.flora/mainnet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."

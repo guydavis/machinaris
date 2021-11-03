@@ -210,7 +210,7 @@
                         cmd += "        container_name: machinaris" + line_end;
                     } else {
                         cmd += "    machinaris-" + blockchain + ":" + line_end;
-                        cmd += "        image: ghcr.io/guydavis/machinaris-" + blockchain + "" + line_end;
+                        cmd += "        image: ghcr.io/guydavis/machinaris-" + blockchain + ":latest" + line_end;
                         cmd += "        container_name: machinaris-" + blockchain + line_end;
                     }
                     if (document.getElementById("worker_hostname").value) {
