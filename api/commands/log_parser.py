@@ -104,7 +104,7 @@ def find_plotting_job_log(plot_id):
     return None
 
 def get_farming_log_file(blockchain):
-    mainnet_folder = globals.get_blockchain_mainnet(blockchain)
+    mainnet_folder = globals.get_blockchain_network_path(blockchain)
     return mainnet_folder + '/log/debug.log'
 
 def get_log_lines(log_type, log_id=None, blockchain=None):

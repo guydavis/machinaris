@@ -54,24 +54,24 @@ def load_daily_diff(farm_summary):
 def plot_count_diff(since, blockchain):
     result = ''
     try:
-        latest = db.session.query(StatPlotCount).order_by(StatPlotCount.blockchain==blockchain, StatPlotCount.created_at.desc()).limit(1).first()
-        #app.logger.debug(latest.value)
+        latest = db.session.query(StatPlotCount).filter(StatPlotCount.blockchain==blockchain).order_by(StatPlotCount.created_at.desc()).limit(1).first()
+        #app.logger.info(latest.value)
         before = db.session.query(StatPlotCount).filter(StatPlotCount.blockchain==blockchain, StatPlotCount.created_at <= since).order_by(StatPlotCount.created_at.desc()).limit(1).first()
-        #app.logger.debug(before.value)
+        #app.logger.info(before.value)
         if (latest.value - before.value) != 0:
             result = "%+0g in last day." % (latest.value - before.value)
     except Exception as ex:
         app.logger.debug("Failed to query for day diff of plot_count because {0}".format(str(ex)))
-    #app.logger.debug("Result is: {0}".format(result))
+    #app.logger.info("Result is: {0}".format(result))
     return result
 
 def plots_size_diff(since, blockchain):
     result = ''
     try:
-        latest = db.session.query(StatPlotsSize).order_by(StatPlotsSize.blockchain==blockchain, StatPlotsSize.created_at.desc()).limit(1).first()
-        #app.logger.debug(latest.value)
+        latest = db.session.query(StatPlotsSize).filter(StatPlotsSize.blockchain==blockchain).order_by(StatPlotsSize.created_at.desc()).limit(1).first()
+        #app.logger.info(latest.value)
         before = db.session.query(StatPlotsSize).filter(StatPlotsSize.blockchain==blockchain, StatPlotsSize.created_at <= since).order_by(StatPlotsSize.created_at.desc()).limit(1).first()
-        #app.logger.debug(before.value)
+        #app.logger.info(before.value)
         gibs = (latest.value - before.value)
         fmtted = converters.gib_to_fmt(gibs)
         if fmtted == "0.000 B":
@@ -82,30 +82,30 @@ def plots_size_diff(since, blockchain):
             result = fmtted
     except Exception as ex:
         app.logger.debug("Failed to query for day diff of plots_size because {0}".format(str(ex)))
-    #app.logger.debug("Result is: {0}".format(result))
+    #app.logger.info("Result is: {0}".format(result))
     return result
 
 def total_coin_diff(since, blockchain):
     result = ''
     try:
         latest = db.session.query(StatTotalChia).filter(StatTotalChia.blockchain==blockchain).order_by(StatTotalChia.created_at.desc()).limit(1).first()
-        #app.logger.debug(latest.value)
+        #app.logger.info(latest.value)
         before = db.session.query(StatTotalChia).filter(StatTotalChia.blockchain==blockchain, StatTotalChia.created_at <= since).order_by(StatTotalChia.created_at.desc()).limit(1).first()
-        #app.logger.debug(before.value)
+        #app.logger.info(before.value)
         if (latest.value - before.value) != 0:
             result = "%+6g in last day." % (latest.value - before.value)
     except Exception as ex:
-        app.logger.debug("Failed to query for day diff of total_chia because {0}".format(str(ex)))
-    #app.logger.debug("Result is: {0}".format(result))
+        app.logger.debug("Failed to query for day diff of total_coin because {0}".format(str(ex)))
+    #app.logger.info("Result is: {0}".format(result))
     return result
 
 def netspace_size_diff(since, blockchain):
     result = ''
     try:
         latest = db.session.query(StatNetspaceSize).filter(StatNetspaceSize.blockchain==blockchain).order_by(StatNetspaceSize.created_at.desc()).limit(1).first()
-        #app.logger.debug(latest.value)
+        #app.logger.info(latest.value)
         before = db.session.query(StatNetspaceSize).filter(StatNetspaceSize.blockchain==blockchain, StatNetspaceSize.created_at <= since).order_by(StatNetspaceSize.created_at.desc()).limit(1).first()
-        #app.logger.debug(before.value)
+        #app.logger.info(before.value)
         gibs = (latest.value - before.value)
         fmtted = converters.gib_to_fmt(gibs)
         if fmtted == "0.000 B":
