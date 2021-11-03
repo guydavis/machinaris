@@ -28,6 +28,9 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain)
 * [Chives](https://github.com/HiveProject2021/chives-blockchain)
 
+## Other Resources
+* [Blockchain DB Downloads](https://chiaforksblockchain.com/) - from Maize
+
 ## Testers and Developers
 
 A big thanks to all that contributed with dev and test including:

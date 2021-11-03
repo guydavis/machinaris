@@ -15,6 +15,15 @@ ln -s /root/.chia/flax /root/.flax
 mkdir -p /root/.flax/mainnet/log
 flax init >> /root/.flax/mainnet/log/init.log 2>&1 
 
+if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.flax/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+  echo "Downloading Flax blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
+  mkdir -p /root/.flax/mainnet/db/ && cd /root/.flax/mainnet/db/
+  # Mega links for Staicoin blockchain DB from: https://chiaforksblockchain.com/
+  mega-get https://mega.nz/folder/WBpCARSA#REDq1mKfsyWjLSEJdgPoaA
+  mv flax/*.sqlite . && rm -rf flax
+fi
+
 echo 'Configuring Flax...'
 if [ -f /root/.flax/mainnet/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.flax/mainnet/config/config.yaml
@@ -65,7 +74,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
-    if [ ! -f /root/.flax/farmer_ca/flax_ca.crt ]; then
+    if [ ! -f /root/.flax/farmer_ca/private_ca.crt ]; then
       mkdir -p /root/.flax/farmer_ca
       response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8928/certificates/?type=flax --output /tmp/certs.zip)
       if [ $response == '200' ]; then
@@ -75,7 +84,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.flax/farmer_ca/flax_ca.crt ]; then
+    if [ -f /root/.flax/farmer_ca/private_ca.crt ]; then
       flax init -c /root/.flax/farmer_ca 2>&1 > /root/.flax/mainnet/log/init.log
       chmod 755 -R /root/.flax/mainnet/config/ssl/ &> /dev/null
       flax init --fix-ssl-permissions > /dev/null 

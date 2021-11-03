@@ -17,6 +17,15 @@ ln -s /root/.chia/silicoin /root/.sit
 mkdir -p /root/.silicoin/mainnet/log
 silicoin init >> /root/.silicoin/mainnet/log/init.log 2>&1 
 
+if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.silicoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+  echo "Downloading Silicoin blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
+  mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
+  # Mega links for Silicoin blockchain DB from: https://chiaforksblockchain.com/
+  mega-get https://mega.nz/folder/qJhmkDwA#l2qGAIdfkuiDxW9QUp4g_Q
+  mv silicoin/*mainnet.sqlite silicoin/*node.sqlite . && rm -rf silicoin
+fi
+
 echo 'Configuring Silicoin...'
 if [ -f /root/.silicoin/mainnet/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.silicoin/mainnet/config/config.yaml
@@ -61,7 +70,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
-    if [ ! -f /root/.silicoin/farmer_ca/chia_ca.crt ]; then
+    if [ ! -f /root/.silicoin/farmer_ca/private_ca.crt ]; then
       mkdir -p /root/.silicoin/farmer_ca
       response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8933/certificates/?type=silicoin --output /tmp/certs.zip)
       if [ $response == '200' ]; then
@@ -71,7 +80,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.silicoin/farmer_ca/chia_ca.crt ]; then
+    if [ -f /root/.silicoin/farmer_ca/private_ca.crt ]; then
       silicoin init -c /root/.silicoin/farmer_ca 2>&1 > /root/.silicoin/mainnet/log/init.log
       chmod 755 -R /root/.silicoin/mainnet/config/ssl/ &> /dev/null
       silicoin init --fix-ssl-permissions > /dev/null 

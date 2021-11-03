@@ -2,7 +2,7 @@
 # Common utility methods
 #
 
-import logging
+import math
 import re
 import traceback
 
@@ -15,6 +15,15 @@ def sizeof_fmt(num, suffix='B'):
     if value == "0.000 B":
         return "0"
     return value
+
+def convert_size(size_bytes):
+   if size_bytes == 0:
+       return "0B"
+   size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+   i = int(math.floor(math.log(size_bytes, 1024)))
+   p = math.pow(1024, i)
+   s = round(size_bytes / p, 2)
+   return "%s %s" % (s, size_name[i])
 
 def gib_to_fmt(gibs):
     return sizeof_fmt(gibs * 1024 * 1024 * 1024)
@@ -57,7 +66,6 @@ def convert_date_for_luxon(datestr):
 # Convert expected time to win back to minutes.  
 # See https://github.com/Chia-Network/chia-blockchain/blob/9e21716965f6f6250f6fe4b3449a66f20794d3d9/chia/util/misc.py#L18
 def etw_to_minutes(etw):
-    #logging.info("ETW='{0}'".format(etw))
     etw_total_minutes = 0
     hour_minutes = 60
     day_minutes = 24 * hour_minutes

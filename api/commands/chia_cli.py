@@ -61,7 +61,7 @@ def load_plots_farming():
     return plots_farming
 
 def load_config(blockchain):
-    mainnet = globals.get_blockchain_mainnet(blockchain)
+    mainnet = globals.get_blockchain_network_path(blockchain)
     return open(f'{mainnet}/config/config.yaml','r').read()
 
 def save_config(config, blockchain):
