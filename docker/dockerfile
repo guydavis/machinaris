@@ -43,11 +43,6 @@ RUN apt-get update \
 		libsodium-dev \
 		g++ \
 	\
-	&& echo 'deb https://mega.nz/linux/MEGAsync/xUbuntu_21.04/ ./' > /etc/apt/sources.list.d/mega-nz.list \
-	&& curl -fsSL https://mega.nz/keys/MEGA_signing.key | apt-key add - \
-	&& apt-get update \
-	&& apt-get install -y megacmd \
-	\
 # cleanup apt cache
 	\
 	&& rm -rf \
@@ -87,6 +82,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/bladebit_clone.sh \
 	&& /usr/bin/bash /machinaris/scripts/fd-cli_install.sh \
+	&& /usr/bin/bash /machinaris/scripts/megacmd_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
 	&& rm -rf \
 		/root/.cache \

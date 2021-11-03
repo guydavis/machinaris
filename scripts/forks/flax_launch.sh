@@ -15,7 +15,10 @@ ln -s /root/.chia/flax /root/.flax
 mkdir -p /root/.flax/mainnet/log
 flax init >> /root/.flax/mainnet/log/init.log 2>&1 
 
-if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.flax/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+if [[ -z "${blockchain_skip_download}" ]] \
+  && [[ "${mode}" == 'fullnode' ]] \
+  && [[ -f /usr/bin/mega-get ]] \
+  && [[ ! -f /root/.flax/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading Flax blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.flax/mainnet/db/ && cd /root/.flax/mainnet/db/
@@ -57,12 +60,15 @@ flax init --fix-ssl-permissions > /dev/null
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  if [ ! -f ~/.flax/mainnet/config/ssl/wallet/public_wallet.key ]; then
-    echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
-    exit 1
-  else
-    flax start farmer
-  fi
+  while [ ! -f ~/.flax/mainnet/config/ssl/wallet/public_wallet.key ]; do
+    echo 'Waiting for mnemonic key to be created/imported into ~/.machinaris/mnemonic.txt on host OS. See: http://localhost:8926'
+    sleep 10  # Wait 10 seconds before checking for mnemonic.txt presence
+    if [ -s /root/.chia/mnemonic.txt ]; then
+      flax keys add -f /root/.chia/mnemonic.txt
+      sleep 10
+    fi
+  done
+  flax start farmer
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.flax/mainnet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."

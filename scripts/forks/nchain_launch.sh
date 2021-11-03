@@ -11,7 +11,10 @@ cd /ext9-blockchain
 mkdir -p /root/.chia/ext9/log
 chia init >> /root/.chia/ext9/log/init.log 2>&1 
 
-if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.chia/ext9/db/blockchain_v1_ext9.sqlite ]]; then
+if [[ -z "${blockchain_skip_download}" ]] \
+  && [[ "${mode}" == 'fullnode' ]] \
+  && [[ -f /usr/bin/mega-get ]] \
+  && [[ ! -f /root/.chia/ext9/db/blockchain_v1_ext9.sqlite ]]; then
   echo "Downloading N-Chain blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/ext9/db/ && cd /root/.chia/ext9/db/
@@ -50,12 +53,15 @@ chia init --fix-ssl-permissions > /dev/null
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  if [ ! -f ~/.chia/ext9/config/ssl/wallet/public_wallet.key ]; then
-    echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
-    exit 1
-  else
-    chia start farmer
-  fi
+  while [ ! -f ~/.chia/ext9/config/ssl/wallet/public_wallet.key ]; do
+    echo 'Waiting for mnemonic key to be created/imported into ~/.machinaris/mnemonic.txt on host OS. See: http://localhost:8926'
+    sleep 10  # Wait 10 seconds before checking for mnemonic.txt presence
+    if [ -s /root/.chia/mnemonic.txt ]; then
+      chia keys add -f /root/.chia/mnemonic.txt
+      sleep 10
+    fi
+  done
+  chia start farmer
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.chia/ext9/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
