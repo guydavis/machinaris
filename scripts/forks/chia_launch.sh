@@ -3,6 +3,10 @@
 # Initialize Chia service, depending on mode of system requested
 #
 
+if [[ "${mode}" == 'fullnode' ]]; then
+  touch /root/.chia/mnemonic.txt
+fi
+
 # Ensure Chia keyring is held on a persistent volume
 mkdir -p /root/.chia/.chia_keys
 rm -f /root/.chia_keys

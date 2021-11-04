@@ -56,7 +56,7 @@ silicoin init --fix-ssl-permissions > /dev/null
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  while [ ! -f ~/.silicoin/mainnet/config/ssl/wallet/public_wallet.key ]; do
+  while [ ! -f /root/.chia/mnemonic.txt ]; do
     echo 'Waiting for mnemonic key to be created/imported into ~/.machinaris/mnemonic.txt on host OS. See: http://localhost:8926'
     sleep 10  # Wait 10 seconds before checking for mnemonic.txt presence
     if [ -s /root/.chia/mnemonic.txt ]; then
