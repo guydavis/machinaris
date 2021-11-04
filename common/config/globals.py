@@ -150,11 +150,11 @@ def is_setup():
     # logging.debug("Trying with full keys='{0}'".format(keys))
     foundKey = False
     for key in keys.split(':'):
-        if os.path.exists(key.strip()):
+        if os.path.exists(key.strip()) and os.path.getsize(key.strip()) > 0:
             # logging.debug("Found key file at: '{0}'".format(key.strip()))
             foundKey = True
         else:
-            logging.info("No such keys file: '{0}'".format(key.strip()))
+            logging.info("No such key file with mnemonic: '{0}'".format(key.strip()))
             logging.info(os.listdir(os.path.dirname(key.strip())))
             try:
                 logging.info(os.stat(key.strip()))
