@@ -35,11 +35,9 @@ ln -s /root/.chia/ext9 /root/.chia/mainnet
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
-  if [ -f ${k} ]; then
+  if [ -s ${k} ]; then
     echo "Adding key at path: ${k}"
     chia keys add -f ${k} > /dev/null
-  else
-    echo "Skipping 'chia keys add' as no file found at: ${k}"
   fi
 done
 
@@ -53,8 +51,8 @@ chia init --fix-ssl-permissions > /dev/null
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  while [ ! -f /root/.chia/mnemonic.txt ]; do
-    echo 'Waiting for mnemonic key to be created/imported into ~/.machinaris/mnemonic.txt on host OS. See: http://localhost:8926'
+  while [ ! -s /root/.chia/mnemonic.txt ]; do
+    echo 'Waiting for key to be created/imported into mnemonic.txt. See: http://localhost:8926'
     sleep 10  # Wait 10 seconds before checking for mnemonic.txt presence
     if [ -s /root/.chia/mnemonic.txt ]; then
       chia keys add -f /root/.chia/mnemonic.txt
