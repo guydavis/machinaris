@@ -207,9 +207,9 @@ def generate_key(key_path, blockchain):
         except:
                 flash('{0} was unreadable or not found.'.format(key_path), 'danger')
                 return False
-        flash('Welcome! A new key has been generated. If also running blockchain forks like Flax, you must copy this mnemonic.txt file over to them. See the ' + \
-        '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
-            'details.  Please allow 5-10 minutes for Chia to begin syncing with peers...', 'success')
+        flash('Welcome! A new key has been generated, see below. Please visit the ' + \
+        '<a href="https://github.com/guydavis/machinaris/wiki#basic-configuration" target="_blank">Wiki</a> to get started with Machinaris. ' \
+        'Please allow 5-10 minutes for Chia to begin syncing with peers...', 'success')
         flash('{0}'.format(" ".join(mnemonic_words)), 'info')
     if os.environ['mode'].startswith('farmer'):
         cmd = 'farmer-only'
@@ -281,9 +281,9 @@ def import_key(key_path, mnemonic, blockchain):
         return False
     if outs:
         app.logger.debug(outs.decode('utf-8'))
-    flash('Welcome! Your mnemonic key was imported. If also running blockchain forks like Flax, you must copy this mnemonic.txt file over to them. See the ' + \
-        '<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a> for ' + \
-            'details.  Please allow 5-10 minutes for Chia to begin syncing with peers...', 'success')
+    flash('Welcome! Your mnemonic key was imported. See the ' + \
+        '<a href="https://github.com/guydavis/machinaris/wiki#basic-configuration" target="_blank">Wiki</a> to get started with Machinaris. ' \
+        'Please allow 5-10 minutes for Chia to begin syncing with peers...', 'success')
     return True
 
 def add_connection(connection, hostname, blockchain):

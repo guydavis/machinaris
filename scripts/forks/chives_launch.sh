@@ -16,6 +16,18 @@ ln -s /root/.chia/chives /root/.chives
 mkdir -p /root/.chives/mainnet/log
 chives init >> /root/.chives/mainnet/log/init.log 2>&1 
 
+if [[ -z "${blockchain_skip_download}" ]] \
+  && [[ "${mode}" == 'fullnode' ]] \
+  && [[ -f /usr/bin/mega-get ]] \
+  && [[ ! -f /root/.chives/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+  echo "Downloading Chives blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
+  mkdir -p /root/.chives/mainnet/db/ && cd /root/.chives/mainnet/db/
+  # Mega links for Chives blockchain DB from: https://chiaforksblockchain.com/
+  mega-get https://mega.nz/folder/rQpDTaCS#bXNL-QmeGQfcTIXLpbBB6Q
+  mv chives/*.sqlite . && rm -rf chives
+fi
+
 echo 'Configuring Chives...'
 if [ -f /root/.chives/mainnet/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chives/mainnet/config/config.yaml
@@ -24,11 +36,11 @@ if [ -f /root/.chives/mainnet/config/config.yaml ]; then
 fi
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
-  if [ -f ${k} ]; then
+  if [[ "${k}" == "persistent" ]]; then
+    echo "Not touching key directories."
+  elif [ -s ${k} ]; then
     echo "Adding key at path: ${k}"
     chives keys add -f ${k} > /dev/null
-  else
-    echo "Skipping 'chives keys add' as no file found at: ${k}"
   fi
 done
 
@@ -39,11 +51,17 @@ done
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  if [ ! -f ~/.chives/mainnet/config/ssl/wallet/public_wallet.key ]; then
-    echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
-  else
-    chives start farmer
-  fi
+  for k in ${keys//:/ }; do
+    while [[ "${k}" != "persistent" ]] && [[ ! -s ${k} ]]; do
+      echo 'Waiting for key to be created/imported into mnemonic.txt. See: http://localhost:8926'
+      sleep 10  # Wait 10 seconds before checking for mnemonic.txt presence
+      if [ -s ${k} ]; then
+        chives keys add -f ${k}
+        sleep 10
+      fi
+    done
+  done
+  chives start farmer
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.chives/mainnet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."

@@ -3,6 +3,14 @@
 # Initialize Chia service, depending on mode of system requested
 #
 
+if [[ "${mode}" == 'fullnode' ]]; then
+  touch /root/.chia/mnemonic.txt
+fi
+
+# Ensure Chia keyring is held on a persistent volume
+mkdir -p /root/.chia/.chia_keys
+rm -f /root/.chia_keys
+ln -s /root/.chia/.chia_keys /root/.chia_keys
 
 cd /chia-blockchain
 
@@ -10,6 +18,27 @@ cd /chia-blockchain
 
 mkdir -p /root/.chia/mainnet/log
 chia init >> /root/.chia/mainnet/log/init.log 2>&1 
+
+if [[ -z "${blockchain_skip_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+  # Create machinaris dbs and launch web only while blockchain database downloads
+  . /machinaris/scripts/setup_databases.sh
+  mkdir -p /root/.chia/machinaris/config
+  mkdir -p /root/.chia/machinaris/logs
+  cd /machinaris
+  /chia-blockchain/venv/bin/gunicorn \
+      --bind 0.0.0.0:8926 --timeout 90 \
+      --log-level=info \
+      --workers=2 \
+      --log-config web/log.conf \
+      web:app &
+  echo 'Starting web server...  Browse to port 8926.'
+  echo "Downloading Chia blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
+  mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
+  # Mega links for Chia blockchain DB from: https://chiaforksblockchain.com/
+  mega-get https://mega.nz/folder/eQIhCSjD#PcfxQS0QZUSU9lQgwmmlqA
+  mv chia/*.sqlite . && rm -rf chia
+fi
 
 echo 'Configuring Chia...'
 if [ ! -f /root/.chia/mainnet/config/config.yaml ]; then
@@ -23,7 +52,9 @@ fi
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
-  if [ -f ${k} ]; then
+  if [[ "${k}" == "persistent" ]]; then
+    echo "Not touching key directories."
+  elif [ -f ${k} ]; then
     echo "Adding key at path: ${k}"
     chia keys add -f ${k} > /dev/null
   else

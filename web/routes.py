@@ -51,8 +51,11 @@ def setup():
             show_setup = not chia.generate_key(key_paths[0], globals.enabled_blockchains()[0])
         elif request.form.get('action') == 'import':
             show_setup = not chia.import_key(key_paths[0], request.form.get('mnemonic'), globals.enabled_blockchains()[0])
+    [download_percentage, blockchain_download_size] = globals.blockchain_downloading()
+    app.logger.info(f"Blockchain download @ {download_percentage}% - {blockchain_download_size}")
     if show_setup:
-        return render_template('setup.html', key_paths = key_paths)
+        return render_template('setup.html', key_paths = key_paths, 
+            blockchain_download_size=blockchain_download_size, download_percentage=download_percentage)
     else:
         return redirect(url_for('index'))
 

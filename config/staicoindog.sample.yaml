@@ -1,9 +1,9 @@
 # This is useful to differentiate multiple
 # instances monitoring multiple harvesters
-notification_title_prefix: 'Machinaris-Chives'
+notification_title_prefix: 'Machinaris-Staicoin'
 log_level: INFO
-coin_name: 'chives'
-coin_symbol: 'xcc'
+coin_name: 'staicoin'
+coin_symbol: 'stai'
 
 # Only one consumer can be enabled at a time, you can
 # delete the section for the consumer which you aren't using
@@ -11,8 +11,8 @@ coin_symbol: 'xcc'
 chia_logs:
   file_log_consumer:
     enable: true
-    prefix: 'chives'
-    file_path: '~/.chives/mainnet/log/debug.log'
+    prefix: 'staicoin'
+    file_path: '~/.chia/staicoin/mainnet/log/debug.log'
 
 # Enable this and chiadog will ping a remote server every 5 minutes
 # That way you can know that the monitoring is running as expected
@@ -52,8 +52,8 @@ notifier:
     daily_stats: true
     wallet_events: true
     credentials:
-      sender: 'chives@example.com'
-      sender_name: 'chivesdog'
+      sender: 'staicoin@example.com'
+      sender_name: 'staicoindog'
       recipient: 'you@example.com'
       username_smtp: 'username'
       password_smtp: 'password'
@@ -81,7 +81,7 @@ notifier:
     enable: false
     daily_stats: true
     wallet_events: true
-    topic: flax/chivesdog/alert
+    topic: staicoin/staicoindog/alert
     qos: 1
     retain: false
     credentials:

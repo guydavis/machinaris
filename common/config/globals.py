@@ -5,6 +5,7 @@
 import datetime
 import logging
 import os
+import pathlib
 import re
 import shutil
 import socket
@@ -18,6 +19,8 @@ from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
 from subprocess import Popen, TimeoutExpired, PIPE
 from os import environ, path
 
+from common.utils import converters
+
 SUPPORTED_BLOCKCHAINS = [
     'chia',
     'chives',
@@ -25,7 +28,8 @@ SUPPORTED_BLOCKCHAINS = [
     'flora',
     'nchain',
     'hddcoin',
-    'silicoin'
+    'silicoin',
+    'staicoin',
 ]
 
 PLOTMAN_CONFIG = '/root/.chia/plotman/plotman.yaml'
@@ -42,7 +46,8 @@ FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
 FLORA_BINARY = '/flora-blockchain/venv/bin/flora'
 NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
 HDDCOIN_BINARY = '/hddcoin-blockchain/venv/bin/hddcoin'
-SILICOIN_BINARY = '/silicoin-blockchain/venv/bin/chia'
+SILICOIN_BINARY = '/silicoin-blockchain/venv/bin/sit'
+STAICOIN_BINARY = '/staicoin-blockchain/venv/bin/staicoin'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
 
@@ -61,9 +66,11 @@ def get_blockchain_binary(blockchain):
         return NCHAIN_BINARY
     if blockchain == "silicoin":
         return SILICOIN_BINARY
+    if blockchain == "staicoin":
+        return STAICOIN_BINARY
     raise Exception("Invalid blockchain: ".format(blockchain))
 
-def get_blockchain_mainnet(blockchain):
+def get_blockchain_network_path(blockchain):
     if blockchain == 'chia':
         return "/root/.chia/mainnet"
     if blockchain == 'chives':
@@ -78,7 +85,14 @@ def get_blockchain_mainnet(blockchain):
         return "/root/.chia/ext9"
     if blockchain == 'silicoin':
         return "/root/.silicoin/mainnet"
+    if blockchain == 'staicoin':
+        return "/root/.staicoin/mainnet"
     raise Exception("No mainnet folder for unknown blockchain: {0}".format(blockchain))
+
+def get_blockchain_network_name(blockchain):
+    if blockchain == 'nchain':
+        return "ext9"
+    return "mainnet"
 
 def load():
     cfg = {}
@@ -122,7 +136,7 @@ def is_setup():
         # Harvester doesn't require a mnemonic private key as farmer's ca already imported.
         return True
     try:
-        if os.path.exist(get_blockchain_mainnet(enabled_blockchains()[0]) + '/config/ssl/wallet/public_wallet.key'):
+        if os.path.exist(get_blockchain_network_path(enabled_blockchains()[0]) + '/config/ssl/wallet/public_wallet.key'):
             logging.info("Skipping check for mnemonic.txt as public wallet key exists on disk.")
             return True
     except Exception as ex:
@@ -136,17 +150,30 @@ def is_setup():
     # logging.debug("Trying with full keys='{0}'".format(keys))
     foundKey = False
     for key in keys.split(':'):
-        if os.path.exists(key.strip()):
+        if os.path.exists(key.strip()) and os.path.getsize(key.strip()) > 0:
             # logging.debug("Found key file at: '{0}'".format(key.strip()))
             foundKey = True
         else:
-            logging.info("No such keys file: '{0}'".format(key.strip()))
+            logging.info("No such key file with mnemonic: '{0}'".format(key.strip()))
             logging.info(os.listdir(os.path.dirname(key.strip())))
             try:
                 logging.info(os.stat(key.strip()))
             except:
                 logging.info(traceback.format_exc())
     return foundKey
+
+# On very first launch of the main Chia container, blockchain DB is being downloaded so must wait.
+CHIA_BLOCKCHAIN_DB_SIZE = 30 * 1024 * 1024 * 1024 # Approaching 30 GBs in late 2021
+def blockchain_downloading():
+    db_path = '/root/.chia/mainnet/db'
+    if path.exists(f"{db_path}/blockchain_v1_mainnet.sqlite"):
+        return [100, None]
+    tmp_path =  f"{db_path}/chia"
+    if not path.exists(tmp_path):
+        logging.info("No folder at {0} yet...".format(tmp_path))
+        return [0, "0 GB"]
+    bytes = sum(f.stat().st_size for f in pathlib.Path(tmp_path).glob('**/*') if f.is_file())
+    return [ round(100*bytes/CHIA_BLOCKCHAIN_DB_SIZE, 2), converters.convert_size(bytes) ]
 
 def get_key_paths():
     if "keys" not in os.environ:
@@ -232,9 +259,12 @@ def load_plotman_version():
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_plotman_version
     if not os.path.exists(PLOTMAN_CONFIG):
-        logging.info("No existing plotman config found, so copying sample to: {0}" \
+        try:
+            logging.info("No existing plotman config found, so copying sample to: {0}" \
                 .format(PLOTMAN_CONFIG))
-        shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_CONFIG)
+            shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_CONFIG)
+        except:
+            pass
     last_plotman_version = ""
     try:
         proc = Popen("{0} version".format(PLOTMAN_SCRIPT),

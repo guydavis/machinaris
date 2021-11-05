@@ -11,7 +11,7 @@ def on_starting(server):
         status_plots, status_challenges, status_wallets, status_blockchains, \
         status_connections, status_keys, status_alerts, status_controller, \
         status_plotnfts, status_points, status_pools, status_partials
-    from api.schedules import stats_disk, stats_farm, nft_recover
+    from api.schedules import stats_disk, stats_farm, nft_recover, plots_check
     from common.config import globals
 
     scheduler = BackgroundScheduler()
@@ -52,8 +52,6 @@ def on_starting(server):
     if utils.is_fullnode():
         scheduler.add_job(func=stats_farm.collect, name="stats_farm", trigger='cron', minute=0)  # Hourly
         scheduler.add_job(func=status_wallets.update, name="wallets", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
-        if 'chia' in globals.enabled_blockchains():  # Only Chia supports plotnft command now
-            scheduler.add_job(func=status_plotnfts.update, name="plotnfts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_blockchains.update, name="blockchains", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_connections.update, name="connections", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_keys.update, name="keys", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
@@ -61,6 +59,9 @@ def on_starting(server):
         scheduler.add_job(func=status_plots.update, name="plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)  
         scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_partials.update, name="partials", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        if 'chia' in globals.enabled_blockchains():  # Jobs only Chia controller should run
+            scheduler.add_job(func=plots_check.execute, name="plots_checks", trigger='interval', minutes=15) 
+            scheduler.add_job(func=status_plotnfts.update, name="plotnfts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
 
     # Status for single Machinaris controller only, should be blockchain=chia
     if utils.is_controller():

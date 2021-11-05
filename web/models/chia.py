@@ -22,6 +22,7 @@ CURRENCY_SYMBOLS = {
     "hddcoin": "HDD",
     "nchain": "NCH",
     "silicoin": "SIT",
+    "staicoin": "STAI",
 }
 
 PLOT_TABLE_COLUMNS = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', '.' ]
@@ -331,6 +332,8 @@ class Connections:
             return "218.88.205.216:58445"
         if blockchain == 'silicoin':
             return "218.80.75.23:11444"
+        if blockchain == 'staicoin':
+            return "173.54.12.193:1999"
         
     def blockchain_port(self,blockchain):
         if blockchain == 'chia':
@@ -347,6 +350,8 @@ class Connections:
             return 58445
         elif blockchain == 'silicoin':
             return 11444
+        elif blockchain == 'staicoin':
+            return 1999
 
         raise("Unknown blockchain fork of selected: " + blockchain)
 

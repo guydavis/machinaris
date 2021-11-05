@@ -18,7 +18,7 @@ Machinaris bundles the [latest Chia™ version](https://github.com/Chia-Network/
 
 ![Farming](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_farming.png)
 
-Machinaris also optionally farms your plots to the [Flax Network](https://flaxnetwork.org/) too!
+Machinaris also optionally farms your plots to many other blockchain forks including [[Chives]], [[Flax]], [[Flora]], [[HDDCoin]], [[NChain]], [[Silicoin]], and [[Staicoin]].
 
 ## Alerts
 
@@ -33,6 +33,8 @@ Simplified setup allows you to either import your existing key mnemonic or gener
 ![Setup](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_setup.png)
 
 That's for fullnode (default) and farmer modes. However, for [harvester](https://github.com/guydavis/machinaris/wiki/Docker#harvester-only) you only need the farmer's CA certificates and for [plotter](https://github.com/guydavis/machinaris/wiki/Docker#plotter-only) only your pool and farmer public keys.
+
+Immediately on setup, a [fast blockchain download](https://github.com/guydavis/machinaris/wiki/Keys#blockchain-initialization) will get you synced and farming in just minutes, rather than the days required by other blockchain clients.
 
 ## Configuration
 
