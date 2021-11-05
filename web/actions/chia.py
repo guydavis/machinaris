@@ -207,7 +207,7 @@ def generate_key(key_path, blockchain):
         except:
                 flash('{0} was unreadable or not found.'.format(key_path), 'danger')
                 return False
-        flash('Welcome! A new key has been generated. See the ' + \
+        flash('Welcome! A new key has been generated, see below. Please visit the ' + \
         '<a href="https://github.com/guydavis/machinaris/wiki#basic-configuration" target="_blank">Wiki</a> to get started with Machinaris. ' \
         'Please allow 5-10 minutes for Chia to begin syncing with peers...', 'success')
         flash('{0}'.format(" ".join(mnemonic_words)), 'info')
