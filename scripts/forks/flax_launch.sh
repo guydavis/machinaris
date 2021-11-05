@@ -36,35 +36,33 @@ fi
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
-  if [ -s ${k} ]; then
+  if [[ "${k}" == "persistent" ]]; then
+    echo "Not touching key directories."
+  elif [ -s ${k} ]; then
     echo "Adding key at path: ${k}"
     flax keys add -f ${k} > /dev/null
   fi
 done
 
 # Loop over provided list of completed plot directories
-if [ -z "${flax_plots_dir}" ]; then
-  for p in ${plots_dir//:/ }; do
-    flax plots add -d ${p}
-  done
-else
-  for p in ${flax_plots_dir//:/ }; do
-    flax plots add -d ${p}
-  done
-fi
+for p in ${plots_dir//:/ }; do
+  flax plots add -d ${p}
+done
 
 chmod 755 -R /root/.flax/mainnet/config/ssl/ &> /dev/null
 flax init --fix-ssl-permissions > /dev/null 
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  while [ ! -s /root/.chia/mnemonic.txt ]; do
-    echo 'Waiting for key to be created/imported into mnemonic.txt. See: http://localhost:8926'
-    sleep 10  # Wait 10 seconds before checking for mnemonic.txt presence
-    if [ -s /root/.chia/mnemonic.txt ]; then
-      flax keys add -f /root/.chia/mnemonic.txt
-      sleep 10
-    fi
+  for k in ${keys//:/ }; do
+    while [[ "${k}" != "persistent" ]] && [[ ! -s ${k} ]]; do
+      echo 'Waiting for key to be created/imported into mnemonic.txt. See: http://localhost:8926'
+      sleep 10  # Wait 10 seconds before checking for mnemonic.txt presence
+      if [ -s ${k} ]; then
+        flax keys add -f ${k}
+        sleep 10
+      fi
+    done
   done
   flax start farmer
 elif [[ ${mode} =~ ^farmer.* ]]; then

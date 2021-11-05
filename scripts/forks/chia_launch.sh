@@ -52,7 +52,9 @@ fi
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
-  if [ -f ${k} ]; then
+  if [[ "${k}" == "persistent" ]]; then
+    echo "Not touching key directories."
+  elif [ -f ${k} ]; then
     echo "Adding key at path: ${k}"
     chia keys add -f ${k} > /dev/null
   else

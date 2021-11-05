@@ -34,7 +34,9 @@ fi
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
-  if [ -s ${k} ]; then
+  if [[ "${k}" == "persistent" ]]; then
+    echo "Not touching key directories."
+  elif [ -s ${k} ]; then
     echo "Adding key at path: ${k}"
     hddcoin keys add -f ${k} > /dev/null
   fi
@@ -50,13 +52,15 @@ hddcoin init --fix-ssl-permissions > /dev/null
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  while [ ! -s /root/.chia/mnemonic.txt ]; do
-    echo 'Waiting for key to be created/imported into mnemonic.txt. See: http://localhost:8926'
-    sleep 10  # Wait 10 seconds before checking for mnemonic.txt presence
-    if [ -s /root/.chia/mnemonic.txt ]; then
-      hddcoin keys add -f /root/.chia/mnemonic.txt
-      sleep 10
-    fi
+  for k in ${keys//:/ }; do
+    while [[ "${k}" != "persistent" ]] && [[ ! -s ${k} ]]; do
+      echo 'Waiting for key to be created/imported into mnemonic.txt. See: http://localhost:8926'
+      sleep 10  # Wait 10 seconds before checking for mnemonic.txt presence
+      if [ -s ${k} ]; then
+        hddcoin keys add -f ${k}
+        sleep 10
+      fi
+    done
   done
   hddcoin start farmer
 elif [[ ${mode} =~ ^farmer.* ]]; then
