@@ -15,7 +15,7 @@ ln -s /root/.chia/flax /root/.flax
 mkdir -p /root/.flax/mainnet/log
 flax init >> /root/.flax/mainnet/log/init.log 2>&1 
 
-if [[ -z "${blockchain_skip_download}" ]] \
+if [[ ! -z "${blockchain_db_download}" ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.flax/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
