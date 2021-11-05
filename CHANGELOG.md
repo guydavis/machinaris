@@ -4,8 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.6.3] - 2021-11-05
  - [Staicoin](https://github.com/STATION-I/staicoin-blockchain) - cross-farming support for this blockchain fork.
- - Machinaris - fullnode initialization and setup has been simplified and greatly sped up.
-- Chia - Update to version 1.2.11.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.11).
+ - Chia - Update to version 1.2.11.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.11).
 
 ## [0.6.2] - 2021-10-29
  - [Silicoin](https://github.com/silicoin-network/silicoin-blockchain) - cross-farming support for this blockchain fork.

@@ -16,7 +16,7 @@ ln -s /root/.chia/staicoin /root/.staicoin
 mkdir -p /root/.staicoin/mainnet/log
 staicoin init >> /root/.staicoin/mainnet/log/init.log 2>&1 
 
-if [[ -z "${blockchain_skip_download}" ]] \
+if [[ ! -z "${blockchain_db_download}" ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.staicoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then

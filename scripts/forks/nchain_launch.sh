@@ -11,7 +11,7 @@ cd /ext9-blockchain
 mkdir -p /root/.chia/ext9/log
 chia init >> /root/.chia/ext9/log/init.log 2>&1 
 
-if [[ -z "${blockchain_skip_download}" ]] \
+if [[ ! -z "${blockchain_db_download}" ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.chia/ext9/db/blockchain_v1_ext9.sqlite ]]; then

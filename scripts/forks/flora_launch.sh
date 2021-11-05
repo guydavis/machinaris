@@ -16,7 +16,7 @@ mkdir -p /root/.flora/mainnet/log
 flora init >> /root/.flora/mainnet/log/init.log 2>&1 
 
 # Check for first launch (missing mainnet folder and download)
-if [[ -z "${blockchain_skip_download}" ]] \
+if [[ ! -z "${blockchain_db_download}" ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.flora/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
