@@ -2,9 +2,10 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.6.3] - 2021-11-?
+## [0.6.3] - 2021-11-05
  - [Staicoin](https://github.com/STATION-I/staicoin-blockchain) - cross-farming support for this blockchain fork.
- - Machinaris - fullnode initialization and setup has been simplified and sped up.
+ - Machinaris - fullnode initialization and setup has been simplified and greatly sped up.
+- Chia - Update to version 1.2.11.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.11).
 
 ## [0.6.2] - 2021-10-29
  - [Silicoin](https://github.com/silicoin-network/silicoin-blockchain) - cross-farming support for this blockchain fork.
