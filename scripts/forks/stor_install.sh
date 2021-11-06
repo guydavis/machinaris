@@ -11,6 +11,7 @@ if [ -z ${STOR_BRANCH} ]; then
 	echo 'Skipping Stor install as not requested.'
 else
 	git clone --branch ${STOR_BRANCH} --recurse-submodules https://github.com/Stor-Network/stor-blockchain.git /stor-blockchain 
+	cd /stor-blockchain
 	git submodule update --init mozilla-ca
 	git checkout $HASH
 	chmod +x install.sh

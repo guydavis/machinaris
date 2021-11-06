@@ -11,6 +11,7 @@ if [ -z ${CACTUS_BRANCH} ]; then
 	echo 'Skipping Cactus install as not requested.'
 else
 	git clone --branch ${CACTUS_BRANCH} --recurse-submodules https://github.com/Cactus-Network/cactus-blockchain.git /cactus-blockchain 
+	cd /cactus-blockchain 
 	git submodule update --init mozilla-ca
 	git checkout $HASH
 	chmod +x install.sh
