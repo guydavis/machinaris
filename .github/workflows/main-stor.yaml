@@ -41,7 +41,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
-            "STOR_BRANCH=main"
+            "STOR_BRANCH=master"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-stor:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-stor:v${{ github.event.inputs.version }}
