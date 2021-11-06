@@ -27,7 +27,10 @@ class Certificates(MethodView):
 
     def get(self):
         type = request.args.get('type')
-        if type == "chia":
+        if type == "cactus":
+            blockchain = "cactus"
+            dir = "/root/.cactus/mainnet/config/ssl/ca"
+        elif type == "chia":
             blockchain = "chia"
             dir = "/root/.chia/mainnet/config/ssl/ca"
         elif type == "chives":
@@ -51,6 +54,9 @@ class Certificates(MethodView):
         elif type == "staicoin":
             blockchain = "staicoin"
             dir = "/root/.staicoin/mainnet/config/ssl/ca"
+        elif type == "stor":
+            blockchain = "stor"
+            dir = "/root/.stor/mainnet/config/ssl/ca"
         else:
             abort(400) # Bad blockchain type passed
         if blockchain == 'chia' and not self.allow_download():

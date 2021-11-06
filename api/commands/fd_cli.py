@@ -15,6 +15,8 @@ from api import app
 
 # No need to reward recover for either Chia or Chives
 def get_full_node_rpc_port(blockchain):
+    if blockchain == 'cactus':
+        return "TODO"
     if blockchain == 'flax':
         return 6755
     if blockchain == 'flora':
@@ -27,6 +29,8 @@ def get_full_node_rpc_port(blockchain):
         return 11555
     if blockchain == 'staicoin':
         return 1758
+    if blockchain == 'stor':
+        return "TODO"
     raise Exception(f"Unknown rpc_port for blockchain: {blockchain}")
 
 def reward_recovery(wallet_id, launcher_id, pool_contract_address):
