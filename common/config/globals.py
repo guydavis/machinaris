@@ -34,6 +34,19 @@ SUPPORTED_BLOCKCHAINS = [
     'stor'
 ]
 
+CURRENCY_SYMBOLS = {
+    "cactus": "CAC",
+    "chia": "XCH",
+    "chives": "XCC",
+    "flax": "XFX",
+    "flora": "XFL",
+    "hddcoin": "HDD",
+    "nchain": "NCH",
+    "silicoin": "SIT",
+    "staicoin": "STAI",
+    "stor": "STOR",
+}
+
 PLOTMAN_CONFIG = '/root/.chia/plotman/plotman.yaml'
 PLOTMAN_SAMPLE = '/machinaris/config/plotman.sample.yaml'
 
@@ -105,6 +118,9 @@ def get_blockchain_network_name(blockchain):
     if blockchain == 'nchain':
         return "ext9"
     return "mainnet"
+
+def get_blockchain_symbol():
+    return CURRENCY_SYMBOLS[enabled_blockchains()[0]]
 
 def load():
     cfg = {}

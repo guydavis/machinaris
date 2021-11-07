@@ -8,24 +8,11 @@ import datetime
 
 from web import app
 from web.actions import worker as w
+from common.config.globals import CURRENCY_SYMBOLS
 from common.utils import converters
 
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
 MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
-
-# Mapping of blockchains to currency symbols
-CURRENCY_SYMBOLS = {
-    "cactus": "CAC",
-    "chia": "XCH",
-    "chives": "XCC",
-    "flax": "XFX",
-    "flora": "XFL",
-    "hddcoin": "HDD",
-    "nchain": "NCH",
-    "silicoin": "SIT",
-    "staicoin": "STAI",
-    "stor": "STOR",
-}
 
 PLOT_TABLE_COLUMNS = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', '.' ]
 

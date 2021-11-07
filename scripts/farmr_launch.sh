@@ -9,27 +9,56 @@ mkdir -p /root/.chia/farmr
 rm -f /root/.farmr
 ln -s /root/.chia/farmr /root/.farmr 
 
-cd /root/.farmr/blockchain
-if [[ ${blockchains} == 'cactus' ]]; then
-    cp -n cac.json.template cac.json
-elif [[ ${blockchains} == 'chia' ]]; then
-    cp -n xch.json.template xch.json
-elif [[ ${blockchains} == 'chives' ]]; then
-    cp -n xcc.json.template xcc.json
-elif [[ ${blockchains} == 'flax' ]]; then
-    cp -n xfx.json.template xfx.json
-elif [[ ${blockchains} == 'flora' ]]; then
-    cp -n xfl.json.template xfl.json
-elif [[ ${blockchains} == 'hddcoin' ]]; then
-    cp -n hdd.json.template hdd.json
-elif [[ ${blockchains} == 'nchain' ]]; then
-    cp -n nch.json.template nch.json
-elif [[ ${blockchains} == 'silicoin' ]]; then
-    cp -n sit.json.template sit.json
-elif [[ ${blockchains} == 'staicoin' ]]; then
-    cp -n stai.json.template stai.json
-elif [[ ${blockchains} == 'stor' ]]; then
-    cp -n stor.json.template stor.json
-fi
 cd /root/.farmr
-nohup farmr &
+
+if [[ ${blockchains} != "chia" ]]; then
+    rm -f cache/cache-xch.json  # Remove default config when on a fork
+fi
+
+echo 'Checking if any cache json already exists:'
+cat cache/*.json
+
+if [[ ${blockchains} == 'cactus' ]]; then
+    cp -n blockchain/cac.json.template blockchain/cac.json
+    echo "/cactus-blockchain/venv/bin/cactus" > override-cac-binary.txt
+elif [[ ${blockchains} == 'chia' ]]; then
+    cp -n blockchain/xch.json.template blockchain/xch.json
+    echo "/chia-blockchain/venv/bin/chia" > override-xch-binary.txt
+elif [[ ${blockchains} == 'chives' ]]; then
+    cp -n blockchain/xcc.json.template blockchain/xcc.json
+    echo "/chives-blockchain/venv/bin/chives" > override-xcc-binary.txt
+elif [[ ${blockchains} == 'flax' ]]; then
+    cp -n blockchain/xfx.json.template blockchain/xfx.json
+    echo "/flax-blockchain/venv/bin/flax" > override-xfx-binary.txt
+elif [[ ${blockchains} == 'flora' ]]; then
+    cp -n blockchain/xfl.json.template blockchain/xfl.json
+    echo "/flora-blockchain/venv/bin/flora" > override-xfl-binary.txt
+elif [[ ${blockchains} == 'hddcoin' ]]; then
+    cp -n blockchain/hdd.json.template blockchain/hdd.json
+    echo "/hddcoin-blockchain/venv/bin/hddcoin" > override-hdd-binary.txt
+elif [[ ${blockchains} == 'nchain' ]]; then
+    cp -n blockchain/nch.json.template blockchain/nch.json
+    echo "/chia-blockchain/venv/bin/chia" > override-nch-binary.txt
+elif [[ ${blockchains} == 'silicoin' ]]; then
+    cp -n blockchain/sit.json.template blockchain/sit.json
+    echo "/sit-blockchain/venv/bin/sit" > override-sit-binary.txt
+elif [[ ${blockchains} == 'staicoin' ]]; then
+    cp -n blockchain/stai.json.template blockchain/stai.json
+    echo "/stai-blockchain/venv/bin/stai" > override-stai-binary.txt
+elif [[ ${blockchains} == 'stor' ]]; then
+    cp -n blockchain/stor.json.template blockchain/stor.json
+    echo "/stor-blockchain/venv/bin/stor" > override-stor-binary.txt
+fi
+
+# Use local file for configuration
+#sed -i 's/"Online Config": true/"Online Config": false/g' blockchain/*.json
+
+if [[ ! -z $"farmr_skip_launch" ]]; then
+    rm nohup.out # Remove stale stdout logging
+    # Launch in harvester or farmer mode
+    if [[ ${mode} ~= 'harvester' ]]; then
+        nohup /usr/bin/farmr harvester headless &
+    elif [[ ${mode} == 'farmer']] || [[ ${mode} == 'fullnode']] then
+        nohup /usr/bin/farmr farmer headless &
+    fi
+fi
