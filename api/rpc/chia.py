@@ -51,7 +51,7 @@ elif importlib.util.find_spec("staicoin"):
     from staicoin.util.ints import uint16
     from staicoin.util.config import load_config as load_fork_config
 elif importlib.util.find_spec("stor"):
-    from staicoin.rpc.full_node_rpc_client import FullNodeRpcClient
+    from stor.rpc.full_node_rpc_client import FullNodeRpcClient
     from stor.rpc.farmer_rpc_client import FarmerRpcClient
     from stor.util.default_root import DEFAULT_ROOT_PATH
     from stor.util.ints import uint16

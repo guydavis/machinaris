@@ -31,7 +31,7 @@ SUPPORTED_BLOCKCHAINS = [
     'hddcoin',
     'silicoin',
     'staicoin',
-    'status'
+    'stor'
 ]
 
 PLOTMAN_CONFIG = '/root/.chia/plotman/plotman.yaml'
