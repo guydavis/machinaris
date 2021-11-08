@@ -55,7 +55,7 @@ fi
 #sed -i 's/"Online Config": true/"Online Config": false/g' blockchain/*.json
 
 if [[ ! -z $"farmr_skip_launch" ]]; then
-    rm nohup.out # Remove stale stdout logging
+    rm -f nohup.out # Remove stale stdout logging
     # Launch in harvester or farmer mode
     if [[ ${mode} =~ ^harvester.* ]]; then
         (sleep 180 && nohup /usr/bin/farmr harvester headless) &
