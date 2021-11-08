@@ -60,8 +60,8 @@ if [[ ! -z $"farmr_skip_launch" ]]; then
     rm nohup.out # Remove stale stdout logging
     # Launch in harvester or farmer mode
     if [[ ${mode} =~ ^harvester.* ]]; then
-        nohup /usr/bin/farmr harvester headless &
+        (sleep 180 && nohup /usr/bin/farmr harvester headless) &
     elif [[ ${mode} == 'farmer' ]] || [[ ${mode} == 'fullnode' ]]; then
-        nohup /usr/bin/farmr farmer headless &
+        (sleep 180 && nohup /usr/bin/farmr farmer headless) &
     fi
 fi
