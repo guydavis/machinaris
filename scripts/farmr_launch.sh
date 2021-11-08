@@ -11,12 +11,15 @@ ln -s /root/.chia/farmr /root/.farmr
 
 cd /root/.farmr
 
-if [[ ${blockchains} != "chia" ]]; then
-    rm -f cache/cache-xch.json  # Remove default config when on a fork
+if [[ ! -d ./blockchain ]]; then # Never run before, will create default configs
+    nohup farmr & 
+    sleep 60
+    rm -f nohup.out
 fi
 
-echo 'Checking if any cache json already exists:'
-cat cache/*.json
+if [[ ${blockchains} != "chia" ]] && [[ -f blockchain/xch.json ]]; then
+    mv -f blockchain/xch.json blockchain/xch.json.template
+fi
 
 if [[ ${blockchains} == 'cactus' ]]; then
     cp -n blockchain/cac.json.template blockchain/cac.json
@@ -56,7 +59,7 @@ fi
 if [[ ! -z $"farmr_skip_launch" ]]; then
     rm nohup.out # Remove stale stdout logging
     # Launch in harvester or farmer mode
-    if [[ ${mode} ~= 'harvester' ]]; then
+    if [[ ${mode} =~ ^harvester.* ]]; then
         nohup /usr/bin/farmr harvester headless &
     elif [[ ${mode} == 'farmer']] || [[ ${mode} == 'fullnode']] then
         nohup /usr/bin/farmr farmer headless &
