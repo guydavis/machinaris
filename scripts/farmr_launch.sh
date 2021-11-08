@@ -61,7 +61,7 @@ if [[ ! -z $"farmr_skip_launch" ]]; then
     # Launch in harvester or farmer mode
     if [[ ${mode} =~ ^harvester.* ]]; then
         nohup /usr/bin/farmr harvester headless &
-    elif [[ ${mode} == 'farmer']] || [[ ${mode} == 'fullnode']]; then
+    elif [[ ${mode} == 'farmer' ]] || [[ ${mode} == 'fullnode' ]]; then
         nohup /usr/bin/farmr farmer headless &
     fi
 fi
