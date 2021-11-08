@@ -12,9 +12,8 @@ ln -s /root/.chia/farmr /root/.farmr
 cd /root/.farmr
 
 if [[ ! -d ./blockchain ]]; then # Never run before, will create default configs
-    nohup farmr & 
-    sleep 60
-    rm -f nohup.out
+    farmr 2>&1 >/dev/null &
+    sleep 30
 fi
 
 if [[ ${blockchains} != "chia" ]] && [[ -f blockchain/xch.json ]]; then
@@ -25,7 +24,6 @@ if [[ ${blockchains} == 'cactus' ]]; then
     cp -n blockchain/cac.json.template blockchain/cac.json
     echo "/cactus-blockchain/venv/bin/cactus" > override-cac-binary.txt
 elif [[ ${blockchains} == 'chia' ]]; then
-    cp -n blockchain/xch.json.template blockchain/xch.json
     echo "/chia-blockchain/venv/bin/chia" > override-xch-binary.txt
 elif [[ ${blockchains} == 'chives' ]]; then
     cp -n blockchain/xcc.json.template blockchain/xcc.json
