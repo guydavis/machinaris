@@ -42,10 +42,10 @@ elif [[ ${blockchains} == 'nchain' ]]; then
     echo "/chia-blockchain/venv/bin/chia" > override-nch-binary.txt
 elif [[ ${blockchains} == 'silicoin' ]]; then
     cp -n blockchain/sit.json.template blockchain/sit.json
-    echo "/sit-blockchain/venv/bin/sit" > override-sit-binary.txt
+    echo "/silicoin-blockchain/venv/bin/sit" > override-sit-binary.txt
 elif [[ ${blockchains} == 'staicoin' ]]; then
     cp -n blockchain/stai.json.template blockchain/stai.json
-    echo "/stai-blockchain/venv/bin/stai" > override-stai-binary.txt
+    echo "/staicoin-blockchain/venv/bin/stai" > override-stai-binary.txt
 elif [[ ${blockchains} == 'stor' ]]; then
     cp -n blockchain/stor.json.template blockchain/stor.json
     echo "/stor-blockchain/venv/bin/stor" > override-stor-binary.txt
