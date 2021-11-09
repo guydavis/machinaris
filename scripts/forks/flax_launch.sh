@@ -22,7 +22,7 @@ if [[ ! -z "${blockchain_db_download}" ]] \
   echo "Downloading Flax blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.flax/mainnet/db/ && cd /root/.flax/mainnet/db/
-  # Mega links for Staicoin blockchain DB from: https://chiaforksblockchain.com/
+  # Mega links for Flax blockchain DB from: https://chiaforksblockchain.com/
   mega-get https://mega.nz/folder/WBpCARSA#REDq1mKfsyWjLSEJdgPoaA
   mv flax/*.sqlite . && rm -rf flax
 fi

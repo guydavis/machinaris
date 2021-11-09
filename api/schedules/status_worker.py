@@ -15,7 +15,7 @@ import traceback
 from flask import g
 
 from common.config import globals
-from api.commands import chia_cli, chiadog_cli, plotman_cli
+from api.commands import chia_cli, chiadog_cli, plotman_cli, farmr_cli
 from api import app
 from api import utils
 
@@ -25,6 +25,8 @@ def update():
             hostname = utils.get_hostname()
             displayname = utils.get_displayname()
             config = globals.load()
+            if config['farming_enabled'] or config['harvesting_enabled']:
+                config['farmr_device_id'] = farmr_cli.load_device_id()
             payload = {
                 "hostname": hostname,
                 "blockchain": os.environ['blockchains'],

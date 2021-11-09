@@ -8,22 +8,11 @@ import datetime
 
 from web import app
 from web.actions import worker as w
+from common.config.globals import CURRENCY_SYMBOLS
 from common.utils import converters
 
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
 MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
-
-# Mapping of blockchains to currency symbols
-CURRENCY_SYMBOLS = {
-    "chia": "XCH",
-    "chives": "XCC",
-    "flax": "XFX",
-    "flora": "XFL",
-    "hddcoin": "HDD",
-    "nchain": "NCH",
-    "silicoin": "SIT",
-    "staicoin": "STAI",
-}
 
 PLOT_TABLE_COLUMNS = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', '.' ]
 
@@ -318,6 +307,8 @@ class Connections:
         self.rows.sort(key=lambda conn: conn['blockchain'])
     
     def get_add_connection_example(self, blockchain):
+        if blockchain == 'cactus':
+            return "101.127.109.238:11444"
         if blockchain == 'chia':
             return "node.chia.net:8444"
         if blockchain == 'chives':
@@ -331,27 +322,33 @@ class Connections:
         if blockchain == 'nchain':
             return "218.88.205.216:58445"
         if blockchain == 'silicoin':
-            return "218.80.75.23:11444"
+            return "218.80.75.23:22222"
         if blockchain == 'staicoin':
             return "173.54.12.193:1999"
+        if blockchain == 'stor':
+            return "118.33.225.159:8668"
         
     def blockchain_port(self,blockchain):
+        if blockchain == 'cactus':
+            return 11444
         if blockchain == 'chia':
             return 8444
-        elif blockchain == 'chives':
+        if blockchain == 'chives':
             return 9699
-        elif blockchain == 'flax':
+        if blockchain == 'flax':
             return 6888
-        elif blockchain == 'flora':
+        if blockchain == 'flora':
             return 18644
-        elif blockchain == 'hddcoin':
+        if blockchain == 'hddcoin':
             return 28444
-        elif blockchain == 'nchain':
+        if blockchain == 'nchain':
             return 58445
-        elif blockchain == 'silicoin':
-            return 11444
-        elif blockchain == 'staicoin':
+        if blockchain == 'silicoin':
+            return 22222
+        if blockchain == 'staicoin':
             return 1999
+        if blockchain == 'stor':
+            return 8668
 
         raise("Unknown blockchain fork of selected: " + blockchain)
 

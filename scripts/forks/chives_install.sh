@@ -4,15 +4,18 @@
 #
 
 CHIVES_BRANCH=$1
+# On 2021-11-06
+HASH=56734ef0719f7bf844213823bb95b0fcc642d222
 
 if [ -z ${CHIVES_BRANCH} ]; then
 	echo 'Skipping Chives install as not requested.'
 else
-	git clone --branch ${CHIVES_BRANCH} --recurse-submodules https://github.com/HiveProject2021/chives-blockchain.git /chives-blockchain \
-		&& cd /chives-blockchain \
-		&& git submodule update --init mozilla-ca \
-		&& chmod +x install.sh \
-		&& /usr/bin/sh ./install.sh
+	git clone --branch ${CHIVES_BRANCH} --recurse-submodules https://github.com/HiveProject2021/chives-blockchain.git /chives-blockchain 
+	cd /chives-blockchain 
+	git submodule update --init mozilla-ca 
+	git checkout $HASH
+	chmod +x install.sh 
+	/usr/bin/sh ./install.sh
 
 	if [ ! -d /chia-blockchain/venv ]; then
 		cd /

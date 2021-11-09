@@ -66,7 +66,7 @@ def on_starting(server):
     # Status for single Machinaris controller only, should be blockchain=chia
     if utils.is_controller():
         scheduler.add_job(func=status_controller.update, name="controller", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
-        scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', days=1)
+        scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', hours=1)
 
     # Testing only
     #scheduler.add_job(func=stats_farm.collect, trigger='interval', seconds=10) # Test immediately

@@ -23,7 +23,7 @@ if [[ ! -z "${blockchain_db_download}" ]] \
   echo "Downloading Flora blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.flora/mainnet/db/ && cd /root/.flora/mainnet/db/
-  # Mega links for Staicoin blockchain DB from: https://chiaforksblockchain.com/
+  # Mega links for Flora blockchain DB from: https://chiaforksblockchain.com/
   mega-get https://mega.nz/folder/PNhQhBKA#ERigrZQ6zg3CJeI10sXuzQ
   mv flora/*.sqlite . && rm -rf flora
 fi

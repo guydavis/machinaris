@@ -41,9 +41,10 @@ if [ ${AUTO_PLOT,,} = "true" ]; then
     nohup plotman plot >> /root/.chia/plotman/logs/plotman.log 2>&1 &
 fi
 
-# Start the farming log monitor
+# Start the farming log monitoring
 if [ "${mode}" != "plotter" ]; then
     . /machinaris/scripts/chiadog_launch.sh
+    . /machinaris/scripts/farmr_launch.sh
 fi
 
 # Even standalone plotting mode needs database setup

@@ -8,6 +8,9 @@ cd /ext9-blockchain
 
 . ./activate
 
+# farmr binary makes hard-coded assumptions about N-Chain locations, so create symlinks
+ln -s /root/.chia/ /root/.ext9 
+
 mkdir -p /root/.chia/ext9/log
 chia init >> /root/.chia/ext9/log/init.log 2>&1 
 
