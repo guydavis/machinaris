@@ -216,6 +216,11 @@
             for(var i = 0; i < blockchains.length; ++i) {
                 if (blockchains[i].checked) {
                     var blockchain = blockchains[i].value
+                    if (!document.getElementById('mode-harvester').checked && 
+                            document.getElementById('mode-plotter').checked &&
+                            blockchain != "chia" && blockchain != "chives") {
+                        continue;  // Don't add plotter-only containers for forks beyond Chia & Chives
+                    }
                     if (blockchain == "chia") {
                         cmd += "    machinaris:" + line_end;
                         cmd += "        image: ghcr.io/guydavis/machinaris:latest" + line_end;
@@ -510,6 +515,7 @@
                                 N-Chain
                             </label>
                         </div>
+                        <!--
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-silicoin" onclick="updateDocker()" value="silicoin">
@@ -517,6 +523,7 @@
                                 Silicoin
                             </label>
                         </div>
+                        -->
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-staicoin" onclick="updateDocker()" value="staicoin">
