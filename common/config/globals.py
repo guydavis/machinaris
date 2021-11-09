@@ -178,6 +178,8 @@ def is_setup():
     # logging.debug("Trying with full keys='{0}'".format(keys))
     foundKey = False
     for key in keys.split(':'):
+        if key.strip() == "persistent":  # User wants to manage themselves
+            return True # pretend a key was found
         if os.path.exists(key.strip()) and os.path.getsize(key.strip()) > 0:
             # logging.debug("Found key file at: '{0}'".format(key.strip()))
             foundKey = True
