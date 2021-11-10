@@ -58,18 +58,19 @@ scheduling:
         # Phase major corresponds to the plot phase, phase minor corresponds to
         # the table or table pair in sequence, phase limit corresponds to
         # the number of plots allowed before [phase major, phase minor]
-        tmpdir_stagger_phase_major: 2
-        tmpdir_stagger_phase_minor: 1
+        # Five is the final move stage of madmax
+        tmpdir_stagger_phase_major: 5
+        tmpdir_stagger_phase_minor: 0
         # Optional: default is 1
         tmpdir_stagger_phase_limit: 1
 
         # Don't run more than this many jobs at a time on a single temp dir.
-        # Increase for staggered plotting by chia, leave at 1 for madmax sequential plotting
-        tmpdir_max_jobs: 1
+        # Increase for staggered plotting by chia, leave at 2 for madmax sequential plotting
+        tmpdir_max_jobs: 2
 
         # Don't run more than this many jobs at a time in total.
-        # Increase for staggered plotting by chia, leave at 1 for madmax sequential plotting
-        global_max_jobs: 1 
+        # Increase for staggered plotting by chia, leave at 2 for madmax sequential plotting
+        global_max_jobs: 2 
 
         # Don't run any jobs (across all temp dirs) more often than this, in minutes.
         global_stagger_m: 30
