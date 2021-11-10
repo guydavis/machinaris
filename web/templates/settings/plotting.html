@@ -11,9 +11,7 @@
 </div>
 
 <header class="pb-3 mb-4 border-bottom">
-    <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
-        <span class="fs-4">Plotting - plotman.yaml </span>
-    </a>
+    <span class="fs-4">Plotting - plotman.yaml </span>
 </header>
 
 <div>
@@ -39,9 +37,9 @@
                 <label for="worker" class="col-sm-1 col-form-label-lg text-end p-1">Worker</label>
                 <div class="col-sm-3">
                     <select id="worker" name="worker" class="form-select">
-                        {% for worker in workers() %}
-                        <option {% if worker==selected_worker %}selected{% endif %}
-                            value="{{ worker.hostname }}">{{ worker.displayname }}</option>
+                        {% for host in workers() %}
+                        <option {% if host.hostname==selected_worker %}selected{% endif %}
+                            value="{{ host.hostname }}">{{ host.displayname }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -86,16 +84,17 @@
                         console.log("jqXHR, textStatus, errorThrown");
                     });
             }
-            update_blockchain_options("{{selected_worker.hostname}}");
+            update_blockchain_options("{{selected_worker}}");
             //Call the function when #input is clicked
             $(document).on("change", "#worker", function (e) {
                 load_config($("#worker").val(), $("#blockchain").val())
+                update_blockchain_options($("#worker").val());
             });
             $(document).on("change", "#blockchain", function (e) {
                 load_config($("#worker").val(), $("#blockchain").val())
             });
             //Call the function when the page loads
-            load_config("{{selected_worker.hostname}}", "{{selected_blockchain}}");
+            load_config("{{selected_worker}}", "{{selected_blockchain}}");
         });
 
         function update_blockchain_options(hostname) {

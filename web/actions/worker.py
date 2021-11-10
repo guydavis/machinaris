@@ -45,7 +45,7 @@ def load_worker_summary(hostname = None):
     return WorkerSummary(workers)
 
 def get_worker(hostname, blockchain='chia'):
-    #app.logger.info("Searching for worker with hostname: {0} and blockchain: {1}".format(hostname, blockchain))
+    app.logger.info("Searching for worker with hostname: {0} and blockchain: {1}".format(hostname, blockchain))
     return db.session.query(w.Worker).filter(w.Worker.hostname==hostname, w.Worker.blockchain==blockchain).first()
 
 def prune_workers_status(workers):

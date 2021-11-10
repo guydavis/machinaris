@@ -108,7 +108,7 @@ def stop_plotman(plotter):
 def start_archiving(plotter):
     app.logger.info("Starting Archiver....")
     try:
-        response = utils.send_post(plotter, "/actions/", {"service": "archiving","action": "start"}, debug=False)
+        response = utils.send_post(plotter, "/actions/", {"service": "archiving","action": "start"}, debug=True)
     except:
         app.logger.info(traceback.format_exc())
         flash('Failed to start Plotman archiver!', 'danger')
@@ -122,7 +122,7 @@ def start_archiving(plotter):
 def stop_archiving(plotter):
     app.logger.info("Stopping Archiver run....")
     try:
-        response = utils.send_post(plotter, "/actions/", payload={"service": "archiving","action": "stop"}, debug=False)
+        response = utils.send_post(plotter, "/actions/", payload={"service": "archiving","action": "stop"}, debug=True)
     except:
         app.logger.info(traceback.format_exc())
         flash('Failed to stop Plotman archiver', 'danger')
@@ -174,7 +174,7 @@ def load_config(plotter, blockchain):
         app.logger.info("Unable to load replacements on install with mode={0}".format(os.environ['mode']))
         app.logger.info(traceback.format_exc())
     lines = []
-    config = utils.send_get(plotter, "/configs/plotting/" + blockchain, debug=False).content.decode('utf-8')
+    config = utils.send_get(plotter, "/configs/plotting/" + blockchain, debug=True).content.decode('utf-8')
     replaces = 0
     for line in config.splitlines():
         for replacement in replacements:

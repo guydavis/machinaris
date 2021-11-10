@@ -45,7 +45,7 @@ elif [[ ${blockchains} == 'silicoin' ]]; then
     echo "/silicoin-blockchain/venv/bin/sit" > override-sit-binary.txt
 elif [[ ${blockchains} == 'staicoin' ]]; then
     cp -n blockchain/stai.json.template blockchain/stai.json
-    echo "/staicoin-blockchain/venv/bin/stai" > override-stai-binary.txt
+    echo "/staicoin-blockchain/venv/bin/staicoin" > override-stai-binary.txt
 elif [[ ${blockchains} == 'stor' ]]; then
     cp -n blockchain/stor.json.template blockchain/stor.json
     echo "/stor-blockchain/venv/bin/stor" > override-stor-binary.txt
@@ -58,8 +58,8 @@ if [[ ! -z $"farmr_skip_launch" ]]; then
     rm -f nohup.out # Remove stale stdout logging
     # Launch in harvester or farmer mode
     if [[ ${mode} =~ ^harvester.* ]]; then
-        (sleep 180 && nohup /usr/bin/farmr harvester headless) &
+        (sleep 180 && nohup /usr/bin/farmr harvester headless 2>&1 ) &
     elif [[ ${mode} == 'farmer' ]] || [[ ${mode} == 'fullnode' ]]; then
-        (sleep 180 && nohup /usr/bin/farmr farmer headless) &
+        (sleep 180 && nohup /usr/bin/farmr farmer headless 2>&1 ) &
     fi
 fi
