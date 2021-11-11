@@ -19,7 +19,10 @@ cd /chia-blockchain
 mkdir -p /root/.chia/mainnet/log
 chia init >> /root/.chia/mainnet/log/init.log 2>&1 
 
-if [[ ! -z "${blockchain_db_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+if [[ ! -z "${blockchain_db_download}" ]] \
+  && [[ "${mode}" == 'fullnode' ]] \
+  && [[ -f /usr/bin/mega-get ]] \
+  && [[ ! -f /root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   # Create machinaris dbs and launch web only while blockchain database downloads
   . /machinaris/scripts/setup_databases.sh
   mkdir -p /root/.chia/machinaris/config
@@ -82,11 +85,11 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
   else
     if [ ! -f /root/.chia/farmer_ca/chia_ca.crt ]; then
       mkdir -p /root/.chia/farmer_ca
-      response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8927/certificates/?type=chia --output /tmp/certs.zip)
+      response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8927/certificates/?type=chia --output /tmp/certs.zip)
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.chia/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${controller_host}:8927/certificates/?type=chia.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${farmer_address}:8927/certificates/?type=chia.  Try clicking 'New Worker' button on 'Workers' page first."
       fi
       rm -f /tmp/certs.zip 
     fi

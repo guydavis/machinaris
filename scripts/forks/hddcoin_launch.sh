@@ -76,11 +76,11 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
   else
     if [ ! -f /root/.hddcoin/farmer_ca/private_ca.crt ]; then
       mkdir -p /root/.hddcoin/farmer_ca
-      response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8930/certificates/?type=hddcoin --output /tmp/certs.zip)
+      response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8930/certificates/?type=hddcoin --output /tmp/certs.zip)
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.hddcoin/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${controller_host}:8930/certificates/?type=hddcoin.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${farmer_address}:8930/certificates/?type=hddcoin.  Try clicking 'New Worker' button on 'Workers' page first."
       fi
       rm -f /tmp/certs.zip 
     fi
