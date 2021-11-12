@@ -1,4 +1,4 @@
-name: develop-chives
+name: develop-cryptodoge
 
 on:
   push:
@@ -42,5 +42,5 @@ jobs:
           build-args: |
             "CRYPTODOGE_BRANCH=main"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chives:develop
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chives:develop
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-cryptodoge:develop
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-cryptodoge:develop
