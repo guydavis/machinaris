@@ -28,6 +28,9 @@ elif [[ ${blockchains} == 'chia' ]]; then
 elif [[ ${blockchains} == 'chives' ]]; then
     cp -n blockchain/xcc.json.template blockchain/xcc.json
     echo "/chives-blockchain/venv/bin/chives" > override-xcc-binary.txt
+elif [[ ${blockchains} == 'cryptodoge' ]]; then
+    cp -n blockchain/xcd.json.template blockchain/xcd.json
+    echo "/cryptodoge-blockchain/venv/bin/cryptodoge" > override-xcd-binary.txt
 elif [[ ${blockchains} == 'flax' ]]; then
     cp -n blockchain/xfx.json.template blockchain/xfx.json
     echo "/flax-blockchain/venv/bin/flax" > override-xfx-binary.txt

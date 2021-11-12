@@ -18,7 +18,7 @@ def get_full_node_rpc_port(blockchain):
     if blockchain == 'cactus':
         return 11555
     if blockchain == 'cryptodoge':
-        return "TODO"
+        return 16795
     if blockchain == 'flax':
         return 6755
     if blockchain == 'flora':
