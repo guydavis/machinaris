@@ -49,8 +49,8 @@ for p in ${plots_dir//:/ }; do
   cactus plots add -d ${p}
 done
 
-chmod 755 -R /root/.cactus/mainnet/config/ssl/ &> /dev/null
-cactus init --fix-ssl-permissions > /dev/null 
+#chmod 755 -R /root/.cactus/mainnet/config/ssl/ &> /dev/null
+#cactus init --fix-ssl-permissions > /dev/null 
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
@@ -78,18 +78,18 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
   else
     if [ ! -f /root/.cactus/farmer_ca/private_ca.crt ]; then
       mkdir -p /root/.cactus/farmer_ca
-      response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8928/certificates/?type=cactus --output /tmp/certs.zip)
+      response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8936/certificates/?type=cactus --output /tmp/certs.zip)
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.cactus/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${farmer_address}:8928/certificates/?type=cactus.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${farmer_address}:8936/certificates/?type=cactus.  Try clicking 'New Worker' button on 'Workers' page first."
       fi
       rm -f /tmp/certs.zip 
     fi
     if [ -f /root/.cactus/farmer_ca/private_ca.crt ]; then
       cactus init -c /root/.cactus/farmer_ca 2>&1 > /root/.cactus/mainnet/log/init.log
-      chmod 755 -R /root/.cactus/mainnet/config/ssl/ &> /dev/null
-      cactus init --fix-ssl-permissions > /dev/null 
+      #chmod 755 -R /root/.cactus/mainnet/config/ssl/ &> /dev/null
+      #cactus init --fix-ssl-permissions > /dev/null 
     else
       echo "Did not find your farmer's certificates within /root/.cactus/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"

@@ -22,10 +22,9 @@ if [[ ! -z "${blockchain_db_download}" ]] \
   echo "Downloading Stor blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.stor/mainnet/db/ && cd /root/.stor/mainnet/db/
-  echo "Oops! No "
-  # Mega links for Staicoin blockchain DB from: https://chiaforksblockchain.com/
-  #mega-get https://mega.nz/folder/ON5QkJTI#-ImFLyyhBH_-fwzfqB5iJQ
-  #mv stor/*.sqlite . && rm -rf stor
+  # Mega links for Stor blockchain DB from: https://chiaforksblockchain.com/
+  mega-get https://mega.nz/folder/WYBmgT6R#RNYmuFcmMpzhqkzxbByrxg
+  mv stor/*.sqlite . && rm -rf stor
 fi
 
 echo 'Configuring Stor...'
@@ -79,11 +78,11 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
   else
     if [ ! -f /root/.stor/farmer_ca/private_ca.crt ]; then
       mkdir -p /root/.stor/farmer_ca
-      response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8928/certificates/?type=stor --output /tmp/certs.zip)
+      response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8935/certificates/?type=stor --output /tmp/certs.zip)
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.stor/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${farmer_address}:8928/certificates/?type=stor.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${farmer_address}:8935/certificates/?type=stor.  Try clicking 'New Worker' button on 'Workers' page first."
       fi
       rm -f /tmp/certs.zip 
     fi
