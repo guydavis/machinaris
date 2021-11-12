@@ -1,6 +1,7 @@
 #!/bin/env bash
 #
-# Installs fd-cli tool used to recover pool plot wins on the forks
+# Installs fd-cli tool: https://github.com/Flora-Network/fd-cli
+# Used to recover pool plot rewards (7/8) on the forks
 # Not needed on either the Chia or Chives images, only other forks.
 #
 
