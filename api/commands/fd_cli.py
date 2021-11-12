@@ -15,6 +15,8 @@ from api import app
 
 # No need to reward recover for either Chia or Chives
 def get_full_node_rpc_port(blockchain):
+    if blockchain == 'cactus':
+        return 11555
     if blockchain == 'flax':
         return 6755
     if blockchain == 'flora':
@@ -24,9 +26,11 @@ def get_full_node_rpc_port(blockchain):
     if blockchain == 'nchain':
         return 38555
     if blockchain == 'silicoin':
-        return 11555
+        return "TODO"
     if blockchain == 'staicoin':
         return 1758
+    if blockchain == 'stor':
+        return 8155
     raise Exception(f"Unknown rpc_port for blockchain: {blockchain}")
 
 def reward_recovery(wallet_id, launcher_id, pool_contract_address):
@@ -43,7 +47,7 @@ def reward_recovery(wallet_id, launcher_id, pool_contract_address):
     fd_env = os.environ.copy()
     fd_env.update(vars)
     rpc_port = get_full_node_rpc_port(blockchain)
-    cmd = f"/usr/local/bin/fd-cli nft-recover -l {launcher_id} -p {pool_contract_address} -nh 127.0.0.1 -np {rpc_port} -ct {mainnet}/config/ssl/full_node/private_full_node.crt -ck {mainnet}/config/ssl/full_node/private_full_node.key"
+    cmd = f"/usr/local/bin/fd-cli nft-recover -l {launcher_id} -p {pool_contract_address} -nh 127.0.0.1 -np {rpc_port} -ct {network_path}/config/ssl/full_node/private_full_node.crt -ck {network_path}/config/ssl/full_node/private_full_node.key"
     app.logger.info(f"Executing NFT 1/8 win recovery for {blockchain}: {cmd}")
     log_fo.write("\n\nExecuted at: {0}\n{1}".format(time.strftime("%Y%m%d-%H%M%S"), cmd))
     log_fo.flush()

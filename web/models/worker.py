@@ -94,6 +94,8 @@ class WorkerSummary:
             worker.time_on_worker = config['now']
         else:
             worker.time_on_worker = '?'
+        if 'farmr_device_id' in config:
+            worker.farmr_device_id = config['farmr_device_id']
         if not worker.port:  # Old records
             worker.port = 8927
 
@@ -160,7 +162,7 @@ class WorkerSummary:
                     if h.displayname == worker.displayname:
                         host = h
                 if not host:
-                    app.logger.info("Adding new host for {0}".format(worker.displayname))
+                    #app.logger.info("Adding new host for {0}".format(worker.displayname))
                     host = Host(worker.hostname, worker.displayname)
                     filtered.append(host)
                 host.workers.append({
@@ -182,7 +184,7 @@ class WorkerSummary:
                     if h.displayname == worker.displayname:
                         host = h
                 if not host:
-                    app.logger.info("Adding new host for {0}".format(worker.displayname))
+                    #app.logger.info("Adding new host for {0}".format(worker.displayname))
                     host = Host(worker.hostname, worker.displayname)
                     filtered.append(host)
                 host.workers.append({
@@ -204,7 +206,7 @@ class WorkerSummary:
                     if h.displayname == worker.displayname:
                         host = h
                 if not host:
-                    app.logger.info("Adding new host for {0}".format(worker.displayname))
+                    #app.logger.info("Adding new host for {0}".format(worker.displayname))
                     host = Host(worker.hostname, worker.displayname)
                     filtered.append(host)
                 host.workers.append({

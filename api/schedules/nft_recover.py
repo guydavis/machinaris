@@ -1,5 +1,5 @@
 #
-# Performs a daily NFT wins recovery using fd-cli: https://github.com/Flora-Network/flora-dev-cli
+# Performs a twice-daily NFT reward recovery using fd-cli: https://github.com/Flora-Network/flora-dev-cli
 #
 
 import datetime

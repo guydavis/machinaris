@@ -22,7 +22,7 @@ if [[ ! -z "${blockchain_db_download}" ]] \
   echo "Downloading Flax blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.flax/mainnet/db/ && cd /root/.flax/mainnet/db/
-  # Mega links for Staicoin blockchain DB from: https://chiaforksblockchain.com/
+  # Mega links for Flax blockchain DB from: https://chiaforksblockchain.com/
   mega-get https://mega.nz/folder/WBpCARSA#REDq1mKfsyWjLSEJdgPoaA
   mv flax/*.sqlite . && rm -rf flax
 fi
@@ -78,11 +78,11 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
   else
     if [ ! -f /root/.flax/farmer_ca/private_ca.crt ]; then
       mkdir -p /root/.flax/farmer_ca
-      response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8928/certificates/?type=flax --output /tmp/certs.zip)
+      response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8928/certificates/?type=flax --output /tmp/certs.zip)
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.flax/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${controller_host}:8928/certificates/?type=flax.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${farmer_address}:8928/certificates/?type=flax.  Try clicking 'New Worker' button on 'Workers' page first."
       fi
       rm -f /tmp/certs.zip 
     fi

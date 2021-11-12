@@ -84,14 +84,16 @@ def collect():
         db = get_db()
         delete_old_stats(db)
         current_datetime = datetime.datetime.now().strftime("%Y%m%d%H%M")
-        store_disk_stats(db, current_datetime, 'plots')
+        if gc['farming_enabled'] or gc['harvesting_enabled']:
+            store_disk_stats(db, current_datetime, 'plots')
+            if not gc['is_controller']: 
+                send_stats(stats.StatPlotsDiskUsed, '/stats/plotsdiskused/')
+                send_stats(stats.StatPlotsDiskFree, '/stats/plotsdiskfree/')
         if gc['plotting_enabled']:
             store_disk_stats(db, current_datetime, 'plotting')
             if not gc['is_controller']: 
                 send_stats(stats.StatPlottingDiskUsed, '/stats/plottingdiskused/')
                 send_stats(stats.StatPlottingDiskFree, '/stats/plottingdiskfree/')
-                send_stats(stats.StatPlotsDiskUsed, '/stats/plotsdiskused/')
-                send_stats(stats.StatPlotsDiskFree, '/stats/plotsdiskfree/')
 
 def send_stats(model, endpoint):
     from api import db

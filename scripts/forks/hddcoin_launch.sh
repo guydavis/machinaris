@@ -20,7 +20,7 @@ if [[ ! -z "${blockchain_db_download}" ]] && [[ "${mode}" == 'fullnode' ]] && [[
   echo "Downloading HDDCoin blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.hddcoin/mainnet/db/ && cd /root/.hddcoin/mainnet/db/
-  # Mega links for Staicoin blockchain DB from: https://chiaforksblockchain.com/
+  # Mega links for HDDCoin blockchain DB from: https://chiaforksblockchain.com/
   mega-get https://mega.nz/folder/6IpSyDBJ#NbGmW1GuV_JXzqzki8TbeA
   mv hddcoin/*.sqlite . && rm -rf hddcoin
 fi
@@ -76,11 +76,11 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
   else
     if [ ! -f /root/.hddcoin/farmer_ca/private_ca.crt ]; then
       mkdir -p /root/.hddcoin/farmer_ca
-      response=$(curl --write-out '%{http_code}' --silent http://${controller_host}:8930/certificates/?type=hddcoin --output /tmp/certs.zip)
+      response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8930/certificates/?type=hddcoin --output /tmp/certs.zip)
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.hddcoin/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${controller_host}:8930/certificates/?type=hddcoin.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${farmer_address}:8930/certificates/?type=hddcoin.  Try clicking 'New Worker' button on 'Workers' page first."
       fi
       rm -f /tmp/certs.zip 
     fi

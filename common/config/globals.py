@@ -22,6 +22,7 @@ from os import environ, path
 from common.utils import converters
 
 SUPPORTED_BLOCKCHAINS = [
+    'cactus',
     'chia',
     'chives',
     'flax',
@@ -30,7 +31,21 @@ SUPPORTED_BLOCKCHAINS = [
     'hddcoin',
     'silicoin',
     'staicoin',
+    'stor'
 ]
+
+CURRENCY_SYMBOLS = {
+    "cactus": "CAC",
+    "chia": "XCH",
+    "chives": "XCC",
+    "flax": "XFX",
+    "flora": "XFL",
+    "hddcoin": "HDD",
+    "nchain": "NCH",
+    "silicoin": "SIT",
+    "staicoin": "STAI",
+    "stor": "STOR",
+}
 
 PLOTMAN_CONFIG = '/root/.chia/plotman/plotman.yaml'
 PLOTMAN_SAMPLE = '/machinaris/config/plotman.sample.yaml'
@@ -40,6 +55,7 @@ MADMAX_BINARY = '/usr/bin/chia_plot'
 BLADEBIT_BINARY = '/usr/bin/bladebit'
 CHIADOG_PATH = '/chiadog'
 
+CACTUS_BINARY = '/cactus-blockchain/venv/bin/cactus'
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 CHIVES_BINARY = '/chives-blockchain/venv/bin/chives'
 FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
@@ -48,10 +64,13 @@ NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
 HDDCOIN_BINARY = '/hddcoin-blockchain/venv/bin/hddcoin'
 SILICOIN_BINARY = '/silicoin-blockchain/venv/bin/sit'
 STAICOIN_BINARY = '/staicoin-blockchain/venv/bin/staicoin'
+STOR_BINARY = '/stor-blockchain/venv/bin/stor'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
 
 def get_blockchain_binary(blockchain):
+    if blockchain == "cactus":
+        return CACTUS_BINARY
     if blockchain == "chia":
         return CHIA_BINARY
     if blockchain == "chives":
@@ -68,9 +87,13 @@ def get_blockchain_binary(blockchain):
         return SILICOIN_BINARY
     if blockchain == "staicoin":
         return STAICOIN_BINARY
+    if blockchain == "stor":
+        return STOR_BINARY
     raise Exception("Invalid blockchain: ".format(blockchain))
 
 def get_blockchain_network_path(blockchain):
+    if blockchain == 'cactus':
+        return "/root/.cactus/mainnet"
     if blockchain == 'chia':
         return "/root/.chia/mainnet"
     if blockchain == 'chives':
@@ -87,12 +110,17 @@ def get_blockchain_network_path(blockchain):
         return "/root/.silicoin/mainnet"
     if blockchain == 'staicoin':
         return "/root/.staicoin/mainnet"
+    if blockchain == 'stor':
+        return "/root/.stor/mainnet"
     raise Exception("No mainnet folder for unknown blockchain: {0}".format(blockchain))
 
 def get_blockchain_network_name(blockchain):
     if blockchain == 'nchain':
         return "ext9"
     return "mainnet"
+
+def get_blockchain_symbol():
+    return CURRENCY_SYMBOLS[enabled_blockchains()[0]]
 
 def load():
     cfg = {}
@@ -150,6 +178,8 @@ def is_setup():
     # logging.debug("Trying with full keys='{0}'".format(keys))
     foundKey = False
     for key in keys.split(':'):
+        if key.strip() == "persistent":  # User wants to manage themselves
+            return True # pretend a key was found
         if os.path.exists(key.strip()) and os.path.getsize(key.strip()) > 0:
             # logging.debug("Found key file at: '{0}'".format(key.strip()))
             foundKey = True

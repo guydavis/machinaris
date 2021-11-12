@@ -7,7 +7,13 @@ import datetime
 import importlib
 import os
 
-if importlib.util.find_spec("chia"):
+if importlib.util.find_spec("cactus"):
+    from cactus.rpc.full_node_rpc_client import FullNodeRpcClient
+    from cactus.rpc.farmer_rpc_client import FarmerRpcClient
+    from cactus.util.default_root import DEFAULT_ROOT_PATH
+    from cactus.util.ints import uint16
+    from cactus.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("chia"):
     from chia.rpc.full_node_rpc_client import FullNodeRpcClient
     from chia.rpc.farmer_rpc_client import FarmerRpcClient
     from chia.util.default_root import DEFAULT_ROOT_PATH
@@ -44,6 +50,12 @@ elif importlib.util.find_spec("staicoin"):
     from staicoin.util.default_root import DEFAULT_ROOT_PATH
     from staicoin.util.ints import uint16
     from staicoin.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("stor"):
+    from stor.rpc.full_node_rpc_client import FullNodeRpcClient
+    from stor.rpc.farmer_rpc_client import FarmerRpcClient
+    from stor.util.default_root import DEFAULT_ROOT_PATH
+    from stor.util.ints import uint16
+    from stor.util.config import load_config as load_fork_config
 
 else:
     raise Exception("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ('blockchains')))
