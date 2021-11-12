@@ -1,6 +1,6 @@
 #!/bin/env bash
 #
-# Installs Stor as per https://github.com/Stor-Network/stor-blockchain/wiki/INSTALL#ubuntudebian
+# Installs Stor as per https://github.com/Stor-Network/stor-blockchain
 #
 
 STOR_BRANCH=$1

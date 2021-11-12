@@ -181,6 +181,9 @@
             if (blockchain == 'chives') {
                 return 9647;
             }
+            if (blockchain == 'cryptodoge') {
+                return "TODO";
+            }
             if (blockchain == 'flax') {
                 return 6885;
             }
@@ -236,9 +239,6 @@
                     else if (i == 0) {
                         errors.push("Missing worker hostname.  Please provide a short name to identify your worker.");
                     }
-                    if (document.getElementById("dns_ip_addr").value) {
-                        cmd += '        dns: ' + document.getElementById("dns_ip_addr").value + line_end;
-                    }
                     cmd += '        restart: always' + line_end;
                     cmd += '        volumes:' + line_end;
                     if (blockchain == "chia") {
@@ -270,7 +270,7 @@
                         }
                     });
                     cmd += '        environment:' + line_end;
-                    cmd += '            - TZ=' + $('#timezone').val() + line_end;
+                    cmd += '            - TZ=' + Intl.DateTimeFormat().resolvedOptions().timeZone + line_end;
                     var mode = ""
                     if (document.getElementById('mode-harvester').checked) {
                         mode = "harvester";
@@ -327,11 +327,19 @@
             }
             return cmd;
         }
+        function valid_ip_addr(ipaddress) {  
+            if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {  
+                return (true)  
+            }  
+            return (false)  
+        }
         $(document).ready(function () {
-            $('#plotting_keys_row').hide()
-            //$('#farmer_address_row').hide() 
-            $('#farmer_address').val(location.hostname)
-            $('#controller_host').val(location.hostname)
+            $('#plotting_keys_row').hide();
+            //$('#farmer_address_row').hide()
+            if (valid_ip_addr(location.hostname)) {
+                $('#farmer_address').val(location.hostname)
+                $('#controller_host').val(location.hostname)
+            }
             updateDocker();
         });
     </script>
@@ -356,17 +364,17 @@
                             </label>
                         </div>
                         <div class="col">
-                            <input class="form-check-input" type="radio" name="os" id="os-windows" value="windows"
-                                onclick="updateVolumes(); updateDocker()">
-                            <label class="form-check-label" for="os-windows">
-                                Windows
-                            </label>
-                        </div>
-                        <div class="col">
                             <input class="form-check-input" type="radio" name="os" id="os-macintosh" value="macintosh"
                                 onclick="updateVolumes(); updateDocker()">
                             <label class="form-check-label" for="os-macintosh">
                                 Macintosh
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="radio" name="os" id="os-windows" value="windows"
+                                onclick="updateVolumes(); updateDocker()">
+                            <label class="form-check-label" for="os-windows">
+                                Windows
                             </label>
                         </div>
                     </div>
@@ -451,17 +459,6 @@
                         id='ip_addr' onkeyup="updateDocker()">
                 </div>
             </div>
-            <div class="row mb-3">
-                <div class="col">
-                    <label for="timezone" class="form-label">Timezone</label>
-                    {% include 'views/timezones_select.html' %}
-                </div>
-                <div class="col">
-                    <label for="dns_ip_addr" class="form-label">DNS Server IP Address (Optional)</label>
-                    <input type="text" class="form-control" placeholder="192.168.1.1" aria-label="dns_ip_addr"
-                        id='dns_ip_addr' onkeyup="updateDocker()">
-                </div>
-            </div>
             <div class="row mb-3" id="blockchains_row">
                 <div class="col offset">
                     <label for="inputState" class="form-label">Blockchains to Farm</label>
@@ -485,6 +482,13 @@
                                 id="blockchain-chives" onclick="updateDocker()" value="chives">
                             <label class="form-check-label" for="blockchain-chives">
                                 Chives
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" name="blockchains"
+                                id="blockchain-cryptodoge" onclick="updateDocker()" value="cryptodoge">
+                            <label class="form-check-label" for="blockchain-cryptodoge">
+                                Cryptodoge
                             </label>
                         </div>
                         <div class="col">

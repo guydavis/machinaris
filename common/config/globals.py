@@ -25,6 +25,7 @@ SUPPORTED_BLOCKCHAINS = [
     'cactus',
     'chia',
     'chives',
+    'cryptodoge',
     'flax',
     'flora',
     'nchain',
@@ -38,6 +39,7 @@ CURRENCY_SYMBOLS = {
     "cactus": "CAC",
     "chia": "XCH",
     "chives": "XCC",
+    "cryptodoge": "XCD",
     "flax": "XFX",
     "flora": "XFL",
     "hddcoin": "HDD",
@@ -58,6 +60,7 @@ CHIADOG_PATH = '/chiadog'
 CACTUS_BINARY = '/cactus-blockchain/venv/bin/cactus'
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 CHIVES_BINARY = '/chives-blockchain/venv/bin/chives'
+CRYPTODOGE_BINARY = '/cryptodoge-blockchain/venv/bin/cryptodoge'
 FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
 FLORA_BINARY = '/flora-blockchain/venv/bin/flora'
 NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
@@ -75,6 +78,8 @@ def get_blockchain_binary(blockchain):
         return CHIA_BINARY
     if blockchain == "chives":
         return CHIVES_BINARY
+    if blockchain == "cryptodoge":
+        return CRYPTODOGE_BINARY
     if blockchain == "flax":
         return FLAX_BINARY
     if blockchain == "flora":
@@ -98,6 +103,8 @@ def get_blockchain_network_path(blockchain):
         return "/root/.chia/mainnet"
     if blockchain == 'chives':
         return "/root/.chives/mainnet"
+    if blockchain == 'cryptodoge':
+        return "/root/.cryptodoge/mainnet"
     if blockchain == 'flax':
         return "/root/.flax/mainnet"
     if blockchain == 'flora':
