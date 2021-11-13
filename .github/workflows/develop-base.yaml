@@ -1,10 +1,6 @@
-name: release-chives
+name: develop-base
 
-on: 
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Release Version' 
+on: workflow_dispatch
 
 jobs:
   docker:
@@ -38,13 +34,8 @@ jobs:
         with:
           file: docker/dockerfile
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
-          build-args: |
-            "MACHINARIS_STREAM=latest"
-            "CHIVES_BRANCH=main"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chives:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chives:v${{ github.event.inputs.version }}
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chives:latest
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chives:v${{ github.event.inputs.version }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-base:develop
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-base:develop

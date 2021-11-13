@@ -1,9 +1,6 @@
 name: develop-flax
 
-on:
-  push:
-    branches:
-      - 'develop'
+on: workflow_dispatch
 
 jobs:
   docker:
@@ -40,6 +37,7 @@ jobs:
           platforms: linux/amd64
           push: true
           build-args: |
+            "MACHINARIS_STREAM=develop"
             "FLAX_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-flax:develop

@@ -1,8 +1,7 @@
-# set ubuntu release version
-ARG UBUNTU_VER="hirsute"
+ARG MACHINARIS_STREAM
 
 ######## packages stage ###########
-FROM ubuntu:${UBUNTU_VER} as package_stage
+FROM machinaris-base:${MACHINARIS_STREAM}
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -70,7 +69,7 @@ COPY . /machinaris/
 # set workdir
 WORKDIR /chia-blockchain
 
-# Install Chia (and forks), Plotman, Chiadog, Machinaris, etc
+# Install specific blockchain fork (based on branch enabled) + tools that depend on the fork
 RUN \
 	/usr/bin/bash /machinaris/scripts/forks/cactus_install.sh ${CACTUS_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chia_install.sh ${CHIA_BRANCH} \
@@ -85,11 +84,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/stor_install.sh ${STOR_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/plotman_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/bladebit_clone.sh \
 	&& /usr/bin/bash /machinaris/scripts/fd-cli_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/megacmd_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/farmr_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
 	&& rm -rf \
 		/root/.cache \

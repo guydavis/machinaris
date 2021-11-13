@@ -12,7 +12,7 @@ ln -s /root/.chia/farmr /root/.farmr
 cd /root/.farmr
 
 if [[ ! -d ./blockchain ]]; then # Never run before, will create default configs
-    farmr 2>&1 >/dev/null &
+    nohup farmr 2>&1 >/dev/null &
     sleep 30
 fi
 
