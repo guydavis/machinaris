@@ -28,7 +28,7 @@ RUN apt-get update \
 		python3-pip \
 		python-is-python3 \
 		sqlite3 \
-		#sudo \
+		sudo \
 		tar \
 		tzdata \
 		unzip \
