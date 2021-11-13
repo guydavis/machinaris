@@ -58,12 +58,12 @@ COPY . /machinaris/
 
 # Install common tools
 RUN \
-	/usr/bin/bash /machinaris/scripts/madmax_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/bladebit_clone.sh \
-	&& /usr/bin/bash /machinaris/scripts/fd-cli_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/megacmd_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/farmr_install.sh \
-	&& rm -rf \
+	#/usr/bin/bash /machinaris/scripts/madmax_install.sh \
+	#&& /usr/bin/bash /machinaris/scripts/bladebit_clone.sh \
+	#&& /usr/bin/bash /machinaris/scripts/fd-cli_install.sh \
+	#&& /usr/bin/bash /machinaris/scripts/megacmd_install.sh \
+	#&& /usr/bin/bash /machinaris/scripts/farmr_install.sh \
+	rm -rf \
 		/root/.cache \
 		/tmp/* \
 		/var/lib/apt/lists/* \
