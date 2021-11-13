@@ -1,6 +1,10 @@
 name: develop-cryptodoge
 
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Useless Input' 
 
 jobs:
   docker:

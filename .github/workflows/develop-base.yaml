@@ -1,10 +1,10 @@
 name: develop-base
 
-#on: workflow_dispatch
-on:
-  push:
-    branches:
-      - 'develop'
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Useless Input' 
 
 jobs:
   docker:
