@@ -17,14 +17,32 @@ if [[ -z "${worker_address}" ]]; then
   exit 1
 fi
 
+# Conditionally install megacmd on fullnodes
+/usr/bin/bash /machinaris/scripts/megacmd_setup.sh > /tmp/megacmd_setup.log 2>&1
+
 # Start the selected fork, then start Machinaris WebUI
 if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
 
   # Launch Machinaris web server and other services
   /machinaris/scripts/start_machinaris.sh
 
-  # Must build bladebit on target hardware on each container launch
-  /usr/bin/bash /machinaris/scripts/bladebit_build.sh > /tmp/bladebit_build.log 2>&1
+  # Conditionally install plotman on plotters and fullnodes
+  /usr/bin/bash /machinaris/scripts/plotman_setup.sh > /tmp/plotman_setup.log 2>&1
+
+  # Conditionally install chiadog on harvesters and fullnodes
+  /usr/bin/bash /machinaris/scripts/chiadog_setup.sh > /tmp/chiadog_setup.log 2>&1
+
+  # Conditionally build madmax on plotters and fullnodes
+  /usr/bin/bash /machinaris/scripts/madmax_setup.sh > /tmp/madmax_setup.log 2>&1
+  
+  # Conditionally build bladebit on plotters and fullnodes
+  /usr/bin/bash /machinaris/scripts/bladebit_setup.sh > /tmp/bladebit_setup.log 2>&1
+
+  # Conditionally install farmr on harvesters and fullnodes
+  /usr/bin/bash /machinaris/scripts/farmr_setup.sh > /tmp/farmr_setup.log 2>&1
+
+  # Conditionally install fd-cli on fullnodes, excluding Chia and Chives
+  /usr/bin/bash /machinaris/scripts/fd-cli_setup.sh > /tmp/fd-cli_setup.log 2>&1
 
   # Cleanly stop Chia services on container stop/kill
   trap "chia stop all -d; exit 0" SIGINT SIGTERM

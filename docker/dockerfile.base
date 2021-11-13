@@ -1,26 +1,25 @@
 # set ubuntu release version
 ARG UBUNTU_VER="hirsute"
 
-######## packages stage ###########
 FROM ubuntu:${UBUNTU_VER} as package_stage
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-# install build packages
 RUN apt-get update \
 	&& apt-get install -y \
 		acl \
-		ansible \
+		#ansible \
 		apt \
 		bash \
 		bc \
-		build-essential \
+		#build-essential \
 		ca-certificates \
 		curl \
 		git \
+		iputils-ping \
 		jq \
 		lsb-release \
-		nfs-common \
+		#nfs-common \
 		openssl \
 		python3 \
 		python3.9-distutils \
@@ -29,19 +28,15 @@ RUN apt-get update \
 		python3-pip \
 		python-is-python3 \
 		sqlite3 \
-		sudo \
+		#sudo \
 		tar \
 		tzdata \
 		unzip \
 		vim \
 		wget \
-		cmake \
-		rsync \
-		iputils-ping \
-		libgmp-dev \
-		libnuma-dev \
-		libsodium-dev \
-		g++ \
+		#cmake \
+		#rsync \
+		#g++ \
 	\
 # cleanup apt cache
 	\
@@ -49,25 +44,3 @@ RUN apt-get update \
 		/tmp/* \
 		/var/lib/apt/lists/* \
 		/var/tmp/*
-
-######## build/runtime stage #########
-FROM package_stage
-
-# copy local files
-COPY . /machinaris/
-
-# Install common tools
-RUN \
-	#/usr/bin/bash /machinaris/scripts/madmax_install.sh \
-	#&& /usr/bin/bash /machinaris/scripts/bladebit_clone.sh \
-	#&& /usr/bin/bash /machinaris/scripts/fd-cli_install.sh \
-	#&& /usr/bin/bash /machinaris/scripts/megacmd_install.sh \
-	#&& /usr/bin/bash /machinaris/scripts/farmr_install.sh \
-	rm -rf \
-		/root/.cache \
-		/tmp/* \
-		/var/lib/apt/lists/* \
-		/var/tmp/*
-
-WORKDIR /
-ENTRYPOINT ["bash"]
