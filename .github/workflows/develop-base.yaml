@@ -1,6 +1,10 @@
 name: develop-base
 
-on: workflow_dispatch
+#on: workflow_dispatch
+on:
+  push:
+    branches:
+      - 'develop'
 
 jobs:
   docker:
