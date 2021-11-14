@@ -1,6 +1,6 @@
 ARG MACHINARIS_STREAM
 
-FROM ghcr.io/guydavis/machinaris-base:${MACHINARIS_STREAM}
+FROM guydavis/machinaris-base:${MACHINARIS_STREAM}
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG CACTUS_BRANCH
