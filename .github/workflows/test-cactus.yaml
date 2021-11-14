@@ -1,6 +1,9 @@
 name: test-cactus
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - 'integration'
 
 jobs:
   docker:

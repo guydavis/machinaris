@@ -1,10 +1,9 @@
 name: develop-cryptodoge
 
-on: 
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Useless Input' 
+on:
+  push:
+    branches:
+      - 'develop'
 
 jobs:
   docker:

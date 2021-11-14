@@ -1,6 +1,9 @@
 name: develop-silicoin
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - 'develop'
 
 jobs:
   docker:
