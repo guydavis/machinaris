@@ -10,6 +10,7 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "plotter" ]]; then
         cd /chia-blockchain
         echo 'Installing Plotman...'
         venv/bin/pip3 install git+${PLOTMAN_REPO_URL} || venv/bin/pip3 install git+${PLOTMAN_REPO_URL}
+        apt update && apt install -y rsync
     fi
     # Start plotting automatically if requested (not the default)
     if [ ${AUTO_PLOT,,} = "true" ]; then
