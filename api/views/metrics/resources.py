@@ -5,6 +5,8 @@ import traceback
 from flask import request, make_response, abort
 from flask.views import MethodView
 
+from common.config import globals
+
 from api import app
 from api.extensions.api import Blueprint
 from api.commands import plotman_cli
@@ -16,16 +18,27 @@ blp = Blueprint(
     description="Return plotman prometheus metrics"
 )
 
-
 @blp.route('/')
-class Logs(MethodView):
+class Metrics(MethodView):
 
     def get(self):
-      metrics = plotman_cli.get_prometheus_metrics()
-      if metrics:
-        response = make_response(metrics, 200)
-        response.mimetype = "plain/text"
-        return response
-      else:
-        return make_response("Sorry, something went wrong...", 404)
+      return make_response("Invalid metrics type requested.  Please request /metrics/prometheus endpoint.", 400)
+    
 
+@blp.route('/<type>')
+class MetricsByType(MethodView):
+
+    def get(self, type):
+      if type != 'prometheus':
+        return make_response("Invalid metrics type requested.  Please request /metrics/prometheus endpoint.", 400)
+
+      if globals.plotting_enabled():
+        metrics = plotman_cli.get_prometheus_metrics()
+        if metrics:
+          response = make_response(metrics, 200)
+          response.mimetype = "plain/text"
+          return response
+        else:
+          return make_response("Failed to retrieve plotman metrics.", 500)
+      else:
+        return make_response("Plotting not enabled on this Machinaris worker.", 404)
