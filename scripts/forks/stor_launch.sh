@@ -15,7 +15,7 @@ ln -s /root/.chia/stor /root/.stor
 mkdir -p /root/.stor/mainnet/log
 stor init >> /root/.stor/mainnet/log/init.log 2>&1 
 
-if [[ ! -z "${blockchain_db_download}" ]] \
+if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.stor/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then

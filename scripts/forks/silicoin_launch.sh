@@ -17,7 +17,7 @@ ln -s /root/.chia/silicoin /root/.sit
 mkdir -p /root/.silicoin/mainnet/log
 silicoin init >> /root/.silicoin/mainnet/log/init.log 2>&1 
 
-if [[ ! -z "${blockchain_db_download}" ]] \
+if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.silicoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then

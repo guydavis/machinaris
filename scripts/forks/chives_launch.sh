@@ -16,7 +16,7 @@ ln -s /root/.chia/chives /root/.chives
 mkdir -p /root/.chives/mainnet/log
 chives init >> /root/.chives/mainnet/log/init.log 2>&1 
 
-if [[ ! -z "${blockchain_db_download}" ]] \
+if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.chives/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then

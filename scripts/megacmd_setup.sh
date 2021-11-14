@@ -6,7 +6,7 @@
 # https://chiaforksblockchain.com/
 #
 
-if [[ ${mode} == 'fullnode' ]] && [[ ! -z "${blockchain_db_download}" ]] && [[ ! -f /usr/bin/mega-cmd ]]; then
+if [[ ${mode} == 'fullnode' ]] && [[ "${blockchain_db_download}" == 'true' ]] && [[ ! -f /usr/bin/mega-cmd ]]; then
 	arch_name="$(uname -m)"
 	echo "Installing megacmd on ${arch_name}..."
 	if [[ "${arch_name}" = "x86_64" ]]; then
