@@ -1,60 +1,12 @@
-# set ubuntu release version
-ARG UBUNTU_VER="hirsute"
+ARG MACHINARIS_STREAM
 
-######## packages stage ###########
-FROM ubuntu:${UBUNTU_VER} as package_stage
+FROM ghcr.io/guydavis/machinaris-base:${MACHINARIS_STREAM}
 
 ARG DEBIAN_FRONTEND=noninteractive
-
-# install build packages
-RUN apt-get update \
-	&& apt-get install -y \
-		acl \
-		ansible \
-		apt \
-		bash \
-		bc \
-		build-essential \
-		ca-certificates \
-		curl \
-		git \
-		jq \
-		lsb-release \
-		nfs-common \
-		openssl \
-		python3 \
-		python3.9-distutils \
-		python3.9-venv \
-		python3-dev \
-		python3-pip \
-		python-is-python3 \
-		sqlite3 \
-		sudo \
-		tar \
-		tzdata \
-		unzip \
-		vim \
-		wget \
-		cmake \
-		rsync \
-		iputils-ping \
-		libgmp-dev \
-		libnuma-dev \
-		libsodium-dev \
-		g++ \
-	\
-# cleanup apt cache
-	\
-	&& rm -rf \
-		/tmp/* \
-		/var/lib/apt/lists/* \
-		/var/tmp/*
-
-######## build/runtime stage #########
-FROM package_stage
 ARG CACTUS_BRANCH
 ARG CHIA_BRANCH
 ARG CHIVES_BRANCH
+ARG CRYPTODOGE_BRANCH
 ARG FLAX_BRANCH
 ARG FLORA_BRANCH
 ARG HDDCOIN_BRANCH
@@ -69,11 +21,12 @@ COPY . /machinaris/
 # set workdir
 WORKDIR /chia-blockchain
 
-# Install Chia (and forks), Plotman, Chiadog, Machinaris, etc
+# Install specific blockchain fork (based on branch enabled) + tools that depend on the fork
 RUN \
 	/usr/bin/bash /machinaris/scripts/forks/cactus_install.sh ${CACTUS_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chia_install.sh ${CHIA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chives_install.sh ${CHIVES_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/cryptodoge_install.sh ${CRYPTODOGE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/flax_install.sh ${FLAX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/flora_install.sh ${FLORA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
@@ -81,13 +34,6 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/silicoin_install.sh ${SILICOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/staicoin_install.sh ${STAICOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/stor_install.sh ${STOR_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/chiadog_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/plotman_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/madmax_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/bladebit_clone.sh \
-	&& /usr/bin/bash /machinaris/scripts/fd-cli_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/megacmd_install.sh \
-	&& /usr/bin/bash /machinaris/scripts/farmr_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
 	&& rm -rf \
 		/root/.cache \

@@ -26,6 +26,13 @@ elif importlib.util.find_spec("chives"):
     from chives.util.default_root import DEFAULT_ROOT_PATH
     from chives.util.ints import uint16
     from chives.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("cryptodoge"):
+    from cryptodoge.rpc.full_node_rpc_client import FullNodeRpcClient
+    from cryptodoge.rpc.farmer_rpc_client import FarmerRpcClient
+    from cryptodoge.rpc.harvester_rpc_client import HarvesterRpcClient
+    from cryptodoge.util.default_root import DEFAULT_ROOT_PATH
+    from cryptodoge.util.ints import uint16
+    from cryptodoge.util.config import load_config as load_fork_config
 elif importlib.util.find_spec("flax"):
     from flax.rpc.full_node_rpc_client import FullNodeRpcClient
     from flax.rpc.farmer_rpc_client import FarmerRpcClient

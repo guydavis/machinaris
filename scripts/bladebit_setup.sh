@@ -1,17 +1,21 @@
 #!/bin/env bash
 #
-# At container launch on target user's system, this builds the bladebit
-# codebase checked out on Github servers during image creation.  Due to
-# issues with illegal instructions bladebit must be built on hardware it
-# runs on. 
+# Installs bladebit - A fast RAM-only, k32-only, Chia plotter.
+# 416 GiB of RAM are needed. See https://github.com/harold-b/bladebit
+#
+# Can't acutally build on Github servers, must build on each target system 
+# during container launch, otherwise get all sorts of errors.
 #
 
-if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "plotter" ]]; then
+BLADEBIT_BRANCH=master
+
+if [[ ${mode} == 'fullnode' && (${blockchains} == 'chia' || ${blockchains} == 'chives') ]] || [[ ${mode} =~ "plotter" ]]; then
     if [ ! -f /usr/bin/bladebit ] && [[ -z "${bladebit_skip_build}" ]]; then
-        # Build the code, previously cloned when image was built on Github build servers
         arch_name="$(uname -m)"
-        echo "arch_name=${arch_name}"
         if [[ "${arch_name}" = "x86_64" ]] || [[ "${arch_name}" = "arm64" ]]; then
+            apt update && apt install -y build-essential cmake libgmp-dev libnuma-dev
+            cd /
+            git clone --recursive --branch ${BLADEBIT_BRANCH} https://github.com/Chia-Network/bladebit.git
             cd /bladebit && echo "Building bladebit on ${arch_name}..."
             mkdir -p build && cd build
             cmake ..

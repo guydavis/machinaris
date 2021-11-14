@@ -591,6 +591,87 @@
 						"description": "Get all alerts from all workers."
 					},
 					"response": []
+				},
+				{
+					"name": "Certificates - Flora",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/certificates/?type=flora",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"certificates",
+								""
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "flora"
+								}
+							]
+						},
+						"description": "Get all alerts from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Certificates - Staicoin",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/certificates/?type=staicoin",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"certificates",
+								""
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "staicoin"
+								}
+							]
+						},
+						"description": "Get all alerts from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Certificates - Silicoin Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/certificates/?type=silicoin",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"certificates",
+								""
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "silicoin"
+								}
+							]
+						},
+						"description": "Get all alerts from all workers."
+					},
+					"response": []
 				}
 			]
 		},
@@ -934,14 +1015,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/connections",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/connections/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"connections"
+								"connections",
+								""
 							]
 						},
 						"description": "Add a new Worker."
@@ -954,7 +1036,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/connections/aragorn",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/connections/aragorn/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -962,7 +1044,8 @@
 							"port": "{{port}}",
 							"path": [
 								"connections",
-								"aragorn"
+								"aragorn",
+								""
 							]
 						},
 						"description": "Get a worker by hostname."
@@ -995,7 +1078,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/connections/aragorn",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/connections/aragorn/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -1003,7 +1086,8 @@
 							"port": "{{port}}",
 							"path": [
 								"connections",
-								"aragorn"
+								"aragorn",
+								""
 							]
 						},
 						"description": "Update a worker's status by hostname."
@@ -1051,14 +1135,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/farms",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/farms/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"farms"
+								"farms",
+								""
 							]
 						},
 						"description": "Get all farms from all workers."
@@ -1165,14 +1250,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/keys",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/keys/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"keys"
+								"keys",
+								""
 							]
 						},
 						"description": "Get all workers reporting in with their status."
@@ -1194,14 +1280,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/keys",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/keys/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"keys"
+								"keys",
+								""
 							]
 						},
 						"description": "Add a new Worker."
@@ -1387,6 +1474,32 @@
 			]
 		},
 		{
+			"name": "Metrics",
+			"item": [
+				{
+					"name": "Metrics - Prometheus",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/metrics/prometheus",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"metrics",
+								"prometheus"
+							]
+						},
+						"description": "Gets plotman metrics suitable for Prometheus."
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Ping",
 			"item": [
 				{
@@ -1395,14 +1508,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/ping",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/ping/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"ping"
+								"ping",
+								""
 							]
 						},
 						"description": "Get all workers reporting in with their status."
@@ -1450,14 +1564,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/plots",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plots/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"plots"
+								"plots",
+								""
 							]
 						},
 						"description": "Add a new completed Plot."
@@ -1496,14 +1611,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/plotnfts",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plotnfts/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"plotnfts"
+								"plotnfts",
+								""
 							]
 						},
 						"description": "Get all completed plots from all workers."
@@ -1525,14 +1641,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/plots",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plots/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"plots"
+								"plots",
+								""
 							]
 						},
 						"description": "Add a new completed Plot."
@@ -1601,14 +1718,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/plottings",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plottings/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"plottings"
+								"plottings",
+								""
 							]
 						},
 						"description": "Creates the current plottings for the given hostname (of first plotting).  Deletes any old plottings."
@@ -1648,7 +1766,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"blockchain\": \"flora\",\r\n    \"wallet_id\": \"1601234564\",\r\n    \"launcher_id\": \"0bf90046f-REDACTED-78f3d6\",\r\n    \"pool_contract_address\": \"xch1tu5yjwqcak-REDACTED-ax6d\"\r\n}",
+							"raw": "{\r\n    \"blockchain\": \"flora\",\r\n    \"wallet_id\": \"1606814864\",\r\n    \"launcher_id\": \"0bf90046f2eeff6a22c7bf44f22dad8b84583c7c08cf6973ce246e16c378f3d6\",\r\n    \"pool_contract_address\": \"xch1tu5yjwqcakt3867u07ln7w2wkfe3dqyazh4ac00vfy4v8mu3xq6qa9ax6d\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1685,7 +1803,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{proto}}://{{hostname}}:{{port}}/stats/plottingdiskused",
+									"raw": "{{proto}}://{{hostname}}:{{port}}/stats/plottingdiskused/",
 									"protocol": "{{proto}}",
 									"host": [
 										"{{hostname}}"
@@ -1693,7 +1811,8 @@
 									"port": "{{port}}",
 									"path": [
 										"stats",
-										"plottingdiskused"
+										"plottingdiskused",
+										""
 									]
 								},
 								"description": "Get all plotting jobs from all workers."
@@ -1715,7 +1834,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{proto}}://{{hostname}}:{{port}}/stats/plottingdiskused",
+									"raw": "{{proto}}://{{hostname}}:{{port}}/stats/plottingdiskused/",
 									"protocol": "{{proto}}",
 									"host": [
 										"{{hostname}}"
@@ -1723,7 +1842,8 @@
 									"port": "{{port}}",
 									"path": [
 										"stats",
-										"plottingdiskused"
+										"plottingdiskused",
+										""
 									]
 								},
 								"description": "Creates the current plottings for the given hostname (of first plotting).  Deletes any old plottings."
@@ -1736,7 +1856,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "{{proto}}://{{hostname}}:{{port}}/stats/plottingdiskused",
+									"raw": "{{proto}}://{{hostname}}:{{port}}/stats/plottingdiskused/",
 									"protocol": "{{proto}}",
 									"host": [
 										"{{hostname}}"
@@ -1744,7 +1864,8 @@
 									"port": "{{port}}",
 									"path": [
 										"stats",
-										"plottingdiskused"
+										"plottingdiskused",
+										""
 									]
 								},
 								"description": "Delete a plotting job's status."
@@ -1794,14 +1915,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/wallets",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/wallets/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"wallets"
+								"wallets",
+								""
 							]
 						},
 						"description": "Add a new Worker."
@@ -1930,14 +2052,15 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/workers",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"workers"
+								"workers",
+								""
 							]
 						},
 						"description": "Add a new Worker."

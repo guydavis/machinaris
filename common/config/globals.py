@@ -25,6 +25,7 @@ SUPPORTED_BLOCKCHAINS = [
     'cactus',
     'chia',
     'chives',
+    'cryptodoge',
     'flax',
     'flora',
     'nchain',
@@ -38,6 +39,7 @@ CURRENCY_SYMBOLS = {
     "cactus": "CAC",
     "chia": "XCH",
     "chives": "XCC",
+    "cryptodoge": "XCD",
     "flax": "XFX",
     "flora": "XFL",
     "hddcoin": "HDD",
@@ -58,6 +60,7 @@ CHIADOG_PATH = '/chiadog'
 CACTUS_BINARY = '/cactus-blockchain/venv/bin/cactus'
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 CHIVES_BINARY = '/chives-blockchain/venv/bin/chives'
+CRYPTODOGE_BINARY = '/cryptodoge-blockchain/venv/bin/cryptodoge'
 FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
 FLORA_BINARY = '/flora-blockchain/venv/bin/flora'
 NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
@@ -75,6 +78,8 @@ def get_blockchain_binary(blockchain):
         return CHIA_BINARY
     if blockchain == "chives":
         return CHIVES_BINARY
+    if blockchain == "cryptodoge":
+        return CRYPTODOGE_BINARY
     if blockchain == "flax":
         return FLAX_BINARY
     if blockchain == "flora":
@@ -98,6 +103,8 @@ def get_blockchain_network_path(blockchain):
         return "/root/.chia/mainnet"
     if blockchain == 'chives':
         return "/root/.chives/mainnet"
+    if blockchain == 'cryptodoge':
+        return "/root/.cryptodoge/mainnet"
     if blockchain == 'flax':
         return "/root/.flax/mainnet"
     if blockchain == 'flora':
@@ -137,6 +144,7 @@ def load():
     cfg['chiadog_version'] = load_chiadog_version()
     cfg['madmax_version'] = load_madmax_version()
     cfg['bladebit_version'] = load_bladebit_version()
+    cfg['farmr_version'] = load_farmr_version()
     cfg['is_controller'] = "localhost" == (
         os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost')
     return cfg
@@ -219,7 +227,8 @@ def harvesting_enabled():
     return "mode" in os.environ and ("harvester" in os.environ['mode'] or "fullnode" == os.environ['mode'])
 
 def plotting_enabled():
-    return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode'])
+    return "mode" in os.environ and ("plotter" in os.environ['mode'] 
+        or ("fullnode" == os.environ['mode'] and enabled_blockchains()[0] in ['chia', 'chives']))
 
 def enabled_blockchains():
     blockchains = []
@@ -285,6 +294,8 @@ last_plotman_version_load_time = None
 def load_plotman_version():
     global last_plotman_version
     global last_plotman_version_load_time
+    if not os.path.exists(PLOTMAN_SCRIPT):
+        return None
     if last_plotman_version_load_time and last_plotman_version_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_plotman_version
@@ -320,6 +331,8 @@ last_chiadog_version_load_time = None
 def load_chiadog_version():
     global last_chiadog_version
     global last_chiadog_version_load_time
+    if not os.path.exists(CHIADOG_PATH):
+        return None
     if last_chiadog_version_load_time and last_chiadog_version_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_chiadog_version
@@ -346,6 +359,8 @@ last_madmax_version_load_time = None
 def load_madmax_version():
     global last_madmax_version
     global last_madmax_version_load_time
+    if not os.path.exists(MADMAX_BINARY):
+        return None
     if last_madmax_version_load_time and last_madmax_version_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_madmax_version
@@ -372,6 +387,8 @@ last_bladebit_version_load_time = None
 def load_bladebit_version():
     global last_bladebit_version
     global last_bladebit_version_load_time
+    if not os.path.exists(BLADEBIT_BINARY):
+        return None
     if last_bladebit_version_load_time and last_bladebit_version_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_bladebit_version
@@ -392,6 +409,28 @@ def load_bladebit_version():
         logging.debug(traceback.format_exc())
     last_bladebit_version_load_time = datetime.datetime.now()
     return last_bladebit_version
+
+last_farmr_version = None
+last_farmr_version_load_time = None
+def load_farmr_version():
+    global last_farmr_version
+    global last_farmr_version_load_time
+    if last_farmr_version_load_time and last_farmr_version_load_time >= \
+            (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
+        return last_farmr_version
+    last_farmr_version = ""
+    try:
+        proc = Popen("apt-cache policy farmr | grep -i installed | cut -f 2 -d ':'",
+                stdout=PIPE, stderr=PIPE, shell=True)
+        outs, errs = proc.communicate(timeout=90)
+        last_farmr_version = outs.decode('utf-8').strip()
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+    except:
+        logging.debug(traceback.format_exc())
+    last_farmr_version_load_time = datetime.datetime.now()
+    return last_farmr_version
 
 last_machinaris_version = None
 last_machinaris_version_load_time = None

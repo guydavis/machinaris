@@ -1,6 +1,6 @@
 #!/bin/env bash
 #
-# Installs Cactus as per https://github.com/Cactus-Network/cactus-blockchain/wiki/INSTALL#ubuntudebian
+# Installs Cactus as per https://github.com/Cactus-Network/cactus-blockchain
 #
 
 CACTUS_BRANCH=$1
