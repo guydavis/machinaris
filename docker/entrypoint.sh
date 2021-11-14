@@ -32,17 +32,16 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   # Conditionally install chiadog on harvesters and fullnodes
   /usr/bin/bash /machinaris/scripts/chiadog_setup.sh > /tmp/chiadog_setup.log 2>&1
 
-  # Conditionally build madmax on plotters and fullnodes
-  /usr/bin/bash /machinaris/scripts/madmax_setup.sh > /tmp/madmax_setup.log 2>&1
-  
-  # Conditionally build bladebit on plotters and fullnodes
-  /usr/bin/bash /machinaris/scripts/bladebit_setup.sh > /tmp/bladebit_setup.log 2>&1
-
   # Conditionally install farmr on harvesters and fullnodes
   /usr/bin/bash /machinaris/scripts/farmr_setup.sh > /tmp/farmr_setup.log 2>&1
 
   # Conditionally install fd-cli on fullnodes, excluding Chia and Chives
   /usr/bin/bash /machinaris/scripts/fd-cli_setup.sh > /tmp/fd-cli_setup.log 2>&1
+
+  # Conditionally build bladebit and madmax on plotters and fullnodes, sleep a bit first
+  sleep $[ ( $RANDOM % 300 )  + 1 ]s
+  /usr/bin/bash /machinaris/scripts/bladebit_setup.sh > /tmp/bladebit_setup.log 2>&1
+  /usr/bin/bash /machinaris/scripts/madmax_setup.sh > /tmp/madmax_setup.log 2>&1
 
   # Cleanly stop Chia services on container stop/kill
   trap "chia stop all -d; exit 0" SIGINT SIGTERM
