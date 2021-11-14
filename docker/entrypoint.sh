@@ -26,6 +26,12 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   # Launch Machinaris web server and other services
   /machinaris/scripts/start_machinaris.sh
 
+  # Cleanly stop Chia services on container stop/kill
+  trap "chia stop all -d; exit 0" SIGINT SIGTERM
+
+  # During concurrent startup of multiple fork containers, stagger setups
+  sleep $[ ( $RANDOM % 300 )  + 1 ]s
+
   # Conditionally install plotman on plotters and fullnodes
   /usr/bin/bash /machinaris/scripts/plotman_setup.sh > /tmp/plotman_setup.log 2>&1
 
@@ -38,13 +44,11 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   # Conditionally install fd-cli on fullnodes, excluding Chia and Chives
   /usr/bin/bash /machinaris/scripts/fd-cli_setup.sh > /tmp/fd-cli_setup.log 2>&1
 
-  # Conditionally build bladebit and madmax on plotters and fullnodes, sleep a bit first
-  sleep $[ ( $RANDOM % 300 )  + 1 ]s
+  # Conditionally build bladebit on plotters and fullnodes, sleep a bit first
   /usr/bin/bash /machinaris/scripts/bladebit_setup.sh > /tmp/bladebit_setup.log 2>&1
-  /usr/bin/bash /machinaris/scripts/madmax_setup.sh > /tmp/madmax_setup.log 2>&1
 
-  # Cleanly stop Chia services on container stop/kill
-  trap "chia stop all -d; exit 0" SIGINT SIGTERM
+  # Conditionally madmax on plotters and fullnodes, sleep a bit first
+  /usr/bin/bash /machinaris/scripts/madmax_setup.sh > /tmp/madmax_setup.log 2>&1
 
 fi
 

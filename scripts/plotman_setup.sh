@@ -5,7 +5,7 @@
 
 PLOTMAN_REPO_URL=https://github.com/guydavis/plotman@development
 
-if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "plotter" ]]; then
+if [[ ${mode} == 'fullnode' && (${blockchains} == 'chia' || ${blockchains} == 'chives') ]] || [[ ${mode} =~ "plotter" ]]; then
     if [[ ! -f /chia-blockchain/venv/bin/plotman ]]; then
         cd /chia-blockchain
         echo 'Installing Plotman...'

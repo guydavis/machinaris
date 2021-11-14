@@ -130,7 +130,7 @@ class WorkerSummary:
     def plotters(self):
         filtered = []
         for worker in self.workers:
-            if worker.mode == "fullnode" or "plotter" in worker.mode:
+            if (worker.mode == "fullnode" and worker.blockchains in ['chia', 'chives']) or "plotter" in worker.mode:
                 host = None
                 for h in filtered:
                     if h.displayname == worker.displayname:
