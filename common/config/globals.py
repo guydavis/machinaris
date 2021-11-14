@@ -144,6 +144,7 @@ def load():
     cfg['chiadog_version'] = load_chiadog_version()
     cfg['madmax_version'] = load_madmax_version()
     cfg['bladebit_version'] = load_bladebit_version()
+    cfg['farmr_version'] = load_farmr_version()
     cfg['is_controller'] = "localhost" == (
         os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost')
     return cfg
@@ -226,7 +227,8 @@ def harvesting_enabled():
     return "mode" in os.environ and ("harvester" in os.environ['mode'] or "fullnode" == os.environ['mode'])
 
 def plotting_enabled():
-    return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode'])
+    return "mode" in os.environ and ("plotter" in os.environ['mode'] 
+        or ("fullnode" == os.environ['mode'] and enabled_blockchains()[0] in ['chia', 'chives']))
 
 def enabled_blockchains():
     blockchains = []
@@ -407,6 +409,28 @@ def load_bladebit_version():
         logging.debug(traceback.format_exc())
     last_bladebit_version_load_time = datetime.datetime.now()
     return last_bladebit_version
+
+last_farmr_version = None
+last_farmr_version_load_time = None
+def load_farmr_version():
+    global last_farmr_version
+    global last_farmr_version_load_time
+    if last_farmr_version_load_time and last_farmr_version_load_time >= \
+            (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
+        return last_farmr_version
+    last_farmr_version = ""
+    try:
+        proc = Popen("apt-cache policy farmr | grep -i installed | cut -f 2 -d ':'",
+                stdout=PIPE, stderr=PIPE, shell=True)
+        outs, errs = proc.communicate(timeout=90)
+        last_farmr_version = outs.decode('utf-8').strip()
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+    except:
+        logging.debug(traceback.format_exc())
+    last_farmr_version_load_time = datetime.datetime.now()
+    return last_farmr_version
 
 last_machinaris_version = None
 last_machinaris_version_load_time = None

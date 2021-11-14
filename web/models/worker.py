@@ -76,25 +76,27 @@ class WorkerSummary:
             worker.versions['machinaris'] = config['machinaris_version']
         other_versions = ""
         gc = globals.load()
-        if 'bladebit_version' in config:
+        if 'bladebit_version' in config and config['bladebit_version']:
             other_versions += "Bladebit: " + config['bladebit_version'] + "<br/>"
         if not 'enabled_blockchains' in config:  # Default if missing from old records
             config['enabled_blockchains'] = 'chia'
         for blockchain in config['enabled_blockchains']:
             if 'blockchain_version' in config:
                 other_versions += blockchain.capitalize() + ": " + config['blockchain_version'] + "<br/>"
-        if 'chiadog_version' in config:
+        if 'chiadog_version' in config and config['chiadog_version']:
             other_versions += "Chiadog: " + config['chiadog_version'] + "<br/>"
-        if 'madmax_version' in config:
+        if 'farmr_version' in config and config['farmr_version']:
+            other_versions += "Farmr: " + config['farmr_version'] + "<br/>"
+        if 'madmax_version' in config and config['madmax_version']:
             other_versions += "Madmax: " + config['madmax_version'] + "<br/>"
-        if 'plotman_version' in config:
+        if 'plotman_version' in config and config['plotman_version']:
             other_versions += "Plotman: " + config['plotman_version']
         worker.versions['components'] = other_versions
         if 'now' in config:
             worker.time_on_worker = config['now']
         else:
             worker.time_on_worker = '?'
-        if 'farmr_device_id' in config:
+        if 'farmr_device_id' in config and config['farmr_device_id']:
             worker.farmr_device_id = config['farmr_device_id']
         if not worker.port:  # Old records
             worker.port = 8927
@@ -130,7 +132,7 @@ class WorkerSummary:
     def plotters(self):
         filtered = []
         for worker in self.workers:
-            if (worker.mode == "fullnode" and worker.blockchains in ['chia', 'chives']) or "plotter" in worker.mode:
+            if (worker.mode == "fullnode" and worker.blockchain in ['chia', 'chives']) or "plotter" in worker.mode:
                 host = None
                 for h in filtered:
                     if h.displayname == worker.displayname:
