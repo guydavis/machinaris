@@ -1,9 +1,6 @@
 name: test-stor
 
-on:
-  push:
-    branches:
-      - 'integration'
+on: workflow_dispatch
 
 jobs:
   docker:

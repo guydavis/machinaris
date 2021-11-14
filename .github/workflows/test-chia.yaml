@@ -1,9 +1,6 @@
 name: test-chia
 
-on:
-  push:
-    branches:
-      - 'integration'
+on: workflow_dispatch
 
 jobs:
   docker:

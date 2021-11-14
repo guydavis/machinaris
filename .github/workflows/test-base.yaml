@@ -1,4 +1,4 @@
-name: test-flora
+name: test-base
 
 on: workflow_dispatch
 
@@ -15,6 +15,9 @@ jobs:
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+        with:
+          buildkitd-flags: --debug
+          driver-opts: image=moby/buildkit:v0.9.2
       - 
         name: Login to DockerHub
         uses: docker/login-action@v1 
@@ -32,13 +35,10 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v2
         with:
-          file: docker/dockerfile
+          file: docker/dockerfile.base
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          build-args: |
-            "MACHINARIS_STREAM=test"
-            "FLORA_BRANCH=main"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-flora:test
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-flora:test
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-base:test
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-base:test
