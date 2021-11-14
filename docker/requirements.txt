@@ -15,3 +15,4 @@ requests
 pexpect
 flask-migrate
 ruamel.yaml
+psutil
