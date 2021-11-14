@@ -36,16 +36,6 @@ _EOF
     chmod 700 ~/.ssh
     chmod 600 ~/.ssh/*
 fi
-# Start plotting automatically if requested (not the default)
-if [ ${AUTO_PLOT,,} = "true" ]; then
-    nohup plotman plot >> /root/.chia/plotman/logs/plotman.log 2>&1 &
-fi
-
-# Start the farming log monitoring
-if [ "${mode}" != "plotter" ]; then
-    . /machinaris/scripts/chiadog_launch.sh
-    . /machinaris/scripts/farmr_launch.sh
-fi
 
 # Even standalone plotting mode needs database setup
 . /machinaris/scripts/setup_databases.sh

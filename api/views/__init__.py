@@ -18,6 +18,7 @@ from . import pools
 from . import rewards
 from . import wallets
 from . import workers
+from . import metrics
 
 from .stats import plottingdiskused,plottingdiskfree,plotsdiskused, \
     plotsdiskfree,plotcount,plotssize,totalchia,netspacesize,timetowin
@@ -53,6 +54,7 @@ MODULES = (
     totalchia,
     netspacesize,
     timetowin,
+    metrics,
 )
 
 

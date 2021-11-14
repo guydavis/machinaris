@@ -15,7 +15,7 @@ ln -s /root/.chia/cactus /root/.cactus
 mkdir -p /root/.cactus/mainnet/log
 cactus init >> /root/.cactus/mainnet/log/init.log 2>&1 
 
-if [[ ! -z "${blockchain_db_download}" ]] \
+if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.cactus/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then

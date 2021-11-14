@@ -245,3 +245,18 @@ def analyze(plot_file):
             abort(500, description="Failed to analyze plots.")
         return outs.decode('utf-8')
     return None
+
+def get_prometheus_metrics():
+    check_config()
+    proc = Popen("{0} {1}".format(PLOTMAN_SCRIPT,
+                 'prometheus'), stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        raise Exception("The timeout expired during plotman call.")
+    if errs:
+        raise Exception("Errors during plotman call:\n {0}".format(errs.decode('utf-8')))
+    cli_stdout = outs.decode('utf-8')
+    return cli_stdout

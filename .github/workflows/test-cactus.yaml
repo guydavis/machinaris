@@ -1,9 +1,6 @@
 name: test-cactus
 
-on:
-  push:
-    branches:
-      - 'integration'
+on: workflow_dispatch
 
 jobs:
   docker:
@@ -40,6 +37,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
+            "MACHINARIS_STREAM=test"
             "CACTUS_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-cactus:test

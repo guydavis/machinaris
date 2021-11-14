@@ -15,7 +15,7 @@ ln -s /root/.chia/cryptodoge /root/.cryptodoge
 mkdir -p /root/.cryptodoge/mainnet/log
 cryptodoge init >> /root/.cryptodoge/mainnet/log/init.log 2>&1 
 
-if [[ ! -z "${blockchain_db_download}" ]] \
+if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.cryptodoge/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then

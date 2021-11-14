@@ -41,6 +41,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
+            "MACHINARIS_STREAM=latest"
             "CACTUS_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-cactus:latest

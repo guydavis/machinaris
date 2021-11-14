@@ -174,7 +174,10 @@ def load_recent_disk_usage(disk_type):
                 path_values = []
                 for date in dates:
                     if path in paths:
-                        path_values.append(paths[path][date])
+                        if date in paths[path]:  
+                            path_values.append(paths[path][date])
+                        else: # Due to exeception reported by one user
+                            path_values.append('null')
                     else:
                         path_values.append('null')
                 summary_by_worker[hostname][path] = path_values
