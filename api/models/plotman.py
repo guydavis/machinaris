@@ -19,7 +19,7 @@ class PlottingSummary:
                 self.columns[7] = 'size'
             else: # Check for a plotting job row
                 values = line.split()
-                if values[1] in ['chia', 'madmax', 'bladebit']:
+                if len(values) > 1 and values[1] in ['chia', 'madmax', 'bladebit']:
                     if len(values) == len(self.columns) - 1:
                         app.logger.info("Bladebit job before: {0}".format(values))
                         values.insert(3, '-') # bladebit rows don't have a tmp directory
