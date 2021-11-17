@@ -21,6 +21,7 @@ class FarmSummary:
     def __init__(self, farm_recs, wallet_recs):
         self.farms = {}
         chives_farm_recs = []
+        wallets = Wallets(wallet_recs)
         for farm_rec in farm_recs: 
             if 'chives' == farm_rec.blockchain:  # Chives sends from both harvesters and fullnodes
                 chives_farm_recs.append(farm_rec) # Must later combine them together for single summary
@@ -36,13 +37,13 @@ class FarmSummary:
                     displayname = farm_rec.hostname
                     connection_status = None
                 try:
-                    wallet_balance = self.sum_wallet_balance(wallet_recs, farm_rec.hostname, farm_rec.blockchain)
+                    wallet_balance = wallets.sum_wallet_balance(farm_rec.hostname, farm_rec.blockchain)
                 except: 
                     wallet_balance = '?'
                 if farm_rec.total_coins:
-                    total_coins = self.round_balance(farm_rec.total_coins)
+                    total_coins = converters.round_balance(farm_rec.total_coins)
                 else:
-                    total_coins = self.round_balance(0)
+                    total_coins = converters.round_balance(0)
                 farm = {
                     "plot_count": int(farm_rec.plot_count),
                     "plots_size": farm_rec.plots_size,
@@ -74,6 +75,7 @@ class FarmSummary:
         wallet_balance = '?'
         displayname = '?'
         connection_status = '?'
+        wallets = Wallets(wallet_recs)
         for farm_rec in chives_farm_recs:
             plot_count += int(farm_rec.plot_count)
             plots_size += farm_rec.plots_size
@@ -90,7 +92,7 @@ class FarmSummary:
                     displayname = farm_rec.hostname
                     connection_status = None
                 try:
-                    wallet_balance = self.sum_wallet_balance(wallet_recs, farm_rec.hostname, 'chives')
+                    wallet_balance = wallets.sum_wallet_balance(farm_rec.hostname, 'chives')
                 except Exception as ex: 
                     app.logger.info("Failed to sum Chives wallet balances.".format(str(ex)))
         if fullnode:
@@ -130,35 +132,6 @@ class FarmSummary:
             return "Active" if last_status == "Farming" else last_status
         app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
         return "Offline"
-    
-    def round_balance(self, value):
-        if value > 100:
-            value = '{:.6g}'.format(value)
-        else:
-            value = '{:.6f}'.format(value)
-        if value.endswith(".000000"):
-            return value[:-5]
-        return value
-
-    def sum_wallet_balance(self, wallet_recs, hostname, blockchain):
-        numeric_const_pattern = '-Total\sBalance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
-        rx = re.compile(numeric_const_pattern, re.VERBOSE)
-        found_balance = False
-        sum = 0
-        for wallet_rec in wallet_recs:
-            if wallet_rec.hostname == hostname and wallet_rec.blockchain == blockchain:
-                try:
-                    for balance in rx.findall(wallet_rec.details):
-                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
-                        # wallet_rec.hostname, wallet_rec.blockchain))
-                        sum += locale.atof(balance)
-                        found_balance = True
-                except Exception as ex:
-                    app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
-                        wallet_rec.hostname, wallet_rec.blockchain, str(ex)))
-        if found_balance:
-            return self.round_balance(sum)
-        return '?'
 
 class FarmPlots:
 
@@ -206,9 +179,11 @@ class ChallengesChartData:
 
 class Wallets:
 
-    def __init__(self, wallets):
+    def __init__(self, wallets, cold_wallet_addresses={}):
+        self.wallets = wallets
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
+        self.cold_wallet_addresses = cold_wallet_addresses
         for wallet in wallets:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(wallet.hostname))
@@ -216,12 +191,44 @@ class Wallets:
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(wallet.hostname))
                 displayname = wallet.hostname
+            hot_balance = self.sum_wallet_balance(wallet.hostname, wallet.blockchain, False)
+            cold_balance = wallet.cold_balance
+            try:
+                total_balance = converters.round_balance(float(hot_balance) + float(cold_balance))
+            except:
+                total_balance = hot_balance
             self.rows.append({ 
                 'displayname': displayname, 
                 'hostname': wallet.hostname,
                 'blockchain': wallet.blockchain, 
                 'details': wallet.details, 
+                'hot_balance': hot_balance,
+                'cold_balance': cold_balance,
+                'cold_address': ','.join(cold_wallet_addresses[wallet.blockchain]) if wallet.blockchain in cold_wallet_addresses else '',
+                'total_balance': total_balance,
                 'updated_at': wallet.updated_at }) 
+
+    def sum_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
+        numeric_const_pattern = '-Total\sBalance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
+        rx = re.compile(numeric_const_pattern, re.VERBOSE)
+        found_balance = False
+        sum = 0
+        for wallet in self.wallets:
+            if wallet.hostname == hostname and wallet.blockchain == blockchain:
+                try:
+                    for balance in rx.findall(wallet.details):
+                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
+                        # wallet.hostname, wallet.blockchain))
+                        sum += locale.atof(balance)
+                        found_balance = True
+                except Exception as ex:
+                    app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
+                        wallet.hostname, wallet.blockchain, str(ex)))
+                if include_cold_balance and wallet.cold_balance:
+                    sum += locale.atof(wallet.cold_balance)
+        if found_balance:
+            return converters.round_balance(sum)
+        return '?'
 
 class Keys:
 

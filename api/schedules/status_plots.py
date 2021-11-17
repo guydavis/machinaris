@@ -61,7 +61,7 @@ def update_chia_plots(since):
                     # '172.18.0.1' was non-local IP on OlivierLA75's Docker setup, inside his container
                     if plot['hostname'] in ['127.0.0.1','172.18.0.1']:
                         hostname = controller_hostname
-                    app.logger.info("Found worker with hostname '{0}'".format(hostname))
+                    #app.logger.info("Found worker with hostname '{0}'".format(hostname))
                     displayname = db.session.query(w.Worker).filter(w.Worker.hostname==hostname, 
                         w.Worker.blockchain=='chia').first().displayname
                 except:

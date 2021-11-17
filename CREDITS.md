@@ -23,16 +23,18 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Charts.js](https://www.chartjs.org/): dynamic charting library.
 
 ## Blockchain Forks
+* [Cactus](https://github.com/Cactus-Network/cactus-blockchain)
 * [Chives](https://github.com/HiveProject2021/chives-blockchain)
 * [Flax](https://github.com/Flax-Network/flax-blockchain)
 * [Flora](https://github.com/Flora-Network/flora-blockchain)
 * [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain)
 * [NChain](https://gitee.com/ext9/ext9-blockchain)
-* [Silicoin](https://github.com/silicoin-network/silicoin-blockchain)
 * [Staicoin](https://github.com/STATION-I/staicoin-blockchain)
+* [Stor](https://github.com/Stor-Network/stor-blockchain)
 
 ## Other Resources
 * [Blockchain DB Downloads](https://chiaforksblockchain.com/) - from Maize
+* [All the Blocks](https://alltheblocks.net/) - blockchain & wallet info
 
 ## Testers and Developers
 

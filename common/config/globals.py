@@ -295,7 +295,7 @@ def load_plotman_version():
     global last_plotman_version
     global last_plotman_version_load_time
     if not os.path.exists(PLOTMAN_SCRIPT):
-        return None
+        return ""
     if last_plotman_version_load_time and last_plotman_version_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_plotman_version
@@ -332,7 +332,7 @@ def load_chiadog_version():
     global last_chiadog_version
     global last_chiadog_version_load_time
     if not os.path.exists(CHIADOG_PATH):
-        return None
+        return ""
     if last_chiadog_version_load_time and last_chiadog_version_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_chiadog_version
@@ -360,7 +360,7 @@ def load_madmax_version():
     global last_madmax_version
     global last_madmax_version_load_time
     if not os.path.exists(MADMAX_BINARY):
-        return None
+        return ""
     if last_madmax_version_load_time and last_madmax_version_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_madmax_version
@@ -388,7 +388,7 @@ def load_bladebit_version():
     global last_bladebit_version
     global last_bladebit_version_load_time
     if not os.path.exists(BLADEBIT_BINARY):
-        return None
+        return ""
     if last_bladebit_version_load_time and last_bladebit_version_load_time >= \
             (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
         return last_bladebit_version

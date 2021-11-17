@@ -2,34 +2,123 @@
 
 {% block content %}
 
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+        {% else %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {% endif %}
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+<style>
+    a.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+
+    button.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+    td.edit_cell {
+        text-align: center;
+        padding:0px 5px 0px 0px;
+    }
+</style>
+
+<div class="modal fade" id="walletModal" tabindex="-1" aria-labelledby="walletModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3 modal-lg">
+      <div class="modal-content bg-dark">
+        <div class="modal-header bg-dark">
+          <h5 class="modal-title" id="walletModalLabel">Wallet Settings</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-dark">
+          <form method="POST" id="wallet-form">
+            <input type="hidden" id="blockchain_field" name="blockchain" value="" />
+            <div class="mb-3">
+                <a style='float:right' href="https://github.com/guydavis/machinaris/wiki/Wallets" target="_blank">
+                    <i class="fs-4 bi-question-circle"></i>
+                </a>
+              <label for="cold_wallet_address" class="col-form-label">Cold Wallet Address:</label>
+              <input type="text" class="form-control" id="cold_wallet_address_field" name="cold_wallet_address"/>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-outline-success" id="btnSave">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <header class="pb-3 mb-4 border-bottom">
-    <span class="fs-4">Keys - chia wallet show </span>
+    <span class="fs-4">Wallet Summary</span>
 </header>
 
-
 {% if wallets.rows|length > 0 %}
-<div class="table-responsive">
-    <table class="table table-dark">
-        <thead>
-            <tr>
-                <th scope="col" class="text-success">Worker</th>
-                <th scope="col" class="text-success">Fork</th>
-                <th scope="col" class="text-success">Details</th>
-                <th scope="col" class="text-success">Updated At</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for wallet in wallets.rows %}
-            <tr>
-                <td>{{wallet.displayname}}</td>
-                <td>{{wallet.blockchain}}</td>
-                <td style="white-space: pre-wrap;">{{wallet.details}}</td>
-                <td>{{wallet.updated_at | datetimefilter}}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="table-responsive rounded">
+    <form method="POST" id="wallet-form" style="padding-bottom: 10px;">
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-success">Fork</th>
+                    <th scope="col" class="text-success">Wallet Balance</th>
+                    <th scope="col" class="text-success">Cold Wallet Balance</th>
+                    <th scope="col" class="text-success">Total Balance</th>
+                    <th scope="col" class="text-success">Updated At</th>
+                    <th scope="col" class="text-success"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for wallet in wallets.rows %}
+                <tr>
+                    <td>{{wallet.blockchain}}</td>
+                    <td>{{wallet.hot_balance}}</td>
+                    <td>{{wallet.cold_balance}}</td>
+                    <td>{{wallet.total_balance}}</td>
+                    <td>{{wallet.updated_at | datetimefilter}}</td>
+                    <td class='edit_cell'><a href="#" title="Edit Wallet" data-bs-toggle="modal" 
+                        data-bs-target="#walletModal" data-bs-blockchain="{{wallet.blockchain}}"
+                        data-bs-cold-wallet-address="{{wallet.cold_address}}"><i 
+                        class="fs-4 bi-pencil-square"></i></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </form>
 </div>
+
+<header class="pb-3 mt-4">
+    <span class="fs-4">Wallet Details</span>
+</header>
+<nav class="navbar navbar-expand-lg navbar-dark" style="padding-bottom: 0px;">
+    <div class="h-100 p-2 text-white">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            {% for wallet in wallets.rows %}
+            <li class="nav-item" role="presentation">
+                <button class="nav-link {% if loop.index == 1 %}active{% endif %}" id="{{wallet.blockchain}}-tab" data-bs-toggle="tab" data-bs-target="#{{wallet.blockchain}}"
+                    type="button" role="tab" aria-controls="{{wallet.blockchain}}" aria-selected="{% if loop.index == 1 %}true{% else %}false{% endif %}">{{ wallet.blockchain }}</button>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="tab-content">
+            {% for wallet in wallets.rows %}
+            <div class="tab-pane {% if loop.index == 1 %}active{% endif %}" id="{{wallet.blockchain}}" role="tabpanel" aria-labelledby="{{wallet.blockchain}}-tab">
+                <br/>
+                <pre>{{ wallet.details}}</pre>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</nav>
 {% else %}
 <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
     <h6>No wallet status received.  Perhaps just starting?  Please allow at least 10 minutes to update.</h6>
@@ -37,4 +126,31 @@
 </div>
 {% endif %}
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+        $(document).ready(function () {
+            $("#btnSave").click(function () {
+                $("#btnCancel").prop("disabled", true);
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...`
+                );
+                $("#wallet-form").submit();
+            });
+            var walletModal = document.getElementById('walletModal')
+            walletModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget
+                var blockchain = button.getAttribute('data-bs-blockchain')
+                var blockchainField = document.getElementById('blockchain_field')
+                blockchainField.value = blockchain
+                var coldWalletAddress = button.getAttribute('data-bs-cold-wallet-address')
+                var coldWalletAddressField = document.getElementById('cold_wallet_address_field')
+                coldWalletAddressField.value = coldWalletAddress
+                var modalTitle = walletModal.querySelector('.modal-title')
+                modalTitle.textContent = 'Wallet Settings - ' + blockchain
+            })
+        })
+</script>
 {% endblock %}

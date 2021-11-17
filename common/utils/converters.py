@@ -55,7 +55,14 @@ def convert_date_for_luxon(datestr):
     time = datestr[8:]
     return "{0}-{1}-{2}T{3}".format(year, month, day, time)
 
-
+def round_balance(value):
+    if value > 100:
+        value = '{:.6g}'.format(value)
+    else:
+        value = '{:.6f}'.format(value)
+    if value.endswith(".000000"):
+        return value[:-5]
+    return value
 
 
 ##################################################################################################
