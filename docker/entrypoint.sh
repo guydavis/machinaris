@@ -17,6 +17,9 @@ if [[ -z "${worker_address}" ]]; then
   exit 1
 fi
 
+# If on Windows, possibly mount SMB remote shares as defined in 'remote_shares' env var
+/usr/bin/bash /machinaris/scripts/mount_remote_shares.sh > /tmp/mount_remote_shares.log
+
 # Conditionally install megacmd on fullnodes
 /usr/bin/bash /machinaris/scripts/megacmd_setup.sh > /tmp/megacmd_setup.log 2>&1
 
@@ -30,9 +33,9 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   trap "chia stop all -d; exit 0" SIGINT SIGTERM
 
   # During concurrent startup of multiple fork containers, stagger setups
-  sleep $[ ( $RANDOM % 300 )  + 1 ]s
+  sleep $[ ( $RANDOM % 90 )  + 1 ]s
 
-  # Conditionally install plotman on plotters and fullnodes
+  # Conditionally install plotman on plotters and fullnodes, after the plotters setup
   /usr/bin/bash /machinaris/scripts/plotman_setup.sh > /tmp/plotman_setup.log 2>&1
 
   # Conditionally install chiadog on harvesters and fullnodes
@@ -49,6 +52,9 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
 
   # Conditionally madmax on plotters and fullnodes, sleep a bit first
   /usr/bin/bash /machinaris/scripts/madmax_setup.sh > /tmp/madmax_setup.log 2>&1
+
+  # Conditionally install plotman on plotters and fullnodes, after the plotters setup
+  /usr/bin/bash /machinaris/scripts/plotman_autoplot.sh > /tmp/plotman_autoplot.log 2>&1
 
 fi
 

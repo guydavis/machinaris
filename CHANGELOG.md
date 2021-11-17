@@ -4,8 +4,9 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.6.5] - 2021-11-19
  - [Cryptodoge](https://github.com/CryptoDoge-Network/cryptodoge) - cross-farming support for this blockchain fork.
- - Machinaris - Docker images now roughly 1/3 the size of previous releases.  Shared base image further decreases download size for forks.
- - Machinaris - API endpoint /metrics/prometheus exposes plotting statistics.  Thanks to @Nold360 for the contribution!
+ - Docker images now roughly 1/3 the size of previous releases.  Shared base image further decreases download size for forks.
+ - API endpoint /metrics/prometheus exposes plotting statistics.  Thanks to @Nold360 for the contribution!
+ - Windows deployments now support automatically mounting remote plot shares (such as on a NAS) using CIFS in-container.
 
 ## [0.6.4] - 2021-11-12
  - [Farmr](https://github.com/gilnobrega/farmr) - include `farmr` client for optional monitoring at [farmr.net](https://farmr.net/)
