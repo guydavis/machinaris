@@ -11,19 +11,19 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 	export FORKTOOLSBLOCKCHAINDIRS=/
 	git clone https://github.com/Qwinn1/forktools
 	cd forktools
-	git checkout $HASH
+	bash installft.sh
+	git checkout $HASH > /dev/null
 
 	mkdir -p /root/.chia/forktools/ftconfigs
-	cp -f ftconfigs/* /root/.chia/forktools/ftconfigs
+	cp -f ftconfigs/* /root/.chia/forktools/ftconfigs > /dev/null
 	rm -rf ftconfigs
 	ln -s /root/.chia/forktools/ftconfigs ftconfigs
 	
 	mkdir -p /root/.chia/forktools/ftlogs
-	cp -f ftlogs/* /root/.chia/forktools/ftlogs
+	cp -f ftlogs/* /root/.chia/forktools/ftlogs > /dev/null
 	rm -rf ftlogs
 	ln -s /root/.chia/forktools/ftlogs ftlogs
 
-	bash installft.sh
 	source ~/.bashrc
 
 	# Now multiproc patch fullnodes to limit memory usage
