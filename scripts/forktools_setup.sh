@@ -8,7 +8,6 @@ HASH=65bf10c63e701de732b61b24fafeab03e6d1e695
 
 if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
     cd /
-	export FORKTOOLSBLOCKCHAINDIRS=/
 	git clone https://github.com/Qwinn1/forktools
 	cd forktools
 	bash installft.sh
