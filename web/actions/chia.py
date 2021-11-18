@@ -34,6 +34,8 @@ from web.models.chia import FarmSummary, FarmPlots, Wallets, \
     ChallengesChartData, PLOT_TABLE_COLUMNS
 from . import worker as wk
 
+COLD_WALLET_ADDRESSES_FILE = '/root/.chia/machinaris/config/cold_wallet_addresses.json'
+
 def load_farm_summary():
     farms = db.session.query(f.Farm).order_by(f.Farm.hostname).all()
     wallets = db.session.query(w.Wallet).order_by(w.Wallet.blockchain).all()
@@ -114,14 +116,15 @@ def partials_chart_data(farm_summary):
 
 def load_wallets():
     wallets = db.session.query(w.Wallet).order_by(w.Wallet.blockchain).all()
-    return Wallets(wallets)
+    cold_wallet_addresses = load_cold_wallet_addresses()
+    return Wallets(wallets, cold_wallet_addresses)
 
 def load_blockchain_show():
-    try:  # Sparkly had an error here once with malformed data
+    try:  
         blockchains = db.session.query(b.Blockchain).order_by(b.Blockchain.blockchain).all()
         return Blockchains(blockchains)
-    except:
-        traceback.print_exc()
+    except Exception as ex:
+        app.logger.error("Error querying for blockchains: {0}".format(str(ex)))
     return None
 
 def load_connections_show():
@@ -516,3 +519,32 @@ def process_self_pool(wallet_index=1):
     time.sleep(5)
     flash('Successfully created a NFT for self-pooling.  Please wait a while to complete, then refresh page. See below for details.', 'success')
     return True
+
+def load_cold_wallet_addresses():
+    data = {}
+    if os.path.exists(COLD_WALLET_ADDRESSES_FILE):
+        try:
+            with open(COLD_WALLET_ADDRESSES_FILE) as f:
+                data = json.load(f)
+        except Exception as ex:
+            msg = "Unable to read addresses from {0} because {1}".format(COLD_WALLET_ADDRESSES_FILE, str(ex))
+            app.logger.error(msg)
+            flash(msg, 'danger')
+            return data
+    return data
+    
+def save_cold_wallet_addresses(blockchain, cold_wallet_addresses):
+    data = load_cold_wallet_addresses()
+    if cold_wallet_addresses.strip():
+        data[blockchain] = cold_wallet_addresses.split(',')
+    else:
+        del data[blockchain]
+    try:
+        with open(COLD_WALLET_ADDRESSES_FILE, 'w') as f:
+            json.dump(data, f)
+        flash(f'Successfully stored cold wallet addresses for {blockchain}. Please allow a few minutes for updated values to appear below.', 'success')
+    except Exception as ex:
+        msg = "Failed to store addresses in {0} because {1}".format(COLD_WALLET_ADDRESSES_FILE, str(ex))
+        app.logger.error(msg)
+        flash(msg, 'danger')
+        return

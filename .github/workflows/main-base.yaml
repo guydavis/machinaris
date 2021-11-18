@@ -1,4 +1,4 @@
-name: main-base
+name: release-base
 
 on: workflow_dispatch
 

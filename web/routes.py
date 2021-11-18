@@ -171,12 +171,13 @@ def alerts():
     return render_template('alerts.html', reload_seconds=120, farmers=farmers,
         notifications=notifications, global_config=gc)
 
-@app.route('/wallet')    
+@app.route('/wallet', methods=['GET', 'POST'])    
 def wallet():
     gc = globals.load()
+    if request.method == 'POST':
+        chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
     wallets = chia.load_wallets()
-    return render_template('wallet.html', wallets=wallets, 
-        global_config=gc)
+    return render_template('wallet.html', wallets=wallets, global_config=gc, reload_seconds=120)
 
 @app.route('/keys')
 def keys():
@@ -194,7 +195,7 @@ def workers():
             worker.prune_workers_status(request.form.getlist('worker'))
     wkrs = worker.load_worker_summary()
     return render_template('workers.html', reload_seconds=120, 
-        workers=wkrs, global_config=gc, now=gc['now'])
+        workers=wkrs, global_config=gc)
 
 @app.route('/worker', methods=['GET'])
 def worker_route():
@@ -215,7 +216,7 @@ def blockchains():
     gc = globals.load()
     blockchains = chia.load_blockchain_show()
     return render_template('blockchains.html', reload_seconds=120, 
-        blockchains=blockchains, global_config=gc, now=gc['now'])
+        blockchains=blockchains, global_config=gc)
 
 @app.route('/connections', methods=['GET', 'POST'])
 def connections():
@@ -229,7 +230,7 @@ def connections():
             app.logger.info("Unknown form action: {0}".format(request.form))
     connections = chia.load_connections_show()
     return render_template('connections.html', reload_seconds=120, 
-        connections=connections, global_config=gc, now=gc['now'])
+        connections=connections, global_config=gc)
 
 def find_selected_worker(hosts, hostname, blockchain= None):
     if len(hosts) == 0:

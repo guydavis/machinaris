@@ -3,7 +3,9 @@ import datetime as dt
 from flask.views import MethodView
 
 from api import app
+from api.commands.websvcs import cold_wallet_balance
 from api.extensions.api import Blueprint, SQLCursorPage
+from api.commands import websvcs
 from common.extensions.database import db
 from common.models import Wallet
 
@@ -32,8 +34,10 @@ class Wallets(MethodView):
     @blp.arguments(WalletSchema)
     @blp.response(201, WalletSchema)
     def post(self, new_item):
+        blockchain = new_item['blockchain']
         item = db.session.query(Wallet).filter(Wallet.hostname==new_item['hostname'], \
-            Wallet.blockchain==new_item['blockchain']).first()
+            Wallet.blockchain==blockchain).first()
+        new_item['cold_balance'] = websvcs.cold_wallet_balance(blockchain)
         if item: # upsert
             new_item['created_at'] = item.created_at
             new_item['updated_at'] = dt.datetime.now()
