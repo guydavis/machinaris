@@ -27,6 +27,9 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 
 	# Now multiproc patch fullnodes to limit memory usage
 	if [[ ${mode} == 'fullnode' ]]; then
+		sed -i "s/SETMAXLOGROTATION='99'/SETMAXLOGROTATION='7' /g" /root/.chia/forktools/ftconfigs/config.forkfixconfig*
+		sed -i "s/SETPLOTLOADFREQUENCY='18000'/SETPLOTLOADFREQUENCY='1800' /g" /root/.chia/forktools/ftconfigs/config.forkfixconfig*
+		echo 'Y' | ./forkfixconfig all
 		./forkpatch all -multiproc
 	fi
 fi
