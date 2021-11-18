@@ -9,6 +9,8 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Chiadog](https://github.com/martomi/chiadog): a log monitor with alerting.
 * [Madmax](https://github.com/madMAx43v3r/chia-plotter): a pipelined, multi-threaded plotter.
 * [Bladebit](https://github.com/harold-b/bladebit): an in-memory plotter.
+* [Farmr](https://github.com/gilnobrega/farmr): provides advanced monitoring at [farmr.net](https://farmr.net).
+* [Forktools](https://github.com/Qwinn1/forktools): shell utilities for managing Chia forks.
 
 ## Web Application
 * [Flask](https://flask.palletsprojects.com/en/2.0.x/): Web UI application server.
@@ -25,6 +27,7 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 ## Blockchain Forks
 * [Cactus](https://github.com/Cactus-Network/cactus-blockchain)
 * [Chives](https://github.com/HiveProject2021/chives-blockchain)
+* [Cryptodoge](https://github.com/CryptoDoge-Network/cryptodoge)
 * [Flax](https://github.com/Flax-Network/flax-blockchain)
 * [Flora](https://github.com/Flora-Network/flora-blockchain)
 * [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain)

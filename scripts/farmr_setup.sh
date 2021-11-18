@@ -1,6 +1,6 @@
 #!/bin/env bash
 #
-# Installs farmr for optionally monitoring
+# Installs farmr - https://github.com/gilnobrega/farmr
 #
 
 if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
