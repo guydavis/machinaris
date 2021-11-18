@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.6] - 2021-11-26
+ - [Maize](https://github.com/Maize-Network/maize-blockchain) - cross-farming support for this blockchain fork.
+ - [Forktools](https://github.com/Qwinn1/forktools) - utilities including a multiproc patch to limit memory usage.
+
 ## [0.6.5] - 2021-11-19
  - [Cryptodoge](https://github.com/CryptoDoge-Network/cryptodoge) - cross-farming support for this blockchain fork.
  - Docker images now roughly 1/3 the size of previous releases.  Shared base image further decreases download size for forks.
