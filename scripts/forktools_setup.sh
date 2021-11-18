@@ -20,6 +20,6 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 
 	# Now multiproc patch fullnodes to limit memory usage
 	if [[ ${mode} == 'fullnode' ]]; then
-		forkpatch all -multiproc
+		./forkpatch all -multiproc
 	fi
 fi
