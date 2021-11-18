@@ -65,7 +65,7 @@ ENV controller_web_port=8926
 ENV controller_api_port=8927
 
 # Set env vars requried by forktools
-ENV FORKTOOLSDIR=/root/.chia/forktools
+ENV FORKTOOLSDIR=/forktools
 ENV FORKTOOLSBLOCKCHAINDIRS=/
 ENV FORKTOOLSHIDDENDIRS=/root
 
