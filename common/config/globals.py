@@ -28,9 +28,9 @@ SUPPORTED_BLOCKCHAINS = [
     'cryptodoge',
     'flax',
     'flora',
-    'nchain',
     'hddcoin',
-    'silicoin',
+    'maize',
+    'nchain',
     'staicoin',
     'stor'
 ]
@@ -43,8 +43,8 @@ CURRENCY_SYMBOLS = {
     "flax": "XFX",
     "flora": "XFL",
     "hddcoin": "HDD",
+    "maize": "XMZ",
     "nchain": "NCH",
-    "silicoin": "SIT",
     "staicoin": "STAI",
     "stor": "STOR",
 }
@@ -63,9 +63,9 @@ CHIVES_BINARY = '/chives-blockchain/venv/bin/chives'
 CRYPTODOGE_BINARY = '/cryptodoge-blockchain/venv/bin/cryptodoge'
 FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
 FLORA_BINARY = '/flora-blockchain/venv/bin/flora'
-NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
 HDDCOIN_BINARY = '/hddcoin-blockchain/venv/bin/hddcoin'
-SILICOIN_BINARY = '/silicoin-blockchain/venv/bin/sit'
+MAIZE_BINARY = '/maize-blockchain/venv/bin/maize'
+NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
 STAICOIN_BINARY = '/staicoin-blockchain/venv/bin/staicoin'
 STOR_BINARY = '/stor-blockchain/venv/bin/stor'
 
@@ -86,10 +86,10 @@ def get_blockchain_binary(blockchain):
         return FLORA_BINARY
     if blockchain == "hddcoin":
         return HDDCOIN_BINARY
+    if blockchain == "maize":
+        return MAIZE_BINARY
     if blockchain == "nchain":
         return NCHAIN_BINARY
-    if blockchain == "silicoin":
-        return SILICOIN_BINARY
     if blockchain == "staicoin":
         return STAICOIN_BINARY
     if blockchain == "stor":
@@ -111,10 +111,10 @@ def get_blockchain_network_path(blockchain):
         return "/root/.flora/mainnet"
     if blockchain == 'hddcoin':
         return "/root/.hddcoin/mainnet"
+    if blockchain == 'maize':
+        return "/root/.maize/mainnet"
     if blockchain == 'nchain':
         return "/root/.chia/ext9"
-    if blockchain == 'silicoin':
-        return "/root/.silicoin/mainnet"
     if blockchain == 'staicoin':
         return "/root/.staicoin/mainnet"
     if blockchain == 'stor':

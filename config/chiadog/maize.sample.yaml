@@ -1,9 +1,9 @@
 # This is useful to differentiate multiple
 # instances monitoring multiple harvesters
-notification_title_prefix: 'Machinaris-Silicoin'
+notification_title_prefix: 'Machinaris-Maize'
 log_level: INFO
-coin_name: 'silicoin'
-coin_symbol: 'sit'
+coin_name: 'maize'
+coin_symbol: 'xmz'
 
 # Only one consumer can be enabled at a time, you can
 # delete the section for the consumer which you aren't using
@@ -12,7 +12,7 @@ chia_logs:
   file_log_consumer:
     enable: true
     prefix: 'chia'
-    file_path: '~/.chia/silicoin/mainnet/log/debug.log'
+    file_path: '~/.chia/maize/mainnet/log/debug.log'
 
 # Enable this and chiadog will ping a remote server every 5 minutes
 # That way you can know that the monitoring is running as expected
@@ -52,8 +52,8 @@ notifier:
     daily_stats: true
     wallet_events: true
     credentials:
-      sender: 'silicoin@example.com'
-      sender_name: 'silicoindog'
+      sender: 'maize@example.com'
+      sender_name: 'maizedog'
       recipient: 'you@example.com'
       username_smtp: 'username'
       password_smtp: 'password'
@@ -81,7 +81,7 @@ notifier:
     enable: false
     daily_stats: true
     wallet_events: true
-    topic: silicoin/silicoindog/alert
+    topic: maize/maizedog/alert
     qos: 1
     retain: false
     credentials:

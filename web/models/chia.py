@@ -328,10 +328,10 @@ class Connections:
             return "186.123.88.33:18644"
         if blockchain == 'hddcoin':
             return "145.1.235.18:28444"
+        if blockchain == 'maize':
+            return "212.159.183.209:8644"
         if blockchain == 'nchain':
             return "218.88.205.216:58445"
-        if blockchain == 'silicoin':
-            return "218.80.75.23:22222"
         if blockchain == 'staicoin':
             return "173.54.12.193:1999"
         if blockchain == 'stor':
@@ -354,8 +354,8 @@ class Connections:
             return 28444
         if blockchain == 'nchain':
             return 58445
-        if blockchain == 'silicoin':
-            return 22222
+        if blockchain == 'maize':
+            return 8644
         if blockchain == 'staicoin':
             return 1999
         if blockchain == 'stor':

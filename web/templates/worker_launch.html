@@ -162,7 +162,7 @@
             if (blockchain == 'nchain') {
                 return 8929;
             }
-            if (blockchain == 'silicoin') {
+            if (blockchain == 'maize') {
                 return 8933;
             }
             if (blockchain == 'staicoin') {
@@ -199,8 +199,8 @@
             if (blockchain == 'nchain') {
                 return 38447;
             }
-            if (blockchain == 'silicoin') {
-                return "TODO";
+            if (blockchain == 'maize') {
+                return 8647;
             }
             if (blockchain == 'staicoin') {
                 return 1692;
@@ -517,20 +517,18 @@
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
+                                id="blockchain-maize" onclick="updateDocker()" value="maize">
+                            <label class="form-check-label" for="blockchain-maize">
+                                Silicoin
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-nchain" onclick="updateDocker()" value="nchain">
                             <label class="form-check-label" for="blockchain-nchain">
                                 N-Chain
                             </label>
                         </div>
-                        <!--
-                        <div class="col">
-                            <input class="form-check-input" type="checkbox" name="blockchains"
-                                id="blockchain-silicoin" onclick="updateDocker()" value="silicoin">
-                            <label class="form-check-label" for="blockchain-silicoin">
-                                Silicoin
-                            </label>
-                        </div>
-                        -->
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-staicoin" onclick="updateDocker()" value="staicoin">

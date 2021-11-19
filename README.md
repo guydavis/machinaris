@@ -4,7 +4,7 @@ A Docker image for plotting and farming the Chia™ cryptocurrency on [one compu
 
 ![Home](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_home.png)
 
-For details, see your particular platform: [Windows](https://github.com/guydavis/machinaris/wiki/Windows), [Linux](https://github.com/guydavis/machinaris/wiki/Linux), [Macintosh](https://github.com/guydavis/machinaris/wiki/MacOS), [Unraid](https://github.com/guydavis/machinaris/wiki/Unraid), [TrueNAS](https://github.com/guydavis/machinaris/wiki/TrueNAS), [Synology](https://github.com/guydavis/machinaris/wiki/Synology) and [others](https://github.com/guydavis/machinaris/wiki/Docker).  *For support, start a [Discussion](https://github.com/guydavis/machinaris/discussions) or join our [Discord](https://discord.gg/mX4AtMTt87)*
+For details, see your particular platform: [Windows](https://github.com/guydavis/machinaris/wiki/Windows), [Linux](https://github.com/guydavis/machinaris/wiki/Linux), [Macintosh](https://github.com/guydavis/machinaris/wiki/MacOS), [Unraid](https://github.com/guydavis/machinaris/wiki/Unraid), [TrueNAS](https://github.com/guydavis/machinaris/wiki/TrueNAS), [Synology](https://github.com/guydavis/machinaris/wiki/Synology) and [others](https://github.com/guydavis/machinaris/wiki/Docker).  *For support, start a [Discussion](https://github.com/guydavis/machinaris/discussions) or join our [Discord](https://discord.gg/mX4AtMTt87)*.
 
 ## Plotting View
 

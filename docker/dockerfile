@@ -30,8 +30,8 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/flax_install.sh ${FLAX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/flora_install.sh ${FLORA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/maize_install.sh ${MAIZE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/silicoin_install.sh ${SILICOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/staicoin_install.sh ${STAICOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/stor_install.sh ${STOR_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \

@@ -57,12 +57,12 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 	elif [[ ${blockchains} == 'hddcoin' ]]; then
 		cp -n blockchain/hdd.json.template blockchain/hdd.json
 		echo "/hddcoin-blockchain/venv/bin/hddcoin" > override-hdd-binary.txt
+	elif [[ ${blockchains} == 'maize' ]]; then
+		cp -n blockchain/xmz.json.template blockchain/xmz.json
+		echo "/maize-blockchain/venv/bin/maize" > override-xmz-binary.txt
 	elif [[ ${blockchains} == 'nchain' ]]; then
 		cp -n blockchain/nch.json.template blockchain/nch.json
 		echo "/chia-blockchain/venv/bin/chia" > override-nch-binary.txt
-	elif [[ ${blockchains} == 'silicoin' ]]; then
-		cp -n blockchain/sit.json.template blockchain/sit.json
-		echo "/silicoin-blockchain/venv/bin/sit" > override-sit-binary.txt
 	elif [[ ${blockchains} == 'staicoin' ]]; then
 		cp -n blockchain/stai.json.template blockchain/stai.json
 		echo "/staicoin-blockchain/venv/bin/staicoin" > override-stai-binary.txt

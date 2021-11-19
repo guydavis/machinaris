@@ -25,10 +25,10 @@ def get_full_node_rpc_port(blockchain):
         return 18755
     if blockchain == 'hddcoin':
         return 28555
+    if blockchain == 'maize':
+        return 8755
     if blockchain == 'nchain':
         return 38555
-    if blockchain == 'silicoin':
-        return "TODO"
     if blockchain == 'staicoin':
         return 1758
     if blockchain == 'stor':
