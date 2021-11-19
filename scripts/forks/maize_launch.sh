@@ -22,7 +22,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.maize/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading Maize blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
-  mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
+  mkdir -p /root/.maize/mainnet/db/ && cd /root/.maize/mainnet/db/
   # Mega links for Maize blockchain DB from: https://chiaforksblockchain.com/
   mega-get https://mega.nz/folder/KIwkDbjY#wcU3oKyhS3GZiwNbv4UQUA
   mv maize/*mainnet.sqlite maize/*node.sqlite . && rm -rf maize

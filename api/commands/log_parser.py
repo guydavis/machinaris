@@ -127,15 +127,25 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         app.logger.info("No log file found at {0}".format(log_file))
         return 'No log file found!'
     #app.logger.info("Log file found at {0}".format(log_file))
-    if blockchain == "chives":
+    if blockchain == "cactus":
+        class_escape = re.compile(r' cactus.plotting.(\w+)(\s+): ')
+    elif blockchain == "chives":
         class_escape = re.compile(r' chives.plotting.(\w+)(\s+): ')
+    elif blockchain == "cryptodoge":
+        class_escape = re.compile(r' cryptodoge.plotting.(\w+)(\s+): ')
     elif blockchain == "flax":
         class_escape = re.compile(r' flax.plotting.(\w+)(\s+): ')
     elif blockchain == "flora":
         class_escape = re.compile(r' flora.plotting.(\w+)(\s+): ')
     elif blockchain == "hddcoin":
         class_escape = re.compile(r' hddcoin.plotting.(\w+)(\s+): ')
-    else: # Chia, NChain, Silicoin all use default package name
+    elif blockchain == "maize":
+        class_escape = re.compile(r' maize.plotting.(\w+)(\s+): ')
+    elif blockchain == "staicoin":
+        class_escape = re.compile(r' staicoin.plotting.(\w+)(\s+): ')
+    elif blockchain == "stor":
+        class_escape = re.compile(r' stor.plotting.(\w+)(\s+): ')
+    else: # Chia, NChain, etc all use default package name
         class_escape = re.compile(r' chia.plotting.(\w+)(\s+): ')
     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
     proc = Popen(['tail', '-n', str(MAX_LOG_LINES), log_file], stdout=PIPE)

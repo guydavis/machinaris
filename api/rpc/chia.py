@@ -51,6 +51,12 @@ elif importlib.util.find_spec("hddcoin"):
     from hddcoin.util.default_root import DEFAULT_ROOT_PATH
     from hddcoin.util.ints import uint16
     from hddcoin.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("maize"):
+    from maize.rpc.full_node_rpc_client import FullNodeRpcClient
+    from maize.rpc.farmer_rpc_client import FarmerRpcClient
+    from maize.util.default_root import DEFAULT_ROOT_PATH
+    from maize.util.ints import uint16
+    from maize.util.config import load_config as load_fork_config
 elif importlib.util.find_spec("staicoin"):
     from staicoin.rpc.full_node_rpc_client import FullNodeRpcClient
     from staicoin.rpc.farmer_rpc_client import FarmerRpcClient
@@ -63,7 +69,6 @@ elif importlib.util.find_spec("stor"):
     from stor.util.default_root import DEFAULT_ROOT_PATH
     from stor.util.ints import uint16
     from stor.util.config import load_config as load_fork_config
-
 else:
     raise Exception("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ('blockchains')))
 
