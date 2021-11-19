@@ -31,6 +31,7 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Flax](https://github.com/Flax-Network/flax-blockchain)
 * [Flora](https://github.com/Flora-Network/flora-blockchain)
 * [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain)
+* [Maize](https://github.com/Maize-Network/maize-blockchain)
 * [NChain](https://gitee.com/ext9/ext9-blockchain)
 * [Staicoin](https://github.com/STATION-I/staicoin-blockchain)
 * [Stor](https://github.com/Stor-Network/stor-blockchain)

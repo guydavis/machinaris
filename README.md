@@ -18,7 +18,7 @@ Machinaris bundles the [latest Chia™ version](https://github.com/Chia-Network/
 
 ![Farming](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_farming.png)
 
-Machinaris also optionally farms your plots to many other blockchain forks including [Cactus](https://github.com/guydavis/machinaris/wiki/Cactus), [Cryptodoge](https://github.com/guydavis/machinaris/wiki/Cryptodoge), [Chives](https://github.com/guydavis/machinaris/wiki/Chives), [Flax](https://github.com/guydavis/machinaris/wiki/Flax), [Flora](https://github.com/guydavis/machinaris/wiki/Flora), [HDDCoin](https://github.com/guydavis/machinaris/wiki/HDDCoin), [NChain](https://github.com/guydavis/machinaris/wiki/Nchain), [Staicoin](https://github.com/guydavis/machinaris/wiki/Staicoin), and [Stor](https://github.com/guydavis/machinaris/wiki/Stor).
+Machinaris also optionally farms your plots to many other blockchain forks including [Cactus](https://github.com/guydavis/machinaris/wiki/Cactus), [Cryptodoge](https://github.com/guydavis/machinaris/wiki/Cryptodoge), [Chives](https://github.com/guydavis/machinaris/wiki/Chives), [Flax](https://github.com/guydavis/machinaris/wiki/Flax), [Flora](https://github.com/guydavis/machinaris/wiki/Flora), [HDDCoin](https://github.com/guydavis/machinaris/wiki/HDDCoin), [Maize](https://github.com/guydavis/machinaris/wiki/Maize), [NChain](https://github.com/guydavis/machinaris/wiki/Nchain), [Staicoin](https://github.com/guydavis/machinaris/wiki/Staicoin), and [Stor](https://github.com/guydavis/machinaris/wiki/Stor).
 
 ## Alerts
 
