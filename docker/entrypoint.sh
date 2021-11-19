@@ -2,7 +2,8 @@
 #  Configure and start plotting and farming services.
 #
 
-echo "Welcome to Machinaris! - v$(cat /machinaris/VERSION) - ${mode}"
+echo "Welcome to Machinaris!"
+echo "v$(cat /machinaris/VERSION) - ${mode} - ${blockchains}"
 
 # v0.6.0 upgrade check guard - only allow single blockchain per container
 if [[ "${blockchains}" == "chia,flax" ]]; then
