@@ -36,6 +36,9 @@ class Certificates(MethodView):
         elif type == "chives":
             blockchain = "chives"
             dir = "/root/.chives/mainnet/config/ssl/ca"
+        elif type == "cryptodoge":
+            blockchain = "cryptodoge"
+            dir = "/root/.cryptodoge/mainnet/config/ssl/ca"
         elif type == "flax":
             blockchain = "flax"
             dir = "/root/.flax/mainnet/config/ssl/ca"
