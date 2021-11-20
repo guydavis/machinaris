@@ -16,3 +16,4 @@ pexpect
 flask-migrate
 ruamel.yaml
 psutil
+pytest
