@@ -7,7 +7,6 @@ import math
 import re
 import traceback
 
-locale.setlocale(locale.LC_ALL, '')
 
 def sizeof_fmt(num, suffix='B'):
     for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
@@ -59,6 +58,7 @@ def convert_date_for_luxon(datestr):
     return "{0}-{1}-{2}T{3}".format(year, month, day, time)
 
 def round_balance(value):
+    locale.setlocale(locale.LC_ALL, '')
     if abs(value) < 10 and abs(value) >= 1:
         return "%.1f"% round(value, 2)
     elif value > 1:
