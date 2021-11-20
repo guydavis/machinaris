@@ -343,9 +343,9 @@ class Connections:
         if blockchain == 'chia':
             return 8444
         if blockchain == 'chives':
-            return 15994
-        if blockchain == 'cryptodoge':
             return 9699
+        if blockchain == 'cryptodoge':
+            return 15994
         if blockchain == 'flax':
             return 6888
         if blockchain == 'flora':

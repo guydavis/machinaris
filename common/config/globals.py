@@ -172,7 +172,7 @@ def is_setup():
         # Harvester doesn't require a mnemonic private key as farmer's ca already imported.
         return True
     try:
-        if os.path.exist(get_blockchain_network_path(enabled_blockchains()[0]) + '/config/ssl/wallet/public_wallet.key'):
+        if os.path.exists(get_blockchain_network_path(enabled_blockchains()[0]) + '/config/ssl/wallet/public_wallet.key'):
             logging.info("Skipping check for mnemonic.txt as public wallet key exists on disk.")
             return True
     except Exception as ex:

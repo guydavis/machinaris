@@ -5,6 +5,12 @@
 echo "Welcome to Machinaris!"
 echo "v$(cat /machinaris/VERSION) - ${mode} - ${blockchains}"
 
+if [[ "$HOSTNAME" =~ " |'" ]]; then 
+  echo "You have placed a space character in the hostname for this container."
+  echo "Please use only alpha-numeric characters in the hostname within docker-compose.yml and restart."
+  exit 1
+fi
+
 # v0.6.0 upgrade check guard - only allow single blockchain per container
 if [[ "${blockchains}" == "chia,flax" ]]; then
   echo "Only one blockchain allowed per container in Machinaris."
@@ -12,6 +18,7 @@ if [[ "${blockchains}" == "chia,flax" ]]; then
   exit 1
 fi
 
+# Ensure a worker_address containing an IP address is set on every launch, else exit
 if [[ -z "${worker_address}" ]]; then
   echo "Please set the 'worker_address' environment variable to this system's IP address on your LAN."
   echo "https://github.com/guydavis/machinaris/wiki/Unraid#how-do-i-update-from-v05x-to-v060-with-fork-support"
