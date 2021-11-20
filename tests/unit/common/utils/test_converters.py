@@ -2,6 +2,7 @@ import os
 import sys
 import unittest
 
+sys.path.insert(1, os.path.join(sys.path[0], '../../../..'))
 from common.utils import converters
 
 class TestRoundBalance(unittest.TestCase):
