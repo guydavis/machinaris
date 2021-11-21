@@ -7,8 +7,6 @@ import math
 import re
 import traceback
 
-#from flask_babel import format_decimal
-
 def sizeof_fmt(num, suffix='B'):
     for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
         if abs(num) < 1024.0:
@@ -65,7 +63,6 @@ def round_balance(value):
     elif value > 1:
         return f"{value:n}"
     return str(round(value, 4))
-    #return format_decimal(value)
 
 ##################################################################################################
 #

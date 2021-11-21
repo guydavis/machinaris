@@ -4,8 +4,12 @@ import unittest
 
 sys.path.insert(1, os.path.join(sys.path[0], '../../../..'))
 from common.utils import converters
+from web import app
 
 class TestRoundBalance(unittest.TestCase):
+
+    def setUp(self):
+        app.test_request_context().push()
 
     def test_zero(self):
         data = 0
@@ -41,6 +45,11 @@ class TestRoundBalance(unittest.TestCase):
         data = 0.0002
         result = converters.round_balance(data)
         self.assertEqual(result, "0.0002")
+
+    def test_hundredthousandths(self):
+        data = 0.00002
+        result = converters.round_balance(data)
+        self.assertEqual(result, "0.0")
     
     def test_millionths(self):
         data = 0.000002

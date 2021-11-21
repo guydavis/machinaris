@@ -6,6 +6,7 @@
 import logging
 
 from flask import Flask
+from flask_babel import Babel
 from flask_migrate import Migrate
 from sqlalchemy.engine import Engine
 from sqlalchemy import event
@@ -29,6 +30,7 @@ from api.default_settings import DefaultConfig
 app.config.from_object(DefaultConfig)
 # Override config with optional settings file
 app.config.from_envvar('API_SETTINGS_FILE', silent=True)
+babel = Babel(app)
 
 from common.extensions.database import db
 migrate = Migrate(app, db)

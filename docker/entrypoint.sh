@@ -3,7 +3,7 @@
 #
 
 echo "Welcome to Machinaris!"
-echo "v$(cat /machinaris/VERSION) - ${mode} - ${blockchains}"
+echo "v$(cat /machinaris/VERSION) - ${mode} - ${blockchains} - $(uname -m)"
 
 if [[ "$HOSTNAME" =~ " |'" ]]; then 
   echo "You have placed a space character in the hostname for this container."

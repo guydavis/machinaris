@@ -37,7 +37,7 @@ def load_cold_wallet_addresses():
             return data
     return data
 
-def cold_wallet_balance(blockchain, debug=True):
+def cold_wallet_balance(blockchain, debug=False):
     balance = 0.0
     addresses_per_blockchain = load_cold_wallet_addresses()
     if blockchain in addresses_per_blockchain:
