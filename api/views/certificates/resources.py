@@ -51,9 +51,9 @@ class Certificates(MethodView):
         elif type == "hddcoin":
             blockchain = "hddcoin"
             dir = "/root/.hddcoin/mainnet/config/ssl/ca"
-        elif type == "silicoin":
-            blockchain = "silicoin"
-            dir = "/root/.silicoin/mainnet/config/ssl/ca"
+        elif type == "maize":
+            blockchain = "maize"
+            dir = "/root/.maize/mainnet/config/ssl/ca"
         elif type == "staicoin":
             blockchain = "staicoin"
             dir = "/root/.staicoin/mainnet/config/ssl/ca"

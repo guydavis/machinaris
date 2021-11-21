@@ -1,9 +1,9 @@
-name: develop-chia
+name: test-maize
 
 on:
   push:
     branches:
-      - 'develop'
+      - 'integration'
 
 jobs:
   docker:
@@ -37,11 +37,11 @@ jobs:
         with:
           file: docker/dockerfile
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
-            "MACHINARIS_STREAM=develop"
-            "CHIA_BRANCH=1.2.11"
+            "MACHINARIS_STREAM=test"
+            "MAIZE_BRANCH=main"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:develop
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:develop
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-maize:test
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-maize:test

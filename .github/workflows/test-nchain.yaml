@@ -1,6 +1,9 @@
 name: test-nchain
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - 'integration'
 
 jobs:
   docker:

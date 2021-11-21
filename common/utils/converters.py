@@ -2,9 +2,12 @@
 # Common utility methods
 #
 
+import locale
 import math
 import re
 import traceback
+
+#from flask_babel import format_decimal
 
 def sizeof_fmt(num, suffix='B'):
     for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
@@ -56,14 +59,13 @@ def convert_date_for_luxon(datestr):
     return "{0}-{1}-{2}T{3}".format(year, month, day, time)
 
 def round_balance(value):
-    if value > 100:
-        value = '{:.6g}'.format(value)
-    else:
-        value = '{:.6f}'.format(value)
-    if value.endswith(".000000"):
-        return value[:-5]
-    return value
-
+    locale.setlocale(locale.LC_ALL, '')
+    if abs(value) < 10 and abs(value) >= 1:
+        return "%.1f"% round(value, 2)
+    elif value > 1:
+        return f"{value:n}"
+    return str(round(value, 4))
+    #return format_decimal(value)
 
 ##################################################################################################
 #

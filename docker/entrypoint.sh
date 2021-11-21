@@ -2,7 +2,14 @@
 #  Configure and start plotting and farming services.
 #
 
-echo "Welcome to Machinaris! - v$(cat /machinaris/VERSION) - ${mode}"
+echo "Welcome to Machinaris!"
+echo "v$(cat /machinaris/VERSION) - ${mode} - ${blockchains}"
+
+if [[ "$HOSTNAME" =~ " |'" ]]; then 
+  echo "You have placed a space character in the hostname for this container."
+  echo "Please use only alpha-numeric characters in the hostname within docker-compose.yml and restart."
+  exit 1
+fi
 
 # v0.6.0 upgrade check guard - only allow single blockchain per container
 if [[ "${blockchains}" == "chia,flax" ]]; then
@@ -11,6 +18,7 @@ if [[ "${blockchains}" == "chia,flax" ]]; then
   exit 1
 fi
 
+# Ensure a worker_address containing an IP address is set on every launch, else exit
 if [[ -z "${worker_address}" ]]; then
   echo "Please set the 'worker_address' environment variable to this system's IP address on your LAN."
   echo "https://github.com/guydavis/machinaris/wiki/Unraid#how-do-i-update-from-v05x-to-v060-with-fork-support"
@@ -40,6 +48,9 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
 
   # During concurrent startup of multiple fork containers, stagger less important setups
   sleep $[ ( $RANDOM % 180 )  + 1 ]s
+
+  # Conditionally install forktools on fullnodes
+  /usr/bin/bash /machinaris/scripts/forktools_setup.sh > /tmp/forktools_setup.log 2>&1
 
   # Conditionally install farmr on harvesters and fullnodes
   /usr/bin/bash /machinaris/scripts/farmr_setup.sh > /tmp/farmr_setup.log 2>&1
