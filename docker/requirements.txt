@@ -17,3 +17,4 @@ flask-migrate
 ruamel.yaml
 psutil
 pytest
+flask-babel

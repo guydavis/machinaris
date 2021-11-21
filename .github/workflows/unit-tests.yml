@@ -19,4 +19,4 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r docker/requirements.txt
       - name: Test with pytest
-        run: pytest
+        run: LANG=en_US.UTF-8 pytest
