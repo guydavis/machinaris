@@ -48,7 +48,7 @@
     <div id="center_div">
       <img src="{{ url_for('static', filename='machinaris.png') }}" style="height:128px; width:128px;" />
 
-      <div id="message">{{random_message}}</div>
+      <div id="message">{{random_message|safe}}</div>
 
       <img src="{{ url_for('static', filename='landing.gif') }}" style="height:56px; width:56px;"/>
     </div>

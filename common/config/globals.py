@@ -31,6 +31,7 @@ SUPPORTED_BLOCKCHAINS = [
     'hddcoin',
     'maize',
     'nchain',
+    'silicoin',
     'staicoin',
     'stor'
 ]
@@ -45,6 +46,7 @@ CURRENCY_SYMBOLS = {
     "hddcoin": "HDD",
     "maize": "XMZ",
     "nchain": "NCH",
+    "silicoin": "SIT",
     "staicoin": "STAI",
     "stor": "STOR",
 }
@@ -66,6 +68,7 @@ FLORA_BINARY = '/flora-blockchain/venv/bin/flora'
 HDDCOIN_BINARY = '/hddcoin-blockchain/venv/bin/hddcoin'
 MAIZE_BINARY = '/maize-blockchain/venv/bin/maize'
 NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
+SILICOIN_BINARY = '/silicoin-blockchain/venv/bin/sit'
 STAICOIN_BINARY = '/staicoin-blockchain/venv/bin/staicoin'
 STOR_BINARY = '/stor-blockchain/venv/bin/stor'
 
@@ -90,6 +93,8 @@ def get_blockchain_binary(blockchain):
         return MAIZE_BINARY
     if blockchain == "nchain":
         return NCHAIN_BINARY
+    if blockchain == "silicoin":
+        return SILICOIN_BINARY
     if blockchain == "staicoin":
         return STAICOIN_BINARY
     if blockchain == "stor":
@@ -115,6 +120,8 @@ def get_blockchain_network_path(blockchain):
         return "/root/.maize/mainnet"
     if blockchain == 'nchain':
         return "/root/.chia/ext9"
+    if blockchain == 'silicoin':
+        return "/root/.sit/mainnet"
     if blockchain == 'staicoin':
         return "/root/.staicoin/mainnet"
     if blockchain == 'stor':

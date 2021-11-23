@@ -17,7 +17,7 @@ import yaml
 
 from flask import Flask, jsonify, abort, request, flash
 from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
-from subprocess import Popen, TimeoutExpired, PIPE
+from subprocess import Popen, TimeoutExpired, PIPE, STDOUT
 from os import path
 
 from common.config import globals
@@ -166,10 +166,10 @@ def load_keys_show(blockchain):
 
 def start_farmer(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    proc = Popen("{0} start farmer".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} start farmer -r".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
-    except TimeoutExpired:
+    except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
@@ -178,8 +178,7 @@ def start_farmer(blockchain):
         return False
     if errs:
         app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash('Unable to start farmer. Try restarting the Machinaris container.'.format(key_path), 'danger')
-        flash(str(ex), 'warning')
+        flash('Unable to start farmer. Try restarting the Machinaris container instead.', 'danger')
         return False
     return True
 
@@ -210,24 +209,23 @@ def is_plots_check_running():
             return proc.info['pid']
     return None
 
-def check_plots(first_load):
-    output_file = '/root/.chia/mainnet/log/plots_check.log'
-    if not is_plots_check_running() and first_load == "true":
-        try:
-            log_fd = os.open(output_file, os.O_RDWR | os.O_CREAT)
-            log_fo = os.fdopen(log_fd, "a+")
-            proc = Popen("{0} plots check".format(CHIA_BINARY), shell=True, 
-                universal_newlines=True, stdout=log_fo, stderr=log_fo)
-        except:
-            app.logger.info(traceback.format_exc())
-            return 'Failed to start plots check job!'
-        else:
-            return "Starting plots check at " + datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-    else:
-        class_escape = re.compile(r' chia.plotting.(\w+)(\s+): ')
-        ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
-        proc = Popen(['tail', '-n', str(MAX_LOG_LINES), output_file], stdout=PIPE)
-        return  class_escape.sub('', ansi_escape.sub('', proc.stdout.read().decode("utf-8")))
+def plot_check(blockchain, plot_path):
+    if not os.path.exists(plot_path):
+        app.logger.error("No such plot file to check at: {0}".format(plot_path))
+        return None
+    plot_file = os.path.basename(plot_path)
+    chia_binary = globals.get_blockchain_binary(blockchain)
+    proc = Popen("{0} plots check -g {1}".format(chia_binary, plot_path),
+        universal_newlines=True, stdout=PIPE, stderr=STDOUT, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        abort(500, description="The timeout is expired attempting to check plots.")
+    class_escape = re.compile(r' chia.plotting.(\w+)(\s+): ')
+    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+    return  class_escape.sub('', ansi_escape.sub('', outs))
 
 def get_pool_login_link(launcher_id):
     try:

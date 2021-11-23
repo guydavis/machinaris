@@ -117,11 +117,6 @@ def farming_plots():
     if request.args.get('analyze'):  # Xhr with a plot filename
         plot_file = request.args.get('analyze')
         return plotman.analyze(plot_file, worker.load_worker_summary().workers)
-    elif request.args.get('check'):  # Xhr calling for check output
-        # TODO Replace this with regular background plots check instead
-        w = worker.get_worker(request.args.get('hostname'))
-        first_load = request.args.get("first_load")
-        return chia.check_plots(w, first_load)
     gc = globals.load()
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()

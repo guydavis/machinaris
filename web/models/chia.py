@@ -356,6 +356,8 @@ class Connections:
             return 58445
         if blockchain == 'maize':
             return 8644
+        if blockchain == 'silicoin':
+            return 22222
         if blockchain == 'staicoin':
             return 1999
         if blockchain == 'stor':

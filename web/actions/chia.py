@@ -328,15 +328,6 @@ def remove_connection(node_ids, hostname, blockchain):
     else:
         flash('Connection removed from {0}!'.format(blockchain), 'success')
 
-def check_plots(worker, first_load):
-    try:
-        payload = {"service":"farming", "action":"check_plots", "first_load": first_load }
-        response = utils.send_post(worker, "/analysis/", payload, debug=False)
-        return response.content.decode('utf-8')
-    except:
-        app.logger.info(traceback.format_exc())
-        flash('Failed to check plots on {0}. Please see logs.'.format(worker.hostname), 'danger')
-
 def get_plotnft_log():
     try:
         return open('/root/.chia/mainnet/log/plotnft.log',"r").read()
