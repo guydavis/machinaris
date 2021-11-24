@@ -63,6 +63,8 @@ ENV WEB_SETTINGS_FILE='/root/.chia/machinaris/config/web.cfg'
 ENV controller_host="localhost"
 ENV controller_web_port=8926
 ENV controller_api_port=8927
+ENV worker_address="null"
+ENV worker_api_port=8927
 
 # Set env vars requried by forktools
 ENV FORKTOOLSDIR=/forktools

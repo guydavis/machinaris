@@ -17,6 +17,7 @@ RUN apt-get update \
 		iproute2 \
 		iputils-ping \
 		jq \
+		logrotate \
 		lsb-release \
 		openssl \
 		python3 \

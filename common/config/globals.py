@@ -178,12 +178,6 @@ def is_setup():
     if "mode" in os.environ and 'harvester' in os.environ['mode']:
         # Harvester doesn't require a mnemonic private key as farmer's ca already imported.
         return True
-    try:
-        if os.path.exists(get_blockchain_network_path(enabled_blockchains()[0]) + '/config/ssl/wallet/public_wallet.key'):
-            logging.info("Skipping check for mnemonic.txt as public wallet key exists on disk.")
-            return True
-    except Exception as ex:
-        logging.info("Failed to find presence of public wallet key due to {0}".format(str(ex)))
     # All other modes, we should have at least one keys path
     if "keys" not in os.environ:
         logging.info(
