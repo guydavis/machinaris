@@ -76,7 +76,7 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 		tee /etc/logrorate.d/farmr <<EOF
 /root/.chia/farmr/log* {
   rotate 3
-  daily
+  hourly
 }
 EOF
 	fi

@@ -11,7 +11,7 @@ def on_starting(server):
         status_plots, status_challenges, status_wallets, status_blockchains, \
         status_connections, status_keys, status_alerts, status_controller, \
         status_plotnfts, status_points, status_pools, status_partials
-    from api.schedules import stats_disk, stats_farm, nft_recover, plots_check
+    from api.schedules import stats_disk, stats_farm, nft_recover, plots_check, log_rotate
     from common.config import globals
 
     scheduler = BackgroundScheduler()
@@ -38,6 +38,7 @@ def on_starting(server):
     if globals.farming_enabled() or globals.harvesting_enabled():
         scheduler.add_job(func=status_challenges.update, name="challenges", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_alerts.update, name="alerts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        scheduler.add_job(func=log_rotate.execute, name="log_rotate", trigger='cron', minute=0)  # Hourly
 
     # Chives need to report farms, plots from harvesters directly due to their old Chia code fork
     if not utils.is_fullnode() and globals.harvesting_enabled() and 'chives' in globals.enabled_blockchains():

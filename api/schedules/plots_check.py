@@ -37,12 +37,12 @@ def have_recent_plot_check_log(plot_check_log):
 def open_status_json():
     status = {}
     if os.path.exists(STATUS_FILE): 
-        with open(STATUS_FILE, 'w') as fp:
-            json.load(status, fp)
+        with open(STATUS_FILE, 'r+') as fp:
+            status = json.load(fp)
     return status
 
 def write_status_json(status):
-    with open(STATUS_FILE, 'w') as fp:
+    with open(STATUS_FILE, 'w+') as fp:
         json.dump(status, fp)
 
 def set_analyze_status(workers, status, plot):
@@ -50,10 +50,11 @@ def set_analyze_status(workers, status, plot):
     if not os.path.exists(analyze_log):
         result = request_analyze(plot.plot_file, workers)
         if result:
+            pass
             # Save the result to a file
             # Store the analysis time into the status.json
-        else:   
-            pathlib.Path(analyze_log).touch() # Leave an empty mark file for no result
+        #else:   
+        #    pathlib.Path(analyze_log).touch() # Leave an empty mark file for no result
     else:
         # if empty file, leave none
         # if file has analyze, store the analysis time into the status.json
@@ -93,7 +94,7 @@ def execute():
             return # Only controller should initiate check/analyze against other fullnodes/harvesters
         workers = db.session.query(w.Worker)
         plots = db.session.query(p.Plot).filter(p.Plot.blockchain == gc['enabled_blockchains'][0], 
-            or_(p.Plot.check is None, p.Plot.analyze is None)).order_by(p.Plot.created_at.desc).limit(1)
+            or_(p.Plot.check is None, p.Plot.analyze is None)).order_by(p.Plot.created_at.desc()).limit(1)
         status = open_status_json()
         for plot in plots:
             set_analyze_status(workers, status, plot)

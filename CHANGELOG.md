@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. The format 
 ## [0.6.6] - 2021-11-26
  - [Maize](https://github.com/Maize-Network/maize-blockchain) - cross-farming support for this blockchain fork.
  - [Forktools](https://github.com/Qwinn1/forktools) - utilities including a multiproc patch to limit memory usage.
+ - Farming page - displays a recent plots check status for each plot row.
 
 ## [0.6.5] - 2021-11-19
  - [Cryptodoge](https://github.com/CryptoDoge-Network/cryptodoge) - cross-farming support for this blockchain fork.
