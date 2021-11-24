@@ -14,6 +14,7 @@ apscheduler==3.8.0
 requests
 pexpect
 flask-migrate
+yaml
 ruamel.yaml
 psutil
 pytest
