@@ -12,6 +12,7 @@ import socket
 import sqlite3
 import time
 import traceback
+import yaml
 
 from flask import Flask, jsonify, abort, request, flash, g
 from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
@@ -460,7 +461,6 @@ def get_disks(disk_type):
     elif disk_type == "plotting":
         try:
             stream = open('/root/.chia/plotman/plotman.yaml', 'r')
-            import yaml  # Blows up Github tests for some reason
             config = yaml.load(stream, Loader=yaml.SafeLoader)
             return config["directories"]["tmp"]
         except:
