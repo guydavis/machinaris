@@ -15,7 +15,6 @@ requests
 pexpect
 flask-migrate
 ruamel.yaml
-ruamel.yaml.clib
 psutil
 pytest
 flask-babel
