@@ -23,7 +23,7 @@ fi
 if [[ "${blockchains}"  == "maize" && "${worker_api_port}" != '8933' ]]; then
   echo "Maize worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8933?"
 fi
-if [[ "${blockchains}"  == "nchain" && "${worker_api_port}" != '8929']]; then
+if [[ "${blockchains}"  == "nchain" && "${worker_api_port}" != '8929' ]]; then
   echo "N-Chain worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8936?"
 fi  
 if [[ "${blockchains}"  == "staicoin" && "${worker_api_port}" != '8934' ]]; then
