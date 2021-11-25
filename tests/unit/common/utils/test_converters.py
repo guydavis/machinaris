@@ -4,12 +4,8 @@ import unittest
 
 sys.path.insert(1, os.path.join(sys.path[0], '../../../..'))
 from common.utils import converters
-from web import app
 
 class TestRoundBalance(unittest.TestCase):
-
-    def setUp(self):
-        app.test_request_context().push()
 
     def test_zero(self):
         data = 0
