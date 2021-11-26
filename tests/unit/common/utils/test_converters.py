@@ -1,3 +1,4 @@
+import locale
 import os
 import sys
 import unittest
@@ -6,6 +7,9 @@ sys.path.insert(1, os.path.join(sys.path[0], '../../../..'))
 from common.utils import converters
 
 class TestRoundBalance(unittest.TestCase):
+
+    def setUp(self):
+        locale.setlocale(locale.LC_ALL, '')
 
     def test_zero(self):
         data = 0

@@ -19,6 +19,7 @@ import urllib
 import yaml
 
 from flask import Flask, jsonify, abort, request, flash, url_for
+from flask.helpers import make_response
 from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
 from subprocess import Popen, TimeoutExpired, PIPE
 from sqlalchemy import or_
@@ -539,3 +540,10 @@ def save_cold_wallet_addresses(blockchain, cold_wallet_addresses):
         app.logger.error(msg)
         flash(msg, 'danger')
         return
+
+def check(plot_id):
+    check_file = '/root/.chia/plotman/checks/{0}.log'.format(plot_id)
+    if os.path.exists(check_file):
+        with open(check_file, 'r+') as fp:
+            return fp.read()
+    return make_response("Sorry, no plot check log found.  Please wait for scheduled plot check to run.", 200)

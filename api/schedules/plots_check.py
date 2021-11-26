@@ -30,7 +30,7 @@ def have_recent_plot_check_log(plot_check_log):
             month_ago = datetime.datetime.now() - datetime.timedelta(months=1)
             return created_date > month_ago  # False if last check was over a month ago
     except Exception as ex:
-        app.logger.info("Failed to check age of temp file at: {0}".format(path))
+        app.logger.info("Failed to check age of temp file at: {0}".format(plot_check_log))
         app.logger.info("Due to: {0}".format(str(ex)))
     return False
 
@@ -46,21 +46,47 @@ def write_status_json(status):
         json.dump(status, fp)
 
 def set_analyze_status(workers, status, plot):
+    app.logger.info("Checking for analyze of {0}".format(plot.plot_id))
     analyze_log = ANALYZE_LOGS + '/' + plot.plot_id + '.log'
+    analysis_seconds = None
     if not os.path.exists(analyze_log):
-        result = request_analyze(plot.plot_file, workers)
+        [hostname, displayname, result] = request_analyze(plot.file, workers)
         if result:
-            pass
-            # Save the result to a file
-            # Store the analysis time into the status.json
-        #else:   
-        #    pathlib.Path(analyze_log).touch() # Leave an empty mark file for no result
+            with open(analyze_log, 'w+') as f:
+                f.write("Plotman analyze from {0} ({1}) found at {2}\n".format(displayname, 
+                    hostname, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+                f.write(result)
+        else:  
+            pathlib.Path(analyze_log).touch() # Leave an empty mark file for no result
+    with open(analyze_log, 'r+') as f:
+        for line in f.readlines():
+            #app.logger.info(line)
+            if line.startswith("Plotman"): # Header line with hostname
+                try:
+                    splits = line.split()
+                    app.logger.info(splits)
+                    hostname = splits[4][1:-1] # strip off brackets
+                    displayname = splits[3]
+                except Exception as ex:
+                    app.log.error("Failed to parse plotman analyze header because: {0}".format(str(ex)))
+                    app.log.error(line)
+            elif line.startswith("| x "):
+                try:
+                    analysis_seconds = line.split('|')[8].strip()
+                except Exception as ex:
+                    app.log.error("Failed to parse plotman analyze line because: {0}".format(str(ex)))
+                    app.log.error(line)
+    if plot.plot_id in status:
+        plot_state = status[plot.plot_id]
     else:
-        # if empty file, leave none
-        # if file has analyze, store the analysis time into the status.json
-        pass
-            
-
+        plot_state = {}
+        status[plot.plot_id] = plot_state
+    if analysis_seconds:
+        app.logger.info("For {0} found {1} seconds.".format(plot.plot_id, analysis_seconds))
+        plot_state['analyze'] = { 'host': hostname, 'seconds': analysis_seconds }
+    else:
+        plot_state['analyze'] = None
+ 
 def request_analyze(plot_file, workers):
     # Don't know which plotter might have the plot result so try them in-turn
     for plotter in workers:
@@ -73,9 +99,9 @@ def request_analyze(plot_file, workers):
             try:
                 app.logger.info("Trying {0}:{1} for analyze....".format(plotter.hostname, plotter.port))
                 payload = {"service":"plotting", "action":"analyze", "plot_file": plot_file }
-                response = utils.send_post(plotter, "/analysis/", payload, debug=False)
+                response = utils.send_worker_post(plotter, "/analysis/", payload, debug=False)
                 if response.status_code == 200:
-                    return response.content.decode('utf-8')
+                    return [plotter.hostname, plotter.displayname, response.content.decode('utf-8')]
                 elif response.status_code == 404:
                     app.logger.info("Plotter on {0}:{1} did not have plot log for {2}".format(
                         plotter.hostname, plotter.port, plot_file))
@@ -84,7 +110,70 @@ def request_analyze(plot_file, workers):
                         plotter.hostname, plotter.port, response.status_code))
             except:
                 app.logger.info(traceback.format_exc())
-    return None
+    return [None, None, None]
+
+def set_check_status(workers, status, plot):
+    app.logger.info("Checking for check of {0}".format(plot.plot_id))
+    check_log = CHECK_LOGS + '/' + plot.plot_id + '.log'
+    check_status = None
+    if not os.path.exists(check_log):
+        [hostname, displayname, result] = request_check(plot.dir, plot.file, workers)
+        if result:
+            with open(check_log, 'w+') as f:
+                f.write("Plots check from {0} ({1}) found at {2}\n".format(displayname, 
+                    hostname, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
+                f.write(result)
+        else:  
+            pathlib.Path(check_log).touch() # Leave an empty mark file for no result
+    with open(check_log, 'r+') as f:
+        for line in f.readlines():
+            #app.logger.info(line)
+            if line.startswith("Plots check from "):
+                check_status = False  # Assume an invalid plot unless get valid line below
+                try:
+                    splits = line.split()
+                    hostname = splits[4][1:-1] # strip off brackets
+                    displayname = splits[3]
+                except Exception as ex:
+                    app.log.error("Failed to parse plotman analyze header because: {0}".format(str(ex)))
+                    app.log.error(line)
+            elif "Found 1 valid plots" in line:
+                check_status = True
+    if plot.plot_id in status:
+        plot_state = status[plot.plot_id]
+    else:
+        plot_state = {}
+        status[plot.plot_id] = plot_state
+    if check_status:
+        app.logger.info("For {0} found {1} status.".format(plot.plot_id, check_status))
+        plot_state['check'] = { 'host': hostname, 'status': check_status }
+    else:
+        plot_state['check'] = None
+
+def request_check(plot_path, plot_file, workers):
+    # Don't know which harvester might have the plot result so try them in-turn
+    for harvester in workers:
+        #app.logger.info("{0}:{1} - {2} - {3}".format(harvester.hostname, harvester.port, harvester.blockchain, harvester.mode))
+        if harvester.mode == 'fullnode' or 'harvester' in harvester.mode:
+            if harvester.latest_ping_result != "Responding":
+                app.logger.info("Skipping analyze call to {0} as last ping was: {1}".format( \
+                    harvester.hostname, harvester.latest_ping_result))
+                continue
+            try:
+                app.logger.info("Trying {0}:{1} for plot check....".format(harvester.hostname, harvester.port))
+                payload = {"service":"farming", "action":"check", "plot_file": plot_path + '/' + plot_file }
+                response = utils.send_worker_post(harvester, "/analysis/", payload, debug=False)
+                if response.status_code == 200:
+                    return [harvester.hostname, harvester.displayname, response.content.decode('utf-8')]
+                elif response.status_code == 404:
+                    app.logger.info("Plotter on {0}:{1} did not have plot check for {2}".format(
+                        harvester.hostname, harvester.port, plot_file))
+                else:
+                    app.logger.info("Plotter on {0}:{1} returned an unexpected error: {2}".format(
+                        harvester.hostname, harvester.port, response.status_code))
+            except:
+                app.logger.info(traceback.format_exc())
+    return [None, None, None]
 
 def execute():
     with app.app_context():
@@ -92,15 +181,19 @@ def execute():
         gc = globals.load()
         if not gc['is_controller']:
             return # Only controller should initiate check/analyze against other fullnodes/harvesters
+        app.logger.info("Executing plots_check...")
+        try:
+            os.makedirs(ANALYZE_LOGS)
+            os.makedirs(CHECK_LOGS)
+        except Exception as ex:
+            app.logger.debug("Unable to create analyze and check folders in plotman. {0}".format(str(ex)))
         workers = db.session.query(w.Worker)
-        plots = db.session.query(p.Plot).filter(p.Plot.blockchain == gc['enabled_blockchains'][0], 
-            or_(p.Plot.check is None, p.Plot.analyze is None)).order_by(p.Plot.created_at.desc()).limit(1)
+        blockchain = gc['enabled_blockchains'][0]
+        #blockchain = 'chives'  # DEBUG ONLY
+        plots = db.session.query(p.Plot).filter(p.Plot.blockchain == blockchain, 
+            or_(p.Plot.plot_check == None, p.Plot.plot_analyze == None)).order_by(p.Plot.created_at.desc()).limit(5)
         status = open_status_json()
-        for plot in plots:
+        for plot in plots.all():
             set_analyze_status(workers, status, plot)
-            # Check for analyze output on disk at /root/.chia/plotman/analzye/PLOT_ID.log (empty means nothing)
-            # If no file, found invoke analyze to check with harvesters.
-            # Store the total time in seconds into a table in the stats database.  Delete all 100 earlier records each time.
-            #plot_check_log = f'/root/.chia/plotman/checks/{plot_file}.log'
-            #os.makedirs(os.path.dirname(plot_check_log))
+            set_check_status(workers, status, plot)
         write_status_json(status)

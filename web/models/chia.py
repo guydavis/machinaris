@@ -14,7 +14,7 @@ from common.utils import converters
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
 MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
-PLOT_TABLE_COLUMNS = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', '.' ]
+PLOT_TABLE_COLUMNS = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', 'a', 'c' ]
 
 class FarmSummary:
 
@@ -135,7 +135,7 @@ class FarmSummary:
 
 class FarmPlots:
 
-     def __init__(self, plots):
+    def __init__(self, plots):
         self.columns = PLOT_TABLE_COLUMNS
         self.rows = []
         for plot in plots:
@@ -148,8 +148,19 @@ class FarmPlots:
                 plot.type if plot.type else "", 
                 plot.created_at, 
                 app.jinja_env.filters['bytesfilter'](plot.size),
-                plot.file]
-            ) 
+                self.get_analzye_cell_value(plot.plot_id, plot.plot_analyze),
+                self.get_check_cell_value(plot.plot_id, plot.plot_check)
+            ])
+
+    def get_analzye_cell_value(self, plot_id, plot_analyze):
+        if plot_analyze and plot_analyze != '-':
+            return "{0} | {1}".format(plot_analyze, plot_id)
+        return ""
+
+    def get_check_cell_value(self, plot_id, plot_check):
+        if plot_check and plot_check != '-':
+            return "{0} | {1}".format(plot_check, plot_id)
+        return ""
 
 
 class ChallengesChartData:

@@ -223,7 +223,7 @@ def plot_check(blockchain, plot_path):
         proc.kill()
         proc.communicate()
         abort(500, description="The timeout is expired attempting to check plots.")
-    class_escape = re.compile(r' chia.plotting.(\w+)(\s+): ')
+    class_escape = re.compile(r'.*: INFO\s+')
     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
     return  class_escape.sub('', ansi_escape.sub('', outs))
 

@@ -114,9 +114,12 @@ def plotting_workers():
 
 @app.route('/farming/plots')
 def farming_plots():
-    if request.args.get('analyze'):  # Xhr with a plot filename
-        plot_file = request.args.get('analyze')
-        return plotman.analyze(plot_file, worker.load_worker_summary().workers)
+    if request.args.get('analyze'):  # Xhr with a plot_id
+        plot_id = request.args.get('analyze')
+        return plotman.analyze(plot_id)
+    elif request.args.get('check'):  # Xhr with a plot_id
+        plot_id = request.args.get('check')
+        return chia.check(plot_id)
     gc = globals.load()
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()
@@ -139,10 +142,6 @@ def farming_workers():
     disk_usage = stats.load_current_disk_usage('plots')
     return render_template('farming/workers.html', farmers=farmers, 
         daily_summaries=daily_summaries, disk_usage=disk_usage, global_config=gc)
-
-@app.route('/plots_check')
-def plots_check():
-    return render_template('plots_check.html')
 
 @app.route('/alerts', methods=['GET', 'POST'])
 def alerts():
