@@ -14,7 +14,7 @@ from common.utils import converters
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
 MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
-PLOT_TABLE_COLUMNS = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', 'a', 'c' ]
+PLOT_TABLE_COLUMNS = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', 'c', 'a' ]
 
 class FarmSummary:
 
@@ -148,8 +148,8 @@ class FarmPlots:
                 plot.type if plot.type else "", 
                 plot.created_at, 
                 app.jinja_env.filters['bytesfilter'](plot.size),
+                self.get_check_cell_value(plot.plot_id, plot.plot_check),
                 self.get_analzye_cell_value(plot.plot_id, plot.plot_analyze),
-                self.get_check_cell_value(plot.plot_id, plot.plot_check)
             ])
 
     def get_analzye_cell_value(self, plot_id, plot_analyze):

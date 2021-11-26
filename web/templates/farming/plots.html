@@ -157,7 +157,7 @@
                 "order": [[6, "desc"]],
                 "columnDefs": [
                     { 
-                        targets: [8], "orderable": false, "className": 'analyze_cell',
+                        targets: [9], "orderable": false, "className": 'analyze_cell',
                         "render": function ( data, type, row, meta ) {
                             if (data) {
                                 arr = data.split("|");
@@ -169,17 +169,16 @@
                         }
                     },
                     { 
-                        targets: [9], "orderable": false, "className": 'check_cell',
+                        targets: [8], "orderable": true, "className": 'check_cell',
                         "render": function ( data, type, row, meta ) {
                             if (data) {
                                 arr = data.split("|");
                                 status = arr[0].trim();
                                 plot_id = arr[1].trim();
-                                console.log(data);
-                                if (status == '1') {
-                                    return '<a href="#" title="Check Plot" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-check-circle"></i></a>';
+                                if (status == 'GOOD') {
+                                    return '<a href="#" title="Good Plot" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-check-circle"></i></a>';
                                 } else {
-                                    return '<a href="#" title="Check Plot" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-exclamation-triangle"></i></a>';
+                                    return '<a href="#" title="Bad Plot" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-exclamation-triangle"></i></a>';
                                 }
                             }               
                             return "";

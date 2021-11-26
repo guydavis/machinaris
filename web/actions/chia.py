@@ -64,6 +64,8 @@ def order_plots_query(args, query):
         column = p.Plot.created_at
     elif col_idx == 7:
         column = p.Plot.size
+    elif col_idx == 8:
+        column = p.Plot.plot_check
     if request.args.get("order[0][dir]") == "desc":
         query = query.order_by(column.desc())
     else:
@@ -80,6 +82,7 @@ def search_plots_query(search, query):
         p.Plot.file.like(search),
         p.Plot.type.like(search),
         p.Plot.created_at.like(search),
+        p.Plot.plot_check.like(search),
     ))
     return query
 

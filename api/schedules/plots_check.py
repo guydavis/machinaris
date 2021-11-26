@@ -91,7 +91,7 @@ def request_analyze(plot_file, workers):
     # Don't know which plotter might have the plot result so try them in-turn
     for plotter in workers:
         #app.logger.info("{0}:{1} - {2} - {3}".format(plotter.hostname, plotter.port, plotter.blockchain, plotter.mode))
-        if plotter.mode == 'fullnode' or 'plotter' in plotter.mode:
+        if (plotter.mode == 'fullnode' and plotter.blockchain in ['chia', 'chives']) or 'plotter' in plotter.mode:
             if plotter.latest_ping_result != "Responding":
                 app.logger.info("Skipping analyze call to {0} as last ping was: {1}".format( \
                     plotter.hostname, plotter.latest_ping_result))
@@ -129,16 +129,16 @@ def set_check_status(workers, status, plot):
         for line in f.readlines():
             #app.logger.info(line)
             if line.startswith("Plots check from "):
-                check_status = False  # Assume an invalid plot unless get valid line below
+                check_status = 'BAD'  # Assume an invalid plot unless get valid line below
                 try:
                     splits = line.split()
                     hostname = splits[4][1:-1] # strip off brackets
                     displayname = splits[3]
                 except Exception as ex:
-                    app.log.error("Failed to parse plotman analyze header because: {0}".format(str(ex)))
+                    app.log.error("Failed to parse plots check header because: {0}".format(str(ex)))
                     app.log.error(line)
             elif "Found 1 valid plots" in line:
-                check_status = True
+                check_status = 'GOOD'
     if plot.plot_id in status:
         plot_state = status[plot.plot_id]
     else:
@@ -156,7 +156,7 @@ def request_check(plot_path, plot_file, workers):
         #app.logger.info("{0}:{1} - {2} - {3}".format(harvester.hostname, harvester.port, harvester.blockchain, harvester.mode))
         if harvester.mode == 'fullnode' or 'harvester' in harvester.mode:
             if harvester.latest_ping_result != "Responding":
-                app.logger.info("Skipping analyze call to {0} as last ping was: {1}".format( \
+                app.logger.info("Skipping check call to {0} as last ping was: {1}".format( \
                     harvester.hostname, harvester.latest_ping_result))
                 continue
             try:
@@ -188,10 +188,8 @@ def execute():
         except Exception as ex:
             app.logger.debug("Unable to create analyze and check folders in plotman. {0}".format(str(ex)))
         workers = db.session.query(w.Worker)
-        blockchain = gc['enabled_blockchains'][0]
-        #blockchain = 'chives'  # DEBUG ONLY
-        plots = db.session.query(p.Plot).filter(p.Plot.blockchain == blockchain, 
-            or_(p.Plot.plot_check == None, p.Plot.plot_analyze == None)).order_by(p.Plot.created_at.desc()).limit(5)
+        plots = db.session.query(p.Plot).filter(or_(p.Plot.plot_check == None, 
+            p.Plot.plot_analyze == None)).order_by(p.Plot.created_at.desc()).limit(5)
         status = open_status_json()
         for plot in plots.all():
             set_analyze_status(workers, status, plot)
