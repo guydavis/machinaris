@@ -459,9 +459,9 @@ class Pools:
         for pool in pools:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(pool.hostname))
-                displayname = w.get_worker(pool.hostname, pools.blockchain).displayname
+                displayname = w.get_worker(pool.hostname, pool.blockchain).displayname
             except:
-                app.logger.info("Unable to find a worker with hostname '{0}'".format(pool.hostname))
+                app.logger.info("Unable to find a worker with hostname '{0}' for {1}".format(pool.hostname, pool.blockchain))
                 displayname = pool.hostname
             launcher_id = pool.launcher_id
             plotnft = self.find_plotnft(plotnfts, launcher_id)

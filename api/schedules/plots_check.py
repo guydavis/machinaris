@@ -30,8 +30,8 @@ def have_recent_plot_check_log(plot_check_log):
             month_ago = datetime.datetime.now() - datetime.timedelta(months=1)
             return created_date > month_ago  # False if last check was over a month ago
     except Exception as ex:
-        app.logger.info("Failed to check age of temp file at: {0}".format(plot_check_log))
-        app.logger.info("Due to: {0}".format(str(ex)))
+        app.logger.error("Failed to check age of temp file at: {0}".format(plot_check_log))
+        app.logger.error("Due to: {0}".format(str(ex)))
     return False
 
 def open_status_json():
@@ -46,7 +46,7 @@ def write_status_json(status):
         json.dump(status, fp)
 
 def set_analyze_status(workers, status, plot):
-    app.logger.info("Checking for analyze of {0}".format(plot.plot_id))
+    #app.logger.info("Checking for analyze of {0}".format(plot.plot_id))
     analyze_log = ANALYZE_LOGS + '/' + plot.plot_id + '.log'
     analysis_seconds = None
     if not os.path.exists(analyze_log):
@@ -64,7 +64,6 @@ def set_analyze_status(workers, status, plot):
             if line.startswith("Plotman"): # Header line with hostname
                 try:
                     splits = line.split()
-                    app.logger.info(splits)
                     hostname = splits[4][1:-1] # strip off brackets
                     displayname = splits[3]
                 except Exception as ex:
@@ -82,7 +81,7 @@ def set_analyze_status(workers, status, plot):
         plot_state = {}
         status[plot.plot_id] = plot_state
     if analysis_seconds:
-        app.logger.info("For {0} found {1} seconds.".format(plot.plot_id, analysis_seconds))
+        #app.logger.info("For {0} found {1} seconds.".format(plot.plot_id, analysis_seconds))
         plot_state['analyze'] = { 'host': hostname, 'seconds': analysis_seconds }
     else:
         plot_state['analyze'] = None
@@ -108,12 +107,12 @@ def request_analyze(plot_file, workers):
                 else:
                     app.logger.info("Plotter on {0}:{1} returned an unexpected error: {2}".format(
                         plotter.hostname, plotter.port, response.status_code))
-            except:
-                app.logger.info(traceback.format_exc())
+            except Exception as ex:
+                app.logger.error(str(ex))
     return [None, None, None]
 
 def set_check_status(workers, status, plot):
-    app.logger.info("Checking for check of {0}".format(plot.plot_id))
+    #app.logger.info("Checking for plot check of {0}".format(plot.plot_id))
     check_log = CHECK_LOGS + '/' + plot.plot_id + '.log'
     check_status = None
     requested_status = False
@@ -147,7 +146,7 @@ def set_check_status(workers, status, plot):
         plot_state = {}
         status[plot.plot_id] = plot_state
     if check_status:
-        app.logger.info("For {0} found {1} status.".format(plot.plot_id, check_status))
+        #app.logger.info("For {0} found {1} status.".format(plot.plot_id, check_status))
         plot_state['check'] = { 'host': hostname, 'status': check_status }
     else:
         plot_state['check'] = None
@@ -174,8 +173,8 @@ def request_check(plot_path, plot_file, workers):
                 else:
                     app.logger.info("Plotter on {0}:{1} returned an unexpected error: {2}".format(
                         harvester.hostname, harvester.port, response.status_code))
-            except:
-                app.logger.info(traceback.format_exc())
+            except Exception as ex:
+                app.logger.info(str(ex))
     return [None, None, None]
 
 def execute():
@@ -184,7 +183,7 @@ def execute():
         gc = globals.load()
         if not gc['is_controller']:
             return # Only controller should initiate check/analyze against other fullnodes/harvesters
-        app.logger.info("Executing plots_check...")
+        #app.logger.info("Executing plots_check...")
         try:
             os.makedirs(ANALYZE_LOGS)
             os.makedirs(CHECK_LOGS)
