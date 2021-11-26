@@ -31,6 +31,7 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 	if [[ ! -d ./blockchain ]]; then # Never run before, will create default configs
 		nohup farmr 2>&1 >/dev/null &
 		sleep 30
+		kill $(pidof farmr)
 	fi
 
 	if [[ ${blockchains} != "chia" ]] && [[ -f blockchain/xch.json ]]; then
@@ -69,6 +70,15 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 	elif [[ ${blockchains} == 'stor' ]]; then
 		cp -n blockchain/stor.json.template blockchain/stor.json
 		echo "/stor-blockchain/venv/bin/stor" > override-stor-binary.txt
+	fi
+
+	if [[ ! -f /etc/logrotate.d/farmr ]]; then
+		tee /etc/logrotate.d/farmr <<EOF
+/root/.chia/farmr/log* {
+  rotate 3
+  hourly
+}
+EOF
 	fi
 
 	# Use local file for configuration

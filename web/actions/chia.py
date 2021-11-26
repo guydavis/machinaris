@@ -19,6 +19,7 @@ import urllib
 import yaml
 
 from flask import Flask, jsonify, abort, request, flash, url_for
+from flask.helpers import make_response
 from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
 from subprocess import Popen, TimeoutExpired, PIPE
 from sqlalchemy import or_
@@ -63,6 +64,8 @@ def order_plots_query(args, query):
         column = p.Plot.created_at
     elif col_idx == 7:
         column = p.Plot.size
+    elif col_idx == 8:
+        column = p.Plot.plot_check
     if request.args.get("order[0][dir]") == "desc":
         query = query.order_by(column.desc())
     else:
@@ -79,6 +82,7 @@ def search_plots_query(search, query):
         p.Plot.file.like(search),
         p.Plot.type.like(search),
         p.Plot.created_at.like(search),
+        p.Plot.plot_check.like(search),
     ))
     return query
 
@@ -328,15 +332,6 @@ def remove_connection(node_ids, hostname, blockchain):
     else:
         flash('Connection removed from {0}!'.format(blockchain), 'success')
 
-def check_plots(worker, first_load):
-    try:
-        payload = {"service":"farming", "action":"check_plots", "first_load": first_load }
-        response = utils.send_post(worker, "/analysis/", payload, debug=False)
-        return response.content.decode('utf-8')
-    except:
-        app.logger.info(traceback.format_exc())
-        flash('Failed to check plots on {0}. Please see logs.'.format(worker.hostname), 'danger')
-
 def get_plotnft_log():
     try:
         return open('/root/.chia/mainnet/log/plotnft.log',"r").read()
@@ -548,3 +543,10 @@ def save_cold_wallet_addresses(blockchain, cold_wallet_addresses):
         app.logger.error(msg)
         flash(msg, 'danger')
         return
+
+def check(plot_id):
+    check_file = '/root/.chia/plotman/checks/{0}.log'.format(plot_id)
+    if os.path.exists(check_file):
+        with open(check_file, 'r+') as fp:
+            return fp.read()
+    return make_response("Sorry, no plot check log found.  Please wait for scheduled plot check to run.", 200)

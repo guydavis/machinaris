@@ -31,6 +31,7 @@ SUPPORTED_BLOCKCHAINS = [
     'hddcoin',
     'maize',
     'nchain',
+    'silicoin',
     'staicoin',
     'stor'
 ]
@@ -45,6 +46,7 @@ CURRENCY_SYMBOLS = {
     "hddcoin": "HDD",
     "maize": "XMZ",
     "nchain": "NCH",
+    "silicoin": "SIT",
     "staicoin": "STAI",
     "stor": "STOR",
 }
@@ -66,6 +68,7 @@ FLORA_BINARY = '/flora-blockchain/venv/bin/flora'
 HDDCOIN_BINARY = '/hddcoin-blockchain/venv/bin/hddcoin'
 MAIZE_BINARY = '/maize-blockchain/venv/bin/maize'
 NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
+SILICOIN_BINARY = '/silicoin-blockchain/venv/bin/sit'
 STAICOIN_BINARY = '/staicoin-blockchain/venv/bin/staicoin'
 STOR_BINARY = '/stor-blockchain/venv/bin/stor'
 
@@ -90,6 +93,8 @@ def get_blockchain_binary(blockchain):
         return MAIZE_BINARY
     if blockchain == "nchain":
         return NCHAIN_BINARY
+    if blockchain == "silicoin":
+        return SILICOIN_BINARY
     if blockchain == "staicoin":
         return STAICOIN_BINARY
     if blockchain == "stor":
@@ -115,6 +120,8 @@ def get_blockchain_network_path(blockchain):
         return "/root/.maize/mainnet"
     if blockchain == 'nchain':
         return "/root/.chia/ext9"
+    if blockchain == 'silicoin':
+        return "/root/.sit/mainnet"
     if blockchain == 'staicoin':
         return "/root/.staicoin/mainnet"
     if blockchain == 'stor':
@@ -171,12 +178,6 @@ def is_setup():
     if "mode" in os.environ and 'harvester' in os.environ['mode']:
         # Harvester doesn't require a mnemonic private key as farmer's ca already imported.
         return True
-    try:
-        if os.path.exists(get_blockchain_network_path(enabled_blockchains()[0]) + '/config/ssl/wallet/public_wallet.key'):
-            logging.info("Skipping check for mnemonic.txt as public wallet key exists on disk.")
-            return True
-    except Exception as ex:
-        logging.info("Failed to find presence of public wallet key due to {0}".format(str(ex)))
     # All other modes, we should have at least one keys path
     if "keys" not in os.environ:
         logging.info(

@@ -21,6 +21,7 @@ MOJO_PER_COIN = {
     'flora': 1000000000000,
     'hddcoin': 1000000000000,
     'nchain': 1000000000000,
+    'silicoin': 1000000000000, 
     'staicoin': 1000000000,
     'stor': 1000000000000,
 }
@@ -37,7 +38,7 @@ def load_cold_wallet_addresses():
             return data
     return data
 
-def cold_wallet_balance(blockchain, debug=True):
+def cold_wallet_balance(blockchain, debug=False):
     balance = 0.0
     addresses_per_blockchain = load_cold_wallet_addresses()
     if blockchain in addresses_per_blockchain:

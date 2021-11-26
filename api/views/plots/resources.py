@@ -1,5 +1,7 @@
 import asyncio
 import datetime as dt
+import json
+import os
 
 from flask.views import MethodView
 
@@ -18,6 +20,34 @@ blp = Blueprint(
     description="Operations on all plots on farmer"
 )
 
+# Holds the cached status of Plotman analyze and Chia plots check
+STATUS_FILE = '/root/.chia/plotman/status.json'
+
+def open_status_json():
+    status = {}
+    if os.path.exists(STATUS_FILE): 
+        with open(STATUS_FILE, 'r+') as fp:
+            status = json.load(fp)
+    return status
+
+def analyze_status(plots_status, short_plot_id):
+    if short_plot_id in plots_status:
+        if "analyze" in plots_status[short_plot_id]:
+            if plots_status[short_plot_id]['analyze'] and 'seconds' in plots_status[short_plot_id]['analyze']:
+                return plots_status[short_plot_id]['analyze']['seconds']
+            else:
+                return "-"
+    return None
+
+def check_status(plots_status, short_plot_id):
+    if short_plot_id in plots_status:
+        if "check" in plots_status[short_plot_id]:
+            if plots_status[short_plot_id]['check'] and 'status' in plots_status[short_plot_id]['check']:
+                return plots_status[short_plot_id]['check']['status']
+            else:
+                return "-"
+    return None
+
 @blp.route('/')
 class Plots(MethodView):
 
@@ -35,16 +65,19 @@ class Plots(MethodView):
     def post(self, new_items):
         # Re-enabled as Chives must send plots from each container
         items = []
+        plots_status = open_status_json()
         for new_item in new_items:
             # Skip any previously sent by existing plot_id
             if not db.session.query(Plot).filter(Plot.hostname==new_item['hostname'], 
                 Plot.plot_id==new_item['plot_id']).first():
+                short_plot_id = new_item['plot_id'][:8]
                 item = Plot(**new_item)
+                item.plot_analyze = analyze_status(plots_status, short_plot_id)
+                item.plot_check = check_status(plots_status, short_plot_id)
                 items.append(item)
                 db.session.add(item)
         db.session.commit()
         return items
-
 
 @blp.route('/<hostname>/<blockchain>')
 class PlotByHostname(MethodView):
@@ -60,11 +93,15 @@ class PlotByHostname(MethodView):
     def put(self, new_items, hostname, blockchain):
         # Re-enabled as Chives must send plots from each container
         items = []
+        plots_status = open_status_json()
         for new_item in new_items:
             # Skip any previously sent by existing plot_id
             if not db.session.query(Plot).filter(Plot.hostname==new_item['hostname'], 
                 Plot.plot_id==new_item['plot_id']).first():
+                short_plot_id = new_item['plot_id'][:8]
                 item = Plot(**new_item)
+                item.plot_analyze = analyze_status(plots_status, short_plot_id)
+                item.plot_check = check_status(plots_status, short_plot_id)
                 items.append(item)
                 db.session.add(item)
         db.session.commit()

@@ -3,6 +3,7 @@
 #
 
 import datetime
+import json
 import os
 import re
 import traceback
@@ -19,6 +20,9 @@ from api import utils
 # Due to database load, only send full plots list every X minutes
 FULL_SEND_INTERVAL_MINS = 15
 
+# Holds the cached status of Plotman analyze and Chia plots check
+STATUS_FILE = '/root/.chia/plotman/status.json'
+
 last_full_send_time = None
 
 def get_plot_attrs(plot_id, filename):
@@ -31,6 +35,13 @@ def get_plot_attrs(plot_id, filename):
         created_at = "" 
     return [short_plot_id, dir,file,created_at]
 
+def open_status_json():
+    status = {}
+    if os.path.exists(STATUS_FILE): 
+        with open(STATUS_FILE, 'r+') as fp:
+            status = json.load(fp)
+    return status
+
 def update():
     global last_full_send_time
     with app.app_context():
@@ -39,14 +50,15 @@ def update():
             (datetime.datetime.now() - datetime.timedelta(minutes=FULL_SEND_INTERVAL_MINS)):
             since = None  # No since filter sends all plots, not just recent
             last_full_send_time = datetime.datetime.now()
+        plots_status = open_status_json()
         if 'chia' in globals.enabled_blockchains():
-            update_chia_plots(since)
+            update_chia_plots(plots_status, since)
         elif 'chives' in globals.enabled_blockchains():
-            update_chives_plots(since)
+            update_chives_plots(plots_status, since)
         else:
             app.logger.debug("Skipping plots update from blockchains other than chia and chives as they all farm same as chia.")
 
-def update_chia_plots(since):
+def update_chia_plots(plots_status, since):
     try:
         controller_hostname = utils.get_hostname()
         plots_farming = chia.get_all_plots()
@@ -79,6 +91,8 @@ def update_chia_plots(since):
                     "file": file,
                     "type": plot['type'],
                     "created_at": created_at,
+                    "plot_analyze": analyze_status(plots_status, short_plot_id),
+                    "plot_check": check_status(plots_status, short_plot_id),
                     "size": plot['file_size']
                 })
         if not since:  # If no filter, delete all for this blockchain before sending again
@@ -93,7 +107,7 @@ def update_chia_plots(since):
         app.logger.info(traceback.format_exc())
 
 # Sent from a separate fullnode container
-def update_chives_plots(since):
+def update_chives_plots(plots_status, since):
     try:
         blockchain = 'chives'
         hostname = utils.get_hostname()
@@ -112,6 +126,8 @@ def update_chives_plots(since):
                     "file": file,
                     "type": plot['type'],
                     "created_at": created_at,
+                    "plot_analyze": analyze_status(plots_status, short_plot_id),
+                    "plot_check": check_status(plots_status, short_plot_id),
                     "size": plot['file_size']
                 })
         if not since:  # If no filter, delete all before sending all current again
@@ -121,3 +137,21 @@ def update_chives_plots(since):
     except:
         app.logger.info("Failed to load Chives plots farming and send.")
         app.logger.info(traceback.format_exc())
+
+def analyze_status(plots_status, short_plot_id):
+    if short_plot_id in plots_status:
+        if "analyze" in plots_status[short_plot_id]:
+            if plots_status[short_plot_id]['analyze'] and 'seconds' in plots_status[short_plot_id]['analyze']:
+                return plots_status[short_plot_id]['analyze']['seconds']
+            else:
+                return "-"
+    return None
+
+def check_status(plots_status, short_plot_id):
+    if short_plot_id in plots_status:
+        if "check" in plots_status[short_plot_id]:
+            if plots_status[short_plot_id]['check'] and 'status' in plots_status[short_plot_id]['check']:
+                return plots_status[short_plot_id]['check']['status']
+            else:
+                return "-"
+    return None

@@ -2,8 +2,8 @@
 #  Configure and start plotting and farming services.
 #
 
-echo "Welcome to Machinaris!"
-echo "v$(cat /machinaris/VERSION) - ${mode} - ${blockchains}"
+echo "Welcome to Machinaris v$(cat /machinaris/VERSION)!"
+echo "${blockchains} - ${mode} on $(uname -m)"
 
 if [[ "$HOSTNAME" =~ " |'" ]]; then 
   echo "You have placed a space character in the hostname for this container."
@@ -24,6 +24,16 @@ if [[ -z "${worker_address}" ]]; then
   echo "https://github.com/guydavis/machinaris/wiki/Unraid#how-do-i-update-from-v05x-to-v060-with-fork-support"
   exit 1
 fi
+
+# Refuse to run if Portainer launched containers out of order and created a directory for mnemonic.txt
+if [[ "${mode}" == 'fullnode' ]] && [[ -d /root/.chia/mnemonic.txt ]]; then
+  echo "Portainer (or similar) seems to have launched a fork container before the main Machinaris container on first run."
+  echo "Now we have a mnemonic.txt directory, instead of an empty file.  Please correct and start only machinaris container first."
+  exit 1
+fi
+
+# Warn if non-standard worker_api_port is being used, likely default value they did not override properly
+/usr/bin/bash /machinaris/scripts/worker_port_warning.sh 
 
 # If on Windows, possibly mount SMB remote shares as defined in 'remote_shares' env var
 /usr/bin/bash /machinaris/scripts/mount_remote_shares.sh > /tmp/mount_remote_shares.log

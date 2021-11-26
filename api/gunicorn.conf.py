@@ -11,7 +11,7 @@ def on_starting(server):
         status_plots, status_challenges, status_wallets, status_blockchains, \
         status_connections, status_keys, status_alerts, status_controller, \
         status_plotnfts, status_points, status_pools, status_partials
-    from api.schedules import stats_disk, stats_farm, nft_recover, plots_check
+    from api.schedules import stats_disk, stats_farm, nft_recover, plots_check, log_rotate
     from common.config import globals
 
     scheduler = BackgroundScheduler()
@@ -38,6 +38,7 @@ def on_starting(server):
     if globals.farming_enabled() or globals.harvesting_enabled():
         scheduler.add_job(func=status_challenges.update, name="challenges", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_alerts.update, name="alerts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        scheduler.add_job(func=log_rotate.execute, name="log_rotate", trigger='cron', minute=0)  # Hourly
 
     # Chives need to report farms, plots from harvesters directly due to their old Chia code fork
     if not utils.is_fullnode() and globals.harvesting_enabled() and 'chives' in globals.enabled_blockchains():
@@ -58,7 +59,7 @@ def on_starting(server):
         scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_plots.update, name="plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)  
         if 'chia' in globals.enabled_blockchains():  # Jobs only Chia controller should run
-            scheduler.add_job(func=plots_check.execute, name="plots_checks", trigger='interval', minutes=15) 
+            scheduler.add_job(func=plots_check.execute, name="plot_checks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
             scheduler.add_job(func=status_plotnfts.update, name="plotnfts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
             scheduler.add_job(func=status_partials.update, name="partials", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
             scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
@@ -69,8 +70,7 @@ def on_starting(server):
         scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', hours=12)
 
     # Testing only
-    #scheduler.add_job(func=stats_farm.collect, trigger='interval', seconds=10) # Test immediately
-    #scheduler.add_job(func=stats_disk.collect, trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=plots_check.execute, trigger='interval', seconds=10) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()
