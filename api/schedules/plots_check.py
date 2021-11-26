@@ -116,7 +116,9 @@ def set_check_status(workers, status, plot):
     app.logger.info("Checking for check of {0}".format(plot.plot_id))
     check_log = CHECK_LOGS + '/' + plot.plot_id + '.log'
     check_status = None
+    requested_status = False
     if not os.path.exists(check_log):
+        requested_status = True
         [hostname, displayname, result] = request_check(plot.dir, plot.file, workers)
         if result:
             with open(check_log, 'w+') as f:
@@ -149,6 +151,7 @@ def set_check_status(workers, status, plot):
         plot_state['check'] = { 'host': hostname, 'status': check_status }
     else:
         plot_state['check'] = None
+    return requested_status
 
 def request_check(plot_path, plot_file, workers):
     # Don't know which harvester might have the plot result so try them in-turn
@@ -189,9 +192,13 @@ def execute():
             app.logger.debug("Unable to create analyze and check folders in plotman. {0}".format(str(ex)))
         workers = db.session.query(w.Worker)
         plots = db.session.query(p.Plot).filter(or_(p.Plot.plot_check == None, 
-            p.Plot.plot_analyze == None)).order_by(p.Plot.created_at.desc()).limit(5)
+            p.Plot.plot_analyze == None)).order_by(p.Plot.created_at.desc()).all()
         status = open_status_json()
-        for plot in plots.all():
+        requested_status_count = 0
+        for plot in plots:
             set_analyze_status(workers, status, plot)
-            set_check_status(workers, status, plot)
+            if set_check_status(workers, status, plot):
+                requested_status_count += 1
+            if requested_status_count > 5:  # Only remote request `check plots` on at most 5 plots per cycle
+                break
         write_status_json(status)
