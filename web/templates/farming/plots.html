@@ -153,7 +153,7 @@
             $('#data').DataTable({
                 "pageLength": 25,
                 "serverSide": true,
-                "ajax": '/farming/data',
+                "ajax": "{{ url_for('farming_data') }}",
                 "order": [[6, "desc"]],
                 "columnDefs": [
                     { 
