@@ -72,14 +72,12 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 		echo "/stor-blockchain/venv/bin/stor" > override-stor-binary.txt
 	fi
 
-	if [[ ! -f /etc/logrotate.d/farmr ]]; then
-		tee /etc/logrotate.d/farmr <<EOF
-/root/.chia/farmr/log* {
+	tee /etc/logrotate.d/farmr <<EOF
+/root/.chia/farmr/log*txt {
   rotate 3
   hourly
 }
 EOF
-	fi
 
 	# Use local file for configuration
 	#sed -i 's/"Online Config": true/"Online Config": false/g' blockchain/*.json

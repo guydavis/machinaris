@@ -31,5 +31,6 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 		sed -i "s/SETPLOTLOADFREQUENCY='18000'/SETPLOTLOADFREQUENCY='1800' /g" /root/.chia/forktools/ftconfigs/config.forkfixconfig*
 		echo 'Y' | ./forkfixconfig all
 		./forkpatch all -multiproc
+		./forkpatch all -logwinningplots
 	fi
 fi
