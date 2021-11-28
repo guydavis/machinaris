@@ -21,6 +21,7 @@ MOJO_PER_COIN = {
     'flora': 1000000000000,
     'hddcoin': 1000000000000,
     'nchain': 1000000000000,
+    'silicoin': 1000000000000, 
     'staicoin': 1000000000,
     'stor': 1000000000000,
 }
@@ -37,14 +38,20 @@ def load_cold_wallet_addresses():
             return data
     return data
 
-def cold_wallet_balance(blockchain, debug=True):
+def get_alltheblocks_name(blockchain):
+    if blockchain == 'staicoin':
+        return 'stai' # Special case for staicoin's inconsistent naming convention
+    return blockchain
+
+def cold_wallet_balance(blockchain, debug=False):
     balance = 0.0
+    alltheblocks_blockchain = get_alltheblocks_name(blockchain)
     addresses_per_blockchain = load_cold_wallet_addresses()
     if blockchain in addresses_per_blockchain:
         if debug:
             http.client.HTTPConnection.debuglevel = 1
         for address in addresses_per_blockchain[blockchain]:
-            url = f"https://api.alltheblocks.net/{blockchain}/address/{address}"
+            url = f"https://api.alltheblocks.net/{alltheblocks_blockchain}/address/{address}"
             try:
                 response = json.loads(requests.get(url).content)
                 balance += response['balance'] / MOJO_PER_COIN[blockchain] 

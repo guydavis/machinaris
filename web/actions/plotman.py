@@ -5,7 +5,6 @@
 import datetime
 import json
 import os
-from flask.helpers import make_response
 import psutil
 import re
 import signal
@@ -15,7 +14,9 @@ import traceback
 import yaml
 
 from flask import Flask, jsonify, abort, request, flash
+from flask.helpers import make_response
 from subprocess import Popen, TimeoutExpired, PIPE
+
 from common.models import plottings as pl
 from web import app, db, utils
 from web.models.plotman import PlottingSummary
@@ -108,7 +109,7 @@ def stop_plotman(plotter):
 def start_archiving(plotter):
     app.logger.info("Starting Archiver....")
     try:
-        response = utils.send_post(plotter, "/actions/", {"service": "archiving","action": "start"}, debug=True)
+        response = utils.send_post(plotter, "/actions/", {"service": "archiving","action": "start"}, debug=False)
     except:
         app.logger.info(traceback.format_exc())
         flash('Failed to start Plotman archiver!', 'danger')
@@ -122,7 +123,7 @@ def start_archiving(plotter):
 def stop_archiving(plotter):
     app.logger.info("Stopping Archiver run....")
     try:
-        response = utils.send_post(plotter, "/actions/", payload={"service": "archiving","action": "stop"}, debug=True)
+        response = utils.send_post(plotter, "/actions/", payload={"service": "archiving","action": "stop"}, debug=False)
     except:
         app.logger.info(traceback.format_exc())
         flash('Failed to stop Plotman archiver', 'danger')
@@ -174,7 +175,7 @@ def load_config(plotter, blockchain):
         app.logger.info("Unable to load replacements on install with mode={0}".format(os.environ['mode']))
         app.logger.info(traceback.format_exc())
     lines = []
-    config = utils.send_get(plotter, "/configs/plotting/" + blockchain, debug=True).content.decode('utf-8')
+    config = utils.send_get(plotter, "/configs/plotting/" + blockchain, debug=False).content.decode('utf-8')
     replaces = 0
     for line in config.splitlines():
         for replacement in replacements:
@@ -219,30 +220,13 @@ def save_config(plotter, blockchain, config):
         else:
             flash("<pre>{0}</pre>".format(response.content.decode('utf-8')), 'danger')
 
-def analyze(plot_file, workers):
-    # Don't know which plotter might have the plot result so try them in-turn
-    for plotter in workers:
-        #app.logger.info("{0}:{1} - {2} - {3}".format(plotter.hostname, plotter.port, plotter.blockchain, plotter.mode))
-        if plotter.mode == 'fullnode' or 'plotter' in plotter.mode:
-            if plotter.latest_ping_result != "Responding":
-                app.logger.info("Skipping analyze call to {0} as last ping was: {1}".format( \
-                    plotter.hostname, plotter.latest_ping_result))
-                continue
-            try:
-                app.logger.info("Trying {0}:{1} for analyze....".format(plotter.hostname, plotter.port))
-                payload = {"service":"plotting", "action":"analyze", "plot_file": plot_file }
-                response = utils.send_post(plotter, "/analysis/", payload, debug=False)
-                if response.status_code == 200:
-                    return response.content.decode('utf-8')
-                elif response.status_code == 404:
-                    app.logger.info("Plotter on {0}:{1} did not have plot log for {2}".format(
-                        plotter.hostname, plotter.port, plot_file))
-                else:
-                    app.logger.info("Plotter on {0}:{1} returned an unexpected error: {2}".format(
-                        plotter.hostname, plotter.port, response.status_code))
-            except:
-                app.logger.info(traceback.format_exc())
-    return make_response("Sorry, not plotting job log found.  Perhaps plot was made elsewhere?", 200)
+def analyze(plot_id):
+    analyze_file = '/root/.chia/plotman/analyze/{0}.log'.format(plot_id)
+    app.logger.info("Analyze request for {0}".format(analyze_file))
+    if os.path.exists(analyze_file):
+        with open(analyze_file, 'r+') as fp:
+            return fp.read()
+    return make_response("Sorry, no plotting job log found.  Perhaps plot was made outside Machinaris?", 200)
 
 def load_plotting_keys():
     farmer_pk = load_key_pk('Farmer')

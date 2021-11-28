@@ -14,7 +14,7 @@ from common.utils import converters
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
 MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
-PLOT_TABLE_COLUMNS = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', '.' ]
+PLOT_TABLE_COLUMNS = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', 'c', 'a' ]
 
 class FarmSummary:
 
@@ -135,7 +135,7 @@ class FarmSummary:
 
 class FarmPlots:
 
-     def __init__(self, plots):
+    def __init__(self, plots):
         self.columns = PLOT_TABLE_COLUMNS
         self.rows = []
         for plot in plots:
@@ -148,8 +148,19 @@ class FarmPlots:
                 plot.type if plot.type else "", 
                 plot.created_at, 
                 app.jinja_env.filters['bytesfilter'](plot.size),
-                plot.file]
-            ) 
+                self.get_check_cell_value(plot.plot_id, plot.plot_check),
+                self.get_analzye_cell_value(plot.plot_id, plot.plot_analyze),
+            ])
+
+    def get_analzye_cell_value(self, plot_id, plot_analyze):
+        if plot_analyze and plot_analyze != '-':
+            return "{0} | {1}".format(plot_analyze, plot_id)
+        return ""
+
+    def get_check_cell_value(self, plot_id, plot_check):
+        if plot_check and plot_check != '-':
+            return "{0} | {1}".format(plot_check, plot_id)
+        return ""
 
 
 class ChallengesChartData:
@@ -328,10 +339,10 @@ class Connections:
             return "186.123.88.33:18644"
         if blockchain == 'hddcoin':
             return "145.1.235.18:28444"
+        if blockchain == 'maize':
+            return "212.159.183.209:8644"
         if blockchain == 'nchain':
             return "218.88.205.216:58445"
-        if blockchain == 'silicoin':
-            return "218.80.75.23:22222"
         if blockchain == 'staicoin':
             return "173.54.12.193:1999"
         if blockchain == 'stor':
@@ -343,9 +354,9 @@ class Connections:
         if blockchain == 'chia':
             return 8444
         if blockchain == 'chives':
-            return 15994
-        if blockchain == 'cryptodoge':
             return 9699
+        if blockchain == 'cryptodoge':
+            return 15994
         if blockchain == 'flax':
             return 6888
         if blockchain == 'flora':
@@ -354,6 +365,8 @@ class Connections:
             return 28444
         if blockchain == 'nchain':
             return 58445
+        if blockchain == 'maize':
+            return 8644
         if blockchain == 'silicoin':
             return 22222
         if blockchain == 'staicoin':
@@ -446,9 +459,9 @@ class Pools:
         for pool in pools:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(pool.hostname))
-                displayname = w.get_worker(pool.hostname, pools.blockchain).displayname
+                displayname = w.get_worker(pool.hostname, pool.blockchain).displayname
             except:
-                app.logger.info("Unable to find a worker with hostname '{0}'".format(pool.hostname))
+                app.logger.info("Unable to find a worker with hostname '{0}' for {1}".format(pool.hostname, pool.blockchain))
                 displayname = pool.hostname
             launcher_id = pool.launcher_id
             plotnft = self.find_plotnft(plotnfts, launcher_id)

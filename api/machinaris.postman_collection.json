@@ -647,12 +647,12 @@
 					"response": []
 				},
 				{
-					"name": "Certificates - Silicoin Copy",
+					"name": "Certificates - Maize",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/certificates/?type=silicoin",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/certificates/?type=maize",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -665,7 +665,7 @@
 							"query": [
 								{
 									"key": "type",
-									"value": "silicoin"
+									"value": "maize"
 								}
 							]
 						},

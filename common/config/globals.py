@@ -28,8 +28,9 @@ SUPPORTED_BLOCKCHAINS = [
     'cryptodoge',
     'flax',
     'flora',
-    'nchain',
     'hddcoin',
+    'maize',
+    'nchain',
     'silicoin',
     'staicoin',
     'stor'
@@ -43,6 +44,7 @@ CURRENCY_SYMBOLS = {
     "flax": "XFX",
     "flora": "XFL",
     "hddcoin": "HDD",
+    "maize": "XMZ",
     "nchain": "NCH",
     "silicoin": "SIT",
     "staicoin": "STAI",
@@ -63,8 +65,9 @@ CHIVES_BINARY = '/chives-blockchain/venv/bin/chives'
 CRYPTODOGE_BINARY = '/cryptodoge-blockchain/venv/bin/cryptodoge'
 FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
 FLORA_BINARY = '/flora-blockchain/venv/bin/flora'
-NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
 HDDCOIN_BINARY = '/hddcoin-blockchain/venv/bin/hddcoin'
+MAIZE_BINARY = '/maize-blockchain/venv/bin/maize'
+NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
 SILICOIN_BINARY = '/silicoin-blockchain/venv/bin/sit'
 STAICOIN_BINARY = '/staicoin-blockchain/venv/bin/staicoin'
 STOR_BINARY = '/stor-blockchain/venv/bin/stor'
@@ -86,6 +89,8 @@ def get_blockchain_binary(blockchain):
         return FLORA_BINARY
     if blockchain == "hddcoin":
         return HDDCOIN_BINARY
+    if blockchain == "maize":
+        return MAIZE_BINARY
     if blockchain == "nchain":
         return NCHAIN_BINARY
     if blockchain == "silicoin":
@@ -111,10 +116,12 @@ def get_blockchain_network_path(blockchain):
         return "/root/.flora/mainnet"
     if blockchain == 'hddcoin':
         return "/root/.hddcoin/mainnet"
+    if blockchain == 'maize':
+        return "/root/.maize/mainnet"
     if blockchain == 'nchain':
         return "/root/.chia/ext9"
     if blockchain == 'silicoin':
-        return "/root/.silicoin/mainnet"
+        return "/root/.sit/mainnet"
     if blockchain == 'staicoin':
         return "/root/.staicoin/mainnet"
     if blockchain == 'stor':
@@ -171,12 +178,6 @@ def is_setup():
     if "mode" in os.environ and 'harvester' in os.environ['mode']:
         # Harvester doesn't require a mnemonic private key as farmer's ca already imported.
         return True
-    try:
-        if os.path.exist(get_blockchain_network_path(enabled_blockchains()[0]) + '/config/ssl/wallet/public_wallet.key'):
-            logging.info("Skipping check for mnemonic.txt as public wallet key exists on disk.")
-            return True
-    except Exception as ex:
-        logging.info("Failed to find presence of public wallet key due to {0}".format(str(ex)))
     # All other modes, we should have at least one keys path
     if "keys" not in os.environ:
         logging.info(

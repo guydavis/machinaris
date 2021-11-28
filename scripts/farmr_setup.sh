@@ -1,6 +1,6 @@
 #!/bin/env bash
 #
-# Installs farmr for optionally monitoring
+# Installs farmr - https://github.com/gilnobrega/farmr
 #
 
 if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
@@ -11,9 +11,11 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 		if [[ "${arch_name}" = "x86_64" ]]; then
 			curl -LJO https://github.com/joaquimguimaraes/farmr/releases/latest/download/farmr-ubuntu-x86_64.deb
 			apt install ./farmr-ubuntu-x86_64.deb
-		elif [[ "${arch_name}" = "aarch_64" ]]; then
+			rm -f ./farmr-ubuntu-x86_64.deb
+		elif [[ "${arch_name}" = "aarch64" ]]; then
 			curl -LJO https://github.com/joaquimguimaraes/farmr/releases/latest/download/farmr-ubuntu-aarch64.deb
 			apt install ./farmr-ubuntu-aarch64.deb
+			rm -f ./farmr-ubuntu-aarch64.deb
 		else
 			echo "Installing farmr skipped -> unsupported architecture: ${arch_name}"
 		fi
@@ -29,6 +31,7 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 	if [[ ! -d ./blockchain ]]; then # Never run before, will create default configs
 		nohup farmr 2>&1 >/dev/null &
 		sleep 30
+		kill $(pidof farmr)
 	fi
 
 	if [[ ${blockchains} != "chia" ]] && [[ -f blockchain/xch.json ]]; then
@@ -55,18 +58,27 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 	elif [[ ${blockchains} == 'hddcoin' ]]; then
 		cp -n blockchain/hdd.json.template blockchain/hdd.json
 		echo "/hddcoin-blockchain/venv/bin/hddcoin" > override-hdd-binary.txt
+	elif [[ ${blockchains} == 'maize' ]]; then
+		cp -n blockchain/xmz.json.template blockchain/xmz.json
+		echo "/maize-blockchain/venv/bin/maize" > override-xmz-binary.txt
 	elif [[ ${blockchains} == 'nchain' ]]; then
 		cp -n blockchain/nch.json.template blockchain/nch.json
 		echo "/chia-blockchain/venv/bin/chia" > override-nch-binary.txt
-	elif [[ ${blockchains} == 'silicoin' ]]; then
-		cp -n blockchain/sit.json.template blockchain/sit.json
-		echo "/silicoin-blockchain/venv/bin/sit" > override-sit-binary.txt
 	elif [[ ${blockchains} == 'staicoin' ]]; then
 		cp -n blockchain/stai.json.template blockchain/stai.json
 		echo "/staicoin-blockchain/venv/bin/staicoin" > override-stai-binary.txt
 	elif [[ ${blockchains} == 'stor' ]]; then
 		cp -n blockchain/stor.json.template blockchain/stor.json
 		echo "/stor-blockchain/venv/bin/stor" > override-stor-binary.txt
+	fi
+
+	if [[ ! -f /etc/logrotate.d/farmr ]]; then
+		tee /etc/logrotate.d/farmr <<EOF
+/root/.chia/farmr/log* {
+  rotate 3
+  hourly
+}
+EOF
 	fi
 
 	# Use local file for configuration

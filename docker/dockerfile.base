@@ -14,8 +14,10 @@ RUN apt-get update \
 		cifs-utils \
 		curl \
 		git \
+		iproute2 \
 		iputils-ping \
 		jq \
+		logrotate \
 		lsb-release \
 		openssl \
 		python3 \

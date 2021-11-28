@@ -17,11 +17,29 @@
     </div>
 </div>
 
+<div class="modal fade" id="checkModal" tabindex="-1" aria-labelledby="checkModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3 modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="checkModalLabel">Plot Check</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+                <pre id="plotCheckContent"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
     a.active.nav-link {
         background-color: #3d3f42 !important
     }
     td.analyze_cell {
+        text-align: center;
+        padding:0px 5px 0px 0px;
+    }
+    td.check_cell {
         text-align: center;
         padding:0px 5px 0px 0px;
     }
@@ -111,15 +129,7 @@
             var left = (screen.width - width) / 2;
             window.open("{{ url_for('logs') }}?log=farming" + "&hostname=" + hostname + "&blockchain=" + blockchain, 'Farming Log for ' + blockchain + ' on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
         }
-        function CheckPlots(hostname) {
-            var d = new Date();
-            var height = 600;
-            var width = 900;
-            var top = (screen.height - height) / 2;
-            var left = (screen.width - width) / 2;
-            window.open("{{ url_for('plots_check') }}?hostname=" + hostname, 'Plots Check on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
-        }
-        function PlotJobAnalyze(plot) {
+        function PlotAnalyze(plot) {
             var output = document.getElementById('plotAnalyzeContent');
             output.textContent = ""; // Clear any old analysis before requesting
             var xhr = new XMLHttpRequest();
@@ -129,16 +139,51 @@
                 output.textContent = xhr.responseText;
             };
         }
+        function PlotCheck(plot) {
+            var output = document.getElementById('plotCheckContent');
+            output.textContent = ""; // Clear any old check before requesting
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', "{{ url_for('farming_plots') }}?check=" + plot);
+            xhr.send();
+            xhr.onload = function () {
+                output.textContent = xhr.responseText;
+            };
+        }
         $(document).ready(function () {
             $('#data').DataTable({
                 "pageLength": 25,
                 "serverSide": true,
-                "ajax": '/farming/data',
+                "ajax": "{{ url_for('farming_data') }}",
                 "order": [[6, "desc"]],
-                "columnDefs": [{ targets: [8], "orderable": false, "className": 'analyze_cell',
-                    "render": function ( data, type, row, meta ) {
-                        return '<a href="#" title="Analyze Plotting Job" data-bs-toggle="modal" data-bs-target="#analyzeModal" onclick=\'PlotJobAnalyze("'+data+'");return false;\'><i class="fs-4 bi-stopwatch"></i></a>'
-                    }}  
+                "columnDefs": [
+                    { 
+                        targets: [9], "orderable": false, "className": 'analyze_cell',
+                        "render": function ( data, type, row, meta ) {
+                            if (data) {
+                                arr = data.split("|");
+                                seconds = arr[0].trim();
+                                plot_id = arr[1].trim();
+                                return '<a href="#" title="' + seconds + ' secs" data-bs-toggle="modal" data-bs-target="#analyzeModal" onclick=\'PlotAnalyze("'+plot_id+'");return false;\'><i class="fs-4 bi-stopwatch"></i></a>'
+                            }
+                            return "";
+                        }
+                    },
+                    { 
+                        targets: [8], "orderable": true, "className": 'check_cell',
+                        "render": function ( data, type, row, meta ) {
+                            if (data) {
+                                arr = data.split("|");
+                                status = arr[0].trim();
+                                plot_id = arr[1].trim();
+                                if (status == 'GOOD') {
+                                    return '<a href="#" title="Good Plot" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-check-circle"></i></a>';
+                                } else {
+                                    return '<a href="#" title="Bad Plot" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-exclamation-triangle"></i></a>';
+                                }
+                            }               
+                            return "";
+                        }
+                    }, 
                 ],
             });
         });

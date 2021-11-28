@@ -35,7 +35,7 @@ class Host:
     def farming_status(self):
         status = "unknown"
         for worker in self.workers:
-            app.logger.info("{0} {1} ==> {2}".format(worker['displayname'], worker['blockchain'], worker['farming_status']))
+            #app.logger.info("{0} {1} ==> {2}".format(worker['displayname'], worker['blockchain'], worker['farming_status']))
             if worker['farming_status'] == 'farming':
                 status = "farming"
             elif worker['farming_status'] == 'harvesting':

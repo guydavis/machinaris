@@ -75,7 +75,6 @@ class WorkerWarning:
 def generate_warnings(worker):
     warnings = []
     # Check if worker is responding to pings
-    app.logger.info(worker)
     if worker.connection_status() != "Responding":
         warnings.append(WorkerWarning("Worker not responding to pings.",  
             "Please check the worker container and restart if necessary."))

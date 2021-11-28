@@ -2,7 +2,14 @@
 #  Configure and start plotting and farming services.
 #
 
-echo "Welcome to Machinaris! - v$(cat /machinaris/VERSION) - ${mode}"
+echo "Welcome to Machinaris v$(cat /machinaris/VERSION)!"
+echo "${blockchains} - ${mode} on $(uname -m)"
+
+if [[ "$HOSTNAME" =~ " |'" ]]; then 
+  echo "You have placed a space character in the hostname for this container."
+  echo "Please use only alpha-numeric characters in the hostname within docker-compose.yml and restart."
+  exit 1
+fi
 
 # v0.6.0 upgrade check guard - only allow single blockchain per container
 if [[ "${blockchains}" == "chia,flax" ]]; then
@@ -11,11 +18,22 @@ if [[ "${blockchains}" == "chia,flax" ]]; then
   exit 1
 fi
 
+# Ensure a worker_address containing an IP address is set on every launch, else exit
 if [[ -z "${worker_address}" ]]; then
   echo "Please set the 'worker_address' environment variable to this system's IP address on your LAN."
   echo "https://github.com/guydavis/machinaris/wiki/Unraid#how-do-i-update-from-v05x-to-v060-with-fork-support"
   exit 1
 fi
+
+# Refuse to run if Portainer launched containers out of order and created a directory for mnemonic.txt
+if [[ "${mode}" == 'fullnode' ]] && [[ -d /root/.chia/mnemonic.txt ]]; then
+  echo "Portainer (or similar) seems to have launched a fork container before the main Machinaris container on first run."
+  echo "Now we have a mnemonic.txt directory, instead of an empty file.  Please correct and start only machinaris container first."
+  exit 1
+fi
+
+# Warn if non-standard worker_api_port is being used, likely default value they did not override properly
+/usr/bin/bash /machinaris/scripts/worker_port_warning.sh 
 
 # If on Windows, possibly mount SMB remote shares as defined in 'remote_shares' env var
 /usr/bin/bash /machinaris/scripts/mount_remote_shares.sh > /tmp/mount_remote_shares.log
@@ -40,6 +58,9 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
 
   # During concurrent startup of multiple fork containers, stagger less important setups
   sleep $[ ( $RANDOM % 180 )  + 1 ]s
+
+  # Conditionally install forktools on fullnodes
+  /usr/bin/bash /machinaris/scripts/forktools_setup.sh > /tmp/forktools_setup.log 2>&1
 
   # Conditionally install farmr on harvesters and fullnodes
   /usr/bin/bash /machinaris/scripts/farmr_setup.sh > /tmp/farmr_setup.log 2>&1
