@@ -178,6 +178,9 @@ def request_check(plot_path, plot_file, workers):
     return [None, None, None]
 
 def execute():
+    if 'plots_check_analyze_skip' in os.environ:
+        app.logger.info("Skipping plots check and analyze as environment variable 'plots_check_analyze_skip' is present.")
+        return
     with app.app_context():
         from api import db
         gc = globals.load()

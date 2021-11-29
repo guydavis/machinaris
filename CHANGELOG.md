@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.7] - 2021-12-30
+ - Fix for Madmax building on certain user's hardware.  Thanks @karaliux for the patch!
+ - Fix to ensure Forktool's configs (~/.machinaris*/forktools/ftconfigs/) are persistent across container restarts.
+ - Option to disable background scheduled Chia `plots check` and Plotman `analyze`. Set `plots_check_analyze_skip` env var.
+ - Quiet logrotate output from container stdout.
+
 ## [0.6.6] - 2021-11-28
  - [Maize](https://github.com/Maize-Network/maize-blockchain) - cross-farming support for this blockchain fork.
  - [Forktools](https://github.com/Qwinn1/forktools) - utilities including a multiproc patch to limit memory usage.

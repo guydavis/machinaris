@@ -14,7 +14,7 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 	git checkout $HASH > /dev/null
 
 	mkdir -p /root/.chia/forktools/ftconfigs
-	cp -f ftconfigs/* /root/.chia/forktools/ftconfigs > /dev/null
+	cp -n ftconfigs/* /root/.chia/forktools/ftconfigs > /dev/null
 	rm -rf ftconfigs
 	ln -s /root/.chia/forktools/ftconfigs ftconfigs
 	
