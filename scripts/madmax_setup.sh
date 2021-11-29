@@ -14,7 +14,9 @@ if [[ ${mode} == 'fullnode' && (${blockchains} == 'chia' || ${blockchains} == 'c
             cd /
             git clone --branch ${MADMAX_BRANCH} https://github.com/madMAx43v3r/chia-plotter.git 
             cd chia-plotter && echo "Building madmax on ${arch_name}..."
-            sed -i 's/set(ENV{RELIC_MAIN} "1")/#set(ENV{RELIC_MAIN} "1")/g' CMakeLists.txt
+            if [[ -z "${madmax_relic_main}" ]]; then
+                sed -i 's/set(ENV{RELIC_MAIN} "1")/#set(ENV{RELIC_MAIN} "1")/g' CMakeLists.txt
+            fi
             git submodule update --init
             ./make_devel.sh
             mkdir -p /usr/lib/chia-plotter
