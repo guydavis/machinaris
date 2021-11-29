@@ -4,6 +4,8 @@
 # See https://github.com/madMAx43v3r/chia-plotter
 #
 
+# As of 2021-11-29
+HASH=c99a449c0467923c576acffcb1b7152ff94bb289
 MADMAX_BRANCH=master
 
 if [[ ${mode} == 'fullnode' && (${blockchains} == 'chia' || ${blockchains} == 'chives') ]] || [[ ${mode} =~ "plotter" ]]; then
@@ -14,10 +16,11 @@ if [[ ${mode} == 'fullnode' && (${blockchains} == 'chia' || ${blockchains} == 'c
             cd /
             git clone --branch ${MADMAX_BRANCH} https://github.com/madMAx43v3r/chia-plotter.git 
             cd chia-plotter && echo "Building madmax on ${arch_name}..."
-            if [[ -z "${madmax_relic_main}" ]]; then
-                sed -i 's/set(ENV{RELIC_MAIN} "1")/#set(ENV{RELIC_MAIN} "1")/g' CMakeLists.txt
-            fi
+            #if [[ -z "${madmax_relic_main}" ]]; then
+            #    sed -i 's/set(ENV{RELIC_MAIN} "1")/#set(ENV{RELIC_MAIN} "1")/g' CMakeLists.txt
+            #fi
             git submodule update --init
+            git checkout $HASH
             ./make_devel.sh
             mkdir -p /usr/lib/chia-plotter
             cp -r ./build/* /usr/lib/chia-plotter
