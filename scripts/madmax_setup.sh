@@ -16,9 +16,9 @@ if [[ ${mode} == 'fullnode' && (${blockchains} == 'chia' || ${blockchains} == 'c
             cd /
             git clone --branch ${MADMAX_BRANCH} https://github.com/madMAx43v3r/chia-plotter.git 
             cd chia-plotter && echo "Building madmax on ${arch_name}..."
-            #if [[ -z "${madmax_relic_main}" ]]; then
-            #    sed -i 's/set(ENV{RELIC_MAIN} "1")/#set(ENV{RELIC_MAIN} "1")/g' CMakeLists.txt
-            #fi
+            if [[ -z "${madmax_relic_main}" ]]; then  # Hack on 2021-11-29 due to failed builds on some systems...
+                sed -i 's/set(ENV{RELIC_MAIN} "1")/#set(ENV{RELIC_MAIN} "1")/g' CMakeLists.txt
+            fi
             git submodule update --init
             git checkout $HASH
             ./make_devel.sh
