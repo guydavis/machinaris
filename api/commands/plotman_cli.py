@@ -35,18 +35,15 @@ def check_config():
         app.logger.info("No existing plotman config found, so copying sample to: {0}" \
                 .format(PLOTMAN_CONFIG))
         shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_CONFIG)
-    try:
-        with open(PLOTMAN_CONFIG) as f:
-            config = yaml.safe_load(f)
-            if 'plotting' in config:
-                if 'type' in config['plotting']:
-                    if config['plotting']['type'] == 'madmax':
-                        check_plotter('/usr/bin/chia_plot')
-                    elif config['plotting']['type'] == 'bladebit':
-                        check_plotter('/usr/bin/bladebit')
-                    # Chia/Chives default plotters are built-into the image itself.
-    except:
-        raise Exception("Malformed or missing configuration file: {0}".format(PLOTMAN_CONFIG))
+    with open(PLOTMAN_CONFIG) as f:
+        config = yaml.safe_load(f)
+        if 'plotting' in config:
+            if 'type' in config['plotting']:
+                if config['plotting']['type'] == 'madmax':
+                    check_plotter('/usr/bin/chia_plot')
+                elif config['plotting']['type'] == 'bladebit':
+                    check_plotter('/usr/bin/bladebit')
+                # Chia/Chives default plotters are built-into the image itself.
 
 def check_script():
     if not os.path.exists(PLOTMAN_SCRIPT):
