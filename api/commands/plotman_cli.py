@@ -32,7 +32,16 @@ def check_config():
                 .format(PLOTMAN_CONFIG))
         shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_CONFIG)
 
+def check_script():
+    if not os.path.exists(PLOTMAN_SCRIPT):
+        app.logger.info("No plotman script found yet at {0}.  Container probably just launched." \
+                .format(PLOTMAN_SCRIPT))
+        return False
+    return True
+
 def load_plotting_summary():
+    if not check_script():
+        return None
     check_config()
     proc = Popen("{0} {1}".format(PLOTMAN_SCRIPT,
                  'status'), stdout=PIPE, stderr=PIPE, shell=True)

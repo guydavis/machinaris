@@ -19,6 +19,8 @@ def update():
             hostname = utils.get_hostname()
             blockchain = globals.enabled_blockchains()[0]
             plotting_summary = plotman_cli.load_plotting_summary()
+            if not plotting_summary:
+                return
             payload = []
             for plot in plotting_summary.rows:
                 payload.append({
