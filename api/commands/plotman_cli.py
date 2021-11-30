@@ -26,13 +26,34 @@ PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 # Don't query plotman unless at least this long since last time.
 RELOAD_MINIMUM_SECS = 30
 
+def check_plotter(plotter_path):
+    if not os.path.exists(plotter_path):
+        raise Exception("Plotter not yet built at {0}. Please allow 15 minutes for startup.".format(plotter_path))
+
 def check_config():
     if not os.path.exists(PLOTMAN_CONFIG):
         app.logger.info("No existing plotman config found, so copying sample to: {0}" \
                 .format(PLOTMAN_CONFIG))
         shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_CONFIG)
+    with open(PLOTMAN_CONFIG) as f:
+        config = yaml.safe_load(f)
+        if 'plotting' in config:
+            if 'type' in config['plotting']:
+                if config['plotting']['type'] == 'madmax':
+                    check_plotter('/usr/bin/chia_plot')
+                elif config['plotting']['type'] == 'bladebit':
+                    check_plotter('/usr/bin/bladebit')
+                # Chia/Chives default plotters are built-into the image itself.
+
+def check_script():
+    if not os.path.exists(PLOTMAN_SCRIPT):
+        return False
+    return True
 
 def load_plotting_summary():
+    if not check_script():
+        raise Exception("No plotman script found yet at {0}. Container probably just launched. Please allow 15 minutes for startup." \
+                .format(PLOTMAN_SCRIPT))
     check_config()
     proc = Popen("{0} {1}".format(PLOTMAN_SCRIPT,
                  'status'), stdout=PIPE, stderr=PIPE, shell=True)
@@ -48,6 +69,9 @@ def load_plotting_summary():
     return plotman.PlottingSummary(cli_stdout.splitlines(), get_plotman_pid())
 
 def dispatch_action(job):
+    if not check_script():
+        raise Exception("No plotman script found yet at {0}. Container probably just launched. Please allow 15 minutes for startup." \
+                .format(PLOTMAN_SCRIPT))
     service = job['service']
     action = job['action']
     if service == 'plotting':
