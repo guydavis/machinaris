@@ -26,11 +26,27 @@ PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 # Don't query plotman unless at least this long since last time.
 RELOAD_MINIMUM_SECS = 30
 
+def check_plotter(plotter_path):
+    if not os.path.exists(plotter_path):
+        raise Exception("Plotter not yet built at {0}. Please allow 15 minutes for startup.".format(plotter_path))
+
 def check_config():
     if not os.path.exists(PLOTMAN_CONFIG):
         app.logger.info("No existing plotman config found, so copying sample to: {0}" \
                 .format(PLOTMAN_CONFIG))
         shutil.copy(PLOTMAN_SAMPLE, PLOTMAN_CONFIG)
+    try:
+        with open(PLOTMAN_CONFIG) as f:
+            config = yaml.safe_load(f)
+            if 'plotting' in config:
+                if 'type' in config['plotting']:
+                    if config['plotting']['type'] == 'madmax':
+                        check_plotter('/usr/bin/chia_plot')
+                    elif config['plotting']['type'] == 'bladebit':
+                        check_plotter('/usr/bin/bladebit')
+                    # Chia/Chives default plotters are built-into the image itself.
+    except:
+        raise Exception("Malformed or missing configuration file: {0}".format(PLOTMAN_CONFIG))
 
 def check_script():
     if not os.path.exists(PLOTMAN_SCRIPT):
