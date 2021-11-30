@@ -67,7 +67,8 @@ class WorkerSummary:
             if not host:
                 host = Host(worker.hostname, worker.displayname)
                 self.hosts.append(host)
-            self.set_worker_attributes(worker)
+            if worker.config:
+                self.set_worker_attributes(worker)
 
     def set_worker_attributes(self, worker):
         config = json.loads(worker.config)
