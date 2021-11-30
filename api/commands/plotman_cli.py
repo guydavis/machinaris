@@ -34,14 +34,13 @@ def check_config():
 
 def check_script():
     if not os.path.exists(PLOTMAN_SCRIPT):
-        app.logger.info("No plotman script found yet at {0}.  Container probably just launched." \
-                .format(PLOTMAN_SCRIPT))
         return False
     return True
 
 def load_plotting_summary():
     if not check_script():
-        return None
+        raise Exception("No plotman script found yet at {0}. Container probably just launched. Please allow 15 minutes for startup." \
+                .format(PLOTMAN_SCRIPT))
     check_config()
     proc = Popen("{0} {1}".format(PLOTMAN_SCRIPT,
                  'status'), stdout=PIPE, stderr=PIPE, shell=True)
@@ -57,6 +56,9 @@ def load_plotting_summary():
     return plotman.PlottingSummary(cli_stdout.splitlines(), get_plotman_pid())
 
 def dispatch_action(job):
+    if not check_script():
+        raise Exception("No plotman script found yet at {0}. Container probably just launched. Please allow 15 minutes for startup." \
+                .format(PLOTMAN_SCRIPT))
     service = job['service']
     action = job['action']
     if service == 'plotting':
