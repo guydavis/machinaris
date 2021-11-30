@@ -90,7 +90,7 @@
     <div class="container-fluid">
         <ul class="nav nav-tabs bg-dark">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('plotting_jobs') }}">Plots</a>
+                <a class="nav-link" href="{{ url_for('plotting_jobs') }}">Jobs</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{{ url_for('plotting_workers') }}">Workers</a>
@@ -173,7 +173,7 @@
                 <p>
                     No plotting disk stats recorded recently for {{plotter.hostname}}. 
                     Please check that valid plotting paths (aka "tmp") are set 
-                    in the worker's Plotman config on the Settings | Archiving page. 
+                    in the worker's Plotman config on the Settings | Plotting page. 
                     Also ensure the worker is reporting into the controller on the
                     Workers page.
                 </p>
