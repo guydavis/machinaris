@@ -6,7 +6,9 @@ All notable changes to this project will be documented in this file. The format 
  - Fix for Madmax building on certain user's hardware.  Thanks @karaliux for the patch!
  - Fix to ensure Forktool's configs (~/.machinaris*/forktools/ftconfigs/) are persistent across container restarts.
  - Option to disable background scheduled Chia `plots check` and Plotman `analyze`. Set `plots_check_analyze_skip` env var.
- - Quiet logrotate output from container stdout.
+ - Fix to quiet logrotate output from container stdout.  Too verbose.
+ - Fix to incorrect commenting out of `pool_contract_address` on plotter systems. Please double-check your Settings | Plotting page!  Check Farming | Plots page for recent 'solo' plots.
+ - Fix to Plotting | Workers page for graph showing tmp disk usage during plotting on mode=plotter systems.
 
 ## [0.6.6] - 2021-11-28
  - [Maize](https://github.com/Maize-Network/maize-blockchain) - cross-farming support for this blockchain fork.

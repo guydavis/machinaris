@@ -15,7 +15,7 @@ from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalChia, Sta
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \
         StatPlottingDiskUsed, StatPlottingDiskFree
 from web import app, db, utils
-from web.actions import chia
+from web.actions import chia, worker
 
 DATABASE = '/root/.chia/machinaris/dbs/stats.db'
 
@@ -154,7 +154,7 @@ def load_recent_disk_usage(disk_type):
     value_factor = "" # Leave at GB for plotting disks
     if disk_type == "plots":
         value_factor = "/1024"  # Divide to TB for plots disks
-    for host in chia.load_farmers():
+    for host in worker.load_workers():
         hostname = host.hostname
         dates = []
         paths = {}
@@ -191,7 +191,7 @@ def load_current_disk_usage(disk_type, hostname=None):
     value_factor = "" # Leave at GB for plotting disks
     if disk_type == "plots":
         value_factor = "/1024"  # Divide to TB for plots disks
-    for host in chia.load_farmers():
+    for host in worker.load_workers():
         if hostname and not (hostname == host.hostname or hostname == host.displayname):
             continue
         paths = []
