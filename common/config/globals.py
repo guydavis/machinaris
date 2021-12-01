@@ -22,6 +22,7 @@ from os import environ, path
 from common.utils import converters
 
 SUPPORTED_BLOCKCHAINS = [
+    'btcgreen',
     'cactus',
     'chia',
     'chives',
@@ -37,6 +38,7 @@ SUPPORTED_BLOCKCHAINS = [
 ]
 
 CURRENCY_SYMBOLS = {
+    "btcgreen": "XBTC",
     "cactus": "CAC",
     "chia": "XCH",
     "chives": "XCC",
@@ -59,6 +61,7 @@ MADMAX_BINARY = '/usr/bin/chia_plot'
 BLADEBIT_BINARY = '/usr/bin/bladebit'
 CHIADOG_PATH = '/chiadog'
 
+BTCGREEN_BINARY = '/btcgreen-blockchain/venv/bin/btcgreen'
 CACTUS_BINARY = '/cactus-blockchain/venv/bin/cactus'
 CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
 CHIVES_BINARY = '/chives-blockchain/venv/bin/chives'
@@ -75,6 +78,8 @@ STOR_BINARY = '/stor-blockchain/venv/bin/stor'
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
 
 def get_blockchain_binary(blockchain):
+    if blockchain == "btcgreen":
+        return BTCGREEN_BINARY
     if blockchain == "cactus":
         return CACTUS_BINARY
     if blockchain == "chia":
@@ -102,6 +107,8 @@ def get_blockchain_binary(blockchain):
     raise Exception("Invalid blockchain: ".format(blockchain))
 
 def get_blockchain_network_path(blockchain):
+    if blockchain == 'btcgreen':
+        return "/root/.btcgreen/mainnet"
     if blockchain == 'cactus':
         return "/root/.cactus/mainnet"
     if blockchain == 'chia':

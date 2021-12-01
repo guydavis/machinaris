@@ -13,6 +13,7 @@ from api import app
 COLD_WALLET_ADDRESSES_FILE = '/root/.chia/machinaris/config/cold_wallet_addresses.json'
 
 MOJO_PER_COIN = {
+    'btcgreen': 1000000000000,
     'cactus': 1000000000000,
     'chia': 1000000000000, 
     'chives': 100000000,

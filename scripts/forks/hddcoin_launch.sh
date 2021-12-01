@@ -1,8 +1,7 @@
 #!/bin/env bash
 #
-# Initialize Chia service, depending on mode of system requested
+# Initialize HDDCoin service, depending on mode of system requested
 #
-
 
 cd /hddcoin-blockchain
 

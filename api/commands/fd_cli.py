@@ -15,6 +15,8 @@ from api import app
 
 # No need to reward recover for either Chia or Chives
 def get_full_node_rpc_port(blockchain):
+    if blockchain == 'btcgreen':
+        return 9393
     if blockchain == 'cactus':
         return 11555
     if blockchain == 'cryptodoge':

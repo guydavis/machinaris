@@ -3,7 +3,6 @@
 # Initialize Chives service, depending on mode of system requested
 #
 
-
 cd /chives-blockchain
 
 . ./activate
