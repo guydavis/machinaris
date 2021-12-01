@@ -20,7 +20,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] && [[ "${mode}" == 'fullnode' ]] 
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.hddcoin/mainnet/db/ && cd /root/.hddcoin/mainnet/db/
   # Mega links for HDDCoin blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/6IpSyDBJ#NbGmW1GuV_JXzqzki8TbeA
+  mega-get https://mega.nz/folder/Hu5miQpa#KAZPquVHG6pfYC5k0-qlsA
   mv hddcoin/*.sqlite . && rm -rf hddcoin
 fi
 

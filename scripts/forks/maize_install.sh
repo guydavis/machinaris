@@ -4,8 +4,8 @@
 #
 
 MAIZE_BRANCH=$1
-# On 2021-11-19
-HASH=8edb226a904a0b947c269964951e5e0cd24539d3
+# On 2021-12-01
+HASH=b8639899f44b03232dda90c706d061e5e1158ca3
 
 if [ -z ${MAIZE_BRANCH} ]; then
 	echo 'Skipping Maize install as not requested.'

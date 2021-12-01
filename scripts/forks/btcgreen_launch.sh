@@ -1,8 +1,7 @@
 #!/bin/env bash
 #
-# Initialize Chia service, depending on mode of system requested
+# Initialize BTCGreen service, depending on mode of system requested
 #
-
 
 cd /btcgreen-blockchain
 
@@ -24,7 +23,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.btcgreen/mainnet/db/ && cd /root/.btcgreen/mainnet/db/
   # Mega links for BTCGreen blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/DZ5BwA6I#OW5_MlxvqWU6oxPldYsNlw
+  mega-get https://mega.nz/folder/uvoEhaaJ#ozryRZYe2wIx-9eyx84nxQ
   mv btcgreen/*mainnet.sqlite btcgreen/*node.sqlite . && rm -rf btcgreen
 fi
 

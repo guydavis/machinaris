@@ -23,7 +23,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chives/mainnet/db/ && cd /root/.chives/mainnet/db/
   # Mega links for Chives blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/rQpDTaCS#bXNL-QmeGQfcTIXLpbBB6Q
+  mega-get https://mega.nz/folder/7j4UUALJ#X7-FGwse0qLkxt2UIqyvDg
   mv chives/*.sqlite . && rm -rf chives
 fi
 

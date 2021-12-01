@@ -4,8 +4,8 @@
 #
 
 BTCGREEN_BRANCH=$1
-# On 2021-11-30
-HASH=8edb226a904a0b947c269964951e5e0cd24539d3
+# On 2021-12-01
+HASH=d1c7f183aa44ca835ec621c96ae6debd703d200b
 
 if [ -z ${BTCGREEN_BRANCH} ]; then
 	echo 'Skipping BTCGreen install as not requested.'
