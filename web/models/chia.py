@@ -325,6 +325,8 @@ class Connections:
         self.rows.sort(key=lambda conn: conn['blockchain'])
     
     def get_add_connection_example(self, blockchain):
+        if blockchain == 'btcgreen':
+            return "155.133.91.176:9282"
         if blockchain == 'cactus':
             return "101.127.109.238:11444"
         if blockchain == 'chia':
@@ -349,6 +351,8 @@ class Connections:
             return "118.33.225.159:8668"
         
     def blockchain_port(self,blockchain):
+        if blockchain == 'btcgreen':
+            return 9282
         if blockchain == 'cactus':
             return 11444
         if blockchain == 'chia':

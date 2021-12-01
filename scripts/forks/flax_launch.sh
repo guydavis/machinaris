@@ -23,7 +23,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.flax/mainnet/db/ && cd /root/.flax/mainnet/db/
   # Mega links for Flax blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/WBpCARSA#REDq1mKfsyWjLSEJdgPoaA
+  mega-get https://mega.nz/folder/impAUA6K#u82XUxLXyicpfEH-CDajyQ
   mv flax/*.sqlite . && rm -rf flax
 fi
 

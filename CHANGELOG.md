@@ -3,12 +3,15 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.6.7] - 2021-12-03
+ - [BTCGreen](https://github.com/BTCgreen-Network/btcgreen-blockchain) - cross-farming support for this blockchain fork.
+ - Option to disable background job to Chia `plots check` and Plotman `analyze`. Set `plots_check_analyze_skip` env var.
  - Fix for Madmax building on certain user's hardware.  Thanks @karaliux for the patch!
  - Fix to ensure Forktool's configs (~/.machinaris*/forktools/ftconfigs/) are persistent across container restarts.
- - Option to disable background scheduled Chia `plots check` and Plotman `analyze`. Set `plots_check_analyze_skip` env var.
  - Fix to quiet logrotate output from container stdout.  Too verbose.
  - Fix to incorrect commenting out of `pool_contract_address` on plotter systems. Please double-check your Settings | Plotting page!  Check Farming | Plots page for recent 'solo' plots.
  - Fix to Plotting | Workers page for graph showing tmp disk usage during plotting on mode=plotter systems.
+ - Fix Farming | Workers page to show Daily Summaries for TrueNAS users with FQDN hostnames in their containers.
+ - Fix - Blockchain download for fresh installs, use the new download paths provided by Maize team.
 
 ## [0.6.6] - 2021-11-28
  - [Maize](https://github.com/Maize-Network/maize-blockchain) - cross-farming support for this blockchain fork.

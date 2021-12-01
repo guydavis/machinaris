@@ -1,8 +1,7 @@
 #!/bin/env bash
 #
-# Initialize Chia service, depending on mode of system requested
+# Initialize Staicoin service, depending on mode of system requested
 #
-
 
 cd /staicoin-blockchain
 
@@ -24,7 +23,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.staicoin/mainnet/db/ && cd /root/.staicoin/mainnet/db/
   # Mega links for Staicoin blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/PYIzQKiJ#ku33SR7_2uUzv3cY9cQo7Q
+  mega-get https://mega.nz/folder/OqgSjYCY#MCwYdt3YnnHA2C6gJV6lvw
   mv staicoin/*.sqlite . && rm -rf staicoin
 fi
 

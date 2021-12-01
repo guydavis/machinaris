@@ -39,7 +39,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
   # Mega links for Chia blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/eQIhCSjD#PcfxQS0QZUSU9lQgwmmlqA
+  mega-get https://mega.nz/folder/iu4QyCzY#Hfdf_tEQEwC9D0C1xNiaZg
   mv chia/*.sqlite . && rm -rf chia
 fi
 

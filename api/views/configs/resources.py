@@ -63,10 +63,11 @@ class ConfigByType(MethodView):
             else:
                 abort(400, "Unknown config type provided: {0}".format(type))
             response = make_response("Successfully saved config.", 200)
-            return response
         except Exception as ex:
+            app.logger.error("Error attempting to save {0} config: ".format(type))
             app.logger.error(traceback.format_exc())
-            abort(400, str(ex))
+            response = make_response(str(ex), 400)
+        return response
 
     def clean_config(self, req_data):
         # First decode the bytes

@@ -24,7 +24,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.flora/mainnet/db/ && cd /root/.flora/mainnet/db/
   # Mega links for Flora blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/PNhQhBKA#ERigrZQ6zg3CJeI10sXuzQ
+  mega-get https://mega.nz/folder/CjpSzYzR#7MR4AHEP2nFkaJa6cy45gg
   mv flora/*.sqlite . && rm -rf flora
 fi
 

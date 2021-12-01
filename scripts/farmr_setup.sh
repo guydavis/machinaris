@@ -38,7 +38,10 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 		mv -f blockchain/xch.json blockchain/xch.json.template
 	fi
 
-	if [[ ${blockchains} == 'cactus' ]]; then
+	if [[ ${blockchains} == 'btcgreen' ]]; then
+		cp -n blockchain/xbtc.json.template blockchain/xbtc.json
+		echo "/btcgreen-blockchain/venv/bin/btcgreen" > override-xbtc-binary.txt
+	elif [[ ${blockchains} == 'cactus' ]]; then
 		cp -n blockchain/cac.json.template blockchain/cac.json
 		echo "/cactus-blockchain/venv/bin/cactus" > override-cac-binary.txt
 	elif [[ ${blockchains} == 'chia' ]]; then
