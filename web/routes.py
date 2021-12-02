@@ -88,8 +88,9 @@ def plotting_jobs():
         return redirect(url_for('plotting_jobs')) # Force a redirect to allow time to update status
     plotters = plotman.load_plotters()
     plotting = plotman.load_plotting_summary()
+    job_stats = stats.load_plotting_stats()
     return render_template('plotting/jobs.html', reload_seconds=120,  plotting=plotting, 
-        plotters=plotters, global_config=gc)
+        plotters=plotters, job_stats=job_stats, global_config=gc)
 
 @app.route('/plotting/workers', methods=['GET', 'POST'])
 def plotting_workers():

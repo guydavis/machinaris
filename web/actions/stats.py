@@ -11,6 +11,7 @@ from sqlalchemy import or_
 
 from common.utils import converters
 from common.models.alerts import Alert
+from common.models.plots import Plot
 from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalChia, StatNetspaceSize, StatTimeToWin, \
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \
         StatPlottingDiskUsed, StatPlottingDiskFree
@@ -227,3 +228,41 @@ def prune_workers_status(hostname, displayname, blockchain):
         db.commit()
     except Exception as ex:
         app.logger.info("Failed to remove stale stats for worker {0} - {1} because {2}".format(displayname, blockchain, str(ex)))
+
+def load_plotting_stats():
+    summary_by_size = {}
+    for k in [29, 30, 31, 32, 33, 34]:  # Current k sizes
+        dates = []
+        workers = {}
+        result = db.session.query(Plot).order_by(Plot.created_at.desc()).filter(
+                Plot.plot_analyze != '-',
+                Plot.plot_analyze.is_not(None),
+                Plot.file.like('%-k{0}-%'.format(k)),
+            ).limit(100).all()
+        for p in result:
+            converted_date = p.created_at.replace(' ', 'T') # Change space between date & time to 'T' for luxon
+            if not converted_date in dates:
+                dates.append(converted_date)
+            if not p.displayname in workers:
+                workers[p.displayname] = {}
+            values = workers[p.displayname]
+            try:
+                values[converted_date] = round(float(p.plot_analyze) / 60, 2) # Convert from seconds to minutes
+            except:
+                app.logger.error("Inavlid plot_analyze time in seconds: {0}".format(p.plot_analyze))
+                values[converted_date] = 'null'
+        if len(dates) > 0:
+            summary_by_size[k] = { "dates": dates, "workers": workers.keys(),  }
+            for worker in workers.keys():
+                worker_values = []
+                for date in dates:
+                    if worker in workers:
+                        if date in workers[worker]:  
+                            worker_values.append(workers[worker][date])
+                        else: # Due to exeception reported by one user
+                            worker_values.append('null')
+                    else:
+                        worker_values.append('null')
+                summary_by_size[k][worker] = worker_values
+    #app.logger.info(summary_by_size.keys())
+    return summary_by_size
