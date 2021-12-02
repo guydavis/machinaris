@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.6.7] - 2021-12-03
  - [BTCGreen](https://github.com/BTCgreen-Network/btcgreen-blockchain) - cross-farming support for this blockchain fork.
+ - Plotting page - Charts to show plotting speed for recent jobs across all workers on your farm.
  - Option to disable background job to Chia `plots check` and Plotman `analyze`. Set `plots_check_analyze_skip` env var.
  - Fix for Madmax building on certain user's hardware.  Thanks @karaliux for the patch!
  - Fix to ensure Forktool's configs (~/.machinaris*/forktools/ftconfigs/) are persistent across container restarts.

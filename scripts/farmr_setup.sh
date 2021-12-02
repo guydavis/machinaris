@@ -75,7 +75,7 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 		echo "/stor-blockchain/venv/bin/stor" > override-stor-binary.txt
 	fi
 
-	tee /etc/logrotate.d/farmr <<EOF
+	tee /etc/logrotate.d/farmr > /dev/null <<EOF
 /root/.chia/farmr/log*txt {
   rotate 3
   hourly
