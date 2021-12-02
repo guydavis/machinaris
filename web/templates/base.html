@@ -153,9 +153,11 @@
                         <div class="col">
                             <small><i>{{ global_config.now }}</i></small>
                         </div>
+                        {% if global_config.bladebit_version %}
                         <div class="col">
                             <small><i>Bladebit {{ global_config.bladebit_version }}</i></small>
                         </div>
+                        {% endif %}
                         <div class="col">
                             <small><i>{{ global_config.enabled_blockchains[0] | capitalize }} {{ global_config.blockchain_version }}</i></small>
                         </div>
@@ -166,9 +168,11 @@
                             <small><i title="mode={{ global_config.machinaris_mode }}">Machinaris {{
                                     global_config.machinaris_version }}</i></small>
                         </div>
+                        {% if global_config.madmax_version %}
                         <div class="col">
                             <small><i>Madmax {{ global_config.madmax_version }}</i></small>
                         </div>
+                        {% endif %}
                         <div class="col">
                             <small><i>Plotman {{ global_config.plotman_version }}</i></small>
                         </div>
