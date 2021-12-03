@@ -54,7 +54,7 @@ def collect():
             app.logger.info(
                 "Skipping farm summary stats collection as not farming on this Machinaris instance.")
             return
-        app.logger.info("Collecting stats about the farm.")
+        #app.logger.info("Collecting stats about the farm.")
         current_datetime = datetime.datetime.now().strftime("%Y%m%d%H%M")
         for blockchain in globals.enabled_blockchains():
             farm_summary = chia_cli.load_farm_summary(blockchain)
