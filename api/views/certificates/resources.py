@@ -27,7 +27,10 @@ class Certificates(MethodView):
 
     def get(self):
         type = request.args.get('type')
-        if type == "cactus":
+        if type == "btcgreen":
+            blockchain = "btcgreen"
+            dir = "/root/.btcgreen/mainnet/config/ssl/ca"
+        elif type == "cactus":
             blockchain = "cactus"
             dir = "/root/.cactus/mainnet/config/ssl/ca"
         elif type == "chia":

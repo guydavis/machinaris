@@ -38,7 +38,10 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 		mv -f blockchain/xch.json blockchain/xch.json.template
 	fi
 
-	if [[ ${blockchains} == 'cactus' ]]; then
+	if [[ ${blockchains} == 'btcgreen' ]]; then
+		cp -n blockchain/xbtc.json.template blockchain/xbtc.json
+		echo "/btcgreen-blockchain/venv/bin/btcgreen" > override-xbtc-binary.txt
+	elif [[ ${blockchains} == 'cactus' ]]; then
 		cp -n blockchain/cac.json.template blockchain/cac.json
 		echo "/cactus-blockchain/venv/bin/cactus" > override-cac-binary.txt
 	elif [[ ${blockchains} == 'chia' ]]; then
@@ -72,7 +75,7 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 		echo "/stor-blockchain/venv/bin/stor" > override-stor-binary.txt
 	fi
 
-	tee /etc/logrotate.d/farmr <<EOF
+	tee /etc/logrotate.d/farmr > /dev/null <<EOF
 /root/.chia/farmr/log*txt {
   rotate 3
   hourly

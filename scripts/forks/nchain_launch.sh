@@ -1,8 +1,7 @@
 #!/bin/env bash
 #
-# Initialize Chia service, depending on mode of system requested
+# Initialize N-Chain service, depending on mode of system requested
 #
-
 
 cd /ext9-blockchain
 
@@ -22,7 +21,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/ext9/db/ && cd /root/.chia/ext9/db/
   # Mega links for N-Chain blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/OEwFASDT#grirFveyT3kNRw7ZWkw56A
+  mega-get https://mega.nz/folder/KmoWBIiL#pPrF0Cxt1P5snfR30XfMXw
   mv nchain/*.sqlite . && rm -rf nchain
 fi
 

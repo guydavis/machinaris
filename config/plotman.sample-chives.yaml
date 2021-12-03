@@ -98,7 +98,7 @@ plotting:
         # ONLY FOR OLD SOLO PLOTS, COMMENT OUT IF PORTABLE PLOTTING!!!
         pool_pk: REPLACE_WITH_CHIVES_POOL_KEY
         # See 'Settings | Pools' page, for 'Pool contract address' value, UNCOMMENT IF PORTABLE PLOTTING!!!
-        #pool_contract_address: REPLACE_WITH_THE_REAL_VALUE
+        #pool_contract_address: REPLACE_WITH_CHIVES_POOL_CONTRACT_ADDRESS
 
         # If you enable 'chia', plot in *parallel* with higher tmpdir_max_jobs and global_max_jobs
         # If you enable 'madmax', plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs

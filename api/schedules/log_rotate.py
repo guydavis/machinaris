@@ -18,7 +18,7 @@ def execute():
     for config in LOG_ROTATE_CONFIGS:
         if os.path.exists(LOG_ROTATE_CONFIG_DIR + config):
             app.logger.info("Rotating config: " + LOG_ROTATE_CONFIG_DIR + config)
-            os.system("/usr/sbin/logrotate -v " + LOG_ROTATE_CONFIG_DIR + config)
+            os.system("/usr/sbin/logrotate " + LOG_ROTATE_CONFIG_DIR + config + " 2>&1 >/dev/null")
 
     # Extra guards for farmr which can eat GBs of log space sometimes
     for file in os.listdir("/root/.chia/farmr"):

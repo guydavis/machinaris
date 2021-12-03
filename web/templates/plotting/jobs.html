@@ -93,7 +93,7 @@
     <div class="container-fluid">
         <ul class="nav nav-tabs bg-dark">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{ url_for('plotting_jobs') }}">Plots</a>
+                <a class="nav-link active" aria-current="page" href="{{ url_for('plotting_jobs') }}">Jobs</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('plotting_workers') }}">Workers</a>
@@ -201,9 +201,116 @@
         </div>
     </form>
 
+    <div class="p-1 mb-4 bg-light border rounded-3">
+        {% for k_size in job_stats %}
+        <div class="row">
+            <div class="col" style="margin-top:5px; margin-bottom:5px;">
+                <div class="h-100 p-2 text-white">
+                    <h6 class="display-6 text-center">Plotting Speed - k{{ k_size }} Plots</h6>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12" style="margin-top:5px; margin-bottom:5px;">
+                <canvas id="k{{k_size}}_jobs"></canvas>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
     {% endblock %}
 
     {% block scripts %}
+    <script>
+        const COLORS = [
+            '#3aac59',
+            '#4dc9f6',
+            '#f67019',
+            '#f53794',
+            '#537bc4',
+            '#acc236',
+            '#166a8f',
+            '#00a950',
+            '#58595b',
+            '#8549ba'
+        ];
+
+        function color(index) {
+            return COLORS[index % COLORS.length];
+        }
+    </script>
+    {% for k_size in job_stats %}
+    <script>
+        var ctx = document.getElementById('k{{k_size}}_jobs');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ job_stats[k_size].dates | safe }},
+                datasets: [
+                {% for worker in job_stats[k_size].workers %}
+                    {
+                        label: "{{worker}}",
+                        data: {{ job_stats[k_size][worker] | safe }},
+                        backgroundColor: color({{ loop.index - 1 }}),
+                    },
+                {% endfor %}
+                ],
+            },
+            borderWidth: 1,
+            options: {
+                plugins: {  
+                    legend: {
+                        labels: {
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            tooltipFormat: 'DD T'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Date',
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        },
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "Time (minutes)",
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        },
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
+                    }
+                }
+            }
+        });
+    </script>
+    {% endfor %}
     <script>
         function PlottingLogs(type, hostname, blockchain, plot_id) {
             var d = new Date();

@@ -3,8 +3,8 @@
 # Installs forktools - https://github.com/Qwinn1/forktools
 #
 
-# On 2021-11-17
-HASH=65bf10c63e701de732b61b24fafeab03e6d1e695
+# On 2021-12-01
+HASH=5df93f705f650cbd1379eee21efaeef8f6dc262a
 
 if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
     cd /
@@ -14,7 +14,7 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 	git checkout $HASH > /dev/null
 
 	mkdir -p /root/.chia/forktools/ftconfigs
-	cp -f ftconfigs/* /root/.chia/forktools/ftconfigs > /dev/null
+	cp -n ftconfigs/* /root/.chia/forktools/ftconfigs > /dev/null
 	rm -rf ftconfigs
 	ln -s /root/.chia/forktools/ftconfigs ftconfigs
 	

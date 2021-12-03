@@ -23,7 +23,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.stor/mainnet/db/ && cd /root/.stor/mainnet/db/
   # Mega links for Stor blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/WYBmgT6R#RNYmuFcmMpzhqkzxbByrxg
+  mega-get https://mega.nz/folder/mr52AapZ#d91-gZoq6auEOWFbcqn8uQ
   mv stor/*.sqlite . && rm -rf stor
 fi
 

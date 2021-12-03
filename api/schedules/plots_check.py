@@ -118,7 +118,7 @@ def set_check_status(workers, status, plot):
     requested_status = False
     if not os.path.exists(check_log):
         requested_status = True
-        [hostname, displayname, result] = request_check(plot.dir, plot.file, workers)
+        [hostname, displayname, result] = request_check(plot, workers)
         if result:
             with open(check_log, 'w+') as f:
                 f.write("Plots check from {0} ({1}) found at {2}\n".format(displayname, 
@@ -152,7 +152,7 @@ def set_check_status(workers, status, plot):
         plot_state['check'] = None
     return requested_status
 
-def request_check(plot_path, plot_file, workers):
+def request_check(plot, workers):
     # Don't know which harvester might have the plot result so try them in-turn
     for harvester in workers:
         #app.logger.info("{0}:{1} - {2} - {3}".format(harvester.hostname, harvester.port, harvester.blockchain, harvester.mode))
@@ -161,15 +161,19 @@ def request_check(plot_path, plot_file, workers):
                 app.logger.info("Skipping check call to {0} as last ping was: {1}".format( \
                     harvester.hostname, harvester.latest_ping_result))
                 continue
+            if harvester.hostname != plot.hostname or harvester.blockchain != plot.blockchain:
+                app.logger.info("Skipping check call to {0} ({1}) for plot on {2} ({3})".format( \
+                    harvester.hostname, harvester.blockchain, plot.hostname, plot.blockchain))
+                continue
             try:
                 app.logger.info("Trying {0}:{1} for plot check....".format(harvester.hostname, harvester.port))
-                payload = {"service":"farming", "action":"check", "plot_file": plot_path + '/' + plot_file }
+                payload = {"service":"farming", "action":"check", "plot_file": plot.dir + '/' + plot.file }
                 response = utils.send_worker_post(harvester, "/analysis/", payload, debug=False)
                 if response.status_code == 200:
                     return [harvester.hostname, harvester.displayname, response.content.decode('utf-8')]
                 elif response.status_code == 404:
                     app.logger.info("Plotter on {0}:{1} did not have plot check for {2}".format(
-                        harvester.hostname, harvester.port, plot_file))
+                        harvester.hostname, harvester.port, plot.file))
                 else:
                     app.logger.info("Plotter on {0}:{1} returned an unexpected error: {2}".format(
                         harvester.hostname, harvester.port, response.status_code))
@@ -178,23 +182,28 @@ def request_check(plot_path, plot_file, workers):
     return [None, None, None]
 
 def execute():
+    if 'plots_check_analyze_skip' in os.environ:
+        app.logger.info("Skipping plots check and analyze as environment variable 'plots_check_analyze_skip' is present.")
+        return
     with app.app_context():
         from api import db
         gc = globals.load()
         if not gc['is_controller']:
             return # Only controller should initiate check/analyze against other fullnodes/harvesters
-        #app.logger.info("Executing plots_check...")
+        app.logger.info("Executing plots_check...")
         try:
             os.makedirs(ANALYZE_LOGS)
             os.makedirs(CHECK_LOGS)
         except Exception as ex:
             app.logger.debug("Unable to create analyze and check folders in plotman. {0}".format(str(ex)))
         workers = db.session.query(w.Worker)
-        plots = db.session.query(p.Plot).filter(or_(p.Plot.plot_check == None, 
-            p.Plot.plot_analyze == None)).order_by(p.Plot.created_at.desc()).all()
+        plots = db.session.query(p.Plot).filter(or_(p.Plot.plot_check.is_(None), 
+            p.Plot.plot_analyze.is_(None))).order_by(p.Plot.created_at.desc()).all()
         status = open_status_json()
         requested_status_count = 0
+        app.logger.info("Querying for plots...")
         for plot in plots:
+            app.logger.info("Checking plot {0}".format(plot.plot_id))
             set_analyze_status(workers, status, plot)
             if set_check_status(workers, status, plot):
                 requested_status_count += 1

@@ -23,7 +23,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.cryptodoge/mainnet/db/ && cd /root/.cryptodoge/mainnet/db/
   # Mega links for Cryptodoge blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/2cgkhYJQ#iAPkqo7lZ8R4-zhNxq-1qw
+  mega-get https://mega.nz/folder/T75UDKpA#dLVq8OhdsjK5kPxNwCaP8Q
   mv cryptodoge/*.sqlite . && rm -rf cryptodoge
 fi
 

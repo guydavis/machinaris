@@ -138,6 +138,9 @@
         }
 
         function lookup_worker_port(blockchain) {
+            if (blockchain == 'btcgreen') {
+                return 8938;
+            }
             if (blockchain == 'cactus') {
                 return 8936;
             }
@@ -175,6 +178,9 @@
         }
 
         function lookup_farmer_port(blockchain) {
+            if (blockchain == 'btcgreen') {
+                return 18655;
+            }
             if (blockchain == 'cactus') {
                 return 11447;
             }
@@ -468,6 +474,13 @@
                     <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
+                                id="blockchain-btcgreen" onclick="updateDocker()" value="btcgreen">
+                            <label class="form-check-label" for="blockchain-btcgreen" onclick="updateDocker()">
+                                BTCGreen
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-cactus" onclick="updateDocker()" value="cactus">
                             <label class="form-check-label" for="blockchain-cactus" onclick="updateDocker()">
                                 Cactus
@@ -501,6 +514,8 @@
                                 Flax
                             </label>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-flora" onclick="updateDocker()" value="flora">

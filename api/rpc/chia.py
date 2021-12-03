@@ -7,7 +7,13 @@ import datetime
 import importlib
 import os
 
-if importlib.util.find_spec("cactus"):
+if importlib.util.find_spec("btcgreen"):
+    from btcgreen.rpc.full_node_rpc_client import FullNodeRpcClient
+    from btcgreen.rpc.farmer_rpc_client import FarmerRpcClient
+    from btcgreen.util.default_root import DEFAULT_ROOT_PATH
+    from btcgreen.util.ints import uint16
+    from btcgreen.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("cactus"):
     from cactus.rpc.full_node_rpc_client import FullNodeRpcClient
     from cactus.rpc.farmer_rpc_client import FarmerRpcClient
     from cactus.util.default_root import DEFAULT_ROOT_PATH

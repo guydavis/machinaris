@@ -14,13 +14,13 @@ else
 fi
 
 if [ ${farmer_pk} != 'null' ]; then
-    sed -i "s/^.*farmer_pk:.*$/        farmer_pk: ${farmer_pk}/g" /root/.chia/plotman/plotman.yaml
+    sed -i "s/^.*farmer_pk: REPLACE_WITH_THE_REAL_VALUE.*$/        farmer_pk: ${farmer_pk}/g" /root/.chia/plotman/plotman.yaml
 fi
 if [ ${pool_pk} != 'null' ]; then
-    sed -i "s/^.*pool_pk:.*$/        pool_pk: ${pool_pk}/g" /root/.chia/plotman/plotman.yaml
+    sed -i "s/^.*pool_pk: REPLACE_WITH_THE_REAL_VALUE.*$/        pool_pk: ${pool_pk}/g" /root/.chia/plotman/plotman.yaml
 fi
 if [ ${pool_contract_address} != 'null' ]; then
-    sed -i "s/^.*pool_contract_address:.*$/        #pool_contract_address: ${pool_contract_address}/g" /root/.chia/plotman/plotman.yaml
+    sed -i "s/^.*pool_contract_address: REPLACE_WITH_THE_REAL_VALUE.*$/        #pool_contract_address: ${pool_contract_address}/g" /root/.chia/plotman/plotman.yaml
 fi
 # Import ssh key if exists
 if [ -f "/id_rsa" ]; then

@@ -127,7 +127,9 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         app.logger.info("No log file found at {0}".format(log_file))
         return 'No log file found!'
     #app.logger.info("Log file found at {0}".format(log_file))
-    if blockchain == "cactus":
+    if blockchain == "btcgreen":
+        class_escape = re.compile(r' btcgreen.plotting.(\w+)(\s+): ')
+    elif blockchain == "cactus":
         class_escape = re.compile(r' cactus.plotting.(\w+)(\s+): ')
     elif blockchain == "chives":
         class_escape = re.compile(r' chives.plotting.(\w+)(\s+): ')

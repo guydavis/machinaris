@@ -1,8 +1,7 @@
 #!/bin/env bash
 #
-# Initialize Chia service, depending on mode of system requested
+# Initialize Maize service, depending on mode of system requested
 #
-
 
 cd /maize-blockchain
 
@@ -24,7 +23,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.maize/mainnet/db/ && cd /root/.maize/mainnet/db/
   # Mega links for Maize blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/KIwkDbjY#wcU3oKyhS3GZiwNbv4UQUA
+  mega-get https://mega.nz/folder/XzgUHI6B#UhllF1ltcyrG4-epJFzp4w
   mv maize/*mainnet.sqlite maize/*node.sqlite . && rm -rf maize
 fi
 
