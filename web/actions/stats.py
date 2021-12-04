@@ -135,14 +135,16 @@ def load_daily_farming_summaries():
 def daily_summaries(since, hostname, displayname, blockchain):
     result = None
     try:
+        # TrueNAS uses a FQDN for container hostname, so must split down to shortname to match Alerts table
+        short_name = displayname.split('.')[0]
         result = db.session.query(Alert).filter(
-                or_(Alert.hostname==hostname,Alert.hostname==displayname), 
+                or_(Alert.hostname==hostname,Alert.hostname==short_name), 
                 Alert.blockchain==blockchain,
                 Alert.created_at >= since,
                 Alert.priority == "LOW",
                 Alert.service == "DAILY"
             ).order_by(Alert.created_at.desc()).first()
-        #app.logger.info("Daily for {0}-{1} is {2}".format(displayname, blockchain, result))
+        #app.logger.info("Daily for {0}-{1} is {2}".format(short_name, blockchain, result))
         if result:
             return result.message
     except Exception as ex:
