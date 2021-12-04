@@ -124,27 +124,23 @@ def load_daily_farming_summaries():
     summary_by_workers = {}
     since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
     for host in chia.load_farmers():
-        # TrueNAS uses a FQDN for container hostname, so must split down to shortname to match Alerts table
-        short_name = host.displayname.split('.')[0]
-        summary_by_workers[short_name] = {}
+        summary_by_workers[host.displayname] = {}
         for wk in host.workers:
-            summary_by_workers[short_name][wk['blockchain']] = daily_summaries(since_date, wk['hostname'], wk['displayname'], wk['blockchain']) 
+            summary_by_workers[host.displayname][wk['blockchain']] = daily_summaries(since_date, wk['hostname'], wk['displayname'], wk['blockchain']) 
             #app.logger.info("{0}-{1}: {2}".format(short_name, wk['blockchain'], summary_by_workers[short_name][wk['blockchain']]))
     return summary_by_workers
 
 def daily_summaries(since, hostname, displayname, blockchain):
     result = None
     try:
-        # TrueNAS uses a FQDN for container hostname, so must split down to shortname to match Alerts table
-        short_name = displayname.split('.')[0]
         result = db.session.query(Alert).filter(
-                or_(Alert.hostname==hostname,Alert.hostname==short_name), 
+                or_(Alert.hostname==hostname,Alert.hostname==displayname), 
                 Alert.blockchain==blockchain,
                 Alert.created_at >= since,
                 Alert.priority == "LOW",
                 Alert.service == "DAILY"
             ).order_by(Alert.created_at.desc()).first()
-        #app.logger.info("Daily for {0}-{1} is {2}".format(short_name, blockchain, result))
+        #app.logger.info("Daily for {0}-{1} is {2}".format(displayname, blockchain, result))
         if result:
             return result.message
     except Exception as ex:
