@@ -82,10 +82,7 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 }
 EOF
 
-	# Use local file for configuration
-	#sed -i 's/"Online Config": true/"Online Config": false/g' blockchain/*.json
-
-	if [[ ! -z $"farmr_skip_launch" ]]; then
+	if [[ ! -z "${farmr_skip_launch}" ]]; then
 		rm -f nohup.out # Remove stale stdout logging
 		# Launch in harvester or farmer mode
 		if [[ ${mode} =~ ^harvester.* ]]; then

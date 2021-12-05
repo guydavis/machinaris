@@ -124,11 +124,10 @@ def load_daily_farming_summaries():
     summary_by_workers = {}
     since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
     for host in chia.load_farmers():
-        # TrueNAS uses a FQDN for container hostname, so must split down to shortname to match Alerts table
-        summary_by_workers[host.displayname.split('.')[0]] = {}
+        summary_by_workers[host.displayname] = {}
         for wk in host.workers:
             summary_by_workers[host.displayname][wk['blockchain']] = daily_summaries(since_date, wk['hostname'], wk['displayname'], wk['blockchain']) 
-            #app.logger.info("{0}-{1}: {2}".format(host.displayname, wk['blockchain'], summary_by_workers[host.displayname][wk['blockchain']]))
+            #app.logger.info("{0}-{1}: {2}".format(short_name, wk['blockchain'], summary_by_workers[short_name][wk['blockchain']]))
     return summary_by_workers
 
 def daily_summaries(since, hostname, displayname, blockchain):
