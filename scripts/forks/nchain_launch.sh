@@ -8,7 +8,7 @@ cd /ext9-blockchain
 . ./activate
 
 # farmr binary makes hard-coded assumptions about N-Chain locations, so create symlinks
-if [ ! -f /root/.ext9 ]; then
+if [ ! -d /root/.ext9 ]; then
   ln -s /root/.chia/ /root/.ext9 
 fi
 
@@ -35,7 +35,9 @@ if [ -f /root/.chia/ext9/config/config.yaml ]; then
 fi
 
 # Fix for chia binaries complaining about missing mainnet folder 
-ln -s /root/.chia/ext9 /root/.chia/mainnet 
+if [ ! -d /root/.chia/mainnet ]; then
+  ln -s /root/.chia/ext9 /root/.chia/mainnet 
+fi
 
 # Loop over provided list of key paths
 for k in ${keys//:/ }; do
