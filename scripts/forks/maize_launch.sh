@@ -23,7 +23,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.maize/mainnet/db/ && cd /root/.maize/mainnet/db/
   # Mega links for Maize blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/XzgUHI6B#UhllF1ltcyrG4-epJFzp4w
+  mega-get https://mega.nz/folder/W7YWUBzJ#7pTVcC2F_a7zFCJCMbbDKw
   mv maize/*mainnet.sqlite maize/*node.sqlite . && rm -rf maize
 fi
 

@@ -31,6 +31,8 @@ def get_full_node_rpc_port(blockchain):
         return 8755
     if blockchain == 'nchain':
         return 38555
+    if blockchain == 'shibgreen':
+        return 18793
     if blockchain == 'staicoin':
         return 1758
     if blockchain == 'stor':

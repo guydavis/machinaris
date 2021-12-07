@@ -27,8 +27,9 @@ fi
 
 # Refuse to run if Portainer launched containers out of order and created a directory for mnemonic.txt
 if [[ "${mode}" == 'fullnode' ]] && [[ -d /root/.chia/mnemonic.txt ]]; then
-  echo "Portainer (or similar) seems to have launched a fork container before the main Machinaris container on first run."
-  echo "Now we have a mnemonic.txt directory, instead of an empty file.  Please correct and start only machinaris container first."
+  echo "Portainer (or similar) launched a fork container before the main Machinaris container on first run."
+  echo "Attempting to delete the empty mnemonic.txt directory and restarting this fork container."
+  rmdir /root/.chia/mnemonic.txt || true
   exit 1
 fi
 

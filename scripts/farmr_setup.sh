@@ -2,8 +2,9 @@
 #
 # Installs farmr - https://github.com/gilnobrega/farmr
 #
-
-if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
+if [[ ${blockchains} == 'shibgreen' ]]; then
+	echo 'Sorry, ${blockchains} not supported by Farmr. Nothing started...'
+elif [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
     if [[ ! -f /usr/bin/farmr ]]; then
 		arch_name="$(uname -m)"
 		echo "Installing farmr on ${arch_name}..."
@@ -91,5 +92,4 @@ EOF
 			(sleep 180 && nohup /usr/bin/farmr farmer headless 2>&1 ) &
 		fi
 	fi
-	
 fi

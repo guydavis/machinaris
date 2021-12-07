@@ -29,6 +29,9 @@ fi
 if [[ "${blockchains}"  == "nchain" && "${worker_api_port}" != '8929' ]]; then
   echo "N-Chain worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8936?"
 fi  
+if [[ "${blockchains}"  == "shibgreen" && "${worker_api_port}" != '8939' ]]; then
+  echo "Shibgreen worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8939?"
+fi
 if [[ "${blockchains}"  == "staicoin" && "${worker_api_port}" != '8934' ]]; then
   echo "Staicoin worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8934?"
 fi
