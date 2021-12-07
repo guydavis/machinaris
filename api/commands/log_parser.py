@@ -143,6 +143,8 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         class_escape = re.compile(r' hddcoin.plotting.(\w+)(\s+): ')
     elif blockchain == "maize":
         class_escape = re.compile(r' maize.plotting.(\w+)(\s+): ')
+    elif blockchain == "shibgreen":
+        class_escape = re.compile(r' shibgreen.plotting.(\w+)(\s+): ')
     elif blockchain == "staicoin":
         class_escape = re.compile(r' staicoin.plotting.(\w+)(\s+): ')
     elif blockchain == "stor":

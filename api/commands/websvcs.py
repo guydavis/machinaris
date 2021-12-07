@@ -23,6 +23,7 @@ MOJO_PER_COIN = {
     'hddcoin': 1000000000000,
     'nchain': 1000000000000,
     'silicoin': 1000000000000, 
+    'shibgreen': 1000,
     'staicoin': 1000000000,
     'stor': 1000000000000,
 }

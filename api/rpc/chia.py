@@ -63,6 +63,12 @@ elif importlib.util.find_spec("maize"):
     from maize.util.default_root import DEFAULT_ROOT_PATH
     from maize.util.ints import uint16
     from maize.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("shibgreen"):
+    from shibgreen.rpc.full_node_rpc_client import FullNodeRpcClient
+    from shibgreen.rpc.farmer_rpc_client import FarmerRpcClient
+    from shibgreen.util.default_root import DEFAULT_ROOT_PATH
+    from shibgreen.util.ints import uint16
+    from shibgreen.util.config import load_config as load_fork_config
 elif importlib.util.find_spec("staicoin"):
     from staicoin.rpc.full_node_rpc_client import FullNodeRpcClient
     from staicoin.rpc.farmer_rpc_client import FarmerRpcClient
