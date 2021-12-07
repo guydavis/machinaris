@@ -76,19 +76,20 @@ elif [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 		echo "/stor-blockchain/venv/bin/stor" > override-stor-binary.txt
 	fi
 
-	tee /etc/logrotate.d/farmr > /dev/null <<EOF
+	tee /etc/logrotate.d/farmr >/dev/null <<EOF
 /root/.chia/farmr/log*txt {
   rotate 3
   hourly
 }
 EOF
-
-	if [[ ! -z "${farmr_skip_launch}" ]]; then
+	if [[ -z "${farmr_skip_launch}" ]]; then
 		rm -f nohup.out # Remove stale stdout logging
 		# Launch in harvester or farmer mode
 		if [[ ${mode} =~ ^harvester.* ]]; then
+			echo "After a pause, about to start Farmr in harvester mode..."
 			(sleep 180 && nohup /usr/bin/farmr harvester headless 2>&1 ) &
 		elif [[ ${mode} == 'farmer' ]] || [[ ${mode} == 'fullnode' ]]; then
+			echo "After a pause, about to start Farmr in farmer mode..."
 			(sleep 180 && nohup /usr/bin/farmr farmer headless 2>&1 ) &
 		fi
 	fi
