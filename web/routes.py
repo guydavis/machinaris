@@ -12,7 +12,7 @@ from flask import Flask, flash, redirect, render_template, abort, \
 
 from common.config import globals
 from web import app, utils
-from web.actions import chia, plotman, chiadog, worker, log_handler, stats, warnings
+from web.actions import chia, pools as p, plotman, chiadog, worker, log_handler, stats, warnings
 
 @app.route('/')
 def landing():
@@ -294,11 +294,12 @@ def settings_alerts():
 def settings_pools():
     gc = globals.load()
     if request.method == 'POST':
-        plotnfts = chia.load_plotnfts()
+        plotnfts = p.load_plotnfts()
         current_pool_url = plotnfts.get_current_pool_url()
-        chia.process_pool_save(request.form.get('choice'), request.form.get('pool_url'), current_pool_url)
-    plotnfts = chia.load_plotnfts()
-    plotnft_log = chia.get_plotnft_log()
+        p.process_pool_save(request.form.get('choice'), request.form.get('pool_url'), current_pool_url)
+    p.check_for_pool_requirements()
+    plotnfts = p.load_plotnfts()
+    plotnft_log = p.get_plotnft_log()
     current_pool_url = plotnfts.get_current_pool_url()
     return render_template('settings/pools.html', plotnfts=plotnfts, current_pool_url=current_pool_url, 
         plotnft_log = plotnft_log, global_config=gc)
@@ -351,8 +352,7 @@ def worker_launch():
 @app.route('/pools')
 def pools():
     gc = globals.load()
-    pools = chia.load_pools()
-    return render_template('pools.html', pools=pools, global_config=gc)
+    return render_template('pools.html', pools= p.load_pools(), global_config=gc)
 
 @app.route('/favicon.ico')
 def favicon():

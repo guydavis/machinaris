@@ -9,6 +9,7 @@ if [[ ! -z ${remote_shares} ]]; then
         for share in ${remote_shares//,/ }; do
             remote="$(cut -d ':' -f1 <<<${share})"
             path="$(cut -d ':' -f2 <<<${share})"
+            mkdir -p ${path}
             echo "mount -t cifs -o credentials=/root/.chia/smbcredentials.txt ${remote} ${path}"
             mount -t cifs -o credentials=/root/.chia/smbcredentials.txt ${remote} ${path}
         done
