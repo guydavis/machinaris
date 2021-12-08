@@ -54,7 +54,7 @@ def update():
         if 'chia' in globals.enabled_blockchains():
             update_chia_plots(plots_status, since)
         elif 'chives' in globals.enabled_blockchains():
-            update_chives_plots(plots_status, since)
+            update_chives_plots(since)
         else:
             app.logger.debug("Skipping plots update from blockchains other than chia and chives as they all farm same as chia.")
 
@@ -107,12 +107,11 @@ def update_chia_plots(plots_status, since):
         app.logger.info(traceback.format_exc())
 
 # Sent from a separate fullnode container
-def update_chives_plots(plots_status, since):
+def update_chives_plots(since):
     try:
         blockchain = 'chives'
         hostname = utils.get_hostname()
-        displayname = utils.get_displayname()
-        plots_farming = chia.get_chives_plots()
+        plots_farming = chia.get_all_plots()
         payload = []
         for plot in plots_farming:
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
@@ -121,13 +120,13 @@ def update_chives_plots(plots_status, since):
                     "plot_id": short_plot_id,
                     "blockchain": blockchain,
                     "hostname": hostname if plot['hostname'] in ['127.0.0.1'] else plot['hostname'],
-                    "displayname": displayname,
+                    "displayname": None,  # Can't know all Chives workers' displaynames here, done in API receiver
                     "dir": dir,
                     "file": file,
                     "type": plot['type'],
                     "created_at": created_at,
-                    "plot_analyze": analyze_status(plots_status, short_plot_id),
-                    "plot_check": check_status(plots_status, short_plot_id),
+                    "plot_analyze": None, # Handled in receiver
+                    "plot_check": None, # Handled in receiver
                     "size": plot['file_size']
                 })
         if not since:  # If no filter, delete all before sending all current again

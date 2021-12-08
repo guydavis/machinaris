@@ -166,34 +166,3 @@ async def load_all_plots():
     except Exception as ex:
         app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
     return all_plots
-
-def get_chives_plots():
-    plots_via_rpc = asyncio.run(load_chives_plots())
-    return plots_via_rpc
-
-async def load_chives_plots():
-    host = utils.get_hostname()
-    all_plots = []
-    try:
-        config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
-        harvester_rpc_port = config["harvester"]["rpc_port"]
-        harvester = await HarvesterRpcClient.create(
-            'localhost', uint16(harvester_rpc_port), DEFAULT_ROOT_PATH, config
-        )
-        result = await harvester.get_plots()
-        harvester.close()
-        await harvester.await_closed()
-        for plot in result['plots']:
-            all_plots.append({
-                "hostname": host,
-                "type": "solo" if (plot["pool_contract_puzzle_hash"] is None) else "portable",
-                "plot_id": plot['plot-seed'], # chives uses plot-seed instead
-                "file_size": plot['file_size'], # bytes
-                "filename": plot['filename'], # full path and name
-                "plot_public_key": plot['plot_public_key'],
-                "pool_contract_puzzle_hash": plot['pool_contract_puzzle_hash'],
-                "pool_public_key": plot['pool_public_key'],
-            })
-    except Exception as ex:
-        app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
-    return all_plots
