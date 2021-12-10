@@ -5,7 +5,7 @@
 
 # On 2021-12-01
 HASH=5df93f705f650cbd1379eee21efaeef8f6dc262a
-if [[ ! -z "${forktools_skip_build}" ]]; then
+if [[ -z "${forktools_skip_build}" ]]; then
 	if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 		cd /
 		git clone https://github.com/Qwinn1/forktools

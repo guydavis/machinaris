@@ -31,6 +31,8 @@ from common.config import globals
 from web.models.pools import Plotnfts, Pools
 from . import worker as wk
 
+POOLABLE_BLOCKCHAINS = [ 'chia', 'chives']
+
 def load_plotnfts():
     plotnfts = db.session.query(pn.Plotnft).all()
     return Plotnfts(plotnfts)
@@ -224,4 +226,5 @@ def process_self_pool(wallet_index=1):
     return True
 
 def check_for_pool_requirements():
-    pass
+    for blockchain in POOLABLE_BLOCKCHAINS:
+        pass  # TODO
