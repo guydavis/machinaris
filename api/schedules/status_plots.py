@@ -50,8 +50,8 @@ def update():
             (datetime.datetime.now() - datetime.timedelta(minutes=FULL_SEND_INTERVAL_MINS)):
             since = None  # No since filter sends all plots, not just recent
             last_full_send_time = datetime.datetime.now()
-        plots_status = open_status_json()
         if 'chia' in globals.enabled_blockchains():
+            plots_status = open_status_json()
             update_chia_plots(plots_status, since)
         elif 'chives' in globals.enabled_blockchains():
             update_chives_plots(since)
