@@ -25,7 +25,8 @@ fi
     --bind 0.0.0.0:${worker_api_port:-8927} \
     --timeout 90 \
     --log-level=${LOG_LEVEL} \
-    --workers=2 \
+    --workers=1 \
+    --threads=12 \
     --config api/gunicorn.conf.py \
     --error-logfile - \
     --access-logfile - \

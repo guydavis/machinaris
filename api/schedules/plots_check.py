@@ -158,12 +158,12 @@ def request_check(plot, workers):
         #app.logger.info("{0}:{1} - {2} - {3}".format(harvester.hostname, harvester.port, harvester.blockchain, harvester.mode))
         if harvester.mode == 'fullnode' or 'harvester' in harvester.mode:
             if harvester.latest_ping_result != "Responding":
-                app.logger.info("Skipping check call to {0} as last ping was: {1}".format( \
-                    harvester.hostname, harvester.latest_ping_result))
+                #app.logger.info("Skipping check call to {0} as last ping was: {1}".format( \
+                #    harvester.hostname, harvester.latest_ping_result))
                 continue
             if harvester.hostname != plot.hostname or harvester.blockchain != plot.blockchain:
-                app.logger.info("Skipping check call to {0} ({1}) for plot on {2} ({3})".format( \
-                    harvester.hostname, harvester.blockchain, plot.hostname, plot.blockchain))
+                #app.logger.info("Skipping check call to {0} ({1}) for plot on {2} ({3})".format( \
+                #    harvester.hostname, harvester.blockchain, plot.hostname, plot.blockchain))
                 continue
             try:
                 app.logger.info("Trying {0}:{1} for plot check....".format(harvester.hostname, harvester.port))
