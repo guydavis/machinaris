@@ -22,6 +22,7 @@ from web import app, db, utils
 from web.models.plotman import PlottingSummary
 from . import worker as w
 from . import chia as c
+from . import pools as p
 
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 
@@ -142,7 +143,7 @@ def load_key_pk(type):
     return None
 
 def load_pool_contract_address():
-    plotnfts = c.load_plotnfts()
+    plotnfts = p.load_plotnfts()
     if len(plotnfts.rows) == 1:
         m = re.search('Pool contract address .*: (\w+)'.format(type), plotnfts.rows[0]['details'])
         if m:
