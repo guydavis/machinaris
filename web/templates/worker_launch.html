@@ -293,7 +293,7 @@
                         var farmer_port = lookup_farmer_port(blockchain);
                         cmd += '            - farmer_port=' + farmer_port + line_end;
                     }
-                    if (document.getElementById('mode-plotter').checked) {
+                    if ((blockchain == "chia" || blockchain == "chives") && (document.getElementById('mode-plotter').checked)) {
                         if (mode) {
                             mode += ',plotter';
                         }
