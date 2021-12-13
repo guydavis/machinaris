@@ -23,7 +23,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.cactus/mainnet/db/ && cd /root/.cactus/mainnet/db/
   # Mega links for Cactus blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/33h03ayA#R-uEiqqFoDcjrn9fW_qsYg
+  mega-get https://mega.nz/folder/u7wSDJYT#9KGpDVOGGK5-frBBI1v_Rg
   mv cactus/*.sqlite . && rm -rf cactus
 fi
 

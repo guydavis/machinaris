@@ -2,11 +2,11 @@ import datetime as dt
 import sqlalchemy as sa
 
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship, backref
 
 from common.extensions.database import db
 
 class Blockchain(db.Model):
+    __bind_key__ = 'blockchains'
     __tablename__ = "blockchains"
 
     hostname = sa.Column(sa.String(length=255), primary_key=True)

@@ -21,7 +21,7 @@ from . import workers
 from . import metrics
 
 from .stats import plottingdiskused,plottingdiskfree,plotsdiskused, \
-    plotsdiskfree,plotcount,plotssize,totalchia,netspacesize,timetowin
+    plotsdiskfree,plotcount,plotssize,totalcoins,netspacesize,timetowin
 
 MODULES = (
     actions,
@@ -51,7 +51,7 @@ MODULES = (
     plotsdiskfree,
     plotcount,
     plotssize,
-    totalchia,
+    totalcoins,
     netspacesize,
     timetowin,
     metrics,

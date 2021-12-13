@@ -21,7 +21,7 @@
   <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
     <div class="carousel-inner">
       {% for blockchain in farms.keys()|sort(case_sensitive=False) %}
-      <div class="carousel-item {% if blockchain == 'chia' %} active {% endif %}" data-bs-interval="10000">
+      <div class="carousel-item {% if blockchain == selected_blockchain %} active {% endif %}" data-bs-interval="10000">
 
         {% if farms[blockchain].expected_time_to_win != '-' %}
         <div class="row align-items-md-stretch" style="margin-top:0px; margin-bottom:5px;">

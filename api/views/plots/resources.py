@@ -2,6 +2,7 @@ import asyncio
 import datetime as dt
 import json
 import os
+import traceback
 
 from flask.views import MethodView
 
@@ -62,6 +63,7 @@ def lookup_worker_displayname(displaynames, hostname):
             displayname = db.session.query(w.Worker).filter(w.Worker.hostname==hostname, 
                 w.Worker.blockchain=='chia').first().displayname
         except:
+            traceback.print_exc()
             app.logger.info("Unable to find a worker with hostname '{0}'".format(hostname))
             displayname = hostname
         displaynames[hostname] = displayname

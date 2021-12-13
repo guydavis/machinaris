@@ -8,7 +8,7 @@ import datetime
 
 from web import app
 from web.actions import worker as w
-from common.config.globals import CURRENCY_SYMBOLS
+from common.config import globals
 from common.utils import converters
 
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
@@ -20,20 +20,22 @@ class FarmSummary:
 
     def __init__(self, farm_recs, wallet_recs):
         self.farms = {}
-        chives_farm_recs = []
         wallets = Wallets(wallet_recs)
         for farm_rec in farm_recs: 
-            if 'chives' == farm_rec.blockchain:  # Chives sends from both harvesters and fullnodes
-                chives_farm_recs.append(farm_rec) # Must later combine them together for single summary
-            elif farm_rec.mode == "fullnode":
+            if farm_rec.mode == "fullnode":
                 try:
-                    app.logger.debug("Found worker with hostname '{0}'".format(farm_rec.hostname))
+                    app.logger.debug("Searching for worker with hostname '{0}'".format(farm_rec.hostname))
                     wkr = w.get_worker(farm_rec.hostname, farm_rec.blockchain)
-                    displayname = wkr.displayname
-                    connection_status = wkr.connection_status()
+                    if wkr:
+                        displayname = wkr.displayname
+                        connection_status = wkr.connection_status()
+                    else:
+                        app.logger.info("Unable to find a worker with hostname '{0}' and blockchain '{1}'".format(farm_rec.hostname, farm_rec.blockchain))
+                        displayname = farm_rec.hostname
+                        connection_status = None
                 except Exception as ex:
-                    app.logger.info(str(ex))
-                    app.logger.info("Unable to find a worker with hostname '{0}' and blockchain '{1}'".format(farm_rec.hostname, farm_rec.blockchain))
+                    app.logger.info("Error finding a worker with hostname '{0}' and blockchain '{1}'".format(farm_rec.hostname, farm_rec.blockchain))
+                    traceback.print_exc()
                     displayname = farm_rec.hostname
                     connection_status = None
                 try:
@@ -52,7 +54,7 @@ class FarmSummary:
                     "display_status": self.status_if_responding(displayname, farm_rec.blockchain, connection_status, farm_rec.status),
                     "total_coins": total_coins,
                     "wallet_balance": wallet_balance,
-                    "currency_symbol": CURRENCY_SYMBOLS[farm_rec.blockchain],
+                    "currency_symbol": globals.CURRENCY_SYMBOLS[farm_rec.blockchain],
                     "netspace_display_size": '?' if not farm_rec.netspace_size else converters.gib_to_fmt(farm_rec.netspace_size),
                     "netspace_size": farm_rec.netspace_size,
                     "expected_time_to_win": farm_rec.expected_time_to_win,
@@ -63,75 +65,23 @@ class FarmSummary:
                     app.logger.info("Discarding duplicate fullnode blockchain status from {0} - {1}".format(farm_rec.hostname, farm_rec.blockchain))    
             else:
                 app.logger.info("Stale farm status for {0} - {1}".format(farm_rec.hostname, farm_rec.blockchain))
-        # Now combine Chives farm records from fullnodes and harvesters
-        self.combine_chives_recs_into_summary(chives_farm_recs, wallet_recs)
         if len(self.farms) == 0:  # Handle completely missing farm summary info 
             self.farms['chia'] = {} # with empty chia farm
-
-    def combine_chives_recs_into_summary(self, chives_farm_recs, wallet_recs):
-        plot_count = 0
-        plots_size = 0
-        fullnode = None
-        wallet_balance = '?'
-        displayname = '?'
-        connection_status = '?'
-        wallets = Wallets(wallet_recs)
-        for farm_rec in chives_farm_recs:
-            plot_count += int(farm_rec.plot_count)
-            plots_size += farm_rec.plots_size
-            if farm_rec.mode == 'fullnode':
-                fullnode = farm_rec
-                try:
-                    app.logger.debug("Found worker with hostname '{0}'".format(farm_rec.hostname))
-                    wkr = w.get_worker(farm_rec.hostname, 'chives')
-                    displayname = wkr.displayname
-                    connection_status = wkr.connection_status()
-                except Exception as ex:
-                    app.logger.info(str(ex))
-                    app.logger.info("Unable to find a worker with hostname '{0}' and blockchain '{1}'".format(farm_rec.hostname, 'chives'))
-                    displayname = farm_rec.hostname
-                    connection_status = None
-                try:
-                    wallet_balance = wallets.sum_wallet_balance(farm_rec.hostname, 'chives')
-                except Exception as ex: 
-                    app.logger.info("Failed to sum Chives wallet balances.".format(str(ex)))
-        if fullnode:
-            if len(chives_farm_recs) > 0:
-                total_etw = self.calc_entire_farm_etw(fullnode.plots_size, fullnode.expected_time_to_win, plots_size)
-            else:
-                total_etw = fullnode.expected_time_to_win
-            farm = {
-                "plot_count": int(plot_count),
-                "plots_size": plots_size,
-                "plots_display_size": converters.gib_to_fmt(plots_size),
-                "status": fullnode.status,
-                "display_status": self.status_if_responding(displayname, 'chives', connection_status, fullnode.status),
-                "total_coins": '0.0' if not fullnode.total_coins else round(fullnode.total_coins, 6),
-                "wallet_balance": wallet_balance,
-                "currency_symbol": CURRENCY_SYMBOLS['chives'],
-                "netspace_display_size": '?' if not fullnode.netspace_size else converters.gib_to_fmt(fullnode.netspace_size),
-                "netspace_size": fullnode.netspace_size,
-                "expected_time_to_win": total_etw,
-            }
-            self.farms['chives'] = farm
-        elif len(chives_farm_recs) > 0:
-            app.logger.error("Found {0} chives farm summary records, but none were the fullnode.".format(len(chives_farm_recs)))
-
-    # Only needed for older Chives code-base which reports ETW of plots only on fullnode
-    def calc_entire_farm_etw(self, fullnode_plots_size, expected_time_to_win, total_farm_plots_size):
-        try:
-            fullnode_etw_mins = converters.etw_to_minutes(expected_time_to_win)
-            total_farm_etw_mins = (fullnode_plots_size / total_farm_plots_size) * fullnode_etw_mins
-            return converters.format_minutes(int(total_farm_etw_mins))
-        except Exception as ex:
-            app.logger.debug("Failed to calculate ETW for entire farm due to: {0}".format(str(ex)))
-            return "-"
+        #app.logger.info(self.farms.keys())
 
     def status_if_responding(self, displayname, blockchain, connection_status, last_status):
         if connection_status == 'Responding':
             return "Active" if last_status == "Farming" else last_status
         app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
         return "Offline"
+
+    def selected_blockchain(self):
+        blockchains = list(self.farms.keys())
+        blockchains.sort()
+        for blockchain in blockchains:
+            if blockchain == globals.enabled_blockchains()[0]:
+                return blockchain
+        return blockchains[0]
 
 class FarmPlots:
 
@@ -201,6 +151,7 @@ class Wallets:
                 displayname = w.get_worker(wallet.hostname, wallet.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(wallet.hostname))
+                traceback.print_exc()
                 displayname = wallet.hostname
             hot_balance = self.sum_wallet_balance(wallet.hostname, wallet.blockchain, False)
             cold_balance = wallet.cold_balance
@@ -252,6 +203,7 @@ class Keys:
                 displayname = w.get_worker(key.hostname, key.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(key.hostname))
+                traceback.print_exc()
                 displayname = key.hostname
             self.rows.append({ 
                 'displayname': displayname, 
@@ -271,6 +223,7 @@ class Blockchains:
                 displayname = w.get_worker(blockchain.hostname, blockchain.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(blockchain.hostname))
+                traceback.print_exc()
                 displayname = blockchain.hostname
             self.rows.append({ 
                 'displayname': displayname, 
@@ -312,6 +265,7 @@ class Connections:
                 displayname = w.get_worker(connection.hostname, connection.blockchain).displayname
             except:
                 app.logger.info("Unable to find a worker with hostname '{0}'".format(connection.hostname))
+                traceback.print_exc()
                 displayname = connection.hostname
             self.rows.append({
                 'displayname': displayname, 

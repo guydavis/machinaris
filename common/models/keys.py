@@ -2,11 +2,11 @@ import datetime as dt
 import sqlalchemy as sa
 
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship, backref
 
 from common.extensions.database import db
 
 class Key(db.Model):
+    __bind_key__ = 'keys'
     __tablename__ = "keys"
 
     hostname = sa.Column(sa.String(length=255), primary_key=True)

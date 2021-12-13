@@ -77,7 +77,7 @@ def update_chia_plots(plots_status, since):
                     displayname = db.session.query(w.Worker).filter(w.Worker.hostname==hostname, 
                         w.Worker.blockchain=='chia').first().displayname
                 except:
-                    app.logger.info("Unable to find a worker with hostname '{0}'".format(plot['hostname']))
+                    app.logger.info("status_plots: Unable to find a worker with hostname '{0}'".format(plot['hostname']))
                     displayname = plot['hostname']
                 displaynames[plot['hostname']] = displayname
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])

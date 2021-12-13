@@ -39,6 +39,8 @@ COLD_WALLET_ADDRESSES_FILE = '/root/.chia/machinaris/config/cold_wallet_addresse
 def load_farm_summary():
     farms = db.session.query(f.Farm).order_by(f.Farm.hostname).all()
     wallets = db.session.query(w.Wallet).order_by(w.Wallet.blockchain).all()
+    if len(farms) == 0:
+        flash("Relax and grab a coffee. Status is being gathered from active workers.  Please allow 15 minutes...", 'info')
     return FarmSummary(farms, wallets)
 
 def load_plots_farming(hostname=None):
