@@ -96,16 +96,16 @@ def request_analyze(plot_file, workers):
                     plotter.hostname, plotter.latest_ping_result))
                 continue
             try:
-                app.logger.info("Trying {0}:{1} for analyze....".format(plotter.hostname, plotter.port))
+                app.logger.debug("Trying {0}:{1} for analyze....".format(plotter.hostname, plotter.port))
                 payload = {"service":"plotting", "action":"analyze", "plot_file": plot_file }
                 response = utils.send_worker_post(plotter, "/analysis/", payload, debug=False)
                 if response.status_code == 200:
                     return [plotter.hostname, plotter.displayname, response.content.decode('utf-8')]
                 elif response.status_code == 404:
-                    app.logger.info("Plotter on {0}:{1} did not have plot log for {2}".format(
+                    app.logger.debug("Plotter on {0}:{1} did not have plot log for {2}".format(
                         plotter.hostname, plotter.port, plot_file))
                 else:
-                    app.logger.info("Plotter on {0}:{1} returned an unexpected error: {2}".format(
+                    app.logger.debug("Plotter on {0}:{1} returned an unexpected error: {2}".format(
                         plotter.hostname, plotter.port, response.status_code))
             except Exception as ex:
                 app.logger.error(str(ex))

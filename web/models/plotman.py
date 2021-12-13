@@ -31,8 +31,7 @@ class PlottingSummary:
                 app.logger.debug("Found worker with hostname '{0}'".format(plotting.hostname))
                 displayname = w.get_worker(plotting.hostname).displayname
             except:
-                app.logger.info("Unable to find a worker with hostname '{0}'".format(plotting.hostname))
-                traceback.print_exc()
+                app.logger.info("PlottingSummary.init(): Unable to find a worker with hostname '{0}'".format(plotting.hostname))
                 displayname = plotting.hostname
             self.rows.append({
                 'hostname': plotting.hostname,

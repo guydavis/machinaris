@@ -63,8 +63,7 @@ def lookup_worker_displayname(displaynames, hostname):
             displayname = db.session.query(w.Worker).filter(w.Worker.hostname==hostname, 
                 w.Worker.blockchain=='chia').first().displayname
         except:
-            traceback.print_exc()
-            app.logger.info("Unable to find a worker with hostname '{0}'".format(hostname))
+            app.logger.info("views/plots/resources.py: Unable to find a worker with hostname '{0}'".format(hostname))
             displayname = hostname
         displaynames[hostname] = displayname
     return displayname

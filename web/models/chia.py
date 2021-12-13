@@ -34,8 +34,7 @@ class FarmSummary:
                         displayname = farm_rec.hostname
                         connection_status = None
                 except Exception as ex:
-                    app.logger.info("Error finding a worker with hostname '{0}' and blockchain '{1}'".format(farm_rec.hostname, farm_rec.blockchain))
-                    traceback.print_exc()
+                    app.logger.info("FarmSummary.init(): Error finding a worker with hostname '{0}' and blockchain '{1}'".format(farm_rec.hostname, farm_rec.blockchain))
                     displayname = farm_rec.hostname
                     connection_status = None
                 try:
@@ -150,8 +149,7 @@ class Wallets:
                 app.logger.debug("Found worker with hostname '{0}'".format(wallet.hostname))
                 displayname = w.get_worker(wallet.hostname, wallet.blockchain).displayname
             except:
-                app.logger.info("Unable to find a worker with hostname '{0}'".format(wallet.hostname))
-                traceback.print_exc()
+                app.logger.info("Wallets.init(): Unable to find a worker with hostname '{0}'".format(wallet.hostname))
                 displayname = wallet.hostname
             hot_balance = self.sum_wallet_balance(wallet.hostname, wallet.blockchain, False)
             cold_balance = wallet.cold_balance
@@ -202,8 +200,7 @@ class Keys:
                 app.logger.debug("Found worker with hostname '{0}'".format(key.hostname))
                 displayname = w.get_worker(key.hostname, key.blockchain).displayname
             except:
-                app.logger.info("Unable to find a worker with hostname '{0}'".format(key.hostname))
-                traceback.print_exc()
+                app.logger.info("Keys.init(): Unable to find a worker with hostname '{0}'".format(key.hostname))
                 displayname = key.hostname
             self.rows.append({ 
                 'displayname': displayname, 
@@ -222,8 +219,7 @@ class Blockchains:
                 app.logger.debug("Found worker with hostname '{0}'".format(blockchain.hostname))
                 displayname = w.get_worker(blockchain.hostname, blockchain.blockchain).displayname
             except:
-                app.logger.info("Unable to find a worker with hostname '{0}'".format(blockchain.hostname))
-                traceback.print_exc()
+                app.logger.info("Blockchains.init(): Unable to find a worker with hostname '{0}'".format(blockchain.hostname))
                 displayname = blockchain.hostname
             self.rows.append({ 
                 'displayname': displayname, 
@@ -264,8 +260,7 @@ class Connections:
                 app.logger.debug("Found worker with hostname '{0}'".format(connection.hostname))
                 displayname = w.get_worker(connection.hostname, connection.blockchain).displayname
             except:
-                app.logger.info("Unable to find a worker with hostname '{0}'".format(connection.hostname))
-                traceback.print_exc()
+                app.logger.info("Connections.init(): Unable to find a worker with hostname '{0}'".format(connection.hostname))
                 displayname = connection.hostname
             self.rows.append({
                 'displayname': displayname, 

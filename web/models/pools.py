@@ -19,8 +19,7 @@ class Plotnfts:
                 app.logger.debug("Found worker with hostname '{0}'".format(plotnft.hostname))
                 displayname = w.get_worker(plotnft.hostname).displayname
             except:
-                traceback.print_exc()
-                app.logger.info("Unable to find a worker with hostname '{0}'".format(plotnft.hostname))
+                app.logger.info("Plotnfts.init(): Unable to find a worker with hostname '{0}'".format(plotnft.hostname))
                 displayname = plotnft.hostname
             self.rows.append({ 
                 'displayname': displayname, 
@@ -49,8 +48,7 @@ class Pools:
                 app.logger.debug("Found worker with hostname '{0}'".format(pool.hostname))
                 displayname = w.get_worker(pool.hostname, pool.blockchain).displayname
             except:
-                traceback.print_exc()
-                app.logger.info("Unable to find a worker with hostname '{0}' for {1}".format(pool.hostname, pool.blockchain))
+                app.logger.info("Pools.init(): Unable to find a worker with hostname '{0}' for {1}".format(pool.hostname, pool.blockchain))
                 displayname = pool.hostname
             launcher_id = pool.launcher_id
             plotnft = self.find_plotnft(plotnfts, launcher_id)
