@@ -4,8 +4,8 @@
 #
 
 SHIBGREEN_BRANCH=$1
-# On 2021-12-06
-HASH=2f72bf07bf9298668f7253587be64bb3dfac5c84
+# On 2021-12-12
+HASH=d2e08a3cad84b1cb72c7952c9870aa44ff9d7104
 
 if [ -z ${SHIBGREEN_BRANCH} ]; then
 	echo 'Skipping SHIBGreen install as not requested.'

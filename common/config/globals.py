@@ -242,8 +242,8 @@ def harvesting_enabled():
     return "mode" in os.environ and ("harvester" in os.environ['mode'] or "fullnode" == os.environ['mode'])
 
 def plotting_enabled():
-    return "mode" in os.environ and ("plotter" in os.environ['mode'] 
-        or ("fullnode" == os.environ['mode'] and enabled_blockchains()[0] in ['chia', 'chives']))
+    return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode']) \
+        and enabled_blockchains()[0] in ['chia', 'chives']
 
 def enabled_blockchains():
     blockchains = []

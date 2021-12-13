@@ -81,22 +81,22 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     echo "A farmer peer address and port are required."
     exit
   else
-    if [ ! -f /root/.chia/farmer_ca/private_ca.crt ]; then
-      mkdir -p /root/.chia/farmer_ca
+    if [ ! -f /root/.ex9/farmer_ca/private_ca.crt ]; then
+      mkdir -p /root/.ex9/farmer_ca
       response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8929/certificates/?type=nchain --output /tmp/certs.zip)
       if [ $response == '200' ]; then
-        unzip /tmp/certs.zip -d /root/.chia/farmer_ca
+        unzip /tmp/certs.zip -d /root/.ex9/farmer_ca
       else
         echo "Certificates response of ${response} from http://${farmer_address}:8929/certificates/?type=nchain.  Try clicking 'New Worker' button on 'Workers' page first."
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.chia/farmer_ca/private_ca.crt ]; then
-      chia init -c /root/.chia/farmer_ca 2>&1 > /root/.chia/ext9/log/init.log
+    if [ -f /root/.ex9/farmer_ca/private_ca.crt ]; then
+      chia init -c /root/.ex9/farmer_ca 2>&1 > /root/.chia/ext9/log/init.log
       chmod 755 -R /root/.chia/ext9/config/ssl/ &> /dev/null
       chia init --fix-ssl-permissions > /dev/null 
     else
-      echo "Did not find your farmer's certificates within /root/.chia/farmer_ca."
+      echo "Did not find your farmer's certificates within /root/.ex9/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"

@@ -60,9 +60,6 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   # During concurrent startup of multiple fork containers, stagger less important setups
   sleep $[ ( $RANDOM % 180 )  + 1 ]s
 
-  # Conditionally install forktools on fullnodes
-  /usr/bin/bash /machinaris/scripts/forktools_setup.sh > /tmp/forktools_setup.log 2>&1
-
   # Conditionally install farmr on harvesters and fullnodes
   /usr/bin/bash /machinaris/scripts/farmr_setup.sh > /tmp/farmr_setup.log 2>&1
 
@@ -77,6 +74,9 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
 
   # Conditionally install plotman on plotters and fullnodes, after the plotters setup
   /usr/bin/bash /machinaris/scripts/plotman_autoplot.sh > /tmp/plotman_autoplot.log 2>&1
+
+  # Conditionally install forktools on fullnodes
+  /usr/bin/bash /machinaris/scripts/forktools_setup.sh > /tmp/forktools_setup.log 2>&1
 
 fi
 

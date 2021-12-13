@@ -19,13 +19,12 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.shibgreen/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
-  #echo "Downloading SHIBGreen blockchain DB (many GBs in size) on first launch..."
-  #echo "Please be patient as takes minutes now, but saves days of syncing time later."
-  #mkdir -p /root/.shibgreen/mainnet/db/ && cd /root/.shibgreen/mainnet/db/
+  echo "Downloading SHIBGreen blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
+  mkdir -p /root/.shibgreen/mainnet/db/ && cd /root/.shibgreen/mainnet/db/
   # Mega links for SHIBGreen blockchain DB from: https://chiaforksblockchain.com/
-  #mega-get https://mega.nz/folder/uvoEhaaJ#ozryRZYe2wIx-9eyx84nxQ
-  #mv shibgreen/*mainnet.sqlite shibgreen/*node.sqlite . && rm -rf shibgreen
-  echo "Sorry, no blockchain DB available for SHIBGreen!"
+  mega-get https://mega.nz/folder/SnhEXJLT#HkbG3IhiWzFbABSmYb6lTA
+  mv shibgreen/*mainnet.sqlite shibgreen/*node.sqlite . && rm -rf shibgreen
 fi
 
 echo 'Configuring SHIBGreen...'

@@ -30,7 +30,7 @@ def on_starting(server):
     # Every single container should report as a worker
     scheduler.add_job(func=status_worker.update, name="workers", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
 
-    # Collect disk stats from all where blockchain is chia, avoid duplicate disks from multiple forks on same host
+    # Collect disk stats from all modes where blockchain is chia, avoiding duplicate disks from multiple forks on same host
     if 'chia' in globals.enabled_blockchains():
         scheduler.add_job(func=stats_disk.collect, name="stats_disk", trigger='cron', minute="*/10") # Every 10 minutes
         
@@ -40,11 +40,6 @@ def on_starting(server):
         scheduler.add_job(func=status_alerts.update, name="alerts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=log_rotate.execute, name="log_rotate", trigger='cron', minute=0)  # Hourly
 
-    # Chives need to report farms, plots from harvesters directly due to their old Chia code fork
-    if not utils.is_fullnode() and globals.harvesting_enabled() and 'chives' in globals.enabled_blockchains():
-        scheduler.add_job(func=status_plots.update, name="plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)  
-        scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
-      
     # Status for plotters
     if globals.plotting_enabled():
         scheduler.add_job(func=status_plotting.update, name="plottings", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
@@ -58,19 +53,18 @@ def on_starting(server):
         scheduler.add_job(func=status_keys.update, name="keys", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_plots.update, name="plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)  
-        if 'chia' in globals.enabled_blockchains():  # Jobs only Chia controller should run
-            scheduler.add_job(func=plots_check.execute, name="plot_checks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
-            scheduler.add_job(func=status_plotnfts.update, name="plotnfts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
-            scheduler.add_job(func=status_partials.update, name="partials", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
-            scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
-
+            
     # Status for single Machinaris controller only, should be blockchain=chia
     if utils.is_controller():
+        scheduler.add_job(func=plots_check.execute, name="plot_checks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        scheduler.add_job(func=status_plotnfts.update, name="plotnfts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        scheduler.add_job(func=status_partials.update, name="partials", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
+        scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_controller.update, name="controller", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', hours=12)
 
     # Testing only
-    #scheduler.add_job(func=plots_check.execute, trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=stats_farm.collect, trigger='interval', seconds=10) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()

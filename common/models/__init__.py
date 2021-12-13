@@ -9,7 +9,7 @@ from .plots import Plot
 from .plotnfts import Plotnft
 from .plottings import Plotting 
 from .pools import Pool
-from .stats import StatPlotCount, StatPlotsSize, StatTotalChia, StatNetspaceSize, StatTimeToWin, \
+from .stats import StatPlotCount, StatPlotsSize, StatTotalCoins, StatNetspaceSize, StatTimeToWin, \
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \
         StatPlottingDiskUsed, StatPlottingDiskFree
 from .wallets import Wallet

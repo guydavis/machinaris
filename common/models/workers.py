@@ -3,16 +3,16 @@ import json as j
 import sqlalchemy as sa
 
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship, backref
 
 from common.extensions.database import db
 
 class Worker(db.Model):
+    __bind_key__ = 'workers'
     __tablename__ = "workers"
 
     hostname = sa.Column(sa.String(length=255), primary_key=True)
     port = sa.Column(sa.Integer, primary_key=True)
-    blockchain = sa.Column(sa.String(length=64), nullable=True)
+    blockchain = sa.Column(sa.String(length=64), nullable=False)
     displayname = sa.Column(sa.String(length=255), nullable=True)
     mode = sa.Column(sa.String(length=64), nullable=False)
     services = sa.Column(sa.String, nullable=False)

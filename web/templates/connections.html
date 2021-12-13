@@ -18,6 +18,14 @@
         {% endwith %}
     </div>
 
+    <div class="position-relative">
+        <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -8px;">
+          <a href="https://github.com/guydavis/machinaris/wiki/Workers" target="_blank">
+            <i class="fs-4 bi-question-circle"></i>
+          </a>
+        </div>
+      </div>
+
     <style>
         a.active.nav-link {
             background-color: #3d3f42 !important
@@ -125,11 +133,10 @@
     </nav>
     {% else %}
     <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
-        <h6>No connections found from any farmers. Not running?</h6>
-        <h6>Try running 'chia show --connections' on your farmers to verify.</h6>
+        <h6>No connections found from any farmers yet. Perhaps just starting?</h6>
+        <h6>After a while, try running 'chia show --connections' on your farmers to verify.</h6>
     </div>
     {% endif %}
-
 
     {% endblock %}
 
