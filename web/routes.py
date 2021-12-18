@@ -294,16 +294,17 @@ def settings_alerts():
 @app.route('/settings/pools', methods=['GET', 'POST'])
 def settings_pools():
     gc = globals.load()
+    selected_blockchain = 'chia'
     if request.method == 'POST':
-        plotnfts = p.load_plotnfts()
-        current_pool_url = plotnfts.get_current_pool_url()
-        p.process_pool_save(request.form.get('choice'), request.form.get('pool_url'), current_pool_url)
-    p.check_for_pool_requirements()
-    plotnfts = p.load_plotnfts()
-    plotnft_log = p.get_plotnft_log()
-    current_pool_url = plotnfts.get_current_pool_url()
-    return render_template('settings/pools.html', plotnfts=plotnfts, current_pool_url=current_pool_url, 
-        plotnft_log = plotnft_log, global_config=gc)
+        selected_blockchain = request.form.get('blockchain')
+        fullnode = worker.get_fullnode(selected_blockchain)
+        launcher_ids = request.form.getlist('{0}-launcher_id'.format(selected_blockchain))
+        choices = request.form.getlist('{0}-choice'.format(selected_blockchain))
+        pool_urls = request.form.getlist('{0}-pool_url'.format(selected_blockchain))
+        p.send_request(fullnode, selected_blockchain, launcher_ids, choices, pool_urls)
+    pool_configs = p.get_pool_configs()
+    return render_template('settings/pools.html',  global_config=gc, 
+        pool_configs=pool_configs, blockchains=p.POOLABLE_BLOCKCHAINS, selected_blockchain=selected_blockchain)
 
 @app.route('/settings/config', defaults={'path': ''})
 @app.route('/settings/config/<path:path>')

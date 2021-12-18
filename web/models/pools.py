@@ -6,7 +6,8 @@ import traceback
 
 import datetime
 
-from web import app
+from common.models.plotnfts import Plotnft
+from web import app, db
 from web.actions import worker as w
 
 class Plotnfts:
@@ -24,7 +25,10 @@ class Plotnfts:
             self.rows.append({ 
                 'displayname': displayname, 
                 'hostname': plotnft.hostname,
-                'blockchain': plotnft.blockchain, 
+                'blockchain': plotnft.blockchain,
+                'launcher_id': plotnft.launcher,
+                'wallet_num': plotnft.wallet_num,
+                'header': plotnft.header, 
                 'details': plotnft.details, 
                 'updated_at': plotnft.updated_at })
     
@@ -56,8 +60,10 @@ class Pools:
             if plotnft:
                 status = self.extract_plotnft_value(plotnft, "Current state:")
                 points_successful_last_24h = self.extract_plotnft_value(plotnft, "Percent Successful Points (24h)")
+                num_plots = self.extract_plotnft_value(plotnft, "Number of plots:")
             else:
                 status = "-"
+                num_plots = '-'
                 pool_errors_24h = len(pool_state['pool_errors_24h'])
                 points_found_24h = len(pool_state['points_found_24h'])
                 if points_found_24h == 0:
@@ -68,7 +74,8 @@ class Pools:
                 'displayname': displayname, 
                 'hostname': pool.hostname,
                 'launcher_id': pool.launcher_id, 
-                'login_link': pool.login_link, 
+                'login_link': pool.login_link,
+                'num_plots': num_plots, 
                 'blockchain': pool.blockchain, 
                 'pool_state': pool_state,
                 'updated_at': pool.updated_at,
@@ -87,3 +94,38 @@ class Pools:
             if line.startswith(key):
                 return line[line.index(':')+1:].strip()
         return None
+
+
+class PoolConfigs():
+
+    def __init__(self, blockchain, plotnfts, wallets):
+        self.plotnfts = plotnfts
+        if blockchain == 'chia':
+            self.links = self.chia_links()
+        elif blockchain == 'chives':
+            self.links = self.chives_links()
+        else:
+            raise Exception("Unsupported blockchain for pooling: {0}".format(blockchain))
+        self.warnings = self.get_warnings(blockchain, wallets)
+        if len(self.warnings) == 0 and len(self.plotnfts) == 0:
+            self.plotnfts.append(Plotnft(blockchain=blockchain, details=""))
+
+    def chia_links(self):
+        links = {}
+        links['compare_pools'] = "https://chiapool.directory/"
+        links['get_mojos'] = "https://faucet.chia.net/"
+        return links
+
+    def chives_links(self):
+        links = {}
+        links['compare_pools'] = "https://www.chivespool.com/"  # TODO Find a chives pool compare site...
+        return links
+
+    def get_warnings(self, blockchain, wallets):
+        warnings = []
+        for wallet in wallets:
+            if not wallet.is_synced():
+                warnings.append("{0} wallet ({1}) is not fully synced yet.  Please allow wallet time to complete syncing before changing Pooling settings.".format(blockchain.capitalize(), wallet.wallet_id()))
+            if (blockchain == 'chia' and not wallet.has_few_mojos()):
+                warnings.append("{0} wallet ({1}) has a zero balance.  Please request some mojos from a <a href='{2}' target='_blank'>faucet</a>, then try again hours later.".format(blockchain.capitalize(), wallet.wallet_id(), self.links['get_mojos']))
+        return warnings

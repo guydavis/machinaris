@@ -51,6 +51,10 @@ def get_worker(hostname, blockchain='chia'):
     #app.logger.info("Searching for worker with hostname: {0} and blockchain: {1}".format(hostname, blockchain))
     return db.session.query(w.Worker).filter(w.Worker.hostname==hostname, w.Worker.blockchain==blockchain).first()
 
+def get_fullnode(blockchain='chia'):
+    #app.logger.info("Searching for fullnode with blockchain: {0}".format(blockchain))
+    return db.session.query(w.Worker).filter(w.Worker.mode=='fullnode', w.Worker.blockchain==blockchain).first()
+
 def prune_workers_status(workers):
     for id in workers:
         [hostname,blockchain] = id.split('|')

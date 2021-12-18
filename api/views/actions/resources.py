@@ -9,8 +9,9 @@ from flask.views import MethodView
 from api import app
 from api.extensions.api import Blueprint
 
-from api.commands import chiadog_cli, chia_cli, plotman_cli
-from api.schedules import status_worker, status_plotting, status_farm, status_alerts, status_connections
+from api.commands import chiadog_cli, chia_cli, plotman_cli, pools_cli
+from api.schedules import status_worker, status_plotting, status_farm, \
+    status_alerts, status_connections, status_pools, status_plotnfts
 
 blp = Blueprint(
     'Action',
@@ -30,11 +31,13 @@ class Actions(MethodView):
             abort("Invalid action request without service.", 400)
         try:
             if service in ["plotting", "archiving"]:
-                plotman_cli.dispatch_action(body)
+                msg = plotman_cli.dispatch_action(body)
             elif service in [ "farming", "networking" ]:
-                chia_cli.dispatch_action(body)
+                msg = chia_cli.dispatch_action(body)
             elif service == "monitoring":
-                chiadog_cli.dispatch_action(body)
+                msg = chiadog_cli.dispatch_action(body)
+            elif service == "pooling":
+                msg = pools_cli.dispatch_action(body)
             else:
                 abort("Unknown service provided: {0}".format(service))
             # Now trigger updates after a delay
@@ -48,8 +51,11 @@ class Actions(MethodView):
                 status_connections.update()
             elif service == "monitoring":
                 status_alerts.update()
+            elif service == "pooling":
+                status_plotnfts.update()
+                status_pools.update()
             time.sleep(3) # Time for status update to reach database
-            return make_response("Action completed.", 200)
+            return make_response(msg, 200)
         except Exception as ex:
             app.logger.info(traceback.format_exc())
             return str(ex), 400

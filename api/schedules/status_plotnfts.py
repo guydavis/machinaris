@@ -15,21 +15,42 @@ import traceback
 from flask import g
 
 from common.config import globals
-from api.commands import chia_cli
+from api.commands import pools_cli
 from api import app
 from api import utils
+
+def extract_wallet_num(plotnft):
+    for line in plotnft.split('\n'):
+        if line.strip().startswith("Wallet id"):
+            return int(line[len('Wallet id '): len(line)-2])
+    return None
+
+def extract_launcher_id(plotnft):
+    for line in plotnft.split('\n'):
+        if line.startswith("Launcher ID:"):
+            return line.split(':')[1].strip()
+    return None
 
 def update():
     with app.app_context():
         try:
             for blockchain in globals.enabled_blockchains():
                 hostname = utils.get_hostname()
-                plotnft = chia_cli.load_plotnft_show(blockchain)
-                payload = {
-                    "hostname": hostname,
-                    "blockchain": blockchain,
-                    "details": plotnft.text.replace('\r', ''),
-                }
+                plotnfts = pools_cli.load_plotnft_show(blockchain)
+                payload = []
+                for plotnft in plotnfts.wallets:
+                    text = plotnft.replace('\r', '')
+                    launcher_id = extract_launcher_id(text)
+                    payload.append({
+                        "unique_id": hostname + '_' + blockchain + '_' + launcher_id,
+                        "hostname": hostname,
+                        "blockchain": blockchain,
+                        # Note, for some reason sqlite/smorest refused inserts to column "launcher_id" so I shortened it
+                        "launcher": launcher_id,
+                        "wallet_num": extract_wallet_num(text),
+                        "header": plotnfts.header.replace('\r', ''),
+                        "details": text,
+                    })
                 #app.logger.info(payload)
                 utils.send_post('/plotnfts/', payload, debug=False)
         except:
