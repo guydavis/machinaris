@@ -57,6 +57,12 @@ def get_fullnode(blockchain='chia'):
     #app.logger.info("Searching for fullnode with blockchain: {0}".format(blockchain))
     return db.session.query(workers.Worker).filter(workers.Worker.mode=='fullnode', workers.Worker.blockchain==blockchain).first()
 
+def get_fullnodes_by_blockchain():
+    fullnodes = {}
+    for worker in db.session.query(workers.Worker).filter(workers.Worker.mode=='fullnode').all():
+        fullnodes[worker.blockchain] = worker
+    return fullnodes
+
 def prune_workers_status(workers):
     for id in workers:
         [hostname,blockchain] = id.split('|')

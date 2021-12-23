@@ -297,13 +297,14 @@ def settings_pools():
     selected_blockchain = 'chia'
     if request.method == 'POST':
         selected_blockchain = request.form.get('blockchain')
-        fullnode = worker.get_fullnode(selected_blockchain)
+        selected_fullnode = worker.get_fullnode(selected_blockchain)
         launcher_ids = request.form.getlist('{0}-launcher_id'.format(selected_blockchain))
         choices = request.form.getlist('{0}-choice'.format(selected_blockchain))
         pool_urls = request.form.getlist('{0}-pool_url'.format(selected_blockchain))
-        p.send_request(fullnode, selected_blockchain, launcher_ids, choices, pool_urls)
+        p.send_request(selected_fullnode, selected_blockchain, launcher_ids, choices, pool_urls)
     pool_configs = p.get_pool_configs()
-    return render_template('settings/pools.html',  global_config=gc, 
+    fullnodes_by_blockchain = worker.get_fullnodes_by_blockchain()
+    return render_template('settings/pools.html',  global_config=gc, fullnodes_by_blockchain=fullnodes_by_blockchain,
         pool_configs=pool_configs, blockchains=p.POOLABLE_BLOCKCHAINS, selected_blockchain=selected_blockchain)
 
 @app.route('/settings/config', defaults={'path': ''})
@@ -336,7 +337,7 @@ def logs():
 def logfile():
     w = worker.get_worker(request.args.get('hostname'), request.args.get('blockchain'))
     log_type = request.args.get("log")
-    if log_type in [ 'alerts', 'farming', 'plotting', 'archiving', 'apisrv', 'webui']:
+    if log_type in [ 'alerts', 'farming', 'plotting', 'archiving', 'apisrv', 'webui', 'pooling']:
         log_id = request.args.get("log_id")
         blockchain = request.args.get("blockchain")
         return log_handler.get_log_lines(w, log_type, log_id, blockchain)

@@ -80,11 +80,10 @@
                 <div class="tab-pane {% if blockchain == selected_blockchain %}active{% endif %}" id="{{blockchain}}" role="tabpanel" aria-labelledby="{{blockchain}}-tab">
                     <form method="POST" id="{{blockchain}}-pooling-form">
                     <div class="p-1 mb-4 bg-light border rounded-3">
-                        <div class="container">
-                            <br />
+                        <div class="container m-4">
                             <p>Join a pool and get consistent farming rewards. The average returns are the same,<br />
                                 but it is much less volatile. You can easily switch pools without having to re-plot.</p>
-                        {% if pool_configs[blockchain].warnings|length > 0 %}
+                            {% if pool_configs[blockchain].warnings|length > 0 %}
                             <p>ERROR: Unable to join a pool because:</p>
                             <ul>
                                 {% for warning in pool_configs[blockchain].warnings %}
@@ -93,12 +92,22 @@
                             </ul>
                         {% else %}
                             {% for plotnft in pool_configs[blockchain].plotnfts %}
-                            <div class="row  g-3">
+                            {% if plotnft.details %}
+                            <div class="row g-3">
+                                <div class="container-fluid">
+                                    <span style="float:right">Updated at: {{plotnft.updated_at|datetimefilter}}</span>
+                                    <pre>{{plotnft.header}}</pre>
+                                    <pre style="margin: 0px">{{plotnft.details}}</pre>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <div class="row g-3">
                                 {% if plotnft.wallnet_num %}
                                 <h6>Wallet ID: {{ plotnft.wallnet_num }}</h6>
                                 {% endif %}
                                 <div class="col-12">
-                                    <input class="form-check-input" type="radio" name="{{blockchain}}-choice" id="{{blockchain}}-self_pool" value="self" 
+                                    <input class="form-check-input" type="radio" name="{{blockchain}}-choice" 
+                                        id="{{blockchain}}-{{plotnft.wallnet_num}}-self_pool" value="self" 
                                     {% if not current_pool_url %} checked {% endif %}/>
                                     <label class="form-check-label" for="self_pool">
                                         Self pool. When you win a block, you will earn rewards.
@@ -107,7 +116,8 @@
                             </div>
                             <div class="row mt-1 g-3">
                                 <div class="col-lg-2 d-flex align-items-center">
-                                    <input class="form-check-input" type="radio" name="{{blockchain}}-choice" id="{{blockchain}}-join_pool" value="join"
+                                    <input class="form-check-input" type="radio" name="{{blockchain}}-choice" 
+                                        id="{{blockchain}}-{{plotnft.wallnet_num}}-join_pool" value="join"
                                     {% if plotnft.current_pool_url() %} checked {% endif %}/>
                                     &nbsp;
                                     <label class="form-check-label" for="join_pool">
@@ -115,7 +125,7 @@
                                     </label>
                                 </div>
                                 <div class="col-lg-3">
-                                    <input class="form-control" id="{{blockchain}}-pool_url" name="{{blockchain}}-pool_url" type="text"
+                                    <input class="form-control" id="{{blockchain}}-{{plotnft.wallnet_num}}-pool_url" name="{{blockchain}}-pool_url" type="text"
                                         placeholder="https://myfave.pool.org" 
                                         {% if plotnft.current_pool_url() %} value="{{ plotnft.current_pool_url() }}" {% endif %}>
                                 </div>
@@ -127,22 +137,26 @@
                                     <a href="{{pool_configs[blockchain].links.get_mojos}}" target="_blank" class="text-white">Get Mojos</a>
                                     {% endif %}
                                 </div>
-                            </div>
-                            <div class="row g-3">
-                                <div class="col-sm">
-                                    <input type="hidden" name="blockchain" value="{{blockchain}}"/>
-                                    {% if plotnft.launcher %}
-                                    <input type="hidden" name="{{blockchain}}-launcher_id" value="{{plotnft.launcher}}"/>
-                                    {% endif %}
-                                    <button type="button" data-bs-toggle="modal" data-bs-target="#confirmModal"
-                                        class="btn btn-outline-success m-2 btnSave" id="{{blockchain}}-btnSave">Save</button>
-                                </div>
+                                <input type="hidden" name="blockchain" value="{{blockchain}}"/>
+                                {% if plotnft.launcher %}
+                                <input type="hidden" name="{{blockchain}}-launcher_id" value="{{plotnft.launcher}}"/>
+                                {% endif %}
                             </div>
                             {% endfor %}
                         {% endif %}
                         </div>
                     </div>
-                </form>
+                    <div class="row g-3">
+                        <div class="col-sm">
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                class="btn btn-outline-success m-2 btnSave" id="{{blockchain}}-btnSave">Save Changes</button>
+                        </div>
+                        <div class="col-sm">
+                            <button type="button" onclick='viewLogs("{{fullnodes_by_blockchain[blockchain].hostname}}","{{blockchain}}");return false;'
+                                class="btn btn-outline-success m-2" id="{{blockchain}}-btnLog">View Log</button>
+                        </div>
+                    </div>
+                    </form>
                 </div>
                 {% endfor %}
           </div>
@@ -169,5 +183,13 @@
                 $('#' + selected_blockchain + '-pooling-form').submit();
             });
         })
+        function viewLogs(hostname, blockchain) {
+            var d = new Date();
+            var height = 600;
+            var width = 900;
+            var top = (screen.height - height) / 2;
+            var left = (screen.width - width) / 2;
+            window.open("{{ url_for('logs') }}?log=pooling&hostname=" + hostname + "&blockchain=" + blockchain, 'PlotNFT Log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        }
     </script>
     {% endblock %}
