@@ -25,14 +25,14 @@
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             {% for blockchain in blockchains.rows %}
             <li class="nav-item" role="presentation">
-                <button class="nav-link {% if loop.index == 1 %}active{% endif %}" id="{{blockchain.blockchain}}-tab" data-bs-toggle="tab" data-bs-target="#{{blockchain.blockchain}}"
-                    type="button" role="tab" aria-controls="{{blockchain.blockchain}}" aria-selected="{% if loop.index == 1 %}true{% else %}false{% endif %}">{{ blockchain.blockchain }}</button>
+                <button class="nav-link {% if blockchain.blockchain == selected_blockchain %}active{% endif %}" id="{{blockchain.blockchain}}-tab" data-bs-toggle="tab" data-bs-target="#{{blockchain.blockchain}}"
+                    type="button" role="tab" aria-controls="{{blockchain.blockchain}}" aria-selected="{% if blockchain.blockchain == selected_blockchain %}true{% else %}false{% endif %}">{{ blockchain.blockchain }}</button>
             </li>
             {% endfor %}
         </ul>
         <div class="tab-content">
             {% for blockchain in blockchains.rows %}
-            <div class="tab-pane {% if loop.index == 1 %}active{% endif %}" id="{{blockchain.blockchain}}" role="tabpanel" aria-labelledby="{{blockchain.blockchain}}-tab">
+            <div class="tab-pane {% if blockchain.blockchain == selected_blockchain %}active{% endif %}" id="{{blockchain.blockchain}}" role="tabpanel" aria-labelledby="{{blockchain.blockchain}}-tab">
                 <br/>
                 <pre>{{ blockchain.details}}</pre>
             </div>

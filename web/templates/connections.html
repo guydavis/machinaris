@@ -42,18 +42,18 @@
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 {% for connection in connections.rows %}
                 <li class="nav-item" role="presentation">
-                    <button class="nav-link {% if loop.index == 1 %}active{% endif %}"
+                    <button class="nav-link {% if connection.blockchain == selected_blockchain %}active{% endif %}"
                         id="{{connection.blockchain}}-tab" data-bs-toggle="tab"
                         data-bs-target="#{{connection.blockchain}}" type="button" role="tab"
                         aria-controls="{{connection.blockchain}}"
-                        aria-selected="{% if loop.index == 1 %}true{% else %}false{% endif %}">{{ connection.blockchain
+                        aria-selected="{% if connection.blockchain == selected_blockchain %}true{% else %}false{% endif %}">{{ connection.blockchain
                         }}</button>
                 </li>
                 {% endfor %}
             </ul>
             <div class="tab-content">
                 {% for connection in connections.rows %}
-                <div class="tab-pane {% if loop.index == 1 %}active{% endif %}" id="{{connection.blockchain}}"
+                <div class="tab-pane {% if connection.blockchain == selected_blockchain %}active{% endif %}" id="{{connection.blockchain}}"
                     role="tabpanel" aria-labelledby="{{connection.blockchain}}-tab">
                     <br />
                     <form method="POST" id="form_{{connection.displayname}}_{{connection.blockchain}}">

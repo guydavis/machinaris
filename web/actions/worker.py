@@ -63,6 +63,17 @@ def get_fullnodes_by_blockchain():
         fullnodes[worker.blockchain] = worker
     return fullnodes
 
+def default_blockchain():
+    first_blockchain = None
+    for worker in db.session.query(workers.Worker).filter(workers.Worker.mode=='fullnode').order_by(workers.Worker.blockchain).all():
+        if not first_blockchain:
+            first_blockchain = worker.blockchain
+        if worker.blockchain == 'chia':  # Default choice
+            return worker.blockchain
+        if worker.blockchain == 'chives':  # Second choice
+            return worker.blockchain
+    return first_blockchain # Last choice, just use whatever is first alphabetically
+
 def prune_workers_status(workers):
     for id in workers:
         [hostname,blockchain] = id.split('|')

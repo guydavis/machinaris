@@ -170,17 +170,20 @@ def alerts():
 @app.route('/wallet', methods=['GET', 'POST'])    
 def wallet():
     gc = globals.load()
+    selected_blockchain = worker.default_blockchain()
     if request.method == 'POST':
+        selected_blockchain = request.form.get('blockchain')
         chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
     wallets = chia.load_wallets()
-    return render_template('wallet.html', wallets=wallets, global_config=gc, reload_seconds=120)
+    return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, reload_seconds=120)
 
 @app.route('/keys')
 def keys():
     gc = globals.load()
+    selected_blockchain = worker.default_blockchain()
     keys = chia.load_keys_show()
     key_paths = globals.get_key_paths()
-    return render_template('keys.html', keys=keys, 
+    return render_template('keys.html', keys=keys, selected_blockchain = selected_blockchain,
         key_paths=key_paths, global_config=gc)
 
 @app.route('/workers', methods=['GET', 'POST'])
@@ -210,14 +213,17 @@ def worker_route():
 @app.route('/blockchains')
 def blockchains():
     gc = globals.load()
+    selected_blockchain = worker.default_blockchain()
     blockchains = chia.load_blockchain_show()
-    return render_template('blockchains.html', reload_seconds=120, 
+    return render_template('blockchains.html', reload_seconds=120, selected_blockchain = selected_blockchain, 
         blockchains=blockchains, global_config=gc)
 
 @app.route('/connections', methods=['GET', 'POST'])
 def connections():
     gc = globals.load()
+    selected_blockchain = worker.default_blockchain()
     if request.method == 'POST':
+        selected_blockchain = request.form.get('blockchain')
         if request.form.get('action') == "add":
             chia.add_connection(request.form.get("connection"), request.form.get('hostname'), request.form.get('blockchain'))
         elif request.form.get('action') == 'remove':
@@ -225,7 +231,7 @@ def connections():
         else:
             app.logger.info("Unknown form action: {0}".format(request.form))
     connections = chia.load_connections_show()
-    return render_template('connections.html', reload_seconds=120, 
+    return render_template('connections.html', reload_seconds=120, selected_blockchain = selected_blockchain,
         connections=connections, global_config=gc)
 
 def find_selected_worker(hosts, hostname, blockchain= None):
@@ -294,7 +300,7 @@ def settings_alerts():
 @app.route('/settings/pools', methods=['GET', 'POST'])
 def settings_pools():
     gc = globals.load()
-    selected_blockchain = 'chia'
+    selected_blockchain = worker.default_blockchain()
     if request.method == 'POST':
         selected_blockchain = request.form.get('blockchain')
         selected_fullnode = worker.get_fullnode(selected_blockchain)
@@ -355,7 +361,8 @@ def worker_launch():
 @app.route('/pools')
 def pools():
     gc = globals.load()
-    return render_template('pools.html', pools= p.load_pools(), global_config=gc)
+    selected_blockchain = worker.default_blockchain()
+    return render_template('pools.html', pools= p.load_pools(), global_config=gc, selected_blockchain = selected_blockchain)
 
 @app.route('/favicon.ico')
 def favicon():
