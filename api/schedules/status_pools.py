@@ -45,7 +45,7 @@ def update():
                         "updated_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     })
                 #app.logger.info(payload)
-                response = utils.send_post('/pools/', payload, debug=True)
+                response = utils.send_post('/pools/', payload, debug=False)
                 #app.logger.info(response.content)
         except:
             app.logger.info("Failed to load and send pools state.")

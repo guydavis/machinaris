@@ -13,7 +13,7 @@ rm -f /root/.staicoin
 ln -s /root/.chia/staicoin /root/.staicoin 
 
 mkdir -p /root/.staicoin/mainnet/log
-staicoin init >> /root/.staicoin/mainnet/log/init.log 2>&1 
+stai init >> /root/.staicoin/mainnet/log/init.log 2>&1 
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
@@ -40,17 +40,17 @@ for k in ${keys//:/ }; do
     echo "Not touching key directories."
   elif [ -s ${k} ]; then
     echo "Adding key at path: ${k}"
-    staicoin keys add -f ${k} > /dev/null
+    stai keys add -f ${k} > /dev/null
   fi
 done
 
 # Loop over provided list of completed plot directories
 for p in ${plots_dir//:/ }; do
-    staicoin plots add -d ${p}
+    stai plots add -d ${p}
 done
 
 #chmod 755 -R /root/.staicoin/mainnet/config/ssl/ &> /dev/null
-#staicoin init --fix-ssl-permissions > /dev/null 
+#stai init --fix-ssl-permissions > /dev/null 
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
@@ -59,17 +59,17 @@ if [[ ${mode} == 'fullnode' ]]; then
       echo 'Waiting for key to be created/imported into mnemonic.txt. See: http://localhost:8926'
       sleep 10  # Wait 10 seconds before checking for mnemonic.txt presence
       if [ -s ${k} ]; then
-        staicoin keys add -f ${k}
+        stai keys add -f ${k}
         sleep 10
       fi
     done
   done
-  staicoin start farmer
+  stai start farmer
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.staicoin/mainnet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
   else
-    staicoin start farmer-only
+    stai start farmer-only
   fi
 elif [[ ${mode} =~ ^harvester.* ]]; then
   if [[ -z ${farmer_address} || -z ${farmer_port} ]]; then
@@ -78,7 +78,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
   else
     if [ ! -f /root/.staicoin/farmer_ca/private_ca.crt ]; then
       mkdir -p /root/.staicoin/farmer_ca
-      response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8934/certificates/?type=staicoin --output /tmp/certs.zip)
+      response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8934/certificates/?type=stai --output /tmp/certs.zip)
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.staicoin/farmer_ca
       else
@@ -87,17 +87,17 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       rm -f /tmp/certs.zip 
     fi
     if [ -f /root/.staicoin/farmer_ca/private_ca.crt ]; then
-      staicoin init -c /root/.staicoin/farmer_ca 2>&1 > /root/.staicoin/mainnet/log/init.log
+      stai init -c /root/.staicoin/farmer_ca 2>&1 > /root/.staicoin/mainnet/log/init.log
       #chmod 755 -R /root/.staicoin/mainnet/config/ssl/ &> /dev/null
-      #staicoin init --fix-ssl-permissions > /dev/null 
+      #stai init --fix-ssl-permissions > /dev/null 
     else
       echo "Did not find your farmer's certificates within /root/.staicoin/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
-    staicoin configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    staicoin configure --enable-upnp false
-    staicoin start harvester -r
+    stai configure --set-farmer-peer ${farmer_address}:${farmer_port}
+    stai configure --enable-upnp false
+    stai start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then
     echo "Starting in Plotter-only mode.  Run Plotman from either CLI or WebUI."
