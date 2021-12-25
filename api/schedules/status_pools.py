@@ -15,6 +15,7 @@ import traceback
 from flask import g
 
 from common.config import globals
+from common.models import pools as p
 from api.commands import pools_cli
 from api.rpc import chia
 from api import app
@@ -24,6 +25,8 @@ def update():
     with app.app_context():
         try:
             for blockchain in globals.enabled_blockchains():
+                if not blockchain in p.POOLABLE_BLOCKCHAINS:
+                    continue
                 payload = []
                 hostname = utils.get_hostname()
                 pools =  asyncio.run(chia.get_pool_state(blockchain))
@@ -42,7 +45,7 @@ def update():
                         "updated_at": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     })
                 #app.logger.info(payload)
-                response = utils.send_post('/pools/', payload, debug=False)
+                response = utils.send_post('/pools/', payload, debug=True)
                 #app.logger.info(response.content)
         except:
             app.logger.info("Failed to load and send pools state.")

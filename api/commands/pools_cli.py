@@ -28,8 +28,6 @@ from common.models import plotnfts as pn, pools as po
 from common.config import globals
 from api.models.pools import Plotnfts
 
-POOLABLE_BLOCKCHAINS = [ 'chia', 'chives' ]
-
 def get_job_parameter(job, key, index):
     value = job[key][index].strip()
     if value and value != 'None':

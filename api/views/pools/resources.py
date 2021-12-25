@@ -35,7 +35,7 @@ class Pools(MethodView):
     def post(self, new_items):
         if len(new_items) == 0:
             return "No pools provided.", 400
-        db.session.query(Pool).filter(Pool.hostname==new_items[0]['hostname']).delete()
+        db.session.query(Pool).filter(Pool.hostname==new_items[0]['hostname'], Pool.blockchain==new_items[0]['blockchain']).delete()
         items = []
         for new_item in new_items:
             item = Pool(**new_item)

@@ -82,6 +82,7 @@ class Pools:
                 'status': status,
                 'points_successful_last_24h': points_successful_last_24h
             })
+        app.logger.info(self.rows)
     
     def find_plotnft(self, plotnfts, launcher_id):
         for plotnft in plotnfts:

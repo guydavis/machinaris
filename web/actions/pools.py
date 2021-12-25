@@ -27,11 +27,8 @@ from os import path
 
 from web import app, db, utils
 from common.models import plotnfts as pn, pools as po, wallets as w, partials as pr
-from common.config import globals
 from web.models.pools import Plotnfts, Pools, PoolConfigs, PartialsChartData
 from . import worker as wk
-
-POOLABLE_BLOCKCHAINS = [ 'chia', 'chives']
 
 def load_plotnfts():
     plotnfts = db.session.query(pn.Plotnft).all()
@@ -39,7 +36,7 @@ def load_plotnfts():
 
 def load_pools():
     plotnfts = db.session.query(pn.Plotnft).all()
-    pools = db.session.query(po.Pool).all()
+    pools = db.session.query(po.Pool).order_by(po.Pool.blockchain).all()
     return Pools(pools, plotnfts)
 
 def get_plotnft_log():
@@ -78,7 +75,7 @@ def send_request(fullnode, selected_blockchain, launcher_ids, choices, pool_urls
 
 def get_pool_configs():
     configs = {}
-    for blockchain in POOLABLE_BLOCKCHAINS:
+    for blockchain in pn.POOLABLE_BLOCKCHAINS:
         plotnfts = db.session.query(pn.Plotnft).filter(pn.Plotnft.blockchain == blockchain).all()
         wallets = db.session.query(w.Wallet).filter(w.Wallet.blockchain == blockchain).all()
         configs[blockchain] = PoolConfigs(blockchain, plotnfts, wallets)
