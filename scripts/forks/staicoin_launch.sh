@@ -11,6 +11,8 @@ cd /staicoin-blockchain
 mkdir -p /root/.chia/staicoin
 rm -f /root/.staicoin
 ln -s /root/.chia/staicoin /root/.staicoin 
+rm -f /root/.stai
+ln -s /root/.chia/staicoin /root/.stai
 
 mkdir -p /root/.staicoin/mainnet/log
 stai init >> /root/.staicoin/mainnet/log/init.log 2>&1 
