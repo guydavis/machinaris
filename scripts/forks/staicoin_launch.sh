@@ -34,6 +34,8 @@ if [ -f /root/.staicoin/mainnet/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.staicoin/mainnet/config/config.yaml
   sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.staicoin/mainnet/config/config.yaml
   sed -i 's/localhost/127.0.0.1/g' /root/.staicoin/mainnet/config/config.yaml
+  # Fix for their renaming from staicoin to stai in December 2021
+  sed -i 's/staicoin_ssl_ca/stai_ssl_ca/g' /root/.staicoin/mainnet/config/config.yaml
 fi
 
 # Loop over provided list of key paths
@@ -51,8 +53,8 @@ for p in ${plots_dir//:/ }; do
     stai plots add -d ${p}
 done
 
-#chmod 755 -R /root/.staicoin/mainnet/config/ssl/ &> /dev/null
-#stai init --fix-ssl-permissions > /dev/null 
+chmod 755 -R /root/.staicoin/mainnet/config/ssl/ &> /dev/null
+stai init --fix-ssl-permissions > /dev/null 
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
@@ -90,8 +92,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     fi
     if [ -f /root/.staicoin/farmer_ca/private_ca.crt ]; then
       stai init -c /root/.staicoin/farmer_ca 2>&1 > /root/.staicoin/mainnet/log/init.log
-      #chmod 755 -R /root/.staicoin/mainnet/config/ssl/ &> /dev/null
-      #stai init --fix-ssl-permissions > /dev/null 
+      chmod 755 -R /root/.staicoin/mainnet/config/ssl/ &> /dev/null
+      stai init --fix-ssl-permissions > /dev/null 
     else
       echo "Did not find your farmer's certificates within /root/.staicoin/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
