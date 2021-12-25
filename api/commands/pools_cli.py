@@ -30,14 +30,32 @@ from api.models.pools import Plotnfts
 
 POOLABLE_BLOCKCHAINS = [ 'chia', 'chives' ]
 
+def get_job_parameter(job, key, index):
+    value = job[key][index].strip()
+    if value and value != 'None':
+        return value
+    return None
+
 def dispatch_action(job):
     service = job['service']
     if service != 'pooling':
         raise Exception("Only pooling requests handled here!")
     action = job['action']
     if action == "save":
-        return 'This is a test response.'
-        #return process_pool_save()
+        # Loop thru the provided launcher_ids
+        msg = ""
+        blockchain = job["blockchain"]
+        for i in range(len(job["launcher_ids"])):
+            launcher_id = get_job_parameter(job,"launcher_ids", i)
+            pool_wallet_id = get_job_parameter(job,"wallet_nums", i)
+            choice = get_job_parameter(job,"choices", i)
+            pool_url = get_job_parameter(job,"pool_urls", i)
+            current_pool_url = get_job_parameter(job,"current_pool_urls", i)
+            msg += process_pool_save(blockchain, choice, pool_wallet_id, pool_url, current_pool_url, launcher_id)
+        if msg.strip():
+            return msg
+        else:
+            return "No requested pool modifications were sent.  Current settings are unchanged."
     else:
         raise Exception("Unsupported action {0} for monitoring.".format(action))
 
@@ -77,17 +95,19 @@ def load_plotnft_show(blockchain):
             wallet_show += "ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
     return Plotnfts(wallet_show)
 
-def process_pool_save(blockchain, choice, pool_wallet_id, pool_url, current_pool_url):
+def process_pool_save(blockchain, choice, pool_wallet_id, pool_url, current_pool_url, launcher_id):
     if choice == "self":
         if current_pool_url and pool_wallet_id:
             return process_pool_leave(blockchain, pool_wallet_id)
         elif not pool_wallet_id:
-            return process_self_pool(blockchain)
+            return process_self_pool(blockchain, pool_wallet_id)
         else:
-            return 'Already self-pooling your own NFT.  No changes made.'
+            app.logger.info('Already self-pooling your own NFT.  No changes made to {0}'.format(launcher_id))
+            return ""
     elif choice == "join":
         if current_pool_url == pool_url:
-            return 'Already pooling with {0}.  No changes made.'.format(pool_url)
+            app.logger.info('Already pooling with {0}.  No changes made to {1}'.format(pool_url, launcher_id))
+            return ""
         return process_pool_join(blockchain, pool_url, pool_wallet_id)
 
 def process_pool_leave(blockchain, pool_wallet_id):
@@ -117,7 +137,7 @@ def process_pool_leave(blockchain, pool_wallet_id):
     for line in stdout_lines:
         if "Error" in line:
             raise Exception('Error while leaving pool: ' + line)
-    return ['Successfully left pool, switching to self plotting.  Please wait a while to complete, then refresh page. See below for details.', 'success']
+    return 'Successfully left pool, switching to self plotting.  Please wait a while to complete, then refresh page. View the log for details.'
 
 def process_pool_join(blockchain, pool_url, pool_wallet_id):
     chia_binary = globals.get_blockchain_binary(blockchain)
@@ -161,7 +181,7 @@ def process_pool_join(blockchain, pool_url, pool_wallet_id):
         for line in stdout_lines:
             if "Error" in line:
                 raise Exception('Error while joining Chia pool. Please double-check pool URL: {0} {1}'.format(pool_url, line))
-    return ['Successfully joined {0} pool by creating Chia NFT.  Please wait a while to complete, then refresh page. See below for details.'.format(pool_url), 'success']
+    return 'Successfully joined {0} pool by creating Chia NFT.  Please wait a while to complete, then refresh this page. DO NOT immediately re-submit the request. Be patient! View the log for details.'.format(pool_url)
 
 def process_self_pool(blockchain, pool_wallet_id):
     chia_binary = globals.get_blockchain_binary(blockchain)
@@ -190,4 +210,4 @@ def process_self_pool(blockchain, pool_wallet_id):
     for line in stdout_lines:
         if "Error" in line:
             raise Exception('Error while creating self-pooling NFT: {0}'.format(line))
-    return 'Successfully created a NFT for self-pooling.  Please wait a while to complete, then refresh page. See below for details.'
+    return 'Successfully created a NFT for self-pooling.  Please wait a while to complete, then refresh the page. DO NOT immediately re-submit the request. Be patient! View the log for details.'

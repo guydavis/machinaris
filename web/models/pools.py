@@ -95,7 +95,27 @@ class Pools:
                 return line[line.index(':')+1:].strip()
         return None
 
+class PartialsChartData:
 
+    def __init__(self, partials):
+        self.labels = []
+        label_index_by_hour = {}
+        for i in range(1,25):
+            start_time = datetime.datetime.now().replace(microsecond=0, second=0, minute=0) - datetime.timedelta(hours=24-i)
+            self.labels.append(start_time.strftime("%I %p"))
+            label_index_by_hour[start_time.strftime("%H")] = len(self.labels) - 1
+            #app.logger.info("At {0} is label: {1}".format((len(self.labels) - 1), start_time.strftime("%I %p")))
+        self.data = {}
+        for partial in partials:
+            created_at = partial.created_at
+            pool_launcher = partial.pool_url.replace('https://', '') + ' (' + partial.launcher_id[:8] + '...)'
+            if not pool_launcher in self.data:
+                self.data[pool_launcher] = [0] * 24 # Initialize as list of zeros
+            dataset = self.data[pool_launcher]
+            partial_hour_at = created_at[11:13]
+            #app.logger.info("{0}: partial_hour_at={1} -> slot {2}".format(created_at, partial_hour_at, label_index_by_hour[partial_hour_at]))
+            dataset[label_index_by_hour[partial_hour_at]] += 1
+            
 class PoolConfigs():
 
     def __init__(self, blockchain, plotnfts, wallets):
@@ -118,7 +138,8 @@ class PoolConfigs():
 
     def chives_links(self):
         links = {}
-        links['compare_pools'] = "https://www.chivespool.com/"  # TODO Find a chives pool compare site...
+        links['compare_pools'] = "https://www.chivespool.com/"  # TODO Find a chives pool compare site... any other pools?
+        links['get_mojos'] = "https://faucet.chivescoin.org/" 
         return links
 
     def get_warnings(self, blockchain, wallets):
@@ -126,6 +147,6 @@ class PoolConfigs():
         for wallet in wallets:
             if not wallet.is_synced():
                 warnings.append("{0} wallet ({1}) is not fully synced yet.  Please allow wallet time to complete syncing before changing Pooling settings.".format(blockchain.capitalize(), wallet.wallet_id()))
-            if (blockchain == 'chia' and not wallet.has_few_mojos()):
-                warnings.append("{0} wallet ({1}) has a zero balance.  Please request some mojos from a <a href='{2}' target='_blank'>faucet</a>, then try again hours later.".format(blockchain.capitalize(), wallet.wallet_id(), self.links['get_mojos']))
+            if not wallet.has_few_mojos():
+                warnings.append("{0} wallet ({1}) has a zero balance.  Please request some mojos from a <a href='{2}' target='_blank'>faucet</a>, then try again later.".format(blockchain.capitalize(), wallet.wallet_id(), self.links['get_mojos']))
         return warnings

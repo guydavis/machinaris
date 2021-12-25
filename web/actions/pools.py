@@ -26,9 +26,9 @@ from sqlalchemy import or_
 from os import path
 
 from web import app, db, utils
-from common.models import plotnfts as pn, pools as po, wallets as w
+from common.models import plotnfts as pn, pools as po, wallets as w, partials as pr
 from common.config import globals
-from web.models.pools import Plotnfts, Pools, PoolConfigs
+from web.models.pools import Plotnfts, Pools, PoolConfigs, PartialsChartData
 from . import worker as wk
 
 POOLABLE_BLOCKCHAINS = [ 'chia', 'chives']
@@ -57,13 +57,14 @@ def get_first_pool_wallet_id():
                 return m.group(1)
     return None
 
-def send_request(fullnode, selected_blockchain, launcher_ids, choices, pool_urls):
+def send_request(fullnode, selected_blockchain, launcher_ids, choices, pool_urls, wallet_nums,current_pool_urls):
     app.logger.info("Sending pooling settings change request...")
     try:
         response = utils.send_post(fullnode, "/actions/", 
             payload={
                     "service": "pooling","action": "save", "blockchain": selected_blockchain, 
-                        "choices": choices, "pool_urls": pool_urls, "launcher_ids": launcher_ids
+                        "choices": choices, "pool_urls": pool_urls, "current_pool_urls": current_pool_urls,
+                        "launcher_ids": launcher_ids, "wallet_nums": wallet_nums
                     }, 
             debug=True)
     except:
@@ -82,3 +83,8 @@ def get_pool_configs():
         wallets = db.session.query(w.Wallet).filter(w.Wallet.blockchain == blockchain).all()
         configs[blockchain] = PoolConfigs(blockchain, plotnfts, wallets)
     return configs
+
+def partials_chart_data(farm_summary):
+    for blockchain in farm_summary.farms:
+        partials = db.session.query(pr.Partial).filter(pr.Partial.blockchain==blockchain).order_by(pr.Partial.created_at.desc()).all()
+        farm_summary.farms[blockchain]['partials'] =  PartialsChartData(partials)

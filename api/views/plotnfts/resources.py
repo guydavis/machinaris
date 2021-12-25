@@ -35,10 +35,16 @@ class Plotnfts(MethodView):
         db.session.commit()
         return items
 
+@blp.route('/<hostname>/<blockchain>')
+class PlotNftByHostname(MethodView):
+
+    @blp.etag
+    @blp.response(200, PlotnftSchema)
+    def get(self, hostname, blockchain):
+        return db.session.query(Plotnft).filter(Plotnft.hostname==hostname, Plotnft.blockchain==blockchain)
+
     @blp.etag
     @blp.response(204)
-    def delete(self, unique_id):
-        item = db.session.query(Plotnft).get_or_404(unique_id)
-        blp.check_etag(item, PlotnftSchema)
-        db.session.delete(item)
+    def delete(self, hostname, blockchain):
+        db.session.query(Plotnft).filter(Plotnft.hostname==hostname, Plotnft.blockchain==blockchain).delete()
         db.session.commit()

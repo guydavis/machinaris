@@ -92,18 +92,15 @@
                             </ul>
                         {% else %}
                             {% for plotnft in pool_configs[blockchain].plotnfts %}
-                            {% if plotnft.details %}
                             <div class="row g-3">
+                                {% if plotnft.wallet_num %}
+                                <h6>Wallet ID: {{ plotnft.wallet_num }}</h6>
+                                {% endif %}
+                                {% if plotnft.details %}
                                 <div class="container-fluid">
-                                    <span style="float:right">Updated at: {{plotnft.updated_at|datetimefilter}}</span>
+                                    <pre style="float:right">Updated at: {{plotnft.updated_at|datetimefilter}}</pre>
                                     <pre>{{plotnft.header}}</pre>
-                                    <pre style="margin: 0px">{{plotnft.details}}</pre>
                                 </div>
-                            </div>
-                            {% endif %}
-                            <div class="row g-3">
-                                {% if plotnft.wallnet_num %}
-                                <h6>Wallet ID: {{ plotnft.wallnet_num }}</h6>
                                 {% endif %}
                                 <div class="col-12">
                                     <input class="form-check-input" type="radio" name="{{blockchain}}-choice" 
@@ -138,10 +135,17 @@
                                     {% endif %}
                                 </div>
                                 <input type="hidden" name="blockchain" value="{{blockchain}}"/>
-                                {% if plotnft.launcher %}
                                 <input type="hidden" name="{{blockchain}}-launcher_id" value="{{plotnft.launcher}}"/>
-                                {% endif %}
+                                <input type="hidden" name="{{blockchain}}-wallet_num" value="{{plotnft.wallet_num}}"/>
+                                <input type="hidden" name="{{blockchain}}-current_pool_url" value="{{plotnft.current_pool_url()}}"/>
                             </div>
+                            {% if plotnft.details %}
+                            <div class="row g-3">
+                                <div class="container-fluid">
+                                    <pre style="margin: 15px;">{{plotnft.details}}</pre>
+                                </div>
+                            </div>
+                            {% endif %}
                             {% endfor %}
                         {% endif %}
                         </div>

@@ -30,6 +30,6 @@ class Wallet(db.Model):
 
     def has_few_mojos(self):
         for line in self.details.split('\n'):
-            if line.strip().startswith("-Spendable") and "(0" in line:
+            if line.strip().startswith("-Spendable") and not "(0" in line:
                 return True
         return False

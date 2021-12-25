@@ -34,7 +34,7 @@ def index():
     farm_summary = chia.load_farm_summary()
     selected_blockchain = farm_summary.selected_blockchain()
     chia.challenges_chart_data(farm_summary)
-    chia.partials_chart_data(farm_summary)
+    p.partials_chart_data(farm_summary)
     stats.load_daily_diff(farm_summary)
     warnings.check_warnings(request.args)
     return render_template('index.html', reload_seconds=120, farms=farm_summary.farms, \
@@ -305,9 +305,11 @@ def settings_pools():
         selected_blockchain = request.form.get('blockchain')
         selected_fullnode = worker.get_fullnode(selected_blockchain)
         launcher_ids = request.form.getlist('{0}-launcher_id'.format(selected_blockchain))
+        wallet_nums = request.form.getlist('{0}-wallet_num'.format(selected_blockchain))
         choices = request.form.getlist('{0}-choice'.format(selected_blockchain))
         pool_urls = request.form.getlist('{0}-pool_url'.format(selected_blockchain))
-        p.send_request(selected_fullnode, selected_blockchain, launcher_ids, choices, pool_urls)
+        current_pool_urls = request.form.getlist('{0}-current_pool_url'.format(selected_blockchain))
+        p.send_request(selected_fullnode, selected_blockchain, launcher_ids, choices, pool_urls, wallet_nums, current_pool_urls)
     pool_configs = p.get_pool_configs()
     fullnodes_by_blockchain = worker.get_fullnodes_by_blockchain()
     return render_template('settings/pools.html',  global_config=gc, fullnodes_by_blockchain=fullnodes_by_blockchain,
