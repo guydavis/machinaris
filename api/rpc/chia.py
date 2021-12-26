@@ -82,7 +82,7 @@ elif importlib.util.find_spec("stor"):
     from stor.util.ints import uint16
     from stor.util.config import load_config as load_fork_config
 else:
-    raise Exception("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ('blockchains')))
+    raise Exception("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ['blockchains']))
 
 from api import app
 from api import utils
