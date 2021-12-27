@@ -25,6 +25,11 @@ if [[ -z "${worker_address}" ]]; then
   exit 1
 fi
 
+# v0.6.8 upgrade step - move location of plotnft.log
+if [ -f /root/.chia/mainnet/log/plotnft.log ]; then
+  mv /root/.chia/mainnet/log/plotnft.log /root/.chia/machinaris/logs/plotnft.log
+fi
+
 # Refuse to run if Portainer launched containers out of order and created a directory for mnemonic.txt
 if [[ "${mode}" == 'fullnode' ]] && [[ -d /root/.chia/mnemonic.txt ]]; then
   echo "Portainer (or similar) launched a fork container before the main Machinaris container on first run."

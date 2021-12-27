@@ -93,7 +93,8 @@ class FarmPlots:
                 plot.blockchain, 
                 plot.plot_id, 
                 plot.dir,  
-                app.jinja_env.filters['plotnameshortener'](plot.file),
+                #app.jinja_env.filters['plotnameshortener'](plot.file),
+                plot.file,
                 plot.type if plot.type else "", 
                 plot.created_at, 
                 app.jinja_env.filters['bytesfilter'](plot.size),
@@ -227,29 +228,7 @@ class Blockchains:
                 'blockchain': blockchain.blockchain, 
                 'details': blockchain.details,
                 'updated_at': blockchain.updated_at }) 
-            
-class PartialsChartData:
-
-    def __init__(self, partials):
-        self.labels = []
-        label_index_by_hour = {}
-        for i in range(1,25):
-            start_time = datetime.datetime.now().replace(microsecond=0, second=0, minute=0) - datetime.timedelta(hours=24-i)
-            self.labels.append(start_time.strftime("%I %p"))
-            label_index_by_hour[start_time.strftime("%H")] = len(self.labels) - 1
-            #app.logger.info("At {0} is label: {1}".format((len(self.labels) - 1), start_time.strftime("%I %p")))
-        self.data = {}
-        for partial in partials:
-            created_at = partial.created_at
-            pool_launcher = partial.pool_url.replace('https://', '') + ' (' + partial.launcher_id[:8] + '...)'
-            if not pool_launcher in self.data:
-                self.data[pool_launcher] = [0] * 24 # Initialize as list of zeros
-            dataset = self.data[pool_launcher]
-            partial_hour_at = created_at[11:13]
-            #app.logger.info("{0}: partial_hour_at={1} -> slot {2}".format(created_at, partial_hour_at, label_index_by_hour[partial_hour_at]))
-            dataset[label_index_by_hour[partial_hour_at]] += 1
-
-    
+   
 class Connections:
 
     def __init__(self, connections):

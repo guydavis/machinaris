@@ -21,3 +21,15 @@ class Wallet(db.Model):
             if line.startswith("Balances, fingerprint:"):
                 return line.split(':')[1].strip()
         return None
+
+    def is_synced(self):
+        for line in self.details.split('\n'):
+            if line.strip().startswith("Sync status: Synced"):
+                return True
+        return False
+
+    def has_few_mojos(self):
+        for line in self.details.split('\n'):
+            if line.strip().startswith("-Spendable") and not "(0" in line:
+                return True
+        return False

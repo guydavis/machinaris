@@ -123,6 +123,8 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         log_file = "/root/.chia/machinaris/logs/webui.log"
     elif log_type == "apisrv":
         log_file = "/root/.chia/machinaris/logs/apisrv.log"
+    elif log_type == "pooling":
+        log_file = "/root/.chia/machinaris/logs/plotnft.log"
     if not log_file or not os.path.exists(log_file):
         app.logger.info("No log file found at {0}".format(log_file))
         return 'No log file found!'

@@ -142,8 +142,8 @@ def load_key_pk(type):
         return m.group(1)
     return None
 
-def load_pool_contract_address():
-    plotnfts = p.load_plotnfts()
+def load_pool_contract_address(blockchain):
+    plotnfts = p.load_plotnfts(blockchain)
     if len(plotnfts.rows) == 1:
         m = re.search('Pool contract address .*: (\w+)'.format(type), plotnfts.rows[0]['details'])
         if m:
@@ -152,7 +152,7 @@ def load_pool_contract_address():
         app.logger.info("Did not find a unique Pool contract address as multiple plotnfts exist.  Not replacing in plotman.yaml.")
     return None
 
-def load_config_replacements():
+def load_config_replacements(blockchain):
     replacements = []
     farmer_pk = load_key_pk('Farmer')
     if farmer_pk:
@@ -162,7 +162,7 @@ def load_config_replacements():
     if pool_pk:
         #app.logger.info("POOL_PK: {0}".format(pool_pk))
         replacements.append([ 'pool_pk:\s+REPLACE_WITH_THE_REAL_VALUE.*$', 'pool_pk: '+ pool_pk])
-    pool_contract_address = load_pool_contract_address()
+    pool_contract_address = load_pool_contract_address(blockchain)
     if pool_contract_address:
         #app.logger.info("POOL_CONTRACT_ADDRESS: {0}".format(pool_contract_address))
         replacements.append([ 'pool_contract_address:\s+REPLACE_WITH_THE_REAL_VALUE.*$', 'pool_contract_address: '+ pool_contract_address])
@@ -171,7 +171,7 @@ def load_config_replacements():
 def load_config(plotter, blockchain):
     replacements = []
     try:
-        replacements = load_config_replacements()
+        replacements = load_config_replacements(blockchain)
     except:
         app.logger.info("Unable to load replacements on install with mode={0}".format(os.environ['mode']))
         app.logger.info(traceback.format_exc())
@@ -229,10 +229,10 @@ def analyze(plot_id):
             return fp.read()
     return make_response("Sorry, no plotting job log found.  Perhaps plot was made outside Machinaris?", 200)
 
-def load_plotting_keys():
+def load_plotting_keys(blockchain):
     farmer_pk = load_key_pk('Farmer')
     pool_pk = load_key_pk('Pool')
-    pool_contract_address = load_pool_contract_address()
+    pool_contract_address = load_pool_contract_address(blockchain)
     if not farmer_pk:
         farmer_pk = None if os.environ['farmer_pk'] == 'null' else os.environ['farmer_pk']
     if not pool_pk:

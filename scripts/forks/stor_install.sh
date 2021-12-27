@@ -4,8 +4,8 @@
 #
 
 STOR_BRANCH=$1
-# On 2021-11-06
-HASH=6edabce59a101a757c3269ab5a305259ddf95599
+# On 2021-12-26
+HASH=3c3cd1a3b99592e88160107ca5b81afc0937b992
 
 if [ -z ${STOR_BRANCH} ]; then
 	echo 'Skipping Stor install as not requested.'

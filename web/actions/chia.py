@@ -27,11 +27,10 @@ from os import path
 
 from web import app, db, utils
 from common.models import farms as f, plots as p, challenges as c, wallets as w, \
-    blockchains as b, connections as co, keys as k, partials as pr
+    blockchains as b, connections as co, keys as k
 from common.config import globals
 from web.models.chia import FarmSummary, FarmPlots, Wallets, \
-    Blockchains, Connections, Keys, PartialsChartData, \
-    ChallengesChartData, PLOT_TABLE_COLUMNS
+    Blockchains, Connections, Keys, ChallengesChartData
 from . import worker as wk
 
 COLD_WALLET_ADDRESSES_FILE = '/root/.chia/machinaris/config/cold_wallet_addresses.json'
@@ -113,11 +112,6 @@ def challenges_chart_data(farm_summary):
             c.Challenge.created_at >= chart_start_time).order_by(
             c.Challenge.created_at.desc(), c.Challenge.hostname).all()
         farm_summary.farms[blockchain]['challenges'] = ChallengesChartData(challenges)
-
-def partials_chart_data(farm_summary):
-    for blockchain in farm_summary.farms:
-        partials = db.session.query(pr.Partial).filter(pr.Partial.blockchain==blockchain).order_by(pr.Partial.created_at.desc()).all()
-        farm_summary.farms[blockchain]['partials'] =  PartialsChartData(partials)
 
 def load_wallets():
     wallets = db.session.query(w.Wallet).order_by(w.Wallet.blockchain).all()

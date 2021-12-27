@@ -19,10 +19,10 @@ from web import app, db, utils
 from web.actions import chia, worker
 
 ALL_TABLES_BY_HOSTNAME = [
-    'stat_plots_disk_used',
-    'stat_plotting_disk_used',
-    'stat_plots_disk_free',
-    'stat_plotting_disk_free',
+    StatPlotsDiskUsed,
+    StatPlottingDiskUsed,
+    StatPlotsDiskFree,
+    StatPlottingDiskFree,
 ]
 
 def load_daily_diff(farm_summary):
@@ -231,9 +231,8 @@ def load_current_disk_usage(disk_type, hostname=None):
 def prune_workers_status(hostname, displayname, blockchain):
     try:
         for table in ALL_TABLES_BY_HOSTNAME:
-            db.engine.execute("DELETE FROM " + table + " WHERE (hostname = :hostname OR hostname = :displayname)", 
-                {"hostname":hostname, "displayname":displayname})
-        db.commit()
+            db.session.query(table).filter(or_((table.hostname == hostname), (table.hostname == worker.displayname)), table.blockchain == worker.blockchain).delete()
+            db.session.commit()
     except Exception as ex:
         app.logger.info("Failed to remove stale stats for worker {0} - {1} because {2}".format(displayname, blockchain, str(ex)))
 

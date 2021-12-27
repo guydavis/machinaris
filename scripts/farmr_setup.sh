@@ -2,9 +2,7 @@
 #
 # Installs farmr - https://github.com/gilnobrega/farmr
 #
-if [[ ${blockchains} == 'shibgreen' ]]; then
-	echo 'Sorry, ${blockchains} not supported by Farmr. Nothing started...'
-elif [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
+if [[ "${farmr_skip_launch}" == 'false' &&  (${mode} == 'fullnode' || ${mode} =~ "harvester") ]]; then
     if [[ ! -f /usr/bin/farmr ]]; then
 		arch_name="$(uname -m)"
 		echo "Installing farmr on ${arch_name}..."
@@ -82,15 +80,14 @@ elif [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
   hourly
 }
 EOF
-	if [[ -z "${farmr_skip_launch}" ]]; then
-		rm -f nohup.out # Remove stale stdout logging
-		# Launch in harvester or farmer mode
-		if [[ ${mode} =~ ^harvester.* ]]; then
-			echo "After a pause, about to start Farmr in harvester mode..."
-			(sleep 180 && nohup /usr/bin/farmr harvester headless 2>&1 ) &
-		elif [[ ${mode} == 'farmer' ]] || [[ ${mode} == 'fullnode' ]]; then
-			echo "After a pause, about to start Farmr in farmer mode..."
-			(sleep 180 && nohup /usr/bin/farmr farmer headless 2>&1 ) &
-		fi
+
+	rm -f nohup.out # Remove stale stdout logging
+	# Launch in harvester or farmer mode
+	if [[ ${mode} =~ ^harvester.* ]]; then
+		echo "After a pause, about to start Farmr in harvester mode..."
+		(sleep 180 && nohup /usr/bin/farmr harvester headless 2>&1 ) &
+	elif [[ ${mode} == 'farmer' ]] || [[ ${mode} == 'fullnode' ]]; then
+		echo "After a pause, about to start Farmr in farmer mode..."
+		(sleep 180 && nohup /usr/bin/farmr farmer headless 2>&1 ) &
 	fi
 fi

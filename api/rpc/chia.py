@@ -69,12 +69,12 @@ elif importlib.util.find_spec("shibgreen"):
     from shibgreen.util.default_root import DEFAULT_ROOT_PATH
     from shibgreen.util.ints import uint16
     from shibgreen.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("staicoin"):
-    from staicoin.rpc.full_node_rpc_client import FullNodeRpcClient
-    from staicoin.rpc.farmer_rpc_client import FarmerRpcClient
-    from staicoin.util.default_root import DEFAULT_ROOT_PATH
-    from staicoin.util.ints import uint16
-    from staicoin.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("stai"):
+    from stai.rpc.full_node_rpc_client import FullNodeRpcClient
+    from stai.rpc.farmer_rpc_client import FarmerRpcClient
+    from stai.util.default_root import DEFAULT_ROOT_PATH
+    from stai.util.ints import uint16
+    from stai.util.config import load_config as load_fork_config
 elif importlib.util.find_spec("stor"):
     from stor.rpc.full_node_rpc_client import FullNodeRpcClient
     from stor.rpc.farmer_rpc_client import FarmerRpcClient
@@ -82,7 +82,7 @@ elif importlib.util.find_spec("stor"):
     from stor.util.ints import uint16
     from stor.util.config import load_config as load_fork_config
 else:
-    raise Exception("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ('blockchains')))
+    raise Exception("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ['blockchains']))
 
 from api import app
 from api import utils

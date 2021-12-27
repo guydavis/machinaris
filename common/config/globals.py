@@ -75,7 +75,7 @@ MAIZE_BINARY = '/maize-blockchain/venv/bin/maize'
 NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
 SHIBGREEN_BINARY = '/shibgreen-blockchain/venv/bin/shibgreen'
 SILICOIN_BINARY = '/silicoin-blockchain/venv/bin/sit'
-STAICOIN_BINARY = '/staicoin-blockchain/venv/bin/staicoin'
+STAICOIN_BINARY = '/staicoin-blockchain/venv/bin/stai'
 STOR_BINARY = '/stor-blockchain/venv/bin/stor'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires

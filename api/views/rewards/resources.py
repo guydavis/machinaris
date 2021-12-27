@@ -11,6 +11,7 @@ from api import app
 from api.extensions.api import Blueprint
 
 from api.commands import fd_cli
+from common.models import pools
 
 blp = Blueprint(
     'Reward',
@@ -32,7 +33,7 @@ class Rewards(MethodView):
         except:
             abort("Invalid rewards recovery request without blockchain, launcher_id, or pool_contract_address.", 400)
         
-        if blockchain in ['chia', 'chives']:
+        if blockchain in pools.POOLABLE_BLOCKCHAINS:
             abort(f"No need to recover rewards for blockchain: {blockchain}")
 
         try:

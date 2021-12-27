@@ -42,18 +42,18 @@
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             {% for pool in pools.rows %}
               <li class="nav-item" role="presentation">
-                  <button class="nav-link {% if loop.index == 1 %}active{% endif %}"
+                  <button class="nav-link {% if pool.blockchain == selected_blockchain %}active{% endif %}"
                       id="{{pool.blockchain}}-tab" data-bs-toggle="tab"
                       data-bs-target="#{{pool.blockchain}}" type="button" role="tab"
                       aria-controls="{{pool.blockchain}}"
-                      aria-selected="{% if loop.index == 1 %}true{% else %}false{% endif %}">{{ pool.blockchain
+                      aria-selected="{% if pool.blockchain == selected_blockchain %}true{% else %}false{% endif %}">{{ pool.blockchain
                       }}</button>
               </li>
               {% endfor %}
           </ul>
           <div class="tab-content">
             {% for pool in pools.rows %}
-            <div class="tab-pane {% if loop.index == 1 %}active{% endif %}" id="{{pool.blockchain}}"
+            <div class="tab-pane {% if pool.blockchain == selected_blockchain %}active{% endif %}" id="{{pool.blockchain}}"
                 role="tabpanel" aria-labelledby="{{pool.blockchain}}-tab">
               <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
                 <div class="h-20 p-2 bg-light border rounded-3">
@@ -73,6 +73,7 @@
                     <li>Points Found Since Start: {{pool.pool_state.points_found_since_start}}</li>
                     <li>Points Found in Last 24 Hours: {{pool.pool_state.points_found_24h|length}}</li>
                     <li>Points Successful in Last 24 Hours: {{ pool.points_successful_last_24h }}</li>
+                    <li>Number of Plots: {{pool.num_plots}}</li>
                   </ul>
                   <b>Launcher ID:</b>
                   <span>

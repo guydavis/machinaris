@@ -9,7 +9,7 @@ import traceback
 from flask import g
 
 from common.config import globals
-from common.models import partials as p
+from common.models import partials as p, pools as po
 from common.utils import converters
 from api import app
 from api.commands import log_parser
@@ -35,6 +35,8 @@ def update():
             payload = []
             partials_so_far = {}
             for blockchain in globals.enabled_blockchains():
+                if not blockchain in po.POOLABLE_BLOCKCHAINS:
+                    continue
                 recent_partials = log_parser.recent_partials(blockchain)
                 for partial in recent_partials.rows:
                     app.logger.debug(partial)
