@@ -34,6 +34,10 @@ def load_plotnfts():
     plotnfts = db.session.query(pn.Plotnft).all()
     return Plotnfts(plotnfts)
 
+def load_plotnfts(blockchain):
+    plotnfts = db.session.query(pn.Plotnft).filter(pn.Plotnft.blockchain==blockchain).all()
+    return Plotnfts(plotnfts)
+
 def load_pools():
     plotnfts = db.session.query(pn.Plotnft).all()
     pools = db.session.query(po.Pool).order_by(po.Pool.blockchain).all()
@@ -75,7 +79,7 @@ def send_request(fullnode, selected_blockchain, launcher_ids, choices, pool_urls
 
 def get_pool_configs():
     configs = {}
-    for blockchain in pn.POOLABLE_BLOCKCHAINS:
+    for blockchain in po.POOLABLE_BLOCKCHAINS:
         plotnfts = db.session.query(pn.Plotnft).filter(pn.Plotnft.blockchain == blockchain).all()
         wallets = db.session.query(w.Wallet).filter(w.Wallet.blockchain == blockchain).all()
         configs[blockchain] = PoolConfigs(blockchain, plotnfts, wallets)

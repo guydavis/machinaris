@@ -11,6 +11,7 @@ from flask import Flask, flash, redirect, render_template, abort, \
         request, session, url_for, send_from_directory, make_response
 
 from common.config import globals
+from common.models import pools as po
 from web import app, utils
 from web.actions import chia, pools as p, plotman, chiadog, worker, log_handler, stats, warnings
 
@@ -313,7 +314,7 @@ def settings_pools():
     pool_configs = p.get_pool_configs()
     fullnodes_by_blockchain = worker.get_fullnodes_by_blockchain()
     return render_template('settings/pools.html',  global_config=gc, fullnodes_by_blockchain=fullnodes_by_blockchain,
-        pool_configs=pool_configs, blockchains=p.POOLABLE_BLOCKCHAINS, selected_blockchain=selected_blockchain)
+        pool_configs=pool_configs, blockchains=po.POOLABLE_BLOCKCHAINS, selected_blockchain=selected_blockchain)
 
 @app.route('/settings/config', defaults={'path': ''})
 @app.route('/settings/config/<path:path>')
@@ -354,7 +355,7 @@ def logfile():
 
 @app.route('/worker_launch')
 def worker_launch():
-    [farmer_pk, pool_pk, pool_contract_address] = plotman.load_plotting_keys()
+    [farmer_pk, pool_pk, pool_contract_address] = plotman.load_plotting_keys('chia')
     pathlib.Path('/root/.chia/machinaris/tmp/').mkdir(parents=True, exist_ok=True)
     pathlib.Path('/root/.chia/machinaris/tmp/worker_launch.tmp').touch()
     return render_template('worker_launch.html', farmer_pk=farmer_pk, 

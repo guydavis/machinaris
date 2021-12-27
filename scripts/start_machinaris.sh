@@ -8,19 +8,18 @@ mkdir -p /root/.chia/plotman/logs
 if [[ "${blockchains}" == 'chives' ]]; then
     cp -f /machinaris/config/plotman.sample-chives.yaml /root/.chia/plotman/plotman.sample.yaml
     cp -n /machinaris/config/plotman.sample-chives.yaml /root/.chia/plotman/plotman.yaml
-else
+else # If Chia
     cp -f /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.sample.yaml
     cp -n /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.yaml
-fi
-
-if [ ${farmer_pk} != 'null' ]; then
-    sed -i "s/^.*farmer_pk: REPLACE_WITH_THE_REAL_VALUE.*$/        farmer_pk: ${farmer_pk}/g" /root/.chia/plotman/plotman.yaml
-fi
-if [ ${pool_pk} != 'null' ]; then
-    sed -i "s/^.*pool_pk: REPLACE_WITH_THE_REAL_VALUE.*$/        pool_pk: ${pool_pk}/g" /root/.chia/plotman/plotman.yaml
-fi
-if [ ${pool_contract_address} != 'null' ]; then
-    sed -i "s/^.*pool_contract_address: REPLACE_WITH_THE_REAL_VALUE.*$/        #pool_contract_address: ${pool_contract_address}/g" /root/.chia/plotman/plotman.yaml
+    if [ ${farmer_pk} != 'null' ]; then
+        sed -i "s/^.*farmer_pk: REPLACE_WITH_THE_REAL_VALUE.*$/        farmer_pk: ${farmer_pk}/g" /root/.chia/plotman/plotman.yaml
+    fi
+    if [ ${pool_pk} != 'null' ]; then
+        sed -i "s/^.*pool_pk: REPLACE_WITH_THE_REAL_VALUE.*$/        pool_pk: ${pool_pk}/g" /root/.chia/plotman/plotman.yaml
+    fi
+    if [ ${pool_contract_address} != 'null' ]; then
+        sed -i "s/^.*pool_contract_address: REPLACE_WITH_THE_REAL_VALUE.*$/        #pool_contract_address: ${pool_contract_address}/g" /root/.chia/plotman/plotman.yaml
+    fi
 fi
 # Import ssh key if exists
 if [ -f "/id_rsa" ]; then
