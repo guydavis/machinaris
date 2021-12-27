@@ -31,11 +31,14 @@ class Actions(MethodView):
             abort("Invalid action request without service.", 400)
         try:
             if service in ["plotting", "archiving"]:
-                msg = plotman_cli.dispatch_action(body)
+                plotman_cli.dispatch_action(body)
+                msg = "Plotman action completed."
             elif service in [ "farming", "networking" ]:
-                msg = chia_cli.dispatch_action(body)
+                chia_cli.dispatch_action(body)
+                msg = "Blockchain action completed."
             elif service == "monitoring":
-                msg = chiadog_cli.dispatch_action(body)
+                chiadog_cli.dispatch_action(body)
+                msg = "Chiadog action completed."
             elif service == "pooling":
                 msg = pools_cli.dispatch_action(body)
             else:
