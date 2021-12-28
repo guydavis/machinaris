@@ -1,9 +1,9 @@
-name: develop-staicoin
+name: develop-mmx
 
-#on:
-#  push:
-#    branches:
-#      - 'develop'
+on:
+  push:
+    branches:
+      - 'develop'
 
 jobs:
   docker:
@@ -41,7 +41,7 @@ jobs:
           push: true
           build-args: |
             "MACHINARIS_STREAM=develop"
-            "STAICOIN_BRANCH=main"
+            "MMX_BRANCH=master"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-staicoin:develop
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-staicoin:develop
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:develop
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:develop

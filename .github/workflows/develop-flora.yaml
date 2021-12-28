@@ -1,9 +1,9 @@
 name: develop-flora
 
-on:
-  push:
-    branches:
-      - 'develop'
+#on:
+#  push:
+#    branches:
+#      - 'develop'
 
 jobs:
   docker:
