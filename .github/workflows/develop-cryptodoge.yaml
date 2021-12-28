@@ -1,9 +1,9 @@
 name: develop-cryptodoge
 
-#on:
-#  push:
-#    branches:
-#      - 'develop'
+on:
+  push:
+    branches:
+      - 'develop'
 
 jobs:
   docker:
