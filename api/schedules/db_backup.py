@@ -13,4 +13,4 @@ def execute():
     chia_binary = globals.get_blockchain_binary(os.environ['blockchains'])
     # TODO Optionally perform a database backup with the blockchain stopped for consistency
     app.logger.info("Executing blockchain restart for {0}...".format(chia_binary))
-    subprocess.call("{0} start farmer -r >/dev/null 2>&1".format(chia_binary), shell=True)
+    subprocess.call("{0} start farmer -r >/tmp/db_backup.log 2>&1".format(chia_binary), shell=True)
