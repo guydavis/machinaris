@@ -30,6 +30,7 @@ RUN apt-get update \
 		sudo \
 		tar \
 		tzdata \
+		unrar \
 		unzip \
 		vim \
 		wget \

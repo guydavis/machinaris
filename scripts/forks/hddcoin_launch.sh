@@ -15,13 +15,14 @@ ln -s /root/.chia/hddcoin /root/.hddcoin
 mkdir -p /root/.hddcoin/mainnet/log
 hddcoin init >> /root/.hddcoin/mainnet/log/init.log 2>&1
 
-if [[ "${blockchain_db_download}" == 'true' ]] && [[ "${mode}" == 'fullnode' ]] && [[ ! -f /root/.hddcoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+if [[ "${blockchain_db_download}" == 'true' ]] \
+  && [[ "${mode}" == 'fullnode' ]] \
+  && [[ ! -f /root/.hddcoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading HDDCoin blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.hddcoin/mainnet/db/ && cd /root/.hddcoin/mainnet/db/
-  # Mega links for HDDCoin blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/Hu5miQpa#KAZPquVHG6pfYC5k0-qlsA
-  mv hddcoin/*.sqlite . && rm -rf hddcoin
+  # Latest Blockchain DB download from 
+  curl -skLJO https://download.hddcoin.org/blockchain_v1_mainnet.sqlite
 fi
 
 echo 'Configuring HDDCoin...'

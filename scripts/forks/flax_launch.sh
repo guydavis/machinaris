@@ -17,14 +17,12 @@ flax init >> /root/.flax/mainnet/log/init.log 2>&1
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
-  && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.flax/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading Flax blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.flax/mainnet/db/ && cd /root/.flax/mainnet/db/
-  # Mega links for Flax blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/impAUA6K#u82XUxLXyicpfEH-CDajyQ
-  mv flax/*.sqlite . && rm -rf flax
+  # Latest Blockchain DB download as per the Flax Discord FAQ
+  curl -skLJO https://flax.musmo.com/db/blockchain_v1_mainnet.sqlite
 fi
 
 echo 'Configuring Flax...'

@@ -17,14 +17,10 @@ cryptodoge init >> /root/.cryptodoge/mainnet/log/init.log 2>&1
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
-  && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.cryptodoge/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
-  echo "Downloading Cryptodoge blockchain DB (many GBs in size) on first launch..."
-  echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.cryptodoge/mainnet/db/ && cd /root/.cryptodoge/mainnet/db/
-  # Mega links for Cryptodoge blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/T75UDKpA#dLVq8OhdsjK5kPxNwCaP8Q
-  mv cryptodoge/*.sqlite . && rm -rf cryptodoge
+  echo "Sorry, Cryptodoge does not offer a recent blockchain DB for download.  Standard sync will happen over a few days..."
+  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/cryptodoge"
 fi
 
 echo 'Configuring Cryptodoge...'

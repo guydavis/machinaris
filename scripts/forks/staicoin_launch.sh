@@ -19,14 +19,15 @@ stai init >> /root/.staicoin/mainnet/log/init.log 2>&1
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
-  && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.staicoin/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading Staicoin blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.staicoin/mainnet/db/ && cd /root/.staicoin/mainnet/db/
-  # Mega links for Staicoin blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/OqgSjYCY#MCwYdt3YnnHA2C6gJV6lvw
-  mv staicoin/*.sqlite . && rm -rf staicoin
+  # Latest Blockchain DB download from direct from https://stai.global
+  curl -skJLO https://stai.global/database/staiblockchain.rar
+  unrar staiblockchain.rar 
+  mv staiblockchain/*.sqlite .
+  rm -rf staiblockchain/ staiblockchain.rar
 fi
 
 echo 'Configuring Staicoin...'
