@@ -19,10 +19,9 @@ else
 	git checkout $HASH
 	./make_devel.sh
 
-	if [ ! -d /chia-blockchain/venv ]; then
+	if [ ! -d /chia-blockchain ]; then
 		cd /
 		rmdir /chia-blockchain
 		ln -s /mmx-node /chia-blockchain
-		ln -s /mmx-node/venv/bin/mmx /chia-blockchain/venv/bin/chia
 	fi
 fi
