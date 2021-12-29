@@ -4,8 +4,8 @@
 #
 
 MMX_BRANCH=$1
-# On 2021-12-28
-HASH=cbe49cb871be289d7aa1c729b5d16f5cd765dee8
+# On 2021-12-29
+HASH=00fdc419a6b5d9ad7c00839dbf9af93014673a18
 
 if [ -z ${MMX_BRANCH} ]; then
 	echo 'Skipping MMX install as not requested.'
@@ -18,10 +18,4 @@ else
 	git submodule update --init --recursive 
 	git checkout $HASH
 	./make_devel.sh
-
-	if [ ! -d /chia-blockchain ]; then
-		cd /
-		rmdir /chia-blockchain
-		ln -s /mmx-node /chia-blockchain
-	fi
 fi
