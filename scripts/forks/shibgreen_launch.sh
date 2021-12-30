@@ -41,6 +41,9 @@ for k in ${keys//:/ }; do
 done
 
 # Loop over provided list of completed plot directories
+IFS=':' read -r -a array <<< "$plots_dir"
+joined=$(printf ", %s" "${array[@]}")
+echo "Adding plot directories at: ${joined:1}"
 for p in ${plots_dir//:/ }; do
     shibgreen plots add -d ${p}
 done
