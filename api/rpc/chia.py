@@ -7,6 +7,9 @@ import datetime
 import importlib
 import os
 
+from api import app
+from api import utils
+
 if importlib.util.find_spec("btcgreen"):
     from btcgreen.rpc.full_node_rpc_client import FullNodeRpcClient
     from btcgreen.rpc.farmer_rpc_client import FarmerRpcClient
@@ -82,10 +85,7 @@ elif importlib.util.find_spec("stor"):
     from stor.util.ints import uint16
     from stor.util.config import load_config as load_fork_config
 else:
-    raise Exception("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ['blockchains']))
-
-from api import app
-from api import utils
+    app.logger.info("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ['blockchains']))
 
 # Unused as I am getting signage points from debug.log as this API returns no dates
 async def get_signage_points(blockchain):

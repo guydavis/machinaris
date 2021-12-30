@@ -31,6 +31,7 @@ SUPPORTED_BLOCKCHAINS = [
     'flora',
     'hddcoin',
     'maize',
+    'mmx',
     'nchain',
     'shibgreen',
     'silicoin',
@@ -48,6 +49,7 @@ CURRENCY_SYMBOLS = {
     "flora": "XFL",
     "hddcoin": "HDD",
     "maize": "XMZ",
+    "mmx": "MMX",
     "nchain": "NCH",
     "shibgreen": 'XSHIB',
     "silicoin": "SIT",
@@ -72,6 +74,7 @@ FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
 FLORA_BINARY = '/flora-blockchain/venv/bin/flora'
 HDDCOIN_BINARY = '/hddcoin-blockchain/venv/bin/hddcoin'
 MAIZE_BINARY = '/maize-blockchain/venv/bin/maize'
+MMX_BINARY = '/maize-blockchain/venv/bin/maize'
 NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
 SHIBGREEN_BINARY = '/shibgreen-blockchain/venv/bin/shibgreen'
 SILICOIN_BINARY = '/silicoin-blockchain/venv/bin/sit'

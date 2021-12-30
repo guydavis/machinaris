@@ -10,25 +10,18 @@ mkdir -p /root/.chia/mmx/logs
 ln -s /root/.chia/mmx/logs logs
 
 
-if [ -d /root/.chia/mmx/config/local ]; then
-	mv /root/.chia/mmx/config/local config/backup
-	git checkout -- config/
-	./update.sh
-	mv config/backup /root/.chia/mmx/config/local
-	mv ./config /root/.chia/mmx/config
-	ln -s /root/.chia/mmx/config config
-else
-	mv ./config /root/.chia/mmx/config
+if [ ! -d /root/.chia/mmx/config ]; then
 	mkdir -p /root/.chia/mmx/config/local
+	mv ./config /root/.chia/mmx/config
 	tee /root/.chia/mmx/config/local/Node.json >/dev/null <<EOF
 	{
 		"opencl_device": 0,
 		"storage_path": "/root/.chia/mmx/"
 	}
 EOF
-	ln -s /root/.chia/mmx/config config
 fi
-cp 
+rm -rf ./config
+ln -s /root/.chia/mmx/config config
 
 echo "Current state of the $(pwd) folder:"
 ls -al .
