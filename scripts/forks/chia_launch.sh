@@ -5,6 +5,7 @@
 
 if [[ "${mode}" == 'fullnode' ]]; then
   touch /root/.chia/mnemonic.txt
+  chmod 600 /root/.chia/mnemonic.txt
 fi
 
 # Ensure Chia keyring is held on a persistent volume
