@@ -1,9 +1,9 @@
 With Anaconda on Windows, 
 
-    $ pip install --user -r docker/requirements
+    $ pip install --user -r docker/requirements.txt
 
 To run tests:
 
-    $ pytests
+    $ pytest
 
 For functional testing, see: https://testdriven.io/blog/flask-pytest/

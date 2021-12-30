@@ -21,6 +21,8 @@ def landing():
     if not globals.is_setup():
         return redirect(url_for('setup'))
     msg = random.choice(list(open('web/static/landings.txt')))
+    if msg.endswith(".png"):
+        msg = "<img style='height: 150px' src='{0}' />".format(url_for('static', filename='/landings/' + msg))
     return render_template('landing.html', random_message=msg)
 
 @app.route('/index')

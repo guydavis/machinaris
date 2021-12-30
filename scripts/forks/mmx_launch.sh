@@ -10,8 +10,8 @@ mkdir -p /root/.chia/mmx/logs
 ln -s /root/.chia/mmx/logs logs
 
 if [ ! -d /root/.chia/mmx/config ]; then
-	mkdir -p /root/.chia/mmx/config/local
 	mv ./config /root/.chia/mmx/config
+	mkdir -p /root/.chia/mmx/config/local
 	tee /root/.chia/mmx/config/local/Node.json >/dev/null <<EOF
 	{
 		"opencl_device": 0,
