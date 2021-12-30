@@ -12,8 +12,9 @@ ln -s /root/.chia/mmx/logs logs
 IFS=':' read -r -a array <<< "$plots_dir"
 joined=$(printf ", \"%s\"" "${array[@]}")
 plot_dirs=${joined:1}
-echo $plot_dirs
+echo "Adding plot directories at: ${plot_dirs}"
 
+# Setup configuration for MMX inside a Docker container
 if [ ! -d /root/.chia/mmx/config ]; then
 	mv ./config /root/.chia/mmx/config
 	mkdir -p /root/.chia/mmx/config/local
@@ -37,11 +38,23 @@ sed -i "s/\"plot_dirs\":.*$/\"plot_dirs\": [ $escaped_plot_dirs ]/g" ./config/lo
 
 # Create a key if none found from previous runs
 if [ ! -f /root/.chia/mmx/wallet.dat ]; then
+	echo "Creating key at path: /root/.chia/mmx/wallet.dat"
 	mmx wallet create -f /root/.chia/mmx/wallet.dat
 	ln -s /root/.chia/mmx/wallet.dat /mmx-node/wallet.dat
+else
+	echo "Adding key at path: /root/.chia/mmx/wallet.dat"
 fi
 
-#echo "Current state of the $(pwd) folder:"
-#ls -al .
+# Symlink the known_peers database file
+if [ ! -f /root/.chia/mmx/known_peers.dat ]; then
+	if [ -f ./known_peers.dat ]; then
+		mv ./known_peers.dat /root/.chia/mmx/known_peers.dat
+	else
+		touch /root/.chia/mmx/known_peers.dat
+	fi 
+fi
+rm -f ./known_peers.dat
+ln -s /root/.chia/mmx/known_peers.dat /mmx-node/known_peers.dat
 
+# Now start the MMX node
 ./run_node.sh >/root/.chia/mmx/logs/mmx_node.log 2>&1 &
