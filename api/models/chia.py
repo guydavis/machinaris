@@ -8,9 +8,6 @@ from api import app
 from common.config import globals
 from common.utils import converters
 
-# Treat *.plot files smaller than this as in-transit (copying) so don't count them
-MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
-
 class FarmSummary:
 
     def __init__(self, cli_stdout, blockchain):
@@ -19,9 +16,9 @@ class FarmSummary:
             for line in cli_stdout:
                 if "Plot count for all" in line: 
                     self.plot_count = line.strip().split(':')[1].strip()
-                if "Plot count:" in line: # Just chives
-                    self.plot_count = line.strip().split(':')[1].strip()
-                elif "Total size of plots" in line:
+                elif "Total size of plots" in line: # Chia and forks
+                    self.plots_size = line.strip().split(':')[1].strip()
+                elif "Total space" in line: # MMX
                     self.plots_size = line.strip().split(':')[1].strip()
                 elif "status" in line: 
                     self.calc_status(line.split(':')[1].strip())
@@ -33,13 +30,9 @@ class FarmSummary:
                     self.time_to_win = line.split(':')[1].strip()
                 elif "User transaction fees" in line:
                     self.transaction_fees = line.split(':')[1].strip()
-            if blockchain == 'chives' and 'harvester' in os.environ['mode']:
-                try:
-                    if int(self.plot_count) > 0:
-                        app.logger.debug("On a Chives Harvester, setting farm status to Harvesting.")
-                        self.status = "Harvesting"
-                except:
-                    app.logger.debug("Non-numeric chives plot count so not setting status to Harvesting.")
+            if not hasattr(self, 'status'):  # MMX no status yet
+                self.status = ""
+
 
     def calc_status(self, status):
         self.status = status

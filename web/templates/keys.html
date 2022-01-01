@@ -35,6 +35,30 @@
             <div class="tab-pane {% if key.blockchain == selected_blockchain %}active{% endif %}" id="{{key.blockchain}}" role="tabpanel" aria-labelledby="{{key.blockchain}}-tab">
                 <br/>
                 <pre>{{ key.details}}</pre>
+                <br/><br/><br/>
+                <p><b>NOTE: Machinaris will never display your private key here.</b></p>
+                <p>However, you may view it yourself by executing this from within the Docker container.</p>
+                <div style="padding-left: 50px;">
+                    {% if key.blockchain == 'mmx' %}
+                    <code>mmx wallet get seed</code>
+                    {% else %}
+                    <code>chia keys show --show-mnemonic-seed</code>
+                    {% endif %}
+                </div>
+                <br />
+                {% if key.blockchain != 'mmx' %}
+                <h4>Best Practices</h4>
+                <ul>
+                    <!--li>We recommend that you delete your mnemonic.txt after first launch. Details on the 
+                        <a target="_blank" href="https://github.com/guydavis/machinaris/wiki/Keys#deleting-mnemonic-off-disk">wiki</a>.
+                        Please ensure you have safely recorded your mnemonic passphrase (24 words) before deleting!
+                    </li-->
+                    <li>Machinaris uses an online wallet for farming. It is strongly recommended that you use a cold wallet 
+                        for your payout instructions. Tutorial on the <a target="_blank" href="https://github.com/guydavis/machinaris/wiki/Keys#using-a-cold-wallet">wiki</a>.
+                        Please add "Setup a Cold Wallet" to your To-Do list!
+                    </li>
+                </ul>
+                {% endif %}
             </div>
             {% endfor %}
         </div>
@@ -46,30 +70,5 @@
     <h6>Try running 'chia keys show' on your farmers to verify.</h6>
 </div>
 {% endif %}
-
-<br/><br/><br/>
-
-<p><b>NOTE: Machinaris will never display your private key here.</b></p>
-
-<p>However, you may view it yourself by executing this from within the Docker container.</p>
-
-<div style="padding-left: 50px;">
-    <code>chia keys show --show-mnemonic-seed</code>
-</div>
-
-<br />
-
-<h4>Best Practices</h4>
-
-<ul>
-    <!--li>We recommend that you delete your mnemonic.txt after first launch. Details on the 
-        <a target="_blank" href="https://github.com/guydavis/machinaris/wiki/Keys#deleting-mnemonic-off-disk">wiki</a>.
-        Please ensure you have safely recorded your mnemonic passphrase (24 words) before deleting!
-    </li-->
-    <li>Machinaris uses an online wallet for farming. It is strongly recommended that you use a cold wallet 
-        for your Chia payout instructions. Tutorial on the <a target="_blank" href="https://github.com/guydavis/machinaris/wiki/Keys#using-a-cold-wallet">wiki</a>.
-        Please add "Setup a Cold Wallet" to your To-Do list!
-    </li>
-</ul>
 
 {% endblock %}

@@ -49,6 +49,8 @@ def stale_peak(blockchain_show):
     return False # Not stuck on a stale peak so DO NOT restart
 
 def execute():
+    if BLOCKCHAIN == 'mmx':
+        return # Chia+forks only right now
     with app.app_context():
         #app.logger.info("***************** RESTART STUCK FARMER ******************")
         try:

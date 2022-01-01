@@ -14,7 +14,7 @@ import traceback
 from flask import g
 from sqlalchemy import or_
 
-from common.models import plots as p
+from common.models import plots as p, plottings as pl
 from common.models import workers as w
 from common.config import globals
 from api import app, utils
@@ -90,7 +90,7 @@ def request_analyze(plot_file, workers):
     # Don't know which plotter might have the plot result so try them in-turn
     for plotter in workers:
         #app.logger.info("{0}:{1} - {2} - {3}".format(plotter.hostname, plotter.port, plotter.blockchain, plotter.mode))
-        if (plotter.mode == 'fullnode' and plotter.blockchain in ['chia', 'chives']) or 'plotter' in plotter.mode:
+        if (plotter.mode == 'fullnode' and plotter.blockchain in pl.PLOTTABLE_BLOCKCHAINS) or 'plotter' in plotter.mode:
             if plotter.latest_ping_result != "Responding":
                 app.logger.info("Skipping analyze call to {0} as last ping was: {1}".format( \
                     plotter.hostname, plotter.latest_ping_result))

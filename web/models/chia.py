@@ -249,7 +249,10 @@ class Connections:
                 'details': connection.details,
                 'add_exmample': self.get_add_connection_example(connection.blockchain)
             })
-            self.blockchains[connection.blockchain] = self.parse(connection, connection.blockchain)
+            if connection.blockchain == 'mmx':
+                self.blockchains[connection.blockchain] = self.parse_mmx(connection, connection.blockchain)
+            else:
+                self.blockchains[connection.blockchain] = self.parse_chia(connection, connection.blockchain)
         self.rows.sort(key=lambda conn: conn['blockchain'])
     
     def get_add_connection_example(self, blockchain):
@@ -299,6 +302,8 @@ class Connections:
             return 28444
         if blockchain == 'nchain':
             return 58445
+        if blockchain == 'mmx':
+            return 12331
         if blockchain == 'maize':
             return 8644
         if blockchain == 'shibgreen':
@@ -312,7 +317,7 @@ class Connections:
 
         raise("Unknown blockchain fork of selected: " + blockchain)
 
-    def parse(self, connection, blockchain):
+    def parse_chia(self, connection, blockchain):
         conns = []
         for line in connection.details.split('\n'):
             try:
@@ -354,6 +359,31 @@ class Connections:
                             conns.append(connection)
                     else:
                         app.logger.info("Bad connection line: {0}".format(line))
+            except:
+                app.logger.info(traceback.format_exc())
+        return conns
+
+    def parse_mmx(self, connection, blockchain):
+        conns = []
+        for line in connection.details.split('\n'):
+            try:
+                app.logger.info(line)
+                m = re.match("\[(.+)\]   height =  (\d+), (\d+\.?\d*) MB recv, (\d*\.?\d*) MB sent, timeout = (\d+\.?\d*) sec", line.strip(), re.IGNORECASE)
+                if m:
+                    connection = {
+                        'type': 'peer',
+                        'ip': m.group(1),
+                        'height': m.group(2),
+                        'ports': '',
+                        'nodeid': '',
+                        'last_connect': '',
+                        'mib_up': m.group(4),
+                        'mib_down': m.group(3),
+                        'timeout': m.group(5)
+                    }
+                    conns.append(connection)
+                elif line.strip():
+                    app.logger.info("Bad peer line: {0}".format(line))
             except:
                 app.logger.info(traceback.format_exc())
         return conns

@@ -15,6 +15,9 @@ LOG_ROTATE_CONFIGS = [
 ]
 
 def execute():
+    blockchain = os.environ['blockchains'][0]
+    if blockchain == 'mmx':
+        return  # Only Chia+forks for now
     app.logger.info("Executing log rotation...")
     for config in LOG_ROTATE_CONFIGS:
         if os.path.exists(LOG_ROTATE_CONFIG_DIR + config):

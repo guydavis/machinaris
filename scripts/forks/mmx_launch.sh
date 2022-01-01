@@ -56,5 +56,16 @@ fi
 rm -f ./known_peers.dat
 ln -s /root/.chia/mmx/known_peers.dat /mmx-node/known_peers.dat
 
+# Symlink the NETWORK file
+if [ ! -f /root/.chia/mmx/NETWORK ]; then
+	if [ -f ./NETWORK ]; then
+		mv ./NETWORK /root/.chia/mmx/NETWORK
+	else
+		touch /root/.chia/mmx/NETWORK
+	fi 
+fi
+rm -f ./NETWORK
+ln -s /root/.chia/mmx/NETWORK /mmx-node/NETWORK
+
 # Now start the MMX node
 ./run_node.sh >/root/.chia/mmx/logs/mmx_node.log 2>&1 &
