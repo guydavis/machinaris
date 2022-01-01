@@ -62,6 +62,8 @@ if [ ! -f /root/.chia/mmx/NETWORK ]; then
 	if [ -f ./NETWORK ]; then
 		mv ./NETWORK /root/.chia/mmx/NETWORK
 	else
+	    NETWORK=test2
+		echo ${NETWORK} > NETWORK
 		touch /root/.chia/mmx/NETWORK
 	fi 
 fi
