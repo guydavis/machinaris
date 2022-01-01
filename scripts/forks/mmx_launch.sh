@@ -57,15 +57,9 @@ fi
 rm -f ./known_peers.dat
 ln -s /root/.chia/mmx/known_peers.dat /mmx-node/known_peers.dat
 
-# Symlink the NETWORK file
+# Symlink the NETWORK file, use 'test2' for now
 if [ ! -f /root/.chia/mmx/NETWORK ]; then
-	if [ -f ./NETWORK ]; then
-		mv ./NETWORK /root/.chia/mmx/NETWORK
-	else
-	    NETWORK=test2
-		echo ${NETWORK} > NETWORK
-		touch /root/.chia/mmx/NETWORK
-	fi 
+		echo 'test2' > /root/.chia/mmx/NETWORK
 fi
 rm -f ./NETWORK
 ln -s /root/.chia/mmx/NETWORK /mmx-node/NETWORK
