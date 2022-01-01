@@ -139,7 +139,7 @@ def load_key_pk(type, blockchain):
         #app.logger.info("Searching for {0} replacement in {1}".format(type, blockchain))
         key = db.session.query(k.Key).filter(k.Key.blockchain==blockchain).first()
         #app.logger.info(key.details)
-        m = re.search('{0} public key.*:\s?(\w+)'.format(type.lower()), key.details.lower())
+        m = re.search('{0} public key.*:\s+(\w+)'.format(type.lower()), key.details.lower())
         if m:
             #app.logger.info("Found: {0}".format(m.group(1)))
             return m.group(1)

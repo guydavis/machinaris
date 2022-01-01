@@ -7,7 +7,8 @@ cd /mmx-node
 
 rm -rf ./logs
 mkdir -p /root/.chia/mmx/logs
-ln -s /root/.chia/mmx/logs logs
+ln -s /root/.chia/mmx/logs /mmx-node/logs
+ln -s /root/.chia/mmx /root/.mmx 
 
 IFS=':' read -r -a array <<< "$plots_dir"
 joined=$(printf ", \"%s\"" "${array[@]}")
@@ -16,7 +17,7 @@ echo "Adding plot directories at: ${plot_dirs}"
 
 # Setup configuration for MMX inside a Docker container
 if [ ! -d /root/.chia/mmx/config ]; then
-	mv ./config /root/.chia/mmx/config
+	mv ./config /root/.chia/mmx/
 	mkdir -p /root/.chia/mmx/config/local
 	tee /root/.chia/mmx/config/local/Node.json >/dev/null <<EOF
 {
@@ -31,7 +32,7 @@ EOF
 EOF
 fi
 rm -rf ./config
-ln -s /root/.chia/mmx/config config
+ln -s /root/.chia/mmx/config /mmx-node/config
 sed -i 's/"storage_path": ""/"storage_path": "\/root\/.chia\/mmx\/"/g' ./config/local/Node.json
 escaped_plot_dirs=$(printf '%s\n' "$plot_dirs" | sed -e 's/[\/&]/\\&/g')
 sed -i "s/\"plot_dirs\":.*$/\"plot_dirs\": [ $escaped_plot_dirs ]/g" ./config/local/Harvester.json
