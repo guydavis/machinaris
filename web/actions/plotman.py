@@ -17,11 +17,10 @@ from flask import Flask, jsonify, abort, request, flash
 from flask.helpers import make_response
 from subprocess import Popen, TimeoutExpired, PIPE
 
-from common.models import plottings as pl
+from common.models import plottings as pl, keys as k
 from web import app, db, utils
 from web.models.plotman import PlottingSummary
 from . import worker as w
-from . import chia as c
 from . import pools as p
 
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
@@ -135,11 +134,17 @@ def stop_archiving(plotter):
         else:
             flash("<pre>{0}</pre>".format(response.content.decode('utf-8')), 'danger')
 
-def load_key_pk(type):
-    keys = c.load_keys_show()
-    m = re.search('{0} public key .*: (\w+)'.format(type), keys.rows[0]['details'])
-    if m:
-        return m.group(1)
+def load_key_pk(type, blockchain):
+    try:
+        #app.logger.info("Searching for {0} replacement in {1}".format(type, blockchain))
+        key = db.session.query(k.Key).filter(k.Key.blockchain==blockchain).first()
+        #app.logger.info(key.details)
+        m = re.search('{0} public key.*:\s?(\w+)'.format(type.lower()), key.details.lower())
+        if m:
+            #app.logger.info("Found: {0}".format(m.group(1)))
+            return m.group(1)
+    except Exception as ex:
+        app.logger.info("Failed to extract {0} key for {1} because {2}.".format(type, blockchain, ))
     return None
 
 def load_pool_contract_address(blockchain):
@@ -154,11 +159,11 @@ def load_pool_contract_address(blockchain):
 
 def load_config_replacements(blockchain):
     replacements = []
-    farmer_pk = load_key_pk('Farmer')
+    farmer_pk = load_key_pk('Farmer', blockchain)
     if farmer_pk:
         #app.logger.info("FARMER_PK: {0}".format(farmer_pk))
         replacements.append([ 'farmer_pk:\s+REPLACE_WITH_THE_REAL_VALUE.*$', 'farmer_pk: '+ farmer_pk])
-    pool_pk = load_key_pk('Pool')
+    pool_pk = load_key_pk('Pool', blockchain)
     if pool_pk:
         #app.logger.info("POOL_PK: {0}".format(pool_pk))
         replacements.append([ 'pool_pk:\s+REPLACE_WITH_THE_REAL_VALUE.*$', 'pool_pk: '+ pool_pk])

@@ -57,7 +57,6 @@ def on_starting(server):
         scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=db_backup.execute, name="db_backup", trigger='cron', hour=0, jitter=(JOB_JITTER*3600))  # Daily
         scheduler.add_job(func=restart_stuck_farmer.execute, name="restart_stuck_farmer", trigger='interval', minutes=5, jitter=0) 
-        pass
 
     # Status for single Machinaris controller only, should be blockchain=chia
     if utils.is_controller():
@@ -67,7 +66,7 @@ def on_starting(server):
         scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', hours=12)
 
     # Testing only
-    scheduler.add_job(func=status_plots.update, trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=status_plots.update, trigger='interval', seconds=10) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()
