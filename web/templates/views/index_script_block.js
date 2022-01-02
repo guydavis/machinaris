@@ -39,6 +39,8 @@ $(document).ready(function () {
 $('[data-toggle="tooltip"]').tooltip();
 
 {% for blockchain in farms %}
+
+{% if farms[blockchain].challenges.labels|length > 0 %}
 var ctx = document.getElementById('{{blockchain}}_challenges_chart');
 var myChart = new Chart(ctx, {
     type: 'scatter',
@@ -107,6 +109,7 @@ var myChart = new Chart(ctx, {
         }
     }
   });
+{% endif %}
 
 {% if farms[blockchain].partials.data|length > 0 %}
 var ctx = document.getElementById('{{blockchain}}_partials_chart');

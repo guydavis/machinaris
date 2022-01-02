@@ -99,6 +99,7 @@
           </div>
         </div>
 
+        {% if farms[blockchain].challenges.labels|length > 0 %}
         <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
           <div class="h-100 p-2 text-white bg-dark rounded-3">
             <div class="position-relative">
@@ -112,6 +113,7 @@
             <canvas id="{{blockchain}}_challenges_chart"></canvas>
           </div>
         </div>
+        {% endif %}
 
         {% if farms[blockchain].partials.data|length > 0 %}
         <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">

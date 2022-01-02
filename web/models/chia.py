@@ -38,7 +38,10 @@ class FarmSummary:
                     displayname = farm_rec.hostname
                     connection_status = None
                 try:
-                    wallet_balance = wallets.sum_wallet_balance(farm_rec.hostname, farm_rec.blockchain)
+                    if farm_rec.blockchain == 'mmx':
+                        wallet_balance = wallets.sum_mmx_wallet_balance(farm_rec.hostname, farm_rec.blockchain)
+                    else:
+                        wallet_balance = wallets.sum_chia_wallet_balance(farm_rec.hostname, farm_rec.blockchain)
                 except: 
                     wallet_balance = '?'
                 if farm_rec.total_coins:
@@ -152,7 +155,10 @@ class Wallets:
             except:
                 app.logger.info("Wallets.init(): Unable to find a worker with hostname '{0}'".format(wallet.hostname))
                 displayname = wallet.hostname
-            hot_balance = self.sum_wallet_balance(wallet.hostname, wallet.blockchain, False)
+            if wallet.blockchain == 'mmx':
+                hot_balance = self.sum_mmx_wallet_balance(wallet.hostname, wallet.blockchain, False)
+            else:
+                hot_balance = self.sum_chia_wallet_balance(wallet.hostname, wallet.blockchain, False)
             cold_balance = wallet.cold_balance
             try:
                 total_balance = converters.round_balance(float(hot_balance) + float(cold_balance))
@@ -169,8 +175,30 @@ class Wallets:
                 'total_balance': total_balance,
                 'updated_at': wallet.updated_at }) 
 
-    def sum_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
+    def sum_chia_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
         numeric_const_pattern = '-Total\sBalance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
+        rx = re.compile(numeric_const_pattern, re.VERBOSE)
+        found_balance = False
+        sum = 0
+        for wallet in self.wallets:
+            if wallet.hostname == hostname and wallet.blockchain == blockchain:
+                try:
+                    for balance in rx.findall(wallet.details):
+                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
+                        # wallet.hostname, wallet.blockchain))
+                        sum += locale.atof(balance)
+                        found_balance = True
+                except Exception as ex:
+                    app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
+                        wallet.hostname, wallet.blockchain, str(ex)))
+                if include_cold_balance and wallet.cold_balance:
+                    sum += locale.atof(wallet.cold_balance)
+        if found_balance:
+            return converters.round_balance(sum)
+        return '?'
+
+    def sum_mmx_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
+        numeric_const_pattern = '^Balance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
         rx = re.compile(numeric_const_pattern, re.VERBOSE)
         found_balance = False
         sum = 0
