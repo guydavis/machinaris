@@ -13,7 +13,6 @@ class FarmSummary:
     def __init__(self, cli_stdout, blockchain):
             self.plot_count = 0
             self.plots_size = 0
-            self.time_to_win = "Soon" # MMX doesn't have this?
             for line in cli_stdout:
                 m = re.match('^K(\d+): (\d+) plots$', line)
                 if m:
@@ -29,6 +28,10 @@ class FarmSummary:
                         self.calc_status('Farming')
                     else:
                         self.calc_status(line.strip())
+            if self.plots_size == "Total space: 0 TiB":
+                self.time_to_win = "Never"
+            else:
+                self.time_to_win = "Soon"
 
     def calc_status(self, status):
         self.status = status
