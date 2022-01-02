@@ -2,11 +2,11 @@ import datetime as dt
 import sqlalchemy as sa
 
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship, backref
 
 from common.extensions.database import db
 
 class Wallet(db.Model):
+    __bind_key__ = 'wallets'
     __tablename__ = "wallets"
 
     hostname = sa.Column(sa.String(length=255), primary_key=True)
@@ -21,3 +21,15 @@ class Wallet(db.Model):
             if line.startswith("Balances, fingerprint:"):
                 return line.split(':')[1].strip()
         return None
+
+    def is_synced(self):
+        for line in self.details.split('\n'):
+            if line.strip().startswith("Sync status: Synced"):
+                return True
+        return False
+
+    def has_few_mojos(self):
+        for line in self.details.split('\n'):
+            if line.strip().startswith("-Spendable") and not "(0" in line:
+                return True
+        return False

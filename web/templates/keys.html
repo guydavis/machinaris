@@ -2,6 +2,14 @@
 
 {% block content %}
 
+<div class="position-relative">
+    <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -8px;">
+      <a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">
+        <i class="fs-4 bi-question-circle"></i>
+      </a>
+    </div>
+  </div>
+
 <style>
     a.active.nav-link {
         background-color: #3d3f42 !important
@@ -17,14 +25,14 @@
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             {% for key in keys.rows %}
             <li class="nav-item" role="presentation">
-                <button class="nav-link {% if loop.index == 1 %}active{% endif %}" id="{{key.blockchain}}-tab" data-bs-toggle="tab" data-bs-target="#{{key.blockchain}}"
-                    type="button" role="tab" aria-controls="{{key.blockchain}}" aria-selected="{% if loop.index == 1 %}true{% else %}false{% endif %}">{{ key.blockchain }}</button>
+                <button class="nav-link {% if key.blockchain == selected_blockchain %}active{% endif %}" id="{{key.blockchain}}-tab" data-bs-toggle="tab" data-bs-target="#{{key.blockchain}}"
+                    type="button" role="tab" aria-controls="{{key.blockchain}}" aria-selected="{% if key.blockchain == selected_blockchain %}true{% else %}false{% endif %}">{{ key.blockchain }}</button>
             </li>
             {% endfor %}
         </ul>
         <div class="tab-content">
             {% for key in keys.rows %}
-            <div class="tab-pane {% if loop.index == 1 %}active{% endif %}" id="{{key.blockchain}}" role="tabpanel" aria-labelledby="{{key.blockchain}}-tab">
+            <div class="tab-pane {% if key.blockchain == selected_blockchain %}active{% endif %}" id="{{key.blockchain}}" role="tabpanel" aria-labelledby="{{key.blockchain}}-tab">
                 <br/>
                 <pre>{{ key.details}}</pre>
             </div>

@@ -2,8 +2,7 @@
 #
 # Installs farmr - https://github.com/gilnobrega/farmr
 #
-
-if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
+if [[ "${farmr_skip_launch}" == 'false' &&  (${mode} == 'fullnode' || ${mode} =~ "harvester") ]]; then
     if [[ ! -f /usr/bin/farmr ]]; then
 		arch_name="$(uname -m)"
 		echo "Installing farmr on ${arch_name}..."
@@ -75,24 +74,20 @@ if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
 		echo "/stor-blockchain/venv/bin/stor" > override-stor-binary.txt
 	fi
 
-	tee /etc/logrotate.d/farmr > /dev/null <<EOF
+	tee /etc/logrotate.d/farmr >/dev/null <<EOF
 /root/.chia/farmr/log*txt {
   rotate 3
   hourly
 }
 EOF
 
-	# Use local file for configuration
-	#sed -i 's/"Online Config": true/"Online Config": false/g' blockchain/*.json
-
-	if [[ ! -z $"farmr_skip_launch" ]]; then
-		rm -f nohup.out # Remove stale stdout logging
-		# Launch in harvester or farmer mode
-		if [[ ${mode} =~ ^harvester.* ]]; then
-			(sleep 180 && nohup /usr/bin/farmr harvester headless 2>&1 ) &
-		elif [[ ${mode} == 'farmer' ]] || [[ ${mode} == 'fullnode' ]]; then
-			(sleep 180 && nohup /usr/bin/farmr farmer headless 2>&1 ) &
-		fi
+	rm -f nohup.out # Remove stale stdout logging
+	# Launch in harvester or farmer mode
+	if [[ ${mode} =~ ^harvester.* ]]; then
+		echo "After a pause, about to start Farmr in harvester mode..."
+		(sleep 180 && nohup /usr/bin/farmr harvester headless 2>&1 ) &
+	elif [[ ${mode} == 'farmer' ]] || [[ ${mode} == 'fullnode' ]]; then
+		echo "After a pause, about to start Farmr in farmer mode..."
+		(sleep 180 && nohup /usr/bin/farmr farmer headless 2>&1 ) &
 	fi
-	
 fi

@@ -11,8 +11,9 @@ from flask import Flask, flash, redirect, render_template, abort, \
         request, session, url_for, send_from_directory, make_response
 
 from common.config import globals
+from common.models import pools as po
 from web import app, utils
-from web.actions import chia, plotman, chiadog, worker, log_handler, stats, warnings
+from web.actions import chia, pools as p, plotman, chiadog, worker, log_handler, stats, warnings
 
 @app.route('/')
 def landing():
@@ -32,12 +33,13 @@ def index():
     workers = worker.load_worker_summary()
     plotting = plotman.load_plotting_summary()
     farm_summary = chia.load_farm_summary()
+    selected_blockchain = farm_summary.selected_blockchain()
     chia.challenges_chart_data(farm_summary)
-    chia.partials_chart_data(farm_summary)
+    p.partials_chart_data(farm_summary)
     stats.load_daily_diff(farm_summary)
     warnings.check_warnings(request.args)
     return render_template('index.html', reload_seconds=120, farms=farm_summary.farms, \
-        plotting=plotting.__dict__, workers=workers, global_config=gc)
+        plotting=plotting.__dict__, workers=workers, global_config=gc, selected_blockchain=selected_blockchain)
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
@@ -169,17 +171,20 @@ def alerts():
 @app.route('/wallet', methods=['GET', 'POST'])    
 def wallet():
     gc = globals.load()
+    selected_blockchain = worker.default_blockchain()
     if request.method == 'POST':
+        selected_blockchain = request.form.get('blockchain')
         chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
     wallets = chia.load_wallets()
-    return render_template('wallet.html', wallets=wallets, global_config=gc, reload_seconds=120)
+    return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, reload_seconds=120)
 
 @app.route('/keys')
 def keys():
     gc = globals.load()
+    selected_blockchain = worker.default_blockchain()
     keys = chia.load_keys_show()
     key_paths = globals.get_key_paths()
-    return render_template('keys.html', keys=keys, 
+    return render_template('keys.html', keys=keys, selected_blockchain = selected_blockchain,
         key_paths=key_paths, global_config=gc)
 
 @app.route('/workers', methods=['GET', 'POST'])
@@ -209,14 +214,17 @@ def worker_route():
 @app.route('/blockchains')
 def blockchains():
     gc = globals.load()
+    selected_blockchain = worker.default_blockchain()
     blockchains = chia.load_blockchain_show()
-    return render_template('blockchains.html', reload_seconds=120, 
+    return render_template('blockchains.html', reload_seconds=120, selected_blockchain = selected_blockchain, 
         blockchains=blockchains, global_config=gc)
 
 @app.route('/connections', methods=['GET', 'POST'])
 def connections():
     gc = globals.load()
+    selected_blockchain = worker.default_blockchain()
     if request.method == 'POST':
+        selected_blockchain = request.form.get('blockchain')
         if request.form.get('action') == "add":
             chia.add_connection(request.form.get("connection"), request.form.get('hostname'), request.form.get('blockchain'))
         elif request.form.get('action') == 'remove':
@@ -224,7 +232,7 @@ def connections():
         else:
             app.logger.info("Unknown form action: {0}".format(request.form))
     connections = chia.load_connections_show()
-    return render_template('connections.html', reload_seconds=120, 
+    return render_template('connections.html', reload_seconds=120, selected_blockchain = selected_blockchain,
         connections=connections, global_config=gc)
 
 def find_selected_worker(hosts, hostname, blockchain= None):
@@ -293,15 +301,20 @@ def settings_alerts():
 @app.route('/settings/pools', methods=['GET', 'POST'])
 def settings_pools():
     gc = globals.load()
+    selected_blockchain = worker.default_blockchain()
     if request.method == 'POST':
-        plotnfts = chia.load_plotnfts()
-        current_pool_url = plotnfts.get_current_pool_url()
-        chia.process_pool_save(request.form.get('choice'), request.form.get('pool_url'), current_pool_url)
-    plotnfts = chia.load_plotnfts()
-    plotnft_log = chia.get_plotnft_log()
-    current_pool_url = plotnfts.get_current_pool_url()
-    return render_template('settings/pools.html', plotnfts=plotnfts, current_pool_url=current_pool_url, 
-        plotnft_log = plotnft_log, global_config=gc)
+        selected_blockchain = request.form.get('blockchain')
+        selected_fullnode = worker.get_fullnode(selected_blockchain)
+        launcher_ids = request.form.getlist('{0}-launcher_id'.format(selected_blockchain))
+        wallet_nums = request.form.getlist('{0}-wallet_num'.format(selected_blockchain))
+        choices = request.form.getlist('{0}-choice'.format(selected_blockchain))
+        pool_urls = request.form.getlist('{0}-pool_url'.format(selected_blockchain))
+        current_pool_urls = request.form.getlist('{0}-current_pool_url'.format(selected_blockchain))
+        p.send_request(selected_fullnode, selected_blockchain, launcher_ids, choices, pool_urls, wallet_nums, current_pool_urls)
+    pool_configs = p.get_pool_configs()
+    fullnodes_by_blockchain = worker.get_fullnodes_by_blockchain()
+    return render_template('settings/pools.html',  global_config=gc, fullnodes_by_blockchain=fullnodes_by_blockchain,
+        pool_configs=pool_configs, blockchains=po.POOLABLE_BLOCKCHAINS, selected_blockchain=selected_blockchain)
 
 @app.route('/settings/config', defaults={'path': ''})
 @app.route('/settings/config/<path:path>')
@@ -333,7 +346,7 @@ def logs():
 def logfile():
     w = worker.get_worker(request.args.get('hostname'), request.args.get('blockchain'))
     log_type = request.args.get("log")
-    if log_type in [ 'alerts', 'farming', 'plotting', 'archiving', 'apisrv', 'webui']:
+    if log_type in [ 'alerts', 'farming', 'plotting', 'archiving', 'apisrv', 'webui', 'pooling']:
         log_id = request.args.get("log_id")
         blockchain = request.args.get("blockchain")
         return log_handler.get_log_lines(w, log_type, log_id, blockchain)
@@ -342,7 +355,7 @@ def logfile():
 
 @app.route('/worker_launch')
 def worker_launch():
-    [farmer_pk, pool_pk, pool_contract_address] = plotman.load_plotting_keys()
+    [farmer_pk, pool_pk, pool_contract_address] = plotman.load_plotting_keys('chia')
     pathlib.Path('/root/.chia/machinaris/tmp/').mkdir(parents=True, exist_ok=True)
     pathlib.Path('/root/.chia/machinaris/tmp/worker_launch.tmp').touch()
     return render_template('worker_launch.html', farmer_pk=farmer_pk, 
@@ -351,8 +364,8 @@ def worker_launch():
 @app.route('/pools')
 def pools():
     gc = globals.load()
-    pools = chia.load_pools()
-    return render_template('pools.html', pools=pools, global_config=gc)
+    selected_blockchain = worker.default_blockchain()
+    return render_template('pools.html', pools= p.load_pools(), global_config=gc, selected_blockchain = selected_blockchain)
 
 @app.route('/favicon.ico')
 def favicon():

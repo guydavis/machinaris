@@ -4,8 +4,8 @@
 #
 
 CHIVES_BRANCH=$1
-# On 2021-11-06
-HASH=56734ef0719f7bf844213823bb95b0fcc642d222
+# On 2021-12-25
+HASH=ca078c8a2270e237437b0bab8e94d18d9f719951
 
 if [ -z ${CHIVES_BRANCH} ]; then
 	echo 'Skipping Chives install as not requested.'

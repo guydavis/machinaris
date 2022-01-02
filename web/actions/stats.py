@@ -12,32 +12,18 @@ from sqlalchemy import or_
 from common.utils import converters
 from common.models.alerts import Alert
 from common.models.plots import Plot
-from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalChia, StatNetspaceSize, StatTimeToWin, \
+from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalCoins, StatNetspaceSize, StatTimeToWin, \
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \
         StatPlottingDiskUsed, StatPlottingDiskFree
 from web import app, db, utils
 from web.actions import chia, worker
 
-DATABASE = '/root/.chia/machinaris/dbs/stats.db'
-
 ALL_TABLES_BY_HOSTNAME = [
-    'stat_plots_disk_used',
-    'stat_plotting_disk_used',
-    'stat_plots_disk_free',
-    'stat_plotting_disk_free',
+    StatPlotsDiskUsed,
+    StatPlottingDiskUsed,
+    StatPlotsDiskFree,
+    StatPlottingDiskFree,
 ]
-
-def get_stats_db():
-    db = getattr(g, '_stats_database', None)
-    if db is None:
-        db = g._stats_database = sqlite3.connect(DATABASE)
-    return db
-
-@app.teardown_appcontext
-def close_connection(exception):
-    db = getattr(g, '_stats_database', None)
-    if db is not None:
-        db.close()
 
 def load_daily_diff(farm_summary):
     for blockchain in farm_summary.farms:
@@ -89,9 +75,9 @@ def plots_size_diff(since, blockchain):
 def total_coin_diff(since, blockchain):
     result = ''
     try:
-        latest = db.session.query(StatTotalChia).filter(StatTotalChia.blockchain==blockchain).order_by(StatTotalChia.created_at.desc()).limit(1).first()
+        latest = db.session.query(StatTotalCoins).filter(StatTotalCoins.blockchain==blockchain).order_by(StatTotalCoins.created_at.desc()).limit(1).first()
         #app.logger.info(latest.value)
-        before = db.session.query(StatTotalChia).filter(StatTotalChia.blockchain==blockchain, StatTotalChia.created_at <= since).order_by(StatTotalChia.created_at.desc()).limit(1).first()
+        before = db.session.query(StatTotalCoins).filter(StatTotalCoins.blockchain==blockchain, StatTotalCoins.created_at <= since).order_by(StatTotalCoins.created_at.desc()).limit(1).first()
         #app.logger.info(before.value)
         if (latest.value - before.value) != 0:
             result = "%+6g in last day." % (latest.value - before.value)
@@ -124,11 +110,10 @@ def load_daily_farming_summaries():
     summary_by_workers = {}
     since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
     for host in chia.load_farmers():
-        # TrueNAS uses a FQDN for container hostname, so must split down to shortname to match Alerts table
-        summary_by_workers[host.displayname.split('.')[0]] = {}
+        summary_by_workers[host.displayname] = {}
         for wk in host.workers:
             summary_by_workers[host.displayname][wk['blockchain']] = daily_summaries(since_date, wk['hostname'], wk['displayname'], wk['blockchain']) 
-            #app.logger.info("{0}-{1}: {2}".format(host.displayname, wk['blockchain'], summary_by_workers[host.displayname][wk['blockchain']]))
+            #app.logger.info("{0}-{1}: {2}".format(short_name, wk['blockchain'], summary_by_workers[short_name][wk['blockchain']]))
     return summary_by_workers
 
 def daily_summaries(since, hostname, displayname, blockchain):
@@ -150,34 +135,40 @@ def daily_summaries(since, hostname, displayname, blockchain):
     return result
 
 def load_recent_disk_usage(disk_type):
-    db = get_stats_db()
-    cur = db.cursor()
     summary_by_worker = {}
-    value_factor = "" # Leave at GB for plotting disks
-    if disk_type == "plots":
-        value_factor = "/1024"  # Divide to TB for plots disks
     for host in worker.load_workers():
         hostname = host.hostname
         dates = []
         paths = {}
-        sql = "select path, value{0}, created_at from stat_{1}_disk_used where (hostname = ? or hostname = ?) order by created_at, path".format(value_factor, disk_type)
-        used_result = cur.execute(sql, [ host.hostname, host.displayname, ]).fetchall()
+        if disk_type == 'plots':
+            used_result = db.session.query(StatPlotsDiskUsed).filter( 
+                or_(StatPlotsDiskUsed.hostname == host.hostname, StatPlotsDiskUsed.hostname == host.displayname)). \
+                order_by(StatPlotsDiskUsed.created_at, StatPlotsDiskUsed.path).all()
+        elif disk_type == 'plotting':
+            used_result = db.session.query(StatPlottingDiskUsed).filter( 
+                or_(StatPlottingDiskUsed.hostname == host.hostname, StatPlottingDiskUsed.hostname == host.displayname)). \
+                order_by(StatPlottingDiskUsed.created_at, StatPlottingDiskUsed.path).all()
+        else:
+            raise Exception("Unknown disk type provided.")
         for used_row in used_result:
-            converted_date = converters.convert_date_for_luxon(used_row[2])
+            converted_date = converters.convert_date_for_luxon(used_row.created_at)
             if not converted_date in dates:
                 dates.append(converted_date)
-            if not used_row[0] in paths:
-                paths[used_row[0]] = {}
-            values = paths[used_row[0]]
-            values[converted_date] = used_row[1]
+            if not used_row.path in paths:
+                paths[used_row.path] = {}
+            values = paths[used_row.path]
+            values[converted_date] = used_row.value
         if len(dates) > 0:
             summary_by_worker[hostname] = { "dates": dates, "paths": paths.keys(),  }
             for path in paths.keys():
                 path_values = []
                 for date in dates:
                     if path in paths:
-                        if date in paths[path]:  
-                            path_values.append(paths[path][date])
+                        if date in paths[path]:
+                            if disk_type == "plots":  
+                                path_values.append(paths[path][date] / 1024) # Convert to TB
+                            else:
+                                path_values.append(paths[path][date]) # Leave at GB
                         else: # Due to exeception reported by one user
                             path_values.append('null')
                     else:
@@ -187,31 +178,50 @@ def load_recent_disk_usage(disk_type):
     return summary_by_worker
 
 def load_current_disk_usage(disk_type, hostname=None):
-    db = get_stats_db()
-    cur = db.cursor()
     summary_by_worker = {}
-    value_factor = "" # Leave at GB for plotting disks
-    if disk_type == "plots":
-        value_factor = "/1024"  # Divide to TB for plots disks
     for host in worker.load_workers():
         if hostname and not (hostname == host.hostname or hostname == host.displayname):
             continue
         paths = []
         used = []
         free = []
-        sql = "select path, value{0}, created_at from stat_{1}_disk_used where (hostname = ? or hostname = ?) group by path having max(created_at)".format(value_factor, disk_type)
-        used_result = cur.execute(sql, [ host.hostname, host.displayname, ]).fetchall()
-        sql = "select path, value{0}, created_at from stat_{1}_disk_free where (hostname = ? or hostname = ?) group by path having max(created_at)".format(value_factor, disk_type)
-        free_result =cur.execute(sql, [ host.hostname, host.displayname, ]).fetchall()
+        if disk_type == 'plots':
+            created_at_max = db.session.query(StatPlotsDiskUsed).order_by(StatPlotsDiskUsed.created_at.desc()).first()
+            used_result = db.session.query(StatPlotsDiskUsed).filter( 
+                or_(StatPlotsDiskUsed.hostname == host.hostname, StatPlotsDiskUsed.hostname == host.displayname),
+                    StatPlotsDiskUsed.created_at == created_at_max.created_at).order_by(StatPlotsDiskUsed.path).all()
+            free_result = db.session.query(StatPlotsDiskFree).filter( 
+                or_(StatPlotsDiskFree.hostname == host.hostname, StatPlotsDiskFree.hostname == host.displayname),
+                    StatPlotsDiskFree.created_at == created_at_max.created_at).order_by(StatPlotsDiskFree.path).all()
+        elif disk_type == 'plotting':
+            created_at_max = db.session.query(StatPlottingDiskUsed).order_by(StatPlottingDiskUsed.created_at.desc()).first()
+            used_result = db.session.query(StatPlottingDiskUsed).filter( 
+                or_(StatPlottingDiskUsed.hostname == host.hostname, StatPlottingDiskUsed.hostname == host.displayname),
+                    StatPlottingDiskUsed.created_at == created_at_max.created_at).order_by(StatPlottingDiskUsed.path).all()
+            free_result = db.session.query(StatPlottingDiskFree).filter( 
+                or_(StatPlottingDiskFree.hostname == host.hostname, StatPlottingDiskFree.hostname == host.displayname),
+                    StatPlottingDiskFree.created_at == created_at_max.created_at).order_by(StatPlottingDiskFree.path).all()
+        else:
+            raise Exception("Unknown disk type provided.")
+        #sql = "select path, value{0}, created_at from stat_{1}_disk_used where (hostname = ? or hostname = ?) group by path having max(created_at)".format(value_factor, disk_type)
+        #used_result = db.engine.execute(sql, [ host.hostname, host.displayname, ]).fetchall()
+        #sql = "select path, value{0}, created_at from stat_{1}_disk_free where (hostname = ? or hostname = ?) group by path having max(created_at)".format(value_factor, disk_type)
+        #free_result =cur.execute(sql, [ host.hostname, host.displayname, ]).fetchall()
         if len(used_result) != len(free_result):
-            app.logger.debug("Found mismatched count of disk used/free stats for {0}".format(disk_type))
+            app.logger.info("Found mismatched count of disk used/free stats for {0}".format(disk_type))
         else:
             for used_row in used_result:
-                paths.append(used_row[0])
-                used.append(used_row[1])
+                paths.append(used_row.path)
+                if disk_type == "plots":  
+                    used.append(used_row.value / 1024) # Convert to TB
+                else:
+                    used.append(used_row.value) # Leave at GB
                 for free_row in free_result:
-                    if used_row[0] == free_row[0]:
-                        free.append(free_row[1])
+                    if used_row.path == free_row.path:
+                        if disk_type == "plots":  
+                            free.append(free_row.value / 1024) # Convert to TB
+                        else:
+                            free.append(free_row.value) # Leave at GB
                         continue
             if len(paths):
                 summary_by_worker[host.hostname] = { "paths": paths, "used": used, "free": free}
@@ -220,12 +230,9 @@ def load_current_disk_usage(disk_type, hostname=None):
 
 def prune_workers_status(hostname, displayname, blockchain):
     try:
-        db = get_stats_db()
-        cur = db.cursor()
         for table in ALL_TABLES_BY_HOSTNAME:
-            cur.execute("DELETE FROM " + table + " WHERE (hostname = :hostname OR hostname = :displayname)", 
-                {"hostname":hostname, "displayname":displayname})
-        db.commit()
+            db.session.query(table).filter(or_((table.hostname == hostname), (table.hostname == worker.displayname)), table.blockchain == worker.blockchain).delete()
+            db.session.commit()
     except Exception as ex:
         app.logger.info("Failed to remove stale stats for worker {0} - {1} because {2}".format(displayname, blockchain, str(ex)))
 

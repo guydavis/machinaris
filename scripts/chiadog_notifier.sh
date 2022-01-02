@@ -13,6 +13,6 @@ echo "${now} ${hostname} ${event_service_name} ${event_priority_name}: ${event_m
 
 now_secs_only=$(echo "${now}" | sed 's/...$//')
 cd /root/.chia/machinaris/dbs
-sqlite3 -cmd '.timeout 5000' machinaris.db <<EOF
+sqlite3 -cmd '.timeout 5000' alerts.db <<EOF
 INSERT INTO alerts (unique_id,hostname,blockchain,priority,service,message,created_at) VALUES ('${unique_id}', '${hostname}', '${blockchains}','${event_priority_name//\'/\'\'}','${event_service_name//\'/\'\'}','${event_message//\'/\'\'}', '${now_secs_only}');
 EOF

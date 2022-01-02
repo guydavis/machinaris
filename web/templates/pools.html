@@ -3,16 +3,12 @@
 {% block content %}
 
 <div class="position-relative">
-  <div class="position-absolute top-0 end-0">
+  <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -8px;">
     <a href="https://github.com/guydavis/machinaris/wiki/Pooling" target="_blank">
       <i class="fs-4 bi-question-circle"></i>
     </a>
   </div>
 </div>
-
-<header class="pb-3 mb-4 border-bottom">
-  <span class="fs-4">Pools - Status</span>
-</header>
 
 <div>
   {% with messages = get_flashed_messages(with_categories=true) %}
@@ -20,62 +16,88 @@
   {% for category, message in messages %}
   {% if category == 'message' %}
   <div class="alert alert-warning" role="alert">
-    {% else %}
-    <div class="alert alert-{{ category }}" role="alert">
+      {% else %}
+      <div class="alert alert-{{ category }}" role="alert">
+          {% endif %}
+          {{ message }}
+      </div>
+      {% endfor %}
       {% endif %}
-      {{ message|safe }}
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
+      {% endwith %}
   </div>
+
+  <style>
+      a.active.nav-link {
+          background-color: #3d3f42 !important
+      }
+
+      button.active.nav-link {
+          background-color: #3d3f42 !important
+      }
+  </style>
 
   {% if pools.rows|length > 0 %}
-  <div class="row align-items-md-stretch">
-    {% for pool in pools.rows %}
-    <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
-      <div class="h-20 p-2 bg-light border rounded-3">
-        <h6 class="display-7">Pool:
-          <span class="text-success">
-            {% if pool.pool_state.pool_config.pool_url %}
-              {{ pool.pool_state.pool_config.pool_url }}
-            {% else %}
-              SELF_POOL
-            {% endif %}
-          </span>
-        </h6>
-        <ul>
-          <li>Status: {{pool.status}}</li>
-          <li>Current Difficulty: {{pool.pool_state.current_difficulty}}</li>
-          <li>Current Points Balance: {{pool.pool_state.current_points}}</li>
-          <li>Points Found Since Start: {{pool.pool_state.points_found_since_start}}</li>
-          <li>Points Found in Last 24 Hours: {{pool.pool_state.points_found_24h|length}}</li>
-          <li>Points Successful in Last 24 Hours: {{ pool.points_successful_last_24h }}</li>
-        </ul>
-        <b>Launcher ID:</b>
-        <span>
-          {% if pool.login_link %}
-          <a target="_blank" class="text-white" href="{{ pool.login_link }}">{{ pool.launcher_id }}</a>
-          {% else %}
-          {{ pool.launcher_id }}
-          {% endif %}
-        </span>
+  <nav class="navbar navbar-expand-lg navbar-dark" style="padding-bottom: 0px; display: block">
+      <div class="h-100 p-2 text-white">
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            {% for pool in pools.rows %}
+              <li class="nav-item" role="presentation">
+                  <button class="nav-link {% if pool.blockchain == selected_blockchain %}active{% endif %}"
+                      id="{{pool.blockchain}}-tab" data-bs-toggle="tab"
+                      data-bs-target="#{{pool.blockchain}}" type="button" role="tab"
+                      aria-controls="{{pool.blockchain}}"
+                      aria-selected="{% if pool.blockchain == selected_blockchain %}true{% else %}false{% endif %}">{{ pool.blockchain
+                      }}</button>
+              </li>
+              {% endfor %}
+          </ul>
+          <div class="tab-content">
+            {% for pool in pools.rows %}
+            <div class="tab-pane {% if pool.blockchain == selected_blockchain %}active{% endif %}" id="{{pool.blockchain}}"
+                role="tabpanel" aria-labelledby="{{pool.blockchain}}-tab">
+              <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+                <div class="h-20 p-2 bg-light border rounded-3">
+                  <h6 class="display-7">Pool:
+                    <span class="text-success">
+                      {% if pool.pool_state.pool_config.pool_url %}
+                        {{ pool.pool_state.pool_config.pool_url }}
+                      {% else %}
+                        SELF_POOL
+                      {% endif %}
+                    </span>
+                  </h6>
+                  <ul>
+                    <li>Status: {{pool.status}}</li>
+                    <li>Current Difficulty: {{pool.pool_state.current_difficulty}}</li>
+                    <li>Current Points Balance: {{pool.pool_state.current_points}}</li>
+                    <li>Points Found Since Start: {{pool.pool_state.points_found_since_start}}</li>
+                    <li>Points Found in Last 24 Hours: {{pool.pool_state.points_found_24h|length}}</li>
+                    <li>Points Successful in Last 24 Hours: {{ pool.points_successful_last_24h }}</li>
+                    <li>Number of Plots: {{pool.num_plots}}</li>
+                  </ul>
+                  <b>Launcher ID:</b>
+                  <span>
+                    {% if pool.login_link %}
+                    <a target="_blank" class="text-white" href="{{ pool.login_link }}">{{ pool.launcher_id }}</a>
+                    {% else %}
+                    {{ pool.launcher_id }}
+                    {% endif %}
+                  </span>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
       </div>
-    </div>
-    {% endfor %}
-  </div>
+  </nav>
   {% else %}
-
   <div class="text-center" style="padding-top:100 px; padding-bottom: 0px">
-    <h6>No Chia pools have been found yet. Perhaps the wallet is still syncing?</h6>
+    <h6>No {{blockchain|capitalize}} pools have been found yet. Perhaps the wallet is still syncing?</h6>
     <h6>If you would like to join a pool, please select the "Settings | Pools" page to get started.</h6>
     <h6>For more, see the Machinaris <a href="https://github.com/guydavis/machinaris/wiki/Pooling"
         target="_blank">wiki.</a></h6>
   </div>
-  <br />
-  <br />
   {% endif %}
-
 
   {% endblock %}
 

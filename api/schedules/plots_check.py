@@ -96,16 +96,16 @@ def request_analyze(plot_file, workers):
                     plotter.hostname, plotter.latest_ping_result))
                 continue
             try:
-                app.logger.info("Trying {0}:{1} for analyze....".format(plotter.hostname, plotter.port))
+                app.logger.debug("Trying {0}:{1} for analyze....".format(plotter.hostname, plotter.port))
                 payload = {"service":"plotting", "action":"analyze", "plot_file": plot_file }
                 response = utils.send_worker_post(plotter, "/analysis/", payload, debug=False)
                 if response.status_code == 200:
                     return [plotter.hostname, plotter.displayname, response.content.decode('utf-8')]
                 elif response.status_code == 404:
-                    app.logger.info("Plotter on {0}:{1} did not have plot log for {2}".format(
+                    app.logger.debug("Plotter on {0}:{1} did not have plot log for {2}".format(
                         plotter.hostname, plotter.port, plot_file))
                 else:
-                    app.logger.info("Plotter on {0}:{1} returned an unexpected error: {2}".format(
+                    app.logger.debug("Plotter on {0}:{1} returned an unexpected error: {2}".format(
                         plotter.hostname, plotter.port, response.status_code))
             except Exception as ex:
                 app.logger.error(str(ex))
@@ -158,21 +158,21 @@ def request_check(plot, workers):
         #app.logger.info("{0}:{1} - {2} - {3}".format(harvester.hostname, harvester.port, harvester.blockchain, harvester.mode))
         if harvester.mode == 'fullnode' or 'harvester' in harvester.mode:
             if harvester.latest_ping_result != "Responding":
-                app.logger.info("Skipping check call to {0} as last ping was: {1}".format( \
-                    harvester.hostname, harvester.latest_ping_result))
+                #app.logger.info("Skipping check call to {0} as last ping was: {1}".format( \
+                #    harvester.hostname, harvester.latest_ping_result))
                 continue
             if harvester.hostname != plot.hostname or harvester.blockchain != plot.blockchain:
-                app.logger.info("Skipping check call to {0} ({1}) for plot on {2} ({3})".format( \
-                    harvester.hostname, harvester.blockchain, plot.hostname, plot.blockchain))
+                #app.logger.info("Skipping check call to {0} ({1}) for plot on {2} ({3})".format( \
+                #    harvester.hostname, harvester.blockchain, plot.hostname, plot.blockchain))
                 continue
             try:
-                app.logger.info("Trying {0}:{1} for plot check....".format(harvester.hostname, harvester.port))
+                app.logger.debug("Trying {0}:{1} for plot check....".format(harvester.hostname, harvester.port))
                 payload = {"service":"farming", "action":"check", "plot_file": plot.dir + '/' + plot.file }
                 response = utils.send_worker_post(harvester, "/analysis/", payload, debug=False)
                 if response.status_code == 200:
                     return [harvester.hostname, harvester.displayname, response.content.decode('utf-8')]
                 elif response.status_code == 404:
-                    app.logger.info("Plotter on {0}:{1} did not have plot check for {2}".format(
+                    app.logger.debug("Plotter on {0}:{1} did not have plot check for {2}".format(
                         harvester.hostname, harvester.port, plot.file))
                 else:
                     app.logger.info("Plotter on {0}:{1} returned an unexpected error: {2}".format(
@@ -190,7 +190,7 @@ def execute():
         gc = globals.load()
         if not gc['is_controller']:
             return # Only controller should initiate check/analyze against other fullnodes/harvesters
-        app.logger.info("Executing plots_check...")
+        #app.logger.info("Executing plots_check...")
         try:
             os.makedirs(ANALYZE_LOGS)
             os.makedirs(CHECK_LOGS)
@@ -201,9 +201,9 @@ def execute():
             p.Plot.plot_analyze.is_(None))).order_by(p.Plot.created_at.desc()).all()
         status = open_status_json()
         requested_status_count = 0
-        app.logger.info("Querying for plots...")
+        #app.logger.info("Querying for plots...")
         for plot in plots:
-            app.logger.info("Checking plot {0}".format(plot.plot_id))
+            #app.logger.info("Checking plot {0}".format(plot.plot_id))
             set_analyze_status(workers, status, plot)
             if set_check_status(workers, status, plot):
                 requested_status_count += 1

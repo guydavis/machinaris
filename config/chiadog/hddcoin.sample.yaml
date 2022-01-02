@@ -1,6 +1,6 @@
 # This is useful to differentiate multiple
 # instances monitoring multiple harvesters
-notification_title_prefix: 'Machinaris-HDDCoin'
+notification_title_prefix: '$HOSTNAME-hddcoin'
 log_level: INFO
 coin_name: 'hddcoin'
 coin_symbol: 'hdd'
@@ -53,7 +53,7 @@ notifier:
     wallet_events: true
     credentials:
       sender: 'hddcoin@example.com'
-      sender_name: 'hddcoindog'
+      sender_name: 'Machinaris'
       recipient: 'you@example.com'
       username_smtp: 'username'
       password_smtp: 'password'

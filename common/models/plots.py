@@ -2,18 +2,18 @@ import datetime as dt
 import sqlalchemy as sa
 
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship, backref
 
 from common.extensions.database import db
 
 class Plot(db.Model):
+    __bind_key__ = 'plots'
     __tablename__ = "plots"
 
     hostname = sa.Column(sa.String(length=255), primary_key=True)
     displayname = sa.Column(sa.String(length=255), nullable=True)
-    blockchain = sa.Column(sa.String(length=64), nullable=True)
+    blockchain = sa.Column(sa.String(length=64), nullable=False)
     plot_id = sa.Column(sa.String(length=16), primary_key=True)
-    type = sa.Column(sa.String(length=32), nullable=True)
+    type = sa.Column(sa.String(length=32), nullable=False)
     dir = sa.Column(sa.String(length=255), nullable=False)
     file = sa.Column(sa.String(length=255), nullable=False)
     size = sa.Column(sa.Integer, nullable=False)

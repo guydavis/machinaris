@@ -123,6 +123,8 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         log_file = "/root/.chia/machinaris/logs/webui.log"
     elif log_type == "apisrv":
         log_file = "/root/.chia/machinaris/logs/apisrv.log"
+    elif log_type == "pooling":
+        log_file = "/root/.chia/machinaris/logs/plotnft.log"
     if not log_file or not os.path.exists(log_file):
         app.logger.info("No log file found at {0}".format(log_file))
         return 'No log file found!'
@@ -143,6 +145,8 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         class_escape = re.compile(r' hddcoin.plotting.(\w+)(\s+): ')
     elif blockchain == "maize":
         class_escape = re.compile(r' maize.plotting.(\w+)(\s+): ')
+    elif blockchain == "shibgreen":
+        class_escape = re.compile(r' shibgreen.plotting.(\w+)(\s+): ')
     elif blockchain == "staicoin":
         class_escape = re.compile(r' staicoin.plotting.(\w+)(\s+): ')
     elif blockchain == "stor":

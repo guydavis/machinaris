@@ -32,6 +32,7 @@ SUPPORTED_BLOCKCHAINS = [
     'hddcoin',
     'maize',
     'nchain',
+    'shibgreen',
     'silicoin',
     'staicoin',
     'stor'
@@ -48,6 +49,7 @@ CURRENCY_SYMBOLS = {
     "hddcoin": "HDD",
     "maize": "XMZ",
     "nchain": "NCH",
+    "shibgreen": 'XSHIB',
     "silicoin": "SIT",
     "staicoin": "STAI",
     "stor": "STOR",
@@ -71,8 +73,9 @@ FLORA_BINARY = '/flora-blockchain/venv/bin/flora'
 HDDCOIN_BINARY = '/hddcoin-blockchain/venv/bin/hddcoin'
 MAIZE_BINARY = '/maize-blockchain/venv/bin/maize'
 NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
+SHIBGREEN_BINARY = '/shibgreen-blockchain/venv/bin/shibgreen'
 SILICOIN_BINARY = '/silicoin-blockchain/venv/bin/sit'
-STAICOIN_BINARY = '/staicoin-blockchain/venv/bin/staicoin'
+STAICOIN_BINARY = '/staicoin-blockchain/venv/bin/stai'
 STOR_BINARY = '/stor-blockchain/venv/bin/stor'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
@@ -98,6 +101,8 @@ def get_blockchain_binary(blockchain):
         return MAIZE_BINARY
     if blockchain == "nchain":
         return NCHAIN_BINARY
+    if blockchain == "shibgreen":
+        return SHIBGREEN_BINARY
     if blockchain == "silicoin":
         return SILICOIN_BINARY
     if blockchain == "staicoin":
@@ -127,6 +132,8 @@ def get_blockchain_network_path(blockchain):
         return "/root/.maize/mainnet"
     if blockchain == 'nchain':
         return "/root/.chia/ext9"
+    if blockchain == 'shibgreen':
+        return "/root/.shibgreen/mainnet"
     if blockchain == 'silicoin':
         return "/root/.sit/mainnet"
     if blockchain == 'staicoin':
@@ -235,8 +242,8 @@ def harvesting_enabled():
     return "mode" in os.environ and ("harvester" in os.environ['mode'] or "fullnode" == os.environ['mode'])
 
 def plotting_enabled():
-    return "mode" in os.environ and ("plotter" in os.environ['mode'] 
-        or ("fullnode" == os.environ['mode'] and enabled_blockchains()[0] in ['chia', 'chives']))
+    return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode']) \
+        and enabled_blockchains()[0] in ['chia', 'chives']
 
 def enabled_blockchains():
     blockchains = []

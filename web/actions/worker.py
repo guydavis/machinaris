@@ -14,42 +14,65 @@ import time
 import traceback
 import yaml
 
+from sqlalchemy import or_
 from flask import Flask, jsonify, abort, request, flash
 
 from web import app, db, utils
-from common.models import workers as w
+from common.models import alerts, blockchains, challenges, connections, farms, \
+    keys, plots, plottings, plotnfts, pools, wallets, workers
 from web.models.worker import WorkerSummary
 from web.actions import stats
 
 ALL_TABLES_BY_HOSTNAME_AND_BLOCKCHAIN = [
-    'alerts',
-    'blockchains',
-    'challenges',
-    'connections',
-    'farms', 
-    'keys',
-    'plots',
-    'plottings',
-    'plotnfts',
-    'pools',
-    'wallets',
-    'workers'
+    alerts.Alert,
+    blockchains.Blockchain,
+    challenges.Challenge,
+    connections.Connection,
+    farms.Farm, 
+    keys.Key,
+    plots.Plot,
+    plottings.Plotting,
+    plotnfts.Plotnft,
+    pools.Pool,
+    wallets.Wallet,
+    workers.Worker
 ]
 
 def load_worker_summary(hostname = None):
-    query = db.session.query(w.Worker).order_by(w.Worker.displayname, w.Worker.blockchain)
+    query = db.session.query(workers.Worker).order_by(workers.Worker.displayname, workers.Worker.blockchain)
     if hostname:
-        workers = query.filter(w.Worker.hostname==hostname)
+        wkrs = query.filter(workers.Worker.hostname==hostname)
     else:
-        workers = query.all()
-    return WorkerSummary(workers)
+        wkrs = query.all()
+    return WorkerSummary(wkrs)
 
 def load_workers():
     return load_worker_summary().workers
 
 def get_worker(hostname, blockchain='chia'):
     #app.logger.info("Searching for worker with hostname: {0} and blockchain: {1}".format(hostname, blockchain))
-    return db.session.query(w.Worker).filter(w.Worker.hostname==hostname, w.Worker.blockchain==blockchain).first()
+    return db.session.query(workers.Worker).filter(workers.Worker.hostname==hostname, workers.Worker.blockchain==blockchain).first()
+
+def get_fullnode(blockchain='chia'):
+    #app.logger.info("Searching for fullnode with blockchain: {0}".format(blockchain))
+    return db.session.query(workers.Worker).filter(workers.Worker.mode=='fullnode', workers.Worker.blockchain==blockchain).first()
+
+def get_fullnodes_by_blockchain():
+    fullnodes = {}
+    for worker in db.session.query(workers.Worker).filter(workers.Worker.mode=='fullnode').all():
+        fullnodes[worker.blockchain] = worker
+    return fullnodes
+
+def default_blockchain():
+    first_blockchain = None
+    for worker in db.session.query(workers.Worker).filter(workers.Worker.mode=='fullnode').order_by(workers.Worker.blockchain).all():
+        if not first_blockchain:
+            first_blockchain = worker.blockchain
+        if worker.blockchain == 'chia':  # Default choice
+            return worker.blockchain
+        if worker.blockchain == 'chives':  # Second choice
+            return worker.blockchain
+    return first_blockchain # Last choice, just use whatever is first alphabetically
 
 def prune_workers_status(workers):
     for id in workers:
@@ -59,8 +82,7 @@ def prune_workers_status(workers):
             if 'chia' == blockchain:
                 stats.prune_workers_status(hostname, worker.displayname, worker.blockchain)
             for table in ALL_TABLES_BY_HOSTNAME_AND_BLOCKCHAIN:
-                db.session.execute("DELETE FROM " + table + " WHERE (hostname = :hostname OR hostname = :displayname) AND blockchain = :blockchain", 
-                    {"hostname":hostname, "displayname":worker.displayname, "blockchain":worker.blockchain})
+                db.session.query(table).filter(or_((table.hostname == hostname), (table.hostname == worker.displayname)), table.blockchain == worker.blockchain).delete()
                 db.session.commit()
         else:
             app.logger.info("Unable to find worker: {0} - {1}".format(hostname, blockchain))

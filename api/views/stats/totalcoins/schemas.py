@@ -3,25 +3,25 @@ from marshmallow_sqlalchemy import field_for
 from marshmallow_toplevel import TopLevelSchema
 
 from api.extensions.api import Schema, AutoSchema
-from common.models.stats import StatTotalChia
+from common.models.stats import StatTotalCoins
 
-class StatTotalChiaSchema(AutoSchema):
-    id = field_for(StatTotalChia, "id")
+class StatTotalCoinsSchema(AutoSchema):
+    id = field_for(StatTotalCoins, "id")
 
     class Meta(AutoSchema.Meta):
-        table = StatTotalChia.__table__
+        table = StatTotalCoins.__table__
 
 
-class StatTotalChiaQueryArgsSchema(Schema):
+class StatTotalCoinsQueryArgsSchema(Schema):
     id = ma.fields.Str()
     hostname = ma.fields.Str()
 
-class BatchOfStatTotalChiaSchema(TopLevelSchema):
+class BatchOfStatTotalCoinsSchema(TopLevelSchema):
     _toplevel = ma.fields.Nested(
-        StatTotalChiaSchema,
+        StatTotalCoinsSchema,
         required=True,
         many=True
     )
 
-class BatchOfStatTotalChiaQueryArgsSchema(Schema):
+class BatchOfStatTotalCoinsQueryArgsSchema(Schema):
     hostname = ma.fields.Str()

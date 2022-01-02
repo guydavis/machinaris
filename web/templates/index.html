@@ -21,7 +21,7 @@
   <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
     <div class="carousel-inner">
       {% for blockchain in farms.keys()|sort(case_sensitive=False) %}
-      <div class="carousel-item {% if blockchain == 'chia' %} active {% endif %}" data-bs-interval="10000">
+      <div class="carousel-item {% if blockchain == selected_blockchain %} active {% endif %}" data-bs-interval="10000">
 
         {% if farms[blockchain].expected_time_to_win != '-' %}
         <div class="row align-items-md-stretch" style="margin-top:0px; margin-bottom:5px;">
@@ -101,6 +101,13 @@
 
         <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
           <div class="h-100 p-2 text-white bg-dark rounded-3">
+            <div class="position-relative">
+              <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -10px; margin-right: -3px;">
+                <a href="https://github.com/guydavis/machinaris/wiki/{{ blockchain|capitalize }}" target="_blank">
+                  <i class="fs-4 bi-question-circle"></i>
+                </a>
+              </div>
+            </div>
             <h6 class="display-6 text-center">{{blockchain|capitalize}} - Challenges from Harvesters</h6>
             <canvas id="{{blockchain}}_challenges_chart"></canvas>
           </div>
@@ -109,6 +116,13 @@
         {% if farms[blockchain].partials.data|length > 0 %}
         <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
           <div class="h-100 p-2 text-white bg-dark rounded-3">
+            <div class="position-relative">
+              <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -10px; margin-right: -3px;">
+                <a href="https://github.com/guydavis/machinaris/wiki/Pooling" target="_blank">
+                  <i class="fs-4 bi-question-circle"></i>
+                </a>
+              </div>
+            </div>
             <h6 class="display-6 text-center">{{blockchain|capitalize}} - Partial Proofs for Pools</h6>
             <canvas id="{{blockchain}}_partials_chart"></canvas>
           </div>

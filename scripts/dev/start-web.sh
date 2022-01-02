@@ -21,7 +21,8 @@ fi
     --bind 0.0.0.0:8926 \
     --timeout 90 \
     --log-level=$LOG_LEVEL \
-    --workers=2 \
+    --workers=1 \
+    --threads=12 \
     --access-logfile - \
     --error-logfile - \
     web:app

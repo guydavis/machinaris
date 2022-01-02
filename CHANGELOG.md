@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.8] - 2022-01-?
+ - [SHIBGreen](https://github.com/BTCgreen-Network/shibgreen-blockchain) - cross-farming support for this blockchain fork.
+ - Support for pooling configuration of forks like Chives.
+ - Updated blockchains: Chives, Stor, Stai(coin)
+ - Various fixes for issues reported in the Discord.  Thanks all!
+
 ## [0.6.7] - 2021-12-03
  - [BTCGreen](https://github.com/BTCgreen-Network/btcgreen-blockchain) - cross-farming support for this blockchain fork.
  - Plotting page - Charts to show plotting speed for recent jobs across all workers on your farm.

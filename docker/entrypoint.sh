@@ -25,10 +25,16 @@ if [[ -z "${worker_address}" ]]; then
   exit 1
 fi
 
+# v0.6.8 upgrade step - move location of plotnft.log
+if [ -f /root/.chia/mainnet/log/plotnft.log ]; then
+  mv /root/.chia/mainnet/log/plotnft.log /root/.chia/machinaris/logs/plotnft.log
+fi
+
 # Refuse to run if Portainer launched containers out of order and created a directory for mnemonic.txt
 if [[ "${mode}" == 'fullnode' ]] && [[ -d /root/.chia/mnemonic.txt ]]; then
-  echo "Portainer (or similar) seems to have launched a fork container before the main Machinaris container on first run."
-  echo "Now we have a mnemonic.txt directory, instead of an empty file.  Please correct and start only machinaris container first."
+  echo "Portainer (or similar) launched a fork container before the main Machinaris container on first run."
+  echo "Attempting to delete the empty mnemonic.txt directory and restarting this fork container."
+  rmdir /root/.chia/mnemonic.txt || true
   exit 1
 fi
 
@@ -59,9 +65,6 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   # During concurrent startup of multiple fork containers, stagger less important setups
   sleep $[ ( $RANDOM % 180 )  + 1 ]s
 
-  # Conditionally install forktools on fullnodes
-  /usr/bin/bash /machinaris/scripts/forktools_setup.sh > /tmp/forktools_setup.log 2>&1
-
   # Conditionally install farmr on harvesters and fullnodes
   /usr/bin/bash /machinaris/scripts/farmr_setup.sh > /tmp/farmr_setup.log 2>&1
 
@@ -76,6 +79,9 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
 
   # Conditionally install plotman on plotters and fullnodes, after the plotters setup
   /usr/bin/bash /machinaris/scripts/plotman_autoplot.sh > /tmp/plotman_autoplot.log 2>&1
+
+  # Conditionally install forktools on fullnodes
+  /usr/bin/bash /machinaris/scripts/forktools_setup.sh > /tmp/forktools_setup.log 2>&1
 
 fi
 

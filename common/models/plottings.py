@@ -2,18 +2,17 @@ import datetime as dt
 import sqlalchemy as sa
 
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy.sql.elements import True_
 
 from common.extensions.database import db
 
 class Plotting(db.Model):
+    __bind_key__ = 'plottings'
     __tablename__ = "plottings"
 
     plot_id = sa.Column(sa.String(length=8), primary_key=True)
     hostname = sa.Column(sa.String(length=255), nullable=False)
-    plotter = sa.Column(sa.String(length=64), nullable=True)
-    blockchain = sa.Column(sa.String(length=64), nullable=True)
+    plotter = sa.Column(sa.String(length=64), nullable=False)
+    blockchain = sa.Column(sa.String(length=64), nullable=False)
     k = sa.Column(sa.Integer, nullable=False)
     tmp = sa.Column(sa.String(length=255), nullable=False)
     dst = sa.Column(sa.String(length=255), nullable=False)

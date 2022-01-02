@@ -103,28 +103,6 @@ def load_wallet_show(blockchain):
             wallet_show += "ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
     return chia.Wallet(wallet_show)
 
-def load_plotnft_show(blockchain):
-    chia_binary = globals.get_blockchain_binary(blockchain)
-    wallet_show = ""
-    child = pexpect.spawn("{0} plotnft show".format(chia_binary))
-    wallet_index = 1
-    while True:
-        i = child.expect(["Wallet height:.*\r\n", "Choose wallet key:.*\r\n", "No online backup file found.*\r\n"], timeout=120)
-        if i == 0:
-            app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
-            wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
-            break
-        elif i == 1:
-            app.logger.debug("wallet show got index prompt so selecting #{0}".format(wallet_index))
-            child.sendline("{0}".format(wallet_index))
-            wallet_index += 1
-        elif i == 2:
-            child.sendline("S")
-        else:
-            app.logger.debug("pexpect returned {0}".format(i))
-            wallet_show += "ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
-    return chia.Wallet(wallet_show)
-
 def load_blockchain_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     proc = Popen("{0} show --state".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
@@ -213,7 +191,6 @@ def plot_check(blockchain, plot_path):
     if not os.path.exists(plot_path):
         app.logger.error("No such plot file to check at: {0}".format(plot_path))
         return None
-    plot_file = os.path.basename(plot_path)
     chia_binary = globals.get_blockchain_binary(blockchain)
     proc = Popen("{0} plots check -g {1}".format(chia_binary, plot_path),
         universal_newlines=True, stdout=PIPE, stderr=STDOUT, shell=True)
@@ -226,14 +203,6 @@ def plot_check(blockchain, plot_path):
     class_escape = re.compile(r'.*: INFO\s+')
     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
     return  class_escape.sub('', ansi_escape.sub('', outs))
-
-def get_pool_login_link(launcher_id):
-    try:
-        stream = os.popen("chia plotnft get_login_link -l {0}".format(launcher_id))
-        return stream.read()
-    except Exception as ex:
-        app.logger.info("Failed to get_login_link: {0}".format(str(ex)))
-    return ""
 
 def dispatch_action(job):
     service = job['service']

@@ -63,12 +63,18 @@ elif importlib.util.find_spec("maize"):
     from maize.util.default_root import DEFAULT_ROOT_PATH
     from maize.util.ints import uint16
     from maize.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("staicoin"):
-    from staicoin.rpc.full_node_rpc_client import FullNodeRpcClient
-    from staicoin.rpc.farmer_rpc_client import FarmerRpcClient
-    from staicoin.util.default_root import DEFAULT_ROOT_PATH
-    from staicoin.util.ints import uint16
-    from staicoin.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("shibgreen"):
+    from shibgreen.rpc.full_node_rpc_client import FullNodeRpcClient
+    from shibgreen.rpc.farmer_rpc_client import FarmerRpcClient
+    from shibgreen.util.default_root import DEFAULT_ROOT_PATH
+    from shibgreen.util.ints import uint16
+    from shibgreen.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("stai"):
+    from stai.rpc.full_node_rpc_client import FullNodeRpcClient
+    from stai.rpc.farmer_rpc_client import FarmerRpcClient
+    from stai.util.default_root import DEFAULT_ROOT_PATH
+    from stai.util.ints import uint16
+    from stai.util.config import load_config as load_fork_config
 elif importlib.util.find_spec("stor"):
     from stor.rpc.full_node_rpc_client import FullNodeRpcClient
     from stor.rpc.farmer_rpc_client import FarmerRpcClient
@@ -76,7 +82,7 @@ elif importlib.util.find_spec("stor"):
     from stor.util.ints import uint16
     from stor.util.config import load_config as load_fork_config
 else:
-    raise Exception("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ('blockchains')))
+    raise Exception("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ['blockchains']))
 
 from api import app
 from api import utils
@@ -157,37 +163,6 @@ async def load_all_plots():
                     "pool_contract_puzzle_hash": plot['pool_contract_puzzle_hash'],
                     "pool_public_key": plot['pool_public_key'],
                 })
-    except Exception as ex:
-        app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
-    return all_plots
-
-def get_chives_plots():
-    plots_via_rpc = asyncio.run(load_chives_plots())
-    return plots_via_rpc
-
-async def load_chives_plots():
-    host = utils.get_hostname()
-    all_plots = []
-    try:
-        config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
-        harvester_rpc_port = config["harvester"]["rpc_port"]
-        harvester = await HarvesterRpcClient.create(
-            'localhost', uint16(harvester_rpc_port), DEFAULT_ROOT_PATH, config
-        )
-        result = await harvester.get_plots()
-        harvester.close()
-        await harvester.await_closed()
-        for plot in result['plots']:
-            all_plots.append({
-                "hostname": host,
-                "type": "solo" if (plot["pool_contract_puzzle_hash"] is None) else "portable",
-                "plot_id": plot['plot-seed'], # chives uses plot-seed instead
-                "file_size": plot['file_size'], # bytes
-                "filename": plot['filename'], # full path and name
-                "plot_public_key": plot['plot_public_key'],
-                "pool_contract_puzzle_hash": plot['pool_contract_puzzle_hash'],
-                "pool_public_key": plot['pool_public_key'],
-            })
     except Exception as ex:
         app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
     return all_plots

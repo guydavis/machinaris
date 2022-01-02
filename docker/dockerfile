@@ -13,6 +13,7 @@ ARG FLORA_BRANCH
 ARG HDDCOIN_BRANCH
 ARG MAIZE_BRANCH
 ARG NCHAIN_BRANCH
+ARG SHIBGREEN_BRANCH
 ARG STAICOIN_BRANCH
 ARG STOR_BRANCH
 
@@ -34,6 +35,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/maize_install.sh ${MAIZE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/shibgreen_install.sh ${SHIBGREEN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/staicoin_install.sh ${STAICOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/stor_install.sh ${STOR_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
