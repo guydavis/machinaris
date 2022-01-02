@@ -15,7 +15,7 @@ import traceback
 from flask import g
 
 from common.config import globals
-from api.commands import chia_cli, chiadog_cli, plotman_cli, farmr_cli
+from api.commands import chia_cli, chiadog_cli, plotman_cli, farmr_cli, mmx_cli
 from api import app
 from api import utils
 
@@ -65,7 +65,10 @@ def gather_services_status():
     # Assumes a single blockchain is enabled in this container
     for blockchain in globals.enabled_blockchains():
         if gc['farming_enabled'] or gc['harvesting_enabled']:
-            farming_status = chia_cli.load_farm_summary(blockchain).status
+            if blockchain == 'mmx':
+                farming_status = mmx_cli.load_farm_info(blockchain).status
+            else:
+                farming_status = chia_cli.load_farm_summary(blockchain).status
             if chiadog_cli.get_chiadog_pid(blockchain):
                 monitoring_status = "running"
             else:

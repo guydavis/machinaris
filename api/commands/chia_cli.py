@@ -45,21 +45,6 @@ def load_farm_summary(blockchain):
     else:
         raise Exception("Unable to load farm summary on non-farmer and non-harvester.")
 
-def load_plots_farming():
-    all_entries = []
-    for dir_path in os.environ['plots_dir'].split(':'):
-        try:
-            entries = (os.path.join(dir_path, file_name) for file_name in os.listdir(dir_path))
-            entries = ((os.stat(path), path) for path in entries)
-            entries = ((stat[ST_MTIME], stat[ST_SIZE], path) for stat, path in entries if S_ISREG(stat[ST_MODE]))
-            all_entries.extend(entries)
-        except:
-            app.logger.info("Failed to list files at {0}".format(dir_path))
-            app.logger.info(traceback.format_exc())
-    all_entries = sorted(all_entries, key=lambda entry: entry[0], reverse=True)
-    plots_farming = chia.FarmPlots(all_entries)
-    return plots_farming
-
 def load_config(blockchain):
     mainnet = globals.get_blockchain_network_path(blockchain)
     return open(f'{mainnet}/config/config.yaml','r').read()
@@ -188,6 +173,9 @@ def is_plots_check_running():
     return None
 
 def plot_check(blockchain, plot_path):
+    if blockchain == 'mmx':
+        app.logger.debug("MMX doesn't offer a plot check function.")
+        return None
     if not os.path.exists(plot_path):
         app.logger.error("No such plot file to check at: {0}".format(plot_path))
         return None

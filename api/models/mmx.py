@@ -13,21 +13,22 @@ class FarmSummary:
     def __init__(self, cli_stdout, blockchain):
             self.plot_count = 0
             self.plots_size = 0
+            self.time_to_win = "Soon" # MMX doesn't have this?
             for line in cli_stdout:
-                if "Plot count for all" in line: 
-                    self.plot_count = line.strip().split(':')[1].strip()
-                elif "Total size of plots" in line:
+                m = re.match('^K(\d+): (\d+) plots$', line)
+                if m:
+                    self.plot_count += int(m.group(2))
+                elif line.startswith('Total space'):
                     self.plots_size = line.strip().split(':')[1].strip()
-                elif "status" in line: 
-                    self.calc_status(line.split(':')[1].strip())
-                elif re.match("Total.*farmed:.*$", line):
-                    self.total_coins = line.split(':')[1].strip()
-                elif "Estimated network space" in line:
+                elif line.startswith('Balance'):
+                    self.total_coins = line.split(':')[1].strip().split(' ')[0].strip()
+                elif line.startswith('Netspace'):
                     self.calc_netspace_size(line.split(':')[1].strip())
-                elif "Expected time to win" in line:
-                    self.time_to_win = line.split(':')[1].strip()
-                elif "User transaction fees" in line:
-                    self.transaction_fees = line.split(':')[1].strip()
+                elif line.startswith('Synced'):
+                    if 'Yes' == line.split(':')[1].strip():
+                        self.calc_status('Farming')
+                    else:
+                        self.calc_status(line.strip())
 
     def calc_status(self, status):
         self.status = status
@@ -48,10 +49,31 @@ class FarmSummary:
             app.logger.info("Unable to split network size value: {0}".format(netspace_size))
             self.display_netspace_size = self.netspace_size
 
-class HarvesterSummary:
+class FarmPlots:
 
-    def __init__(self):
-        self.status = "Harvesting" # TODO Check for harvester status in debug.log
+     def __init__(self, entries):
+        hostname = utils.get_hostname()
+        self.columns = ['hostname', 'plot_id', 'dir', 'file', 'filename', 'type', 'create_date', 'size']
+        self.rows = []
+        for st_ctime, st_size, path in entries:
+            if not path.endswith(".plot"):
+                app.logger.info("Skipping non-plot file named: {0}".format(path))
+                continue
+            dir,file=os.path.split(path)
+            groups = re.match("plot-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", file)
+            if not groups:
+                app.logger.info("Invalid plot file name provided: {0}".format(file))
+                continue
+            plot_id = groups[7][:8]
+            self.rows.append({ \
+                'hostname': hostname, \
+                'plot_id': plot_id, \
+                'dir': dir,  \
+                'file': file, \
+                'filename': path,  \
+                'type': 'solo', \
+                'created_at': datetime.fromtimestamp(int(st_ctime)).strftime('%Y-%m-%d %H:%M:%S'), \
+                'file_size': int(st_size) }) 
 
 class Wallet:
 

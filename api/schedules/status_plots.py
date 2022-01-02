@@ -145,9 +145,9 @@ def update_mmx_plots(since):
     try:
         blockchain = 'mmx'
         hostname = utils.get_hostname()
-        plots_farming = mmx_cli.get_all_plots()
+        plots_farming = mmx_cli.list_plots()
         payload = []
-        for plot in plots_farming:
+        for plot in plots_farming.rows:
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
             if not since or created_at > since:
                 payload.append({
