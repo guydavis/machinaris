@@ -145,7 +145,7 @@ def get_blockchain_network_path(blockchain):
     if blockchain == 'silicoin':
         return "/root/.sit/mainnet"
     if blockchain == 'staicoin':
-        return "/root/.staicoin/mainnet"
+        return "/root/.stai/mainnet"
     if blockchain == 'stor':
         return "/root/.stor/mainnet"
     raise Exception("No mainnet folder for unknown blockchain: {0}".format(blockchain))
