@@ -251,8 +251,8 @@ def analyze(plot_id):
     return make_response("Sorry, no plotting job log found.  Perhaps plot was made outside Machinaris?", 200)
 
 def load_plotting_keys(blockchain):
-    farmer_pk = load_key_pk('Farmer')
-    pool_pk = load_key_pk('Pool')
+    farmer_pk = load_key_pk('Farmer', blockchain)
+    pool_pk = load_key_pk('Pool', blockchain)
     pool_contract_address = load_pool_contract_address(blockchain)
     if not farmer_pk:
         farmer_pk = None if os.environ['farmer_pk'] == 'null' else os.environ['farmer_pk']
