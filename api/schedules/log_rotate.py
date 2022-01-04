@@ -11,13 +11,11 @@ from api import app
 MAX_LOG_SIZE_MB = 20
 LOG_ROTATE_CONFIG_DIR = '/etc/logrotate.d/'
 LOG_ROTATE_CONFIGS = [
-    'farmr'
+    'farmr',
+    'mmx-node',
 ]
 
 def execute():
-    blockchain = os.environ['blockchains'][0]
-    if blockchain == 'mmx':
-        return  # Only Chia+forks for now
     app.logger.info("Executing log rotation...")
     for config in LOG_ROTATE_CONFIGS:
         if os.path.exists(LOG_ROTATE_CONFIG_DIR + config):
