@@ -313,8 +313,12 @@ def settings_pools():
         p.send_request(selected_fullnode, selected_blockchain, launcher_ids, choices, pool_urls, wallet_nums, current_pool_urls)
     pool_configs = p.get_pool_configs()
     fullnodes_by_blockchain = worker.get_fullnodes_by_blockchain()
+    poolable_blockchains = []
+    for pb in po.POOLABLE_BLOCKCHAINS:
+        if pb in fullnodes_by_blockchain:
+            poolable_blockchains.append(pb)
     return render_template('settings/pools.html',  global_config=gc, fullnodes_by_blockchain=fullnodes_by_blockchain,
-        pool_configs=pool_configs, blockchains=po.POOLABLE_BLOCKCHAINS, selected_blockchain=selected_blockchain)
+        pool_configs=pool_configs, blockchains=poolable_blockchains, selected_blockchain=selected_blockchain)
 
 @app.route('/settings/config', defaults={'path': ''})
 @app.route('/settings/config/<path:path>')
