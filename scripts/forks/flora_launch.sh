@@ -18,14 +18,12 @@ flora init >> /root/.flora/mainnet/log/init.log 2>&1
 # Check for first launch (missing mainnet folder and download)
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
-  && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.flora/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading Flora blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.flora/mainnet/db/ && cd /root/.flora/mainnet/db/
-  # Mega links for Flora blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/CjpSzYzR#7MR4AHEP2nFkaJa6cy45gg
-  mv flora/*.sqlite . && rm -rf flora
+  # Latest Blockchain DB download as per the Flora Discord #info
+  curl -skLJO https://floracoin.farm/downloads/blockchain_v1_mainnet.sqlite
 fi
 
 echo 'Configuring Flora...'
@@ -46,6 +44,9 @@ for k in ${keys//:/ }; do
 done
 
 # Loop over provided list of completed plot directories
+IFS=':' read -r -a array <<< "$plots_dir"
+joined=$(printf ", %s" "${array[@]}")
+echo "Adding plot directories at: ${joined:1}"
 for p in ${plots_dir//:/ }; do
   flora plots add -d ${p}
 done

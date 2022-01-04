@@ -2,7 +2,7 @@
 #
 # Installs farmr - https://github.com/gilnobrega/farmr
 #
-if [[ "${farmr_skip_launch}" == 'false' &&  (${mode} == 'fullnode' || ${mode} =~ "harvester") ]]; then
+if [[ "${farmr_skip_launch}" == 'false' &&  (${mode} == 'fullnode' || ${mode} =~ "harvester") && ${blockchains} != 'mmx' ]]; then
     if [[ ! -f /usr/bin/farmr ]]; then
 		arch_name="$(uname -m)"
 		echo "Installing farmr on ${arch_name}..."

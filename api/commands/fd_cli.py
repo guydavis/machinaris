@@ -37,25 +37,29 @@ def get_full_node_rpc_port(blockchain):
         return 1758
     if blockchain == 'stor':
         return 8155
-    raise Exception(f"Unknown rpc_port for blockchain: {blockchain}")
+    app.logger.info(f"Unknown rpc_port for blockchain: {blockchain}")
+    return None
 
 def reward_recovery(wallet_id, launcher_id, pool_contract_address):
     app.logger.info("NFT reward recovery requested for {wallet_id} {launcher_id} {pool_contract_address}")
+    blockchain = globals.enabled_blockchains()[0]
+    rpc_port = get_full_node_rpc_port(blockchain)
+    if not rpc_port:
+        app.logger.info("Skipping NFT reward recovery on unsupported blockchain: {0}".format(blockchain))
+        return
     logfile = "/root/.chia/machinaris/logs/fd-cli.log"
     log_fd = os.open(logfile, os.O_RDWR | os.O_CREAT)
     log_fo = os.fdopen(log_fd, "a+")
     vars = {}
-    blockchain = globals.enabled_blockchains()[0]
     network_path = globals.get_blockchain_network_path(blockchain)
     network_name = globals.get_blockchain_network_name(blockchain)
     vars['FD_CLI_BC_DB_PATH'] = f'{network_path}/db/blockchain_v1_{network_name}.sqlite'
     vars['FD_CLI_WT_DB_PATH'] = f'{network_path}/wallet/db/blockchain_wallet_v1_{network_name}_{wallet_id}.sqlite'
     fd_env = os.environ.copy()
     fd_env.update(vars)
-    rpc_port = get_full_node_rpc_port(blockchain)
     cmd = f"/usr/local/bin/fd-cli nft-recover -l {launcher_id} -p {pool_contract_address} -nh 127.0.0.1 -np {rpc_port} -ct {network_path}/config/ssl/full_node/private_full_node.crt -ck {network_path}/config/ssl/full_node/private_full_node.key"
     app.logger.info(f"Executing NFT 1/8 win recovery for {blockchain}: {cmd}")
-    log_fo.write("\n\nExecuted at: {0}\n{1}".format(time.strftime("%Y%m%d-%H%M%S"), cmd))
+    log_fo.write("\n\nExecuted at: {0}\n{1}".format(time.strftime("%Y-%m-%d-%H:%M:%S"), cmd))
     log_fo.flush()
     proc = Popen(cmd,cwd="/fd-cli", env=fd_env, shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
     try:

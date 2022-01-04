@@ -5,7 +5,7 @@
 
 CHIADOG_BRANCH=dev
 
-if [[ ${mode} == 'fullnode' ]] || [[ ${mode} =~ "harvester" ]]; then
+if [[ (${mode} == 'fullnode' || ${mode} =~ "harvester") && ${blockchains} != 'mmx' ]]; then
     if [[ ! -f /chiadog/main.py ]]; then
         echo 'Installing Chiadog...'
         cd /

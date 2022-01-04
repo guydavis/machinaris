@@ -66,7 +66,7 @@ class ConfigByType(MethodView):
         except Exception as ex:
             app.logger.error("Error attempting to save {0} config: ".format(type))
             app.logger.error(traceback.format_exc())
-            human_readable_error = ex.message
+            human_readable_error = str(ex)
             response = make_response(human_readable_error, 400)
         return response
 

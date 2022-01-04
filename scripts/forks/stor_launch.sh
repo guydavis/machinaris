@@ -17,14 +17,16 @@ stor init >> /root/.stor/mainnet/log/init.log 2>&1
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
-  && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.stor/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading Stor blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.stor/mainnet/db/ && cd /root/.stor/mainnet/db/
-  # Mega links for Stor blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/mr52AapZ#d91-gZoq6auEOWFbcqn8uQ
-  mv stor/*.sqlite . && rm -rf stor
+  # Latest Blockchain DB download from direct from https://eu.stornode.net/
+  db_file=$(curl -s https://eu.stornode.net/ | grep -Po 'db-(\d){4}-(\d){2}-(\d){2}'.zip | tail -n 1)
+  curl -skJLO https://eu.stornode.net/${db_file}
+  unzip db*.zip 
+  mv db*/*sqlite .
+  rm -rf db*
 fi
 
 echo 'Configuring Stor...'
@@ -45,6 +47,9 @@ for k in ${keys//:/ }; do
 done
 
 # Loop over provided list of completed plot directories
+IFS=':' read -r -a array <<< "$plots_dir"
+joined=$(printf ", %s" "${array[@]}")
+echo "Adding plot directories at: ${joined:1}"
 for p in ${plots_dir//:/ }; do
   stor plots add -d ${p}
 done

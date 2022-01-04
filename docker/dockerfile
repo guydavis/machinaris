@@ -12,6 +12,7 @@ ARG FLAX_BRANCH
 ARG FLORA_BRANCH
 ARG HDDCOIN_BRANCH
 ARG MAIZE_BRANCH
+ARG MMX_BRANCH
 ARG NCHAIN_BRANCH
 ARG SHIBGREEN_BRANCH
 ARG STAICOIN_BRANCH
@@ -34,6 +35,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/flora_install.sh ${FLORA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/maize_install.sh ${MAIZE_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/mmx_install.sh ${MMX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/shibgreen_install.sh ${SHIBGREEN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/staicoin_install.sh ${STAICOIN_BRANCH} \
@@ -75,7 +77,7 @@ ENV FORKTOOLSDIR=/forktools
 ENV FORKTOOLSBLOCKCHAINDIRS=/
 ENV FORKTOOLSHIDDENDIRS=/root
 
-ENV PATH="${PATH}:/chia-blockchain/venv/bin:/forktools"
+ENV PATH="${PATH}:/chia-blockchain/venv/bin:/forktools:/mmx-node/build"
 ENV TZ=Etc/UTC
 ENV FLASK_ENV=production
 ENV XDG_CONFIG_HOME=/root/.chia

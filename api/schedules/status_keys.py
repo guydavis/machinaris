@@ -15,7 +15,7 @@ import traceback
 from flask import g
 
 from common.config import globals
-from api.commands import chia_cli
+from api.commands import chia_cli, mmx_cli
 from api import app
 from api import utils
 
@@ -24,7 +24,10 @@ def update():
         try:
             hostname = utils.get_hostname()
             for blockchain in globals.enabled_blockchains():
-                public_keys = chia_cli.load_keys_show(blockchain)
+                if blockchain == 'mmx':
+                    public_keys = mmx_cli.load_keys_show(blockchain)
+                else:
+                    public_keys = chia_cli.load_keys_show(blockchain)
                 payload = {
                     "hostname": hostname,
                     "blockchain": blockchain,

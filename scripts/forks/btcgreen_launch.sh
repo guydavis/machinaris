@@ -17,14 +17,10 @@ btcgreen init >> /root/.btcgreen/mainnet/log/init.log 2>&1
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
-  && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.btcgreen/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
-  echo "Downloading BTCGreen blockchain DB (many GBs in size) on first launch..."
-  echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.btcgreen/mainnet/db/ && cd /root/.btcgreen/mainnet/db/
-  # Mega links for BTCGreen blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/uvoEhaaJ#ozryRZYe2wIx-9eyx84nxQ
-  mv btcgreen/*mainnet.sqlite btcgreen/*node.sqlite . && rm -rf btcgreen
+  echo "Sorry, BTCGreen does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
+  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/btcgreen"
 fi
 
 echo 'Configuring BTCGreen...'
@@ -45,6 +41,9 @@ for k in ${keys//:/ }; do
 done
 
 # Loop over provided list of completed plot directories
+IFS=':' read -r -a array <<< "$plots_dir"
+joined=$(printf ", %s" "${array[@]}")
+echo "Adding plot directories at: ${joined:1}"
 for p in ${plots_dir//:/ }; do
     btcgreen plots add -d ${p}
 done

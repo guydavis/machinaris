@@ -60,6 +60,8 @@ def convert_date_for_luxon(datestr):
 def round_balance(value):
     if abs(value) < 10 and abs(value) >= 1:
         return "%.1f"% round(value, 2)
+    elif value >= 1000:
+        return "{:,}".format(int(value))
     elif value > 1:
         return f"{value:n}"
     return str(round(value, 4))

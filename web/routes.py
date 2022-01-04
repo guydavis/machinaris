@@ -21,6 +21,8 @@ def landing():
     if not globals.is_setup():
         return redirect(url_for('setup'))
     msg = random.choice(list(open('web/static/landings.txt')))
+    if msg.endswith(".png"):
+        msg = "<img style='height: 150px' src='{0}' />".format(url_for('static', filename='/landings/' + msg))
     return render_template('landing.html', random_message=msg)
 
 @app.route('/index')
@@ -31,15 +33,15 @@ def index():
     if not utils.is_controller():
         return redirect(url_for('controller'))
     workers = worker.load_worker_summary()
-    plotting = plotman.load_plotting_summary()
     farm_summary = chia.load_farm_summary()
+    plotting = plotman.load_plotting_summary_by_blockchains(farm_summary.farms.keys())
     selected_blockchain = farm_summary.selected_blockchain()
     chia.challenges_chart_data(farm_summary)
     p.partials_chart_data(farm_summary)
     stats.load_daily_diff(farm_summary)
     warnings.check_warnings(request.args)
     return render_template('index.html', reload_seconds=120, farms=farm_summary.farms, \
-        plotting=plotting.__dict__, workers=workers, global_config=gc, selected_blockchain=selected_blockchain)
+        plotting=plotting, workers=workers, global_config=gc, selected_blockchain=selected_blockchain)
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():

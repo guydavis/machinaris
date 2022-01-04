@@ -148,7 +148,7 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
     elif blockchain == "shibgreen":
         class_escape = re.compile(r' shibgreen.plotting.(\w+)(\s+): ')
     elif blockchain == "staicoin":
-        class_escape = re.compile(r' staicoin.plotting.(\w+)(\s+): ')
+        class_escape = re.compile(r' stai.plotting.(\w+)(\s+): ')
     elif blockchain == "stor":
         class_escape = re.compile(r' stor.plotting.(\w+)(\s+): ')
     else: # Chia, NChain, etc all use default package name

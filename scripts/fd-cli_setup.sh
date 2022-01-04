@@ -9,7 +9,7 @@
 HASH=e99cf3c9d39d0a6c71ee0f92f11034f0b5516df7
 
 if [[ ${mode} == 'fullnode' ]]; then
-    if [[ "${blockchains}" != 'chia' ]] && [[ "${blockchains}" != 'chives' ]]; then
+    if [[ "${blockchains}" != 'chia' ]] && [[ "${blockchains}" != 'chives' ]] && [[ "${blockchains}" != 'mmx' ]]; then
         cd /
         git clone https://github.com/Flora-Network/fd-cli.git
         cd fd-cli

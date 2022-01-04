@@ -20,6 +20,7 @@ from subprocess import Popen, TimeoutExpired, PIPE
 from os import environ, path
 
 from common.utils import converters
+from common.models import plottings as pl
 
 SUPPORTED_BLOCKCHAINS = [
     'btcgreen',
@@ -31,6 +32,7 @@ SUPPORTED_BLOCKCHAINS = [
     'flora',
     'hddcoin',
     'maize',
+    'mmx',
     'nchain',
     'shibgreen',
     'silicoin',
@@ -48,6 +50,7 @@ CURRENCY_SYMBOLS = {
     "flora": "XFL",
     "hddcoin": "HDD",
     "maize": "XMZ",
+    "mmx": "MMX",
     "nchain": "NCH",
     "shibgreen": 'XSHIB',
     "silicoin": "SIT",
@@ -72,6 +75,7 @@ FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
 FLORA_BINARY = '/flora-blockchain/venv/bin/flora'
 HDDCOIN_BINARY = '/hddcoin-blockchain/venv/bin/hddcoin'
 MAIZE_BINARY = '/maize-blockchain/venv/bin/maize'
+MMX_BINARY = '/mmx-node/build/mmx'
 NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
 SHIBGREEN_BINARY = '/shibgreen-blockchain/venv/bin/shibgreen'
 SILICOIN_BINARY = '/silicoin-blockchain/venv/bin/sit'
@@ -99,6 +103,8 @@ def get_blockchain_binary(blockchain):
         return HDDCOIN_BINARY
     if blockchain == "maize":
         return MAIZE_BINARY
+    if blockchain == "mmx":
+        return MMX_BINARY
     if blockchain == "nchain":
         return NCHAIN_BINARY
     if blockchain == "shibgreen":
@@ -130,6 +136,8 @@ def get_blockchain_network_path(blockchain):
         return "/root/.hddcoin/mainnet"
     if blockchain == 'maize':
         return "/root/.maize/mainnet"
+    if blockchain == 'mmx':
+        return "/root/.chia/mmx"
     if blockchain == 'nchain':
         return "/root/.chia/ext9"
     if blockchain == 'shibgreen':
@@ -137,7 +145,7 @@ def get_blockchain_network_path(blockchain):
     if blockchain == 'silicoin':
         return "/root/.sit/mainnet"
     if blockchain == 'staicoin':
-        return "/root/.staicoin/mainnet"
+        return "/root/.stai/mainnet"
     if blockchain == 'stor':
         return "/root/.stor/mainnet"
     raise Exception("No mainnet folder for unknown blockchain: {0}".format(blockchain))
@@ -243,7 +251,7 @@ def harvesting_enabled():
 
 def plotting_enabled():
     return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode']) \
-        and enabled_blockchains()[0] in ['chia', 'chives']
+        and enabled_blockchains()[0] in pl.PLOTTABLE_BLOCKCHAINS
 
 def enabled_blockchains():
     blockchains = []

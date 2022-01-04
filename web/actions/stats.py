@@ -187,27 +187,27 @@ def load_current_disk_usage(disk_type, hostname=None):
         free = []
         if disk_type == 'plots':
             created_at_max = db.session.query(StatPlotsDiskUsed).order_by(StatPlotsDiskUsed.created_at.desc()).first()
-            used_result = db.session.query(StatPlotsDiskUsed).filter( 
-                or_(StatPlotsDiskUsed.hostname == host.hostname, StatPlotsDiskUsed.hostname == host.displayname),
-                    StatPlotsDiskUsed.created_at == created_at_max.created_at).order_by(StatPlotsDiskUsed.path).all()
-            free_result = db.session.query(StatPlotsDiskFree).filter( 
-                or_(StatPlotsDiskFree.hostname == host.hostname, StatPlotsDiskFree.hostname == host.displayname),
-                    StatPlotsDiskFree.created_at == created_at_max.created_at).order_by(StatPlotsDiskFree.path).all()
+            if created_at_max:
+                used_result = db.session.query(StatPlotsDiskUsed).filter( 
+                    or_(StatPlotsDiskUsed.hostname == host.hostname, StatPlotsDiskUsed.hostname == host.displayname),
+                        StatPlotsDiskUsed.created_at == created_at_max.created_at).order_by(StatPlotsDiskUsed.path).all()
+                free_result = db.session.query(StatPlotsDiskFree).filter( 
+                    or_(StatPlotsDiskFree.hostname == host.hostname, StatPlotsDiskFree.hostname == host.displayname),
+                        StatPlotsDiskFree.created_at == created_at_max.created_at).order_by(StatPlotsDiskFree.path).all()
         elif disk_type == 'plotting':
             created_at_max = db.session.query(StatPlottingDiskUsed).order_by(StatPlottingDiskUsed.created_at.desc()).first()
-            used_result = db.session.query(StatPlottingDiskUsed).filter( 
-                or_(StatPlottingDiskUsed.hostname == host.hostname, StatPlottingDiskUsed.hostname == host.displayname),
-                    StatPlottingDiskUsed.created_at == created_at_max.created_at).order_by(StatPlottingDiskUsed.path).all()
-            free_result = db.session.query(StatPlottingDiskFree).filter( 
-                or_(StatPlottingDiskFree.hostname == host.hostname, StatPlottingDiskFree.hostname == host.displayname),
-                    StatPlottingDiskFree.created_at == created_at_max.created_at).order_by(StatPlottingDiskFree.path).all()
+            if created_at_max:
+                used_result = db.session.query(StatPlottingDiskUsed).filter( 
+                    or_(StatPlottingDiskUsed.hostname == host.hostname, StatPlottingDiskUsed.hostname == host.displayname),
+                        StatPlottingDiskUsed.created_at == created_at_max.created_at).order_by(StatPlottingDiskUsed.path).all()
+                free_result = db.session.query(StatPlottingDiskFree).filter( 
+                    or_(StatPlottingDiskFree.hostname == host.hostname, StatPlottingDiskFree.hostname == host.displayname),
+                        StatPlottingDiskFree.created_at == created_at_max.created_at).order_by(StatPlottingDiskFree.path).all()
         else:
             raise Exception("Unknown disk type provided.")
-        #sql = "select path, value{0}, created_at from stat_{1}_disk_used where (hostname = ? or hostname = ?) group by path having max(created_at)".format(value_factor, disk_type)
-        #used_result = db.engine.execute(sql, [ host.hostname, host.displayname, ]).fetchall()
-        #sql = "select path, value{0}, created_at from stat_{1}_disk_free where (hostname = ? or hostname = ?) group by path having max(created_at)".format(value_factor, disk_type)
-        #free_result =cur.execute(sql, [ host.hostname, host.displayname, ]).fetchall()
-        if len(used_result) != len(free_result):
+        if not used_result or not free_result:
+            app.logger.info("Found no {0} disk usage stats.".format(disk_type))
+        elif len(used_result) != len(free_result):
             app.logger.info("Found mismatched count of disk used/free stats for {0}".format(disk_type))
         else:
             for used_row in used_result:

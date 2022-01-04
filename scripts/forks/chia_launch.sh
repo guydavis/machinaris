@@ -5,6 +5,7 @@
 
 if [[ "${mode}" == 'fullnode' ]]; then
   touch /root/.chia/mnemonic.txt
+  chmod 600 /root/.chia/mnemonic.txt
 fi
 
 # Ensure Chia keyring is held on a persistent volume
@@ -19,30 +20,27 @@ cd /chia-blockchain
 mkdir -p /root/.chia/mainnet/log
 chia init >> /root/.chia/mainnet/log/init.log 2>&1 
 
-# Maize team started charging for Chia blockchain DB download on 2021-12-09 - disabling this for now.
-#if [[ "${blockchain_db_download}" == 'true' ]] \
-#  && [[ "${mode}" == 'fullnode' ]] \
-#  && [[ -f /usr/bin/mega-get ]] \
-#  && [[ ! -f /root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
-#  # Create machinaris dbs and launch web only while blockchain database downloads
-#  . /machinaris/scripts/setup_databases.sh
-#  mkdir -p /root/.chia/machinaris/config
-#  mkdir -p /root/.chia/machinaris/logs
-#  cd /machinaris
-#  /chia-blockchain/venv/bin/gunicorn \
-#     --bind 0.0.0.0:8926 --timeout 90 \
-#      --log-level=info \
-#      --workers=2 \
-#      --log-config web/log.conf \
-#      web:app &
-#  echo 'Starting web server...  Browse to port 8926.'
-#  echo "Downloading Chia blockchain DB (many GBs in size) on first launch..."
-#  echo "Please be patient as takes minutes now, but saves days of syncing time later."
-#  mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
-#  # Mega links for Chia blockchain DB from: https://chiaforksblockchain.com/
-#  mega-get https://mega.nz/folder/iu4QyCzY#Hfdf_tEQEwC9D0C1xNiaZg
-#  mv chia/*.sqlite . && rm -rf chia
-#fi
+if [[ "${blockchain_db_download}" == 'true' ]] \
+  && [[ "${mode}" == 'fullnode' ]] \
+  && [[ ! -f /root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+  # Create machinaris dbs and launch web only while blockchain database downloads
+  . /machinaris/scripts/setup_databases.sh
+  mkdir -p /root/.chia/machinaris/config
+  mkdir -p /root/.chia/machinaris/logs
+  cd /machinaris
+  /chia-blockchain/venv/bin/gunicorn \
+     --bind 0.0.0.0:8926 --timeout 90 \
+      --log-level=info \
+      --workers=2 \
+      --log-config web/log.conf \
+      web:app &
+  echo 'Starting web server...  Browse to port 8926.'
+  echo "Downloading Chia blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
+  mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
+  # Latest Blockchain DB download from direct from https://www.chia-database.com/
+  curl -skLJ -o - https://ipfs.infura-ipfs.io/ipfs/QmVDxk4SiwMoTmvKRkQfsCxf8gnVTKYJTiUq937fwkg5rW/blockchain_v1_mainnet.zip | zcat >> blockchain_v1_mainnet.sqlite
+fi
 
 echo 'Configuring Chia...'
 if [ ! -f /root/.chia/mainnet/config/config.yaml ]; then
@@ -67,6 +65,9 @@ for k in ${keys//:/ }; do
 done
 
 # Loop over provided list of completed plot directories
+IFS=':' read -r -a array <<< "$plots_dir"
+joined=$(printf ", %s" "${array[@]}")
+echo "Adding plot directories at: ${joined:1}"
 for p in ${plots_dir//:/ }; do
     chia plots add -d ${p}
 done

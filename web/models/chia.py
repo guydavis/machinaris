@@ -14,7 +14,7 @@ from common.utils import converters
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
 MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
-PLOT_TABLE_COLUMNS = ['worker', 'fork', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', 'c', 'a' ]
+PLOT_TABLE_COLUMNS = ['worker', 'blockchain', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', 'c', 'a' ]
 
 class FarmSummary:
 
@@ -38,7 +38,10 @@ class FarmSummary:
                     displayname = farm_rec.hostname
                     connection_status = None
                 try:
-                    wallet_balance = wallets.sum_wallet_balance(farm_rec.hostname, farm_rec.blockchain)
+                    if farm_rec.blockchain == 'mmx':
+                        wallet_balance = wallets.sum_mmx_wallet_balance(farm_rec.hostname, farm_rec.blockchain)
+                    else:
+                        wallet_balance = wallets.sum_chia_wallet_balance(farm_rec.hostname, farm_rec.blockchain)
                 except: 
                     wallet_balance = '?'
                 if farm_rec.total_coins:
@@ -152,7 +155,10 @@ class Wallets:
             except:
                 app.logger.info("Wallets.init(): Unable to find a worker with hostname '{0}'".format(wallet.hostname))
                 displayname = wallet.hostname
-            hot_balance = self.sum_wallet_balance(wallet.hostname, wallet.blockchain, False)
+            if wallet.blockchain == 'mmx':
+                hot_balance = self.sum_mmx_wallet_balance(wallet.hostname, wallet.blockchain, False)
+            else:
+                hot_balance = self.sum_chia_wallet_balance(wallet.hostname, wallet.blockchain, False)
             cold_balance = wallet.cold_balance
             try:
                 total_balance = converters.round_balance(float(hot_balance) + float(cold_balance))
@@ -169,8 +175,30 @@ class Wallets:
                 'total_balance': total_balance,
                 'updated_at': wallet.updated_at }) 
 
-    def sum_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
+    def sum_chia_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
         numeric_const_pattern = '-Total\sBalance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
+        rx = re.compile(numeric_const_pattern, re.VERBOSE)
+        found_balance = False
+        sum = 0
+        for wallet in self.wallets:
+            if wallet.hostname == hostname and wallet.blockchain == blockchain:
+                try:
+                    for balance in rx.findall(wallet.details):
+                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
+                        # wallet.hostname, wallet.blockchain))
+                        sum += locale.atof(balance)
+                        found_balance = True
+                except Exception as ex:
+                    app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
+                        wallet.hostname, wallet.blockchain, str(ex)))
+                if include_cold_balance and wallet.cold_balance:
+                    sum += locale.atof(wallet.cold_balance)
+        if found_balance:
+            return converters.round_balance(sum)
+        return '?'
+
+    def sum_mmx_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
+        numeric_const_pattern = '^Balance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
         rx = re.compile(numeric_const_pattern, re.VERBOSE)
         found_balance = False
         sum = 0
@@ -249,7 +277,10 @@ class Connections:
                 'details': connection.details,
                 'add_exmample': self.get_add_connection_example(connection.blockchain)
             })
-            self.blockchains[connection.blockchain] = self.parse(connection, connection.blockchain)
+            if connection.blockchain == 'mmx':
+                self.blockchains[connection.blockchain] = self.parse_mmx(connection, connection.blockchain)
+            else:
+                self.blockchains[connection.blockchain] = self.parse_chia(connection, connection.blockchain)
         self.rows.sort(key=lambda conn: conn['blockchain'])
     
     def get_add_connection_example(self, blockchain):
@@ -299,6 +330,8 @@ class Connections:
             return 28444
         if blockchain == 'nchain':
             return 58445
+        if blockchain == 'mmx':
+            return 12331
         if blockchain == 'maize':
             return 8644
         if blockchain == 'shibgreen':
@@ -312,7 +345,7 @@ class Connections:
 
         raise("Unknown blockchain fork of selected: " + blockchain)
 
-    def parse(self, connection, blockchain):
+    def parse_chia(self, connection, blockchain):
         conns = []
         for line in connection.details.split('\n'):
             try:
@@ -354,6 +387,31 @@ class Connections:
                             conns.append(connection)
                     else:
                         app.logger.info("Bad connection line: {0}".format(line))
+            except:
+                app.logger.info(traceback.format_exc())
+        return conns
+
+    def parse_mmx(self, connection, blockchain):
+        conns = []
+        for line in connection.details.split('\n'):
+            try:
+                app.logger.info(line)
+                m = re.match("\[(.+)\]   height =  (\d+), (\d+\.?\d*) MB recv, (\d*\.?\d*) MB sent, timeout = (\d+\.?\d*) sec", line.strip(), re.IGNORECASE)
+                if m:
+                    connection = {
+                        'type': 'peer',
+                        'ip': m.group(1),
+                        'height': m.group(2),
+                        'ports': '',
+                        'nodeid': '',
+                        'last_connect': '',
+                        'mib_up': m.group(4),
+                        'mib_down': m.group(3),
+                        'timeout': m.group(5)
+                    }
+                    conns.append(connection)
+                elif line.strip():
+                    app.logger.info("Bad peer line: {0}".format(line))
             except:
                 app.logger.info(traceback.format_exc())
         return conns

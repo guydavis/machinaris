@@ -4,6 +4,7 @@ import os
 import traceback
 
 from common.config import globals
+from common.models import plottings as pl
 
 from web import app
 
@@ -133,7 +134,7 @@ class WorkerSummary:
     def plotters(self):
         filtered = []
         for worker in self.workers:
-            if (worker.mode == "fullnode" or "plotter" in worker.mode) and worker.blockchain in ['chia', 'chives']:
+            if (worker.mode == "fullnode" or "plotter" in worker.mode) and worker.blockchain in pl.PLOTTABLE_BLOCKCHAINS:
                 host = None
                 for h in filtered:
                     if h.displayname == worker.displayname:
