@@ -19,12 +19,6 @@ echo "Adding plot directories at: ${plot_dirs}"
 if [ ! -d /root/.chia/mmx/config ]; then
 	mv ./config /root/.chia/mmx/
 	mkdir -p /root/.chia/mmx/config/local
-	tee /root/.chia/mmx/config/local/Node.json >/dev/null <<EOF
-{
-	"opencl_device": 0,
-	"storage_path": "/root/.chia/mmx/"
-}
-EOF
 	tee /root/.chia/mmx/config/local/Harvester.json >/dev/null <<EOF
 {
 	"plot_dirs": [ ${plot_dirs} ]
@@ -33,29 +27,29 @@ EOF
 fi
 rm -rf ./config
 ln -s /root/.chia/mmx/config /mmx-node/config
-sed -i 's/"storage_path": ""/"storage_path": "\/root\/.chia\/mmx\/"/g' ./config/local/Node.json
 escaped_plot_dirs=$(printf '%s\n' "$plot_dirs" | sed -e 's/[\/&]/\\&/g')
 sed -i "s/\"plot_dirs\":.*$/\"plot_dirs\": [ $escaped_plot_dirs ]/g" ./config/local/Harvester.json
 
 # Create a key if none found from previous runs
 if [ ! -f /root/.chia/mmx/wallet.dat ]; then
 	echo "Creating key at path: /root/.chia/mmx/wallet.dat"
-	mmx wallet create -f /root/.chia/mmx/wallet.dat
-	ln -s /root/.chia/mmx/wallet.dat /mmx-node/wallet.dat
+	mmx wallet create
+	mv wallet.dat /root/.chia/mmx/
 else
 	echo "Adding key at path: /root/.chia/mmx/wallet.dat"
 fi
+ln -s /root/.chia/mmx/wallet.dat /mmx-node/wallet.dat
 
 # Symlink the known_peers database file
-if [ ! -f /root/.chia/mmx/known_peers.dat ]; then
-	if [ -f ./known_peers.dat ]; then
-		mv ./known_peers.dat /root/.chia/mmx/known_peers.dat
-	else
-		touch /root/.chia/mmx/known_peers.dat
-	fi 
-fi
-rm -f ./known_peers.dat
-ln -s /root/.chia/mmx/known_peers.dat /mmx-node/known_peers.dat
+#if [ ! -f /root/.chia/mmx/known_peers.dat ]; then
+#	if [ -f ./known_peers.dat ]; then
+#		mv ./known_peers.dat /root/.chia/mmx/known_peers.dat
+#	else
+#		touch /root/.chia/mmx/known_peers.dat
+#	fi 
+#fi
+#rm -f ./known_peers.dat
+#ln -s /root/.chia/mmx/known_peers.dat /mmx-node/known_peers.dat
 
 # Symlink the NETWORK file, use 'test3' for now
 if [ ! -f /root/.chia/mmx/NETWORK ]; then
@@ -63,6 +57,13 @@ if [ ! -f /root/.chia/mmx/NETWORK ]; then
 fi
 rm -f ./NETWORK
 ln -s /root/.chia/mmx/NETWORK /mmx-node/NETWORK
+
+# Symlink the testnet3 folder
+if [ ! -d /root/.chia/mmx/testnet3 ]; then
+	mkdir /root/.chia/mmx/testnet3
+fi
+rm -rf ./testnet3
+ln -s /root/.chia/mmx/testnet3 /mmx-node/testnet3
 
 # Now start the MMX node
 ./run_node.sh >/root/.chia/mmx/logs/mmx_node.log 2>&1 &
