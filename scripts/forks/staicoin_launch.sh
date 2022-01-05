@@ -9,6 +9,8 @@ cd /staicoin-blockchain
 
 # Only the /root/.chia folder is volume-mounted so store staicoin within
 mkdir -p /root/.chia/staicoin
+rm -f /root/.staicoin
+ln -s /root/.chia/staicoin /root/.staicoin
 rm -f /root/.stai
 ln -s /root/.chia/staicoin /root/.stai
 
@@ -35,6 +37,7 @@ if [ -f /root/.stai/mainnet/config/config.yaml ]; then
   sed -i 's/localhost/127.0.0.1/g' /root/.stai/mainnet/config/config.yaml
   # Fix for their renaming from staicoin to stai in December 2021
   sed -i 's/staicoin_ssl_ca/stai_ssl_ca/g' /root/.stai/mainnet/config/config.yaml
+  sed -i "s/prefix: 'staicoin'/prefix: 'stai'/g" /root/.chia/chiadog/config.yaml
 fi
 
 # Loop over provided list of key paths

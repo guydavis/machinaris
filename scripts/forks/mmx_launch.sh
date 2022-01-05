@@ -38,18 +38,9 @@ if [ ! -f /root/.chia/mmx/wallet.dat ]; then
 else
 	echo "Adding key at path: /root/.chia/mmx/wallet.dat"
 fi
-ln -s /root/.chia/mmx/wallet.dat /mmx-node/wallet.dat
-
-# Symlink the known_peers database file
-#if [ ! -f /root/.chia/mmx/known_peers.dat ]; then
-#	if [ -f ./known_peers.dat ]; then
-#		mv ./known_peers.dat /root/.chia/mmx/known_peers.dat
-#	else
-#		touch /root/.chia/mmx/known_peers.dat
-#	fi 
-#fi
-#rm -f ./known_peers.dat
-#ln -s /root/.chia/mmx/known_peers.dat /mmx-node/known_peers.dat
+if [ ! -L /mmx-node/wallet.dat ]; then
+	ln -s /root/.chia/mmx/wallet.dat /mmx-node/wallet.dat
+fi
 
 # Symlink the NETWORK file, use 'test3' for now
 if [ ! -f /root/.chia/mmx/NETWORK ]; then
@@ -64,6 +55,14 @@ if [ ! -d /root/.chia/mmx/testnet3 ]; then
 fi
 rm -rf ./testnet3
 ln -s /root/.chia/mmx/testnet3 /mmx-node/testnet3
+
+# Setup log rotation
+tee /etc/logrotate.d/mmx-node >/dev/null <<EOF
+/root/.chia/mmx/logs/mmx_node.log {
+  rotate 3
+  daily
+}
+EOF
 
 # Now start the MMX node
 ./run_node.sh >/root/.chia/mmx/logs/mmx_node.log 2>&1 &

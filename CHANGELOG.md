@@ -4,9 +4,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.6.9] - 2022-02-04
  - [MMX](https://github.com/madMAx43v3r/mmx-node) - support for this new blockchain.  Requires its own plot files for `testnet3`.
+ - 
  - Various fixes for issues reported in the Discord.  Thanks all!
 
-## [0.6.8] - 2022-01-03
+## [0.6.8] - 2022-01-04
  - [SHIBGreen](https://github.com/BTCgreen-Network/shibgreen-blockchain) - cross-farming support for this blockchain fork.
  - Support for pooling configuration of forks like Chives.
  - Updated blockchains: Chives, Stor, Stai(coin)
