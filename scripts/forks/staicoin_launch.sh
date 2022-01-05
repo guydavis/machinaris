@@ -9,6 +9,8 @@ cd /staicoin-blockchain
 
 # Only the /root/.chia folder is volume-mounted so store staicoin within
 mkdir -p /root/.chia/staicoin
+rm -f /root/.staicoin
+ln -s /root/.chia/staicoin /root/.staicoin
 rm -f /root/.stai
 ln -s /root/.chia/staicoin /root/.stai
 
