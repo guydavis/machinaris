@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.6.9] - 2022-02-04
  - [MMX](https://github.com/madMAx43v3r/mmx-node) - support for this new blockchain.  Requires its own plot files for `testnet3`.
- - 
+ - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain/releases) - update to version 1.2.11
  - Various fixes for issues reported in the Discord.  Thanks all!
 
 ## [0.6.8] - 2022-01-04
