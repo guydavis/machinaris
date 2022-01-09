@@ -1,0 +1,9 @@
+CHIA_FORK=nchain
+CHIA_FORK_SYMBOL=nch
+FORK_REPO_URL=https://gitee.com/ext9/ext9-blockchain.git
+FORK_BRANCH=net9.dev
+FORK_DOWNLOAD_URL='https://mega.nz/folder/KmoWBIiL#pPrF0Cxt1P5snfR30XfMXw'
+FORK_CMD=chia
+FORK_CONFIG_DIR=/root/.chia/ext9
+FORK_INSTALL_DIR=/ext9-blockchain
+FORK_CHIADOG_PREFIX=chia

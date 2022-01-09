@@ -1,0 +1,5 @@
+CHIA_FORK=btcgreen
+FORK_REPO_URL=https://github.com/BTCgreen-Network/btcgreen-blockchain.git
+FORK_BRANCH=2.2.61
+FORK_DOWNLOAD_URL='https://mega.nz/folder/uvoEhaaJ#ozryRZYe2wIx-9eyx84nxQ'
+CHIA_FORK_SYMBOL=xbtc

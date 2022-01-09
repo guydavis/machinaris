@@ -1,0 +1,5 @@
+CHIA_FORK=hddcoin
+FORK_REPO_URL=https://github.com/HDDcoin-Network/hddcoin-blockchain.git
+FORK_BRANCH=1.2.11
+FORK_DOWNLOAD_URL='https://mega.nz/folder/Hu5miQpa#KAZPquVHG6pfYC5k0-qlsA'
+CHIA_FORK_SYMBOL=hdd

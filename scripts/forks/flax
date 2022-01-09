@@ -1,0 +1,5 @@
+CHIA_FORK=flax
+FORK_REPO_URL=https://github.com/Flax-Network/flax-blockchain.git
+FORK_BRANCH=0.1.5
+FORK_DOWNLOAD_URL='https://mega.nz/folder/impAUA6K#u82XUxLXyicpfEH-CDajyQ'
+CHIA_FORK_SYMBOL=xfx

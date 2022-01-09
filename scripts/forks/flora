@@ -1,0 +1,5 @@
+CHIA_FORK=flora
+FORK_REPO_URL=https://github.com/Flora-Network/flora-blockchain.git
+FORK_BRANCH=0.2.12
+FORK_DOWNLOAD_URL='https://mega.nz/folder/CjpSzYzR#7MR4AHEP2nFkaJa6cy45gg'
+CHIA_FORK_SYMBOL=xfl

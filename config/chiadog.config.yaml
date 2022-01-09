@@ -1,9 +1,9 @@
 # This is useful to differentiate multiple
 # instances monitoring multiple harvesters
-notification_title_prefix: '$HOSTNAME-flax'
+notification_title_prefix: '${HOSTNAME}-${blockchains}'
 log_level: INFO
-coin_name: 'flax'
-coin_symbol: 'xfx'
+coin_name: '${blockchains}'
+coin_symbol: '${CHIA_FORK_SYMBOL}'
 
 # Only one consumer can be enabled at a time, you can
 # delete the section for the consumer which you aren't using
@@ -11,8 +11,8 @@ coin_symbol: 'xfx'
 chia_logs:
   file_log_consumer:
     enable: true
-    prefix: 'flax'
-    file_path: '~/.chia/flax/mainnet/log/debug.log'
+    prefix: '${FORK_CHIADOG_PREFIX}'
+    file_path: '${FORK_CONFIG_DIR}/mainnet/log/debug.log'
 
 # Enable this and chiadog will ping a remote server every 5 minutes
 # That way you can know that the monitoring is running as expected
@@ -24,7 +24,7 @@ chia_logs:
 # on your farm performance at the specified time of the day.
 daily_stats:
   enable: true
-  time_of_day: 21
+  time_of_day: 20
 
 # We support a lot of notifiers, please check the README for more
 # information. You can delete the sections which you aren't using.
@@ -52,7 +52,7 @@ notifier:
     daily_stats: true
     wallet_events: true
     credentials:
-      sender: 'flax@example.com'
+      sender: '${blockchains}@example.com'
       sender_name: 'Machinaris'
       recipient: 'you@example.com'
       username_smtp: 'username'
@@ -81,7 +81,7 @@ notifier:
     enable: false
     daily_stats: true
     wallet_events: true
-    topic: flax/flaxdog/alert
+    topic: ${blockchains}/${blockchains}dog/alert
     qos: 1
     retain: false
     credentials:

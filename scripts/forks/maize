@@ -1,0 +1,5 @@
+CHIA_FORK=maize
+FORK_REPO_URL=https://github.com/Maize-Network/maize-blockchain.git
+FORK_BRANCH=1.2.11
+FORK_DOWNLOAD_URL='https://mega.nz/folder/W7YWUBzJ#7pTVcC2F_a7zFCJCMbbDKw'
+CHIA_FORK_SYMBOL=xmz

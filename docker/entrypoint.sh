@@ -5,7 +5,7 @@
 echo "Welcome to Machinaris v$(cat /machinaris/VERSION)!"
 echo "${blockchains} - ${mode} on $(uname -m)"
 
-if [[ "$HOSTNAME" =~ " |'" ]]; then 
+if [[ "$HOSTNAME" =~ " |'" ]]; then
   echo "You have placed a space character in the hostname for this container."
   echo "Please use only alpha-numeric characters in the hostname within docker-compose.yml and restart."
   exit 1
@@ -39,13 +39,13 @@ if [[ "${mode}" == 'fullnode' ]] && [[ -d /root/.chia/mnemonic.txt ]]; then
 fi
 
 # Warn if non-standard worker_api_port is being used, likely default value they did not override properly
-/usr/bin/bash /machinaris/scripts/worker_port_warning.sh 
+/usr/bin/bash /machinaris/scripts/worker_port_warning.sh
 
 # If on Windows, possibly mount SMB remote shares as defined in 'remote_shares' env var
 /usr/bin/bash /machinaris/scripts/mount_remote_shares.sh > /tmp/mount_remote_shares.log
 
 # Start the selected fork, then start Machinaris WebUI
-if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
+if /usr/bin/bash /machinaris/scripts/fork_launch.sh; then
 
   # Launch Machinaris web server and other services
   /machinaris/scripts/start_machinaris.sh

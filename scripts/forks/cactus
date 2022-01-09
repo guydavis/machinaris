@@ -1,0 +1,5 @@
+CHIA_FORK=cactus
+FORK_REPO_URL=https://github.com/Cactus-Network/cactus-blockchain.git
+FORK_BRANCH=v1.2.11
+FORK_DOWNLOAD_URL='https://mega.nz/folder/u7wSDJYT#9KGpDVOGGK5-frBBI1v_Rg'
+CHIA_FORK_SYMBOL=cac

@@ -1,0 +1,5 @@
+CHIA_FORK=stor
+CHIA_FORK_SYMBOL=stor
+FORK_REPO_URL=https://github.com/Stor-Network/stor-blockchain.git
+FORK_BRANCH=1.0.4
+FORK_DOWNLOAD_URL='https://mega.nz/folder/mr52AapZ#d91-gZoq6auEOWFbcqn8uQ'

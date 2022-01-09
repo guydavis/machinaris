@@ -1,0 +1,4 @@
+CHIA_FORK=shibgreen
+FORK_REPO_URL=https://github.com/BTCgreen-Network/shibgreen-blockchain
+FORK_BRANCH=1.2.12
+FORK_DOWNLOAD_URL='https://mega.nz/folder/SnhEXJLT#HkbG3IhiWzFbABSmYb6lTA'

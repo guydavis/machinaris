@@ -1,0 +1,5 @@
+CHIA_FORK=chives
+FORK_REPO_URL=https://github.com/HiveProject2021/chives-blockchain.git
+FORK_BRANCH=1.2.11.1
+FORK_DOWNLOAD_URL='https://mega.nz/folder/7j4UUALJ#X7-FGwse0qLkxt2UIqyvDg'
+CHIA_FORK_SYMBOL=xcc

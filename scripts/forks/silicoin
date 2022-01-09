@@ -1,0 +1,7 @@
+CHIA_FORK=silicoin
+FORK_REPO_URL=https://github.com/silicoin-network/silicoin-blockchain
+FORK_BRANCH=v1.2.0
+FORK_CMD=sit
+CHIA_FORK_SYMBOL=sit
+FORK_CONFIG_DIR=/root/.chia/sit
+FORK_CHIADOG_PREFIX=chia

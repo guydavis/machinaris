@@ -1,0 +1,6 @@
+CHIA_FORK=chia
+FORK_REPO_URL=https://github.com/Chia-Network/chia-blockchain.git
+FORK_BRANCH=1.2.11
+FORK_DOWNLOAD_URL='https://mega.nz/folder/iu4QyCzY#Hfdf_tEQEwC9D0C1xNiaZg'
+CHIA_FORK_SYMBOL=xch
+FORK_CONFIG_DIR=/root/.chia

@@ -1,52 +1,45 @@
-ARG MACHINARIS_STREAM
+ARG MACHINARIS_STREAM=test
 
 FROM ghcr.io/guydavis/machinaris-base:${MACHINARIS_STREAM}
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG BTCGREEN_BRANCH
-ARG CACTUS_BRANCH
-ARG CHIA_BRANCH
-ARG CHIVES_BRANCH
-ARG CRYPTODOGE_BRANCH
-ARG FLAX_BRANCH
-ARG FLORA_BRANCH
-ARG HDDCOIN_BRANCH
-ARG MAIZE_BRANCH
-ARG MMX_BRANCH
-ARG NCHAIN_BRANCH
-ARG SHIBGREEN_BRANCH
-ARG STAICOIN_BRANCH
-ARG STOR_BRANCH
+ARG CHIA_FORK=chia
+ARG FORK_REPO_URL=https://github.com/Chia-Network/chia-blockchain.git
+ARG FORK_BRANCH=1.2.11
+ARG FORK_CHIADOG_PREFIX=chia
+
+# Symbol of the Fork
+ARG CHIA_FORK_SYMBOL=xch
+# Command used by fork e.g. chia/sit/...
+ARG FORK_CMD=${CHIA_FORK}
+# Download URL for blockchain DB
+ARG FORK_DOWNLOAD_URL=""
+# Name of config directory in /root/.${CONFIG_DIR} e.g. "ext9" for nchain
+ARG FORK_CONFIG_DIR=/root/.${CHIA_FORK}
+# Install directory e.g. "chia" == /chia-blockchain
+ARG FORK_INSTALL_DIR=/${CHIA_FORK}-blockchain
+
 
 # copy local files
 COPY . /machinaris/
 
-# set workdir
-WORKDIR /chia-blockchain
-
-# Install specific blockchain fork (based on branch enabled) + tools that depend on the fork
 RUN \
-	/usr/bin/bash /machinaris/scripts/forks/btcgreen_install.sh ${BTCGREEN_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/cactus_install.sh ${CACTUS_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/chia_install.sh ${CHIA_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/chives_install.sh ${CHIVES_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/cryptodoge_install.sh ${CRYPTODOGE_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/flax_install.sh ${FLAX_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/flora_install.sh ${FLORA_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/maize_install.sh ${MAIZE_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/mmx_install.sh ${MMX_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/shibgreen_install.sh ${SHIBGREEN_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/staicoin_install.sh ${STAICOIN_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/stor_install.sh ${STOR_BRANCH} \
-  && /usr/bin/bash /machinaris/scripts/pull_3rd_party_libs.sh \
-	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
-	&& rm -rf \
-		/root/.cache \
-		/tmp/* \
-		/var/lib/apt/lists/* \
-		/var/tmp/*
+  /usr/bin/bash /machinaris/scripts/fork_install.sh \
+  && /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
+  && apt-get clean \
+  && rm -rf \
+    /root/.cache \
+    /tmp/* \
+    /var/lib/apt/lists/* \
+    /var/tmp/*
+
+# Export ARGs to Env
+ENV CHIA_FORK_SYMBOL=${CHIA_FORK_SYMBOL}
+ENV FORK_CMD=${FORK_CMD}
+ENV FORK_DOWNLOAD_URL=${FORK_DOWNLOAD_URL}
+ENV FORK_CONFIG_DIR=${FORK_CONFIG_DIR}
+ENV FORK_INSTALL_DIR=${FORK_INSTALL_DIR}
+ENV FORK_CHIADOG_PREFIX=${FORK_CHIADOG_PREFIX}
 
 # Provide a colon-separated list of in-container paths to your mnemonic keys
 ENV keys="/root/.chia/mnemonic.txt"  
@@ -55,7 +48,7 @@ ENV plots_dir="/plots"
 # One of fullnode, farmer, harvester, plotter, farmer+plotter, harvester+plotter. Default is fullnode
 ENV mode="fullnode" 
 # The single blockchain to run: chia, flax, nchain, hddcoin, chives, etc
-ENV blockchains="chia"
+ENV blockchains="${CHIA_FORK}"
 # If provided then these optional 3 public keys will be set in your plotman.yaml
 ENV farmer_pk="null"
 ENV pool_pk="null"
@@ -99,4 +92,4 @@ EXPOSE 8926
 EXPOSE 8927
 
 WORKDIR /chia-blockchain
-ENTRYPOINT ["bash", "./entrypoint.sh"]
+CMD ["bash", "/machinaris/docker/entrypoint.sh"]

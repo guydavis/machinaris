@@ -1,0 +1,7 @@
+CHIA_FORK=staicoin
+FORK_REPO_URL=https://github.com/STATION-I/staicoin-blockchain.git
+FORK_BRANCH=1.1.1
+FORK_CMD=stai
+FORK_DOWNLOAD_URL='https://mega.nz/folder/OqgSjYCY#MCwYdt3YnnHA2C6gJV6lvw'
+CHIA_FORK_SYMBOL=stai
+FORK_CONFIG_DIR=/root/.chia/stai

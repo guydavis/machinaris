@@ -1,0 +1,5 @@
+CHIA_FORK=cryptodoge
+FORK_REPO_URL=https://github.com/CryptoDoge-Network/cryptodoge.git
+FORK_BRANCH=1.2.9
+FORK_DOWNLOAD_URL='https://mega.nz/folder/T75UDKpA#dLVq8OhdsjK5kPxNwCaP8Q'
+CHIA_FORK_SYMBOL=gdog

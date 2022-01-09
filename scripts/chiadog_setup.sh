@@ -21,8 +21,13 @@ if [[ (${mode} == 'fullnode' || ${mode} =~ "harvester") && ${blockchains} != 'mm
     fi
     echo 'Configuring Chiadog...'
     mkdir -p /root/.chia/chiadog/logs
-    cp -n /machinaris/config/chiadog/${blockchains}.sample.yaml /root/.chia/chiadog/config.yaml
-    sed "s/\$HOSTNAME/`hostname -s`/g" /root/.chia/chiadog/config.yaml
+
+    # This "templates" (/replaces variables in) the chiadog sample config:
+    eval "cat <<EOF
+$(</machinaris/config/chiadog.config.yaml)
+EOF
+" 2> /dev/null > /root/.chia/chiadog/config.yaml
+
     cp -f /machinaris/scripts/chiadog_notifier.sh /root/.chia/chiadog/notifier.sh && chmod 755 /root/.chia/chiadog/notifier.sh
     echo 'Starting Chiadog...'
     cd /chiadog
