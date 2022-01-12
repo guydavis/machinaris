@@ -254,9 +254,50 @@ class Blockchains:
                 'displayname': displayname, 
                 'hostname': blockchain.hostname,
                 'blockchain': blockchain.blockchain, 
+                'status': self.extract_status(blockchain.blockchain, blockchain.details),
+                'peak_height': self.extract_height(blockchain.blockchain, blockchain.details),
+                'peak_time': self.extract_time(blockchain.blockchain, blockchain.details),
                 'details': blockchain.details,
                 'updated_at': blockchain.updated_at }) 
-   
+    
+    def extract_status(self, blockchain, details):
+        if not details:
+            return None
+        if blockchain == 'mmx':
+            pattern = '^(Synced: .*)$'
+        else:
+            pattern = '^Current Blockchain Status: (.*)$'
+        for line in details.split('\n'):
+            m = re.match(pattern, line)
+            if m: 
+                return m.group(1).strip()
+        return None
+
+    def extract_height(self, blockchain, details):
+        if not details:
+            return None
+        if blockchain == 'mmx':
+            pattern = '^Height: (\d+)$'
+        else:
+            pattern = '^.* Height:\s+(\d+)$'
+        for line in details.split('\n'):
+            m = re.match(pattern, line)
+            if m: 
+                return m.group(1).strip()
+        return None
+
+    def extract_time(self, blockchain, details):
+        if not details:
+            return None
+        if blockchain == 'mmx':
+            return '-' # None for MMX
+        pattern = '^\s+Time:\s+(.*)\sHeight:.*$'
+        for line in details.split('\n'):
+            m = re.match(pattern, line)
+            if m: 
+                return m.group(1).strip()
+        return None
+
 class Connections:
 
     def __init__(self, connections):
