@@ -2,17 +2,25 @@
 #
 # Installs farmr - https://github.com/gilnobrega/farmr
 #
-if [[ "${farmr_skip_launch}" == 'false' &&  (${mode} == 'fullnode' || ${mode} =~ "harvester") ]]; then
+if [[ "${farmr_skip_launch}" == 'false' &&  (${mode} == 'fullnode' || ${mode} =~ "harvester") && ${blockchains} != 'mmx' ]]; then
     if [[ ! -f /usr/bin/farmr ]]; then
 		arch_name="$(uname -m)"
-		echo "Installing farmr on ${arch_name}..."
+		if [ -z ${farmr_version} ]
+		then
+			farmr_version = "latest"
+			echo "As farmr_version env variable was not set we will use stable (latest) release to install"
+		else
+			farmr_version="${farmr_version}"
+			echo "As farmr_version env variable was set we will install farmr version: ${farmr_version}"
+		fi
+		echo "Installing farmr version ${farmr_version} on ${arch_name}..."
 		cd /tmp
 		if [[ "${arch_name}" = "x86_64" ]]; then
-			curl -LJO https://github.com/joaquimguimaraes/farmr/releases/latest/download/farmr-ubuntu-x86_64.deb
+			curl -LJO https://github.com/joaquimguimaraes/farmr/releases/download/${farmr_version}/farmr-ubuntu-x86_64.deb
 			apt install ./farmr-ubuntu-x86_64.deb
 			rm -f ./farmr-ubuntu-x86_64.deb
 		elif [[ "${arch_name}" = "aarch64" ]]; then
-			curl -LJO https://github.com/joaquimguimaraes/farmr/releases/latest/download/farmr-ubuntu-aarch64.deb
+			curl -LJO https://github.com/joaquimguimaraes/farmr/releases/${farmr_version}/download/farmr-ubuntu-aarch64.deb
 			apt install ./farmr-ubuntu-aarch64.deb
 			rm -f ./farmr-ubuntu-aarch64.deb
 		else
