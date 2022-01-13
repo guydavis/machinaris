@@ -134,3 +134,6 @@ scripts/start-web-dev.sh
 
 # Ignore any local SSH keys
 keyfile
+
+# 3rd party css/js 
+web/static/3rd_party
