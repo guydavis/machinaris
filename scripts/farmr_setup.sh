@@ -16,7 +16,7 @@ if [[ "${farmr_skip_launch}" == 'false' &&  (${mode} == 'fullnode' || ${mode} =~
 		echo "Installing farmr version ${farmr_version} on ${arch_name}..."
 		cd /tmp
 		if [[ ("${arch_name}" = "x86_64" || "${arch_name}" = "aarch64") ]]; then			
-			curl -LJO https://github.com/joaquimguimaraes/farmr/releases/download/${farmr_version}/farmr-ubuntu-${arch_name}.deb
+			curl -LJO https://github.com/gilnobrega/farmr/releases/download/${farmr_version}/farmr-ubuntu-${arch_name}.deb
 			apt install ./farmr-ubuntu-${arch_name}.deb
 			rm -f ./farmr-ubuntu-${arch_name}.deb
 		else
