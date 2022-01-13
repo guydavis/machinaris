@@ -17,7 +17,7 @@ if [[ "${farmr_skip_launch}" == 'false' &&  (${mode} == 'fullnode' || ${mode} =~
 		cd /tmp
 		if [[ ("${arch_name}" = "x86_64" || "${arch_name}" = "aarch64") ]]; then			
 			curl -LJO https://github.com/gilnobrega/farmr/releases/download/${farmr_version}/farmr-ubuntu-${arch_name}.deb
-			apt install ./farmr-ubuntu-${arch_name}.deb
+			apt install ./farmr-ubuntu-${arch_name}.deb --allow-downgrades -y
 			rm -f ./farmr-ubuntu-${arch_name}.deb
 		else
 			echo "Installing farmr skipped -> unsupported architecture: ${arch_name}"
