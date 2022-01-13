@@ -39,7 +39,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
   # Latest Blockchain DB download from direct from https://www.chia-database.com/
-  curl -skLJ -o - https://ipfs.infura-ipfs.io/ipfs/QmVDxk4SiwMoTmvKRkQfsCxf8gnVTKYJTiUq937fwkg5rW/blockchain_v1_mainnet.zip | zcat >> blockchain_v1_mainnet.sqlite
+  curl -skLJ -o - https://nginx.chia-database.com/blockchain_v1_mainnet-`date +%d-%m-%y`.zip | zcat >> blockchain_v1_mainnet.sqlite
 fi
 
 echo 'Configuring Chia...'
