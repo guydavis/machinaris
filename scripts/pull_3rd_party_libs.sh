@@ -22,12 +22,12 @@ for url in $LIST ; do
 done
 
 # Bootstrap Icons
-wget -nv -O bsi-icons.zip "https://github.com/twbs/icons/releases/download/v${BSI_VERSION}/bootstrap-icons-${BSI_VERSION}.zip" && \
-unzip -o bsi-icons.zip -d $BASEPATH/ && \
+wget -nv -O ${BASEPATH}/bsi-icons.zip "https://github.com/twbs/icons/releases/download/v${BSI_VERSION}/bootstrap-icons-${BSI_VERSION}.zip" && \
+unzip -o ${BASEPATH}/bsi-icons.zip -d $BASEPATH/ && \
 mv $BASEPATH/bootstrap-icons-${BSI_VERSION} $BASEPATH/icons && \
-rm -f bsi-icons.zip
+rm -f ${BASEPATH}/bsi-icons.zip
 
 # Bootstrap
-wget -O bs.zip -nv "https://github.com/twbs/bootstrap/releases/download/v${BOOTSTRAP_VERSION}/bootstrap-${BOOTSTRAP_VERSION}-dist.zip" && \
-unzip -o -j bs.zip -d $BASEPATH/ bootstrap-${BOOTSTRAP_VERSION}*/css/bootstrap.min.css* bootstrap-${BOOTSTRAP_VERSION}*/js/bootstrap.bundle.min.js*  && \
-rm -f bs.zip
+wget -O ${BASEPATH}/bs.zip -nv "https://github.com/twbs/bootstrap/releases/download/v${BOOTSTRAP_VERSION}/bootstrap-${BOOTSTRAP_VERSION}-dist.zip" && \
+unzip -o -j ${BASEPATH}/bs.zip -d $BASEPATH/ bootstrap-${BOOTSTRAP_VERSION}*/css/bootstrap.min.css* bootstrap-${BOOTSTRAP_VERSION}*/js/bootstrap.bundle.min.js*  && \
+rm -f ${BASEPATH}/bs.zip

@@ -104,6 +104,8 @@ def find_plotting_job_log(plot_id):
     return None
 
 def get_farming_log_file(blockchain):
+    if blockchain == 'mmx': 
+        return '/root/.mmx/logs/mmx_node.log'
     mainnet_folder = globals.get_blockchain_network_path(blockchain)
     return mainnet_folder + '/log/debug.log'
 
