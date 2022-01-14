@@ -40,6 +40,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/shibgreen_install.sh ${SHIBGREEN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/staicoin_install.sh ${STAICOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/stor_install.sh ${STOR_BRANCH} \
+  && /usr/bin/bash /machinaris/scripts/pull_3rd_party_libs.sh \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
 	&& rm -rf \
 		/root/.cache \
