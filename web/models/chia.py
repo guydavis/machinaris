@@ -244,9 +244,12 @@ class Blockchains:
         self.columns = ['hostname', 'blockchain', 'details', 'updated_at']
         self.rows = []
         for blockchain in blockchains:
+            worker_status = None
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(blockchain.hostname))
-                displayname = w.get_worker(blockchain.hostname, blockchain.blockchain).displayname
+                worker = w.get_worker(blockchain.hostname, blockchain.blockchain)
+                worker_status = worker.connection_status()
+                displayname = worker.displayname
             except:
                 app.logger.info("Blockchains.init(): Unable to find a worker with hostname '{0}'".format(blockchain.hostname))
                 displayname = blockchain.hostname
@@ -254,24 +257,25 @@ class Blockchains:
                 'displayname': displayname, 
                 'hostname': blockchain.hostname,
                 'blockchain': blockchain.blockchain, 
-                'status': self.extract_status(blockchain.blockchain, blockchain.details),
+                'status': self.extract_status(blockchain.blockchain, blockchain.details, worker_status),
                 'peak_height': self.extract_height(blockchain.blockchain, blockchain.details),
                 'peak_time': self.extract_time(blockchain.blockchain, blockchain.details),
                 'details': blockchain.details,
                 'updated_at': blockchain.updated_at }) 
     
-    def extract_status(self, blockchain, details):
-        if not details:
-            return None
-        if blockchain == 'mmx':
-            pattern = '^(Synced: .*)$'
-        else:
-            pattern = '^Current Blockchain Status: (.*)$'
-        for line in details.split('\n'):
-            m = re.match(pattern, line)
-            if m: 
-                return m.group(1).strip()
-        return None
+    def extract_status(self, blockchain, details, worker_status):
+        if worker_status == 'Responding':
+            if not details:
+                return None
+            if blockchain == 'mmx':
+                pattern = '^(Synced: .*)$'
+            else:
+                pattern = '^Current Blockchain Status: (.*)$'
+            for line in details.split('\n'):
+                m = re.match(pattern, line)
+                if m: 
+                    return m.group(1).strip()
+        return "Offline"
 
     def extract_height(self, blockchain, details):
         if not details:
@@ -294,8 +298,12 @@ class Blockchains:
         pattern = '^\s+Time:\s+(.*)\sHeight:.*$'
         for line in details.split('\n'):
             m = re.match(pattern, line)
-            if m: 
-                return m.group(1).strip()
+            if m:
+                try:
+                    peak_time = datetime.datetime.strptime(m.group(1).strip(), '%a %b %d %Y %H:%M:%S %Z')
+                    return peak_time.strftime("%Y-%m-%d %H:%M")
+                except:
+                    return m.group(1).strip() # Unconverted time
         return None
 
 class Connections:

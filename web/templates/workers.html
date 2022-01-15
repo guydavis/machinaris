@@ -59,7 +59,14 @@
             <td>{{worker.mode}}</td>
             <td data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
               title="Time on Worker:<br/> {{worker.time_on_worker}}">{{worker.updated_at | datetimefilter}}</td>
-            <td>{{worker.latest_ping_result}}</td>
+            <td>
+              {% if worker.latest_ping_result == 'Responding' %}
+                <i class="bi-check-circle"></i>
+              {% else %}
+                <i class="bi-exclamation-triangle"></i>
+              {% endif %}
+              {{worker.latest_ping_result}}
+            </td>
             <td>{{worker.ping_success_at | datetimefilter}}</td>
             <td><a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
                 title="{{worker.versions.components}}">{{worker.versions.machinaris}}</a></td>

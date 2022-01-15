@@ -39,7 +39,14 @@
             {% for blockchain in blockchains.rows %}
             <tr>
                 <td>{{blockchain.blockchain}}</td>
-                <td>{{blockchain.status}}</td>
+                <td>
+                    {% if blockchain.status == 'Offline' %}
+                      <i class="bi-exclamation-triangle"></i>
+                    {% else %}
+                      <i class="bi-check-circle"></i>
+                    {% endif %}
+                    {{blockchain.status}}
+                </td>
                 <td>{{blockchain.peak_height}}</td>
                 <td>{{blockchain.peak_time}}</td>
                 <td>{{blockchain.updated_at | datetimefilter}}</td>

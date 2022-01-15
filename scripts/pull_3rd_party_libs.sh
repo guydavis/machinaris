@@ -1,10 +1,12 @@
 #!/bin/bash
-# Pull all 3rd party libs / icons into web/static/3rd_party folder
+#
+# Due to complaints about JS CDNs, this pulls all JS libs into web/static/3rd_party folder
+#
 
 # Bootstrap Icons
 BSI_VERSION=1.7.2
 BOOTSTRAP_VERSION=5.1.3
-BASEPATH=/machinaris/web/static/3rd_party
+BASEPATH=${JS_LIBS_BASEPATH:-/machinaris/web/static/3rd_party}
 
 # List of other css/js links
 LIST="
