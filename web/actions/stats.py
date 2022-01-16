@@ -11,6 +11,7 @@ from sqlalchemy import or_
 
 from common.utils import converters
 from common.models.alerts import Alert
+from common.models.challenges import Challenge
 from common.models.plots import Plot
 from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalCoins, StatNetspaceSize, StatTimeToWin, \
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \
@@ -273,3 +274,38 @@ def load_plotting_stats():
                 summary_by_size[k][worker] = worker_values
     #app.logger.info(summary_by_size.keys())
     return summary_by_size
+
+def load_summary_stats(blockchains):
+    all_farmers = worker.load_worker_summary().farmers_harvesters()
+    stats = {}
+    for b in blockchains:
+        blockchain = b['blockchain']
+        harvesters = ''
+        try:
+            harvsters_online = 0
+            harvesters_total = 0
+            for host in all_farmers:
+                for wk in host.workers:
+                    if wk['blockchain'] == blockchain:
+                        harvesters_total += 1
+                        app.logger.info(wk['farming_status'])
+                        if wk['farming_status'] in ['farming', 'harvesting']: 
+                            harvsters_online += 1
+            harvesters = "{0}/{1}".format(harvsters_online, harvesters_total)
+        except Exception as ex:
+            app.logger.error(ex)
+            app.logger.info("No recent challenge response times found for {0}".format(blockchain))
+        max_response = ''
+        try:
+            max_record = db.session.query(Challenge).filter(Challenge.blockchain==blockchain).order_by(Challenge.time_taken.desc()).first()
+            if max_record: 
+                max_response = "%.2f secs" % float(max_record.time_taken.split()[0]) # Strip of 'secs' unit before rounding
+        except Exception as ex:
+            app.logger.error(ex)
+            app.logger.info("No recent challenge response times found for {0}".format(blockchain))
+        stats[blockchain] = {
+            'harvesters': harvesters,
+            'max_resp': max_response,
+            'plottings': "TODO"
+        }
+    return stats

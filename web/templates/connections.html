@@ -46,8 +46,11 @@
                         id="{{connection.blockchain}}-tab" data-bs-toggle="tab"
                         data-bs-target="#{{connection.blockchain}}" type="button" role="tab"
                         aria-controls="{{connection.blockchain}}"
-                        aria-selected="{% if connection.blockchain == selected_blockchain %}true{% else %}false{% endif %}">{{ connection.blockchain
-                        }}</button>
+                        aria-selected="{% if connection.blockchain == selected_blockchain %}true{% else %}false{% endif %}">
+                        {% if connection.status == 'Connection Refused' %}
+                          <i class="bi-dash-circle text-danger" title="{{connection.status}} - connections table is stale."></i>
+                        {% endif %}
+                        {{ connection.blockchain }}</button>
                 </li>
                 {% endfor %}
             </ul>

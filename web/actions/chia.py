@@ -30,8 +30,9 @@ from common.models import farms as f, plots as p, challenges as c, wallets as w,
     blockchains as b, connections as co, keys as k
 from common.config import globals
 from web.models.chia import FarmSummary, FarmPlots, Wallets, \
-    Blockchains, Connections, Keys, ChallengesChartData
+    Blockchains, Connections, Keys, ChallengesChartData, Summaries
 from . import worker as wk
+from . import stats
 
 COLD_WALLET_ADDRESSES_FILE = '/root/.chia/machinaris/config/cold_wallet_addresses.json'
 
@@ -118,7 +119,7 @@ def load_wallets():
     cold_wallet_addresses = load_cold_wallet_addresses()
     return Wallets(wallets, cold_wallet_addresses)
 
-def load_blockchain_show():
+def load_blockchains():
     try:  
         blockchains = db.session.query(b.Blockchain).order_by(b.Blockchain.blockchain).all()
         return Blockchains(blockchains)
@@ -126,11 +127,21 @@ def load_blockchain_show():
         app.logger.error("Error querying for blockchains: {0}".format(str(ex)))
     return None
 
-def load_connections_show():
+def load_summaries():
+    try:
+        blockchains = load_blockchains()
+        farms = load_farm_summary()
+        summary_stats = stats.load_summary_stats(blockchains.rows)
+        return Summaries(blockchains, farms.farms, farms.wallets, summary_stats)
+    except Exception as ex:
+        app.logger.error("Error loading summary: {0}".format(str(ex)))
+    return None
+
+def load_connections():
     connections = db.session.query(co.Connection).all()
     return Connections(connections)
 
-def load_keys_show():
+def load_keys():
     keys = db.session.query(k.Key).order_by(k.Key.blockchain).all()
     return Keys(keys)
     

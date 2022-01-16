@@ -18,6 +18,14 @@ body {
     font-weight: 500;
 }
 
+.text-warning {
+  font-weight: 500;
+}
+
+.text-danger {
+  font-weight: 500;
+}
+
 .dropdown-item:focus, .dropdown-item:hover {
   background-color: #198754;
 }

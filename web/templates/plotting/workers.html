@@ -124,16 +124,16 @@
                                 href="#" {% 
                                 if worker.archiving_status == 'disabled' %}
                                 data-bs-toggle="modal" data-bs-target="#disabledModal">
-                                <i class="fs-4 bi-dash-circle"></i>
+                                <i class="fs-4 bi-dash-circle text-warning" title="Archiving is disabled.  See Settings | Plotting page."></i>
                                 {% elif worker.archiving_status == 'offline' %}
                                 data-bs-toggle="modal" data-bs-target="#offlineModal">
-                                <i class="fs-4 bi-dash-circle"></i>
+                                <i class="fs-4 bi-dash-circle text-danger" title="Worker is offline."></i>
                                 {% elif worker.archiving_status == 'running' %}
                                 data-bs-toggle="modal" data-bs-target="#stopModal">
-                                <i class="fs-4 bi-pause-circle"></i>
+                                <i class="fs-4 bi-pause-circle text-success" title="Stop Archiving"></i>
                                 {% else %}
                                 data-bs-toggle="modal" data-bs-target="#startModal">
-                                <i class="fs-4 bi-play-circle"></i>
+                                <i class="fs-4 bi-play-circle text-success" title="Start Archiving"></i>
                                 {% endif %}
                                 &nbsp;
                                 <span class="align-text-bottom">{{ worker.blockchain }}</span>

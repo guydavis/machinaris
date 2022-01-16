@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="position-relative">
+    <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -8px;">
+      <a href="https://github.com/guydavis/machinaris/wiki" target="_blank">
+        <i class="fs-4 bi-question-circle"></i>
+      </a>
+    </div>
+  </div>
+
+<style>
+    a.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+    button.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+</style>
+
+{% if summaries.rows|length > 0 %}
+<form method="POST" id="blockchain-form" style="padding-bottom: 10px; padding-top: 15px">
+    <table id="data" class="table table-dark">
+        <thead>
+            <tr>
+                <th scope="col" class="text-success">Blockchain</th>
+                <th scope="col" class="text-success">Status</th>
+                <!--th scope="col" class="text-success">Farmed</th-->
+                <th scope="col" class="text-success">Wallet</th>
+                <th scope="col" class="text-success">Height</th>
+                <th scope="col" class="text-success">Plots</th>
+                <th scope="col" class="text-success">ETW</th>
+                <th scope="col" class="text-success">Harvesters</th>
+                <th scope="col" class="text-success">Max Resp.</th>
+                <!--th scope="col" class="text-success">Drives</th-->
+                <!--th scope="col" class="text-success">Plottings</th-->
+                <!--th scope="col" class="text-success">Effort</th-->
+                <!--th scope="col" class="text-success">EDV</th-->
+                <!--th scope="col" class="text-success">EDV $</th-->
+            </tr>
+        </thead>
+        <tbody>
+            {% for summary in summaries.rows %}
+            <tr>
+                <td>{{summary.blockchain}}</td>
+                <td>
+                    {% if summary.status == 'Offline' %}
+                      <i class="bi-dash-circle text-danger"></i>
+                    {% elif summary.status.lower().startswith('synced') %}
+                        <i class="bi-check-circle text-success"></i>
+                    {% else %}
+                      <i class="bi-exclamation-triangle text-warning"></i>
+                    {% endif %} &nbsp;
+                    {{summary.status}}
+                </td>
+                <!--td>{{summary.farmed}}</td-->
+                <td>{{summary.wallet}}</td>
+                <td>{{summary.height}}</td>
+                <td>{{summary.plots}}</td>
+                <td>{{summary.etw}}</td>
+                <td>{{summary.harvesters}}</td>
+                <td>{{summary.max_resp}}</td>
+                <!--td>{{summary.plottings}}</td-->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+
+{% else %}
+<div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
+    <h6>No blockchains found from any farmers. Just starting up?</h6>
+    <h6>Please allow at least 15 minutes for blockchains to get started.</h6>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function () {
+    $('#data').DataTable({
+        "pageLength": 25,
+    });
+})
+</script>
+{% endblock %}

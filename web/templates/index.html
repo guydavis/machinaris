@@ -48,7 +48,15 @@
           <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
             <div class="h-20 p-2 bg-light border rounded-3">
               <h6 class="display-6 text-center">Farming:
-                <span {% if farms[blockchain].display_status=='Active' %} class="text-success" {% endif %}>
+                <span 
+                  {% if farms[blockchain].display_status=='Active' %}
+                    class="text-success"
+                  {% elif farms[blockchain].display_status=='Offline' %} 
+                    class="text-danger" 
+                  {% else %}
+                    class="text-warning"
+                  {% endif %}
+                >
                   {{ farms[blockchain].display_status }}
                 </span>
               </h6>

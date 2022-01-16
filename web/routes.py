@@ -43,6 +43,12 @@ def index():
     return render_template('index.html', reload_seconds=120, farms=farm_summary.farms, \
         plotting=plotting, workers=workers, global_config=gc, selected_blockchain=selected_blockchain)
 
+@app.route('/summary')
+def summary():
+    gc = globals.load()
+    summaries = chia.load_summaries()
+    return render_template('summary.html', reload_seconds=120, summaries=summaries, global_config=gc)
+
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
     if globals.is_setup():
@@ -184,7 +190,7 @@ def wallet():
 def keys():
     gc = globals.load()
     selected_blockchain = worker.default_blockchain()
-    keys = chia.load_keys_show()
+    keys = chia.load_keys()
     key_paths = globals.get_key_paths()
     return render_template('keys.html', keys=keys, selected_blockchain = selected_blockchain,
         key_paths=key_paths, global_config=gc)
@@ -217,7 +223,7 @@ def worker_route():
 def blockchains():
     gc = globals.load()
     selected_blockchain = worker.default_blockchain()
-    blockchains = chia.load_blockchain_show()
+    blockchains = chia.load_blockchains()
     return render_template('blockchains.html', reload_seconds=120, selected_blockchain = selected_blockchain, 
         blockchains=blockchains, global_config=gc)
 
@@ -233,7 +239,7 @@ def connections():
             chia.remove_connection(request.form.getlist('nodeid'), request.form.get('hostname'), request.form.get('blockchain'))
         else:
             app.logger.info("Unknown form action: {0}".format(request.form))
-    connections = chia.load_connections_show()
+    connections = chia.load_connections()
     return render_template('connections.html', reload_seconds=120, selected_blockchain = selected_blockchain,
         connections=connections, global_config=gc)
 

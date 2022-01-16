@@ -98,7 +98,7 @@ def etw_to_minutes(etw):
         etw_total_minutes += int(match.group(1)) * hour_minutes
     match = re.search("(\d+) minute", etw)
     if match:
-        etw_total_minutes += int(match.group(1), etw)
+        etw_total_minutes += int(match.group(1))
     return etw_total_minutes
 
 # Convert an expected time to win in minutes into human-readable units.

@@ -173,6 +173,7 @@ class WorkerSummary:
                     'hostname': worker.hostname,
                     'displayname': worker.displayname,
                     'blockchain': worker.blockchain,
+                    'connection_status': worker.connection_status(),
                     'farming_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.farming_status().lower()),
                     'monitoring_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.monitoring_status().lower())
                 })
@@ -195,6 +196,7 @@ class WorkerSummary:
                     'hostname': worker.hostname,
                     'displayname': worker.displayname,
                     'blockchain': worker.blockchain,
+                    'connection_status': worker.connection_status(),
                     'farming_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.farming_status().lower()),
                     'monitoring_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.monitoring_status().lower())
                 })
@@ -217,6 +219,7 @@ class WorkerSummary:
                     'hostname': worker.hostname,
                     'displayname': worker.displayname,
                     'blockchain': worker.blockchain,
+                    'connection_status': worker.connection_status(),
                     'farming_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.farming_status().lower()),
                     'monitoring_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.monitoring_status().lower())
                 })

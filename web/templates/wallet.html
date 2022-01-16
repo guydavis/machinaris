@@ -75,6 +75,7 @@
         <thead>
             <tr>
                 <th scope="col" class="text-success">Blockchain</th>
+                <th scope="col" class="text-success">Status</th>
                 <th scope="col" class="text-success">Wallet Balance</th>
                 <th scope="col" class="text-success">Cold Wallet Balance</th>
                 <th scope="col" class="text-success">Total Balance</th>
@@ -86,6 +87,16 @@
             {% for wallet in wallets.rows %}
             <tr>
                 <td>{{wallet.blockchain}}</td>
+                <td>
+                    {% if wallet.status == 'Offline' %}
+                      <i class="bi-dash-circle text-danger"></i>
+                    {% elif wallet.status.lower().startswith('synced') %}
+                      <i class="bi-check-circle text-success"></i>
+                    {% else %}
+                      <i class="bi-exclamation-triangle text-warning"></i>
+                    {% endif %} &nbsp;
+                    {{wallet.status}}
+                </td>
                 <td>{{wallet.hot_balance}}</td>
                 <td>{{wallet.cold_balance}}</td>
                 <td>{{wallet.total_balance}}</td>

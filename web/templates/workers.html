@@ -61,9 +61,11 @@
               title="Time on Worker:<br/> {{worker.time_on_worker}}">{{worker.updated_at | datetimefilter}}</td>
             <td>
               {% if worker.latest_ping_result == 'Responding' %}
-                <i class="bi-check-circle"></i>
+                <i class="bi-check-circle text-success"></i>
+              {% elif worker.connection_status() == 'Connection Refused' %}
+                <i class="bi-dash-circle text-danger"></i>
               {% else %}
-                <i class="bi-exclamation-triangle"></i>
+                <i class="bi-exclamation-triangle text-warning" title="{{ worker.connection_status }}"></i>
               {% endif %}
               {{worker.latest_ping_result}}
             </td>

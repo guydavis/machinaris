@@ -18,7 +18,7 @@ def execute():
     with app.app_context():
         from api import db
         gc = globals.load()
-        if not gc['is_controller']: # Only Chia fullnode should gather launcher_ids and trigger recover on each fork
+        if not gc['is_controller']: # Only Chia fullnode should gather plotnft.launchers and trigger recover on each fork
             return
         app.logger.info("****************** Starting twice daily NFT 7/8 reward recovery. *********************")
         fullnodes = db.session.query(wk.Worker).filter(wk.Worker.mode == 'fullnode', 
@@ -30,8 +30,7 @@ def execute():
             app.logger.info("Found no wallet id, so skipping NFT 7/8 reward recovery.")
             return
         for plotnft in plotnfts:
-            launcher_id = plotnft.launcher_id()
-            if not launcher_id: 
+            if not plotnft.launcher: 
                 app.logger.info("Found no launcher id, so skipping NFT 7/8 reward recovery on plotnft: {0}".format(plotnft))
                 continue
             pool_contract_address = plotnft.pool_contract_address()
@@ -39,10 +38,12 @@ def execute():
                 app.logger.info("Found no pool contract address, so skipping NFT 7/8 reward recovery on plotnft: {0}".format(plotnft))
                 continue
             for fullnode in fullnodes:
+                if fullnode.blockchain != 'hddcoin':
+                    continue
                 payload = {
                     'blockchain': fullnode.blockchain,
                     'wallet_id': wallet_id,
-                    'launcher_id': launcher_id,
+                    'launcher_id': plotnft.launcher,
                     'pool_contract_address': pool_contract_address
                 }
                 utils.send_worker_post(fullnode, '/rewards/', payload, debug=True)

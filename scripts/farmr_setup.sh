@@ -7,16 +7,17 @@ if [[ "${farmr_skip_launch}" == 'false' &&  (${mode} == 'fullnode' || ${mode} =~
 		arch_name="$(uname -m)"
 		if [ -z ${farmr_version} ]
 		then
-			farmr_version = "latest"
 			echo "As farmr_version env variable was not set we will use stable (latest) release to install"
+			rpm_url=https://github.com/gilnobrega/farmr/releases/latest/download/farmr-ubuntu-${arch_name}.deb
 		else
 			farmr_version="${farmr_version}"
 			echo "As farmr_version env variable was set we will install farmr version: ${farmr_version}"
+			rpm_url=https://github.com/gilnobrega/farmr/releases/download/${farmr_version}/farmr-ubuntu-${arch_name}.deb
 		fi
 		echo "Installing farmr version ${farmr_version} on ${arch_name}..."
 		cd /tmp
-		if [[ ("${arch_name}" = "x86_64" || "${arch_name}" = "aarch64") ]]; then			
-			curl -LJO https://github.com/gilnobrega/farmr/releases/download/${farmr_version}/farmr-ubuntu-${arch_name}.deb
+		if [[ ("${arch_name}" = "x86_64" || "${arch_name}" = "aarch64") ]]; then
+			curl -LJO $rpm_url
 			apt install ./farmr-ubuntu-${arch_name}.deb --allow-downgrades -y
 			rm -f ./farmr-ubuntu-${arch_name}.deb
 		else

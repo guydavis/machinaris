@@ -26,7 +26,11 @@
             {% for key in keys.rows %}
             <li class="nav-item" role="presentation">
                 <button class="nav-link {% if key.blockchain == selected_blockchain %}active{% endif %}" id="{{key.blockchain}}-tab" data-bs-toggle="tab" data-bs-target="#{{key.blockchain}}"
-                    type="button" role="tab" aria-controls="{{key.blockchain}}" aria-selected="{% if key.blockchain == selected_blockchain %}true{% else %}false{% endif %}">{{ key.blockchain }}</button>
+                    type="button" role="tab" aria-controls="{{key.blockchain}}" aria-selected="{% if key.blockchain == selected_blockchain %}true{% else %}false{% endif %}">
+                    {% if key.status == 'Connection Refused' %}
+                        <i class="bi-dash-circle text-danger" title="{{key.status}} - key info is stale."></i>
+                    {% endif %}
+                    {{ key.blockchain }}</button>
             </li>
             {% endfor %}
         </ul>

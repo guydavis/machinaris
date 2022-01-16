@@ -41,10 +41,12 @@
                 <td>{{blockchain.blockchain}}</td>
                 <td>
                     {% if blockchain.status == 'Offline' %}
-                      <i class="bi-exclamation-triangle"></i>
+                      <i class="bi-dash-circle text-danger"></i>
+                    {% elif blockchain.status.lower().startswith('synced') %}
+                        <i class="bi-check-circle text-success"></i>
                     {% else %}
-                      <i class="bi-check-circle"></i>
-                    {% endif %}
+                      <i class="bi-exclamation-triangle text-warning"></i>
+                    {% endif %} &nbsp;
                     {{blockchain.status}}
                 </td>
                 <td>{{blockchain.peak_height}}</td>
