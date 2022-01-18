@@ -136,12 +136,9 @@ def start_farmer(blockchain):
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
-        flash('Timed out while starting farmer! Try restarting the Machinaris container.', 'danger')
-        flash(str(ex), 'warning')
         return False
     if errs:
         app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash('Unable to start farmer. Try restarting the Machinaris container instead.', 'danger')
         return False
     return True
 

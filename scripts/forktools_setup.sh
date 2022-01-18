@@ -29,8 +29,9 @@ if [[ -z "${forktools_skip_build}" ]]; then
 		if [[ ${mode} == 'fullnode' ]]; then
 			sed -i "s/SETMAXLOGROTATION='99'/SETMAXLOGROTATION='7'/g" /root/.chia/forktools/ftconfigs/config.forkfixconfig*
 			sed -i "s/SETPLOTLOADFREQUENCY='18000'/SETPLOTLOADFREQUENCY='1800'/g" /root/.chia/forktools/ftconfigs/config.forkfixconfig*
-			sed -i "s/SETFNTARGETPEERCOUNT='80'/SETFNTARGETPEERCOUNT='10'/g"  /root/.chia/forktools/ftconfigs/config.forkfixconfig*
-			echo 'Y' | ./forkfixconfig allecho 'Y' | ./forkfixconfig all
+			sed -i "s/SETFNTARGETPEERCOUNT='80'/SETFNTARGETPEERCOUNT='20'/g"  /root/.chia/forktools/ftconfigs/config.forkfixconfig*
+			sed -i "s/\"/'/g" /root/.chia/forktools/ftconfigs/config.forkfixconfig
+			echo 'Y' | ./forkfixconfig all
   			sleep $[ ( $RANDOM % 300 )  + 1 ]s
 			./forkpatch all -multiproc
   			sleep $[ ( $RANDOM % 600 )  + 1 ]s

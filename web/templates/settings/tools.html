@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="position-relative">
+    <div class="position-absolute top-0 end-0">
+        <a href="https://github.com/guydavis/machinaris/wiki/Forktools" target="_blank">
+            <i class="fs-4 bi-question-circle"></i>
+        </a>
+    </div>
+</div>
+
+<header class="pb-3 mb-4 border-bottom">
+    <span class="fs-4">Tools - config.forkfixconfig </span>
+</header>
+
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+        {% else %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {% endif %}
+            {{ message|safe }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <form method="POST">
+        <fieldset>
+            <div class="row mb-3">
+                <label for="worker" class="col-sm-1 col-form-label-lg text-end p-1">Worker</label>
+                <div class="col-sm-3">
+                    <select id="worker" name="worker" class="form-select" onchange="update_blockchain_options(this.value);">
+                        {% for host in workers() %}
+                        <option {% if host.hostname==selected_worker %}selected{% endif %}
+                            value="{{ host.hostname }}">{{ host.displayname }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <label for="blockchain" class="col-sm-1 col-form-label-lg text-end p-1">Blockchain</label>
+                <div class="col-sm-3">
+                    <select id="blockchain" name="blockchain" class="form-select">
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3" id="texteditor">
+                <textarea style="background: #D3D3D3;" class="form-control fs-6" id="config" name="config" rows="18"
+                    style="height:100%;"></textarea>
+            </div>
+            <button type="submit" class="btn btn-outline-success">Save</button>
+            <button type="button" class="btn btn-outline-success"
+                onclick="downloadConfig(); return false">Download</button>
+        </fieldset>
+    </form>
+
+    {% endblock %}
+
+    {% block scripts %}
+    <script>
+        $(document).ready(function () {
+            function load_config(worker, blockchain) {
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url_for('views_settings_config') }}?type=tools&worker=" + worker + "&blockchain=" + blockchain,
+                })
+                    .done(function (data) {
+                        //console.log(data);
+                        $("#config").val(data)
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log(jqXHR, textStatus, errorThrown);
+                    });
+            }
+            update_blockchain_options("{{selected_worker}}");
+            //Call the function when #input is clicked
+            $(document).on("change", "#worker", function (e) {
+                load_config($("#worker").val(), $("#blockchain").val())
+                update_blockchain_options($("#worker").val());
+            });
+            $(document).on("change", "#blockchain", function (e) {
+                load_config($("#worker").val(), $("#blockchain").val())
+            });
+            //Call the function when the page loads
+            load_config("{{selected_worker}}", "{{selected_blockchain}}");
+        });
+
+        function update_blockchain_options(hostname) {
+            var hostsMap = {};
+            {% for worker in workers() %}
+            hostsMap["{{worker.hostname}}"] = [
+                {% for container in worker.workers %} 
+                    "{{ container.blockchain }}",
+                {% endfor %}
+            ];
+            {% endfor %}
+            var $el = $("#blockchain");
+            $el.empty(); // remove old options
+            for (i in hostsMap[hostname]) {
+                var option = $("<option></option>").attr("value", hostsMap[hostname][i]);
+                if (hostsMap[hostname][i] == "{{ selected_blockchain }}") {
+                    option.attr("selected", "selected")
+                }
+                option.text(hostsMap[hostname][i]);
+                $el.append(option);
+            };
+        }
+
+        function downloadConfig() {
+            worker = $("#worker").val()
+            blockchain = $("#blockchain").val()
+            window.location.href = '/settings/config/' + worker + '_' + blockchain + 'dog_config.yaml?type=alerts&worker=' + worker + "&blockchain=" + blockchain
+        }
+    </script>
+    {% endblock %}

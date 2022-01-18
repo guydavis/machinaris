@@ -110,11 +110,16 @@
                                             class="d-none d-sm-inline text-white">Plotting</span> </a>
                                 </li>
                                 {% endif %}
-
                                 {% if global_config.farming_enabled %}
                                 <li>
                                     <a href="{{ url_for('settings_pools') }}" class="nav-link px-0"> <span
                                             class="d-none d-sm-inline text-white">Pools</span> </a>
+                                </li>
+                                {% endif %}
+                                {% if global_config.farming_enabled %}
+                                <li>
+                                    <a href="{{ url_for('settings_tools') }}" class="nav-link px-0"> <span
+                                            class="d-none d-sm-inline text-white">Tools</span> </a>
                                 </li>
                                 {% endif %}
                             </ul>

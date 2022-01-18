@@ -164,7 +164,7 @@ def save_config(farmer, blockchain, config):
         flash('Failed to save config to farmer.  Please check log files.', 'danger')
         flash(str(ex), 'warning')
     else:
-        flash('Nice! Chia\'s config.yaml validated and saved successfully. Please restart the Machinaris worker to take effect.', 'success')
+        flash('Nice! Farming config validated and saved successfully. Worker services now restarting. Please allow 10-15 minutes to take effect.', 'success')
 
 def generate_key(key_path, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
