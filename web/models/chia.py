@@ -270,13 +270,18 @@ class Wallets:
             if not details:
                 return None
             if blockchain == 'mmx':
-                return "-"
+                pattern = '^Synced: (.*)$'
             else:
                 pattern = '^Sync status: (.*)$'
             for line in details.split('\n'):
                 m = re.match(pattern, line)
-                if m: 
-                    return m.group(1).strip()
+                if m:
+                    status = m.group(1).strip()
+                    if 'Yes' == status: # MMX
+                        return "Synced"
+                    if 'No' == status: # MMX
+                        return "Syncing" 
+                    return status
         return "Offline"
 
 class Keys:
