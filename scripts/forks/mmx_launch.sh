@@ -30,19 +30,19 @@ ln -s /root/.chia/mmx/config /mmx-node/config
 escaped_plot_dirs=$(printf '%s\n' "$plot_dirs" | sed -e 's/[\/&]/\\&/g')
 sed -i "s/\"plot_dirs\":.*$/\"plot_dirs\": [ $escaped_plot_dirs ]/g" ./config/local/Harvester.json
 
-# Symlink the NETWORK file, use 'test3' for now
-if [ ! -f /root/.chia/mmx/NETWORK ]; then
-	echo 'test3' > /root/.chia/mmx/NETWORK
-fi
+# Symlink the NETWORK file, use 'test4' for now
+#if [ ! -f /root/.chia/mmx/NETWORK ]; then
+echo 'test4' > /root/.chia/mmx/NETWORK
+#fi
 rm -f ./NETWORK
 ln -s /root/.chia/mmx/NETWORK /mmx-node/NETWORK
 
-# Symlink the testnet3 folder
-if [ ! -d /root/.chia/mmx/testnet3 ]; then
-	mkdir /root/.chia/mmx/testnet3
+# Symlink the testnet4 folder
+if [ ! -d /root/.chia/mmx/testnet4 ]; then
+	mkdir /root/.chia/mmx/testnet4
 fi
-rm -rf ./testnet3
-ln -s /root/.chia/mmx/testnet3 /mmx-node/testnet3
+rm -rf ./testnet4
+ln -s /root/.chia/mmx/testnet4 /mmx-node/testnet4
 
 # Create a key if none found from previous runs
 if [[ ${mode} == 'fullnode' ]]; then
