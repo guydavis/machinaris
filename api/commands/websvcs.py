@@ -83,8 +83,9 @@ def cold_wallet_balance(blockchain, debug=False):
             except Exception as ex:
                 app.logger.info("Failed to query {0} due to {1}".format(url, str(ex)))
                 if address in cold_wallet_cache:
-                    app.logger.info("Using previous cold wallet balance of {0} WHICH MAY BE STALE!")
-                    total_balance += float(cold_wallet_cache[address])
+                    cached_cold_balance = float(cold_wallet_cache[address])
+                    app.logger.info("Using previous cold wallet balance of {0} WHICH MAY BE STALE!".format(cached_cold_balance))
+                    total_balance += cached_cold_balance
         http.client.HTTPConnection.debuglevel = 0
         save_cold_wallet_cache(cold_wallet_cache)
         return total_balance
