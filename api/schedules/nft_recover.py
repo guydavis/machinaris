@@ -29,6 +29,9 @@ def execute():
         if not wallet_id: 
             app.logger.info("Found no wallet id, so skipping NFT 7/8 reward recovery.")
             return
+        if len(plotnfts) == 0:
+            app.logger.info("Found no Chia PlotNFTs at all, so skipping NFT 7/8 reward recovery.")
+            return
         for plotnft in plotnfts:
             if not plotnft.launcher: 
                 app.logger.info("Found no launcher id, so skipping NFT 7/8 reward recovery on plotnft: {0}".format(plotnft))
