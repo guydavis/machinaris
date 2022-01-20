@@ -263,7 +263,7 @@ class Wallets:
                     sum += locale.atof(wallet.cold_balance)
         if found_balance:
             return converters.round_balance(sum)
-        return '?'
+        return '0' # Initially MMX reports nothing at all for a balance.  This implies zero.
 
     def extract_status(self, blockchain, details, worker_status):
         if worker_status == 'Responding':
@@ -337,7 +337,7 @@ class Blockchains:
             if not details:
                 return None
             if blockchain == 'mmx':
-                pattern = '^(Synced: .*)$'
+                pattern = '^Synced: (.*)$'
             else:
                 pattern = '^Current Blockchain Status: (.*)$'
             for line in details.split('\n'):
@@ -348,6 +348,12 @@ class Blockchains:
                         return "Synced"
                     if 'Syncing' in status:
                         return "Syncing"
+                    if 'Not Synced' in status:
+                        return 'Not Synced'
+                    if 'Yes' == status: # MMX
+                        return "Synced"
+                    if 'No' == status: # MMX
+                        return "Syncing" 
                     return status
         return "Offline"
 

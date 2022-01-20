@@ -203,10 +203,12 @@ class WorkerSummary:
         filtered.sort(key=lambda w: w.displayname)
         return filtered
 
-    def farmers_harvesters(self):
+    def farmers_harvesters(self, exclude_blockchains=None):
         filtered = []
         for worker in self.workers:
             if worker.mode == "fullnode" or "farmer" in worker.mode or "harvester" in worker.mode:
+                if exclude_blockchains and worker.blockchain in exclude_blockchains:
+                    continue
                 host = None
                 for h in filtered:
                     if h.displayname == worker.displayname:
