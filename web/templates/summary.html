@@ -4,7 +4,7 @@
 
 <div class="position-relative">
     <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -8px;">
-      <a href="https://github.com/guydavis/machinaris/wiki" target="_blank">
+      <a href="https://github.com/guydavis/machinaris/wiki/Summary" target="_blank">
         <i class="fs-4 bi-question-circle"></i>
       </a>
     </div>
@@ -26,13 +26,15 @@
             <tr>
                 <th scope="col" class="text-success">Blockchain</th>
                 <th scope="col" class="text-success">Status</th>
-                <!--th scope="col" class="text-success">Farmed</th-->
-                <th scope="col" class="text-success">Wallet</th>
                 <th scope="col" class="text-success">Height</th>
                 <th scope="col" class="text-success">Plots</th>
-                <th scope="col" class="text-success">ETW</th>
-                <th scope="col" class="text-success">Harvesters</th>
+                <th scope="col" class="text-success">Workers</th>
                 <th scope="col" class="text-success">Max Resp.</th>
+                <th scope="col" class="text-success">Partials</th>
+                <th scope="col" class="text-success">ETW</th>
+                <!--th scope="col" class="text-success">Farmed</th-->
+                <th scope="col" class="text-success">Wallet</th>
+                <th scope="col" class="text-success">USD*</th>
                 <!--th scope="col" class="text-success">Drives</th-->
                 <!--th scope="col" class="text-success">Plottings</th-->
                 <!--th scope="col" class="text-success">Effort</th-->
@@ -54,13 +56,15 @@
                     {% endif %} &nbsp;
                     {{summary.status}}
                 </td>
-                <!--td>{{summary.farmed}}</td-->
-                <td>{{summary.wallet}}</td>
                 <td>{{summary.height}}</td>
                 <td>{{summary.plots}}</td>
-                <td>{{summary.etw}}</td>
                 <td>{{summary.harvesters}}</td>
                 <td>{{summary.max_resp}}</td>
+                <td>{{summary.partials_per_hour}}</td>
+                <td>{{summary.etw}}</td>
+                <!--td>{{summary.farmed}}</td-->
+                <td>{{summary.wallet}}</td>
+                <td>{{summary.usd}}</td>
                 <!--td>{{summary.plottings}}</td-->
             </tr>
             {% endfor %}

@@ -38,7 +38,7 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 
 ## Other Resources
 * [Blockchain DB Downloads](https://chiaforksblockchain.com/) - from Maize
-* [All the Blocks](https://alltheblocks.net/) - blockchain & wallet info
+* [All the Blocks](https://alltheblocks.net/) - blockchain, wallet, and pricing info
 
 ## Testers and Developers
 

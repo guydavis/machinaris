@@ -12,7 +12,9 @@ from sqlalchemy import or_
 from common.utils import converters
 from common.models.alerts import Alert
 from common.models.challenges import Challenge
+from common.models.pools import POOLABLE_BLOCKCHAINS
 from common.models.plots import Plot
+from common.models.partials import Partial
 from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalCoins, StatNetspaceSize, StatTimeToWin, \
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \
         StatPlottingDiskUsed, StatPlottingDiskFree
@@ -303,9 +305,19 @@ def load_summary_stats(blockchains):
         except Exception as ex:
             app.logger.error(ex)
             app.logger.info("No recent challenge response times found for {0}".format(blockchain))
+        partials_per_hour = ''
+        if blockchain in POOLABLE_BLOCKCHAINS:
+            try:
+                day_ago = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M")
+                partial_records = db.session.query(Partial).filter(Partial.blockchain==blockchain, Partial.created_at >= day_ago ).order_by(Partial.created_at.desc()).all()
+                partials_per_hour = "%.2f per hour" % (len(partial_records) / 24)
+            except Exception as ex:
+                app.logger.error(ex)
+                app.logger.info("No recent partials submitted for {0}".format(blockchain))
         stats[blockchain] = {
             'harvesters': harvesters,
             'max_resp': max_response,
+            'partials_per_hour': partials_per_hour,
             'plottings': "TODO"
         }
     return stats

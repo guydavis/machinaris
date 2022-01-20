@@ -29,11 +29,13 @@ class Summaries:
                 'status': blockchain['status'],
                 'farmed': farm['total_coins'],
                 'wallet': wallet['total_balance'],
+                'usd': converters.to_usd(blockchain['blockchain'], wallet['total_balance']),
                 'height': blockchain['peak_height'],
                 'plots': farm['plot_count'],
                 'harvesters': stats[blockchain['blockchain']]['harvesters'], 
                 'max_resp': stats[blockchain['blockchain']]['max_resp'], 
                 'plottings': stats[blockchain['blockchain']]['plottings'], 
+                'partials_per_hour': stats[blockchain['blockchain']]['partials_per_hour'], 
                 'etw': self.etw_to_days(blockchain['blockchain'], farm['expected_time_to_win']),
             })
 
@@ -219,6 +221,7 @@ class Wallets:
                 'cold_balance': cold_balance,
                 'cold_address': ','.join(cold_wallet_addresses[wallet.blockchain]) if wallet.blockchain in cold_wallet_addresses else '',
                 'total_balance': total_balance,
+                'usd_balance': converters.to_usd(wallet.blockchain, total_balance),
                 'updated_at': wallet.updated_at }) 
 
     def sum_chia_wallet_balance(self, hostname, blockchain, include_cold_balance=True):

@@ -79,6 +79,7 @@
                 <th scope="col" class="text-success">Wallet Balance</th>
                 <th scope="col" class="text-success">Cold Wallet Balance</th>
                 <th scope="col" class="text-success">Total Balance</th>
+                <th scope="col" class="text-success">USD*</th>
                 <th scope="col" class="text-success">Updated At</th>
                 <th scope="col" class="text-success"></th>
             </tr>
@@ -100,6 +101,7 @@
                 <td>{{wallet.hot_balance}}</td>
                 <td>{{wallet.cold_balance}}</td>
                 <td>{{wallet.total_balance}}</td>
+                <td>{{wallet.usd_balance}}</td>
                 <td>{{wallet.updated_at | datetimefilter}}</td>
                 <td class='edit_cell'><a href="#" title="Edit Wallet" data-bs-toggle="modal" 
                     data-bs-target="#walletModal" data-bs-blockchain="{{wallet.blockchain}}"

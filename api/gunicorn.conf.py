@@ -14,6 +14,8 @@ def on_starting(server):
     from api.schedules import stats_disk, stats_farm, nft_recover, plots_check, log_rotate, db_backup, restart_stuck_farmer
     from common.config import globals
 
+    from api.commands import websvcs
+
     scheduler = BackgroundScheduler()
 
     schedule_every_x_minutes = "?"
@@ -63,10 +65,11 @@ def on_starting(server):
     if utils.is_controller():
         scheduler.add_job(func=plots_check.execute, name="plot_checks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_controller.update, name="controller", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        scheduler.add_job(func=websvcs.get_prices, name="get_prices", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', hours=12)
 
     # Testing only
-    #scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=websvcs.test_chia_cold, name="test_chia_cold", trigger='interval', seconds=10) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()
