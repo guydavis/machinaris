@@ -34,8 +34,9 @@ class Summaries:
                 'plots': farm['plot_count'],
                 'harvesters': stats[blockchain['blockchain']]['harvesters'], 
                 'max_resp': stats[blockchain['blockchain']]['max_resp'], 
-                'plottings': stats[blockchain['blockchain']]['plottings'], 
-                'partials_per_hour': stats[blockchain['blockchain']]['partials_per_hour'], 
+                'partials_per_hour': stats[blockchain['blockchain']]['partials_per_hour'],
+                'edv': stats[blockchain['blockchain']]['edv'], 
+                'edv_usd': stats[blockchain['blockchain']]['edv_usd'], 
                 'etw': self.etw_to_days(blockchain['blockchain'], farm['expected_time_to_win']),
             })
 
@@ -100,7 +101,7 @@ class FarmSummary:
                     "display_status": self.status_if_responding(displayname, farm_rec.blockchain, connection_status, farm_rec.status),
                     "total_coins": total_coins,
                     "wallet_balance": wallet_balance,
-                    "currency_symbol": globals.CURRENCY_SYMBOLS[farm_rec.blockchain],
+                    "currency_symbol": globals.get_blockchain_symbol(farm_rec.blockchain),
                     "netspace_display_size": '?' if not farm_rec.netspace_size else converters.gib_to_fmt(farm_rec.netspace_size),
                     "netspace_size": farm_rec.netspace_size,
                     "expected_time_to_win": farm_rec.expected_time_to_win,
@@ -247,16 +248,16 @@ class Wallets:
         return '?'
 
     def sum_mmx_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
-        numeric_const_pattern = '^Balance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
+        numeric_const_pattern = 'Balance:\s+((?: (?: \d*\.\d+ ) | (?: \d+\.? ) )(?: [Ee] [+-]? \d+ )?)'
         rx = re.compile(numeric_const_pattern, re.VERBOSE)
         found_balance = False
         sum = 0
         for wallet in self.wallets:
             if wallet.hostname == hostname and wallet.blockchain == blockchain:
                 try:
+                    #app.logger.info(wallet.details)
                     for balance in rx.findall(wallet.details):
-                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
-                        # wallet.hostname, wallet.blockchain))
+                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, wallet.hostname, wallet.blockchain))
                         sum += locale.atof(balance)
                         found_balance = True
                 except Exception as ex:

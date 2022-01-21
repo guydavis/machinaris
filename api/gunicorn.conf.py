@@ -57,8 +57,8 @@ def on_starting(server):
         scheduler.add_job(func=status_plots.update, name="plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_plotnfts.update, name="plotnfts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
-        scheduler.add_job(func=db_backup.execute, name="db_backup", trigger='cron', hour=0, jitter=(JOB_JITTER*3600))  # Daily
-        scheduler.add_job(func=restart_stuck_farmer.execute, name="restart_stuck_farmer", trigger='interval', minutes=5, jitter=0) 
+        #scheduler.add_job(func=db_backup.execute, name="db_backup", trigger='cron', hour=0, jitter=(JOB_JITTER*3600))  # Daily
+        scheduler.add_job(func=restart_stuck_farmer.execute, name="restart_farmer_if_stuck", trigger='interval', minutes=5, jitter=0) 
         scheduler.add_job(func=status_partials.update, name="partials", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
 
     # Status for single Machinaris controller only, should be blockchain=chia
