@@ -33,8 +33,7 @@ CHIADOG_PATH = '/chiadog'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
 
-# TODO Remove /code from path
-INFO_FILE = '/code/machinaris/common/config/blockchains.json'
+INFO_FILE = '/machinaris/common/config/blockchains.json'
 
 def get_supported_blockchains():
     try:
