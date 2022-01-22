@@ -77,10 +77,12 @@ def to_usd(blockchain, coins):
             with open(BLOCKCHAIN_PRICES_CACHE_FILE) as f:
                 data = json.load(f)
                 if blockchain in data:
-                    return "${:,.2f}".format(float(data[blockchain]) * float(coins))
+                    if isinstance(coins, str):
+                        coins = float(coins.replace(',',''))
+                    return "${:,.2f}".format(float(data[blockchain]) * coins)
                 return ''
         except Exception as ex:
-            print("Unable to convert  to $USD because {0}".format(str(ex)))
+            print("Unable to convert to $USD because {0}".format(str(ex)))
     return ''
 
 ##################################################################################################

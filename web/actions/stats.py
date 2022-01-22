@@ -318,7 +318,7 @@ def load_summary_stats(blockchains):
                 for wk in host.workers:
                     if wk['blockchain'] == blockchain:
                         harvesters_total += 1
-                        app.logger.info(wk['farming_status'])
+                        #app.logger.info(wk['farming_status'])
                         if wk['farming_status'] in ['farming', 'harvesting']: 
                             harvsters_online += 1
             harvesters = "{0} / {1}".format(harvsters_online, harvesters_total)

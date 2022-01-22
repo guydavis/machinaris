@@ -84,6 +84,54 @@
 $(document).ready(function () {
     $('#data').DataTable({
         "pageLength": 25,
+        "columnDefs": [
+            { 
+                targets: [4], "orderable": true, 
+                "render": function ( data, type, row, meta ) {
+                    if (data && data.includes('/')) {
+                        arr = data.split("/");
+                        responding = arr[0].trim();
+                        total = arr[1].trim();
+                        if (responding == 0) {
+                            return "<span class='text-danger'>" + data + "</span>";
+                        }
+                        if (responding < total) {
+                            return "<span class='text-warning'>" + data + "</span>";
+                        }
+                    }
+                    return data;
+                }
+            },
+            { 
+                targets: [5], "orderable": true, 
+                "render": function ( data, type, row, meta ) {
+                    if (data && data.endsWith('secs')) {
+                        arr = data.split(" ");
+                        response_seconds = Number(arr[0].trim());
+                        if (response_seconds > 30) {
+                            return "<span class='text-danger'>" + data + "</span>";
+                        }
+                        if (response_seconds > 10) {
+                            return "<span class='text-warning'>" + data + "</span>";
+                        }
+                    }
+                    return data;
+                }
+            },
+            { 
+                targets: [6], "orderable": true, 
+                "render": function ( data, type, row, meta ) {
+                    if (data && data.includes('/')) {
+                        arr = data.split("/");
+                        partials = arr[0].trim();
+                        if (partials == '0.00') {
+                            return "<span class='text-danger'>" + data + "</span>";
+                        }
+                    }
+                    return data;
+                }
+            },
+        ],
     });
 })
 </script>

@@ -44,12 +44,12 @@
                     <li>
                         <a class="dropdown-item text-white text-decoration-none" href="#"
                             onclick='MonitoringLogs("{{ farmer.hostname }}", "{{worker.blockchain}}");return false;'>
-                            <span class="align-text-bottom" style="padding-right:5px">{{worker.blockchain|capitalize}}</span>
                             {% if worker.monitoring_status == 'running' %}
                                 <i class="fs-4 bi-check-circle text-success"></i>
                             {% else %}
                                 <i class="fs-4 bi-exclamation-triangle text-warning"></i>
-                            {% endif %}
+                            {% endif %} &nbsp;
+                            <span class="align-text-bottom" style="padding-right:5px">{{worker.blockchain|capitalize}}</span>
                         </a>
                     </li>
                     {% endfor %}

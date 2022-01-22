@@ -23,12 +23,16 @@ def execute():
         app.logger.info("****************** Starting twice daily NFT 7/8 reward recovery. *********************")
         fullnodes = db.session.query(wk.Worker).filter(wk.Worker.mode == 'fullnode', 
             wk.Worker.blockchain != 'chia', wk.Worker.blockchain != 'chives').order_by(wk.Worker.blockchain).all()
+        app.logger.info("Found {0} fullnodes to initiate reward recovery on.".format(len(fullnodes)))
         wallet = db.session.query(w.Wallet).filter(w.Wallet.blockchain == 'chia').first()
-        plotnfts = db.session.query(p.Plotnft).filter(p.Plotnft.blockchain == 'chia').all()
+        if not wallet:
+            app.logger.info("Found no Chia wallet details during reward recovery.")
+            return
         wallet_id = wallet.wallet_id()
         if not wallet_id: 
             app.logger.info("Found no wallet id, so skipping NFT 7/8 reward recovery.")
             return
+        plotnfts = db.session.query(p.Plotnft).filter(p.Plotnft.blockchain == 'chia').all()
         if len(plotnfts) == 0:
             app.logger.info("Found no Chia PlotNFTs at all, so skipping NFT 7/8 reward recovery.")
             return
@@ -41,7 +45,9 @@ def execute():
                 app.logger.info("Found no pool contract address, so skipping NFT 7/8 reward recovery on plotnft: {0}".format(plotnft))
                 continue
             for fullnode in fullnodes:
-                if fullnode.blockchain != 'hddcoin':
+                if fullnode.latest_ping_result != 'Responding':
+                    app.logger.error("Skipping reward recovery for {0} as last ping to {1}:{2} returned {3}.".format(
+                        fullnode.blockchain, fullnode.hostname, fullnode.port, fullnode.latest_ping_result))
                     continue
                 payload = {
                     'blockchain': fullnode.blockchain,
@@ -49,5 +55,9 @@ def execute():
                     'launcher_id': plotnft.launcher,
                     'pool_contract_address': pool_contract_address
                 }
-                utils.send_worker_post(fullnode, '/rewards/', payload, debug=True)
+                try:
+                    utils.send_worker_post(fullnode, '/rewards/', payload, debug=True)
+                except Exception as ex:
+                    app.logger.error("Failed to request reward recovery for {0} to {1}:{2} because {3}.".format(
+                        fullnode.blockchain, fullnode.hostname, fullnode.port, str(ex)))
             

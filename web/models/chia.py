@@ -119,7 +119,7 @@ class FarmSummary:
     def status_if_responding(self, displayname, blockchain, connection_status, last_status):
         if connection_status == 'Responding':
             return "Active" if last_status == "Farming" else last_status
-        app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
+        #app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
         return "Offline"
 
     def selected_blockchain(self):
@@ -532,7 +532,7 @@ class Connections:
         conns = []
         for line in connection.details.split('\n'):
             try:
-                app.logger.info(line)
+                #app.logger.info(line)
                 m = re.match("\[(.+)\]   height =  (\d+), (\d+\.?\d*) MB recv, (\d*\.?\d*) MB sent, timeout = (\d+\.?\d*) sec", line.strip(), re.IGNORECASE)
                 if m:
                     connection = {

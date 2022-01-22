@@ -161,7 +161,7 @@
         "network_port": 12334,
         "farmer_port": 11330,
         "worker_port": 8940,
-        "reward": 0.19,
+        "reward": 0.211632,
         "mojos_per_coin": 1000000,
         "blocks_per_day": 4608,
         "git_url": "https://github.com/madMAx43v3r/mmx-node",

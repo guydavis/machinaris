@@ -69,7 +69,7 @@ def on_starting(server):
         scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', hours=12)
 
     # Testing only
-    #scheduler.add_job(func=websvcs.test_chia_cold, name="test_chia_cold", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', seconds=120) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()

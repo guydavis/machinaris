@@ -144,7 +144,7 @@ def request_prices(prices, debug=False):
             if len(price_column.contents) == 1:
                 price_value = price_column.contents[0].string.strip()
                 if price_value.startswith('$'):
-                    app.logger.info("{0} @ {1}".format(blockchain, price_value[1:].strip()))
+                    #app.logger.info("{0} @ {1}".format(blockchain, price_value[1:].strip()))
                     try:
                         prices[blockchain] = float(price_value[1:].strip())
                     except Exception as ex:
