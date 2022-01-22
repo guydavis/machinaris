@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.6.9] - 2022-02-04
  - [MMX](https://github.com/madMAx43v3r/mmx-node) - support for this new blockchain, which requires its own plot files.
- - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain/releases) - update to version 1.2.11
+ - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain/releases) - update to version 2.0.0
  - Improved summary display for status.  Estimated price in USD provided by alltheblocks.net
  - Various fixes for issues reported in the Discord.  Thanks to all who reported!
 

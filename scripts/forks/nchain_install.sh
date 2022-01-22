@@ -5,7 +5,7 @@
 
 NCHAIN_BRANCH=$1
 # On 2021-12-01
-HASH=2F3c51a0bc6ee3930b40296a75dccf0ad8daab3a68
+HASH=3c51a0bc6ee3930b40296a75dccf0ad8daab3a68
 
 if [ -z ${NCHAIN_BRANCH} ]; then
 	echo 'Skipping NChain install as not requested.'
