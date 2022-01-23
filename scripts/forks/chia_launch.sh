@@ -37,10 +37,13 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo 'Starting web server...  Browse to port 8926.'
   echo "Downloading Chia blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
-  mkdir -p /root/.chia/mainnet/db/ && cd /root/.chia/mainnet/db/
+  mkdir -p /root/.chia/mainnet/db/chia && cd /root/.chia/mainnet/db/chia
   # Latest Blockchain DB download from direct from https://www.chia-database.com/
   file_time=$(curl -s https://chia-database.com | grep -Po "blockchain_v1_mainnet-\K(\d|-)+")
   curl -skLJ -o - https://nginx.chia-database.com/blockchain_v1_mainnet-${file_time}.zip | zcat >> blockchain_v1_mainnet.sqlite
+  cd /root/.chia/mainnet/db
+  mv /root/.chia/mainnet/db/chia/blockchain_v1_mainnet.sqlite .
+  rm -rf /root/.chia/mainnet/db/chia
 fi
 
 echo 'Configuring Chia...'
