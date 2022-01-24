@@ -36,25 +36,26 @@
       }
   </style>
 
-  {% if pools.rows|length > 0 %}
+  {% if pools.blockchains|length > 0 %}
   <nav class="navbar navbar-expand-lg navbar-dark" style="padding-bottom: 0px; display: block">
       <div class="h-100 p-2 text-white">
           <ul class="nav nav-tabs" id="myTab" role="tablist">
-            {% for pool in pools.rows %}
+            {% for blockchain in pools.blockchains.keys()|sort %}
               <li class="nav-item" role="presentation">
-                  <button class="nav-link {% if pool.blockchain == selected_blockchain %}active{% endif %}"
-                      id="{{pool.blockchain}}-tab" data-bs-toggle="tab"
-                      data-bs-target="#{{pool.blockchain}}" type="button" role="tab"
-                      aria-controls="{{pool.blockchain}}"
-                      aria-selected="{% if pool.blockchain == selected_blockchain %}true{% else %}false{% endif %}">{{ pool.blockchain
+                  <button class="nav-link {% if blockchain == selected_blockchain %}active{% endif %}"
+                      id="{{blockchain}}-tab" data-bs-toggle="tab"
+                      data-bs-target="#{{blockchain}}" type="button" role="tab"
+                      aria-controls="{{blockchain}}"
+                      aria-selected="{% if blockchain == selected_blockchain %}true{% else %}false{% endif %}">{{ blockchain
                       }}</button>
               </li>
               {% endfor %}
           </ul>
           <div class="tab-content">
-            {% for pool in pools.rows %}
-            <div class="tab-pane {% if pool.blockchain == selected_blockchain %}active{% endif %}" id="{{pool.blockchain}}"
-                role="tabpanel" aria-labelledby="{{pool.blockchain}}-tab">
+            {% for blockchain in pools.blockchains.keys()|sort %}
+            <div class="tab-pane {% if blockchain == selected_blockchain %}active{% endif %}" id="{{blockchain}}"
+                role="tabpanel" aria-labelledby="{{blockchain}}-tab">
+              {% for pool in pools.blockchains[blockchain] %}
               <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
                 <div class="h-20 p-2 bg-light border rounded-3">
                   <h6 class="display-7">Pool:
@@ -85,6 +86,7 @@
                   </span>
                 </div>
               </div>
+              {% endfor %}
             </div>
             {% endfor %}
           </div>
