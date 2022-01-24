@@ -25,7 +25,7 @@ def load_config(farmer, blockchain):
     return utils.send_get(farmer, "/configs/alerts/"+ blockchain, debug=False).content
 
 def load_farmers():
-    return wk.load_worker_summary().farmers_harvesters()
+    return wk.load_worker_summary().farmers_harvesters(exclude_blockchains=['mmx'])
 
 def save_config(farmer, blockchain, config):
     try: # Validate the YAML first

@@ -19,7 +19,49 @@
     }
 </style>
 
+<header class="pb-3 mb-4 border-bottom">
+    <span class="fs-4">Blockchain Summary</span>
+</header>
+
 {% if blockchains.rows|length > 0 %}
+<form method="POST" id="blockchain-form" style="padding-bottom: 10px;">
+    <table id="data" class="table table-dark">
+        <thead>
+            <tr>
+                <th scope="col" class="text-success">Blockchain</th>
+                <th scope="col" class="text-success">Status</th>
+                <th scope="col" class="text-success">Peak Height</th>
+                <th scope="col" class="text-success">Peak Time</th>
+                <th scope="col" class="text-success">Updated At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for blockchain in blockchains.rows %}
+            <tr>
+                <td>{{blockchain.blockchain}}</td>
+                <td>
+                    {% if blockchain.status == 'Offline' %}
+                      <i class="bi-dash-circle text-danger"></i>
+                    {% elif blockchain.status.lower().startswith('synced') %}
+                        <i class="bi-check-circle text-success"></i>
+                    {% else %}
+                      <i class="bi-exclamation-triangle text-warning"></i>
+                    {% endif %} &nbsp;
+                    {{blockchain.status}}
+                </td>
+                <td>{{blockchain.peak_height}}</td>
+                <td>{{blockchain.peak_time}}</td>
+                <td>{{blockchain.updated_at | datetimefilter}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+
+<header class="pb-3 mt-4">
+    <span class="fs-4">Blockchain Details</span>
+</header>
+
 <nav class="navbar navbar-expand-lg navbar-dark" style="padding-bottom: 0px;">
     <div class="h-100 p-2 text-white">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -47,4 +89,14 @@
 </div>
 {% endif %}
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function () {
+    $('#data').DataTable({
+        "pageLength": 25,
+    });
+})
+</script>
 {% endblock %}

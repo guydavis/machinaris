@@ -109,7 +109,7 @@ class WorkerSummary:
     def status_if_responding(self, displayname, blockchain, connection_status, last_status):
         if connection_status == "Responding":
             return last_status
-        app.logger.info("Oops! {0} ({1}) last connection status: {2}".format(displayname, blockchain, connection_status))
+        #app.logger.info("Oops! {0} ({1}) last connection status: {2}".format(displayname, blockchain, connection_status))
         return "offline"
 
     def fullnodes(self):
@@ -173,6 +173,7 @@ class WorkerSummary:
                     'hostname': worker.hostname,
                     'displayname': worker.displayname,
                     'blockchain': worker.blockchain,
+                    'connection_status': worker.connection_status(),
                     'farming_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.farming_status().lower()),
                     'monitoring_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.monitoring_status().lower())
                 })
@@ -195,16 +196,19 @@ class WorkerSummary:
                     'hostname': worker.hostname,
                     'displayname': worker.displayname,
                     'blockchain': worker.blockchain,
+                    'connection_status': worker.connection_status(),
                     'farming_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.farming_status().lower()),
                     'monitoring_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.monitoring_status().lower())
                 })
         filtered.sort(key=lambda w: w.displayname)
         return filtered
 
-    def farmers_harvesters(self):
+    def farmers_harvesters(self, exclude_blockchains=None):
         filtered = []
         for worker in self.workers:
             if worker.mode == "fullnode" or "farmer" in worker.mode or "harvester" in worker.mode:
+                if exclude_blockchains and worker.blockchain in exclude_blockchains:
+                    continue
                 host = None
                 for h in filtered:
                     if h.displayname == worker.displayname:
@@ -217,6 +221,7 @@ class WorkerSummary:
                     'hostname': worker.hostname,
                     'displayname': worker.displayname,
                     'blockchain': worker.blockchain,
+                    'connection_status': worker.connection_status(),
                     'farming_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.farming_status().lower()),
                     'monitoring_status': self.status_if_responding(worker.displayname, worker.blockchain, worker.connection_status(), worker.monitoring_status().lower())
                 })

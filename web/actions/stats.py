@@ -9,9 +9,14 @@ import sqlite3
 from flask import g
 from sqlalchemy import or_
 
+from common.config import globals
 from common.utils import converters
 from common.models.alerts import Alert
+from common.models.challenges import Challenge
+from common.models.farms import Farm
+from common.models.pools import POOLABLE_BLOCKCHAINS
 from common.models.plots import Plot
+from common.models.partials import Partial
 from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalCoins, StatNetspaceSize, StatTimeToWin, \
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \
         StatPlottingDiskUsed, StatPlottingDiskFree
@@ -273,3 +278,76 @@ def load_plotting_stats():
                 summary_by_size[k][worker] = worker_values
     #app.logger.info(summary_by_size.keys())
     return summary_by_size
+
+def calc_estimated_daily_value(blockchain):
+    edv = None
+    edv_usd = None
+    result = []
+    try:
+        farm = db.session.query(Farm).filter(Farm.blockchain == blockchain).first()
+        blocks_per_day = globals.get_blocks_per_day(blockchain)
+        block_reward = globals.get_block_reward(blockchain)
+        symbol = globals.get_blockchain_symbol(blockchain).lower()
+        edv = blocks_per_day * block_reward * farm.plots_size / farm.netspace_size
+    except Exception as ex:
+        app.logger.info("Failed to calculate EDV for {0} because {1}".format(blockchain, str(ex)))
+    if edv:
+        result.append("{:,.3f} {}".format(edv, symbol))
+    else:
+        result.append('')
+    try:
+        edv_usd = converters.to_usd(blockchain, edv)
+    except Exception as ex:
+        app.logger.info("Failed to calculate EDV_USD for {0} because {1}".format(blockchain, str(ex)))
+    if edv:
+        result.append(edv_usd)
+    else:
+        result.append('')
+    return result
+
+def load_summary_stats(blockchains):
+    all_farmers = worker.load_worker_summary().farmers_harvesters()
+    stats = {}
+    for b in blockchains:
+        blockchain = b['blockchain']
+        harvesters = ''
+        try:
+            harvsters_online = 0
+            harvesters_total = 0
+            for host in all_farmers:
+                for wk in host.workers:
+                    if wk['blockchain'] == blockchain:
+                        harvesters_total += 1
+                        #app.logger.info(wk['farming_status'])
+                        if wk['farming_status'] in ['farming', 'harvesting']: 
+                            harvsters_online += 1
+            harvesters = "{0} / {1}".format(harvsters_online, harvesters_total)
+        except Exception as ex:
+            app.logger.error(ex)
+            app.logger.info("No recent challenge response times found for {0}".format(blockchain))
+        max_response = ''
+        try:
+            max_record = db.session.query(Challenge).filter(Challenge.blockchain==blockchain).order_by(Challenge.time_taken.desc()).first()
+            if max_record: 
+                max_response = "%.2f secs" % float(max_record.time_taken.split()[0]) # Strip of 'secs' unit before rounding
+        except Exception as ex:
+            app.logger.error(ex)
+            app.logger.info("No recent challenge response times found for {0}".format(blockchain))
+        partials_per_hour = ''
+        if blockchain in POOLABLE_BLOCKCHAINS:
+            try:
+                day_ago = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M")
+                partial_records = db.session.query(Partial).filter(Partial.blockchain==blockchain, Partial.created_at >= day_ago ).order_by(Partial.created_at.desc()).all()
+                partials_per_hour = "%.2f / hour" % (len(partial_records) / 24)
+            except Exception as ex:
+                app.logger.error(ex)
+                app.logger.info("No recent partials submitted for {0}".format(blockchain))
+        [edv, edv_usd] = calc_estimated_daily_value(blockchain)
+        stats[blockchain] = {
+            'harvesters': harvesters,
+            'max_resp': max_response,
+            'partials_per_hour': partials_per_hour,
+            'edv': edv,
+            'edv_usd': edv_usd
+        }
+    return stats

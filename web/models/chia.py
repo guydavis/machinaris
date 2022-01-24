@@ -16,11 +16,56 @@ MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
 PLOT_TABLE_COLUMNS = ['worker', 'blockchain', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', 'c', 'a' ]
 
+class Summaries:
+
+    def __init__(self, blockchains, farms, wallets, stats):
+        self.rows = []
+        for blockchain in blockchains.rows:
+            farm = self.find_farm(farms, blockchain['blockchain'])
+            wallet = self.find_wallet(wallets, blockchain['blockchain'])
+            #app.logger.info(blockchain)
+            self.rows.append({
+                'blockchain': blockchain['blockchain'],
+                'status': blockchain['status'],
+                'farmed': farm['total_coins'],
+                'wallet': wallet['total_balance'],
+                'usd': converters.to_usd(blockchain['blockchain'], wallet['total_balance']),
+                'height': blockchain['peak_height'],
+                'plots': farm['plot_count'],
+                'harvesters': stats[blockchain['blockchain']]['harvesters'], 
+                'max_resp': stats[blockchain['blockchain']]['max_resp'], 
+                'partials_per_hour': stats[blockchain['blockchain']]['partials_per_hour'],
+                'edv': stats[blockchain['blockchain']]['edv'], 
+                'edv_usd': stats[blockchain['blockchain']]['edv_usd'], 
+                'etw': self.etw_to_days(blockchain['blockchain'], farm['expected_time_to_win']),
+            })
+
+    def find_farm(self, farms, blockchain):
+        if blockchain in farms:
+            return farms[blockchain]
+
+    def find_wallet(self, wallets, blockchain):
+        for wallet in wallets.rows:
+            if wallet['blockchain'] == blockchain:
+                return wallet
+
+    def etw_to_days(self, blockchain, etw):
+        if blockchain == 'mmx':
+            return ''
+        #app.logger.info("{0} -> {1}".format(blockchain, etw))
+        try:
+            minutes = converters.etw_to_minutes(etw)
+            #app.logger.info("Converting {0} minutes.".format(minutes))
+            return "%.1f days"% round(( minutes / 60 / 24), 2)
+        except Exception as ex:
+            app.logger.info("Unable to convert ETW to minutes '{0}' because {1}.".format(etw, str(ex)))
+            return etw
+
 class FarmSummary:
 
     def __init__(self, farm_recs, wallet_recs):
         self.farms = {}
-        wallets = Wallets(wallet_recs)
+        self.wallets = Wallets(wallet_recs)
         for farm_rec in farm_recs: 
             if farm_rec.mode == "fullnode":
                 try:
@@ -39,9 +84,9 @@ class FarmSummary:
                     connection_status = None
                 try:
                     if farm_rec.blockchain == 'mmx':
-                        wallet_balance = wallets.sum_mmx_wallet_balance(farm_rec.hostname, farm_rec.blockchain)
+                        wallet_balance = self.wallets.sum_mmx_wallet_balance(farm_rec.hostname, farm_rec.blockchain)
                     else:
-                        wallet_balance = wallets.sum_chia_wallet_balance(farm_rec.hostname, farm_rec.blockchain)
+                        wallet_balance = self.wallets.sum_chia_wallet_balance(farm_rec.hostname, farm_rec.blockchain)
                 except: 
                     wallet_balance = '?'
                 if farm_rec.total_coins:
@@ -56,7 +101,7 @@ class FarmSummary:
                     "display_status": self.status_if_responding(displayname, farm_rec.blockchain, connection_status, farm_rec.status),
                     "total_coins": total_coins,
                     "wallet_balance": wallet_balance,
-                    "currency_symbol": globals.CURRENCY_SYMBOLS[farm_rec.blockchain],
+                    "currency_symbol": globals.get_blockchain_symbol(farm_rec.blockchain),
                     "netspace_display_size": '?' if not farm_rec.netspace_size else converters.gib_to_fmt(farm_rec.netspace_size),
                     "netspace_size": farm_rec.netspace_size,
                     "expected_time_to_win": farm_rec.expected_time_to_win,
@@ -74,7 +119,7 @@ class FarmSummary:
     def status_if_responding(self, displayname, blockchain, connection_status, last_status):
         if connection_status == 'Responding':
             return "Active" if last_status == "Farming" else last_status
-        app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
+        #app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
         return "Offline"
 
     def selected_blockchain(self):
@@ -149,9 +194,12 @@ class Wallets:
         self.rows = []
         self.cold_wallet_addresses = cold_wallet_addresses
         for wallet in wallets:
+            worker_status = None
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(wallet.hostname))
-                displayname = w.get_worker(wallet.hostname, wallet.blockchain).displayname
+                worker = w.get_worker(wallet.hostname, wallet.blockchain)
+                worker_status = worker.connection_status()
+                displayname = worker.displayname
             except:
                 app.logger.info("Wallets.init(): Unable to find a worker with hostname '{0}'".format(wallet.hostname))
                 displayname = wallet.hostname
@@ -167,12 +215,14 @@ class Wallets:
             self.rows.append({ 
                 'displayname': displayname, 
                 'hostname': wallet.hostname,
-                'blockchain': wallet.blockchain, 
+                'blockchain': wallet.blockchain,
+                'status': self.extract_status(wallet.blockchain, wallet.details, worker_status),
                 'details': wallet.details, 
                 'hot_balance': hot_balance,
                 'cold_balance': cold_balance,
                 'cold_address': ','.join(cold_wallet_addresses[wallet.blockchain]) if wallet.blockchain in cold_wallet_addresses else '',
                 'total_balance': total_balance,
+                'usd_balance': converters.to_usd(wallet.blockchain, total_balance),
                 'updated_at': wallet.updated_at }) 
 
     def sum_chia_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
@@ -198,16 +248,16 @@ class Wallets:
         return '?'
 
     def sum_mmx_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
-        numeric_const_pattern = '^Balance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
+        numeric_const_pattern = 'Balance:\s+((?: (?: \d*\.\d+ ) | (?: \d+\.? ) )(?: [Ee] [+-]? \d+ )?)'
         rx = re.compile(numeric_const_pattern, re.VERBOSE)
         found_balance = False
         sum = 0
         for wallet in self.wallets:
             if wallet.hostname == hostname and wallet.blockchain == blockchain:
                 try:
+                    #app.logger.info(wallet.details)
                     for balance in rx.findall(wallet.details):
-                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
-                        # wallet.hostname, wallet.blockchain))
+                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, wallet.hostname, wallet.blockchain))
                         sum += locale.atof(balance)
                         found_balance = True
                 except Exception as ex:
@@ -217,7 +267,26 @@ class Wallets:
                     sum += locale.atof(wallet.cold_balance)
         if found_balance:
             return converters.round_balance(sum)
-        return '?'
+        return '0' # Initially MMX reports nothing at all for a balance.  This implies zero.
+
+    def extract_status(self, blockchain, details, worker_status):
+        if worker_status == 'Responding':
+            if not details:
+                return None
+            if blockchain == 'mmx':
+                pattern = '^Synced: (.*)$'
+            else:
+                pattern = '^Sync status: (.*)$'
+            for line in details.split('\n'):
+                m = re.match(pattern, line)
+                if m:
+                    status = m.group(1).strip()
+                    if 'Yes' == status: # MMX
+                        return "Synced"
+                    if 'No' == status: # MMX
+                        return "Syncing" 
+                    return status
+        return "Offline"
 
 class Keys:
 
@@ -225,9 +294,12 @@ class Keys:
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
         for key in keys:
+            worker_status = None
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(key.hostname))
-                displayname = w.get_worker(key.hostname, key.blockchain).displayname
+                worker = w.get_worker(key.hostname, key.blockchain)
+                worker_status = worker.connection_status()
+                displayname = worker.displayname
             except:
                 app.logger.info("Keys.init(): Unable to find a worker with hostname '{0}'".format(key.hostname))
                 displayname = key.hostname
@@ -235,6 +307,7 @@ class Keys:
                 'displayname': displayname, 
                 'hostname': key.hostname,
                 'blockchain': key.blockchain,
+                'status': worker_status,
                 'details': key.details,
                 'updated_at': key.updated_at }) 
 
@@ -244,9 +317,12 @@ class Blockchains:
         self.columns = ['hostname', 'blockchain', 'details', 'updated_at']
         self.rows = []
         for blockchain in blockchains:
+            worker_status = None
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(blockchain.hostname))
-                displayname = w.get_worker(blockchain.hostname, blockchain.blockchain).displayname
+                worker = w.get_worker(blockchain.hostname, blockchain.blockchain)
+                worker_status = worker.connection_status()
+                displayname = worker.displayname
             except:
                 app.logger.info("Blockchains.init(): Unable to find a worker with hostname '{0}'".format(blockchain.hostname))
                 displayname = blockchain.hostname
@@ -254,18 +330,78 @@ class Blockchains:
                 'displayname': displayname, 
                 'hostname': blockchain.hostname,
                 'blockchain': blockchain.blockchain, 
+                'status': self.extract_status(blockchain.blockchain, blockchain.details, worker_status),
+                'peak_height': self.extract_height(blockchain.blockchain, blockchain.details),
+                'peak_time': self.extract_time(blockchain.blockchain, blockchain.details),
                 'details': blockchain.details,
                 'updated_at': blockchain.updated_at }) 
-   
+    
+    def extract_status(self, blockchain, details, worker_status):
+        if worker_status == 'Responding':
+            if not details:
+                return None
+            if blockchain == 'mmx':
+                pattern = '^Synced: (.*)$'
+            else:
+                pattern = '^Current Blockchain Status: (.*)$'
+            for line in details.split('\n'):
+                m = re.match(pattern, line)
+                if m: 
+                    status = m.group(1).strip()
+                    if status == "Full Node Synced":
+                        return "Synced"
+                    if 'Syncing' in status:
+                        return "Syncing"
+                    if 'Not Synced' in status:
+                        return 'Not Synced'
+                    if 'Yes' == status: # MMX
+                        return "Synced"
+                    if 'No' == status: # MMX
+                        return "Syncing" 
+                    return status
+        return "Offline"
+
+    def extract_height(self, blockchain, details):
+        if not details:
+            return None
+        if blockchain == 'mmx':
+            pattern = '^Height: (\d+)$'
+        else:
+            pattern = '^.* Height:\s+(\d+)$'
+        for line in details.split('\n'):
+            m = re.match(pattern, line)
+            if m: 
+                return m.group(1).strip()
+        return None
+
+    def extract_time(self, blockchain, details):
+        if not details:
+            return None
+        if blockchain == 'mmx':
+            return '-' # None for MMX
+        pattern = '^\s+Time:\s+(.*)\sHeight:.*$'
+        for line in details.split('\n'):
+            m = re.match(pattern, line)
+            if m:
+                try:
+                    peak_time = datetime.datetime.strptime(m.group(1).strip(), '%a %b %d %Y %H:%M:%S %Z')
+                    return peak_time.strftime("%Y-%m-%d %H:%M")
+                except:
+                    return m.group(1).strip() # Unconverted time
+        return None
+
 class Connections:
 
     def __init__(self, connections):
         self.rows = []
         self.blockchains = {}
         for connection in connections:
+            worker_status = None
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(connection.hostname))
-                displayname = w.get_worker(connection.hostname, connection.blockchain).displayname
+                worker = w.get_worker(connection.hostname, connection.blockchain)
+                worker_status = worker.connection_status()
+                displayname = worker.displayname
             except:
                 app.logger.info("Connections.init(): Unable to find a worker with hostname '{0}'".format(connection.hostname))
                 displayname = connection.hostname
@@ -273,6 +409,7 @@ class Connections:
                 'displayname': displayname, 
                 'hostname': connection.hostname,
                 'blockchain': connection.blockchain,
+                'status': worker_status,
                 'farmer_port': self.blockchain_port(connection.blockchain),
                 'details': connection.details,
                 'add_exmample': self.get_add_connection_example(connection.blockchain)
@@ -395,7 +532,7 @@ class Connections:
         conns = []
         for line in connection.details.split('\n'):
             try:
-                app.logger.info(line)
+                #app.logger.info(line)
                 m = re.match("\[(.+)\]   height =  (\d+), (\d+\.?\d*) MB recv, (\d*\.?\d*) MB sent, timeout = (\d+\.?\d*) sec", line.strip(), re.IGNORECASE)
                 if m:
                     connection = {

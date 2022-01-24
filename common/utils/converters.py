@@ -2,11 +2,15 @@
 # Common utility methods
 #
 
+import json
 import math
+import os
 import re
 import traceback
 
 #from flask_babel import format_number
+
+BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/dbs/blockchain_prices_cache.json'
 
 def sizeof_fmt(num, suffix='B'):
     for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
@@ -67,6 +71,20 @@ def round_balance(value):
     return str(round(value, 4))
     #return format_number(value)
 
+def to_usd(blockchain, coins):
+    if os.path.exists(BLOCKCHAIN_PRICES_CACHE_FILE):
+        try:
+            with open(BLOCKCHAIN_PRICES_CACHE_FILE) as f:
+                data = json.load(f)
+                if blockchain in data:
+                    if isinstance(coins, str):
+                        coins = float(coins.replace(',',''))
+                    return "${:,.2f}".format(float(data[blockchain]) * coins)
+                return ''
+        except Exception as ex:
+            print("Unable to convert to $USD because {0}".format(str(ex)))
+    return ''
+
 ##################################################################################################
 #
 # Chia™-blockchain - Apache Software License code below.
@@ -98,7 +116,7 @@ def etw_to_minutes(etw):
         etw_total_minutes += int(match.group(1)) * hour_minutes
     match = re.search("(\d+) minute", etw)
     if match:
-        etw_total_minutes += int(match.group(1), etw)
+        etw_total_minutes += int(match.group(1))
     return etw_total_minutes
 
 # Convert an expected time to win in minutes into human-readable units.

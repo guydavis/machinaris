@@ -13,37 +13,10 @@ from subprocess import Popen, TimeoutExpired, PIPE
 from common.config import globals
 from api import app
 
-# No need to reward recover for either Chia or Chives
-def get_full_node_rpc_port(blockchain):
-    if blockchain == 'btcgreen':
-        return 18942
-    if blockchain == 'cactus':
-        return 11555
-    if blockchain == 'cryptodoge':
-        return 16795
-    if blockchain == 'flax':
-        return 6755
-    if blockchain == 'flora':
-        return 18755
-    if blockchain == 'hddcoin':
-        return 28555
-    if blockchain == 'maize':
-        return 8755
-    if blockchain == 'nchain':
-        return 38555
-    if blockchain == 'shibgreen':
-        return 18793
-    if blockchain == 'staicoin':
-        return 1758
-    if blockchain == 'stor':
-        return 8155
-    app.logger.info(f"Unknown rpc_port for blockchain: {blockchain}")
-    return None
-
 def reward_recovery(wallet_id, launcher_id, pool_contract_address):
     app.logger.info("NFT reward recovery requested for {wallet_id} {launcher_id} {pool_contract_address}")
     blockchain = globals.enabled_blockchains()[0]
-    rpc_port = get_full_node_rpc_port(blockchain)
+    rpc_port = globals.get_full_node_rpc_port(blockchain)
     if not rpc_port:
         app.logger.info("Skipping NFT reward recovery on unsupported blockchain: {0}".format(blockchain))
         return

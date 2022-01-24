@@ -8,7 +8,7 @@ from flask.views import MethodView
 from api import app
 from api.extensions.api import Blueprint
 
-from api.commands import chiadog_cli, chia_cli, plotman_cli
+from api.commands import chiadog_cli, chia_cli, plotman_cli, forktools_cli
 
 blp = Blueprint(
     'Config',
@@ -22,7 +22,7 @@ blp = Blueprint(
 class Configs(MethodView):
 
     def get(self):
-        response = make_response(json.dumps(['alerts', 'farming', 'plotting']), 200)
+        response = make_response(json.dumps(['alerts', 'farming', 'plotting', 'forktools']), 200)
         response.mimetype = "application/json"
         return response
 
@@ -35,8 +35,9 @@ class ConfigByType(MethodView):
         elif type == "alerts":
             config = chiadog_cli.load_config(blockchain)
         elif type == "plotting":
-            app.logger.info("Search for plotting config...")
             config = plotman_cli.load_config(blockchain)
+        elif type == "tools":
+            config = forktools_cli.load_config(blockchain)
         else:
             abort(400, "Unknown config type provided: {0}".format(type))
         response = make_response(config, 200)
@@ -48,8 +49,10 @@ class ConfigByType(MethodView):
         config = req_data.decode('utf-8')
         # Then strip off the leading and trailing double quote
         config = config[1:-1]
+        # Then deal with any escaped double quotes within the config
+        config = config.replace('\\"', '"')
         # Now split lines correctly again
-        config = config.replace('\\r\\n', '\r\n')
+        config = config.replace('\\r\\n', '\n')
         return config
 
     def put(self, type, blockchain):
@@ -60,6 +63,8 @@ class ConfigByType(MethodView):
                 chiadog_cli.save_config(self.clean_config(request.data), blockchain)
             elif type == "plotting":
                 plotman_cli.save_config(self.clean_config(request.data), blockchain)
+            elif type == "tools":
+                forktools_cli.save_config(self.clean_config(request.data), blockchain)
             else:
                 abort(400, "Unknown config type provided: {0}".format(type))
             response = make_response("Successfully saved config.", 200)
@@ -69,12 +74,3 @@ class ConfigByType(MethodView):
             human_readable_error = str(ex)
             response = make_response(human_readable_error, 400)
         return response
-
-    def clean_config(self, req_data):
-        # First decode the bytes
-        config = req_data.decode('utf-8')
-        # Then strip off the leading and trailing double quote
-        config = config[1:-1]
-        # Now split lines correctly again
-        config = config.replace('\\r\\n', '\r\n')
-        return config

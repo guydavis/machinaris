@@ -1,6 +1,6 @@
 #!/bin/env bash
 #
-# Installs SHIBGreen as per https://github.com/SHIBgreen-Network/shibgreen-blockchain
+# Installs SHIBGreen as per https://github.com/BTCgreen-Network/shibgreen-blockchain
 #
 
 SHIBGREEN_BRANCH=$1

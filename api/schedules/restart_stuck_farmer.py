@@ -13,14 +13,7 @@ from api import app
 from common.config import globals
 from api.commands import chia_cli
 
-
 RESTART_IF_STUCK_MINUTES = 15
-BLOCKCHAIN = os.environ['blockchains']
-
-def restart():
-    chia_binary = globals.get_blockchain_binary(BLOCKCHAIN)
-    ret = subprocess.call("{0} start farmer -r >/tmp/chia_restart.log 2>&1".format(chia_binary), shell=True)
-    app.logger.info("Return code from blockchain restart was {0}".format(ret))
 
 last_peak = None
 last_peak_time = None
@@ -49,13 +42,13 @@ def stale_peak(blockchain_show):
     return False # Not stuck on a stale peak so DO NOT restart
 
 def execute():
-    if BLOCKCHAIN == 'mmx':
+    blockchain = globals.enabled_blockchains()[0]
+    if blockchain == 'mmx':
         return # Chia+forks only right now
     with app.app_context():
         #app.logger.info("***************** RESTART STUCK FARMER ******************")
         try:
-            if stale_peak(chia_cli.load_blockchain_show(BLOCKCHAIN).text.replace('\r', '').split('\n')):
-                restart()
+            if stale_peak(chia_cli.load_blockchain_show(blockchain).text.replace('\r', '').split('\n')):
+                chia_cli.start_farmer(blockchain)
         except Exception as ex:
             app.logger.info("Skipping stuck farmer check due to exception: {0}".format(str(ex)))
-        

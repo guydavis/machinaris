@@ -14,6 +14,8 @@ def on_starting(server):
     from api.schedules import stats_disk, stats_farm, nft_recover, plots_check, log_rotate, db_backup, restart_stuck_farmer
     from common.config import globals
 
+    from api.commands import websvcs
+
     scheduler = BackgroundScheduler()
 
     schedule_every_x_minutes = "?"
@@ -55,18 +57,19 @@ def on_starting(server):
         scheduler.add_job(func=status_plots.update, name="plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_plotnfts.update, name="plotnfts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
-        scheduler.add_job(func=db_backup.execute, name="db_backup", trigger='cron', hour=0, jitter=(JOB_JITTER*3600))  # Daily
-        scheduler.add_job(func=restart_stuck_farmer.execute, name="restart_stuck_farmer", trigger='interval', minutes=5, jitter=0) 
+        #scheduler.add_job(func=db_backup.execute, name="db_backup", trigger='cron', hour=0, jitter=(JOB_JITTER*3600))  # Daily
+        scheduler.add_job(func=restart_stuck_farmer.execute, name="restart_farmer_if_stuck", trigger='interval', minutes=5, jitter=0) 
         scheduler.add_job(func=status_partials.update, name="partials", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
 
     # Status for single Machinaris controller only, should be blockchain=chia
     if utils.is_controller():
         scheduler.add_job(func=plots_check.execute, name="plot_checks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_controller.update, name="controller", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        scheduler.add_job(func=websvcs.get_prices, name="get_prices", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', hours=12)
 
     # Testing only
-    #scheduler.add_job(func=status_farm.update, trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', seconds=120) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()
