@@ -18,9 +18,10 @@ from sqlalchemy import or_
 from flask import Flask, jsonify, abort, request, flash
 
 from web import app, db, utils
+from common.config import globals
 from common.models import alerts, blockchains, challenges, connections, farms, \
     keys, plots, plottings, plotnfts, pools, wallets, workers
-from web.models.worker import WorkerSummary
+from web.models.worker import WorkerSummary, WorkerWarning
 from web.actions import stats
 
 ALL_TABLES_BY_HOSTNAME_AND_BLOCKCHAIN = [
@@ -87,22 +88,33 @@ def prune_workers_status(workers):
         else:
             app.logger.info("Unable to find worker: {0} - {1}".format(hostname, blockchain))
 
-class WorkerWarning:
-
-    def __init__(self, title, message, level="info"):
-        self.title = title
-        self.message = message
-        if level == "info":
-            self.icon = "info-circle"
-        elif level == "error":
-            self.icon = "exclamation-circle"
+# Often users set different timezones for workers, leading to hours of local time difference
+def check_worker_time_near_to_controller(worker):
+    try:
+        worker_time = datetime.datetime.strptime(worker.time_on_worker, "%Y-%m-%d %H:%M:%S")
+        if abs((worker_time - datetime.datetime.now()).total_seconds()) > (60 * 10):
+            return True
+    except:
+        traceback.print_exc()
+    return False
 
 def generate_warnings(worker):
     warnings = []
     # Check if worker is responding to pings
     if worker.connection_status() != "Responding":
         warnings.append(WorkerWarning("Worker not responding to pings.",  
-            "Please check the worker container and restart if necessary."))
+            "Please check the worker container and restart if necessary.", 'error'))
+    elif check_worker_time_near_to_controller(worker):
+        warnings.append(WorkerWarning("Worker time is offset from controller.",  
+            "Please ensure worker and controller share same timezone.", 'warning'))
+    worker_version = worker.machinaris_version()
+    controller_version = globals.load_machinaris_version()
+    if worker_version != controller_version:
+        app.logger.info('Worker {0}:{1} for {2} has version {3}, but controller version is {4}.'.format(
+            worker.hostname, worker.port, worker.blockchain, worker_version, controller_version))
+        warnings.append(WorkerWarning("Machinaris version does not match controller.",  
+            "Please use a consistent Machinaris version to avoid issues.", 'warning'))
+
     # TODO - Warning for fullnode without a working key
     # TODO - Warning for farmer too slow on pool partials: "Error in pooling: (2, 'The partial is too late."
     # TODO - Warning for harvester not connected (worker but not in farm summary)
@@ -111,7 +123,6 @@ def generate_warnings(worker):
     # TODO - Warning for plotter disk usage too high?
     # TODO - Warning if any blockchain challenges are higher than 5 seconds (show both hostname AND drive)
     # TODO - Warning if any blockchain challenges are missing in last hour (some percentage like that chart)
-    # TODO - Warning if worker's Machinaris version does not match that of the fullnode
     # TODO - Warning if worker's time drifts more than 3 minutes off fullnode's WHEN responding with ping seconds ago
     # TODO - Warning if farmer sync status falls behind while running (at 5 mins, before a later restart is attempted)
     return warnings

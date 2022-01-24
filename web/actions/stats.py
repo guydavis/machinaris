@@ -292,7 +292,10 @@ def calc_estimated_daily_value(blockchain):
     except Exception as ex:
         app.logger.info("Failed to calculate EDV for {0} because {1}".format(blockchain, str(ex)))
     if edv:
-        result.append("{:,.3f} {}".format(edv, symbol))
+        if edv >= 1000:
+            result.append("{:,.0f} {}".format(edv, symbol))
+        else:
+            result.append("{:,.3f} {}".format(edv, symbol))
     else:
         result.append('')
     try:
