@@ -167,6 +167,9 @@
             if (blockchain == 'maize') {
                 return 8933;
             }
+            if (blockchain == 'mmx') {
+                return 8940;
+            }
             if (blockchain == 'shibgreen') {
                 return 8939;
             }
@@ -209,6 +212,9 @@
             }
             if (blockchain == 'maize') {
                 return 8647;
+            }
+            if (blockchain == 'mmx') {
+                return 11330;
             }
             if (blockchain == 'shibgreen') {
                 return 18974;
@@ -544,6 +550,13 @@
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
+                                id="blockchain-mmx" onclick="updateDocker()" value="mmx">
+                            <label class="form-check-label" for="blockchain-mmx">
+                                MMX
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-nchain" onclick="updateDocker()" value="nchain">
                             <label class="form-check-label" for="blockchain-nchain">
                                 N-Chain
@@ -570,7 +583,7 @@
                                 Stor
                             </label>
                         </div>
-                        <div class="col">&nbsp;</div>
+                        <!--div class="col">&nbsp;</div-->
                     </div>
                 </div>
             </div>
