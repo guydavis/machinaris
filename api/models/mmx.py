@@ -52,6 +52,11 @@ class FarmSummary:
             app.logger.info("Unable to split network size value: {0}".format(netspace_size))
             self.display_netspace_size = self.netspace_size
 
+class HarvesterSummary:
+
+    def __init__(self):
+        self.status = "Harvesting" # TODO Check for harvester status via MMX somehow (logs or cmds)
+
 class FarmPlots:
 
      def __init__(self, entries):
