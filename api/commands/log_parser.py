@@ -54,7 +54,7 @@ def recent_challenges(blockchain):
         abort(500, description=errs.decode('utf-8'))
     cli_stdout = outs.decode('utf-8')
     #app.logger.debug("Challenges grep: {0}".format(cli_stdout))
-    challenges = log.Challenges(cli_stdout.splitlines())
+    challenges = log.Challenges(cli_stdout.splitlines(), blockchain)
     # app.logger.debug(challenges)
     return challenges
 
@@ -104,8 +104,8 @@ def find_plotting_job_log(plot_id):
     return None
 
 def get_farming_log_file(blockchain):
-    if blockchain == 'mmx': 
-        return '/root/.mmx/logs/mmx_node.log'
+    if blockchain == 'mmx':
+         return "/root/.mmx/{0}/logs/mmx_node_{1}.txt".format(globals.MMX_NETWORK, datetime.datetime.now().strftime("%Y_%m_%d"))
     mainnet_folder = globals.get_blockchain_network_path(blockchain)
     return mainnet_folder + '/log/debug.log'
 

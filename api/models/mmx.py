@@ -63,7 +63,7 @@ class FarmPlots:
                 app.logger.info("Skipping non-plot file named: {0}".format(path))
                 continue
             dir,file=os.path.split(path)
-            groups = re.match("plot(?:-mmx)?-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", file)
+            groups = re.match("plot-mmx-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", file)
             if not groups:
                 app.logger.info("Invalid plot file name provided: {0}".format(file))
                 continue

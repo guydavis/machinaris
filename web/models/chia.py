@@ -23,7 +23,6 @@ class Summaries:
         for blockchain in blockchains.rows:
             farm = self.find_farm(farms, blockchain['blockchain'])
             wallet = self.find_wallet(wallets, blockchain['blockchain'])
-            #app.logger.info(blockchain)
             self.rows.append({
                 'blockchain': blockchain['blockchain'],
                 'status': blockchain['status'],
