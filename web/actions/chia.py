@@ -108,9 +108,11 @@ def load_plots(args):
 
 def challenges_chart_data(farm_summary):
     chart_start_time = (datetime.datetime.now() - datetime.timedelta(minutes=app.config['MAX_CHART_CHALLENGES_MINS'])).strftime("%Y-%m-%d %H:%M:%S.000")
+    chart_end_time = (datetime.datetime.now() - datetime.timedelta(minutes=2)).strftime("%Y-%m-%d %H:%M:%S.000")
     for blockchain in farm_summary.farms:
         challenges = db.session.query(c.Challenge).filter(c.Challenge.blockchain==blockchain,
-            c.Challenge.created_at >= chart_start_time).order_by(
+            c.Challenge.created_at >= chart_start_time,
+            c.Challenge.created_at <= chart_end_time).order_by(
             c.Challenge.created_at.desc(), c.Challenge.hostname).all()
         farm_summary.farms[blockchain]['challenges'] = ChallengesChartData(challenges)
 
