@@ -30,6 +30,11 @@ ln -s /root/.chia/mmx/config /mmx-node/config
 escaped_plot_dirs=$(printf '%s\n' "$plot_dirs" | sed -e 's/[\/&]/\\&/g')
 sed -i "s/\"plot_dirs\":.*$/\"plot_dirs\": [ $escaped_plot_dirs ]/g" ./config/local/Harvester.json
 
+if [[ ${OPENCL_GPU} == 'nvidia' ]]; then    
+    mkdir -p /etc/OpenCL/vendors
+    echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
+fi
+
 # Symlink the NETWORK file, use 'test4' for now
 #if [ ! -f /root/.chia/mmx/NETWORK ]; then
 echo 'test4' > /root/.chia/mmx/NETWORK
