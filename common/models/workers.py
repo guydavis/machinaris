@@ -72,3 +72,9 @@ class Worker(db.Model):
         elif self.latest_ping_result and self.latest_ping_result == 'Responding':
             return "offline" # Was responding but over 15 minutes ago
         return self.latest_ping_result
+
+    def machinaris_version(self):
+        try:
+            return j.loads(self.config)['machinaris_version']
+        except:
+            return None

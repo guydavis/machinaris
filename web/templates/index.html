@@ -51,7 +51,7 @@
                 <span 
                   {% if farms[blockchain].display_status=='Active' %}
                     class="text-success"
-                  {% elif farms[blockchain].display_status=='Offline' %} 
+                  {% elif farms[blockchain].display_status=='Offline' or farms[blockchain].display_status=='Not available' %} 
                     class="text-danger" 
                   {% else %}
                     class="text-warning"

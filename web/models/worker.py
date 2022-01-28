@@ -227,3 +227,15 @@ class WorkerSummary:
                 })
         filtered.sort(key=lambda w: w.displayname)
         return filtered
+
+class WorkerWarning:
+
+    def __init__(self, title, message, level="info"):
+        self.title = title
+        self.message = message
+        if level == "info":
+            self.icon = "fs4 bi-info-circle text-success"
+        if level == "warning":
+            self.icon = "fs4 bi-exclamation-circle text-warning"
+        elif level == "error":
+            self.icon = "fs4 bi-dash-circle text-danger"

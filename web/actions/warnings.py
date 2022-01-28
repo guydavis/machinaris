@@ -33,12 +33,6 @@ def check_cold_wallet(msg):
     return True
 
 WARNINGS = {
-#    'mnemonic_delete': [check_mnemonic_delete, """
-#            <a class="btn btn-primary" style="float:right; margin-left:20px" role="button"href="{0}?mnemonic_delete=dismiss">Dismiss Warning</a>
-#                Head\'s up! Security best practice is to delete your mnemonic.txt after first launch. 
-#                Details on the <a target="_blank" href="https://github.com/guydavis/machinaris/wiki/Keys#deleting-mnemonic-off-disk">wiki</a>.
-#                Please ensure you have safely recorded your mnemonic passphrase (24 words) before deleting!
-#                """],
     'cold_wallet': [check_cold_wallet, """
             <a class="btn btn-primary" style="float:right; margin-left:20px" role="button"href="{0}?cold_wallet=dismiss">Dismiss Warning</a>
                 Machinaris uses an online wallet for farming.  It is strongly recommended that you eventually use a cold wallet for your Chia payout instructions.

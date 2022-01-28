@@ -37,6 +37,8 @@ def load_farm_info(blockchain):
         if errs:
             app.logger.debug("Error from {0} farm summary because {1}".format(blockchain, outs.decode('utf-8')))
         return mmx.FarmSummary(outs.decode('utf-8').splitlines(), blockchain)
+    elif globals.harvesting_enabled():
+        return mmx.HarvesterSummary()
     else:
         raise Exception("Unable to load farm summary on non-farmer and non-harvester.")
 

@@ -83,14 +83,13 @@ class Plots(MethodView):
     @blp.arguments(BatchOfPlotSchema)
     @blp.response(201, PlotSchema(many=True))
     def post(self, new_items):
-        # Re-enabled as Chives sends plots listing from its fullnode
+        # Re-enabled as MMX sends plots listing from its fullnode
         items = []
         displaynames = {}
         plots_status = open_status_json()
         for new_item in new_items:
             # Skip any previously sent by existing plot_id
-            if not db.session.query(Plot).filter(Plot.hostname==new_item['hostname'], 
-                Plot.plot_id==new_item['plot_id']).first():
+            if not db.session.query(Plot).filter(Plot.hostname==new_item['hostname'], Plot.plot_id==new_item['plot_id']).first():
                 short_plot_id = new_item['plot_id'][:8]
                 item = Plot(**new_item)
                 item.displayname = lookup_worker_displayname(displaynames, new_item['hostname'])

@@ -62,7 +62,7 @@
             <td>
               {% if worker.latest_ping_result == 'Responding' %}
                 <i class="bi-check-circle text-success"></i>
-              {% elif worker.connection_status() == 'Connection Refused' %}
+              {% elif worker.connection_status() == 'Connection Refused' or worker.connection_status() == 'Connection Timeout' %}
                 <i class="bi-dash-circle text-danger"></i>
               {% else %}
                 <i class="bi-exclamation-triangle text-warning" title="{{ worker.connection_status }}"></i>

@@ -27,12 +27,13 @@ STATUS_FILE = '/root/.chia/plotman/status.json'
 last_full_send_time = None
 
 def get_plot_attrs(plot_id, filename):
-    short_plot_id = plot_id[2:10]
     dir,file = os.path.split(filename)
     match = re.match("plot(?:-mmx)?-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", file)
     if match:
+        short_plot_id = match.group(7)[:8]
         created_at = "{0}-{1}-{2} {3}:{4}".format( match.group(2),match.group(3),match.group(4),match.group(5),match.group(6))
     else:
+        short_plot_id = plot_id[2:10]
         created_at = "" 
     return [short_plot_id, dir,file,created_at]
 

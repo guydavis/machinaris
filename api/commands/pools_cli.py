@@ -29,9 +29,15 @@ from common.config import globals
 from api.models.pools import Plotnfts
 
 def get_job_parameter(job, key, index):
-    value = job[key][index].strip()
-    if value and value != 'None':
-        return value
+    if key in job:
+        if index in job[key]:
+            value = job[key][index].strip()
+            if value and value != 'None':
+                return value
+        else:
+            app.logger.info("No index {0} for key {1} found in job: {2}".format(index, key, job))
+    else:
+        app.logger.info("No key {0} found in job: {1}".format(key, job))
     return None
 
 def dispatch_action(job):

@@ -12,7 +12,7 @@ if [ -z ${MMX_BRANCH} ]; then
 else
 	rm -rf /root/.cache
 	apt-get update
-	apt-get install -y git cmake build-essential libsecp256k1-dev libsodium-dev zlib1g-dev ocl-icd-opencl-dev clinfo screen librocksdb-dev
+	apt-get install -y git cmake build-essential libsecp256k1-dev librocksdb-dev libsodium-dev zlib1g-dev ocl-icd-opencl-dev clinfo screen
 	git clone --branch ${MMX_BRANCH} --single-branch https://github.com/madMAx43v3r/mmx-node.git /mmx-node
 	cd /mmx-node
 	git submodule update --init --recursive 

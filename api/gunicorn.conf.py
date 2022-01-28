@@ -36,6 +36,10 @@ def on_starting(server):
     if 'chia' in globals.enabled_blockchains():
         scheduler.add_job(func=stats_disk.collect, name="stats_disk", trigger='cron', minute="*/10") # Every 10 minutes
         
+    # MMX needs to report plots from harvesters directly as they are not listed via the fullnode like Chia does
+    if not utils.is_fullnode() and globals.harvesting_enabled() and 'mmx' in globals.enabled_blockchains():
+        scheduler.add_job(func=status_plots.update, name="plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+    
     # Status for both farmers and harvesters (includes fullnodes)
     if globals.farming_enabled() or globals.harvesting_enabled():
         scheduler.add_job(func=status_challenges.update, name="challenges", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)

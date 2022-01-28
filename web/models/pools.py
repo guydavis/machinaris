@@ -22,7 +22,7 @@ class Plotnfts:
             except:
                 app.logger.info("Plotnfts.init(): Unable to find a worker with hostname '{0}'".format(plotnft.hostname))
                 displayname = plotnft.hostname
-            self.rows.append({ 
+            plotnft_obj = { 
                 'displayname': displayname, 
                 'hostname': plotnft.hostname,
                 'blockchain': plotnft.blockchain,
@@ -30,7 +30,9 @@ class Plotnfts:
                 'wallet_num': plotnft.wallet_num,
                 'header': plotnft.header, 
                 'details': plotnft.details, 
-                'updated_at': plotnft.updated_at })
+                'updated_at': plotnft.updated_at 
+            }
+            self.rows.append(plotnft_obj)
     
     def get_current_pool_url(self):
         pool_url = None
@@ -45,8 +47,7 @@ class Plotnfts:
 class Pools:
 
     def __init__(self, pools, plotnfts):
-        self.columns = ['hostname', 'blockchain', 'pool_state', 'updated_at']
-        self.rows = []
+        self.blockchains = {}
         for pool in pools:
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(pool.hostname))
@@ -70,7 +71,7 @@ class Pools:
                     points_successful_last_24h = "0"
                 else:
                     points_successful_last_24h = "%.2f"% ( (points_found_24h - pool_errors_24h) / points_found_24h * 100)
-            self.rows.append({ 
+            pool_obj = { 
                 'displayname': displayname, 
                 'hostname': pool.hostname,
                 'launcher_id': pool.launcher_id, 
@@ -81,8 +82,13 @@ class Pools:
                 'updated_at': pool.updated_at,
                 'status': status,
                 'points_successful_last_24h': points_successful_last_24h
-            })
-        app.logger.info(self.rows)
+            }
+            if pool.blockchain in self.blockchains:
+                blockchain_pools = self.blockchains[pool.blockchain]
+            else:
+                blockchain_pools = []
+                self.blockchains[pool.blockchain] = blockchain_pools
+            blockchain_pools.append(pool_obj)
     
     def find_plotnft(self, plotnfts, launcher_id):
         for plotnft in plotnfts:
