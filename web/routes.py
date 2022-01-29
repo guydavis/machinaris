@@ -3,6 +3,7 @@ import pathlib
 import pytz
 import os
 import random
+import requests
 import time
 import traceback
 
@@ -299,12 +300,12 @@ def settings_alerts():
         selected_worker_hostname = request.form.get('worker')
         selected_blockchain = request.form.get('blockchain')
         chiadog.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
-    workers_summary = worker.load_worker_summary()
-    selected_worker = find_selected_worker(workers_summary.farmers_harvesters(), selected_worker_hostname, selected_blockchain)
+    farmers = chiadog.load_farmers()
+    selected_worker = find_selected_worker(farmers, selected_worker_hostname, selected_blockchain)
     if not selected_blockchain:
         selected_blockchain = selected_worker['blockchain']
     return render_template('settings/alerts.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
-        workers=workers_summary.farmers_harvesters, selected_worker=selected_worker['hostname'], global_config=gc)
+        workers=farmers, selected_worker=selected_worker['hostname'], global_config=gc)
 
 @app.route('/settings/pools', methods=['GET', 'POST'])
 def settings_pools():
@@ -338,12 +339,12 @@ def settings_tools():
         selected_worker_hostname = request.form.get('worker')
         selected_blockchain = request.form.get('blockchain')
         forktools.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
-    workers_summary = worker.load_worker_summary()
-    selected_worker = find_selected_worker(workers_summary.farmers_harvesters(), selected_worker_hostname, selected_blockchain)
+    farmers = chiadog.load_farmers()
+    selected_worker = find_selected_worker(farmers, selected_worker_hostname, selected_blockchain)
     if not selected_blockchain:
         selected_blockchain = selected_worker['blockchain']
     return render_template('settings/tools.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
-        workers=workers_summary.farmers_harvesters, selected_worker=selected_worker['hostname'], global_config=gc)
+        workers=farmers, selected_worker=selected_worker['hostname'], global_config=gc)
 
 @app.route('/settings/config', defaults={'path': ''})
 @app.route('/settings/config/<path:path>')
@@ -355,15 +356,27 @@ def views_settings_config(path):
                 request.args.get('worker'), request.args.get('blockchain')))
         abort(404)
     if config_type == "alerts":
-        response = make_response(chiadog.load_config(w, request.args.get('blockchain')), 200)
+        try:
+            response = make_response(chiadog.load_config(w, request.args.get('blockchain')), 200)
+        except requests.exceptions.ConnectionError as ex:
+            response = make_response("For Alerts config, found no responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
     elif config_type == "farming":
-        response = make_response(chia.load_config(w, request.args.get('blockchain')), 200)
+        try:
+            response = make_response(chia.load_config(w, request.args.get('blockchain')), 200)
+        except requests.exceptions.ConnectionError as ex:
+            response = make_response("For Farming config, found no responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
     elif config_type == "plotting":
-        [replaced, config] = plotman.load_config(w, request.args.get('blockchain'))
-        response = make_response(config, 200)
-        response.headers.set('ConfigReplacementsOccurred', replaced)
+        try:
+            [replaced, config] = plotman.load_config(w, request.args.get('blockchain'))
+            response = make_response(config, 200)
+            response.headers.set('ConfigReplacementsOccurred', replaced)
+        except requests.exceptions.ConnectionError as ex:
+            response = make_response("For Plotting config, found no responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
     elif config_type == "tools":
-        response = make_response(forktools.load_config(w, request.args.get('blockchain')), 200)
+        try:
+            response = make_response(forktools.load_config(w, request.args.get('blockchain')), 200)
+        except requests.exceptions.ConnectionError as ex:
+            response = make_response("No responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
     else:
         abort("Unsupported config type: {0}".format(config_type), 400)
     response.mimetype = "application/x-yaml"

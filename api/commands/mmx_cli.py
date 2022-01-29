@@ -59,16 +59,18 @@ def list_plots():
 
 def load_config(blockchain):
     mainnet = globals.get_blockchain_network_path(blockchain)
-    return open(f'{mainnet}/config/Node.json','r').read()
+    test = globals.MMX_CONFIG
+    return open(f'{mainnet}/config/{test}/Farmer.json','r').read()
 
 def save_config(config, blockchain):
     try:
         mainnet = globals.get_blockchain_network_path(blockchain)
+        test = globals.MMX_CONFIG
         # Validate the json first
         json.load(config)
         # Save a copy of the old config file
-        src=f'{mainnet}/config/Node.json'
-        dst=f'{mainnet}/config/Node.json' + time.strftime("%Y%m%d-%H%M%S")+".yaml"
+        src=f'{mainnet}/config/{test}/Farmer.json'
+        dst=f'{mainnet}/config/{test}/Farmer.json' + time.strftime("%Y%m%d-%H%M%S")+".yaml"
         shutil.copy(src,dst)
         # Now save the new contents to main config file
         with open(src, 'w') as writer:

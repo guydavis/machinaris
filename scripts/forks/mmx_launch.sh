@@ -24,6 +24,8 @@ if [ ! -d /root/.chia/mmx/config ]; then
 	"plot_dirs": [ ${plot_dirs} ]
 }
 EOF
+	# For a fresh install of Machinaris-MMX, disable timelord by default to save CPU usage
+	echo false > /root/.chia/mmx/config/local/timelord
 fi
 rm -rf ./config
 ln -s /root/.chia/mmx/config /mmx-node/config
