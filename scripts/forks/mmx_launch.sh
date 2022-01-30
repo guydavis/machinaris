@@ -8,7 +8,9 @@ cd /mmx-node
 rm -rf ./logs
 mkdir -p /root/.chia/mmx/logs
 ln -s /root/.chia/mmx/logs /mmx-node/logs
-ln -s /root/.chia/mmx /root/.mmx 
+if [ ! -L /root/.mmx ]; then
+	ln -s /root/.chia/mmx /root/.mmx
+fi
 
 IFS=':' read -r -a array <<< "$plots_dir"
 joined=$(printf ", \"%s\"" "${array[@]}")
