@@ -191,6 +191,7 @@ def load_current_disk_usage(disk_type, hostname=None):
         paths = []
         used = []
         free = []
+        used_result = free_result = None
         if disk_type == 'plots':
             created_at_max = db.session.query(StatPlotsDiskUsed).order_by(StatPlotsDiskUsed.created_at.desc()).first()
             if created_at_max:
