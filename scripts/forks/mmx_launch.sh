@@ -37,6 +37,13 @@ sed -i "s/\"plot_dirs\":.*$/\"plot_dirs\": [ $escaped_plot_dirs ]/g" ./config/lo
 if [[ ${OPENCL_GPU} == 'nvidia' ]]; then    
     mkdir -p /etc/OpenCL/vendors
     echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
+elif [[ ${OPENCL_GPU} == 'amd' ]]; then
+	cd /tmp
+	apt update
+    amdgpu-install -y --opencl=legacy,rocr --accept-eula
+	mkdir -p /etc/OpenCL/vendors
+	echo "libamdocl64.so" > /etc/OpenCL/vendors/amdocl64.icd
+	ln -s /usr/lib/x86_64-linux-gnu/libOpenCL.so.1 /usr/lib/libOpenCL.so
 fi
 
 # Symlink the NETWORK file, use 'test4' for now
