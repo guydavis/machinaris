@@ -40,10 +40,10 @@ if [[ ${OPENCL_GPU} == 'nvidia' ]]; then
 elif [[ ${OPENCL_GPU} == 'amd' ]]; then
 	cd /tmp
 	apt update
-    amdgpu-install -y --opencl=legacy,rocr --accept-eula
-	mkdir -p /etc/OpenCL/vendors
-	echo "libamdocl64.so" > /etc/OpenCL/vendors/amdocl64.icd
-	ln -s /usr/lib/x86_64-linux-gnu/libOpenCL.so.1 /usr/lib/libOpenCL.so
+	amdgpu-install -y --usecase=opencl --opencl=rocr --no-dkms --no-32 --accept-eula
+	# If AMD GPU is older than vega 10,use under command, but can't promise work normally.
+	# Because, with --opencl=legacy, dkms will must be installed, it may pollute your kernel
+	# amdgpu-install -y --usecase=opencl --opencl=rocr,legacy --no-32 --accept-eula
 fi
 
 # Symlink the NETWORK file, use 'test4' for now
