@@ -32,6 +32,7 @@ BLADEBIT_BINARY = '/usr/bin/bladebit'
 CHIADOG_PATH = '/chiadog'
 
 MMX_NETWORK = 'testnet4'
+MMX_CONFIG = 'test4'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
 

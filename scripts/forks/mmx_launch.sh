@@ -8,7 +8,9 @@ cd /mmx-node
 rm -rf ./logs
 mkdir -p /root/.chia/mmx/logs
 ln -s /root/.chia/mmx/logs /mmx-node/logs
-ln -s /root/.chia/mmx /root/.mmx 
+if [ ! -L /root/.mmx ]; then
+	ln -s /root/.chia/mmx /root/.mmx
+fi
 
 IFS=':' read -r -a array <<< "$plots_dir"
 joined=$(printf ", \"%s\"" "${array[@]}")
@@ -24,6 +26,8 @@ if [ ! -d /root/.chia/mmx/config ]; then
 	"plot_dirs": [ ${plot_dirs} ]
 }
 EOF
+	# For a fresh install of Machinaris-MMX, disable timelord by default to save CPU usage
+	echo false > /root/.chia/mmx/config/local/timelord
 fi
 rm -rf ./config
 ln -s /root/.chia/mmx/config /mmx-node/config
@@ -33,6 +37,13 @@ sed -i "s/\"plot_dirs\":.*$/\"plot_dirs\": [ $escaped_plot_dirs ]/g" ./config/lo
 if [[ ${OPENCL_GPU} == 'nvidia' ]]; then    
     mkdir -p /etc/OpenCL/vendors
     echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
+elif [[ ${OPENCL_GPU} == 'amd' ]]; then
+	cd /tmp
+	apt update
+    amdgpu-install -y --opencl=legacy,rocr --accept-eula
+	mkdir -p /etc/OpenCL/vendors
+	echo "libamdocl64.so" > /etc/OpenCL/vendors/amdocl64.icd
+	ln -s /usr/lib/x86_64-linux-gnu/libOpenCL.so.1 /usr/lib/libOpenCL.so
 fi
 
 # Symlink the NETWORK file, use 'test4' for now

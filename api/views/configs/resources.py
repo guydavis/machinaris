@@ -8,7 +8,7 @@ from flask.views import MethodView
 from api import app
 from api.extensions.api import Blueprint
 
-from api.commands import chiadog_cli, chia_cli, plotman_cli, forktools_cli
+from api.commands import chiadog_cli, chia_cli, plotman_cli, forktools_cli, mmx_cli
 
 blp = Blueprint(
     'Config',
@@ -31,7 +31,10 @@ class ConfigByType(MethodView):
 
     def get(self, type, blockchain):
         if type == "farming":
-            config = chia_cli.load_config(blockchain)
+            if blockchain == 'mmx':
+                config = mmx_cli.load_config(blockchain)
+            else:
+                config = chia_cli.load_config(blockchain)
         elif type == "alerts":
             config = chiadog_cli.load_config(blockchain)
         elif type == "plotting":

@@ -16,6 +16,7 @@ from common.models.challenges import Challenge
 from common.models.farms import Farm
 from common.models.pools import POOLABLE_BLOCKCHAINS
 from common.models.plots import Plot
+from common.models.pools import Pool
 from common.models.partials import Partial
 from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalCoins, StatNetspaceSize, StatTimeToWin, \
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \
@@ -190,6 +191,7 @@ def load_current_disk_usage(disk_type, hostname=None):
         paths = []
         used = []
         free = []
+        used_result = free_result = None
         if disk_type == 'plots':
             created_at_max = db.session.query(StatPlotsDiskUsed).order_by(StatPlotsDiskUsed.created_at.desc()).first()
             if created_at_max:
@@ -338,13 +340,14 @@ def load_summary_stats(blockchains):
             app.logger.info("No recent challenge response times found for {0}".format(blockchain))
         partials_per_hour = ''
         if blockchain in POOLABLE_BLOCKCHAINS:
-            try:
-                day_ago = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M")
-                partial_records = db.session.query(Partial).filter(Partial.blockchain==blockchain, Partial.created_at >= day_ago ).order_by(Partial.created_at.desc()).all()
-                partials_per_hour = "%.2f / hour" % (len(partial_records) / 24)
-            except Exception as ex:
-                app.logger.error(ex)
-                app.logger.info("No recent partials submitted for {0}".format(blockchain))
+            if len(db.session.query(Pool).filter(Pool.blockchain==blockchain).all()) > 0:
+                try:
+                    day_ago = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M")
+                    partial_records = db.session.query(Partial).filter(Partial.blockchain==blockchain, Partial.created_at >= day_ago ).order_by(Partial.created_at.desc()).all()
+                    partials_per_hour = "%.2f / hour" % (len(partial_records) / 24)
+                except Exception as ex:
+                    app.logger.error(ex)
+                    app.logger.info("No recent partials submitted for {0}".format(blockchain))
         [edv, edv_usd] = calc_estimated_daily_value(blockchain)
         stats[blockchain] = {
             'harvesters': harvesters,
