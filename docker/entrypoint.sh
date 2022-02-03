@@ -44,9 +44,6 @@ fi
 # If on Windows, possibly mount SMB remote shares as defined in 'remote_shares' env var
 /usr/bin/bash /machinaris/scripts/mount_remote_shares.sh > /tmp/mount_remote_shares.log
 
-# Conditionally install megacmd on fullnodes
-/usr/bin/bash /machinaris/scripts/megacmd_setup.sh > /tmp/megacmd_setup.log 2>&1
-
 # Start the selected fork, then start Machinaris WebUI
 if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
 

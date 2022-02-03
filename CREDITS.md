@@ -24,7 +24,8 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [DataTables.js](https://datatables.net/): Filter/search/pagination of dynamic tables, as per [this tutorial](https://blog.miguelgrinberg.com/post/beautiful-interactive-tables-for-your-flask-templates).
 * [Charts.js](https://www.chartjs.org/): dynamic charting library.
 
-## Blockchain Forks
+## Blockchains
+* [BTCgreen](https://github.com/BTCgreen-Network/btcgreen-blockchain)
 * [Cactus](https://github.com/Cactus-Network/cactus-blockchain)
 * [Chives](https://github.com/HiveProject2021/chives-blockchain)
 * [Cryptodoge](https://github.com/CryptoDoge-Network/cryptodoge)
@@ -32,13 +33,15 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Flora](https://github.com/Flora-Network/flora-blockchain)
 * [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain)
 * [Maize](https://github.com/Maize-Network/maize-blockchain)
+* [MMX](https://github.com/madMAx43v3r/mmx-node)
 * [NChain](https://gitee.com/ext9/ext9-blockchain)
+* [SHIBgreen](https://github.com/BTCgreen-Network/shibgreen-blockchain)
 * [Staicoin](https://github.com/STATION-I/staicoin-blockchain)
 * [Stor](https://github.com/Stor-Network/stor-blockchain)
 
 ## Other Resources
 * [Blockchain DB Downloads](https://chiaforksblockchain.com/) - from Maize
-* [All the Blocks](https://alltheblocks.net/) - blockchain & wallet info
+* [All the Blocks](https://alltheblocks.net/) - blockchain, wallet, and pricing info
 
 ## Testers and Developers
 
@@ -84,6 +87,9 @@ A big thanks to all that contributed with dev and test including:
 * FVIERRA27
 * Nold360
 * karaliux
+* bafff
+* tjb_altf4
+* halfroom (aka Sagittarius)
 
 ## Trademark Notice
 CHIA NETWORK INC, CHIA™, the CHIA BLOCKCHAIN™, the CHIA PROTOCOL™, CHIALISP™ and the “leaf Logo” (including the leaf logo alone when it refers to or indicates Chia), are trademarks or registered trademarks of Chia Network, Inc., a Delaware corporation.  *There is no affliation between this Machinaris project and the main Chia Network project.*

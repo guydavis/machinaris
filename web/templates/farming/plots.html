@@ -82,13 +82,16 @@
                             <li>
                                 <a class="dropdown-item text-white text-decoration-none" href="#"
                                     onclick='ViewLogs("{{ worker.hostname }}","{{worker.blockchain}}");return false;'>
-                                    <span class="align-text-bottom" style="padding-right:5px">{{worker.blockchain|capitalize}}</span>
-                                    &nbsp;
-                                    {% if worker.farming_status == 'farming' or worker.farming_status == 'harvesting' %}
-                                        <i class="fs-4 bi-emoji-smile"></i>
+                                    {% if worker.connection_status == 'offline' or worker.connection_status == 'Connection Refused' %}
+                                        <i class="fs-4 bi-dash-circle text-danger" title="Worker is offline."></i>
+                                    {% elif worker.farming_status == 'not available' %}
+                                        <i class="fs-4 bi-dash-circle text-danger" title="Farming not started successfully."></i>
+                                    {% elif worker.farming_status == 'farming' or worker.farming_status == 'harvesting' %}
+                                        <i class="fs-4 bi-check-circle text-success" title="{{worker.farming_status|capitalize}}"></i>
                                     {% else %}
-                                        <i class="fs-4 bi-exclamation-triangle"></i>
-                                    {% endif %}
+                                        <i class="fs-4 bi-exclamation-triangle text-warning" title="{{worker.farming_status}}"></i>
+                                    {% endif %} &nbsp;
+                                    <span class="align-text-bottom" style="padding-right:5px">{{worker.blockchain|capitalize}}</span>
                                 </a>
                             </li>
                             {% endfor %}
@@ -190,9 +193,9 @@
                                 status = arr[0].trim();
                                 plot_id = arr[1].trim();
                                 if (status == 'GOOD') {
-                                    return '<a href="#" title="Good Plot" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-check-circle"></i></a>';
+                                    return '<a href="#" title="Good Plot" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-check-circle text-success"></i></a>';
                                 } else {
-                                    return '<a href="#" title="Bad Plot" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-exclamation-triangle"></i></a>';
+                                    return '<a href="#" title="Bad Plot" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-exclamation-triangle text-warning"></i></a>';
                                 }
                             }               
                             return "";

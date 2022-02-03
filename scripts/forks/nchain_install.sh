@@ -5,7 +5,7 @@
 
 NCHAIN_BRANCH=$1
 # On 2021-12-01
-HASH=2F3c51a0bc6ee3930b40296a75dccf0ad8daab3a68
+HASH=3c51a0bc6ee3930b40296a75dccf0ad8daab3a68
 
 if [ -z ${NCHAIN_BRANCH} ]; then
 	echo 'Skipping NChain install as not requested.'
@@ -15,6 +15,8 @@ else
 	git submodule update --init mozilla-ca
 	git checkout $HASH
 	chmod +x install.sh
+	# 2022-01-30: pip broke due to https://github.com/pypa/pip/issues/10825
+	sed -i 's/upgrade\ pip$/upgrade\ "pip<22.0"/' install.sh
 	/usr/bin/sh ./install.sh
 
 	if [ ! -d /chia-blockchain/venv ]; then

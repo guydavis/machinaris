@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="position-relative">
-    <div class="position-absolute top-0 end-0">
+    <div class="position-absolute top-0 end-0" style="z-index: 2000;">
         <a href="https://github.com/guydavis/machinaris/wiki/Chiadog" target="_blank">
             <i class="fs-4 bi-question-circle"></i>
         </a>
@@ -36,13 +36,13 @@
                 <label for="worker" class="col-sm-1 col-form-label-lg text-end p-1">Worker</label>
                 <div class="col-sm-3">
                     <select id="worker" name="worker" class="form-select" onchange="update_blockchain_options(this.value);">
-                        {% for host in workers() %}
+                        {% for host in workers %}
                         <option {% if host.hostname==selected_worker %}selected{% endif %}
                             value="{{ host.hostname }}">{{ host.displayname }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <label for="blockchain" class="col-sm-1 col-form-label-lg text-end p-1">Fork</label>
+                <label for="blockchain" class="col-sm-1 col-form-label-lg text-end p-1">Blockchain</label>
                 <div class="col-sm-3">
                     <select id="blockchain" name="blockchain" class="form-select">
                     </select>
@@ -69,7 +69,6 @@
                     url: "{{ url_for('views_settings_config') }}?type=alerts&worker=" + worker + "&blockchain=" + blockchain,
                 })
                     .done(function (data) {
-                        //console.log(data);
                         $("#config").val(data)
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         console.log(jqXHR, textStatus, errorThrown);
@@ -90,7 +89,7 @@
 
         function update_blockchain_options(hostname) {
             var hostsMap = {};
-            {% for worker in workers() %}
+            {% for worker in workers %}
             hostsMap["{{worker.hostname}}"] = [
                 {% for container in worker.workers %} 
                     "{{ container.blockchain }}",

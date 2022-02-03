@@ -3,6 +3,7 @@
 #
 
 import datetime
+import json
 import logging
 import os
 import pathlib
@@ -20,40 +21,7 @@ from subprocess import Popen, TimeoutExpired, PIPE
 from os import environ, path
 
 from common.utils import converters
-
-SUPPORTED_BLOCKCHAINS = [
-    'btcgreen',
-    'cactus',
-    'chia',
-    'chives',
-    'cryptodoge',
-    'flax',
-    'flora',
-    'hddcoin',
-    'maize',
-    'nchain',
-    'shibgreen',
-    'silicoin',
-    'staicoin',
-    'stor'
-]
-
-CURRENCY_SYMBOLS = {
-    "btcgreen": "XBTC",
-    "cactus": "CAC",
-    "chia": "XCH",
-    "chives": "XCC",
-    "cryptodoge": "XCD",
-    "flax": "XFX",
-    "flora": "XFL",
-    "hddcoin": "HDD",
-    "maize": "XMZ",
-    "nchain": "NCH",
-    "shibgreen": 'XSHIB',
-    "silicoin": "SIT",
-    "staicoin": "STAI",
-    "stor": "STOR",
-}
+from common.models import plottings as pl
 
 PLOTMAN_CONFIG = '/root/.chia/plotman/plotman.yaml'
 PLOTMAN_SAMPLE = '/machinaris/config/plotman.sample.yaml'
@@ -63,92 +31,40 @@ MADMAX_BINARY = '/usr/bin/chia_plot'
 BLADEBIT_BINARY = '/usr/bin/bladebit'
 CHIADOG_PATH = '/chiadog'
 
-BTCGREEN_BINARY = '/btcgreen-blockchain/venv/bin/btcgreen'
-CACTUS_BINARY = '/cactus-blockchain/venv/bin/cactus'
-CHIA_BINARY = '/chia-blockchain/venv/bin/chia'
-CHIVES_BINARY = '/chives-blockchain/venv/bin/chives'
-CRYPTODOGE_BINARY = '/cryptodoge-blockchain/venv/bin/cryptodoge'
-FLAX_BINARY = '/flax-blockchain/venv/bin/flax'
-FLORA_BINARY = '/flora-blockchain/venv/bin/flora'
-HDDCOIN_BINARY = '/hddcoin-blockchain/venv/bin/hddcoin'
-MAIZE_BINARY = '/maize-blockchain/venv/bin/maize'
-NCHAIN_BINARY = '/ext9-blockchain/venv/bin/chia'
-SHIBGREEN_BINARY = '/shibgreen-blockchain/venv/bin/shibgreen'
-SILICOIN_BINARY = '/silicoin-blockchain/venv/bin/sit'
-STAICOIN_BINARY = '/staicoin-blockchain/venv/bin/stai'
-STOR_BINARY = '/stor-blockchain/venv/bin/stor'
+MMX_NETWORK = 'testnet4'
+MMX_CONFIG = 'test4'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
 
+INFO_FILE = '/machinaris/common/config/blockchains.json'
+
+def get_supported_blockchains():
+    try:
+        data = json.load(open(INFO_FILE))
+        return sorted(data.keys())
+    except:
+        raise Exception("No blockchain info found at {0}.".format(INFO_FILE))
+
 def get_blockchain_binary(blockchain):
-    if blockchain == "btcgreen":
-        return BTCGREEN_BINARY
-    if blockchain == "cactus":
-        return CACTUS_BINARY
-    if blockchain == "chia":
-        return CHIA_BINARY
-    if blockchain == "chives":
-        return CHIVES_BINARY
-    if blockchain == "cryptodoge":
-        return CRYPTODOGE_BINARY
-    if blockchain == "flax":
-        return FLAX_BINARY
-    if blockchain == "flora":
-        return FLORA_BINARY
-    if blockchain == "hddcoin":
-        return HDDCOIN_BINARY
-    if blockchain == "maize":
-        return MAIZE_BINARY
-    if blockchain == "nchain":
-        return NCHAIN_BINARY
-    if blockchain == "shibgreen":
-        return SHIBGREEN_BINARY
-    if blockchain == "silicoin":
-        return SILICOIN_BINARY
-    if blockchain == "staicoin":
-        return STAICOIN_BINARY
-    if blockchain == "stor":
-        return STOR_BINARY
-    raise Exception("Invalid blockchain: ".format(blockchain))
+    return load_blockchain_info(blockchain, 'binary')
 
 def get_blockchain_network_path(blockchain):
-    if blockchain == 'btcgreen':
-        return "/root/.btcgreen/mainnet"
-    if blockchain == 'cactus':
-        return "/root/.cactus/mainnet"
-    if blockchain == 'chia':
-        return "/root/.chia/mainnet"
-    if blockchain == 'chives':
-        return "/root/.chives/mainnet"
-    if blockchain == 'cryptodoge':
-        return "/root/.cryptodoge/mainnet"
-    if blockchain == 'flax':
-        return "/root/.flax/mainnet"
-    if blockchain == 'flora':
-        return "/root/.flora/mainnet"
-    if blockchain == 'hddcoin':
-        return "/root/.hddcoin/mainnet"
-    if blockchain == 'maize':
-        return "/root/.maize/mainnet"
-    if blockchain == 'nchain':
-        return "/root/.chia/ext9"
-    if blockchain == 'shibgreen':
-        return "/root/.shibgreen/mainnet"
-    if blockchain == 'silicoin':
-        return "/root/.sit/mainnet"
-    if blockchain == 'staicoin':
-        return "/root/.staicoin/mainnet"
-    if blockchain == 'stor':
-        return "/root/.stor/mainnet"
-    raise Exception("No mainnet folder for unknown blockchain: {0}".format(blockchain))
+    return load_blockchain_info(blockchain, 'network_path')
 
 def get_blockchain_network_name(blockchain):
-    if blockchain == 'nchain':
-        return "ext9"
-    return "mainnet"
+    return load_blockchain_info(blockchain, 'network_name')
 
-def get_blockchain_symbol():
-    return CURRENCY_SYMBOLS[enabled_blockchains()[0]]
+def get_blockchain_symbol(blockchain):
+    return load_blockchain_info(blockchain, 'symbol')
+
+def get_full_node_rpc_port(blockchain):
+    return load_blockchain_info(blockchain, 'fullnode_rpc_port')
+
+def get_blocks_per_day(blockchain):
+    return load_blockchain_info(blockchain, 'blocks_per_day')
+
+def get_block_reward(blockchain):
+    return load_blockchain_info(blockchain, 'reward')
 
 def load():
     cfg = {}
@@ -169,6 +85,19 @@ def load():
     cfg['is_controller'] = "localhost" == (
         os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost')
     return cfg
+
+def load_blockchain_info(blockchain, key):
+    try:
+        data = json.load(open(INFO_FILE))
+        if blockchain in data:
+            if key in data[blockchain]:
+                return data[blockchain][key]
+            else:
+                raise Exception("Blockchain info key not found for {0}/{1}".format(blockchain, key))
+        else:
+            raise Exception("Blockchain info not found for {0}/{1}".format(blockchain, key))
+    except:
+        raise Exception("No blockchain info found at {0} for {1}/{2}".format(INFO_FILE, blockchain, key))
 
 def get_stats_db():
     db = getattr(g, '_stats_database', None)
@@ -215,8 +144,8 @@ def is_setup():
                 logging.info(traceback.format_exc())
     return foundKey
 
-# On very first launch of the main Chia container, blockchain DB is being downloaded so must wait.
-CHIA_BLOCKCHAIN_DB_SIZE = 32 * 1024 * 1024 * 1024 # Approaching 32 GBs in late 2021
+# On very first launch of the main Chia container, blockchain DB zip is being downloaded so must wait.
+CHIA_BLOCKCHAIN_DB_SIZE = 45 * 1024 * 1024 * 1024 # Almost 45 uncompressed GB in early 2022
 def blockchain_downloading():
     db_path = '/root/.chia/mainnet/db'
     if path.exists(f"{db_path}/blockchain_v1_mainnet.sqlite"):
@@ -243,13 +172,14 @@ def harvesting_enabled():
 
 def plotting_enabled():
     return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode']) \
-        and enabled_blockchains()[0] in ['chia', 'chives']
+        and enabled_blockchains()[0] in pl.PLOTTABLE_BLOCKCHAINS
 
 def enabled_blockchains():
+    supported_blockchains = get_supported_blockchains()
     blockchains = []
     if "blockchains" in os.environ:
         for blockchain in os.environ['blockchains'].split():
-            if blockchain.lower() in SUPPORTED_BLOCKCHAINS:
+            if blockchain.lower() in supported_blockchains:
                 blockchains.append(blockchain.lower())
     return blockchains
 

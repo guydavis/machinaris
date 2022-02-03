@@ -11,7 +11,7 @@ coin_symbol: 'stai'
 chia_logs:
   file_log_consumer:
     enable: true
-    prefix: 'staicoin'
+    prefix: 'stai'
     file_path: '~/.chia/staicoin/mainnet/log/debug.log'
 
 # Enable this and chiadog will ping a remote server every 5 minutes

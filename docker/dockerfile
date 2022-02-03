@@ -12,6 +12,7 @@ ARG FLAX_BRANCH
 ARG FLORA_BRANCH
 ARG HDDCOIN_BRANCH
 ARG MAIZE_BRANCH
+ARG MMX_BRANCH
 ARG NCHAIN_BRANCH
 ARG SHIBGREEN_BRANCH
 ARG STAICOIN_BRANCH
@@ -34,10 +35,12 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/flora_install.sh ${FLORA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/maize_install.sh ${MAIZE_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/mmx_install.sh ${MMX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/shibgreen_install.sh ${SHIBGREEN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/staicoin_install.sh ${STAICOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/stor_install.sh ${STOR_BRANCH} \
+  && /usr/bin/bash /machinaris/scripts/pull_3rd_party_libs.sh \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
 	&& rm -rf \
 		/root/.cache \
@@ -69,13 +72,16 @@ ENV controller_web_port=8926
 ENV controller_api_port=8927
 ENV worker_address="null"
 ENV worker_api_port=8927
+# Some placeholders for Nvidia GPU support in MMX
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 
 # Set env vars requried by forktools
 ENV FORKTOOLSDIR=/forktools
 ENV FORKTOOLSBLOCKCHAINDIRS=/
 ENV FORKTOOLSHIDDENDIRS=/root
 
-ENV PATH="${PATH}:/chia-blockchain/venv/bin:/forktools"
+ENV PATH="${PATH}:/chia-blockchain/venv/bin:/forktools:/mmx-node/build"
 ENV TZ=Etc/UTC
 ENV FLASK_ENV=production
 ENV XDG_CONFIG_HOME=/root/.chia

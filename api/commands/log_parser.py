@@ -54,7 +54,7 @@ def recent_challenges(blockchain):
         abort(500, description=errs.decode('utf-8'))
     cli_stdout = outs.decode('utf-8')
     #app.logger.debug("Challenges grep: {0}".format(cli_stdout))
-    challenges = log.Challenges(cli_stdout.splitlines())
+    challenges = log.Challenges(cli_stdout.splitlines(), blockchain)
     # app.logger.debug(challenges)
     return challenges
 
@@ -104,6 +104,8 @@ def find_plotting_job_log(plot_id):
     return None
 
 def get_farming_log_file(blockchain):
+    if blockchain == 'mmx':
+         return "/root/.mmx/{0}/logs/mmx_node_{1}.txt".format(globals.MMX_NETWORK, datetime.datetime.now().strftime("%Y_%m_%d"))
     mainnet_folder = globals.get_blockchain_network_path(blockchain)
     return mainnet_folder + '/log/debug.log'
 
@@ -129,30 +131,6 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         app.logger.info("No log file found at {0}".format(log_file))
         return 'No log file found!'
     #app.logger.info("Log file found at {0}".format(log_file))
-    if blockchain == "btcgreen":
-        class_escape = re.compile(r' btcgreen.plotting.(\w+)(\s+): ')
-    elif blockchain == "cactus":
-        class_escape = re.compile(r' cactus.plotting.(\w+)(\s+): ')
-    elif blockchain == "chives":
-        class_escape = re.compile(r' chives.plotting.(\w+)(\s+): ')
-    elif blockchain == "cryptodoge":
-        class_escape = re.compile(r' cryptodoge.plotting.(\w+)(\s+): ')
-    elif blockchain == "flax":
-        class_escape = re.compile(r' flax.plotting.(\w+)(\s+): ')
-    elif blockchain == "flora":
-        class_escape = re.compile(r' flora.plotting.(\w+)(\s+): ')
-    elif blockchain == "hddcoin":
-        class_escape = re.compile(r' hddcoin.plotting.(\w+)(\s+): ')
-    elif blockchain == "maize":
-        class_escape = re.compile(r' maize.plotting.(\w+)(\s+): ')
-    elif blockchain == "shibgreen":
-        class_escape = re.compile(r' shibgreen.plotting.(\w+)(\s+): ')
-    elif blockchain == "staicoin":
-        class_escape = re.compile(r' staicoin.plotting.(\w+)(\s+): ')
-    elif blockchain == "stor":
-        class_escape = re.compile(r' stor.plotting.(\w+)(\s+): ')
-    else: # Chia, NChain, etc all use default package name
-        class_escape = re.compile(r' chia.plotting.(\w+)(\s+): ')
     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
     proc = Popen(['tail', '-n', str(MAX_LOG_LINES), log_file], stdout=PIPE)
-    return class_escape.sub('', ansi_escape.sub('', proc.stdout.read().decode("utf-8")))
+    return ansi_escape.sub('', proc.stdout.read().decode("utf-8"))

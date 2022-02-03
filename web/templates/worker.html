@@ -44,7 +44,7 @@
             <td>{{worker.displayname}}</td>
           </tr>
           <tr>
-            <th scope="col" class="text-success">Fork</th>
+            <th scope="col" class="text-success">Blockchain</th>
             <td>{{worker.blockchain}}</td>
           </tr>
           <tr>
@@ -94,12 +94,16 @@
           {% if warnings|length > 0 %}
           {% for warning in warnings %}
           <tr>
-            <td>{{warning.title}} {{warning.message|safe}}</td>
+            <td>
+              <i class="{{warning.icon}}"></i>
+              <span style='font-weight:500;padding-left:7px'>{{warning.title|safe}}</span><br/>
+              {{warning.message|safe}}
+            </td>
           </tr>
           {% endfor %}
           {% else %}
           <tr>
-            <td>Yay! No warnings currently.</td>
+            <td>Yay! No issues currently.</td>
           </tr>
           {% endif %}
         </tbody>

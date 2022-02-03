@@ -3,6 +3,7 @@ import pathlib
 import pytz
 import os
 import random
+import requests
 import time
 import traceback
 
@@ -13,7 +14,7 @@ from flask import Flask, flash, redirect, render_template, abort, \
 from common.config import globals
 from common.models import pools as po
 from web import app, utils
-from web.actions import chia, pools as p, plotman, chiadog, worker, log_handler, stats, warnings
+from web.actions import chia, pools as p, plotman, chiadog, worker, log_handler, stats, warnings, forktools
 
 @app.route('/')
 def landing():
@@ -21,6 +22,8 @@ def landing():
     if not globals.is_setup():
         return redirect(url_for('setup'))
     msg = random.choice(list(open('web/static/landings.txt')))
+    if msg.endswith(".png"):
+        msg = "<img style='height: 150px' src='{0}' />".format(url_for('static', filename='/landings/' + msg))
     return render_template('landing.html', random_message=msg)
 
 @app.route('/index')
@@ -31,15 +34,21 @@ def index():
     if not utils.is_controller():
         return redirect(url_for('controller'))
     workers = worker.load_worker_summary()
-    plotting = plotman.load_plotting_summary()
     farm_summary = chia.load_farm_summary()
+    plotting = plotman.load_plotting_summary_by_blockchains(farm_summary.farms.keys())
     selected_blockchain = farm_summary.selected_blockchain()
     chia.challenges_chart_data(farm_summary)
     p.partials_chart_data(farm_summary)
     stats.load_daily_diff(farm_summary)
     warnings.check_warnings(request.args)
     return render_template('index.html', reload_seconds=120, farms=farm_summary.farms, \
-        plotting=plotting.__dict__, workers=workers, global_config=gc, selected_blockchain=selected_blockchain)
+        plotting=plotting, workers=workers, global_config=gc, selected_blockchain=selected_blockchain)
+
+@app.route('/summary')
+def summary():
+    gc = globals.load()
+    summaries = chia.load_summaries()
+    return render_template('summary.html', reload_seconds=120, summaries=summaries, global_config=gc)
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
@@ -182,7 +191,7 @@ def wallet():
 def keys():
     gc = globals.load()
     selected_blockchain = worker.default_blockchain()
-    keys = chia.load_keys_show()
+    keys = chia.load_keys()
     key_paths = globals.get_key_paths()
     return render_template('keys.html', keys=keys, selected_blockchain = selected_blockchain,
         key_paths=key_paths, global_config=gc)
@@ -215,7 +224,7 @@ def worker_route():
 def blockchains():
     gc = globals.load()
     selected_blockchain = worker.default_blockchain()
-    blockchains = chia.load_blockchain_show()
+    blockchains = chia.load_blockchains()
     return render_template('blockchains.html', reload_seconds=120, selected_blockchain = selected_blockchain, 
         blockchains=blockchains, global_config=gc)
 
@@ -231,7 +240,7 @@ def connections():
             chia.remove_connection(request.form.getlist('nodeid'), request.form.get('hostname'), request.form.get('blockchain'))
         else:
             app.logger.info("Unknown form action: {0}".format(request.form))
-    connections = chia.load_connections_show()
+    connections = chia.load_connections()
     return render_template('connections.html', reload_seconds=120, selected_blockchain = selected_blockchain,
         connections=connections, global_config=gc)
 
@@ -291,12 +300,12 @@ def settings_alerts():
         selected_worker_hostname = request.form.get('worker')
         selected_blockchain = request.form.get('blockchain')
         chiadog.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
-    workers_summary = worker.load_worker_summary()
-    selected_worker = find_selected_worker(workers_summary.farmers_harvesters(), selected_worker_hostname, selected_blockchain)
+    farmers = chiadog.load_farmers()
+    selected_worker = find_selected_worker(farmers, selected_worker_hostname, selected_blockchain)
     if not selected_blockchain:
         selected_blockchain = selected_worker['blockchain']
     return render_template('settings/alerts.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
-        workers=workers_summary.farmers_harvesters, selected_worker=selected_worker['hostname'], global_config=gc)
+        workers=farmers, selected_worker=selected_worker['hostname'], global_config=gc)
 
 @app.route('/settings/pools', methods=['GET', 'POST'])
 def settings_pools():
@@ -320,6 +329,23 @@ def settings_pools():
     return render_template('settings/pools.html',  global_config=gc, fullnodes_by_blockchain=fullnodes_by_blockchain,
         pool_configs=pool_configs, blockchains=poolable_blockchains, selected_blockchain=selected_blockchain)
 
+@app.route('/settings/tools', methods=['GET', 'POST'])
+def settings_tools():
+    selected_worker_hostname = None
+    blockchains = globals.enabled_blockchains()
+    selected_blockchain = None
+    gc = globals.load()
+    if request.method == 'POST':
+        selected_worker_hostname = request.form.get('worker')
+        selected_blockchain = request.form.get('blockchain')
+        forktools.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
+    farmers = chiadog.load_farmers()
+    selected_worker = find_selected_worker(farmers, selected_worker_hostname, selected_blockchain)
+    if not selected_blockchain:
+        selected_blockchain = selected_worker['blockchain']
+    return render_template('settings/tools.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
+        workers=farmers, selected_worker=selected_worker['hostname'], global_config=gc)
+
 @app.route('/settings/config', defaults={'path': ''})
 @app.route('/settings/config/<path:path>')
 def views_settings_config(path):
@@ -330,13 +356,27 @@ def views_settings_config(path):
                 request.args.get('worker'), request.args.get('blockchain')))
         abort(404)
     if config_type == "alerts":
-        response = make_response(chiadog.load_config(w, request.args.get('blockchain')), 200)
+        try:
+            response = make_response(chiadog.load_config(w, request.args.get('blockchain')), 200)
+        except requests.exceptions.ConnectionError as ex:
+            response = make_response("For Alerts config, found no responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
     elif config_type == "farming":
-        response = make_response(chia.load_config(w, request.args.get('blockchain')), 200)
+        try:
+            response = make_response(chia.load_config(w, request.args.get('blockchain')), 200)
+        except requests.exceptions.ConnectionError as ex:
+            response = make_response("For Farming config, found no responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
     elif config_type == "plotting":
-        [replaced, config] = plotman.load_config(w, request.args.get('blockchain'))
-        response = make_response(config, 200)
-        response.headers.set('ConfigReplacementsOccurred', replaced)
+        try:
+            [replaced, config] = plotman.load_config(w, request.args.get('blockchain'))
+            response = make_response(config, 200)
+            response.headers.set('ConfigReplacementsOccurred', replaced)
+        except requests.exceptions.ConnectionError as ex:
+            response = make_response("For Plotting config, found no responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
+    elif config_type == "tools":
+        try:
+            response = make_response(forktools.load_config(w, request.args.get('blockchain')), 200)
+        except requests.exceptions.ConnectionError as ex:
+            response = make_response("No responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
     else:
         abort("Unsupported config type: {0}".format(config_type), 400)
     response.mimetype = "application/x-yaml"

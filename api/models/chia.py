@@ -4,12 +4,9 @@ import traceback
 
 from datetime import datetime
 
-from api import app
+from api import app, utils
 from common.config import globals
 from common.utils import converters
-
-# Treat *.plot files smaller than this as in-transit (copying) so don't count them
-MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
 class FarmSummary:
 
@@ -18,8 +15,6 @@ class FarmSummary:
             self.plots_size = 0
             for line in cli_stdout:
                 if "Plot count for all" in line: 
-                    self.plot_count = line.strip().split(':')[1].strip()
-                if "Plot count:" in line: # Just chives
                     self.plot_count = line.strip().split(':')[1].strip()
                 elif "Total size of plots" in line:
                     self.plots_size = line.strip().split(':')[1].strip()
@@ -33,13 +28,6 @@ class FarmSummary:
                     self.time_to_win = line.split(':')[1].strip()
                 elif "User transaction fees" in line:
                     self.transaction_fees = line.split(':')[1].strip()
-            if blockchain == 'chives' and 'harvester' in os.environ['mode']:
-                try:
-                    if int(self.plot_count) > 0:
-                        app.logger.debug("On a Chives Harvester, setting farm status to Harvesting.")
-                        self.status = "Harvesting"
-                except:
-                    app.logger.debug("Non-numeric chives plot count so not setting status to Harvesting.")
 
     def calc_status(self, status):
         self.status = status
@@ -64,28 +52,6 @@ class HarvesterSummary:
 
     def __init__(self):
         self.status = "Harvesting" # TODO Check for harvester status in debug.log
-
-class FarmPlots:
-
-     def __init__(self, entries):
-        self.columns = ['plot_id', 'dir', 'plot', 'create_date', 'size']
-        self.rows = []
-        for st_ctime, st_size, path in entries:
-            if not path.endswith(".plot"):
-                app.logger.info("Skipping non-plot file named: {0}".format(path))
-                continue
-            dir,file=os.path.split(path)
-            groups = re.match("plot-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", file)
-            if not groups:
-                app.logger.info("Invalid plot file name provided: {0}".format(file))
-                continue
-            plot_id = groups[7][:8]
-            self.rows.append({ \
-                'plot_id': plot_id, \
-                'dir': dir,  \
-                'file': file,  \
-                'created_at': datetime.fromtimestamp(int(st_ctime)).strftime('%Y-%m-%d %H:%M:%S'), \
-                'size': int(st_size) }) 
 
 class Wallet:
 

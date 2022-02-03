@@ -4,8 +4,8 @@
 #
 
 CACTUS_BRANCH=$1
-# On 2021-11-06
-HASH=f9d9f106041c74402f9bd08695a62ab6a762f09a
+# On 2022-01-22
+HASH=9eef13171dff764bd0549de1479d775272e16bcc
 
 if [ -z ${CACTUS_BRANCH} ]; then
 	echo 'Skipping Cactus install as not requested.'
@@ -15,6 +15,8 @@ else
 	git submodule update --init mozilla-ca
 	git checkout $HASH
 	chmod +x install.sh
+	# 2022-01-30: pip broke due to https://github.com/pypa/pip/issues/10825
+	sed -i 's/upgrade\ pip$/upgrade\ "pip<22.0"/' install.sh
 	/usr/bin/sh ./install.sh
 
 	if [ ! -d /chia-blockchain/venv ]; then

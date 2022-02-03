@@ -61,11 +61,11 @@ def get_hostname():
     if 'worker_address' in os.environ:
         hostname = os.environ['worker_address']
     else:
-        hostname = socket.gethostname().split()[0]
+        hostname = socket.gethostname().split('.')[0]
     return hostname
 
 def get_displayname():
-    return socket.gethostname().split()[0]
+    return socket.gethostname().split('.')[0]
 
 def is_controller():
     return app.config['CONTROLLER_HOST'] == "localhost"

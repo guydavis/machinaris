@@ -21,7 +21,8 @@ def load_device_id():
             return None
         try:
             id = id_json['ids'][0]
-            return "{0}-{1}".format(id, globals.get_blockchain_symbol().lower())
+            blockchain = os.environ['blockchains']
+            return "{0}-{1}".format(id, globals.get_blockchain_symbol(blockchain).lower())
         except Exception as ex:
             app.logger.error("Farmr id.json missing ids: {0}".format(str(ex)))
             app.logger.info(id_json)

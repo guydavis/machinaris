@@ -9,9 +9,15 @@ import sqlite3
 from flask import g
 from sqlalchemy import or_
 
+from common.config import globals
 from common.utils import converters
 from common.models.alerts import Alert
+from common.models.challenges import Challenge
+from common.models.farms import Farm
+from common.models.pools import POOLABLE_BLOCKCHAINS
 from common.models.plots import Plot
+from common.models.pools import Pool
+from common.models.partials import Partial
 from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalCoins, StatNetspaceSize, StatTimeToWin, \
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \
         StatPlottingDiskUsed, StatPlottingDiskFree
@@ -185,29 +191,30 @@ def load_current_disk_usage(disk_type, hostname=None):
         paths = []
         used = []
         free = []
+        used_result = free_result = None
         if disk_type == 'plots':
             created_at_max = db.session.query(StatPlotsDiskUsed).order_by(StatPlotsDiskUsed.created_at.desc()).first()
-            used_result = db.session.query(StatPlotsDiskUsed).filter( 
-                or_(StatPlotsDiskUsed.hostname == host.hostname, StatPlotsDiskUsed.hostname == host.displayname),
-                    StatPlotsDiskUsed.created_at == created_at_max.created_at).order_by(StatPlotsDiskUsed.path).all()
-            free_result = db.session.query(StatPlotsDiskFree).filter( 
-                or_(StatPlotsDiskFree.hostname == host.hostname, StatPlotsDiskFree.hostname == host.displayname),
-                    StatPlotsDiskFree.created_at == created_at_max.created_at).order_by(StatPlotsDiskFree.path).all()
+            if created_at_max:
+                used_result = db.session.query(StatPlotsDiskUsed).filter( 
+                    or_(StatPlotsDiskUsed.hostname == host.hostname, StatPlotsDiskUsed.hostname == host.displayname),
+                        StatPlotsDiskUsed.created_at == created_at_max.created_at).order_by(StatPlotsDiskUsed.path).all()
+                free_result = db.session.query(StatPlotsDiskFree).filter( 
+                    or_(StatPlotsDiskFree.hostname == host.hostname, StatPlotsDiskFree.hostname == host.displayname),
+                        StatPlotsDiskFree.created_at == created_at_max.created_at).order_by(StatPlotsDiskFree.path).all()
         elif disk_type == 'plotting':
             created_at_max = db.session.query(StatPlottingDiskUsed).order_by(StatPlottingDiskUsed.created_at.desc()).first()
-            used_result = db.session.query(StatPlottingDiskUsed).filter( 
-                or_(StatPlottingDiskUsed.hostname == host.hostname, StatPlottingDiskUsed.hostname == host.displayname),
-                    StatPlottingDiskUsed.created_at == created_at_max.created_at).order_by(StatPlottingDiskUsed.path).all()
-            free_result = db.session.query(StatPlottingDiskFree).filter( 
-                or_(StatPlottingDiskFree.hostname == host.hostname, StatPlottingDiskFree.hostname == host.displayname),
-                    StatPlottingDiskFree.created_at == created_at_max.created_at).order_by(StatPlottingDiskFree.path).all()
+            if created_at_max:
+                used_result = db.session.query(StatPlottingDiskUsed).filter( 
+                    or_(StatPlottingDiskUsed.hostname == host.hostname, StatPlottingDiskUsed.hostname == host.displayname),
+                        StatPlottingDiskUsed.created_at == created_at_max.created_at).order_by(StatPlottingDiskUsed.path).all()
+                free_result = db.session.query(StatPlottingDiskFree).filter( 
+                    or_(StatPlottingDiskFree.hostname == host.hostname, StatPlottingDiskFree.hostname == host.displayname),
+                        StatPlottingDiskFree.created_at == created_at_max.created_at).order_by(StatPlottingDiskFree.path).all()
         else:
             raise Exception("Unknown disk type provided.")
-        #sql = "select path, value{0}, created_at from stat_{1}_disk_used where (hostname = ? or hostname = ?) group by path having max(created_at)".format(value_factor, disk_type)
-        #used_result = db.engine.execute(sql, [ host.hostname, host.displayname, ]).fetchall()
-        #sql = "select path, value{0}, created_at from stat_{1}_disk_free where (hostname = ? or hostname = ?) group by path having max(created_at)".format(value_factor, disk_type)
-        #free_result =cur.execute(sql, [ host.hostname, host.displayname, ]).fetchall()
-        if len(used_result) != len(free_result):
+        if not used_result or not free_result:
+            app.logger.info("Found no {0} disk usage stats.".format(disk_type))
+        elif len(used_result) != len(free_result):
             app.logger.info("Found mismatched count of disk used/free stats for {0}".format(disk_type))
         else:
             for used_row in used_result:
@@ -273,3 +280,80 @@ def load_plotting_stats():
                 summary_by_size[k][worker] = worker_values
     #app.logger.info(summary_by_size.keys())
     return summary_by_size
+
+def calc_estimated_daily_value(blockchain):
+    edv = None
+    edv_usd = None
+    result = []
+    try:
+        farm = db.session.query(Farm).filter(Farm.blockchain == blockchain).first()
+        blocks_per_day = globals.get_blocks_per_day(blockchain)
+        block_reward = globals.get_block_reward(blockchain)
+        symbol = globals.get_blockchain_symbol(blockchain).lower()
+        edv = blocks_per_day * block_reward * farm.plots_size / farm.netspace_size
+    except Exception as ex:
+        app.logger.info("Failed to calculate EDV for {0} because {1}".format(blockchain, str(ex)))
+    if edv:
+        if edv >= 1000:
+            result.append("{:,.0f} {}".format(edv, symbol))
+        else:
+            result.append("{:,.3f} {}".format(edv, symbol))
+    else:
+        result.append('')
+    try:
+        edv_usd = converters.to_usd(blockchain, edv)
+    except Exception as ex:
+        app.logger.info("Failed to calculate EDV_USD for {0} because {1}".format(blockchain, str(ex)))
+    if edv:
+        result.append(edv_usd)
+    else:
+        result.append('')
+    return result
+
+def load_summary_stats(blockchains):
+    all_farmers = worker.load_worker_summary().farmers_harvesters()
+    stats = {}
+    for b in blockchains:
+        blockchain = b['blockchain']
+        harvesters = ''
+        try:
+            harvsters_online = 0
+            harvesters_total = 0
+            for host in all_farmers:
+                for wk in host.workers:
+                    if wk['blockchain'] == blockchain:
+                        harvesters_total += 1
+                        #app.logger.info(wk['farming_status'])
+                        if wk['farming_status'] in ['farming', 'harvesting']: 
+                            harvsters_online += 1
+            harvesters = "{0} / {1}".format(harvsters_online, harvesters_total)
+        except Exception as ex:
+            app.logger.error(ex)
+            app.logger.info("No recent challenge response times found for {0}".format(blockchain))
+        max_response = ''
+        try:
+            max_record = db.session.query(Challenge).filter(Challenge.blockchain==blockchain).order_by(Challenge.time_taken.desc()).first()
+            if max_record: 
+                max_response = "%.2f secs" % float(max_record.time_taken.split()[0]) # Strip of 'secs' unit before rounding
+        except Exception as ex:
+            app.logger.error(ex)
+            app.logger.info("No recent challenge response times found for {0}".format(blockchain))
+        partials_per_hour = ''
+        if blockchain in POOLABLE_BLOCKCHAINS:
+            if len(db.session.query(Pool).filter(Pool.blockchain==blockchain).all()) > 0:
+                try:
+                    day_ago = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M")
+                    partial_records = db.session.query(Partial).filter(Partial.blockchain==blockchain, Partial.created_at >= day_ago ).order_by(Partial.created_at.desc()).all()
+                    partials_per_hour = "%.2f / hour" % (len(partial_records) / 24)
+                except Exception as ex:
+                    app.logger.error(ex)
+                    app.logger.info("No recent partials submitted for {0}".format(blockchain))
+        [edv, edv_usd] = calc_estimated_daily_value(blockchain)
+        stats[blockchain] = {
+            'harvesters': harvesters,
+            'max_resp': max_response,
+            'partials_per_hour': partials_per_hour,
+            'edv': edv,
+            'edv_usd': edv_usd
+        }
+    return stats

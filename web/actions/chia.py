@@ -30,8 +30,9 @@ from common.models import farms as f, plots as p, challenges as c, wallets as w,
     blockchains as b, connections as co, keys as k
 from common.config import globals
 from web.models.chia import FarmSummary, FarmPlots, Wallets, \
-    Blockchains, Connections, Keys, ChallengesChartData
+    Blockchains, Connections, Keys, ChallengesChartData, Summaries
 from . import worker as wk
+from . import stats
 
 COLD_WALLET_ADDRESSES_FILE = '/root/.chia/machinaris/config/cold_wallet_addresses.json'
 
@@ -107,9 +108,11 @@ def load_plots(args):
 
 def challenges_chart_data(farm_summary):
     chart_start_time = (datetime.datetime.now() - datetime.timedelta(minutes=app.config['MAX_CHART_CHALLENGES_MINS'])).strftime("%Y-%m-%d %H:%M:%S.000")
+    chart_end_time = (datetime.datetime.now() - datetime.timedelta(minutes=2)).strftime("%Y-%m-%d %H:%M:%S.000")
     for blockchain in farm_summary.farms:
         challenges = db.session.query(c.Challenge).filter(c.Challenge.blockchain==blockchain,
-            c.Challenge.created_at >= chart_start_time).order_by(
+            c.Challenge.created_at >= chart_start_time,
+            c.Challenge.created_at <= chart_end_time).order_by(
             c.Challenge.created_at.desc(), c.Challenge.hostname).all()
         farm_summary.farms[blockchain]['challenges'] = ChallengesChartData(challenges)
 
@@ -118,7 +121,7 @@ def load_wallets():
     cold_wallet_addresses = load_cold_wallet_addresses()
     return Wallets(wallets, cold_wallet_addresses)
 
-def load_blockchain_show():
+def load_blockchains():
     try:  
         blockchains = db.session.query(b.Blockchain).order_by(b.Blockchain.blockchain).all()
         return Blockchains(blockchains)
@@ -126,11 +129,21 @@ def load_blockchain_show():
         app.logger.error("Error querying for blockchains: {0}".format(str(ex)))
     return None
 
-def load_connections_show():
+def load_summaries():
+    try:
+        blockchains = load_blockchains()
+        farms = load_farm_summary()
+        summary_stats = stats.load_summary_stats(blockchains.rows)
+        return Summaries(blockchains, farms.farms, farms.wallets, summary_stats)
+    except Exception as ex:
+        app.logger.error("Error loading summary: {0}".format(str(ex)))
+    return None
+
+def load_connections():
     connections = db.session.query(co.Connection).all()
     return Connections(connections)
 
-def load_keys_show():
+def load_keys():
     keys = db.session.query(k.Key).order_by(k.Key.blockchain).all()
     return Keys(keys)
     
@@ -153,7 +166,7 @@ def save_config(farmer, blockchain, config):
         flash('Failed to save config to farmer.  Please check log files.', 'danger')
         flash(str(ex), 'warning')
     else:
-        flash('Nice! Chia\'s config.yaml validated and saved successfully. Please restart the Machinaris worker to take effect.', 'success')
+        flash('Nice! Farming config validated and saved successfully. Worker services now restarting. Please allow 10-15 minutes to take effect.', 'success')
 
 def generate_key(key_path, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)

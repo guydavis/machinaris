@@ -19,7 +19,7 @@
     }
 </style>
 <div class="position-relative">
-    <div class="position-absolute top-0 end-0">
+    <div class="position-absolute top-0 end-0" style="z-index: 2000;">
         <a href="https://github.com/guydavis/machinaris/wiki/Pooling" target="_blank">
             <i class="fs-4 bi-question-circle"></i>
         </a>
@@ -105,7 +105,7 @@
                                 <div class="col-12">
                                     <input class="form-check-input" type="radio" name="{{blockchain}}-choice" 
                                         id="{{blockchain}}-{{plotnft.wallnet_num}}-self_pool" value="self" 
-                                    {% if not current_pool_url %} checked {% endif %}/>
+                                    {% if not plotnft.current_pool_url() %} checked {% endif %}/>
                                     <label class="form-check-label" for="self_pool">
                                         Self pool. When you win a block, you will earn rewards.
                                     </label>

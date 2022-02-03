@@ -12,7 +12,7 @@ from common.config import globals
 from common.models import stats
 from common.utils import converters
 from api import app, utils, db
-from api.commands import chia_cli
+from api.commands import chia_cli, mmx_cli
 
 DELETE_OLD_STATS_AFTER_DAYS = 30
 
@@ -40,7 +40,10 @@ def collect():
         #app.logger.info("Collecting stats about the farm.")
         current_datetime = datetime.datetime.now().strftime("%Y%m%d%H%M")
         for blockchain in globals.enabled_blockchains():
-            farm_summary = chia_cli.load_farm_summary(blockchain)
+            if blockchain == 'mmx':
+                farm_summary = mmx_cli.load_farm_info(blockchain)
+            else:
+                farm_summary = chia_cli.load_farm_summary(blockchain)
             store_locally(blockchain, farm_summary, current_datetime)
             if not gc['is_controller']:
                 send_to_controller(blockchain, farm_summary, current_datetime)

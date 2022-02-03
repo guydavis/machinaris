@@ -70,37 +70,48 @@
 </header>
 
 {% if wallets.rows|length > 0 %}
-<div class="table-responsive rounded">
-    <form method="POST" id="wallet-form" style="padding-bottom: 10px;">
-        <table class="table table-dark">
-            <thead>
-                <tr>
-                    <th scope="col" class="text-success">Fork</th>
-                    <th scope="col" class="text-success">Wallet Balance</th>
-                    <th scope="col" class="text-success">Cold Wallet Balance</th>
-                    <th scope="col" class="text-success">Total Balance</th>
-                    <th scope="col" class="text-success">Updated At</th>
-                    <th scope="col" class="text-success"></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for wallet in wallets.rows %}
-                <tr>
-                    <td>{{wallet.blockchain}}</td>
-                    <td>{{wallet.hot_balance}}</td>
-                    <td>{{wallet.cold_balance}}</td>
-                    <td>{{wallet.total_balance}}</td>
-                    <td>{{wallet.updated_at | datetimefilter}}</td>
-                    <td class='edit_cell'><a href="#" title="Edit Wallet" data-bs-toggle="modal" 
-                        data-bs-target="#walletModal" data-bs-blockchain="{{wallet.blockchain}}"
-                        data-bs-cold-wallet-address="{{wallet.cold_address}}"><i 
-                        class="fs-4 bi-pencil-square"></i></a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </form>
-</div>
+<form method="POST" id="wallet-form" style="padding-bottom: 10px;">
+    <table id="data" class="table table-dark">
+        <thead>
+            <tr>
+                <th scope="col" class="text-success">Blockchain</th>
+                <th scope="col" class="text-success">Status</th>
+                <th scope="col" class="text-success">Wallet Balance</th>
+                <th scope="col" class="text-success">Cold Wallet Balance</th>
+                <th scope="col" class="text-success">Total Balance</th>
+                <th scope="col" class="text-success">USD*</th>
+                <th scope="col" class="text-success">Updated At</th>
+                <th scope="col" class="text-success"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for wallet in wallets.rows %}
+            <tr>
+                <td>{{wallet.blockchain}}</td>
+                <td>
+                    {% if wallet.status == 'Offline' %}
+                      <i class="bi-dash-circle text-danger"></i>
+                    {% elif wallet.status.lower().startswith('synced') %}
+                      <i class="bi-check-circle text-success"></i>
+                    {% else %}
+                      <i class="bi-exclamation-triangle text-warning"></i>
+                    {% endif %} &nbsp;
+                    {{wallet.status}}
+                </td>
+                <td>{{wallet.hot_balance}}</td>
+                <td>{{wallet.cold_balance}}</td>
+                <td>{{wallet.total_balance}}</td>
+                <td>{{wallet.usd_balance}}</td>
+                <td>{{wallet.updated_at | datetimefilter}}</td>
+                <td class='edit_cell'><a href="#" title="Edit Wallet" data-bs-toggle="modal" 
+                    data-bs-target="#walletModal" data-bs-blockchain="{{wallet.blockchain}}"
+                    data-bs-cold-wallet-address="{{wallet.cold_address}}"><i 
+                    class="fs-4 bi-pencil-square"></i></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
 
 <header class="pb-3 mt-4">
     <span class="fs-4">Wallet Details</span>
@@ -137,6 +148,10 @@
 {% block scripts %}
 <script>
         $(document).ready(function () {
+            $('#data').DataTable({
+                "pageLength": 25,
+                "columnDefs": [{ "orderable": false, targets: [5] }],
+            });
             $("#btnSave").click(function () {
                 $("#btnCancel").prop("disabled", true);
                 $(this).prop("disabled", true);

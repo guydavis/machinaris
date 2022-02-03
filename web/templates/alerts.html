@@ -44,12 +44,12 @@
                     <li>
                         <a class="dropdown-item text-white text-decoration-none" href="#"
                             onclick='MonitoringLogs("{{ farmer.hostname }}", "{{worker.blockchain}}");return false;'>
-                            <span class="align-text-bottom" style="padding-right:5px">{{worker.blockchain|capitalize}}</span>
                             {% if worker.monitoring_status == 'running' %}
-                                <i class="fs-4 bi-emoji-smile"></i>
+                                <i class="fs-4 bi-check-circle text-success"></i>
                             {% else %}
-                                <i class="fs-4 bi-exclamation-triangle"></i>
-                            {% endif %}
+                                <i class="fs-4 bi-exclamation-triangle text-warning"></i>
+                            {% endif %} &nbsp;
+                            <span class="align-text-bottom" style="padding-right:5px">{{worker.blockchain|capitalize}}</span>
                         </a>
                     </li>
                     {% endfor %}
@@ -70,7 +70,7 @@
                             <input type="checkbox" name="unique_id_master" onclick="checkPage(this)"/>
                         </th>
                         <th scope="col" class="text-success">Worker</th>
-                        <th scope="col" class="text-success">Fork</th>
+                        <th scope="col" class="text-success">Blockchain</th>
                         <th scope="col" class="text-success">Service</th>
                         <th scope="col" class="text-success">Notification</th>
                         <th scope="col" class="text-success">Recorded At</th>

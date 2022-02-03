@@ -29,9 +29,15 @@ from common.config import globals
 from api.models.pools import Plotnfts
 
 def get_job_parameter(job, key, index):
-    value = job[key][index].strip()
-    if value and value != 'None':
-        return value
+    if key in job:
+        if index < len(job[key]):
+            value = job[key][index].strip()
+            if value and value != 'None':
+                return value
+        else:
+            app.logger.info("No index {0} for key {1} found in: {2}".format(index, key, job[key]))
+    else:
+        app.logger.info("No key {0} found in job: {1}".format(key, job))
     return None
 
 def dispatch_action(job):
@@ -40,6 +46,7 @@ def dispatch_action(job):
         raise Exception("Only pooling requests handled here!")
     action = job['action']
     if action == "save":
+        app.logger.info("Processing pool save: {0}".format(job))
         # Loop thru the provided launcher_ids
         msg = ""
         blockchain = job["blockchain"]
@@ -49,13 +56,17 @@ def dispatch_action(job):
             choice = get_job_parameter(job,"choices", i)
             pool_url = get_job_parameter(job,"pool_urls", i)
             current_pool_url = get_job_parameter(job,"current_pool_urls", i)
-            msg += process_pool_save(blockchain, choice, pool_wallet_id, pool_url, current_pool_url, launcher_id)
+            result = process_pool_save(blockchain, choice, pool_wallet_id, pool_url, current_pool_url, launcher_id)
+            if result:
+                msg += result + ' '
+            else:
+                app.logger.info("process_pool_save returned None for launcher_id index {0}".format(i))
         if msg.strip():
             return msg
         else:
             return "No requested pool modifications were sent.  Current settings are unchanged."
     else:
-        raise Exception("Unsupported action {0} for monitoring.".format(action))
+        raise Exception("Unsupported action {0} for pools.".format(action))
 
 def get_plotnft_log():
     try:
@@ -107,6 +118,7 @@ def process_pool_save(blockchain, choice, pool_wallet_id, pool_url, current_pool
             app.logger.info('Already pooling with {0}.  No changes made to {1}'.format(pool_url, launcher_id))
             return ""
         return process_pool_join(blockchain, pool_url, pool_wallet_id)
+    raise Exception("Unknown pool save choice provided: {0}".format(choice))
 
 def process_pool_leave(blockchain, pool_wallet_id):
     chia_binary = globals.get_blockchain_binary(blockchain)

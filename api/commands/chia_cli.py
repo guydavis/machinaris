@@ -29,7 +29,7 @@ MAX_LOG_LINES = 2000
 
 def load_farm_summary(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    if globals.farming_enabled() or (blockchain == 'chives' and globals.harvesting_enabled()):
+    if globals.farming_enabled():
         proc = Popen("{0} farm summary".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=90)
@@ -44,21 +44,6 @@ def load_farm_summary(blockchain):
         return chia.HarvesterSummary()
     else:
         raise Exception("Unable to load farm summary on non-farmer and non-harvester.")
-
-def load_plots_farming():
-    all_entries = []
-    for dir_path in os.environ['plots_dir'].split(':'):
-        try:
-            entries = (os.path.join(dir_path, file_name) for file_name in os.listdir(dir_path))
-            entries = ((os.stat(path), path) for path in entries)
-            entries = ((stat[ST_MTIME], stat[ST_SIZE], path) for stat, path in entries if S_ISREG(stat[ST_MODE]))
-            all_entries.extend(entries)
-        except:
-            app.logger.info("Failed to list files at {0}".format(dir_path))
-            app.logger.info(traceback.format_exc())
-    all_entries = sorted(all_entries, key=lambda entry: entry[0], reverse=True)
-    plots_farming = chia.FarmPlots(all_entries)
-    return plots_farming
 
 def load_config(blockchain):
     mainnet = globals.get_blockchain_network_path(blockchain)
@@ -151,12 +136,9 @@ def start_farmer(blockchain):
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
-        flash('Timed out while starting farmer! Try restarting the Machinaris container.', 'danger')
-        flash(str(ex), 'warning')
         return False
     if errs:
         app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash('Unable to start farmer. Try restarting the Machinaris container instead.', 'danger')
         return False
     return True
 
@@ -188,6 +170,9 @@ def is_plots_check_running():
     return None
 
 def plot_check(blockchain, plot_path):
+    if blockchain == 'mmx':
+        app.logger.debug("MMX doesn't offer a plot check function.")
+        return None
     if not os.path.exists(plot_path):
         app.logger.error("No such plot file to check at: {0}".format(plot_path))
         return None

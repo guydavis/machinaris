@@ -8,6 +8,11 @@ echo 'Starting Machinaris...'
 mkdir -p /root/.chia/machinaris/logs
 cd /code/machinaris
 
+# Workaround due to certain users who dislike CDNs for JS libs...
+if [ ! -d /code/machinaris/web/static/3rd_party ]; then
+    JS_LIBS_BASEPATH=/code/machinaris/web/static/3rd_party . ./scripts/pull_3rd_party_libs.sh
+fi
+
 if [ $FLASK_ENV == "development" ];
 then
     LOG_LEVEL='debug'

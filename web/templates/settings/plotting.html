@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="position-relative">
-    <div class="position-absolute top-0 end-0">
+    <div class="position-absolute top-0 end-0" style="z-index: 2000;">
         <a href="https://github.com/guydavis/machinaris/wiki/Plotman" target="_blank">
             <i class="fs-4 bi-question-circle"></i>
         </a>
@@ -43,7 +43,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <label for="blockchain" class="col-sm-1 col-form-label-lg text-end p-1">Fork</label>
+                <label for="blockchain" class="col-sm-1 col-form-label-lg text-end p-1">Blockchain</label>
                 <div class="col-sm-3">
                     <select id="blockchain" name="blockchain" class="form-select">
                     </select>

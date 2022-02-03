@@ -8,6 +8,9 @@ mkdir -p /root/.chia/plotman/logs
 if [[ "${blockchains}" == 'chives' ]]; then
     cp -f /machinaris/config/plotman.sample-chives.yaml /root/.chia/plotman/plotman.sample.yaml
     cp -n /machinaris/config/plotman.sample-chives.yaml /root/.chia/plotman/plotman.yaml
+elif [[ "${blockchains}" == 'mmx' ]]; then
+    cp -f /machinaris/config/plotman.sample-mmx.yaml /root/.chia/plotman/plotman.sample.yaml
+    cp -n /machinaris/config/plotman.sample-mmx.yaml /root/.chia/plotman/plotman.yaml
 else # If Chia
     cp -f /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.sample.yaml
     cp -n /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.yaml

@@ -17,14 +17,15 @@ cactus init >> /root/.cactus/mainnet/log/init.log 2>&1
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
-  && [[ -f /usr/bin/mega-get ]] \
   && [[ ! -f /root/.cactus/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
   echo "Downloading Cactus blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.cactus/mainnet/db/ && cd /root/.cactus/mainnet/db/
-  # Mega links for Cactus blockchain DB from: https://chiaforksblockchain.com/
-  mega-get https://mega.nz/folder/u7wSDJYT#9KGpDVOGGK5-frBBI1v_Rg
-  mv cactus/*.sqlite . && rm -rf cactus
+  # Latest Blockchain DB download from direct from https://www.cactus-network.net/
+  curl -skJLO https://www.cactus-network.net/wp-content/uploads/db-Cactus-Mainnet.zip
+  unzip db-Cactus-Mainnet.zip 
+  mv db-Cactus-Mainnet/*.sqlite .
+  rm -rf db-Cactus-Mainnet/ db-Cactus-Mainnet.zip
 fi
 
 echo 'Configuring Cactus...'
@@ -45,6 +46,9 @@ for k in ${keys//:/ }; do
 done
 
 # Loop over provided list of completed plot directories
+IFS=':' read -r -a array <<< "$plots_dir"
+joined=$(printf ", %s" "${array[@]}")
+echo "Adding plot directories at: ${joined:1}"
 for p in ${plots_dir//:/ }; do
   cactus plots add -d ${p}
 done
