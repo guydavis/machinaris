@@ -63,6 +63,9 @@ class Certificates(MethodView):
         elif type == "shibgreen":
             blockchain = "shibgreen"
             dir = "/root/.shibgreen/mainnet/config/ssl/ca"
+        elif type == "silicoin":
+            blockchain = "silicoin"
+            dir = "/root/.sit/mainnet/config/ssl/ca"
         elif type == "stai":
             blockchain = "staicoin"
             dir = "/root/.stai/mainnet/config/ssl/ca"
