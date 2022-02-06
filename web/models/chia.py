@@ -439,9 +439,11 @@ class Connections:
         if blockchain == 'maize':
             return "212.159.183.209:8644"
         if blockchain == 'nchain':
-            return "218.88.205.216:58445"
+            return "218.88.205.216:58445"     
         if blockchain == 'shibgreen':
             return "218.89.239.144:7442"
+        if blockchain == 'silicoin':
+            return "67.172.84.54:22222"
         if blockchain == 'staicoin':
             return "173.54.12.193:1999"
         if blockchain == 'stor':
@@ -470,6 +472,8 @@ class Connections:
             return 12331
         if blockchain == 'maize':
             return 8644
+        if blockchain == 'silicoin':
+            return 22447
         if blockchain == 'shibgreen':
             return 7442
         if blockchain == 'silicoin':
