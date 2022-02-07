@@ -15,7 +15,5 @@ else
 	git submodule update --init mozilla-ca 
 	git checkout $HASH
 	chmod +x install.sh
-	# 2022-01-30: pip broke due to https://github.com/pypa/pip/issues/10825
-	#sed -i 's/upgrade\ pip$/upgrade\ "pip<22.0"/' install.sh
 	/usr/bin/sh ./install.sh
 fi
