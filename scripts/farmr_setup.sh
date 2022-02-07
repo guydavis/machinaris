@@ -72,6 +72,11 @@ if [[ "${farmr_skip_launch}" == 'false' &&  (${mode} == 'fullnode' || ${mode} =~
 		cp -n blockchain/nch.json.template blockchain/nch.json
 		echo "/chia-blockchain/venv/bin/chia" > override-nch-binary.txt
 	elif [[ ${blockchains} == 'silicoin' ]]; then
+		sed -i 's/11560/22560/g' blockchain/sit.json.template
+		sed -i 's/11559/22559/g' blockchain/sit.json.template
+		sed -i 's/11555/22555/g' blockchain/sit.json.template
+		sed -i 's/11256/22256/g' blockchain/sit.json.template
+		sed -i 's/56402/22402/g' blockchain/sit.json.template
 		cp -n blockchain/sit.json.template blockchain/sit.json
 		echo "/silicoin-blockchain/venv/bin/sit" > override-sit-binary.txt
 	elif [[ ${blockchains} == 'staicoin' ]]; then
