@@ -54,10 +54,10 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   trap "chia stop all -d; exit 0" SIGINT SIGTERM
 
   # Conditionally install plotman on plotters and fullnodes, after the plotters setup
-  #/usr/bin/bash /machinaris/scripts/plotman_setup.sh > /tmp/plotman_setup.log 2>&1
+  /usr/bin/bash /machinaris/scripts/plotman_setup.sh > /tmp/plotman_setup.log 2>&1
 
   # Conditionally install chiadog on harvesters and fullnodes
-  #/usr/bin/bash /machinaris/scripts/chiadog_setup.sh > /tmp/chiadog_setup.log 2>&1
+  /usr/bin/bash /machinaris/scripts/chiadog_setup.sh > /tmp/chiadog_setup.log 2>&1
 
   # During concurrent startup of multiple fork containers, stagger less important setups
   sleep $[ ( $RANDOM % 180 )  + 1 ]s
@@ -66,19 +66,19 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   /usr/bin/bash /machinaris/scripts/farmr_setup.sh > /tmp/farmr_setup.log 2>&1
 
   # Conditionally install fd-cli on fullnodes, excluding Chia and Chives
-  #/usr/bin/bash /machinaris/scripts/fd-cli_setup.sh > /tmp/fd-cli_setup.log 2>&1
+  /usr/bin/bash /machinaris/scripts/fd-cli_setup.sh > /tmp/fd-cli_setup.log 2>&1
 
   # Conditionally build bladebit on plotters and fullnodes, sleep a bit first
-  #/usr/bin/bash /machinaris/scripts/bladebit_setup.sh > /tmp/bladebit_setup.log 2>&1
+  /usr/bin/bash /machinaris/scripts/bladebit_setup.sh > /tmp/bladebit_setup.log 2>&1
 
   # Conditionally madmax on plotters and fullnodes, sleep a bit first
-  #/usr/bin/bash /machinaris/scripts/madmax_setup.sh > /tmp/madmax_setup.log 2>&1
+  /usr/bin/bash /machinaris/scripts/madmax_setup.sh > /tmp/madmax_setup.log 2>&1
 
   # Conditionally install plotman on plotters and fullnodes, after the plotters setup
-  #/usr/bin/bash /machinaris/scripts/plotman_autoplot.sh > /tmp/plotman_autoplot.log 2>&1
+  /usr/bin/bash /machinaris/scripts/plotman_autoplot.sh > /tmp/plotman_autoplot.log 2>&1
 
   # Conditionally install forktools on fullnodes
-  #/usr/bin/bash /machinaris/scripts/forktools_setup.sh > /tmp/forktools_setup.log 2>&1
+  /usr/bin/bash /machinaris/scripts/forktools_setup.sh > /tmp/forktools_setup.log 2>&1
 
 fi
 
