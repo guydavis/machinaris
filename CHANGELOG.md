@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.7.0] - 2022-03-04
+ - [Chia](https://github.com/Chia-Network/chia-blockchain) - testing of upcoming v1.3 release (labelled as v1.2.12 now)
  - [Silicoin](https://github.com/silicoin-network/silicoin-blockchain) - supported again as per Discord votes.
 
 ## [0.6.9] - 2022-02-04

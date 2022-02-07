@@ -224,6 +224,19 @@ class Wallets:
                 'usd_balance': converters.to_usd(wallet.blockchain, total_balance),
                 'updated_at': wallet.updated_at }) 
 
+    def exclude_cat_wallets(self, wallet_details):
+        skip = 0
+        details = []
+        for line in wallet_details.split('\n'):
+            if "type CAT" in line:
+                skip = 3 # Skip next 3 lines for this CAT wallet
+            elif skip > 0:
+                skip = skip -1 
+            else:
+                details.append(line)
+        print('\n'.join(details))
+        return '\n'.join(details)
+
     def sum_chia_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
         numeric_const_pattern = '-Total\sBalance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
         rx = re.compile(numeric_const_pattern, re.VERBOSE)
@@ -232,7 +245,7 @@ class Wallets:
         for wallet in self.wallets:
             if wallet.hostname == hostname and wallet.blockchain == blockchain:
                 try:
-                    for balance in rx.findall(wallet.details):
+                    for balance in rx.findall(self.exclude_cat_wallets(wallet.details)):
                         #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
                         # wallet.hostname, wallet.blockchain))
                         sum += locale.atof(balance)
