@@ -23,6 +23,7 @@ class Summaries:
         for blockchain in blockchains.rows:
             farm = self.find_farm(farms, blockchain['blockchain'])
             wallet = self.find_wallet(wallets, blockchain['blockchain'])
+            app.logger.info("Adding summary row for {0}".format(blockchain['blockchain']))
             self.rows.append({
                 'blockchain': blockchain['blockchain'],
                 'status': blockchain['status'],
@@ -234,7 +235,6 @@ class Wallets:
                 skip = skip -1 
             else:
                 details.append(line)
-        print('\n'.join(details))
         return '\n'.join(details)
 
     def sum_chia_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
