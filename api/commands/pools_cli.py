@@ -122,7 +122,7 @@ def process_pool_save(blockchain, choice, pool_wallet_id, pool_url, current_pool
 
 def process_pool_leave(blockchain, pool_wallet_id):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    cmd = "{0} plotnft leave -y -i {1}".format(chia_binary, pool_wallet_id)
+    cmd = "wallet_num{0} plotnft leave -y -i {1}".format(chia_binary, pool_wallet_id)
     app.logger.info("Attempting to leave pool: {0}".format(cmd))
     result = ""
     child = pexpect.spawn(cmd)
@@ -147,7 +147,7 @@ def process_pool_leave(blockchain, pool_wallet_id):
     for line in stdout_lines:
         if "Error" in line:
             raise Exception('Error while leaving pool: ' + line)
-    return 'Successfully left pool, switching to self plotting.  Please wait a while to complete, then refresh page. View the log for details.'
+    return 'Successfully left pool, switching to self plotting.  Please wait a few minutes or more to complete. DO NOT immediately re-submit your request. View the log for details.'
 
 def process_pool_join(blockchain, pool_url, pool_wallet_id):
     chia_binary = globals.get_blockchain_binary(blockchain)
@@ -162,10 +162,10 @@ def process_pool_join(blockchain, pool_url, pool_wallet_id):
     if not result.netloc:
         raise Exception("No hostname or IP provided.")
     if pool_wallet_id: # Just joining a pool with existing NFT
-        cmd = "{0} plotnft join -y -u {1} -i {2}".format(chia_binary, pool_url, pool_wallet_id)
+        cmd = "wallet_num{0} plotnft join -y -u {1} -i {2}".format(chia_binary, pool_url, pool_wallet_id)
         pool_wallet_id = pool_wallet_id
     else:  # Both creating NFT and joining pool in one setp
-        cmd = "{0} plotnft create -y -u {1} -s pool".format(chia_binary, pool_url)
+        cmd = "wallet_num{0} plotnft create -y -u {1} -s pool".format(chia_binary, pool_url)
         pool_wallet_id = 1
     app.logger.info("Executing: {0}".format(cmd))
     result = ""
@@ -191,11 +191,11 @@ def process_pool_join(blockchain, pool_url, pool_wallet_id):
         for line in stdout_lines:
             if "Error" in line:
                 raise Exception('Error while joining Chia pool. Please double-check pool URL: {0} {1}'.format(pool_url, line))
-    return 'Successfully joined {0} pool by creating Chia NFT.  Please wait a while to complete, then refresh this page. DO NOT immediately re-submit the request. Be patient! View the log for details.'.format(pool_url)
+    return 'Successfully joined {0} pool by creating Chia NFT.  Please wait a few minutes or more to complete. DO NOT immediately re-submit your request. Be patient! View the log for details.'.format(pool_url)
 
 def process_self_pool(blockchain, pool_wallet_id):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    cmd = "{0} plotnft create -y -s local".format(chia_binary)
+    cmd = "wallet_num{0} plotnft create -y -s local".format(chia_binary)
     app.logger.info("Attempting to create NFT for self-pooling. {0}".format(cmd))
     result = ""
     child = pexpect.spawn(cmd)
@@ -220,4 +220,4 @@ def process_self_pool(blockchain, pool_wallet_id):
     for line in stdout_lines:
         if "Error" in line:
             raise Exception('Error while creating self-pooling NFT: {0}'.format(line))
-    return 'Successfully created a NFT for self-pooling.  Please wait a while to complete, then refresh the page. DO NOT immediately re-submit the request. Be patient! View the log for details.'
+    return 'Successfully created a NFT for self-pooling.  Please wait a few minutes or more to complete. DO NOT immediately re-submit your request. Be patient! View the log for details.'

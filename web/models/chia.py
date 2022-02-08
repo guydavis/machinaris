@@ -482,7 +482,7 @@ class Connections:
         if blockchain == 'nchain':
             return 58445
         if blockchain == 'mmx':
-            return 12331
+            return 12334
         if blockchain == 'maize':
             return 8644
         if blockchain == 'silicoin':
@@ -502,7 +502,9 @@ class Connections:
         conns = []
         for line in connection.details.split('\n'):
             try:
-                if line.strip().startswith('Connections:'):
+                if line.strip().startswith('Connections:') or \
+                    line.strip().startswith('Connection error.') or \
+                    line.strip().startswith('This is normal if full node'):
                     pass
                 elif line.strip().startswith('Type'):
                     self.columns = line.lower().replace('last connect', 'last_connect') \
@@ -522,14 +524,13 @@ class Connections:
                 else:
                     vals = line.strip().split()
                     if len(vals) > 7:
+                        last_connect = str(datetime.datetime.today().year) + ' ' + vals[4] + ' ' + vals[5] + ' ' + vals[6]
                         connection = {
                             'type': vals[0],
                             'ip': vals[1],
                             'ports': vals[2],
                             'nodeid': vals[3].replace('...',''),
-                            'last_connect': datetime.datetime.strptime( \
-                                str(datetime.datetime.today().year) + ' ' + vals[4] + ' ' + vals[5] + ' ' + vals[6], 
-                                '%Y %b %d %H:%M:%S'),
+                            'last_connect': datetime.datetime.strptime(last_connect, '%Y %b %d %H:%M:%S'),
                             'mib_up': float(vals[7].split('|')[0]),
                             'mib_down': float(vals[7].split('|')[1])
                         }
@@ -541,6 +542,7 @@ class Connections:
                     else:
                         app.logger.info("Bad connection line: {0}".format(line))
             except:
+                app.logger.info("Exception parsing connection line: {0}".format(line))
                 app.logger.info(traceback.format_exc())
         return conns
 
@@ -549,18 +551,18 @@ class Connections:
         for line in connection.details.split('\n'):
             try:
                 #app.logger.info(line)
-                m = re.match("\[(.+)\]   height =  (\d+), (\d+\.?\d*) MB recv, (\d*\.?\d*) MB sent, timeout = (\d+\.?\d*) sec", line.strip(), re.IGNORECASE)
+                m = re.match("\[(.+)\]\s+height\s+=\s+(\!?\d+), (\w+) \(\d+\.\d+\), (\d+\.?\d*) (\w)B/s recv, (\d*\.?\d*) (\w)B/s send,.* since (\d+) min, .* (\d+\.?\d?) sec timeout", line.strip(), re.IGNORECASE)
                 if m:
                     connection = {
-                        'type': 'peer',
+                        'type': m.group(3),
                         'ip': m.group(1),
                         'height': m.group(2),
                         'ports': '',
                         'nodeid': '',
-                        'last_connect': '',
-                        'mib_up': m.group(4),
-                        'mib_down': m.group(3),
-                        'timeout': m.group(5)
+                        'last_connect': 'since {0} min'.format(m.group(8)),
+                        'mib_up': "%.1f"% round(self.rate_to_mb(m.group(6), m.group(7)) * int(m.group(8)) * 60, 2),
+                        'mib_down': "%.1f"% round(self.rate_to_mb(m.group(4), m.group(5)) * int(m.group(8)) * 60, 2),
+                        'timeout': m.group(9)
                     }
                     conns.append(connection)
                 elif line.strip():
@@ -569,3 +571,15 @@ class Connections:
                 app.logger.info(traceback.format_exc())
         return conns
 
+    def rate_to_mb(self, rate, unit):
+        if unit.lower() == 'k':
+            try:
+                return float(rate) / 1024
+            except:
+                app.logger.error("Invalid transmission rate in KB/sec provided: {0}".format(rate))
+                return rate
+        elif unit.lower() == 'm':
+            return float(rate)
+        else:
+            app.logger.error("Unknown transmission rate unit character of {0} encountered.".format(unit))
+            return rate

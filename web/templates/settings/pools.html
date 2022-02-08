@@ -103,8 +103,8 @@
                                 </div>
                                 {% endif %}
                                 <div class="col-12">
-                                    <input class="form-check-input" type="radio" name="{{blockchain}}-choice" 
-                                        id="{{blockchain}}-{{plotnft.wallnet_num}}-self_pool" value="self" 
+                                    <input class="form-check-input" type="radio" name="{{blockchain}}-choice-{{plotnft.wallet_num}}" 
+                                        id="{{blockchain}}-{{plotnft.wallet_num}}-self_pool" value="self" 
                                     {% if not plotnft.current_pool_url() %} checked {% endif %}/>
                                     <label class="form-check-label" for="self_pool">
                                         Self pool. When you win a block, you will earn rewards.
@@ -113,8 +113,8 @@
                             </div>
                             <div class="row mt-1 g-3">
                                 <div class="col-lg-2 d-flex align-items-center">
-                                    <input class="form-check-input" type="radio" name="{{blockchain}}-choice" 
-                                        id="{{blockchain}}-{{plotnft.wallnet_num}}-join_pool" value="join"
+                                    <input class="form-check-input" type="radio" name="{{blockchain}}-choice-{{plotnft.wallet_num}}" 
+                                        id="{{blockchain}}-{{plotnft.wallet_num}}-join_pool" value="join"
                                     {% if plotnft.current_pool_url() %} checked {% endif %}/>
                                     &nbsp;
                                     <label class="form-check-label" for="join_pool">
@@ -122,7 +122,7 @@
                                     </label>
                                 </div>
                                 <div class="col-lg-3">
-                                    <input class="form-control" id="{{blockchain}}-{{plotnft.wallnet_num}}-pool_url" name="{{blockchain}}-pool_url" type="text"
+                                    <input class="form-control" id="{{blockchain}}-{{plotnft.wallet_num}}-pool_url" name="{{blockchain}}-pool_url" type="text"
                                         placeholder="https://myfave.pool.org" 
                                         {% if plotnft.current_pool_url() %} value="{{ plotnft.current_pool_url() }}" {% endif %}>
                                 </div>
