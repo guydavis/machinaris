@@ -42,7 +42,7 @@ jobs:
           build-args: |
             "MACHINARIS_STREAM=test"
             "MMX_BRANCH=master"
-            "CHIA_BRANCH=1.2.11"
+            "CHIA_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:test
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:test
