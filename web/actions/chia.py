@@ -130,10 +130,14 @@ def load_blockchains():
     return None
 
 def load_summaries():
+    app.logger.info("Loading Summary page data...")
     try:
         blockchains = load_blockchains()
+        app.logger.info("Found {0} blockchains states for summary page.".format(len(blockchains.rows)))
         farms = load_farm_summary()
+        app.logger.info("Found {0} blockchain farms for summary page.".format(len(farms.farms)))
         summary_stats = stats.load_summary_stats(blockchains.rows)
+        app.logger.info("Found {0} blockchain stats.".format(len(summary_stats)))
         return Summaries(blockchains, farms.farms, farms.wallets, summary_stats)
     except Exception as ex:
         app.logger.error("Error loading summary: {0}".format(str(ex)))

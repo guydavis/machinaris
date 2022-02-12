@@ -103,12 +103,13 @@
                         <fieldset>
                             <div class="row g-3 mt-2">
                                 <div class="col-sm">
+                                    {% if connection.blockchain != 'mmx' %}
                                     <button form="form_{{connection.displayname}}_{{connection.blockchain}}"
                                         type="submit" name="action" value="remove" class="btn btn-outline-success"
                                         id="btnRemove_{{connection.displayname}}_{{connection.blockchain}}">Disconnect
                                         Selected</button>
+                                    {% endif %}
                                 </div>
-
                                 <div class="col-sm"><a class="btn btn-outline-success" role="button"
                                         href="https://www.yougetsignal.com/tools/open-ports/?port={{connection.farmer_port}}"
                                         target="_blank" class="text-white">
@@ -116,16 +117,20 @@
                                     </a>
                                 </div>
                                 <div class="col-sm-3">
+                                    {% if connection.blockchain != 'mmx' %}
                                     <input class="form-control me-2"
                                         id="connection_{{connection.displayname}}_{{connection.blockchain}}"
                                         name="connection" type="text" placeholder="{{connection.add_exmample}}"
                                         aria-label="Add">
+                                    {% endif %}
                                 </div>
                                 <div class="col-sm-2">
+                                    {% if connection.blockchain != 'mmx' %}
                                     <button class="btn btn-outline-success text-nowrap text-right" type="submit"
                                         name="action" value="add"
                                         id="btnAdd_{{connection.displayname}}_{{connection.blockchain}}"
                                         form="main-form">Add New Connection</button>
+                                    {% endif %}
                                 </div>
                         </fieldset>
                     </form>

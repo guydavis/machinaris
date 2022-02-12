@@ -316,7 +316,9 @@ def settings_pools():
         selected_fullnode = worker.get_fullnode(selected_blockchain)
         launcher_ids = request.form.getlist('{0}-launcher_id'.format(selected_blockchain))
         wallet_nums = request.form.getlist('{0}-wallet_num'.format(selected_blockchain))
-        choices = request.form.getlist('{0}-choice'.format(selected_blockchain))
+        choices = []
+        for num in wallet_nums:
+            choices.append(request.form.get('{0}-choice-{1}'.format(selected_blockchain, num)))
         pool_urls = request.form.getlist('{0}-pool_url'.format(selected_blockchain))
         current_pool_urls = request.form.getlist('{0}-current_pool_url'.format(selected_blockchain))
         p.send_request(selected_fullnode, selected_blockchain, launcher_ids, choices, pool_urls, wallet_nums, current_pool_urls)
