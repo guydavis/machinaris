@@ -3,7 +3,7 @@
 #
 
 # If building on Github servers, change to deployment root
-if [ `pwd` != '/code/machinaris' ]; then  # else stay in code root
+if [ "$PWD" != '/code/machinaris' ]; then  # else stay in code root
     cd /machinaris
 fi
 
