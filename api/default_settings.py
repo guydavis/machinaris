@@ -49,3 +49,5 @@ class DefaultConfig:
 
     STATUS_EVERY_X_MINUTES = 2  # Run status collection once every two minutes by default
     ALLOW_HARVESTER_CERT_LAN_DOWNLOAD = True
+
+    LANGUAGES = ['de', 'fr']

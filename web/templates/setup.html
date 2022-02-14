@@ -24,8 +24,8 @@
                     <img src="{{ url_for('static', filename='machinaris.png') }}"
                         style="height:128px; width:128px; float:left; margin-left:50px" />
                     <div class="text-center" style="margin-top: 20px">
-                        <div class="display-4">Welcome to Machinaris!</div>
-                        <div style="margin-top: 20px">An easy-to-use WebUI for Chia™ plotting and farming.</div>
+                        <div class="display-4">{{_('Welcome to Machinaris!')}}</div>
+                        <div style="margin-top: 20px">{{_('An easy-to-use WebUI for Chia%(trademark)s plotting and farming.', trademark='™')}}</div>
                     </div>
                     <br clear="all" />
                     <hr class="my-4">
@@ -58,13 +58,11 @@
                         <br />
                         <br />
 
-                        <p>On very first launch, the Chia blockchain database (~20 GB compressed) is being downloaded from
-                        <a target="_blank" href="https://www.chia-database.com/">https://www.chia-database.com/</a>.  
-                        At about 45 GB in uncompressed size (progress shown above), this will take a while.</p>
-
-                        <p>However minutes of download now, will save you multiple days of blockchain syncing later. 
-                            Please be patient!</p>
-
+                        <p>{{_(
+                            'On very first launch, the Chia compressed blockchain database %(compressed)s is being downloaded from %(dl_link)s. At about %(uncompressed)s in uncompressed size (progress shown above), this will take a while. However minutes of download now, will save you multiple days of blockchain syncing later. Please be patient!', 
+                            compressed="(~20 GB)", uncompressed="45 GB",
+                            dl_link='<a target="_blank" href="https://www.chia-database.com/">https://www.chia-database.com/</a>'
+                        )}}</p>
                         <br />
                         <br />
                         <br />
@@ -74,33 +72,28 @@
                         <br />
                         <br />
 
-                        <p class="small">NOTE: If you would prefer to allow Chia to sync the blockchain over many days,
-                            see the <a href="https://github.com/guydavis/machinaris/wiki/Keys#blockchain-initialization"
-                                target="_blank">Wiki</a> for details. Similarly, you may instead
-                                <a href="https://github.com/guydavis/machinaris/wiki/Keys#blockchain-import"
-                                target="_blank">import your own blockchain</a> if you have one from a previous Chia install.
-                        </p>
+                        <p class="small">{{_(
+                                'NOTE: If you would prefer to allow Chia to sync the blockchain over many days, see the %(init_link)s for details. Similarly, you may instead %(import_link_open)s import your own blockchain %(import_link_close)s if you have one from a previous Chia install.',
+                                init_link='<a href="https://github.com/guydavis/machinaris/wiki/Keys#blockchain-initialization" target="_blank">Wiki</a>',
+                                import_link_open='<a href="https://github.com/guydavis/machinaris/wiki/Keys#blockchain-import" target="_blank">', import_link_close='</a>'
+                        )}}</p>
 
                         {% else %}
 
-                        <p>To get started with Machinaris as a Chia™ fullnode, either import your existing
-                            24-word
-                            mnemonic seed phrase: </p>
+                        <p>{{_('To get started with Machinaris as a Chia%(trademark)s fullnode, either import your existing 24-word mnemonic seed phrase', trademark='™')}}: </p>
                         <!-- Sample mnemonic to hint with, key long since thrown-away -->
                         <form id="main-form" method="POST">
                             <input class="form-control me-2" id="mnemonic" name="mnemonic" type="text"
                                 placeholder="north divorce holiday whisper inquiry toy rare minute father ostrich surprise runway ill episode dance rather unaware concert sunset maid gather grain gift wire"
                                 aria-label="Import Key">
                             <br />
-                            <button class="btn btn-outline-success" type="submit" id="btnImport">Import Existing
-                                Key</button>
-                            <h3 style="padding-top: 25px;">OR</h3>
+                            <button class="btn btn-outline-success" type="submit" id="btnImport">{{_('Import Existing Key')}}</button>
+                            <h3 style="padding-top: 25px;">{{_('OR')}}</h3>
 
-                            <p>You can generate a brand-new mnemonic phrase that will be written to this in-container
-                                path: {{ key_paths[0] }}
+                            <p>{{_('You can generate a brand-new mnemonic phrase that will be written to this in-container path')}}:
+                                {{ key_paths[0] }}
                             </p>
-                            <button class="btn btn-outline-success" type="submit" id="btnGenerate">Generate New
-                                Key</button>
+                            <button class="btn btn-outline-success" type="submit" id="btnGenerate">{{_('Generate New Key')}}</button>
                         </form>
 
                         <br />
@@ -112,10 +105,9 @@
                         <br />
                         <br />
 
-                        <p class="small">NOTE: If you would prefer to instead import your mnenmoic seed phrase yourself
-                            at the command-line,
-                            see the <a href="https://github.com/guydavis/machinaris/wiki/Keys"
-                                target="_blank">Wiki</a> for details.</p>
+                        <p class="small">{{_('NOTE: If you would prefer to instead import your mnenmoic seed phrase yourself at the command-line, see the %(wiki_link)s for details.', 
+                            wiki_link='<a href="https://github.com/guydavis/machinaris/wiki/Keys" target="_blank">Wiki</a>')}}
+                        </p>
 
                         {% endif %}
                     </div>

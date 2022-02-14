@@ -1,0 +1,130 @@
+# French translations for PROJECT.
+# Copyright (C) 2022 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2022-02-13 15:24-0700\n"
+"PO-Revision-Date: 2022-02-13 13:45-0700\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fr\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: routes.py:68
+msgid "Blockchain download"
+msgstr ""
+
+#: routes.py:100
+msgid "Unknown plotting form"
+msgstr ""
+
+#: routes.py:149
+msgid "Error! Please see logs."
+msgstr ""
+
+#: routes.py:175
+msgid "Unknown alerts form"
+msgstr ""
+
+#: routes.py:244
+msgid "Unknown form action"
+msgstr ""
+
+#: routes.py:360
+msgid "No worker at %{worker} for fork %{blockchain}. Please select another fork."
+msgstr ""
+
+#: routes.py:366
+msgid ""
+"For Alerts config, found no responding fullnode found for %{blockchain}. "
+"Please check your workers."
+msgstr ""
+
+#: routes.py:371
+msgid ""
+"For Farming config, found no responding fullnode found for %{blockchain}."
+" Please check your workers."
+msgstr ""
+
+#: routes.py:378
+msgid ""
+"For Plotting config, found no responding fullnode found for "
+"%{blockchain}. Please check your workers."
+msgstr ""
+
+#: routes.py:383
+msgid "No responding fullnode found for %{blockchain}. Please check your workers."
+msgstr ""
+
+#: routes.py:402
+msgid "Unsupported log type"
+msgstr ""
+
+#: templates/setup.html:27
+msgid "Welcome to Machinaris!"
+msgstr "Bienvenue à Machinaris!"
+
+#: templates/setup.html:28
+#, python-format
+msgid "An easy-to-use WebUI for Chia%(trademark)s plotting and farming."
+msgstr ""
+
+#: templates/setup.html:61
+#, python-format
+msgid ""
+"On very first launch, the Chia compressed blockchain database "
+"%(compressed)s is being downloaded from %(dl_link)s. At about "
+"%(uncompressed)s in uncompressed size (progress shown above), this will "
+"take a while. However minutes of download now, will save you multiple "
+"days of blockchain syncing later. Please be patient!"
+msgstr ""
+
+#: templates/setup.html:75
+#, python-format
+msgid ""
+"NOTE: If you would prefer to allow Chia to sync the blockchain over many "
+"days, see the %(init_link)s for details. Similarly, you may instead "
+"%(import_link_open)s import your own blockchain %(import_link_close)s if "
+"you have one from a previous Chia install."
+msgstr ""
+
+#: templates/setup.html:83
+#, python-format
+msgid ""
+"To get started with Machinaris as a Chia%(trademark)s fullnode, either "
+"import your existing 24-word mnemonic seed phrase"
+msgstr ""
+
+#: templates/setup.html:90
+msgid "Import Existing Key"
+msgstr ""
+
+#: templates/setup.html:91
+msgid "OR"
+msgstr ""
+
+#: templates/setup.html:93
+msgid ""
+"You can generate a brand-new mnemonic phrase that will be written to this"
+" in-container path"
+msgstr ""
+
+#: templates/setup.html:96
+msgid "Generate New Key"
+msgstr ""
+
+#: templates/setup.html:108
+#, python-format
+msgid ""
+"NOTE: If you would prefer to instead import your mnenmoic seed phrase "
+"yourself at the command-line, see the %(wiki_link)s for details."
+msgstr ""
+

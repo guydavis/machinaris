@@ -10,6 +10,8 @@ import traceback
 from datetime import datetime
 from flask import Flask, flash, redirect, render_template, abort, \
         request, session, url_for, send_from_directory, make_response
+from flask_babel import _
+from flask_babel import lazy_gettext as _l
 
 from common.config import globals
 from common.models import pools as po
@@ -63,7 +65,7 @@ def setup():
         elif request.form.get('action') == 'import':
             show_setup = not chia.import_key(key_paths[0], request.form.get('mnemonic'), globals.enabled_blockchains()[0])
     [download_percentage, blockchain_download_size] = globals.blockchain_downloading()
-    app.logger.info(f"Blockchain download @ {download_percentage}% - {blockchain_download_size}")
+    app.logger.info(_("Blockchain download") + f" @ {download_percentage}% - {blockchain_download_size}")
     if show_setup:
         return render_template('setup.html', key_paths = key_paths, 
             blockchain_download_size=blockchain_download_size, download_percentage=download_percentage)
@@ -95,7 +97,7 @@ def plotting_jobs():
             plot_ids = request.form.getlist('plot_id')
             plotman.action_plots(action, plot_ids)
         else:
-            app.logger.info("Unknown plotting form: {0}".format(request.form))
+            app.logger.info(_("Unknown plotting form") + ": {0}".format(request.form))
         return redirect(url_for('plotting_jobs')) # Force a redirect to allow time to update status
     plotters = plotman.load_plotters()
     plotting = plotman.load_plotting_summary()
@@ -144,7 +146,7 @@ def farming_data():
         return make_response({'draw': draw, 'recordsTotal': recordsTotal, 'recordsFiltered': recordsFiltered, "data": data}, 200)
     except: 
         traceback.print_exc()
-    return make_response("Error! Please see logs.", 500)
+    return make_response(_("Error! Please see logs."), 500)
 
 @app.route('/farming/workers')
 def farming_workers():
@@ -170,7 +172,7 @@ def alerts():
         elif request.form.get('action') == 'purge':
             chiadog.remove_all_alerts()
         else:
-            app.logger.info("Unknown alerts form: {0}".format(request.form))
+            app.logger.info(_("Unknown alerts form") + ": {0}".format(request.form))
         return redirect(url_for('alerts')) # Force a redirect to allow time to update status
     farmers = chiadog.load_farmers()
     notifications = chiadog.get_notifications()
@@ -239,7 +241,7 @@ def connections():
         elif request.form.get('action') == 'remove':
             chia.remove_connection(request.form.getlist('nodeid'), request.form.get('hostname'), request.form.get('blockchain'))
         else:
-            app.logger.info("Unknown form action: {0}".format(request.form))
+            app.logger.info(_("Unknown form action") + ": {0}".format(request.form))
     connections = chia.load_connections()
     return render_template('connections.html', reload_seconds=120, selected_blockchain = selected_blockchain,
         connections=connections, global_config=gc)
@@ -354,31 +356,31 @@ def views_settings_config(path):
     config_type = request.args.get('type')
     w = worker.get_worker(request.args.get('worker'), request.args.get('blockchain'))
     if not w:
-        app.logger.info("No worker at {0} for fork {1}. Please select another fork.".format(
-                request.args.get('worker'), request.args.get('blockchain')))
+        app.logger.info(_l("No worker at %{worker} for fork %{blockchain}. Please select another fork.",
+            worker=request.args.get('worker'), blockchain=request.args.get('blockchain')))
         abort(404)
     if config_type == "alerts":
         try:
             response = make_response(chiadog.load_config(w, request.args.get('blockchain')), 200)
         except requests.exceptions.ConnectionError as ex:
-            response = make_response("For Alerts config, found no responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
+            response = make_response(_("For Alerts config, found no responding fullnode found for %{blockchain}. Please check your workers.", blockchain=request.args.get('blockchain')))
     elif config_type == "farming":
         try:
             response = make_response(chia.load_config(w, request.args.get('blockchain')), 200)
         except requests.exceptions.ConnectionError as ex:
-            response = make_response("For Farming config, found no responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
+            response = make_response(_("For Farming config, found no responding fullnode found for %{blockchain}. Please check your workers.", blockchain=request.args.get('blockchain')))
     elif config_type == "plotting":
         try:
             [replaced, config] = plotman.load_config(w, request.args.get('blockchain'))
             response = make_response(config, 200)
             response.headers.set('ConfigReplacementsOccurred', replaced)
         except requests.exceptions.ConnectionError as ex:
-            response = make_response("For Plotting config, found no responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
+            response = make_response(_("For Plotting config, found no responding fullnode found for %{blockchain}. Please check your workers.", blockchain=request.args.get('blockchain')))
     elif config_type == "tools":
         try:
             response = make_response(forktools.load_config(w, request.args.get('blockchain')), 200)
         except requests.exceptions.ConnectionError as ex:
-            response = make_response("No responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
+            response = make_response(_("No responding fullnode found for %{blockchain}. Please check your workers.", blockchain=request.args.get('blockchain')))
     else:
         abort("Unsupported config type: {0}".format(config_type), 400)
     response.mimetype = "application/x-yaml"
@@ -397,7 +399,7 @@ def logfile():
         blockchain = request.args.get("blockchain")
         return log_handler.get_log_lines(w, log_type, log_id, blockchain)
     else:
-        abort(500, "Unsupported log type: {0}".format(log_type))
+        abort(500, _("Unsupported log type") + ": {0}".format(log_type))
 
 @app.route('/worker_launch')
 def worker_launch():
