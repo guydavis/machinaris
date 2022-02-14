@@ -14,7 +14,7 @@ do
     IFS=',';
     for lang in $LANGS; 
     do 
-        pybabel compile -d ./translations
+        /chia-blockchain/venv/bin/pybabel compile -d ./translations
         chmod 777 ./translations/$lang/LC_MESSAGES/*
     done
     popd >/dev/null

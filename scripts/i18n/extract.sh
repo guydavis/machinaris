@@ -9,8 +9,8 @@ do
     IFS=',';
     for lang in $LANGS; 
     do 
-        pybabel extract -F babel.cfg -k _l -o messages.pot .
-        pybabel update -i messages.pot -d ./translations
+        /chia-blockchain/venv/bin/pybabel extract -F babel.cfg -k _l -o messages.pot .
+        /chia-blockchain/venv/bin/pybabel update -i messages.pot -d ./translations
         chmod 777 ./translations/$lang/LC_MESSAGES/*
     done
     popd >/dev/null
