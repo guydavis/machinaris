@@ -14,7 +14,7 @@ do
         else
             /chia-blockchain/venv/bin/pybabel init -i messages.pot -d ./translations -l $lang
             chmod 777 ./translations/$lang/LC_MESSAGES/*
-        #fi
+        fi
     done
     popd >/dev/null
 done

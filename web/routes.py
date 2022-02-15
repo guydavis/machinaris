@@ -10,13 +10,29 @@ import traceback
 from datetime import datetime
 from flask import Flask, flash, redirect, render_template, abort, \
         request, session, url_for, send_from_directory, make_response
-from flask_babel import _
-from flask_babel import lazy_gettext as _l
+from flask_babel import _, lazy_gettext as _l
 
 from common.config import globals
 from common.models import pools as po
 from web import app, utils
 from web.actions import chia, pools as p, plotman, chiadog, worker, log_handler, stats, warnings, forktools
+
+def get_lang(request):
+    lang = None
+    if "Accept-Language" in request.headers:
+        lang = request.headers["Accept-Language"]
+    return lang 
+
+def find_selected_worker(hosts, hostname, blockchain= None):
+    if len(hosts) == 0:
+        return None
+    if not blockchain:
+        hosts[0].workers[0]
+    for host in hosts:
+        for worker in host.workers:
+            if worker['hostname'] == hostname and worker['blockchain'] == blockchain:
+                return worker
+    return hosts[0].workers[0]
 
 @app.route('/')
 def landing():
@@ -246,17 +262,6 @@ def connections():
     return render_template('connections.html', reload_seconds=120, selected_blockchain = selected_blockchain,
         connections=connections, global_config=gc)
 
-def find_selected_worker(hosts, hostname, blockchain= None):
-    if len(hosts) == 0:
-        return None
-    if not blockchain:
-        hosts[0].workers[0]
-    for host in hosts:
-        for worker in host.workers:
-            if worker['hostname'] == hostname and worker['blockchain'] == blockchain:
-                return worker
-    return hosts[0].workers[0]
-
 @app.route('/settings/plotting', methods=['GET', 'POST'])
 def settings_plotting():
     selected_worker_hostname = None
@@ -356,7 +361,7 @@ def views_settings_config(path):
     config_type = request.args.get('type')
     w = worker.get_worker(request.args.get('worker'), request.args.get('blockchain'))
     if not w:
-        app.logger.info(_l("No worker at %{worker} for fork %{blockchain}. Please select another fork.",
+        app.logger.info(_l("No worker at %{worker} for blockchain %{blockchain}. Please select another blockchain.",
             worker=request.args.get('worker'), blockchain=request.args.get('blockchain')))
         abort(404)
     if config_type == "alerts":
@@ -388,7 +393,7 @@ def views_settings_config(path):
 
 @app.route('/logs')
 def logs():
-    return render_template('logs.html')
+    return render_template('logs.html') 
 
 @app.route('/logfile')
 def logfile():
@@ -397,7 +402,7 @@ def logfile():
     if log_type in [ 'alerts', 'farming', 'plotting', 'archiving', 'apisrv', 'webui', 'pooling']:
         log_id = request.args.get("log_id")
         blockchain = request.args.get("blockchain")
-        return log_handler.get_log_lines(w, log_type, log_id, blockchain)
+        return log_handler.get_log_lines(get_lang(request), w, log_type, log_id, blockchain)
     else:
         abort(500, _("Unsupported log type") + ": {0}".format(log_type))
 

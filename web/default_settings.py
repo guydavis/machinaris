@@ -38,4 +38,6 @@ class DefaultConfig:
 
     MAX_CHART_CHALLENGES_MINS = 15
 
-    LANGUAGES = ['de', 'fr']
+    # Note, babel looks in /machinaris/web/translations with this path.
+    BABEL_TRANSLATION_DIRECTORIES = "translations"
+    LANGUAGES = ['de', 'fr', 'it', 'zh']

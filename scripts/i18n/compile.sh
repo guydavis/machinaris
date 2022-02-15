@@ -10,12 +10,7 @@ fi
 for d in 'web' 'api'; 
 do
     pushd $d >/dev/null
-    LANGS=$(grep -oP "LANGUAGES = \[\K(.*)\]" ./default_settings.py | cut -d ']' -f 1 | tr -d \'\" | tr -d ' ')
-    IFS=',';
-    for lang in $LANGS; 
-    do 
-        /chia-blockchain/venv/bin/pybabel compile -d ./translations
-        chmod 777 ./translations/$lang/LC_MESSAGES/*
-    done
+    /chia-blockchain/venv/bin/pybabel compile -d ./translations
+    chmod -R 777 $PWD/translations
     popd >/dev/null
 done

@@ -1,4 +1,4 @@
-# French translations for PROJECT.
+# Chinese translations for PROJECT.
 # Copyright (C) 2022 ORGANIZATION
 # This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2022-02-15 14:38-0700\n"
-"PO-Revision-Date: 2022-02-13 13:45-0700\n"
+"PO-Revision-Date: 2022-02-15 10:14-0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language: fr\n"
-"Language-Team: fr <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"Language: zh\n"
+"Language-Team: zh <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,122 +20,112 @@ msgstr ""
 
 #: routes.py:84
 msgid "Blockchain download"
-msgstr "Télécharger le blockchain"
+msgstr ""
 
 #: routes.py:116
 msgid "Unknown plotting form"
-msgstr "Forme inconnue"
+msgstr ""
 
 #: routes.py:165
 msgid "Error! Please see logs."
-msgstr "Erreur! Veuillez consulter les journaux."
+msgstr ""
 
 #: routes.py:191
 msgid "Unknown alerts form"
-msgstr "Forme inconnue"
+msgstr ""
 
 #: routes.py:260
 msgid "Unknown form action"
-msgstr "Action inconnue"
+msgstr ""
 
 #: routes.py:365
 msgid ""
 "No worker at %{worker} for blockchain %{blockchain}. Please select "
 "another blockchain."
 msgstr ""
-"Aucun travailleur %{worker} pour la blockchain %{blockchain}. Veuillez "
-"sélectionner une autre blockchain."
 
 #: routes.py:371
 msgid ""
 "For Alerts config, found no responding fullnode found for %{blockchain}. "
 "Please check your workers."
 msgstr ""
-"Aucun fullnode répondant n'a été trouvé pour notifier%{blockchain}. "
-"Veuillez vérifier vos travailleurs."
 
 #: routes.py:376
 msgid ""
 "For Farming config, found no responding fullnode found for %{blockchain}."
 " Please check your workers."
 msgstr ""
-"Aucun fullnode répondant n'a été trouvé pour cultiver%{blockchain}. "
-"Veuillez vérifier vos travailleurs."
 
 #: routes.py:383
 msgid ""
 "For Plotting config, found no responding fullnode found for "
 "%{blockchain}. Please check your workers."
 msgstr ""
-"Aucun fullnode répondant n'a été trouvé pour parceller%{blockchain}. "
-"Veuillez vérifier vos travailleurs."
 
 #: routes.py:388
 msgid "No responding fullnode found for %{blockchain}. Please check your workers."
 msgstr ""
-"Aucun fullnode répondant n'a été trouvé pour %{blockchain}. Veuillez "
-"vérifier vos travailleurs."
 
 #: routes.py:407
 msgid "Unsupported log type"
-msgstr "Type de journal non pris en charge"
+msgstr ""
 
 #: templates/index.html:30
 msgid "Expected Time to Win"
-msgstr "Temps prévu pour gagner"
+msgstr ""
 
 #: templates/index.html:41
 msgid "Plotting"
-msgstr "Parcelle"
+msgstr ""
 
 #: templates/index.html:50
 msgid "Farming"
-msgstr "Cultiver"
+msgstr ""
 
 #: templates/index.html:72
 msgid "Total Plots"
-msgstr "Parcelles totales"
+msgstr ""
 
 #: templates/index.html:79
 msgid "Total Plots Size"
-msgstr "Taille totale des parcelles"
+msgstr ""
 
 #: templates/index.html:89
 msgid "Balance"
-msgstr "Total"
+msgstr ""
 
 #: templates/index.html:96
 msgid "Farmed"
-msgstr "A gagné"
+msgstr ""
 
 #: templates/index.html:105
 msgid "Netspace"
-msgstr "Netspace"
+msgstr ""
 
 #: templates/index.html:120
 msgid "Challenges from Harvesters"
-msgstr "Défis des moissonneurs"
+msgstr ""
 
 #: templates/index.html:136
 msgid "Partial Proofs for Pools"
-msgstr "Preuves partielles pour les pools"
+msgstr ""
 
 #: templates/index.html:147
 msgid "Previous"
-msgstr "Précédent"
+msgstr ""
 
 #: templates/index.html:151
 msgid "Next"
-msgstr "Suivant"
+msgstr ""
 
 #: templates/setup.html:27
 msgid "Welcome to Machinaris!"
-msgstr "Bienvenue à Machinaris!"
+msgstr ""
 
 #: templates/setup.html:28
 #, python-format
 msgid "An easy-to-use WebUI for Chia%(trademark)s plotting and farming."
-msgstr "Une WebUI facile pour cultiver Chia%(trademark)s."
+msgstr ""
 
 #: templates/setup.html:61
 #, python-format
@@ -146,12 +136,6 @@ msgid ""
 "take a while. However minutes of download now, will save you multiple "
 "days of blockchain syncing later. Please be patient!"
 msgstr ""
-"Lors du tout premier lancement, la base de données blockchain compressée "
-"de Chia %(compressed)s est en cours de téléchargement depuis %(dl_link)s."
-" À environ %(uncompressed)s en taille non compressée (progression "
-"indiquée ci-dessus), cela prendre un certain temps. Cependant, quelques "
-"minutes de téléchargement maintenant vous feront économiser plusieurs "
-"jours de synchronisation blockchain plus tard. Soyez patient!"
 
 #: templates/setup.html:75
 #, python-format
@@ -161,11 +145,6 @@ msgid ""
 "%(import_link_open)s import your own blockchain %(import_link_close)s if "
 "you have one from a previous Chia install."
 msgstr ""
-"REMARQUE: si vous préférez autoriser Chia à synchroniser la blockchain "
-"sur plusieurs jours, consultez les %(init_link)s pour plus de détails. De"
-" même, vous pouvez %(import_link_open)s importe votre propre blockchain "
-"%(import_link_close)s si vous en avez un d'une installation précédente de"
-" Chia."
 
 #: templates/setup.html:83
 #, python-format
@@ -173,28 +152,24 @@ msgid ""
 "To get started with Machinaris as a Chia%(trademark)s fullnode, either "
 "import your existing 24-word mnemonic seed phrase"
 msgstr ""
-"Pour démarrer avec Machinaris en tant que fullnode Chia%(trademark)s, "
-"soit importez votre phrase de départ mnémonique existante de 24 mots"
 
 #: templates/setup.html:90
 msgid "Import Existing Key"
-msgstr "Importez votre clé"
+msgstr ""
 
 #: templates/setup.html:91
 msgid "OR"
-msgstr "OU"
+msgstr ""
 
 #: templates/setup.html:93
 msgid ""
 "You can generate a brand-new mnemonic phrase that will be written to this"
 " in-container path"
 msgstr ""
-"Vous pouvez générer une toute nouvelle phrase mnémonique qui sera écrite "
-"icichemin dans le conteneur"
 
 #: templates/setup.html:96
 msgid "Generate New Key"
-msgstr "Créer une nouvelle clé"
+msgstr ""
 
 #: templates/setup.html:110
 #, python-format
@@ -202,7 +177,9 @@ msgid ""
 "NOTE: If you would prefer to instead import your mnenmoic seed phrase "
 "yourself at the command-line, see the %(wiki_link)s for details."
 msgstr ""
-"REMARQUE: Si vous préférez plutôt importer votre phrase de départ "
-"mnenmoic vous-même sur la ligne de commande, consultez les %(wiki_link)s "
-"pour plus de détails."
+
+#~ msgid ""
+#~ "No worker at %{worker} for fork "
+#~ "%{blockchain}. Please select another fork."
+#~ msgstr ""
 

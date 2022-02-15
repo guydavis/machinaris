@@ -31,6 +31,7 @@ class Logs(MethodView):
 class LogByType(MethodView):
 
     def get(self, type):
+        app.logger.info(request.headers)
         log = log_parser.get_log_lines(type, log_id=request.args.get('log_id'), blockchain=request.args.get('blockchain'))
         response = make_response(log, 200)
         response.mimetype = "plain/text"

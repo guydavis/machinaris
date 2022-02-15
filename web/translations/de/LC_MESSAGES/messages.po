@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-02-13 15:24-0700\n"
+"POT-Creation-Date: 2022-02-15 14:38-0700\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -18,54 +18,104 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: routes.py:68
+#: routes.py:84
 msgid "Blockchain download"
 msgstr ""
 
-#: routes.py:100
+#: routes.py:116
 msgid "Unknown plotting form"
 msgstr ""
 
-#: routes.py:149
+#: routes.py:165
 msgid "Error! Please see logs."
 msgstr ""
 
-#: routes.py:175
+#: routes.py:191
 msgid "Unknown alerts form"
 msgstr ""
 
-#: routes.py:244
+#: routes.py:260
 msgid "Unknown form action"
 msgstr ""
 
-#: routes.py:360
-msgid "No worker at %{worker} for fork %{blockchain}. Please select another fork."
+#: routes.py:365
+msgid ""
+"No worker at %{worker} for blockchain %{blockchain}. Please select "
+"another blockchain."
 msgstr ""
 
-#: routes.py:366
+#: routes.py:371
 msgid ""
 "For Alerts config, found no responding fullnode found for %{blockchain}. "
 "Please check your workers."
 msgstr ""
 
-#: routes.py:371
+#: routes.py:376
 msgid ""
 "For Farming config, found no responding fullnode found for %{blockchain}."
 " Please check your workers."
 msgstr ""
 
-#: routes.py:378
+#: routes.py:383
 msgid ""
 "For Plotting config, found no responding fullnode found for "
 "%{blockchain}. Please check your workers."
 msgstr ""
 
-#: routes.py:383
+#: routes.py:388
 msgid "No responding fullnode found for %{blockchain}. Please check your workers."
 msgstr ""
 
-#: routes.py:402
+#: routes.py:407
 msgid "Unsupported log type"
+msgstr ""
+
+#: templates/index.html:30
+msgid "Expected Time to Win"
+msgstr ""
+
+#: templates/index.html:41
+msgid "Plotting"
+msgstr ""
+
+#: templates/index.html:50
+msgid "Farming"
+msgstr ""
+
+#: templates/index.html:72
+msgid "Total Plots"
+msgstr ""
+
+#: templates/index.html:79
+msgid "Total Plots Size"
+msgstr ""
+
+#: templates/index.html:89
+msgid "Balance"
+msgstr ""
+
+#: templates/index.html:96
+msgid "Farmed"
+msgstr ""
+
+#: templates/index.html:105
+msgid "Netspace"
+msgstr ""
+
+#: templates/index.html:120
+msgid "Challenges from Harvesters"
+msgstr ""
+
+#: templates/index.html:136
+msgid "Partial Proofs for Pools"
+msgstr ""
+
+#: templates/index.html:147
+msgid "Previous"
+msgstr ""
+
+#: templates/index.html:151
+msgid "Next"
 msgstr ""
 
 #: templates/setup.html:27
@@ -121,9 +171,15 @@ msgstr ""
 msgid "Generate New Key"
 msgstr ""
 
-#: templates/setup.html:108
+#: templates/setup.html:110
 #, python-format
 msgid ""
 "NOTE: If you would prefer to instead import your mnenmoic seed phrase "
 "yourself at the command-line, see the %(wiki_link)s for details."
 msgstr ""
+
+#~ msgid ""
+#~ "No worker at %{worker} for fork "
+#~ "%{blockchain}. Please select another fork."
+#~ msgstr ""
+
