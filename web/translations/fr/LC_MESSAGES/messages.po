@@ -106,7 +106,7 @@ msgstr "Total"
 
 #: templates/index.html:96
 msgid "Farmed"
-msgstr "A gagné"
+msgstr "A Gagné"
 
 #: templates/index.html:105
 msgid "Netspace"
