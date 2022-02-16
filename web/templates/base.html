@@ -7,7 +7,7 @@
     <link href="{{ url_for('static', filename='3rd_party/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='3rd_party/icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='3rd_party/dataTables.bootstrap5.css') }}">
-    <title>Machinaris</title>
+    <title>{{_('Machinaris')}}</title>
     {% if reload_seconds %}
     <meta http-equiv="refresh" content="{{ reload_seconds }}">
     {% endif %}
@@ -22,104 +22,102 @@
                 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
                     <a href="{{ url_for('index') }}"
                         class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                        <i class="fs-4 bi-flower1"></i>&nbsp;<span class="fs-5 d-none d-sm-inline">Machinaris</span>
+                        <i class="fs-4 bi-flower1"></i>&nbsp;<span class="fs-5 d-none d-sm-inline">{{_('Machinaris')}}</span>
                     </a>
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                         id="menu">
                         <li class="nav-item">
                             <a href="{{ url_for('summary') }}" class="nav-link px-0 align-middle text-success">
-                                <i class="fs-4 bi-card-list"></i> <span class="ms-1 d-none d-sm-inline ">Summary</span>
+                                <i class="fs-4 bi-card-list"></i> <span class="ms-1 d-none d-sm-inline ">{{_('Summary')}}</span>
                             </a>
                         </li>
                         {% if global_config.plotting_enabled %}
                         <li>
                             <a href="{{ url_for('plotting_jobs') }}" class="nav-link px-0 align-middle text-success">
-                                <i class="fs-4 bi-speedometer"></i> <span
-                                    class="ms-1 d-none d-sm-inline">Plotting</span> </a>
+                                <i class="fs-4 bi-speedometer"></i> <span class="ms-1 d-none d-sm-inline">{{_('Plotting')}}</span> </a>
                         </li>
                         {% endif %}
                         {% if global_config.farming_enabled %}
                         <li>
                             <a href="{{ url_for('farming_plots') }}" class="nav-link px-0 align-middle text-success">
-                                <i class="fs-4 bi-tree"></i> <span class="ms-1 d-none d-sm-inline">Farming</span></a>
+                                <i class="fs-4 bi-tree"></i> <span class="ms-1 d-none d-sm-inline">{{_('Farming')}}</span></a>
                         </li>
                         {% endif %}
                         {% if global_config.farming_enabled %}
                         <li>
                             <a href="{{ url_for('wallet') }}" class="nav-link px-0 align-middle text-success">
-                                <i class="fs-4 bi-wallet"></i> <span class="ms-1 d-none d-sm-inline">Wallets</span></a>
+                                <i class="fs-4 bi-wallet"></i> <span class="ms-1 d-none d-sm-inline">{{_('Wallets')}}</span></a>
                         </li>
                         {% endif %}
                         {% if global_config.farming_enabled %}
                         <li>
                             <a href="{{ url_for('keys') }}" class="nav-link px-0 align-middle text-success">
-                                <i class="fs-4 bi-key"></i> <span class="ms-1 d-none d-sm-inline">Keys</span></a>
+                                <i class="fs-4 bi-key"></i> <span class="ms-1 d-none d-sm-inline">{{_('Keys')}}</span></a>
                         </li>
                         {% endif %}
                         {% if global_config.farming_enabled %}
                         <li>
                             <a href="{{ url_for('blockchains') }}"
                                 class="nav-link px-0 align-middle text-success">
-                                <i class="fs-4 bi-link-45deg"></i> <span class="ms-1 d-none d-sm-inline">Blockchains</span></a>
+                                <i class="fs-4 bi-link-45deg"></i> <span class="ms-1 d-none d-sm-inline">{{_('Blockchains')}}</span></a>
                         </li>
                         {% endif %}
                         {% if global_config.farming_enabled %}
                         <li>
                             <a href="{{ url_for('connections') }}"
                                 class="nav-link px-0 align-middle text-success">
-                                <i class="fs-4 bi-globe"></i> <span class="ms-1 d-none d-sm-inline">Connections</span></a>
+                                <i class="fs-4 bi-globe"></i> <span class="ms-1 d-none d-sm-inline">{{_('Connections')}}</span></a>
                         </li>
                         {% endif %}
                         {% if global_config.farming_enabled %}
                         <li>
                             <a href="{{ url_for('alerts') }}" class="nav-link px-0 align-middle text-success">
-                                <i class="fs-4 bi-bell"></i> <span class="ms-1 d-none d-sm-inline">Alerts</span></a>
+                                <i class="fs-4 bi-bell"></i> <span class="ms-1 d-none d-sm-inline">{{_('Alerts')}}</span></a>
                         </li>
                         {% endif %}
                         {% if global_config.is_controller %}
                         <li>
                             <a href="{{ url_for('pools') }}" class="nav-link px-0 align-middle text-success">
-                                <i class="fs-4 bi-x-diamond"></i> <span class="ms-1 d-none d-sm-inline">Pools</span></a>
+                                <i class="fs-4 bi-x-diamond"></i> <span class="ms-1 d-none d-sm-inline">{{_('Pools')}}</span></a>
                         </li>
                         <li>
                             <a href="{{ url_for('workers') }}" class="nav-link px-0 align-middle text-success">
-                                <i class="fs-4 bi-diagram-3"></i> <span
-                                    class="ms-1 d-none d-sm-inline">Workers</span></a>
+                                <i class="fs-4 bi-diagram-3"></i> <span class="ms-1 d-none d-sm-inline">{{_('Workers')}}</span></a>
                         </li>
                         {% endif %}
                         <li>
                             <a href="#submenu3" data-bs-toggle="collapse"
                                 class="nav-link px-0 align-middle text-success">
-                                <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">Settings</span> </a>
+                                <i class="fs-4 bi-gear"></i> <span class="ms-1 d-none d-sm-inline">{{_('Settings')}}</span> </a>
                             <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
                                 {% if global_config.farming_enabled %}
                                 <li>
                                     <a href="{{ url_for('settings_alerts') }}" class="nav-link px-0"> <span
-                                            class="d-none d-sm-inline text-white">Alerts</span> </a>
+                                            class="d-none d-sm-inline text-white">{{_('Alerts')}}</span> </a>
                                 </li>
                                 {% endif %}
                                 {% if global_config.farming_enabled %}
                                 <li>
                                     <a href="{{ url_for('settings_farming') }}" class="nav-link px-0"> <span
-                                            class="d-none d-sm-inline text-white">Farming</span> </a>
+                                            class="d-none d-sm-inline text-white">{{_('Farming')}}</span> </a>
                                 </li>
                                 {% endif %}
                                 {% if global_config.plotting_enabled %}
                                 <li class="w-100">
                                     <a href="{{ url_for('settings_plotting') }}" class="nav-link px-0"> <span
-                                            class="d-none d-sm-inline text-white">Plotting</span> </a>
+                                            class="d-none d-sm-inline text-white">{{_('Plotting')}}</span> </a>
                                 </li>
                                 {% endif %}
                                 {% if global_config.farming_enabled %}
                                 <li>
                                     <a href="{{ url_for('settings_pools') }}" class="nav-link px-0"> <span
-                                            class="d-none d-sm-inline text-white">Pools</span> </a>
+                                            class="d-none d-sm-inline text-white">{{_('Pools')}}</span> </a>
                                 </li>
                                 {% endif %}
                                 {% if global_config.farming_enabled %}
                                 <li>
                                     <a href="{{ url_for('settings_tools') }}" class="nav-link px-0"> <span
-                                            class="d-none d-sm-inline text-white">Tools</span> </a>
+                                            class="d-none d-sm-inline text-white">{{_('Tools')}}</span> </a>
                                 </li>
                                 {% endif %}
                             </ul>
@@ -130,20 +128,20 @@
                         <a href="https://github.com/guydavis/machinaris" target="_blank"
                             class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                             id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fs-4 bi-github"></i>&nbsp;<span class="ms-1 d-none d-sm-inline">About</span> </a>
+                            <i class="fs-4 bi-github"></i>&nbsp;<span class="ms-1 d-none d-sm-inline">{{_('About')}}</span> </a>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                            <li><a class="dropdown-item" target="_blank" href="https://machinaris.app">Install</a></li>
+                            <li><a class="dropdown-item" target="_blank" href="https://machinaris.app">{{_('Install')}}</a></li>
                             <li><a class="dropdown-item" target="_blank"
-                                    href="https://github.com/guydavis/machinaris">Project</a></li>
+                                    href="https://github.com/guydavis/machinaris">{{_('Project')}}</a></li>
                             <li><a class="dropdown-item" target="_blank"
-                                    href="https://github.com/guydavis/machinaris/wiki">Wiki</a></li>
+                                    href="https://github.com/guydavis/machinaris/wiki">{{_('Wiki')}}</a></li>
                             <li><a class="dropdown-item" target="_blank"
-                                    href="https://github.com/guydavis/machinaris/issues">Issues</a></li>
+                                    href="https://github.com/guydavis/machinaris/issues">{{_('Issues')}}</a></li>
                             <li><a class="dropdown-item" target="_blank"
-                                    href="https://github.com/guydavis/machinaris/blob/main/LICENSE">License</a></li>
+                                    href="https://github.com/guydavis/machinaris/blob/main/LICENSE">{{_('License')}}</a></li>
                             <li><a class="dropdown-item" target="_blank"
-                                    href="https://github.com/guydavis/machinaris/blob/main/CREDITS.md">Credits</a></li>
+                                    href="https://github.com/guydavis/machinaris/blob/main/CREDITS.md">{{_('Credits')}}</a></li>
                         </ul>
                     </div>
                 </div>
@@ -159,7 +157,7 @@
                         </div>
                         {% if global_config.bladebit_version %}
                         <div class="col">
-                            <small><i>Bladebit {{ global_config.bladebit_version }}</i></small>
+                            <small><i>{{_('Bladebit')}} {{ global_config.bladebit_version }}</i></small>
                         </div>
                         {% endif %}
                         <div class="col">
@@ -169,16 +167,16 @@
                             <small><i>Chiadog {{ global_config.chiadog_version }}</i></small>
                         </div>
                         <div class="col">
-                            <small><i title="mode={{ global_config.machinaris_mode }}">Machinaris {{
+                            <small><i title="mode={{ global_config.machinaris_mode }}">{{_('Machinaris')}} {{
                                     global_config.machinaris_version }}</i></small>
                         </div>
                         {% if global_config.madmax_version %}
                         <div class="col">
-                            <small><i>Madmax {{ global_config.madmax_version }}</i></small>
+                            <small><i>{{_('Madmax')}} {{ global_config.madmax_version }}</i></small>
                         </div>
                         {% endif %}
                         <div class="col">
-                            <small><i>Plotman {{ global_config.plotman_version }}</i></small>
+                            <small><i>{{_('Plotman')}} {{ global_config.plotman_version }}</i></small>
                         </div>
                     </div>
                 </footer>

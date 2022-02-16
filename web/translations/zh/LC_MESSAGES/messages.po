@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-02-15 14:38-0700\n"
+"POT-Creation-Date: 2022-02-16 08:55-0700\n"
 "PO-Revision-Date: 2022-02-15 10:14-0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh\n"
@@ -70,16 +70,100 @@ msgstr ""
 msgid "Unsupported log type"
 msgstr ""
 
-#: templates/index.html:30
-msgid "Expected Time to Win"
+#: templates/base.html:10 templates/base.html:25 templates/base.html:170
+msgid "Machinaris"
 msgstr ""
 
-#: templates/index.html:41
+#: templates/base.html:31
+msgid "Summary"
+msgstr ""
+
+#: templates/base.html:37 templates/base.html:108 templates/index.html:41
 msgid "Plotting"
 msgstr ""
 
-#: templates/index.html:50
+#: templates/base.html:43 templates/base.html:102 templates/index.html:50
 msgid "Farming"
+msgstr ""
+
+#: templates/base.html:49
+msgid "Wallets"
+msgstr ""
+
+#: templates/base.html:55
+msgid "Keys"
+msgstr ""
+
+#: templates/base.html:62
+msgid "Blockchains"
+msgstr ""
+
+#: templates/base.html:69
+msgid "Connections"
+msgstr ""
+
+#: templates/base.html:75 templates/base.html:96
+msgid "Alerts"
+msgstr ""
+
+#: templates/base.html:81 templates/base.html:114
+msgid "Pools"
+msgstr ""
+
+#: templates/base.html:85
+msgid "Workers"
+msgstr ""
+
+#: templates/base.html:91
+msgid "Settings"
+msgstr ""
+
+#: templates/base.html:120
+msgid "Tools"
+msgstr ""
+
+#: templates/base.html:131
+msgid "About"
+msgstr ""
+
+#: templates/base.html:134
+msgid "Install"
+msgstr ""
+
+#: templates/base.html:136
+msgid "Project"
+msgstr ""
+
+#: templates/base.html:138
+msgid "Wiki"
+msgstr ""
+
+#: templates/base.html:140
+msgid "Issues"
+msgstr ""
+
+#: templates/base.html:142
+msgid "License"
+msgstr ""
+
+#: templates/base.html:144
+msgid "Credits"
+msgstr ""
+
+#: templates/base.html:160
+msgid "Bladebit"
+msgstr ""
+
+#: templates/base.html:175
+msgid "Madmax"
+msgstr ""
+
+#: templates/base.html:179
+msgid "Plotman"
+msgstr ""
+
+#: templates/index.html:30
+msgid "Expected Time to Win"
 msgstr ""
 
 #: templates/index.html:72

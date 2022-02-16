@@ -13,7 +13,7 @@ from web import app
 def send_get(worker, path, query_params={}, timeout=30, debug=False, lang=None):
     if debug:
         http.client.HTTPConnection.debuglevel = 1
-    headers = []
+    headers = {}
     if lang:
         headers['Accept-Language'] = lang
     response = requests.get(worker.url + path, headers = headers, params = query_params, timeout=timeout)

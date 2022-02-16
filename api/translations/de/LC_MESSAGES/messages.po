@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-02-15 14:38-0700\n"
+"POT-Creation-Date: 2022-02-16 08:55-0700\n"
 "PO-Revision-Date: 2022-02-15 14:29-0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: de\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: views/ping/resources.py:26
+#: views/ping/resources.py:25
 msgid "Pong!"
 msgstr ""
 

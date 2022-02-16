@@ -24,7 +24,7 @@ def get_log_lines(lang, worker, log_type, log_id, blockchain):
             payload['log_id'] = log_id
         if blockchain != 'undefined':
             payload['blockchain'] = blockchain
-        response = utils.send_get(lang, worker, "/logs/{0}".format(log_type), payload, debug=True)
+        response = utils.send_get(worker, "/logs/{0}".format(log_type), payload, debug=False, lang=lang)
         return response.content.decode('utf-8')
     except:
         app.logger.info(traceback.format_exc())

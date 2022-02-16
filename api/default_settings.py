@@ -51,4 +51,4 @@ class DefaultConfig:
     ALLOW_HARVESTER_CERT_LAN_DOWNLOAD = True
 
     BABEL_TRANSLATION_DIRECTORIES = "api/translations"
-    LANGUAGES = ['de', 'fr', 'it', 'zh']
+    LANGUAGES = ['en', 'de', 'fr', 'it', 'zh']

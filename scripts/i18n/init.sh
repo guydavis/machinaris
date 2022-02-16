@@ -9,6 +9,9 @@ do
     IFS=',';
     for lang in $LANGS; 
     do 
+        if [[ "$lang" == 'en' ]]; then
+            continue  # No separate translation files for default locale
+        fi
         if [ -d ./translations/$lang ]; then
             echo "Skipping initialization of $d/$lang as translations folder already exists."
         else

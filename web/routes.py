@@ -39,7 +39,12 @@ def landing():
     gc = globals.load()
     if not globals.is_setup():
         return redirect(url_for('setup'))
-    msg = random.choice(list(open('web/static/landings.txt')))
+    for accept in request.accept_languages.values():
+        app.logger.info("ACCEPT IS {0}".format(accept))
+    app.logger.info("LANGUAGES IS {0}".format(app.config['LANGUAGES']))
+    lang = request.accept_languages.best_match(app.config['LANGUAGES'])
+    app.logger.info("LANG IS {0}".format(lang))
+    msg = random.choice(list(open('web/static/landings/{0}.txt'.format(lang))))
     if msg.endswith(".png"):
         msg = "<img style='height: 150px' src='{0}' />".format(url_for('static', filename='/landings/' + msg))
     return render_template('landing.html', random_message=msg)

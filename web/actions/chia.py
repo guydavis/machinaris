@@ -141,6 +141,7 @@ def load_summaries():
         return Summaries(blockchains, farms.farms, farms.wallets, summary_stats)
     except Exception as ex:
         app.logger.error("Error loading summary: {0}".format(str(ex)))
+        traceback.print_exc()
     return None
 
 def load_connections():
