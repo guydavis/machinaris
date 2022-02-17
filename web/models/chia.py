@@ -21,23 +21,94 @@ class Summaries:
     def __init__(self, blockchains, farms, wallets, stats):
         self.rows = []
         for blockchain in blockchains.rows:
-            farm = self.find_farm(farms, blockchain['blockchain'])
-            wallet = self.find_wallet(wallets, blockchain['blockchain'])
             app.logger.info("Adding summary row for {0}".format(blockchain['blockchain']))
+            farm = self.find_farm(farms, blockchain['blockchain'])
+            if not farm:
+                app.logger.error("No farm summary found for {0}".format(blockchain['blockchain']))
+                continue
+            wallet = self.find_wallet(wallets, blockchain['blockchain'])
+            if not wallet:
+                app.logger.error("No wallet found for {0}".format(blockchain['blockchain']))
+                continue
+            if not blockchain['blockchain'] in stats:
+                app.logger.error("No blockhain stats for {0} in {1}".format(blockchain['blockchain'], stats.keys()))
+                continue
+            blockchain_stats = stats[blockchain['blockchain']]
+            # Now collect each value in a separate try/except to guard against missing data
+            try:
+                status = blockchain['status']
+            except:
+                status = ''
+                app.logger.error("No status found for blockchain: {0}".format(blockchain))
+            try:
+                farmed = farm['total_coins']
+            except:
+                farmed = ''
+                app.logger.error("No total_coins found for farm: {0}".format(farm))
+            try:
+                wallet_balance = wallet['total_balance']
+            except:
+                wallet_balance = ''
+                app.logger.error("No total_balance found for wallet: {0}".format(wallet))
+            try:
+                height = blockchain['peak_height']
+            except:
+                height = ''
+                app.logger.error("No peak_height found for blockchain: {0}".format(blockchain))
+            try:
+                height = blockchain['peak_height']
+            except:
+                height = ''
+                app.logger.error("No peak_height found for blockchain: {0}".format(blockchain))
+            try:
+                plots = farm['plot_count']
+            except:
+                plots = ''
+                app.logger.error("No plot_count found for farm: {0}".format(farm))
+            try:
+                etw = farm['expected_time_to_win']
+            except:
+                etw = ''
+                app.logger.error("No expected_time_to_win found for farm: {0}".format(farm))
+            try:
+                harvesters = blockchain_stats['harvesters']
+            except:
+                harvesters = ''
+                app.logger.error("No harvesters found for blockchain stats: {0}".format(blockchain_stats))
+            try:
+                max_resp = blockchain_stats['max_resp']
+            except:
+                max_resp = ''
+                app.logger.error("No max_resp found for blockchain stats: {0}".format(blockchain_stats))
+            try:
+                partials_per_hour = blockchain_stats['partials_per_hour']
+            except:
+                partials_per_hour = ''
+                app.logger.error("No partials_per_hour found for blockchain stats: {0}".format(blockchain_stats))
+            try:
+                edv = blockchain_stats['edv']
+            except:
+                edv = ''
+                app.logger.error("No edv found for blockchain stats: {0}".format(blockchain_stats))
+            try:
+                edv_usd = blockchain_stats['edv_usd']
+            except:
+                edv_usd = ''
+                app.logger.error("No edv_usd found for blockchain stats: {0}".format(blockchain_stats))
             self.rows.append({
                 'blockchain': blockchain['blockchain'],
-                'status': blockchain['status'],
-                'farmed': farm['total_coins'],
-                'wallet': wallet['total_balance'],
-                'usd': converters.to_usd(blockchain['blockchain'], wallet['total_balance']),
-                'height': blockchain['peak_height'],
-                'plots': farm['plot_count'],
-                'harvesters': stats[blockchain['blockchain']]['harvesters'], 
-                'max_resp': stats[blockchain['blockchain']]['max_resp'], 
-                'partials_per_hour': stats[blockchain['blockchain']]['partials_per_hour'],
-                'edv': stats[blockchain['blockchain']]['edv'], 
-                'edv_usd': stats[blockchain['blockchain']]['edv_usd'], 
-                'etw': self.etw_to_days(blockchain['blockchain'], farm['expected_time_to_win']),
+                'status': status,
+                'farmed': farmed,
+                'wallet': wallet_balance,
+                'usd': converters.to_usd(blockchain['blockchain'], wallet_balance),
+                'height': height,
+                'plots': plots,
+                'harvesters': harvesters, 
+                'max_resp': max_resp, 
+                'partials_per_hour': partials_per_hour,
+                'edv': edv, 
+                'edv_usd': edv_usd, 
+                'etw': self.etw_to_days(blockchain['blockchain'], etw),
             })
 
     def find_farm(self, farms, blockchain):

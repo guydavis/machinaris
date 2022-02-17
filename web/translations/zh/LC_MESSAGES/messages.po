@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-02-16 17:48-0700\n"
+"POT-Creation-Date: 2022-02-17 16:10-0700\n"
 "PO-Revision-Date: 2022-02-15 10:14-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: zh\n"
@@ -113,6 +113,7 @@ msgstr ""
 
 #: templates/base.html:85 templates/farming/plots.html:69
 #: templates/farming/workers.html:28 templates/plotting/jobs.html:94
+#: templates/plotting/workers.html:96
 msgid "Workers"
 msgstr ""
 
@@ -281,11 +282,16 @@ msgid "Plots"
 msgstr ""
 
 #: templates/farming/plots.html:86 templates/plotting/jobs.html:117
+#: templates/plotting/workers.html:122
 msgid "Worker is offline."
 msgstr ""
 
 #: templates/farming/plots.html:88
 msgid "Farming not started successfully."
+msgstr ""
+
+#: templates/farming/plots.html:147
+msgid "Farming Log for "
 msgstr ""
 
 #: templates/farming/plots.html:201
@@ -333,7 +339,8 @@ msgid ""
 msgstr ""
 
 #: templates/plotting/jobs.html:16 templates/plotting/jobs.html:34
-#: templates/plotting/jobs.html:52
+#: templates/plotting/jobs.html:52 templates/plotting/workers.html:16
+#: templates/plotting/workers.html:34
 msgid "Cancel"
 msgstr ""
 
@@ -352,7 +359,7 @@ msgid ""
 "single machine at a time. Continue?"
 msgstr ""
 
-#: templates/plotting/jobs.html:35
+#: templates/plotting/jobs.html:35 templates/plotting/workers.html:17
 msgid "Start"
 msgstr ""
 
@@ -366,26 +373,28 @@ msgid ""
 "jobs will run to completion. Continue?"
 msgstr ""
 
-#: templates/plotting/jobs.html:53
+#: templates/plotting/jobs.html:53 templates/plotting/workers.html:35
 msgid "Stop"
 msgstr ""
 
-#: templates/plotting/jobs.html:63
+#: templates/plotting/jobs.html:63 templates/plotting/workers.html:45
+#: templates/plotting/workers.html:63
 msgid "Worker Offline"
 msgstr ""
 
-#: templates/plotting/jobs.html:67
+#: templates/plotting/jobs.html:67 templates/plotting/workers.html:67
 msgid ""
 "This worker is not currently online and responding to pings from the "
 "controller.  Please check the Workers page and bring the system back "
 "online."
 msgstr ""
 
-#: templates/plotting/jobs.html:70
+#: templates/plotting/jobs.html:70 templates/plotting/workers.html:53
+#: templates/plotting/workers.html:70
 msgid "OK"
 msgstr ""
 
-#: templates/plotting/jobs.html:91
+#: templates/plotting/jobs.html:91 templates/plotting/workers.html:93
 msgid "Jobs"
 msgstr ""
 
@@ -422,87 +431,40 @@ msgstr ""
 msgid "Stopping..."
 msgstr ""
 
-#~ msgid ""
-#~ "No worker at %{worker} for fork "
-#~ "%{blockchain}. Please select another fork."
-#~ msgstr ""
+#: templates/plotting/workers.html:9 templates/plotting/workers.html:128
+msgid "Start Archiving"
+msgstr ""
 
-#~ msgid ""
-#~ "This action will terminate the selected"
-#~ " plots, whether running or stopped, "
-#~ "and delete all\n"
-#~ "                their temporary files. If "
-#~ "Plotman is still running, another plot"
-#~ " will be immediately started, \n"
-#~ "                so please stop Plotman "
-#~ "first from the top-right. Continue?"
-#~ msgstr ""
+#: templates/plotting/workers.html:13
+msgid ""
+"This action will start Plotman archiving from the configured dst folder. "
+"Completed plots will be disributed locally or transferred remotely. "
+"Continue?"
+msgstr ""
 
-#~ msgid "Confirm Kill"
-#~ msgstr ""
+#: templates/plotting/workers.html:27 templates/plotting/workers.html:125
+msgid "Stop Archiving"
+msgstr ""
 
-#~ msgid ""
-#~ "This action will terminate the selected"
-#~ " plots, whether running or stopped, "
-#~ "and delete all their temporary files."
-#~ " If Plotman is still running, another"
-#~ " plot will be immediately started, so"
-#~ " please stop Plotman first from the"
-#~ " top-right. Continue?"
-#~ msgstr ""
+#: templates/plotting/workers.html:31
+msgid ""
+"This action will stop Plotman archiving from the configured dst folder, "
+"preventing further completed plot transfers. Continue?"
+msgstr ""
 
-#~ msgid "Cancel"
-#~ msgstr ""
+#: templates/plotting/workers.html:49
+#, python-format
+msgid ""
+"This worker is not currently configured for Plotman "
+"%(wiki_link_open)sarchiving%(wiki_link_open)s to enable local or remote "
+"transfer of completed plots.  Please visit the Settings | Plotting page "
+"to configure this worker."
+msgstr ""
 
-#~ msgid "Kill Selected"
-#~ msgstr ""
+#: templates/plotting/workers.html:103
+msgid "Archiving"
+msgstr ""
 
-#~ msgid "Start Plotting"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This action will start Plotman and "
-#~ "launch a plotting run using your "
-#~ "configured plotter. Be careful about "
-#~ "running more than one plotter on a"
-#~ " single machine at a time. Continue?"
-#~ msgstr ""
-
-#~ msgid "Start"
-#~ msgstr ""
-
-#~ msgid "Stop Plotting"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This action will stop Plotman from "
-#~ "launching new plotting jobs.  Running "
-#~ "jobs will run to completion. Continue?"
-#~ msgstr ""
-
-#~ msgid "Stop"
-#~ msgstr ""
-
-#~ msgid "Worker Offline"
-#~ msgstr ""
-
-#~ msgid ""
-#~ "This worker is not currently online "
-#~ "and responding to pings from the "
-#~ "controller.  Please check the Workers "
-#~ "page and bring the system back "
-#~ "online."
-#~ msgstr ""
-
-#~ msgid "OK"
-#~ msgstr ""
-
-#~ msgid "Jobs"
-#~ msgstr ""
-
-#~ msgid "Suspend Selected"
-#~ msgstr ""
-
-#~ msgid "Resume Selected"
-#~ msgstr ""
-
+#: templates/plotting/workers.html:119
+msgid "Archiving is disabled.  See Settings | Plotting page."
+msgstr ""

@@ -144,7 +144,7 @@
             var width = 900;
             var top = (screen.height - height) / 2;
             var left = (screen.width - width) / 2;
-            window.open("{{ url_for('logs') }}?log=farming" + "&hostname=" + hostname + "&blockchain=" + blockchain, 'Farming Log for ' + blockchain + ' on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+            window.open("{{ url_for('logs') }}?log=farming" + "&hostname=" + hostname + "&blockchain=" + blockchain, '{{_('Farming Log for ')}}' + blockchain + ' - ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
         }
         function PlotAnalyze(plot) {
             var output = document.getElementById('plotAnalyzeContent');

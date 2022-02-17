@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-02-16 17:48-0700\n"
+"POT-Creation-Date: 2022-02-17 16:10-0700\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: fr\n"
@@ -123,6 +123,7 @@ msgstr "Pools"
 
 #: templates/base.html:85 templates/farming/plots.html:69
 #: templates/farming/workers.html:28 templates/plotting/jobs.html:94
+#: templates/plotting/workers.html:96
 msgid "Workers"
 msgstr "Workers"
 
@@ -311,12 +312,17 @@ msgid "Plots"
 msgstr "Plots"
 
 #: templates/farming/plots.html:86 templates/plotting/jobs.html:117
+#: templates/plotting/workers.html:122
 msgid "Worker is offline."
 msgstr "Worker est hors ligne."
 
 #: templates/farming/plots.html:88
 msgid "Farming not started successfully."
 msgstr "Farming n'a pas démarré avec succès."
+
+#: templates/farming/plots.html:147
+msgid "Farming Log for "
+msgstr "Journaux Farming de "
 
 #: templates/farming/plots.html:201
 msgid "Good Plot"
@@ -370,12 +376,14 @@ msgid ""
 " first from the top-right. Continue?"
 msgstr ""
 "Cette action mettra fin aux parcelles sélectionnées, qu'elles soient en "
-"arrêté et supprimez tous leurs fichiers temporaires. Si Plotman est toujours "
-"en cours d'exécution, un autre complot sera immédiatement lancé, alors s'il vous plaît arrêtez Plotman"
-" premier en haut à droite. Continuer?"
+"arrêté et supprimez tous leurs fichiers temporaires. Si Plotman est "
+"toujours en cours d'exécution, un autre complot sera immédiatement lancé,"
+" alors s'il vous plaît arrêtez Plotman premier en haut à droite. "
+"Continuer?"
 
 #: templates/plotting/jobs.html:16 templates/plotting/jobs.html:34
-#: templates/plotting/jobs.html:52
+#: templates/plotting/jobs.html:52 templates/plotting/workers.html:16
+#: templates/plotting/workers.html:34
 #, fuzzy
 msgid "Cancel"
 msgstr "Annuler"
@@ -395,11 +403,11 @@ msgid ""
 "configured plotter. Be careful about running more than one plotter on a "
 "single machine at a time. Continue?"
 msgstr ""
-"Cette action démarrera Plotman et lancera une exécution de plotting à l'aide de votre "
-"plotter configuré. Soyez prudent lorsque vous exécutez plus d'un plotter sur un "
-"une seule machine à la fois. Continuer?"
+"Cette action démarrera Plotman et lancera une exécution de plotting à "
+"l'aide de votre plotter configuré. Soyez prudent lorsque vous exécutez "
+"plus d'un plotter sur un une seule machine à la fois. Continuer?"
 
-#: templates/plotting/jobs.html:35
+#: templates/plotting/jobs.html:35 templates/plotting/workers.html:17
 msgid "Start"
 msgstr "Commence"
 
@@ -416,30 +424,32 @@ msgstr ""
 "This action will stop Plotman from launching new plotting jobs. Running "
 "jobs will run to completion. Continue?"
 
-#: templates/plotting/jobs.html:53
+#: templates/plotting/jobs.html:53 templates/plotting/workers.html:35
 msgid "Stop"
 msgstr "Arrête"
 
-#: templates/plotting/jobs.html:63
+#: templates/plotting/jobs.html:63 templates/plotting/workers.html:45
+#: templates/plotting/workers.html:63
 #, fuzzy
 msgid "Worker Offline"
 msgstr "Worker est hors ligne."
 
-#: templates/plotting/jobs.html:67
+#: templates/plotting/jobs.html:67 templates/plotting/workers.html:67
 msgid ""
 "This worker is not currently online and responding to pings from the "
 "controller.  Please check the Workers page and bring the system back "
 "online."
 msgstr ""
 "Ce worker n'est pas en ligne actuellement et répond aux pings du "
-"contrôleur. Veuillez vérifier la page Workers et ramener le système "
-"en ligne."
+"contrôleur. Veuillez vérifier la page Workers et ramener le système en "
+"ligne."
 
-#: templates/plotting/jobs.html:70
+#: templates/plotting/jobs.html:70 templates/plotting/workers.html:53
+#: templates/plotting/workers.html:70
 msgid "OK"
 msgstr "OK"
 
-#: templates/plotting/jobs.html:91
+#: templates/plotting/jobs.html:91 templates/plotting/workers.html:93
 msgid "Jobs"
 msgstr "Jobs"
 
@@ -475,4 +485,48 @@ msgstr "Commencer..."
 #: templates/plotting/jobs.html:373
 msgid "Stopping..."
 msgstr "Arrêt..."
+
+#: templates/plotting/workers.html:9 templates/plotting/workers.html:128
+msgid "Start Archiving"
+msgstr ""
+
+#: templates/plotting/workers.html:13
+msgid ""
+"This action will start Plotman archiving from the configured dst folder. "
+"Completed plots will be disributed locally or transferred remotely. "
+"Continue?"
+msgstr ""
+
+#: templates/plotting/workers.html:27 templates/plotting/workers.html:125
+msgid "Stop Archiving"
+msgstr "Arrêter l'archivage"
+
+#: templates/plotting/workers.html:31
+msgid ""
+"This action will stop Plotman archiving from the configured dst folder, "
+"preventing further completed plot transfers. Continue?"
+msgstr ""
+"Cette action arrêtera l'archivage de Plotman à partir du dossier dst "
+"configuré,empêcher d'autres transferts de plot terminés. Continuer?"
+
+#: templates/plotting/workers.html:49
+#, python-format
+msgid ""
+"This worker is not currently configured for Plotman "
+"%(wiki_link_open)sarchiving%(wiki_link_open)s to enable local or remote "
+"transfer of completed plots.  Please visit the Settings | Plotting page "
+"to configure this worker."
+msgstr ""
+"Ce worker n'est actuellement pas configuré pour "
+"Plotman%(wiki_link_open)sarchivage%(wiki_link_open)s pour activer local "
+"ou distant transfert des plots terminées. Veuillez visiter la page "
+"Paramètres | Plotting pour configurer ce worker."
+
+#: templates/plotting/workers.html:103
+msgid "Archiving"
+msgstr "Archivage"
+
+#: templates/plotting/workers.html:119
+msgid "Archiving is disabled.  See Settings | Plotting page."
+msgstr "L'archivage est désactivé. Voir page Paramètres | Traçage."
 
