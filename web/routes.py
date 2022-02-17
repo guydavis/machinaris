@@ -71,7 +71,8 @@ def index():
 def summary():
     gc = globals.load()
     summaries = chia.load_summaries()
-    return render_template('summary.html', reload_seconds=120, summaries=summaries, global_config=gc)
+    return render_template('summary.html', reload_seconds=120, summaries=summaries, global_config=gc,
+        lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
@@ -124,7 +125,7 @@ def plotting_jobs():
     plotting = plotman.load_plotting_summary()
     job_stats = stats.load_plotting_stats()
     return render_template('plotting/jobs.html', reload_seconds=120,  plotting=plotting, 
-        plotters=plotters, job_stats=job_stats, global_config=gc)
+        plotters=plotters, job_stats=job_stats, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/plotting/workers', methods=['GET', 'POST'])
 def plotting_workers():
@@ -158,7 +159,8 @@ def farming_plots():
     gc = globals.load()
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()
-    return render_template('farming/plots.html', farmers=farmers, plots=plots, global_config=gc)
+    return render_template('farming/plots.html', farmers=farmers, plots=plots, global_config=gc, 
+        lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/farming/data')
 def farming_data():
@@ -198,7 +200,7 @@ def alerts():
     farmers = chiadog.load_farmers()
     notifications = chiadog.get_notifications()
     return render_template('alerts.html', reload_seconds=120, farmers=farmers,
-        notifications=notifications, global_config=gc)
+        notifications=notifications, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/wallet', methods=['GET', 'POST'])    
 def wallet():
@@ -208,7 +210,8 @@ def wallet():
         selected_blockchain = request.form.get('blockchain')
         chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
     wallets = chia.load_wallets()
-    return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, reload_seconds=120)
+    return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, 
+        reload_seconds=120, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/keys')
 def keys():
@@ -227,7 +230,7 @@ def workers():
             worker.prune_workers_status(request.form.getlist('worker'))
     wkrs = worker.load_worker_summary()
     return render_template('workers.html', reload_seconds=120, 
-        workers=wkrs, global_config=gc)
+        workers=wkrs, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/worker', methods=['GET'])
 def worker_route():
@@ -241,7 +244,8 @@ def worker_route():
     warnings = worker.generate_warnings(wkr)
     return render_template('worker.html', worker=wkr, 
         plotting=plotting, plots_disk_usage=plots_disk_usage, 
-        plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc)
+        plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc,
+        lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/blockchains')
 def blockchains():
@@ -249,7 +253,7 @@ def blockchains():
     selected_blockchain = worker.default_blockchain()
     blockchains = chia.load_blockchains()
     return render_template('blockchains.html', reload_seconds=120, selected_blockchain = selected_blockchain, 
-        blockchains=blockchains, global_config=gc)
+        blockchains=blockchains, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/connections', methods=['GET', 'POST'])
 def connections():
@@ -265,7 +269,7 @@ def connections():
             app.logger.info(_("Unknown form action") + ": {0}".format(request.form))
     connections = chia.load_connections()
     return render_template('connections.html', reload_seconds=120, selected_blockchain = selected_blockchain,
-        connections=connections, global_config=gc)
+        connections=connections, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/settings/plotting', methods=['GET', 'POST'])
 def settings_plotting():

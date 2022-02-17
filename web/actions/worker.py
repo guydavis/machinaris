@@ -125,4 +125,5 @@ def generate_warnings(worker):
     # TODO - Warning if any blockchain challenges are missing in last hour (some percentage like that chart)
     # TODO - Warning if worker's time drifts more than 3 minutes off fullnode's WHEN responding with ping seconds ago
     # TODO - Warning if farmer sync status falls behind while running (at 5 mins, before a later restart is attempted)
+    # TODO - Warning if fullnode/harvester is not reporting disk stats
     return warnings

@@ -22,10 +22,10 @@
     <div class="container-fluid">
         <ul class="nav nav-tabs bg-dark">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('farming_plots') }}">Plots</a>
+                <a class="nav-link" href="{{ url_for('farming_plots') }}">{{_('Plots')}}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{ url_for('farming_workers') }}">Workers</a>
+                <a class="nav-link active" aria-current="page" href="{{ url_for('farming_workers') }}">{{_('Workers')}}</a>
             </li>
         </ul>
     </div>
@@ -63,14 +63,13 @@
                     <div class="carousel-inner">
                         {% for blockchain, summary in daily_summaries[farmer.displayname].items() %}
                         <div class="carousel-item {% if blockchain == 'chia' %} active {% endif %}" data-bs-interval="10000">
-                            <h4 class="text-center">{{ blockchain|capitalize }} - Daily Summary</h4>
+                            <h4 class="text-center">{{ blockchain|capitalize }} - {{_('Daily Summary')}}</h4>
                             {% if summary %}
                             <div style="white-space:pre-wrap;margin:10px;">{{ summary }}</div>
                             {% else %}
-                            <div style="margin:10px;">No daily summary found for {{ blockchain }} on {{farmer.displayname}}.
+                            <div style="margin:10px;">{{_('No daily summary found for %(blockchain)s on %(displayname)s.', blockchain=blockchain, displayname=farmer.displayname)}}
                             <br/><br/>
-                            Please check that your Machinaris container for this fork is running. Also please verify 
-                            settings on the Alerts page.
+                            {{_('Please check that your Machinaris container for this blockchain is running. Also please verify settings on the Alerts page.')}}
                             </div>
                             {% endif %}
                         </div>
@@ -78,11 +77,11 @@
                     </div>
                     <button class="carousel-control-prev" style="align-items: initial; justify-content: left; padding-top: 0px; width: 5%; height: 50px;" type="button" data-bs-target="#carousel-{{farmer.displayname}}" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
+                        <span class="visually-hidden">{{_('Previous')}}</span>
                       </button>
                       <button class="carousel-control-next" style="align-items: initial; justify-content: right; padding-top: 0px; width: 5%; height: 50px;" type="button" data-bs-target="#carousel-{{farmer.displayname}}" data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
+                        <span class="visually-hidden">{{_('Next')}}</span>
                       </button>
                 </div>
                 {% endif %}
@@ -91,12 +90,8 @@
                 {% if disk_usage[farmer.hostname] %}
                 <canvas id="disk_{{farmer.hostname}}" width="400"></canvas>
                 {% else %}
-                <p>
-                    No plots disk stats recorded recently for {{farmer.hostname}} with Chia blockchain. 
-                    Please ensure all paths containing plots have been 
-                    <a target="_blank" href="https://github.com/guydavis/machinaris/wiki/FAQ#can-i-use-two-or-more-final-destination-directories-to-hold-my-plots">configured</a>. 
-                    Also ensure the Chia worker is reporting into the controller on the
-                    Workers page.
+                <p>{{_('No plots disk stats recorded recently for %(hostname)s with Chia blockchain. Please ensure all paths containing plots have been %(wiki_link_open)s configured %(wiki_link_close)s. Also ensure the Chia worker is reporting into the controller on the Workers page.', 
+                    hostname=farmer.hostname, wiki_link='<a target="_blank" href="https://github.com/guydavis/machinaris/wiki/FAQ#can-i-use-two-or-more-final-destination-directories-to-hold-my-plots">', wiki_link_close='</a>')}}
                 </p>
                 {% endif %}
             </div>

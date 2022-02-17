@@ -1,15 +1,15 @@
-# German translations for PROJECT.
-# Copyright (C) 2022 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# German translations for Machinaris.
+# Copyright (C) 2022 Guy Davis
+# This file is distributed under the same license as the Machinaris project.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-02-16 08:55-0700\n"
+"Project-Id-Version: Machinaris VERSION\n"
+"Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
+"Creation-Date: 2022-02-16 15:00-0700\n"
+"POT-Creation-Date: 2022-02-16 17:48-0700\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: FULL NAME\n"
 "Language: de\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -18,55 +18,55 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: routes.py:84
+#: routes.py:90
 msgid "Blockchain download"
 msgstr ""
 
-#: routes.py:116
+#: routes.py:122
 msgid "Unknown plotting form"
 msgstr ""
 
-#: routes.py:165
+#: routes.py:172
 msgid "Error! Please see logs."
 msgstr ""
 
-#: routes.py:191
+#: routes.py:198
 msgid "Unknown alerts form"
 msgstr ""
 
-#: routes.py:260
+#: routes.py:269
 msgid "Unknown form action"
 msgstr ""
 
-#: routes.py:365
+#: routes.py:374
 msgid ""
 "No worker at %{worker} for blockchain %{blockchain}. Please select "
 "another blockchain."
 msgstr ""
 
-#: routes.py:371
+#: routes.py:380
 msgid ""
 "For Alerts config, found no responding fullnode found for %{blockchain}. "
 "Please check your workers."
 msgstr ""
 
-#: routes.py:376
+#: routes.py:385
 msgid ""
 "For Farming config, found no responding fullnode found for %{blockchain}."
 " Please check your workers."
 msgstr ""
 
-#: routes.py:383
+#: routes.py:392
 msgid ""
 "For Plotting config, found no responding fullnode found for "
 "%{blockchain}. Please check your workers."
 msgstr ""
 
-#: routes.py:388
+#: routes.py:397
 msgid "No responding fullnode found for %{blockchain}. Please check your workers."
 msgstr ""
 
-#: routes.py:407
+#: routes.py:416
 msgid "Unsupported log type"
 msgstr ""
 
@@ -80,6 +80,7 @@ msgid "Summary"
 msgstr ""
 
 #: templates/base.html:37 templates/base.html:108 templates/index.html:41
+#: templates/plotting/jobs.html:101
 msgid "Plotting"
 msgstr ""
 
@@ -111,7 +112,8 @@ msgstr ""
 msgid "Pools"
 msgstr ""
 
-#: templates/base.html:85
+#: templates/base.html:85 templates/farming/plots.html:69
+#: templates/farming/workers.html:28 templates/plotting/jobs.html:94
 msgid "Workers"
 msgstr ""
 
@@ -195,11 +197,11 @@ msgstr ""
 msgid "Partial Proofs for Pools"
 msgstr ""
 
-#: templates/index.html:147
+#: templates/farming/workers.html:80 templates/index.html:147
 msgid "Previous"
 msgstr ""
 
-#: templates/index.html:151
+#: templates/farming/workers.html:84 templates/index.html:151
 msgid "Next"
 msgstr ""
 
@@ -263,8 +265,245 @@ msgid ""
 "yourself at the command-line, see the %(wiki_link)s for details."
 msgstr ""
 
+#: templates/farming/plots.html:9
+msgid "Plotting Analysis"
+msgstr ""
+
+#: templates/farming/plots.html:13
+msgid "Analysis of the plotting job log shows time (seconds) spent in each phase:"
+msgstr ""
+
+#: templates/farming/plots.html:24
+msgid "Plot Check"
+msgstr ""
+
+#: templates/farming/plots.html:66 templates/farming/workers.html:25
+msgid "Plots"
+msgstr ""
+
+#: templates/farming/plots.html:86 templates/plotting/jobs.html:117
+msgid "Worker is offline."
+msgstr ""
+
+#: templates/farming/plots.html:88
+msgid "Farming not started successfully."
+msgstr ""
+
+#: templates/farming/plots.html:201
+msgid "Good Plot"
+msgstr ""
+
+#: templates/farming/plots.html:203
+msgid "Bad Plot"
+msgstr ""
+
+#: templates/farming/workers.html:66
+msgid "Daily Summary"
+msgstr ""
+
+#: templates/farming/workers.html:70
+#, python-format
+msgid "No daily summary found for %(blockchain)s on %(displayname)s."
+msgstr ""
+
+#: templates/farming/workers.html:72
+msgid ""
+"Please check that your Machinaris container for this blockchain is "
+"running. Also please verify settings on the Alerts page."
+msgstr ""
+
+#: templates/farming/workers.html:93
+#, python-format
+msgid ""
+"No plots disk stats recorded recently for %(hostname)s with Chia "
+"blockchain. Please ensure all paths containing plots have been "
+"%(wiki_link_open)s configured %(wiki_link_close)s. Also ensure the Chia "
+"worker is reporting into the controller on the Workers page."
+msgstr ""
+
+#: templates/plotting/jobs.html:9
+msgid "Confirm Kill"
+msgstr ""
+
+#: templates/plotting/jobs.html:13
+msgid ""
+"This action will terminate the selected plots, whether running or "
+"stopped, and delete all their temporary files. If Plotman is still "
+"running, another plot will be immediately started, so please stop Plotman"
+" first from the top-right. Continue?"
+msgstr ""
+
+#: templates/plotting/jobs.html:16 templates/plotting/jobs.html:34
+#: templates/plotting/jobs.html:52
+msgid "Cancel"
+msgstr ""
+
+#: templates/plotting/jobs.html:17 templates/plotting/jobs.html:193
+msgid "Kill Selected"
+msgstr ""
+
+#: templates/plotting/jobs.html:27 templates/plotting/jobs.html:123
+msgid "Start Plotting"
+msgstr ""
+
+#: templates/plotting/jobs.html:31
+msgid ""
+"This action will start Plotman and launch a plotting run using your "
+"configured plotter. Be careful about running more than one plotter on a "
+"single machine at a time. Continue?"
+msgstr ""
+
+#: templates/plotting/jobs.html:35
+msgid "Start"
+msgstr ""
+
+#: templates/plotting/jobs.html:45 templates/plotting/jobs.html:120
+msgid "Stop Plotting"
+msgstr ""
+
+#: templates/plotting/jobs.html:49
+msgid ""
+"This action will stop Plotman from launching new plotting jobs.  Running "
+"jobs will run to completion. Continue?"
+msgstr ""
+
+#: templates/plotting/jobs.html:53
+msgid "Stop"
+msgstr ""
+
+#: templates/plotting/jobs.html:63
+msgid "Worker Offline"
+msgstr ""
+
+#: templates/plotting/jobs.html:67
+msgid ""
+"This worker is not currently online and responding to pings from the "
+"controller.  Please check the Workers page and bring the system back "
+"online."
+msgstr ""
+
+#: templates/plotting/jobs.html:70
+msgid "OK"
+msgstr ""
+
+#: templates/plotting/jobs.html:91
+msgid "Jobs"
+msgstr ""
+
+#: templates/plotting/jobs.html:189
+msgid "Suspend Selected"
+msgstr ""
+
+#: templates/plotting/jobs.html:191
+msgid "Resume Selected"
+msgstr ""
+
+#: templates/plotting/jobs.html:204
+#, python-format
+msgid "Plotting Speed - k%(k_size)s Plots"
+msgstr ""
+
+#: templates/plotting/jobs.html:337
+msgid "Suspending..."
+msgstr ""
+
+#: templates/plotting/jobs.html:345
+msgid "Resuming..."
+msgstr ""
+
+#: templates/plotting/jobs.html:354
+msgid "Killing..."
+msgstr ""
+
+#: templates/plotting/jobs.html:363
+msgid "Starting..."
+msgstr ""
+
+#: templates/plotting/jobs.html:373
+msgid "Stopping..."
+msgstr ""
+
 #~ msgid ""
 #~ "No worker at %{worker} for fork "
 #~ "%{blockchain}. Please select another fork."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This action will terminate the selected"
+#~ " plots, whether running or stopped, "
+#~ "and delete all\n"
+#~ "                their temporary files. If "
+#~ "Plotman is still running, another plot"
+#~ " will be immediately started, \n"
+#~ "                so please stop Plotman "
+#~ "first from the top-right. Continue?"
+#~ msgstr ""
+
+#~ msgid "Confirm Kill"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This action will terminate the selected"
+#~ " plots, whether running or stopped, "
+#~ "and delete all their temporary files."
+#~ " If Plotman is still running, another"
+#~ " plot will be immediately started, so"
+#~ " please stop Plotman first from the"
+#~ " top-right. Continue?"
+#~ msgstr ""
+
+#~ msgid "Cancel"
+#~ msgstr ""
+
+#~ msgid "Kill Selected"
+#~ msgstr ""
+
+#~ msgid "Start Plotting"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This action will start Plotman and "
+#~ "launch a plotting run using your "
+#~ "configured plotter. Be careful about "
+#~ "running more than one plotter on a"
+#~ " single machine at a time. Continue?"
+#~ msgstr ""
+
+#~ msgid "Start"
+#~ msgstr ""
+
+#~ msgid "Stop Plotting"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This action will stop Plotman from "
+#~ "launching new plotting jobs.  Running "
+#~ "jobs will run to completion. Continue?"
+#~ msgstr ""
+
+#~ msgid "Stop"
+#~ msgstr ""
+
+#~ msgid "Worker Offline"
+#~ msgstr ""
+
+#~ msgid ""
+#~ "This worker is not currently online "
+#~ "and responding to pings from the "
+#~ "controller.  Please check the Workers "
+#~ "page and bring the system back "
+#~ "online."
+#~ msgstr ""
+
+#~ msgid "OK"
+#~ msgstr ""
+
+#~ msgid "Jobs"
+#~ msgstr ""
+
+#~ msgid "Suspend Selected"
+#~ msgstr ""
+
+#~ msgid "Resume Selected"
 #~ msgstr ""
 

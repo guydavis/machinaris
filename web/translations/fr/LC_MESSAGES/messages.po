@@ -1,15 +1,15 @@
-# French translations for PROJECT.
-# Copyright (C) 2022 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# French translations for Machinaris.
+# Copyright (C) 2022 Guy Davis
+# This file is distributed under the same license as the Machinaris project.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-02-16 08:55-0700\n"
+"Project-Id-Version: Machinaris VERSION\n"
+"Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
+"Creation-Date: 2022-02-16 15:00-0700\n"
+"POT-Creation-Date: 2022-02-16 17:48-0700\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: FULL NAME\n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -18,27 +18,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: routes.py:84
+#: routes.py:90
 msgid "Blockchain download"
 msgstr "Télécharger le blockchain"
 
-#: routes.py:116
+#: routes.py:122
 msgid "Unknown plotting form"
 msgstr "Forme inconnue"
 
-#: routes.py:165
+#: routes.py:172
 msgid "Error! Please see logs."
 msgstr "Erreur! Veuillez consulter les journaux."
 
-#: routes.py:191
+#: routes.py:198
 msgid "Unknown alerts form"
 msgstr "Forme inconnue"
 
-#: routes.py:260
+#: routes.py:269
 msgid "Unknown form action"
 msgstr "Action inconnue"
 
-#: routes.py:365
+#: routes.py:374
 msgid ""
 "No worker at %{worker} for blockchain %{blockchain}. Please select "
 "another blockchain."
@@ -46,7 +46,7 @@ msgstr ""
 "Aucun travailleur %{worker} pour la blockchain %{blockchain}. Veuillez "
 "sélectionner une autre blockchain."
 
-#: routes.py:371
+#: routes.py:380
 msgid ""
 "For Alerts config, found no responding fullnode found for %{blockchain}. "
 "Please check your workers."
@@ -54,7 +54,7 @@ msgstr ""
 "Aucun fullnode répondant n'a été trouvé pour notifier%{blockchain}. "
 "Veuillez vérifier vos travailleurs."
 
-#: routes.py:376
+#: routes.py:385
 msgid ""
 "For Farming config, found no responding fullnode found for %{blockchain}."
 " Please check your workers."
@@ -62,7 +62,7 @@ msgstr ""
 "Aucun fullnode répondant n'a été trouvé pour cultiver%{blockchain}. "
 "Veuillez vérifier vos travailleurs."
 
-#: routes.py:383
+#: routes.py:392
 msgid ""
 "For Plotting config, found no responding fullnode found for "
 "%{blockchain}. Please check your workers."
@@ -70,25 +70,26 @@ msgstr ""
 "Aucun fullnode répondant n'a été trouvé pour parceller%{blockchain}. "
 "Veuillez vérifier vos travailleurs."
 
-#: routes.py:388
+#: routes.py:397
 msgid "No responding fullnode found for %{blockchain}. Please check your workers."
 msgstr ""
 "Aucun fullnode répondant n'a été trouvé pour %{blockchain}. Veuillez "
 "vérifier vos travailleurs."
 
-#: routes.py:407
+#: routes.py:416
 msgid "Unsupported log type"
 msgstr "Type de journal non pris en charge"
 
 #: templates/base.html:10 templates/base.html:25 templates/base.html:170
 msgid "Machinaris"
-msgstr ""
+msgstr "Machinaris"
 
 #: templates/base.html:31
 msgid "Summary"
-msgstr "Sommaire"
+msgstr "Résumé"
 
 #: templates/base.html:37 templates/base.html:108 templates/index.html:41
+#: templates/plotting/jobs.html:101
 msgid "Plotting"
 msgstr "Plotting"
 
@@ -120,7 +121,8 @@ msgstr "Alertes"
 msgid "Pools"
 msgstr "Pools"
 
-#: templates/base.html:85
+#: templates/base.html:85 templates/farming/plots.html:69
+#: templates/farming/workers.html:28 templates/plotting/jobs.html:94
 msgid "Workers"
 msgstr "Workers"
 
@@ -204,11 +206,11 @@ msgstr "Défis des moissonneurs"
 msgid "Partial Proofs for Pools"
 msgstr "Preuves partielles pour les pools"
 
-#: templates/index.html:147
+#: templates/farming/workers.html:80 templates/index.html:147
 msgid "Previous"
 msgstr "Précédent"
 
-#: templates/index.html:151
+#: templates/farming/workers.html:84 templates/index.html:151
 msgid "Next"
 msgstr "Suivant"
 
@@ -289,4 +291,188 @@ msgstr ""
 "REMARQUE: Si vous préférez plutôt importer votre phrase de départ "
 "mnenmoic vous-même sur la ligne de commande, consultez les %(wiki_link)s "
 "pour plus de détails."
+
+#: templates/farming/plots.html:9
+msgid "Plotting Analysis"
+msgstr "Analyse de plotting"
+
+#: templates/farming/plots.html:13
+msgid "Analysis of the plotting job log shows time (seconds) spent in each phase:"
+msgstr ""
+"L'analyse du journal de plotting montre le temps (secondes) passé dans "
+"chaque phase :"
+
+#: templates/farming/plots.html:24
+msgid "Plot Check"
+msgstr "Vérification de la plotes"
+
+#: templates/farming/plots.html:66 templates/farming/workers.html:25
+msgid "Plots"
+msgstr "Plots"
+
+#: templates/farming/plots.html:86 templates/plotting/jobs.html:117
+msgid "Worker is offline."
+msgstr "Worker est hors ligne."
+
+#: templates/farming/plots.html:88
+msgid "Farming not started successfully."
+msgstr "Farming n'a pas démarré avec succès."
+
+#: templates/farming/plots.html:201
+msgid "Good Plot"
+msgstr "Bon Plot"
+
+#: templates/farming/plots.html:203
+msgid "Bad Plot"
+msgstr "Mauvais Plot"
+
+#: templates/farming/workers.html:66
+msgid "Daily Summary"
+msgstr "Résumé quotidien"
+
+#: templates/farming/workers.html:70
+#, python-format
+msgid "No daily summary found for %(blockchain)s on %(displayname)s."
+msgstr "Aucun résumé quotidien trouvé pour %(blockchain)s sur %(displayname)s."
+
+#: templates/farming/workers.html:72
+msgid ""
+"Please check that your Machinaris container for this blockchain is "
+"running. Also please verify settings on the Alerts page."
+msgstr ""
+"Veuillez vérifier que votre conteneur Machinaris pour cette blockchain "
+"est en cours d'exécution. Veuillez également vérifier les paramètres sur "
+"la page Alertes."
+
+#: templates/farming/workers.html:93
+#, python-format
+msgid ""
+"No plots disk stats recorded recently for %(hostname)s with Chia "
+"blockchain. Please ensure all paths containing plots have been "
+"%(wiki_link_open)s configured %(wiki_link_close)s. Also ensure the Chia "
+"worker is reporting into the controller on the Workers page."
+msgstr ""
+"Aucune statistique de disque n'a été enregistrée récemment pour "
+"%(hostname)s avec Chia blockchain. Veuillez vous assurer que tous les "
+"chemins contenant des %(wiki_link_open)s a configuré %(wiki_link_close)s."
+" Assurez-vous également que le worker Chia fait rapport au contrôleur sur"
+" la page Workers."
+
+#: templates/plotting/jobs.html:9
+msgid "Confirm Kill"
+msgstr "Confirmer tuer"
+
+#: templates/plotting/jobs.html:13
+msgid ""
+"This action will terminate the selected plots, whether running or "
+"stopped, and delete all their temporary files. If Plotman is still "
+"running, another plot will be immediately started, so please stop Plotman"
+" first from the top-right. Continue?"
+msgstr ""
+"Cette action mettra fin aux parcelles sélectionnées, qu'elles soient en "
+"arrêté et supprimez tous leurs fichiers temporaires. Si Plotman est toujours "
+"en cours d'exécution, un autre complot sera immédiatement lancé, alors s'il vous plaît arrêtez Plotman"
+" premier en haut à droite. Continuer?"
+
+#: templates/plotting/jobs.html:16 templates/plotting/jobs.html:34
+#: templates/plotting/jobs.html:52
+#, fuzzy
+msgid "Cancel"
+msgstr "Annuler"
+
+#: templates/plotting/jobs.html:17 templates/plotting/jobs.html:193
+msgid "Kill Selected"
+msgstr "Tuer la sélection"
+
+#: templates/plotting/jobs.html:27 templates/plotting/jobs.html:123
+#, fuzzy
+msgid "Start Plotting"
+msgstr "Commence Plotting"
+
+#: templates/plotting/jobs.html:31
+msgid ""
+"This action will start Plotman and launch a plotting run using your "
+"configured plotter. Be careful about running more than one plotter on a "
+"single machine at a time. Continue?"
+msgstr ""
+"Cette action démarrera Plotman et lancera une exécution de plotting à l'aide de votre "
+"plotter configuré. Soyez prudent lorsque vous exécutez plus d'un plotter sur un "
+"une seule machine à la fois. Continuer?"
+
+#: templates/plotting/jobs.html:35
+msgid "Start"
+msgstr "Commence"
+
+#: templates/plotting/jobs.html:45 templates/plotting/jobs.html:120
+#, fuzzy
+msgid "Stop Plotting"
+msgstr "Arrête Plotting"
+
+#: templates/plotting/jobs.html:49
+msgid ""
+"This action will stop Plotman from launching new plotting jobs.  Running "
+"jobs will run to completion. Continue?"
+msgstr ""
+"This action will stop Plotman from launching new plotting jobs. Running "
+"jobs will run to completion. Continue?"
+
+#: templates/plotting/jobs.html:53
+msgid "Stop"
+msgstr "Arrête"
+
+#: templates/plotting/jobs.html:63
+#, fuzzy
+msgid "Worker Offline"
+msgstr "Worker est hors ligne."
+
+#: templates/plotting/jobs.html:67
+msgid ""
+"This worker is not currently online and responding to pings from the "
+"controller.  Please check the Workers page and bring the system back "
+"online."
+msgstr ""
+"Ce worker n'est pas en ligne actuellement et répond aux pings du "
+"contrôleur. Veuillez vérifier la page Workers et ramener le système "
+"en ligne."
+
+#: templates/plotting/jobs.html:70
+msgid "OK"
+msgstr "OK"
+
+#: templates/plotting/jobs.html:91
+msgid "Jobs"
+msgstr "Jobs"
+
+#: templates/plotting/jobs.html:189
+msgid "Suspend Selected"
+msgstr "Suspendre la sélection"
+
+#: templates/plotting/jobs.html:191
+msgid "Resume Selected"
+msgstr "Continuer la sélection"
+
+#: templates/plotting/jobs.html:204
+#, python-format
+msgid "Plotting Speed - k%(k_size)s Plots"
+msgstr "Vitesse de Plotting - k%(k_size)s Plots"
+
+#: templates/plotting/jobs.html:337
+msgid "Suspending..."
+msgstr "Suspendre..."
+
+#: templates/plotting/jobs.html:345
+msgid "Resuming..."
+msgstr "Reprendre..."
+
+#: templates/plotting/jobs.html:354
+msgid "Killing..."
+msgstr "Tuer..."
+
+#: templates/plotting/jobs.html:363
+msgid "Starting..."
+msgstr "Commencer..."
+
+#: templates/plotting/jobs.html:373
+msgid "Stopping..."
+msgstr "Arrêt..."
 

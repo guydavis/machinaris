@@ -33,3 +33,20 @@ rm -f ${BASEPATH}/bsi-icons.zip
 wget -O ${BASEPATH}/bs.zip -nv "https://github.com/twbs/bootstrap/releases/download/v${BOOTSTRAP_VERSION}/bootstrap-${BOOTSTRAP_VERSION}-dist.zip" && \
 unzip -o -j ${BASEPATH}/bs.zip -d $BASEPATH/ bootstrap-${BOOTSTRAP_VERSION}*/css/bootstrap.min.css* bootstrap-${BOOTSTRAP_VERSION}*/js/bootstrap.bundle.min.js*  && \
 rm -f ${BASEPATH}/bs.zip
+
+# Pull localization files for DataTables.js
+mkdir -p $BASEPATH/i18n/
+LANGS=$(grep -oP "LANGUAGES = \[\K(.*)\]" $BASEPATH/../../default_settings.py | cut -d ']' -f 1 | tr -d \'\" | tr -d ' ')
+IFS=',';
+for lang in $LANGS; 
+do
+  if [[ "$lang" == 'en' ]]; then
+      continue  # No separate translation files for default locale
+  fi
+  # First try $lang.json
+  wget -nv -O ${BASEPATH}/i18n/datatables.${lang}.json https://raw.githubusercontent.com/DataTables/Plugins/master/i18n/${lang}.json
+  if [ $? != 0 ]; then # Then try $lang_$lang.json  (Example French)
+    echo "Going for ${lang}_${lang}.json"
+    wget -nv -O ${BASEPATH}/i18n/datatables.${lang}.json https://raw.githubusercontent.com/DataTables/Plugins/master/i18n/${lang}_${lang}.json
+  fi
+done

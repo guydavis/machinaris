@@ -1,15 +1,15 @@
-# Chinese translations for PROJECT.
-# Copyright (C) 2022 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# Chinese translations for Machinaris.
+# Copyright (C) 2022 Guy Davis
+# This file is distributed under the same license as the Machinaris project.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-02-16 08:55-0700\n"
+"Project-Id-Version: Machinaris VERSION\n"
+"Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
+"Creation-Date: 2022-02-16 15:00-0700\n"
+"POT-Creation-Date: 2022-02-16 17:48-0700\n"
 "PO-Revision-Date: 2022-02-15 14:29-0700\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: FULL NAME\n"
 "Language: zh\n"
 "Language-Team: zh <LL@li.org>\n"
 "Plural-Forms: nplurals=1; plural=0\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: views/ping/resources.py:25
+#: views/ping/resources.py:25 views/ping/resources.py:28
 msgid "Pong!"
 msgstr ""
 

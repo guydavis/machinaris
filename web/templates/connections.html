@@ -153,6 +153,11 @@
         $(document).ready(function () {
             {% for connection in connections.rows %}
             $('#conns_{{connection.displayname}}_{{connection.blockchain}}').DataTable({
+                {% if lang != 'en' %}
+                "language": {
+                    "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+                },
+                {% endif %}
                 "columnDefs": [{ "orderable": false, targets: [0] }],
             });
             $("#btnAdd_{{connection.displayname}}_{{connection.blockchain}}").click(function () {

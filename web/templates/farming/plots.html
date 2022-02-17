@@ -6,11 +6,11 @@
     <div class="modal-dialog bg-dark rounded-3 modal-lg">
         <div class="modal-content bg-dark">
             <div class="modal-header bg-dark">
-                <h5 class="modal-title" id="analyzeModalLabel">Plotting Analysis</h5>
+                <h5 class="modal-title" id="analyzeModalLabel">{{_('Plotting Analysis')}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-dark">
-                <p>Analysis of the plotting job log shows time (seconds) spent in each phase:</p>
+                <p>{{_('Analysis of the plotting job log shows time (seconds) spent in each phase:')}}</p>
                 <pre id="plotAnalyzeContent"></pre>
             </div>
         </div>
@@ -21,7 +21,7 @@
     <div class="modal-dialog bg-dark rounded-3 modal-lg">
         <div class="modal-content bg-dark">
             <div class="modal-header bg-dark">
-                <h5 class="modal-title" id="checkModalLabel">Plot Check</h5>
+                <h5 class="modal-title" id="checkModalLabel">{{_('Plot Check')}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-dark">
@@ -63,10 +63,10 @@
     <div class="container-fluid">
         <ul class="nav nav-tabs bg-dark">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{ url_for('farming_plots') }}">Plots</a>
+                <a class="nav-link active" aria-current="page" href="{{ url_for('farming_plots') }}">{{_('Plots')}}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('farming_workers') }}">Workers</a>
+                <a class="nav-link" href="{{ url_for('farming_workers') }}">{{_('Workers')}}</a>
             </li>
         </ul>
         <form class="d-flex" method="POST" style="padding-bottom:5px" id="main-form">
@@ -83,9 +83,9 @@
                                 <a class="dropdown-item text-white text-decoration-none" href="#"
                                     onclick='ViewLogs("{{ worker.hostname }}","{{worker.blockchain}}");return false;'>
                                     {% if worker.connection_status == 'offline' or worker.connection_status == 'Connection Refused' %}
-                                        <i class="fs-4 bi-dash-circle text-danger" title="Worker is offline."></i>
+                                        <i class="fs-4 bi-dash-circle text-danger" title="{{_('Worker is offline.')}}"></i>
                                     {% elif worker.farming_status == 'not available' %}
-                                        <i class="fs-4 bi-dash-circle text-danger" title="Farming not started successfully."></i>
+                                        <i class="fs-4 bi-dash-circle text-danger" title="{{_('Farming not started successfully.')}}"></i>
                                     {% elif worker.farming_status == 'farming' or worker.farming_status == 'harvesting' %}
                                         <i class="fs-4 bi-check-circle text-success" title="{{worker.farming_status|capitalize}}"></i>
                                     {% else %}
@@ -171,6 +171,11 @@
                 "pageLength": 25,
                 "serverSide": true,
                 "ajax": "{{ url_for('farming_data') }}",
+                {% if lang != 'en' %}
+                "language": {
+                    "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+                },
+                {% endif %}
                 "order": [[6, "desc"]],
                 "columnDefs": [
                     { 
@@ -193,9 +198,9 @@
                                 status = arr[0].trim();
                                 plot_id = arr[1].trim();
                                 if (status == 'GOOD') {
-                                    return '<a href="#" title="Good Plot" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-check-circle text-success"></i></a>';
+                                    return '<a href="#" title="{{_('Good Plot')}}" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-check-circle text-success"></i></a>';
                                 } else {
-                                    return '<a href="#" title="Bad Plot" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-exclamation-triangle text-warning"></i></a>';
+                                    return '<a href="#" title="{{_('Bad Plot')}}" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-exclamation-triangle text-warning"></i></a>';
                                 }
                             }               
                             return "";
