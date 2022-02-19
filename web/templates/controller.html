@@ -7,7 +7,7 @@
     <link href="{{ url_for('static', filename='3rd_party/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='3rd_party/icons/bootstrap-icons.css') }}">
     <script src="{{ url_for('static', filename='3rd_party/jquery.min.js') }}"></script>
-    <title>Machinaris</title>
+    <title>{{_('Machinaris')}}</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 
@@ -20,10 +20,10 @@
                 <div class="container-fluid py-5">
                     <h1 class="display-4">
                         <img src="{{ url_for('static', filename='hierarchy.png') }}" style= />
-                        <span>Machinaris Worker</span>
+                        <span>{{_('Machinaris Worker')}}</span>
                     </h1>
                     <hr class="my-4">
-                    <p>This Machinaris worker is controlled at: <a href="{{ controller_url}}">{{ controller_url}}</a></p>
+                    <p>{{_('This Machinaris worker is controlled at:')}} <a href="{{ controller_url}}">{{ controller_url}}</a></p>
                 </div>
             </div>
         </div>

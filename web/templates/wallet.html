@@ -42,7 +42,7 @@
     <div class="modal-dialog bg-dark rounded-3 modal-lg">
       <div class="modal-content bg-dark">
         <div class="modal-header bg-dark">
-          <h5 class="modal-title" id="walletModalLabel">Wallet Settings</h5>
+          <h5 class="modal-title" id="walletModalLabel">{{_('Wallet Settings')}}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body bg-dark">
@@ -52,21 +52,21 @@
                 <a style='float:right' href="https://github.com/guydavis/machinaris/wiki/Wallets" target="_blank">
                     <i class="fs-4 bi-question-circle"></i>
                 </a>
-              <label for="cold_wallet_address" class="col-form-label">Cold Wallet Address:</label>
+              <label for="cold_wallet_address" class="col-form-label">{{_('Cold Wallet Address:')}}</label>
               <input type="text" class="form-control" id="cold_wallet_address_field" name="cold_wallet_address"/>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">Cancel</button>
-          <button type="button" class="btn btn-outline-success" id="btnSave">Save</button>
+          <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">{{_('Cancel')}}</button>
+          <button type="button" class="btn btn-outline-success" id="btnSave">{{_('Save')}}</button>
         </div>
       </div>
     </div>
   </div>
 
 <header class="pb-3 mb-4 border-bottom">
-    <span class="fs-4">Wallet Summary</span>
+    <span class="fs-4">{{_('Wallet Summary')}}</span>
 </header>
 
 {% if wallets.rows|length > 0 %}
@@ -74,13 +74,13 @@
     <table id="data" class="table table-dark">
         <thead>
             <tr>
-                <th scope="col" class="text-success">Blockchain</th>
-                <th scope="col" class="text-success">Status</th>
-                <th scope="col" class="text-success">Wallet Balance</th>
-                <th scope="col" class="text-success">Cold Wallet Balance</th>
-                <th scope="col" class="text-success">Total Balance</th>
-                <th scope="col" class="text-success">USD*</th>
-                <th scope="col" class="text-success">Updated At</th>
+                <th scope="col" class="text-success">{{_('Blockchain')}}</th>
+                <th scope="col" class="text-success">{{_('Status')}}</th>
+                <th scope="col" class="text-success">{{_('Wallet Balance')}}</th>
+                <th scope="col" class="text-success">{{_('Cold Wallet Balance')}}</th>
+                <th scope="col" class="text-success">{{_('Total Balance')}}</th>
+                <th scope="col" class="text-success">{{_('USD*')}}</th>
+                <th scope="col" class="text-success">{{_('Updated At')}}</th>
                 <th scope="col" class="text-success"></th>
             </tr>
         </thead>
@@ -114,7 +114,7 @@
 </form>
 
 <header class="pb-3 mt-4">
-    <span class="fs-4">Wallet Details</span>
+    <span class="fs-4">{{_('Wallet Details')}}</span>
 </header>
 <nav class="navbar navbar-expand-lg navbar-dark" style="padding-bottom: 0px;">
     <div class="h-100 p-2 text-white">
@@ -138,8 +138,8 @@
 </nav>
 {% else %}
 <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
-    <h6>No wallet status received.  Perhaps just starting?  Please allow at least 10 minutes to update.</h6>
-    <h6>You can also try running 'chia wallet show' on your fullnode's in-container shell to verify.</h6>
+    <h6>{{_('No wallet status received.  Perhaps just starting?  Please allow at least 10 minutes to update.')}}</h6>
+    <h6>{{_('You can also try running "chia wallet show" on your fullnode\'s in-container shell to verify.')}}</h6>
 </div>
 {% endif %}
 

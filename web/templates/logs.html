@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='3rd_party/icons/bootstrap-icons.css') }}">
     <script src="{{ url_for('static', filename='3rd_party/jquery.min.js') }}"></script>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <title>Machinaris Logs</title>
+    <title>{{_('Machinaris Logs')}}</title>
     <style>
         body {
             background-color: #15171a;
@@ -59,7 +59,7 @@
     <div class="position-relative">
         <div class="position-absolute top-0 end-0">
             <span style="padding:20px"><input id="autoscroll" name="autoscroll" type="checkbox" checked="checked" />
-                Autoscroll</span>
+                {{_('Autoscroll')}}</span>
         </div>
     </div>
 

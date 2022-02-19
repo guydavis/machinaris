@@ -11,7 +11,7 @@
     </div>
 
 <header class="pb-3 mb-4 border-bottom">
-    <span class="fs-4">Alerts: Recent Notifications</span>
+    <span class="fs-4">{{_('Alerts: Recent Notifications')}}</span>
 </header>
 
 <div>
@@ -69,12 +69,12 @@
                         <th scope="col" class="text-success text-center">
                             <input type="checkbox" name="unique_id_master" onclick="checkPage(this)"/>
                         </th>
-                        <th scope="col" class="text-success">Worker</th>
-                        <th scope="col" class="text-success">Blockchain</th>
-                        <th scope="col" class="text-success">Service</th>
-                        <th scope="col" class="text-success">Notification</th>
-                        <th scope="col" class="text-success">Recorded At</th>
-                        <th scope="col" class="text-success">Priority</th>
+                        <th scope="col" class="text-success">{{_('Worker')}}</th>
+                        <th scope="col" class="text-success">{{_('Blockchain')}}</th>
+                        <th scope="col" class="text-success">{{_('Service')}}</th>
+                        <th scope="col" class="text-success">{{_('Notification')}}</th>
+                        <th scope="col" class="text-success">{{_('Recorded At')}}</th>
+                        <th scope="col" class="text-success">{{_('Priority')}}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -96,14 +96,14 @@
     </form>
     <fieldset>
         <button form="alerts-form" type="submit" name="action" value="remove" class="btn btn-outline-success"
-            id="btnRemove">Remove Selected</button>
+            id="btnRemove">{{_('Remove Selected')}}</button>
         <button form="alerts-form" type="submit" name="action" value="purge" class="btn btn-outline-success"
-            id="btnPurge">Remove All</button>
+            id="btnPurge">{{_('Remove All')}}</button>
     </fieldset>
     {% else %}
     <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
-        <h6>No notifications from Chiadog yet... so check back soon.</h6>
-        <h6>Expect at least a summary notification once daily as long as running above.</h6>
+        <h6>{{_('No notifications from Chiadog yet... so check back soon.')}}</h6>
+        <h6>{{_('Expect at least a summary notification once daily as long as running above.')}}</h6>
     </div>
     {% endif %}
 
@@ -117,7 +117,7 @@
             var width = 900;
             var top = (screen.height - height) / 2;
             var left = (screen.width - width) / 2;
-            window.open("{{ url_for('logs') }}?log=alerts&hostname=" + hostname + "&blockchain=" + blockchain, 'Chiadog Log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+            window.open("{{ url_for('logs') }}?log=alerts&hostname=" + hostname + "&blockchain=" + blockchain, '{{_('Chiadog Log on ')}}' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
         }
         function MonitoringAction(hostname, service, action, status) {
             $("#" + hostname + "_btn").prop("disabled", true);
@@ -143,21 +143,21 @@
             $("#btnStart").click(function () {
                 $(this).prop("disabled", true);
                 $(this).html(
-                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Starting...`
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Starting...')}}`
                 );
                 $("#chiadog-form").submit();
             });
             $("#btnStop").click(function () {
                 $(this).prop("disabled", true);
                 $(this).html(
-                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Stopping...`
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Stopping...')}}`
                 );
                 $("#chiadog-form").submit();
             });
             $("#btnRemove").click(function () {
                 $('#btnRemove').prop("disabled", true);
                 $('#btnRemove').html(
-                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Removing...`
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Removing...')}}`
                 );
                 $('#alerts-form').append('<input type="hidden" id="action" name="action" value="remove" />');
                 $("#alerts-form").submit();
@@ -165,7 +165,7 @@
             $("#btnPurge").click(function () {
                 $('#btnPurge').prop("disabled", true);
                 $('#btnPurge').html(
-                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Purging...`
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Purging...')}}`
                 );
                 $('#alerts-form').append('<input type="hidden" id="action" name="action" value="purge" />');
                 $("#alerts-form").submit();

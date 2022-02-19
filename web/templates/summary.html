@@ -24,18 +24,18 @@
     <table id="data" class="table table-dark">
         <thead>
             <tr>
-                <th scope="col" class="text-success">Blockchain</th>
-                <th scope="col" class="text-success">Status</th>
-                <th scope="col" class="text-success">Height</th>
-                <th scope="col" class="text-success">Plots</th>
-                <th scope="col" class="text-success">Workers</th>
-                <th scope="col" class="text-success">Max Resp.</th>
-                <th scope="col" class="text-success">Partials</th>
-                <th scope="col" class="text-success">ETW</th>
+                <th scope="col" class="text-success">{{_('Blockchain')}}</th>
+                <th scope="col" class="text-success">{{_('Status')}}</th>
+                <th scope="col" class="text-success">{{_('Height')}}</th>
+                <th scope="col" class="text-success">{{_('Plots')}}</th>
+                <th scope="col" class="text-success">{{_('Workers')}}</th>
+                <th scope="col" class="text-success">{{_('Max Resp.')}}</th>
+                <th scope="col" class="text-success">{{_('Partials')}}</th>
+                <th scope="col" class="text-success">{{_('ETW')}}</th>
                 <!--th scope="col" class="text-success">Farmed</th-->
-                <th scope="col" class="text-success">Wallet</th>
-                <th scope="col" class="text-success">EDV</th>
-                <th scope="col" class="text-success">EDV US</th>
+                <th scope="col" class="text-success">{{_('Wallet')}}</th>
+                <th scope="col" class="text-success">{{_('EDV')}}</th>
+                <th scope="col" class="text-success">{{_('EDV US')}}</th>
                 <!--th scope="col" class="text-success">Drives</th-->
                 <!--th scope="col" class="text-success">Effort</th-->
             </tr>
@@ -72,8 +72,8 @@
 
 {% else %}
 <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
-    <h6>No blockchains found from any farmers. Just starting up?</h6>
-    <h6>Please allow at least 15 minutes for blockchains to get started.</h6>
+    <h6>{{_('No blockchains found from any farmers. Just starting up?')}}</h6>
+    <h6>{{_('Please allow at least 15 minutes for blockchains to get started.')}}</h6>
 </div>
 {% endif %}
 
