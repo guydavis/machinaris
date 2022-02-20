@@ -16,6 +16,7 @@ import yaml
 
 from sqlalchemy import or_
 from flask import Flask, jsonify, abort, request, flash
+from flask_babel import _, lazy_gettext as _l
 
 from web import app, db, utils
 from common.config import globals
@@ -102,18 +103,18 @@ def generate_warnings(worker):
     warnings = []
     # Check if worker is responding to pings
     if worker.connection_status() != "Responding":
-        warnings.append(WorkerWarning("Worker not responding to pings.",  
-            "Please check the worker container and restart if necessary.", 'error'))
+        warnings.append(WorkerWarning(_("Worker not responding to pings."),  
+            _("Please check the worker container and restart if necessary."), 'error'))
     elif check_worker_time_near_to_controller(worker):
-        warnings.append(WorkerWarning("Worker time is offset from controller.",  
-            "Please ensure worker and controller share same timezone.", 'warning'))
+        warnings.append(WorkerWarning(_("Worker time is offset from controller."),  
+            _("Please ensure worker and controller share same timezone."), 'warning'))
     worker_version = worker.machinaris_version()
     controller_version = globals.load_machinaris_version()
     if worker_version != controller_version:
         app.logger.info('Worker {0}:{1} for {2} has version {3}, but controller version is {4}.'.format(
             worker.hostname, worker.port, worker.blockchain, worker_version, controller_version))
-        warnings.append(WorkerWarning("Machinaris version does not match controller.",  
-            "Please use a consistent Machinaris version to avoid issues.", 'warning'))
+        warnings.append(WorkerWarning(_("Machinaris version does not match controller."),  
+            _("Please use a consistent Machinaris version to avoid issues."), 'warning'))
 
     # TODO - Warning for fullnode without a working key
     # TODO - Warning for farmer too slow on pool partials: "Error in pooling: (2, 'The partial is too late."

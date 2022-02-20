@@ -46,13 +46,16 @@
                 <td>{{summary.blockchain}}</td>
                 <td>
                     {% if summary.status == 'Offline' %}
-                      <i class="bi-dash-circle text-danger"></i>
+                      <i class="bi-dash-circle text-danger"></i> {{_('Offline')}}
                     {% elif summary.status.lower().startswith('synced') %}
-                        <i class="bi-check-circle text-success"></i>
+                        <i class="bi-check-circle text-success"></i> {{_('Synced')}}
+                    {% elif summary.status.lower().startswith('syncing') %}
+                        <i class="bi-check-circle text-warning"></i> {{_('Syncing')}}
+                    {% elif summary.status.lower().startswith('not synced') %}
+                        <i class="bi-check-circle text-danger"></i> {{_('Not Synced')}}
                     {% else %}
-                      <i class="bi-exclamation-triangle text-warning"></i>
+                      <i class="bi-exclamation-triangle text-warning"></i> {{summary.status}}
                     {% endif %} &nbsp;
-                    {{summary.status}}
                 </td>
                 <td>{{summary.height}}</td>
                 <td>{{summary.plots}}</td>

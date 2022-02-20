@@ -11,7 +11,7 @@
 </div>
 
 <header class="pb-3 mb-4 border-bottom">
-  <span class="fs-4">Workers</span>
+  <span class="fs-4">{{_('Workers')}}</span>
 </header>
 
 <div>
@@ -39,14 +39,14 @@
             <th scope="col" class="text-success text-center">
               <input type="checkbox" name="unique_id_master" onclick="checkPage(this)"/>
             </th>
-            <th scope="col" class="text-success">Hostname</th>
-            <th scope="col" class="text-success">Blockchain</th>
-            <th scope="col" class="text-success">Mode</th>
-            <th scope="col" class="text-success">Last Status Received</th>
-            <th scope="col" class="text-success">Last Ping</th>
-            <th scope="col" class="text-success">Last Successful Ping</th>
-            <th scope="col" class="text-success">Version</th>
-            <th scope="col" class="text-success">Logs</th>
+            <th scope="col" class="text-success">{{_('Hostname')}}</th>
+            <th scope="col" class="text-success">{{_('Blockchain')}}</th>
+            <th scope="col" class="text-success">{{_('Mode')}}</th>
+            <th scope="col" class="text-success">{{_('Last Status Received')}}</th>
+            <th scope="col" class="text-success">{{_('Last Ping')}}</th>
+            <th scope="col" class="text-success">{{_('Last Successful Ping')}}</th>
+            <th scope="col" class="text-success">{{_('Version')}}</th>
+            <th scope="col" class="text-success">{{_('Logs')}}</th>
           </tr>
         </thead>
         <tbody>
@@ -61,13 +61,19 @@
               title="Time on Worker:<br/> {{worker.time_on_worker}}">{{worker.updated_at | datetimefilter}}</td>
             <td>
               {% if worker.latest_ping_result == 'Responding' %}
-                <i class="bi-check-circle text-success"></i>
-              {% elif worker.connection_status() == 'Connection Refused' or worker.connection_status() == 'Connection Timeout' %}
-                <i class="bi-dash-circle text-danger"></i>
+                <i class="bi-check-circle text-success"></i> {{_('Responding')}}
+              {% elif worker.connection_status() == 'Connection Refused' %}
+                <i class="bi-dash-circle text-danger"></i> {{_('Connection Refused')}}
+              {% elif worker.connection_status() == 'Connection Timeout' %}
+                <i class="bi-dash-circle text-danger"></i> {{_('Connection Timeout')}}
+              {% elif worker.connection_status() == 'Connection Error' %}
+                <i class="bi-dash-circle text-danger"></i> {{_('Connection Error')}}
+              % elif worker.connection_status() == 'offline' %}
+                <i class="bi-dash-circle text-danger"></i> {{_('Offline')}}
               {% else %}
                 <i class="bi-exclamation-triangle text-warning" title="{{ worker.connection_status }}"></i>
+                {{_(worker.latest_ping_result)}}
               {% endif %}
-              {{worker.latest_ping_result}}
             </td>
             <td>{{worker.ping_success_at | datetimefilter}}</td>
             <td><a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
@@ -85,19 +91,21 @@
 
       <fieldset>
             <button form="workers-form" type="submit" name="action" value="prune" class="btn btn-outline-success"
-              id="btnPrune" title="Only deletes status of selected worker(s).">Prune Selected</button>
+              id="btnPrune" title="Only deletes status of selected worker(s).">{{_('Prune Selected')}}</button>
             <button type="button" class="btn btn-outline-success"
-              onclick="WorkerLaunch(); return false">New Worker</button>
+              onclick="WorkerLaunch(); return false">{{_('New Worker')}}</button>
       </fieldset>
   </form>
 
   {% else %}
 
   <div class="text-center" style="padding-top:100 px; padding-bottom: 0px">
-    <h6>No Machinaris workers have reported status successfully.</h6>
-    <h6>Please check each expected worker's log files.</h6>
-    <h6>For more, see the Machinaris <a href="https://github.com/guydavis/machinaris/wiki/Workers"
-        target="_blank">wiki.</a></h6>
+    <h6>{{_('No Machinaris workers have reported status successfully.')}}</h6>
+    <h6>{{_('Please check each expected worker\'s log files.')}}</h6>
+    <h6>{{_('For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s.', 
+        wiki_link_open='<a href="https://github.com/guydavis/machinaris/wiki/Workers" target="_blank">',
+        wiki_link_close='</a>')}}
+    </h6>
   </div>
   <br />
   <br />

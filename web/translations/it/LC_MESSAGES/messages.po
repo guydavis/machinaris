@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-02-19 16:49-0700\n"
+"POT-Creation-Date: 2022-02-20 13:55-0700\n"
 "PO-Revision-Date: 2022-02-15 10:14-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: it\n"
@@ -70,20 +70,45 @@ msgstr ""
 msgid "Unsupported log type"
 msgstr ""
 
+#: actions/worker.py:106
+msgid "Worker not responding to pings."
+msgstr ""
+
+#: actions/worker.py:107
+msgid "Please check the worker container and restart if necessary."
+msgstr ""
+
+#: actions/worker.py:109
+msgid "Worker time is offset from controller."
+msgstr ""
+
+#: actions/worker.py:110
+msgid "Please ensure worker and controller share same timezone."
+msgstr ""
+
+#: actions/worker.py:116
+msgid "Machinaris version does not match controller."
+msgstr ""
+
+#: actions/worker.py:117
+msgid "Please use a consistent Machinaris version to avoid issues."
+msgstr ""
+
 #: templates/alerts.html:14
 msgid "Alerts: Recent Notifications"
 msgstr ""
 
 #: templates/alerts.html:72 templates/settings/alerts.html:36
 #: templates/settings/farming.html:37 templates/settings/plotting.html:37
-#: templates/settings/tools.html:36
+#: templates/settings/tools.html:36 templates/worker.html:14
 msgid "Worker"
 msgstr ""
 
 #: templates/alerts.html:73 templates/blockchains.html:31
 #: templates/settings/alerts.html:45 templates/settings/farming.html:46
 #: templates/settings/plotting.html:46 templates/settings/tools.html:45
-#: templates/summary.html:27 templates/wallet.html:77
+#: templates/summary.html:27 templates/wallet.html:77 templates/worker.html:47
+#: templates/workers.html:43
 msgid "Blockchain"
 msgstr ""
 
@@ -188,6 +213,7 @@ msgstr ""
 #: templates/base.html:85 templates/farming/plots.html:69
 #: templates/farming/workers.html:28 templates/plotting/jobs.html:94
 #: templates/plotting/workers.html:96 templates/summary.html:31
+#: templates/workers.html:14
 msgid "Workers"
 msgstr ""
 
@@ -270,60 +296,6 @@ msgstr ""
 
 #: templates/blockchains.html:88
 msgid "Try running \"chia show --state\" on your farmers to verify."
-msgstr ""
-
-#: templates/connections.html:70
-msgid "Type"
-msgstr ""
-
-#: templates/connections.html:71
-msgid "IP Address"
-msgstr ""
-
-#: templates/connections.html:72
-msgid "Ports"
-msgstr ""
-
-#: templates/connections.html:73
-msgid "Node ID"
-msgstr ""
-
-#: templates/connections.html:74
-msgid "SB Height"
-msgstr ""
-
-#: templates/connections.html:75
-msgid "Last Connect"
-msgstr ""
-
-#: templates/connections.html:76
-msgid "MiB Up"
-msgstr ""
-
-#: templates/connections.html:77
-msgid "MiB Down"
-msgstr ""
-
-#: templates/connections.html:109
-msgid "Disconnect Selected"
-msgstr ""
-
-#: templates/connections.html:115
-msgid "Check Port Forwarding"
-msgstr ""
-
-#: templates/connections.html:131
-msgid "Add New Connection"
-msgstr ""
-
-#: templates/connections.html:143
-msgid "No connections found from any farmers yet. Perhaps just starting?"
-msgstr ""
-
-#: templates/connections.html:144
-msgid ""
-"After a while, try running \"chia show --connections\" on your farmers to"
-" verify."
 msgstr ""
 
 #: templates/controller.html:23
@@ -529,11 +501,27 @@ msgstr ""
 msgid "EDV US"
 msgstr ""
 
-#: templates/summary.html:75
+#: templates/summary.html:49 templates/worker.html:78 templates/workers.html:72
+msgid "Offline"
+msgstr ""
+
+#: templates/summary.html:51
+msgid "Synced"
+msgstr ""
+
+#: templates/summary.html:53
+msgid "Syncing"
+msgstr ""
+
+#: templates/summary.html:55
+msgid "Not Synced"
+msgstr ""
+
+#: templates/summary.html:78
 msgid "No blockchains found from any farmers. Just starting up?"
 msgstr ""
 
-#: templates/summary.html:76
+#: templates/summary.html:79
 msgid "Please allow at least 15 minutes for blockchains to get started."
 msgstr ""
 
@@ -592,6 +580,74 @@ msgstr ""
 msgid ""
 "You can also try running \"chia wallet show\" on your fullnode's in-"
 "container shell to verify."
+msgstr ""
+
+#: templates/worker.html:35
+msgid "Details"
+msgstr ""
+
+#: templates/worker.html:39
+msgid "IP Address"
+msgstr ""
+
+#: templates/worker.html:43 templates/workers.html:42
+msgid "Hostname"
+msgstr ""
+
+#: templates/worker.html:51
+msgid "Port"
+msgstr ""
+
+#: templates/worker.html:55
+msgid "System Type"
+msgstr ""
+
+#: templates/worker.html:59
+msgid "Last Status Received At"
+msgstr ""
+
+#: templates/worker.html:63
+msgid "Local Time on Worker"
+msgstr ""
+
+#: templates/worker.html:67
+msgid "Last Ping to Worker"
+msgstr ""
+
+#: templates/worker.html:70 templates/workers.html:64
+msgid "Responding"
+msgstr ""
+
+#: templates/worker.html:72 templates/workers.html:66
+msgid "Connection Refused"
+msgstr ""
+
+#: templates/worker.html:74 templates/workers.html:68
+msgid "Connection Timeout"
+msgstr ""
+
+#: templates/worker.html:76 templates/workers.html:70
+msgid "Connection Error"
+msgstr ""
+
+#: templates/worker.html:86
+msgid "Last Successful Ping to Worker"
+msgstr ""
+
+#: templates/worker.html:90 templates/workers.html:48
+msgid "Version"
+msgstr ""
+
+#: templates/worker.html:98
+msgid "Farmr ID"
+msgstr ""
+
+#: templates/worker.html:106
+msgid "Recent Warnings"
+msgstr ""
+
+#: templates/worker.html:121
+msgid "Yay! No issues currently."
 msgstr ""
 
 #: templates/worker_launch.html:50 templates/worker_launch.html:609
@@ -768,6 +824,47 @@ msgstr ""
 
 #: templates/worker_launch.html:667
 msgid "Docker Compose"
+msgstr ""
+
+#: templates/workers.html:44
+msgid "Mode"
+msgstr ""
+
+#: templates/workers.html:45
+msgid "Last Status Received"
+msgstr ""
+
+#: templates/workers.html:46
+msgid "Last Ping"
+msgstr ""
+
+#: templates/workers.html:47
+msgid "Last Successful Ping"
+msgstr ""
+
+#: templates/workers.html:49
+msgid "Logs"
+msgstr ""
+
+#: templates/workers.html:94
+msgid "Prune Selected"
+msgstr ""
+
+#: templates/workers.html:96
+msgid "New Worker"
+msgstr ""
+
+#: templates/workers.html:103
+msgid "No Machinaris workers have reported status successfully."
+msgstr ""
+
+#: templates/workers.html:104
+msgid "Please check each expected worker's log files."
+msgstr ""
+
+#: templates/workers.html:105
+#, python-format
+msgid "For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
 msgstr ""
 
 #: templates/farming/plots.html:9

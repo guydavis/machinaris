@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-02-19 16:49-0700\n"
+"POT-Creation-Date: 2022-02-20 13:55-0700\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: fr\n"
@@ -80,20 +80,49 @@ msgstr ""
 msgid "Unsupported log type"
 msgstr "Type de journal non pris en charge"
 
+#: actions/worker.py:106
+msgid "Worker not responding to pings."
+msgstr "Le worker ne répond pas aux pings."
+
+#: actions/worker.py:107
+msgid "Please check the worker container and restart if necessary."
+msgstr "Veuillez vérifier le conteneur de worker et redémarrer si nécessaire."
+
+#: actions/worker.py:109
+msgid "Worker time is offset from controller."
+msgstr "Le temps du worker est décalé par rapport au contrôleur."
+
+#: actions/worker.py:110
+msgid "Please ensure worker and controller share same timezone."
+msgstr ""
+"Veuillez vous assurer que le worker et le contrôleur partagent le même "
+"fuseau horaire."
+
+#: actions/worker.py:116
+msgid "Machinaris version does not match controller."
+msgstr "La version de Machinaris ne correspond pas au contrôleur."
+
+#: actions/worker.py:117
+msgid "Please use a consistent Machinaris version to avoid issues."
+msgstr ""
+"Veuillez utiliser une version cohérente de Machinaris pour éviter les "
+"problèmes."
+
 #: templates/alerts.html:14
 msgid "Alerts: Recent Notifications"
 msgstr "Alertes: notifications récentes"
 
 #: templates/alerts.html:72 templates/settings/alerts.html:36
 #: templates/settings/farming.html:37 templates/settings/plotting.html:37
-#: templates/settings/tools.html:36
+#: templates/settings/tools.html:36 templates/worker.html:14
 msgid "Worker"
 msgstr "Worker"
 
 #: templates/alerts.html:73 templates/blockchains.html:31
 #: templates/settings/alerts.html:45 templates/settings/farming.html:46
 #: templates/settings/plotting.html:46 templates/settings/tools.html:45
-#: templates/summary.html:27 templates/wallet.html:77
+#: templates/summary.html:27 templates/wallet.html:77 templates/worker.html:47
+#: templates/workers.html:43
 msgid "Blockchain"
 msgstr "Blockchain"
 
@@ -146,12 +175,10 @@ msgid "Stopping..."
 msgstr "Arrêt..."
 
 #: templates/alerts.html:160
-#, fuzzy
 msgid "Removing..."
 msgstr "Reprendre..."
 
 #: templates/alerts.html:168
-#, fuzzy
 msgid "Purging..."
 msgstr "Arrêt..."
 
@@ -184,7 +211,7 @@ msgstr "Clés"
 
 #: templates/base.html:62
 msgid "Blockchains"
-msgstr ""
+msgstr "Blockchains"
 
 #: templates/base.html:69
 msgid "Connections"
@@ -202,6 +229,7 @@ msgstr "Pools"
 #: templates/base.html:85 templates/farming/plots.html:69
 #: templates/farming/workers.html:28 templates/plotting/jobs.html:94
 #: templates/plotting/workers.html:96 templates/summary.html:31
+#: templates/workers.html:14
 msgid "Workers"
 msgstr "Workers"
 
@@ -286,63 +314,6 @@ msgstr "Aucune blockchain trouvée chez les farmers. Pas ajouté?"
 msgid "Try running \"chia show --state\" on your farmers to verify."
 msgstr "Essayez d'exécuter \"chia show --state\" sur vos farmers pour vérifier."
 
-#: templates/connections.html:70
-msgid "Type"
-msgstr "Type"
-
-#: templates/connections.html:71
-msgid "IP Address"
-msgstr "Adresse IP"
-
-#: templates/connections.html:72
-#, fuzzy
-msgid "Ports"
-msgstr "Ports"
-
-#: templates/connections.html:73
-msgid "Node ID"
-msgstr "Node ID"
-
-#: templates/connections.html:74
-msgid "SB Height"
-msgstr "Hauteur SB"
-
-#: templates/connections.html:75
-msgid "Last Connect"
-msgstr "Dernière connexion"
-
-#: templates/connections.html:76
-msgid "MiB Up"
-msgstr "MiB Up"
-
-#: templates/connections.html:77
-msgid "MiB Down"
-msgstr "MiB Down"
-
-#: templates/connections.html:109
-msgid "Disconnect Selected"
-msgstr "Déconnecter la sélection"
-
-#: templates/connections.html:115
-msgid "Check Port Forwarding"
-msgstr "Vérifier la redirection de port"
-
-#: templates/connections.html:131
-msgid "Add New Connection"
-msgstr "Ajouter une nouvelle connexion"
-
-#: templates/connections.html:143
-msgid "No connections found from any farmers yet. Perhaps just starting?"
-msgstr "Aucune connexion trouvée chez les farmers. Pas ajouté?"
-
-#: templates/connections.html:144
-msgid ""
-"After a while, try running \"chia show --connections\" on your farmers to"
-" verify."
-msgstr ""
-"Essayez d'exécuter \"chia show --connections\" sur vos farmers pour "
-"vérifier."
-
 #: templates/controller.html:23
 msgid "Machinaris Worker"
 msgstr "Machinaris Worker"
@@ -392,25 +363,22 @@ msgid "Next"
 msgstr "Suivant"
 
 #: templates/logs.html:11
-#, fuzzy
 msgid "Machinaris Logs"
-msgstr "Machinaris"
+msgstr "Journaux de Machinaris"
 
 #: templates/logs.html:62
 msgid "Autoscroll"
 msgstr "Défilement automatique"
 
 #: templates/pools.html:61
-#, fuzzy
 msgid "Pool:"
-msgstr "Outils"
+msgstr "Pool:"
 
 #: templates/pools.html:66
 msgid "SELF_POOL"
 msgstr "SELF_POOL"
 
 #: templates/pools.html:71
-#, fuzzy
 msgid "Status:"
 msgstr "Statut:"
 
@@ -571,11 +539,27 @@ msgstr "EDV"
 msgid "EDV US"
 msgstr "EDV US"
 
-#: templates/summary.html:75
+#: templates/summary.html:49 templates/worker.html:78 templates/workers.html:72
+msgid "Offline"
+msgstr "Hors ligne"
+
+#: templates/summary.html:51
+msgid "Synced"
+msgstr "Synchronisé"
+
+#: templates/summary.html:53
+msgid "Syncing"
+msgstr "Synchronisation"
+
+#: templates/summary.html:55
+msgid "Not Synced"
+msgstr "Non synchronisé"
+
+#: templates/summary.html:78
 msgid "No blockchains found from any farmers. Just starting up?"
 msgstr "Aucune blockchain trouvée chez les farmers. Pas ajouté?"
 
-#: templates/summary.html:76
+#: templates/summary.html:79
 msgid "Please allow at least 15 minutes for blockchains to get started."
 msgstr "Veuillez prévoir au moins 15 minutes pour que les blockchains commencent."
 
@@ -638,6 +622,74 @@ msgid ""
 "container shell to verify."
 msgstr "Essayez d'exécuter \"chia wallet show\" sur vos farmers pour vérifier."
 
+#: templates/worker.html:35
+msgid "Details"
+msgstr "Des détails"
+
+#: templates/worker.html:39
+msgid "IP Address"
+msgstr "Adresse IP"
+
+#: templates/worker.html:43 templates/workers.html:42
+msgid "Hostname"
+msgstr "Nom d'hôte"
+
+#: templates/worker.html:51
+msgid "Port"
+msgstr "Port"
+
+#: templates/worker.html:55
+msgid "System Type"
+msgstr "System Type"
+
+#: templates/worker.html:59
+msgid "Last Status Received At"
+msgstr "Dernier statut reçu à"
+
+#: templates/worker.html:63
+msgid "Local Time on Worker"
+msgstr "Heure locale sur le worker"
+
+#: templates/worker.html:67
+msgid "Last Ping to Worker"
+msgstr "Dernier ping au worker"
+
+#: templates/worker.html:70 templates/workers.html:64
+msgid "Responding"
+msgstr "Répondre"
+
+#: templates/worker.html:72 templates/workers.html:66
+msgid "Connection Refused"
+msgstr "Connexion rejetée"
+
+#: templates/worker.html:74 templates/workers.html:68
+msgid "Connection Timeout"
+msgstr "Délai de connection dépassé"
+
+#: templates/worker.html:76 templates/workers.html:70
+msgid "Connection Error"
+msgstr "Erreur de connexion"
+
+#: templates/worker.html:86
+msgid "Last Successful Ping to Worker"
+msgstr "Dernier ping réussi vers le worker"
+
+#: templates/worker.html:90 templates/workers.html:48
+msgid "Version"
+msgstr "Version"
+
+#: templates/worker.html:98
+msgid "Farmr ID"
+msgstr "Farmr ID"
+
+#: templates/worker.html:106
+msgid "Recent Warnings"
+msgstr "Avertissements récents"
+
+#: templates/worker.html:121
+msgid "Yay! No issues currently."
+msgstr "Yay! Aucun problème actuellement."
+
 #: templates/worker_launch.html:50 templates/worker_launch.html:609
 #: templates/worker_launch.html:630
 msgid "Host Path"
@@ -660,9 +712,8 @@ msgstr "Plots finale"
 
 #: templates/worker_launch.html:64 templates/worker_launch.html:623
 #: templates/worker_launch.html:644
-#, fuzzy
 msgid "Plotting Temp"
-msgstr "Plotting"
+msgstr "Plotting Temporaire"
 
 #: templates/worker_launch.html:65 templates/worker_launch.html:624
 #: templates/worker_launch.html:645
@@ -720,7 +771,6 @@ msgstr ""
 "contrôleur se connecter à pour les commandes."
 
 #: templates/worker_launch.html:380
-#, fuzzy
 msgid "Machinaris Worker - Launch Config"
 msgstr "Machinaris Worker - Lancer la configuration"
 
@@ -829,6 +879,49 @@ msgstr "Copie"
 msgid "Docker Compose"
 msgstr "Docker Compose"
 
+#: templates/workers.html:44
+msgid "Mode"
+msgstr "Mode"
+
+#: templates/workers.html:45
+msgid "Last Status Received"
+msgstr "Dernier statut reçu à"
+
+#: templates/workers.html:46
+msgid "Last Ping"
+msgstr "Dernier ping"
+
+#: templates/workers.html:47
+msgid "Last Successful Ping"
+msgstr "Dernier ping réussi"
+
+#: templates/workers.html:49
+msgid "Logs"
+msgstr "Journaux"
+
+#: templates/workers.html:94
+msgid "Prune Selected"
+msgstr "Taille sélectionnée"
+
+#: templates/workers.html:96
+msgid "New Worker"
+msgstr "Créer un worker"
+
+#: templates/workers.html:103
+msgid "No Machinaris workers have reported status successfully."
+msgstr "Aucun workers de Machinaris n'a signalé son statut avec succès."
+
+#: templates/workers.html:104
+msgid "Please check each expected worker's log files."
+msgstr "Veuillez vérifier les fichiers journaux de chaque worker attendu."
+
+#: templates/workers.html:105
+#, python-format
+msgid "For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
+msgstr ""
+"Pour en savoir plus, consultez le "
+"%(wiki_link_open)swiki%(wiki_link_close)s Machinaris."
+
 #: templates/farming/plots.html:9
 msgid "Plotting Analysis"
 msgstr "Analyse de plotting"
@@ -918,7 +1011,6 @@ msgid "Kill Selected"
 msgstr "Tuer la sélection"
 
 #: templates/plotting/jobs.html:27 templates/plotting/jobs.html:123
-#, fuzzy
 msgid "Start Plotting"
 msgstr "Commence Plotting"
 
@@ -937,7 +1029,6 @@ msgid "Start"
 msgstr "Commence"
 
 #: templates/plotting/jobs.html:45 templates/plotting/jobs.html:120
-#, fuzzy
 msgid "Stop Plotting"
 msgstr "Arrête Plotting"
 
@@ -955,7 +1046,6 @@ msgstr "Arrête"
 
 #: templates/plotting/jobs.html:63 templates/plotting/workers.html:45
 #: templates/plotting/workers.html:63
-#, fuzzy
 msgid "Worker Offline"
 msgstr "Worker est hors ligne."
 
