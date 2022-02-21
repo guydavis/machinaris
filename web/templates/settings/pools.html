@@ -81,7 +81,9 @@
                     <form method="POST" id="{{blockchain}}-pooling-form">
                     <div class="p-1 mb-4 bg-light border rounded-3">
                         <div class="container m-4">
+                            {% autoescape false %}
                             <p>{{_('Join a pool and get consistent farming rewards. The average returns are the same, %(break)sbut it is much less volatile. You can easily switch pools without having to re-plot.', break='<br/>')}}</p>
+                            {% endautoescape %}
                             {% if pool_configs[blockchain].warnings|length > 0 %}
                             <p>{{_('ERROR: Unable to join a pool because:')}}</p>
                             <ul>

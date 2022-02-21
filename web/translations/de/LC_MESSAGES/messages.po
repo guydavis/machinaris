@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-02-20 13:55-0700\n"
+"POT-Creation-Date: 2022-02-20 17:15-0700\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: de\n"
@@ -299,6 +299,60 @@ msgstr ""
 msgid "Try running \"chia show --state\" on your farmers to verify."
 msgstr ""
 
+#: templates/connections.html:70
+msgid "Type"
+msgstr ""
+
+#: templates/connections.html:71 templates/worker.html:39
+msgid "IP Address"
+msgstr ""
+
+#: templates/connections.html:72
+msgid "Ports"
+msgstr ""
+
+#: templates/connections.html:73
+msgid "Node ID"
+msgstr ""
+
+#: templates/connections.html:74
+msgid "SB Height"
+msgstr ""
+
+#: templates/connections.html:75
+msgid "Last Connect"
+msgstr ""
+
+#: templates/connections.html:76
+msgid "MiB Up"
+msgstr ""
+
+#: templates/connections.html:77
+msgid "MiB Down"
+msgstr ""
+
+#: templates/connections.html:109
+msgid "Disconnect Selected"
+msgstr ""
+
+#: templates/connections.html:115
+msgid "Check Port Forwarding"
+msgstr ""
+
+#: templates/connections.html:131
+msgid "Add New Connection"
+msgstr ""
+
+#: templates/connections.html:143
+msgid "No connections found from any farmers yet. Perhaps just starting?"
+msgstr ""
+
+#: templates/connections.html:144
+msgid ""
+"After a while, try running \"chia show --connections\" on your farmers to"
+" verify."
+msgstr ""
+
 #: templates/controller.html:23
 #, fuzzy
 msgid "Machinaris Worker"
@@ -346,6 +400,37 @@ msgstr ""
 
 #: templates/farming/workers.html:84 templates/index.html:151
 msgid "Next"
+msgstr ""
+
+#: templates/keys.html:43
+msgid "NOTE: Machinaris will never display your private key here."
+msgstr ""
+
+#: templates/keys.html:44
+msgid ""
+"However, you may view it yourself by executing this from within the "
+"Docker container."
+msgstr ""
+
+#: templates/keys.html:54
+msgid "Best Practices"
+msgstr ""
+
+#: templates/keys.html:58
+#, python-format
+msgid ""
+"Machinaris uses an online wallet for farming. It is strongly recommended "
+"that you use a cold wallet for your payout instructions. Tutorial on the "
+"%(wiki_link_open)swiki%(wiki_link_close)s. Please add \"Setup a Cold "
+"Wallet\" to your To-Do list!"
+msgstr ""
+
+#: templates/keys.html:71
+msgid "No keys found from any farmers. Not added?"
+msgstr ""
+
+#: templates/keys.html:72
+msgid "Try running \"chia keys show\" on your farmers to verify."
 msgstr ""
 
 #: templates/logs.html:11
@@ -589,10 +674,6 @@ msgstr ""
 msgid "Details"
 msgstr ""
 
-#: templates/worker.html:39
-msgid "IP Address"
-msgstr ""
-
 #: templates/worker.html:43 templates/workers.html:42
 msgid "Hostname"
 msgstr ""
@@ -651,6 +732,14 @@ msgstr ""
 
 #: templates/worker.html:121
 msgid "Yay! No issues currently."
+msgstr ""
+
+#: templates/farming/workers.html:114 templates/worker.html:183
+msgid "Disk Space Used (TB)"
+msgstr ""
+
+#: templates/farming/workers.html:120 templates/worker.html:189
+msgid "Disk Space Free (TB)"
 msgstr ""
 
 #: templates/worker_launch.html:50 templates/worker_launch.html:609
@@ -1074,7 +1163,7 @@ msgid ""
 "anyway?"
 msgstr ""
 
-#: templates/settings/pools.html:84
+#: templates/settings/pools.html:85
 #, python-format
 msgid ""
 "Join a pool and get consistent farming rewards. The average returns are "
@@ -1082,57 +1171,57 @@ msgid ""
 "pools without having to re-plot."
 msgstr ""
 
-#: templates/settings/pools.html:86
+#: templates/settings/pools.html:88
 msgid "ERROR: Unable to join a pool because:"
 msgstr ""
 
-#: templates/settings/pools.html:109
+#: templates/settings/pools.html:111
 msgid "Self pool. When you win a block, you will earn rewards."
 msgstr ""
 
-#: templates/settings/pools.html:120
+#: templates/settings/pools.html:122
 msgid "Connected to pool:"
 msgstr ""
 
-#: templates/settings/pools.html:120
+#: templates/settings/pools.html:122
 msgid "Connect to pool:"
 msgstr ""
 
-#: templates/settings/pools.html:130
+#: templates/settings/pools.html:132
 msgid "Compare Pools"
 msgstr ""
 
-#: templates/settings/pools.html:133
+#: templates/settings/pools.html:135
 msgid "Get Mojos"
 msgstr ""
 
-#: templates/settings/pools.html:155
+#: templates/settings/pools.html:157
 msgid "Save Changes"
 msgstr ""
 
-#: templates/settings/pools.html:159
+#: templates/settings/pools.html:161
 msgid "View Log"
 msgstr ""
 
-#: templates/settings/pools.html:170
+#: templates/settings/pools.html:172
 msgid ""
 "No wallets found yet.  Perhaps this is a brand-new installation? If so, "
 "please wait for complete start-up."
 msgstr ""
 
-#: templates/settings/pools.html:171
+#: templates/settings/pools.html:173
 msgid "For more on Pooling, see the Machinaris"
 msgstr ""
 
-#: templates/settings/pools.html:171
+#: templates/settings/pools.html:173
 msgid "wiki"
 msgstr ""
 
-#: templates/settings/pools.html:183
+#: templates/settings/pools.html:185
 msgid "Saving..."
 msgstr ""
 
-#: templates/settings/pools.html:195
+#: templates/settings/pools.html:197
 msgid "PlotNFT Log on "
 msgstr ""
 

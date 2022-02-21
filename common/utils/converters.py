@@ -8,7 +8,7 @@ import os
 import re
 import traceback
 
-#from flask_babel import format_number
+from flask_babel import format_decimal
 
 BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/dbs/blockchain_prices_cache.json'
 
@@ -62,14 +62,19 @@ def convert_date_for_luxon(datestr):
     return "{0}-{1}-{2}T{3}".format(year, month, day, time)
 
 def round_balance(value):
-    if abs(value) < 10 and abs(value) >= 1:
-        return "%.1f"% round(value, 2)
-    elif value >= 1000:
-        return "{:,}".format(int(value))
-    elif value > 1:
-        return f"{value:n}"
-    return str(round(value, 4))
-    #return format_number(value)
+    # First round the coin balance
+    if value >= 1000:
+        value = round(value, 0)
+    elif value >= 100:
+        value = round(value, 1)
+    elif value >= 10:
+        value = round(value, 2)
+    elif value >= 1:
+        value = round(value, 3)
+    else:
+        value = round(value, 4)
+    # Then return the locale-specific format as str
+    return format_decimal(value)
 
 def to_usd(blockchain, coins):
     if os.path.exists(BLOCKCHAIN_PRICES_CACHE_FILE):

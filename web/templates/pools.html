@@ -79,9 +79,9 @@
                   <b>{{_('Launcher ID:')}}</b>
                   <span>
                     {% if pool.login_link %}
-                    <a target="_blank" class="text-white" href="{{ pool.login_link }}">{{ pool.launcher_id }}</a>
+                      <a target="_blank" class="text-white" href="{{ pool.login_link }}">{{ pool.launcher_id }}</a>
                     {% else %}
-                    {{ pool.launcher_id }}
+                      {{ pool.launcher_id }}
                     {% endif %}
                   </span>
                 </div>
