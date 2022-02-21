@@ -5,6 +5,11 @@ on:
     branches:
       - 'develop'
 
+env:
+  LANG: "en_US.UTF-8"
+  LANGUAGE: "en_US:en"
+  LC_ALL: "en_US.UTF-8"
+
 jobs:
   build:
     runs-on: ubuntu-latest

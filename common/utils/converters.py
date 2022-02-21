@@ -2,13 +2,13 @@
 # Common utility methods
 #
 
+import babel
+import flask_babel
 import json
 import math
 import os
 import re
 import traceback
-
-from flask_babel import format_decimal
 
 BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/dbs/blockchain_prices_cache.json'
 
@@ -63,18 +63,21 @@ def convert_date_for_luxon(datestr):
 
 def round_balance(value):
     # First round the coin balance
-    if value >= 1000:
+    if abs(value) >= 1000:
         value = round(value, 0)
-    elif value >= 100:
+    elif abs(value) >= 100:
         value = round(value, 1)
-    elif value >= 10:
+    elif abs(value) >= 10:
         value = round(value, 2)
-    elif value >= 1:
+    elif abs(value) >= 1:
         value = round(value, 3)
     else:
         value = round(value, 4)
     # Then return the locale-specific format as str
-    return format_decimal(value)
+    if flask_babel.get_locale(): # Regular web request
+        return flask_babel.format_decimal(value)  
+    else: # Workaround for inability to test flask-babel without a request
+        return babel.numbers.format_decimal(value)
 
 def to_usd(blockchain, coins):
     if os.path.exists(BLOCKCHAIN_PRICES_CACHE_FILE):
