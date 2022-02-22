@@ -2,11 +2,57 @@
 
 {% block content %}
 
-<div class="position-relative">
-    <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -8px;">
-      <a href="https://github.com/guydavis/machinaris/wiki/Summary" target="_blank">
-        <i class="fs-4 bi-question-circle"></i>
-      </a>
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+      {% else %}
+      <div class="alert alert-{{ category }}" role="alert">
+        {% endif %}
+        {{ message|safe }}
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+    </div>
+
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3 modal-sm">
+      <div class="modal-content bg-dark">
+        <div class="modal-header bg-dark">
+          <h5 class="modal-title" id="settingsModalLabel">{{_('Settings')}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-dark">
+          <form method="POST" id="settings-form">
+            <div class="mb-3">
+              <label for="local_currency" class="col-form-label">{{_('Local Currency:')}}</label>
+              <select type="text" class="form-control" id="local_currency_field" name="local_currency">
+                {% for rate in exchange_rates %}
+                  {% if exchange_rates[rate]['type'] == 'fiat' %}
+                    <option {% if local_currency == rate %} selected {% endif %}
+                        value="{{rate}}">{{exchange_rates[rate]['name']}} ({{exchange_rates[rate]['unit']}})</option>
+                    {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">{{_('Cancel')}}</button>
+          <button type="button" class="btn btn-outline-success" id="btnSave">{{_('Save')}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="position-relative">
+    <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -20px; margin-right: -8px;">
+      <a href="#" title="{{_('Settings')}}" data-bs-toggle="modal" data-bs-target="#settingsModal" target="_blank"><i class="fs-4 bi-gear"></i></a>
+      &nbsp;
+      <a href="https://github.com/guydavis/machinaris/wiki/Summary" target="_blank"><i class="fs-4 bi-question-circle"></i></a>
     </div>
   </div>
 
@@ -35,7 +81,7 @@
                 <!--th scope="col" class="text-success">Farmed</th-->
                 <th scope="col" class="text-success">{{_('Wallet')}}</th>
                 <th scope="col" class="text-success">{{_('EDV')}}</th>
-                <th scope="col" class="text-success">{{_('EDV US')}}</th>
+                <th scope="col" class="text-success">{{_('EDV')}} {{local_cur_sym}}</th>
                 <!--th scope="col" class="text-success">Drives</th-->
                 <!--th scope="col" class="text-success">Effort</th-->
             </tr>
@@ -66,7 +112,7 @@
                 <!--td>{{summary.farmed}}</td-->
                 <td>{{summary.wallet}}</td>
                 <td>{{summary.edv}}</td>
-                <td>{{summary.edv_usd}}</td>
+                <td>{{summary.edv_fiat}}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -85,6 +131,14 @@
 {% block scripts %}
 <script>
 $(document).ready(function () {
+    $("#btnSave").click(function () {
+        $("#btnCancel").prop("disabled", true);
+        $(this).prop("disabled", true);
+        $(this).html(
+            `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...`
+        );
+        $("#settings-form").submit();
+    });
     $('#data').DataTable({
         {% if lang != 'en' %}
         "language": {

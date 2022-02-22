@@ -13,6 +13,7 @@ from flask import Flask, flash, redirect, render_template, abort, \
 from flask_babel import _, lazy_gettext as _l
 
 from common.config import globals
+from common.utils import fiat
 from common.models import pools as po
 from web import app, utils
 from web.actions import chia, pools as p, plotman, chiadog, worker, log_handler, stats, warnings, forktools
@@ -67,12 +68,16 @@ def index():
     return render_template('index.html', reload_seconds=120, farms=farm_summary.farms, \
         plotting=plotting, workers=workers, global_config=gc, selected_blockchain=selected_blockchain)
 
-@app.route('/summary')
+@app.route('/summary', methods=['GET', 'POST'])
 def summary():
     gc = globals.load()
+    if request.method == 'POST':
+        fiat.save_local_currency(request.form.get('local_currency'))
+        flash(_("Saved local currency setting."), 'success')
     summaries = chia.load_summaries()
     return render_template('summary.html', reload_seconds=120, summaries=summaries, global_config=gc,
-        lang=request.accept_languages.best_match(app.config['LANGUAGES']))
+        exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
+        local_cur_sym=fiat.get_local_currency_symbol(), lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
@@ -207,11 +212,19 @@ def wallet():
     gc = globals.load()
     selected_blockchain = worker.default_blockchain()
     if request.method == 'POST':
-        selected_blockchain = request.form.get('blockchain')
-        chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
+        if request.form.get('local_currency'):
+            app.logger.info("Saving local currency setting of: {0}".format(request.form.get('local_currency')))
+            fiat.save_local_currency(request.form.get('local_currency'))
+            flash(_("Saved local currency setting."), 'success')
+        else:
+            app.logger.info("Saving {0} cold wallet address of: {1}".format(request.form.get('blockchain'), request.form.get('cold_wallet_address')))
+            selected_blockchain = request.form.get('blockchain')
+            chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
+            flash(_("Saved cold wallet addresses."), 'success')
     wallets = chia.load_wallets()
     return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, 
-        reload_seconds=120, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
+        reload_seconds=120, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
+        local_cur_sym=fiat.get_local_currency_symbol(), lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/keys')
 def keys():

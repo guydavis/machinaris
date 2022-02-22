@@ -17,11 +17,12 @@
         {% endif %}
         {% endwith %}
     </div>
+    
 <div class="position-relative">
     <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -3px;">
-        <a href="https://github.com/guydavis/machinaris/wiki/Wallets" target="_blank">
-        <i class="fs-4 bi-question-circle"></i>
-        </a>
+        <a href="#" title="{{_('Settings')}}" data-bs-toggle="modal" data-bs-target="#settingsModal" target="_blank"><i class="fs-4 bi-gear"></i></a>
+        &nbsp;
+        <a href="https://github.com/guydavis/machinaris/wiki/Wallets" target="_blank"><i class="fs-4 bi-question-circle"></i></a>
     </div>
     </div>
 <style>
@@ -37,6 +38,36 @@
         padding:0px 5px 0px 0px;
     }
 </style>
+
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3 modal-sm">
+      <div class="modal-content bg-dark">
+        <div class="modal-header bg-dark">
+          <h5 class="modal-title" id="settingsModalLabel">{{_('Settings')}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-dark">
+          <form method="POST" id="settings-form">
+            <div class="mb-3">
+              <label for="local_currency" class="col-form-label">{{_('Local Currency:')}}</label>
+              <select type="text" class="form-control" id="local_currency_field" name="local_currency">
+                {% for rate in exchange_rates %}
+                  {% if exchange_rates[rate]['type'] == 'fiat' %}
+                    <option {% if local_currency == rate %} selected {% endif %}
+                        value="{{rate}}">{{exchange_rates[rate]['name']}} ({{exchange_rates[rate]['unit']}})</option>
+                    {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancelSettings" data-bs-dismiss="modal">{{_('Cancel')}}</button>
+          <button type="button" class="btn btn-outline-success" id="btnSaveSettings">{{_('Save')}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 <div class="modal fade" id="walletModal" tabindex="-1" aria-labelledby="walletModalLabel" aria-hidden="true">
     <div class="modal-dialog bg-dark rounded-3 modal-lg">
@@ -79,7 +110,7 @@
                 <th scope="col" class="text-success">{{_('Wallet Balance')}}</th>
                 <th scope="col" class="text-success">{{_('Cold Wallet Balance')}}</th>
                 <th scope="col" class="text-success">{{_('Total Balance')}}</th>
-                <th scope="col" class="text-success">{{_('USD*')}}</th>
+                <th scope="col" class="text-success">{{_('Balance')}} {{local_cur_sym}}</th>
                 <th scope="col" class="text-success">{{_('Updated At')}}</th>
                 <th scope="col" class="text-success"></th>
             </tr>
@@ -100,10 +131,10 @@
                 </td>
                 <td>{{wallet.hot_balance}}</td>
                 <td>{{wallet.cold_balance}}</td>
-                <td>{{wallet.total_balance}}</td>
-                <td>{{wallet.usd_balance}}</td>
+                <td>{{wallet.total_balance}} {{wallet.blockchain_symbol}}</td>
+                <td>{{wallet.fiat_balance}}</td>
                 <td>{{wallet.updated_at | datetimefilter}}</td>
-                <td class='edit_cell'><a href="#" title="Edit Wallet" data-bs-toggle="modal" 
+                <td class='edit_cell'><a href="#" title="{{_('Edit Wallet')}}" data-bs-toggle="modal" 
                     data-bs-target="#walletModal" data-bs-blockchain="{{wallet.blockchain}}"
                     data-bs-cold-wallet-address="{{wallet.cold_address}}"><i 
                     class="fs-4 bi-pencil-square"></i></a></td>
@@ -156,6 +187,14 @@
                 {% endif %}
                 "pageLength": 25,
                 "columnDefs": [{ "orderable": false, targets: [5] }],
+            });
+            $("#btnSaveSettings").click(function () {
+                $("#btnCancelSettings").prop("disabled", true);
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...`
+                );
+                $("#settings-form").submit();
             });
             $("#btnSave").click(function () {
                 $("#btnCancel").prop("disabled", true);

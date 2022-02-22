@@ -3,14 +3,15 @@
 #
 
 import datetime
-from shutil import disk_usage
 import sqlite3
 
 from flask import g
 from sqlalchemy import or_
+from shutil import disk_usage
+from flask_babel import _, lazy_gettext as _l
 
 from common.config import globals
-from common.utils import converters
+from common.utils import converters, fiat
 from common.models.alerts import Alert
 from common.models.challenges import Challenge
 from common.models.farms import Farm
@@ -283,7 +284,7 @@ def load_plotting_stats():
 
 def calc_estimated_daily_value(blockchain):
     edv = None
-    edv_usd = None
+    edv_fiat = None
     result = []
     try:
         farm = db.session.query(Farm).filter(Farm.blockchain == blockchain).first()
@@ -301,11 +302,11 @@ def calc_estimated_daily_value(blockchain):
     else:
         result.append('')
     try:
-        edv_usd = converters.to_usd(blockchain, edv)
+        edv_fiat = fiat.to_fiat(blockchain, edv)
     except Exception as ex:
-        app.logger.info("Failed to calculate EDV_USD for {0} because {1}".format(blockchain, str(ex)))
+        app.logger.info("Failed to calculate edv_fiat for {0} because {1}".format(blockchain, str(ex)))
     if edv:
-        result.append(edv_usd)
+        result.append(edv_fiat)
     else:
         result.append('')
     return result
@@ -333,8 +334,8 @@ def load_summary_stats(blockchains):
         max_response = ''
         try:
             max_record = db.session.query(Challenge).filter(Challenge.blockchain==blockchain).order_by(Challenge.time_taken.desc()).first()
-            if max_record: 
-                max_response = "%.2f secs" % float(max_record.time_taken.split()[0]) # Strip of 'secs' unit before rounding
+            if max_record:  # Strip of 'secs' unit before rounding
+                max_response = "%.2f " % float(max_record.time_taken.split()[0]) + _('secs')
         except Exception as ex:
             app.logger.error(ex)
             app.logger.info("No recent challenge response times found for {0}".format(blockchain))
@@ -344,16 +345,17 @@ def load_summary_stats(blockchains):
                 try:
                     day_ago = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M")
                     partial_records = db.session.query(Partial).filter(Partial.blockchain==blockchain, Partial.created_at >= day_ago ).order_by(Partial.created_at.desc()).all()
-                    partials_per_hour = "%.2f / hour" % (len(partial_records) / 24)
+                    partials_per_hour = "%.2f / " % (len(partial_records) / 24) + _('hour')
                 except Exception as ex:
                     app.logger.error(ex)
                     app.logger.info("No recent partials submitted for {0}".format(blockchain))
-        [edv, edv_usd] = calc_estimated_daily_value(blockchain)
+        [edv, edv_fiat] = calc_estimated_daily_value(blockchain)
         stats[blockchain] = {
             'harvesters': harvesters,
             'max_resp': max_response,
             'partials_per_hour': partials_per_hour,
             'edv': edv,
-            'edv_usd': edv_usd
+            'edv_fiat': edv_fiat
         }
     return stats
+  

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-02-20 17:15-0700\n"
+"POT-Creation-Date: 2022-02-21 17:14-0700\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: fr\n"
@@ -18,27 +18,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: routes.py:90
+#: routes.py:76 routes.py:218
+msgid "Saved local currency setting."
+msgstr "Paramètre de devise locale enregistré."
+
+#: routes.py:95
 msgid "Blockchain download"
 msgstr "Télécharger le blockchain"
 
-#: routes.py:122
+#: routes.py:127
 msgid "Unknown plotting form"
 msgstr "Forme inconnue"
 
-#: routes.py:172
+#: routes.py:177
 msgid "Error! Please see logs."
 msgstr "Erreur! Veuillez consulter les journaux."
 
-#: routes.py:198
+#: routes.py:203
 msgid "Unknown alerts form"
 msgstr "Forme inconnue"
 
-#: routes.py:269
+#: routes.py:223
+msgid "Saved cold wallet addresses."
+msgstr "Adresses de portefeuille froid enregistrées."
+
+#: routes.py:282
 msgid "Unknown form action"
 msgstr "Action inconnue"
 
-#: routes.py:374
+#: routes.py:387
 msgid ""
 "No worker at %{worker} for blockchain %{blockchain}. Please select "
 "another blockchain."
@@ -46,7 +54,7 @@ msgstr ""
 "Aucun travailleur %{worker} pour la blockchain %{blockchain}. Veuillez "
 "sélectionner une autre blockchain."
 
-#: routes.py:380
+#: routes.py:393
 msgid ""
 "For Alerts config, found no responding fullnode found for %{blockchain}. "
 "Please check your workers."
@@ -54,7 +62,7 @@ msgstr ""
 "Aucun fullnode répondant n'a été trouvé pour notifier%{blockchain}. "
 "Veuillez vérifier vos travailleurs."
 
-#: routes.py:385
+#: routes.py:398
 msgid ""
 "For Farming config, found no responding fullnode found for %{blockchain}."
 " Please check your workers."
@@ -62,7 +70,7 @@ msgstr ""
 "Aucun fullnode répondant n'a été trouvé pour cultiver%{blockchain}. "
 "Veuillez vérifier vos travailleurs."
 
-#: routes.py:392
+#: routes.py:405
 msgid ""
 "For Plotting config, found no responding fullnode found for "
 "%{blockchain}. Please check your workers."
@@ -70,15 +78,23 @@ msgstr ""
 "Aucun fullnode répondant n'a été trouvé pour parceller%{blockchain}. "
 "Veuillez vérifier vos travailleurs."
 
-#: routes.py:397
+#: routes.py:410
 msgid "No responding fullnode found for %{blockchain}. Please check your workers."
 msgstr ""
 "Aucun fullnode répondant n'a été trouvé pour %{blockchain}. Veuillez "
 "vérifier vos travailleurs."
 
-#: routes.py:416
+#: routes.py:429
 msgid "Unsupported log type"
 msgstr "Type de journal non pris en charge"
+
+#: actions/stats.py:338
+msgid "secs"
+msgstr "secs"
+
+#: actions/stats.py:348 models/chia.py:228
+msgid "hour"
+msgstr "heure"
 
 #: actions/worker.py:106
 msgid "Worker not responding to pings."
@@ -108,6 +124,58 @@ msgstr ""
 "Veuillez utiliser une version cohérente de Machinaris pour éviter les "
 "problèmes."
 
+#: models/chia.py:133 models/chia.py:222
+msgid "days"
+msgstr "jours"
+
+#: models/chia.py:210
+msgid "years"
+msgstr "ans"
+
+#: models/chia.py:212
+msgid "year"
+msgstr "an"
+
+#: models/chia.py:214
+msgid "months"
+msgstr "mois"
+
+#: models/chia.py:216
+msgid "month"
+msgstr "mois"
+
+#: models/chia.py:218
+msgid "weeks"
+msgstr "semaines"
+
+#: models/chia.py:220
+msgid "week"
+msgstr "semaine"
+
+#: models/chia.py:224
+msgid "day"
+msgstr "jour"
+
+#: models/chia.py:226
+msgid "hours"
+msgstr "heures"
+
+#: models/chia.py:230
+msgid "minutes"
+msgstr "minutes"
+
+#: models/chia.py:232
+msgid "minute"
+msgstr "minute"
+
+#: models/chia.py:234
+msgid "Never (no plots)"
+msgstr "Jamais (pas de plots)"
+
+#: models/chia.py:236
+msgid "Soon"
+msgstr "Bientôt"
+
 #: templates/alerts.html:14
 msgid "Alerts: Recent Notifications"
 msgstr "Alertes: notifications récentes"
@@ -121,7 +189,7 @@ msgstr "Worker"
 #: templates/alerts.html:73 templates/blockchains.html:31
 #: templates/settings/alerts.html:45 templates/settings/farming.html:46
 #: templates/settings/plotting.html:46 templates/settings/tools.html:45
-#: templates/summary.html:27 templates/wallet.html:77 templates/worker.html:47
+#: templates/summary.html:57 templates/wallet.html:107 templates/worker.html:47
 #: templates/workers.html:43
 msgid "Blockchain"
 msgstr "Blockchain"
@@ -228,12 +296,13 @@ msgstr "Pools"
 
 #: templates/base.html:85 templates/farming/plots.html:69
 #: templates/farming/workers.html:28 templates/plotting/jobs.html:94
-#: templates/plotting/workers.html:96 templates/summary.html:31
+#: templates/plotting/workers.html:96 templates/summary.html:61
 #: templates/workers.html:14
 msgid "Workers"
 msgstr "Workers"
 
-#: templates/base.html:91
+#: templates/base.html:91 templates/summary.html:9 templates/summary.html:37
+#: templates/wallet.html:22 templates/wallet.html:45
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -285,8 +354,8 @@ msgstr "Plotman"
 msgid "Blockchain Summary"
 msgstr "Blockchain"
 
-#: templates/blockchains.html:32 templates/summary.html:28
-#: templates/wallet.html:78
+#: templates/blockchains.html:32 templates/summary.html:58
+#: templates/wallet.html:108
 msgid "Status"
 msgstr "Statut"
 
@@ -298,7 +367,7 @@ msgstr "Hauteur maximale"
 msgid "Peak Time"
 msgstr "Heure de pointe"
 
-#: templates/blockchains.html:35 templates/wallet.html:83
+#: templates/blockchains.html:35 templates/wallet.html:113
 msgid "Updated At"
 msgstr "Mis à jour à"
 
@@ -360,7 +429,9 @@ msgstr "Ajouter une nouvelle connexion"
 
 #: templates/connections.html:143
 msgid "No connections found from any farmers yet. Perhaps just starting?"
-msgstr "Aucune connexion trouvée d'aucun worker pour le moment. Peut-être juste commencer?"
+msgstr ""
+"Aucune connexion trouvée d'aucun worker pour le moment. Peut-être juste "
+"commencer?"
 
 #: templates/connections.html:144
 msgid ""
@@ -388,7 +459,7 @@ msgstr "Plots totales"
 msgid "Total Plots Size"
 msgstr "Taille totale des plots"
 
-#: templates/index.html:89
+#: templates/index.html:89 templates/wallet.html:112
 msgid "Balance"
 msgstr "Total"
 
@@ -593,109 +664,110 @@ msgstr ""
 "mnenmoic vous-même sur la ligne de commande, consultez les %(wiki_link)s "
 "pour plus de détails."
 
-#: templates/summary.html:29
-msgid "Height"
-msgstr "Hauteur"
-
-#: templates/farming/plots.html:66 templates/farming/workers.html:25
-#: templates/summary.html:30
-msgid "Plots"
-msgstr "Plots"
-
-#: templates/summary.html:32
-msgid "Max Resp."
-msgstr "Resp. Max"
-
-#: templates/summary.html:33
-msgid "Partials"
-msgstr "Partiels"
-
-#: templates/summary.html:34
-msgid "ETW"
-msgstr "ETW"
-
-#: templates/summary.html:36
-msgid "Wallet"
-msgstr "Portefeuille"
-
-#: templates/summary.html:37
-msgid "EDV"
-msgstr "EDV"
-
-#: templates/summary.html:38
-msgid "EDV US"
-msgstr "EDV US"
-
-#: templates/summary.html:49 templates/worker.html:78 templates/workers.html:72
-msgid "Offline"
-msgstr "Hors ligne"
-
-#: templates/summary.html:51
-msgid "Synced"
-msgstr "Synchronisé"
-
-#: templates/summary.html:53
-msgid "Syncing"
-msgstr "Synchronisation"
-
-#: templates/summary.html:55
-msgid "Not Synced"
-msgstr "Non synchronisé"
-
-#: templates/summary.html:78
-msgid "No blockchains found from any farmers. Just starting up?"
-msgstr "Aucune blockchain trouvée chez les farmers. Pas ajouté?"
-
-#: templates/summary.html:79
-msgid "Please allow at least 15 minutes for blockchains to get started."
-msgstr "Veuillez prévoir au moins 15 minutes pour que les blockchains commencent."
-
-#: templates/wallet.html:45
-msgid "Wallet Settings"
-msgstr "Paramètres du portefeuille"
-
-#: templates/wallet.html:55
-msgid "Cold Wallet Address:"
-msgstr "Adresse du portefeuille froid:"
+#: templates/summary.html:15 templates/wallet.html:51
+msgid "Local Currency:"
+msgstr "Monnaie locale:"
 
 #: templates/plotting/jobs.html:16 templates/plotting/jobs.html:34
 #: templates/plotting/jobs.html:52 templates/plotting/workers.html:16
 #: templates/plotting/workers.html:34 templates/settings/pools.html:39
-#: templates/wallet.html:61
+#: templates/summary.html:28 templates/wallet.html:64 templates/wallet.html:91
 msgid "Cancel"
 msgstr "Annuler"
 
 #: templates/settings/alerts.html:55 templates/settings/farming.html:56
 #: templates/settings/plotting.html:56 templates/settings/pools.html:41
-#: templates/settings/tools.html:55 templates/wallet.html:62
+#: templates/settings/tools.html:55 templates/summary.html:29
+#: templates/wallet.html:65 templates/wallet.html:92
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: templates/wallet.html:69
+#: templates/summary.html:59
+msgid "Height"
+msgstr "Hauteur"
+
+#: templates/farming/plots.html:66 templates/farming/workers.html:25
+#: templates/summary.html:60
+msgid "Plots"
+msgstr "Plots"
+
+#: templates/summary.html:62
+msgid "Max Resp."
+msgstr "Resp. Max"
+
+#: templates/summary.html:63
+msgid "Partials"
+msgstr "Partiels"
+
+#: templates/summary.html:64
+msgid "ETW"
+msgstr "ETW"
+
+#: templates/summary.html:66
+msgid "Wallet"
+msgstr "Portefeuille"
+
+#: templates/summary.html:67 templates/summary.html:68
+msgid "EDV"
+msgstr "EDV"
+
+#: templates/summary.html:79 templates/worker.html:78 templates/workers.html:72
+msgid "Offline"
+msgstr "Hors ligne"
+
+#: templates/summary.html:81
+msgid "Synced"
+msgstr "Synchronisé"
+
+#: templates/summary.html:83
+msgid "Syncing"
+msgstr "Synchronisation"
+
+#: templates/summary.html:85
+msgid "Not Synced"
+msgstr "Non synchronisé"
+
+#: templates/summary.html:108
+msgid "No blockchains found from any farmers. Just starting up?"
+msgstr "Aucune blockchain trouvée chez les farmers. Pas ajouté?"
+
+#: templates/summary.html:109
+msgid "Please allow at least 15 minutes for blockchains to get started."
+msgstr "Veuillez prévoir au moins 15 minutes pour que les blockchains commencent."
+
+#: templates/wallet.html:75
+msgid "Wallet Settings"
+msgstr "Paramètres du portefeuille"
+
+#: templates/wallet.html:85
+msgid "Cold Wallet Address:"
+msgstr "Adresse du portefeuille froid:"
+
+#: templates/wallet.html:99
 msgid "Wallet Summary"
 msgstr "Résumé quotidien"
 
-#: templates/wallet.html:79
+#: templates/wallet.html:109
 msgid "Wallet Balance"
 msgstr "Solde du portefeuille"
 
-#: templates/wallet.html:80
+#: templates/wallet.html:110
 msgid "Cold Wallet Balance"
 msgstr "Solde de portefeuille froid"
 
-#: templates/wallet.html:81
+#: templates/wallet.html:111
 msgid "Total Balance"
 msgstr "Solde total"
 
-#: templates/wallet.html:82
-msgid "USD*"
-msgstr "USD*"
+#: templates/wallet.html:136
+msgid "Edit Wallet"
+msgstr "Modifier le portefeuille"
 
-#: templates/wallet.html:117
+#: templates/wallet.html:147
 msgid "Wallet Details"
 msgstr "Détails du portefeuille"
 
-#: templates/wallet.html:141
+#: templates/wallet.html:171
 msgid ""
 "No wallet status received.  Perhaps just starting?  Please allow at least"
 " 10 minutes to update."
@@ -703,7 +775,7 @@ msgstr ""
 "Aucun statut de portefeuille reçu. Peut-être que vous venez juste de "
 "commencer? Veuillez autoriser au moins 10 minutes pour mettre à jour."
 
-#: templates/wallet.html:142
+#: templates/wallet.html:172
 msgid ""
 "You can also try running \"chia wallet show\" on your fullnode's in-"
 "container shell to verify."
@@ -1316,4 +1388,3 @@ msgstr "Commencer..."
 #: templates/settings/pools.html:197
 msgid "PlotNFT Log on "
 msgstr "Journaux PlotNFT de"
-
