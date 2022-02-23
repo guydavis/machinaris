@@ -47,22 +47,22 @@
             var cur_vols = $('#volumes').children().length
             var new_vol_row = `<div class="row mb-3 volume">
                     <div class="col-md">
-                        <label for="volume_host_path0" class="form-label">Host Path</label>
+                        <label for="volume_host_path0" class="form-label">{{_('Host Path')}}</label>
                         <input type="text" class="form-control" placeholder="/mnt/disk1" onkeyup="updateDocker()"
                             name="volume_host_path" id="volume_host_path0" aria-label="volume_host_path0">
                     </div>
                     <div class="col-sm">
-                        <label for="volume_container_path0" class="form-label">Container Path</label>
+                        <label for="volume_container_path0" class="form-label">{{_('Container Path')}}</label>
                         <input type="text" class="form-control" placeholder="/plots" onkeyup="updateDocker()" 
                             name="volume_container_path" id="volume_container_path0" aria-label="volume_container_path0">
                     </div>
                     <div class="col-auto">
-                        <label for="volume_type0" class="form-label">Used for:</label>
+                        <label for="volume_type0" class="form-label">{{_('Used for:')}}</label>
                         <select class="form-select" id="volume_type0" name="volume_type" aria-label="volume_type0"
                             onchange="updateDocker()">
-                            <option value="plots" selected>Final Plots</option>
-                            <option value="plotting">Plotting Temp</option>
-                            <option value="other">Other</option>
+                            <option value="plots" selected>{{_('Final Plots')}}</option>
+                            <option value="plotting">{{_('Plotting Temp')}}</option>
+                            <option value="other">{{_('Other')}}</option>
                           </select>
                     </div>
                 </div>`;
@@ -231,7 +231,7 @@
             if (blockchain == 'stor') {
                 return 8337;
             }
-            alert("Unknown blockchain fork of selected: " + blockchain);
+            alert("{{_('Unknown blockchain fork of selected:')}} " + blockchain);
         }
 
         function updateDockerCompose(errors) {
@@ -263,7 +263,7 @@
                         cmd += '        hostname: ' + document.getElementById("worker_hostname").value + line_end;
                     }
                     else if (i == 0) {
-                        errors.push("Missing worker hostname.  Please provide a short name to identify your worker.");
+                        errors.push("{{_('Missing worker hostname.  Please provide a short name to identify your worker.')}}");
                     }
                     cmd += '        restart: always' + line_end;
                     cmd += '        volumes:' + line_end;
@@ -279,12 +279,12 @@
                         volume_container_path = document.getElementById("volume_container_path" + index).value;
                         if (i == 0) { // Record error on first pass
                             if (volume_host_path.endsWith(':')) {
-                                errors.push("Invalid host path ending with colon. Try adding a slash to the end like this " + volume_host_path + '/');
+                                errors.push("{{_('Invalid host path ending with colon. Try adding a slash to the end like this')}} " + volume_host_path + '/');
                             } 
                             if (!volume_host_path) {
-                                errors.push("Empty host path provided for volume at '" + volume_container_path + "'. Please provide a host path.");
+                                errors.push("{{_('Empty host path provided for volume at ')}}" + volume_container_path + "'. {{_('Please provide a host path.')}}");
                             } else if (!volume_container_path) {
-                                errors.push("Empty container path provided for volume at '" + volume_host_path + "'. Please provide a container path.");
+                                errors.push("{{_('Empty container path provided for volume at ')}}" + volume_host_path + "'. {{_('Please provide a container path.')}}");
                             }
                         }
                         if ((blockchain == "chives") && ($('#volume_type' + index).val() == 'plots')) {
@@ -329,13 +329,13 @@
                         cmd += '            - controller_host=' + document.getElementById("controller_host").value + line_end;
                         cmd += '            - controller_api_port=' + document.getElementById("controller_api_port").value + line_end;
                     } else if (i == 0) { // fullnode
-                        errors.push("Neither Harvester or Plottter mode selected.  Please choose one or both.");
+                        errors.push("{{_('Neither Harvester or Plottter mode selected.  Please choose one or both.')}}");
                     }
                     if (document.getElementById("ip_addr").value) {
                         cmd += '            - worker_address=' + document.getElementById("ip_addr").value + line_end;
                     }
                     else if (i == 0) {
-                        errors.push("Missing worker IP address.  Please provide the IP the conntroller will connect to for commands.");
+                        errors.push("{{_('Missing worker IP address.  Please provide the IP the conntroller will connect to for commands.')}}");
                     }
                     var worker_port = lookup_worker_port(blockchain);
                     cmd += '            - worker_api_port=' + worker_port + line_end;
@@ -377,52 +377,51 @@
 <body>
     <form>
         <div class="rounded-2">
-            <h2>Machinaris Worker - Launch Config</h2>
-            <p>Complete the form below to run new harvesters/plotters on other computers across your network.  
-            Save the generated docker-compose.yml file to a folder named 'machinaris', then execute "docker-compose up" from a shell.</p>
+            <h2>{{_('Machinaris Worker - Launch Config')}}</h2>
+            <p>{{_('Complete the form below to run new harvesters/plotters on other computers across your network. Save the generated docker-compose.yml file to a folder named "machinaris", then execute "docker-compose up" from a shell.')}}</p>
             <div class="alert alert-warning" role="alert" id='errors'></div>
             <div class="row mb-3">
                 <div class="col offset">
-                    <label for="inputState" class="form-label">Operating System</label>
+                    <label for="inputState" class="form-label">{{_('Operating System')}}</label>
                     <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="radio" name="os" id="os-linux" value="linux" checked
                                 onclick="updateVolumes(); updateDocker()">
                             <label class="form-check-label" for="os-linux">
-                                Linux
+                                {{_('Linux')}}
                             </label>
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="radio" name="os" id="os-macintosh" value="macintosh"
                                 onclick="updateVolumes(); updateDocker()">
                             <label class="form-check-label" for="os-macintosh">
-                                Macintosh
+                                {{_('Macintosh')}}
                             </label>
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="radio" name="os" id="os-windows" value="windows"
                                 onclick="updateVolumes(); updateDocker()">
                             <label class="form-check-label" for="os-windows">
-                                Windows
+                                {{_('Windows')}}
                             </label>
                         </div>
                     </div>
                 </div>
                 <div class="col offset">
-                    <label for="inputState" class="form-label">Machinaris Mode</label>
+                    <label for="inputState" class="form-label">{{_('Machinaris Mode')}}</label>
                     <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" checked name="mode" id="mode-harvester"
                                 onclick="toggleFarmerAddressVisibility();updateDocker();">
                             <label class="form-check-label" for="mode-harvester">
-                                Harvester
+                                {{_('Harvester')}}
                             </label>
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="mode" id="mode-plotter"
                                 onclick="togglePlottingKeysVisibility();updateDocker();">
                             <label class="form-check-label" for="mode-plotter">
-                                Plotter
+                                {{_('Plotter')}}
                             </label>
                         </div>
                     </div>
@@ -430,35 +429,35 @@
             </div>
             <div class="row mb-3" id="plotting_keys_row">
                 <div class="col">
-                    <label for="farmer_pk" class="form-label">Farmer Public Key</label>
+                    <label for="farmer_pk" class="form-label">{{_('Farmer Public Key')}}</label>
                     <input type="text" class="form-control" aria-label="farmer_pk" value="{{farmer_pk}}" id="farmer_pk"
                         onclick="updateDocker()">
                 </div>
                 <div class="col">
-                    <label for="pool_pk" class="form-label">Pool Public Key</label>
+                    <label for="pool_pk" class="form-label">{{_('Pool Public Key')}}</label>
                     <input type="text" class="form-control" aria-label="pool_pk" value="{{pool_pk}}" id="pool_pk"
                         onkeyup="updateDocker()">
                 </div>
                 <div class="col">
-                    <label for="pool_contract_address" class="form-label">Pool Contract Address</label>
+                    <label for="pool_contract_address" class="form-label">{{_('Pool Contract Address')}}</label>
                     <input type="text" class="form-control" aria-label="pool_contract_address"
                         value="{{pool_contract_address}}" id="pool_contract_address" onkeyup="updateDocker()">
                 </div>
                 <div class="col offset">
-                    <label for="inputState" class="form-label">Plot on Startup</label>
+                    <label for="inputState" class="form-label">{{_('Plot on Startup')}}</label>
                     <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="radio" name="auto_plot" id="auto-plot-true"
                                 onclick="updateDocker()" value="true">
                             <label class="form-check-label" for="auto-plot-true">
-                                True
+                                {{_('True')}}
                             </label>
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="radio" name="auto_plot" id="auto-plot-false" checked
                                 onclick="updateDocker()" value="false">
                             <label class="form-check-label" for="auto-plot-false">
-                                False
+                                {{_('False')}}
                             </label>
                         </div>
                     </div>
@@ -466,31 +465,31 @@
             </div>
             <div class="row mb-3" id="controller_address_row">
                 <div class="col offset">
-                    <label for="controller_host" class="form-label">Controller IP Address</label>
+                    <label for="controller_host" class="form-label">{{_('Controller IP Address')}}</label>
                     <input type="text" class="form-control" placeholder="" aria-label="controller_host"
                         id='controller_host' onkeyup="updateDocker()">
                 </div>
                 <div class="col">
-                    <label for="controller_api_port" class="form-label">Controller API Port</label>
+                    <label for="controller_api_port" class="form-label">{{_('Controller API Port')}}</label>
                     <input type="text" class="form-control" value="8927" aria-label="controller_api_port"
                         id='controller_api_port' onkeyup="updateDocker()">
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col offset">
-                    <label for="worker_hostname" class="form-label">Worker Hostname</label>
+                    <label for="worker_hostname" class="form-label">{{_('Worker Hostname')}}</label>
                     <input type="text" class="form-control" placeholder="myhostname" aria-label="worker_hostname"
                         id='worker_hostname' onkeyup="updateDocker()">
                 </div>
                 <div class="col">
-                    <label for="ip_addr" class="form-label">Worker IP Address</label>
+                    <label for="ip_addr" class="form-label">{{_('Worker IP Address')}}</label>
                     <input type="text" class="form-control" placeholder="192.168.1.100" aria-label="ip_addr"
                         id='ip_addr' onkeyup="updateDocker()">
                 </div>
             </div>
             <div class="row mb-3" id="blockchains_row">
                 <div class="col offset">
-                    <label for="inputState" class="form-label">Blockchains to Farm</label>
+                    <label for="inputState" class="form-label">{{_('Blockchains to Farm')}}</label>
                     <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
@@ -603,47 +602,47 @@
                     </div>
                 </div>
             </div>
-            <h4>Volume Mounts</h4>
+            <h4>{{_('Volume Mounts')}}</h4>
             <div class="row mb-3" id="volumes">
                 <div class="row mb-3 volume">
                     <div class="col-md">
-                        <label for="volume_host_path0" class="form-label">Host Path</label>
+                        <label for="volume_host_path0" class="form-label">{{_('Host Path')}}</label>
                         <input type="text" class="form-control" placeholder="/mnt/disk1" onkeyup="updateDocker()"
                             name="volume_host_path" id="volume_host_path0" aria-label="volume_host_path0">
                     </div>
                     <div class="col-sm">
-                        <label for="volume_container_path0" class="form-label">Container Path</label>
+                        <label for="volume_container_path0" class="form-label">{{_('Container Path')}}</label>
                         <input type="text" class="form-control" value="/plots1" aria-label="volume_container_path0"
                             name="volume_container_path" id="volume_container_path0" onkeyup="updateDocker()">
                     </div>
                     <div class="col-auto">
-                        <label for="volume_type0" class="form-label">Used for:</label>
+                        <label for="volume_type0" class="form-label">{{_('Used for:')}}</label>
                         <select class="form-select" id="volume_type0" name="volume_type" aria-label="volume_type0"
                             onchange="updateDocker()">
-                            <option value="plots" selected>Final Plots</option>
-                            <option value="plotting">Plotting Temp</option>
-                            <option value="other">Other</option>
+                            <option value="plots" selected>{{_('Final Plots')}}</option>
+                            <option value="plotting">{{_('Plotting Temp')}}</option>
+                            <option value="other">{{_('Other')}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="row mb-3 volume">
                     <div class="col-md">
-                        <label for="volume_host_path1" class="form-label">Host Path</label>
+                        <label for="volume_host_path1" class="form-label">{{_('Host Path')}}</label>
                         <input type="text" class="form-control" placeholder="/mnt/temp1" onkeyup="updateDocker()"
                             name="volume_host_path" id="volume_host_path1" aria-label="volume_host_path1">
                     </div>
                     <div class="col-sm">
-                        <label for="volume_container_path1" class="form-label">Container Path</label>
+                        <label for="volume_container_path1" class="form-label">{{_('Container Path')}}</label>
                         <input type="text" class="form-control" value="/plotting" aria-label="volume_container_path1"
                             name="volume_container_path" id="volume_container_path1" onkeyup="updateDocker()">
                     </div>
                     <div class="col-auto">
-                        <label for="volume_type1" class="form-label">Used for:</label>
+                        <label for="volume_type1" class="form-label">{{_('Used for:')}}</label>
                         <select class="form-select" id="volume_type1" name="volume_type" aria-label="volume_type1"
                             onchange="updateDocker()">
-                            <option value="plots">Final Plots</option>
-                            <option value="plotting" selected>Plotting Temp</option>
-                            <option value="other">Other</option>
+                            <option value="plots">{{_('Final Plots')}}</option>
+                            <option value="plotting" selected>{{_('Plotting Temp')}}</option>
+                            <option value="other">{{_('Other')}}</option>
                         </select>
                     </div>
                 </div>
@@ -652,20 +651,20 @@
                 <div class="col">
                 </div>
                 <div class="col-auto">
-                    <a href="#volumes" onclick="volumeAdd();" title="Add New Volume"><i
+                    <a href="#volumes" onclick="volumeAdd();" title="{{_('Add New Volume')}}"><i
                             class="fs-4 bi-plus text-white text-right"></i></a><a href="#volumes"
-                        onclick="volumeRemove();" title="Remove Last Volume"><i
+                        onclick="volumeRemove();" title="{{_('Remove Last Volume')}}"><i
                             class="fs-4 bi-dash text-white text-right"></i></a>
                 </div>
             </div>
         </div>
     </form>
     <div class="rounded-3 small" id="docker_compose">
-        <a style="float:right;" href="#" title="Copy"
+        <a style="float:right;" href="#" title="{{_('Copy')}}"
             onclick="copyTextToClipboard(document.getElementById('compose').innerHTML); return false">
             <i class="fs-4 bi-clipboard text-white"></i>
         </a>
-        <h2>Docker Compose</h2>
+        <h2>{{_('Docker Compose')}}</h2>
         <pre id="compose"></pre>
     </div>
     <script src="{{ url_for('static', filename='3rd_party/bootstrap.bundle.min.js') }}"></script>

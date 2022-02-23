@@ -148,7 +148,7 @@ def is_setup():
 CHIA_BLOCKCHAIN_DB_SIZE = 45 * 1024 * 1024 * 1024 # Almost 45 uncompressed GB in early 2022
 def blockchain_downloading():
     db_path = '/root/.chia/mainnet/db'
-    if path.exists(f"{db_path}/blockchain_v1_mainnet.sqlite"):
+    if path.exists(f"{db_path}/blockchain_v1_mainnet.sqlite") or path.exists(f"{db_path}/blockchain_v2_mainnet.sqlite"):
         return [100, None]
     tmp_path =  f"{db_path}/chia"
     if not path.exists(tmp_path):

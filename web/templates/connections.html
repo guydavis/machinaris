@@ -67,14 +67,14 @@
                                 <thead>
                                     <tr>
                                         <th scope="col" class="text-success"></th>
-                                        <th scope="col" class="text-success">Type</th>
-                                        <th scope="col" class="text-success">IP Address</th>
-                                        <th scope="col" class="text-success">Ports</th>
-                                        <th scope="col" class="text-success">Node ID</th>
-                                        <th scope="col" class="text-success">SB Height</th>
-                                        <th scope="col" class="text-success">Last Connect</th>
-                                        <th scope="col" class="text-success">MiB Up</th>
-                                        <th scope="col" class="text-success">MiB Down</th>
+                                        <th scope="col" class="text-success">{{_('Type')}}</th>
+                                        <th scope="col" class="text-success">{{_('IP Address')}}</th>
+                                        <th scope="col" class="text-success">{{_('Ports')}}</th>
+                                        <th scope="col" class="text-success">{{_('Node ID')}}</th>
+                                        <th scope="col" class="text-success">{{_('SB Height')}}</th>
+                                        <th scope="col" class="text-success">{{_('Last Connect')}}</th>
+                                        <th scope="col" class="text-success">{{_('MiB Up')}}</th>
+                                        <th scope="col" class="text-success">{{_('MiB Down')}}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -106,14 +106,13 @@
                                     {% if connection.blockchain != 'mmx' %}
                                     <button form="form_{{connection.displayname}}_{{connection.blockchain}}"
                                         type="submit" name="action" value="remove" class="btn btn-outline-success"
-                                        id="btnRemove_{{connection.displayname}}_{{connection.blockchain}}">Disconnect
-                                        Selected</button>
+                                        id="btnRemove_{{connection.displayname}}_{{connection.blockchain}}">{{_('Disconnect Selected')}}</button>
                                     {% endif %}
                                 </div>
                                 <div class="col-sm"><a class="btn btn-outline-success" role="button"
                                         href="https://www.yougetsignal.com/tools/open-ports/?port={{connection.farmer_port}}"
                                         target="_blank" class="text-white">
-                                        Check Port Forwarding
+                                        {{_('Check Port Forwarding')}}
                                     </a>
                                 </div>
                                 <div class="col-sm-3">
@@ -129,7 +128,7 @@
                                     <button class="btn btn-outline-success text-nowrap text-right" type="submit"
                                         name="action" value="add"
                                         id="btnAdd_{{connection.displayname}}_{{connection.blockchain}}"
-                                        form="main-form">Add New Connection</button>
+                                        form="main-form">{{_('Add New Connection')}}</button>
                                     {% endif %}
                                 </div>
                         </fieldset>
@@ -141,8 +140,8 @@
     </nav>
     {% else %}
     <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
-        <h6>No connections found from any farmers yet. Perhaps just starting?</h6>
-        <h6>After a while, try running 'chia show --connections' on your farmers to verify.</h6>
+        <h6>{{_('No connections found from any farmers yet. Perhaps just starting?')}}</h6>
+        <h6>{{_('After a while, try running "chia show --connections" on your farmers to verify.')}}</h6>
     </div>
     {% endif %}
 
@@ -153,6 +152,11 @@
         $(document).ready(function () {
             {% for connection in connections.rows %}
             $('#conns_{{connection.displayname}}_{{connection.blockchain}}').DataTable({
+                {% if lang != 'en' %}
+                "language": {
+                    "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+                },
+                {% endif %}
                 "columnDefs": [{ "orderable": false, targets: [0] }],
             });
             $("#btnAdd_{{connection.displayname}}_{{connection.blockchain}}").click(function () {

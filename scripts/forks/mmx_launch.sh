@@ -44,6 +44,11 @@ elif [[ ${OPENCL_GPU} == 'amd' ]]; then
 	# If AMD GPU is older than vega 10,use under command, but can't promise work normally.
 	# Because, with --opencl=legacy, dkms will must be installed, it may pollute your kernel
 	# amdgpu-install -y --usecase=opencl --opencl=rocr,legacy --no-32 --accept-eula
+elif [[ ${OPENCL_GPU} == 'intel' ]]; then
+	apt update
+	apt install -y intel-opencl-icd
+else
+	echo "No OPENCL_GPU provided.  MMX blockchain will use use CPU instead."
 fi
 
 # Symlink the NETWORK file, use 'test4' for now

@@ -10,31 +10,40 @@ import socket
 
 from web import app
 
-def send_get(worker, path, query_params={}, timeout=30, debug=False):
+def send_get(worker, path, query_params={}, timeout=30, debug=False, lang=None):
     if debug:
         http.client.HTTPConnection.debuglevel = 1
-    response = requests.get(worker.url + path, params = query_params, timeout=timeout)
+    headers = {}
+    if lang:
+        headers['Accept-Language'] = lang
+    response = requests.get(worker.url + path, headers = headers, params = query_params, timeout=timeout)
     http.client.HTTPConnection.debuglevel = 0
     return response
 
-def send_post(worker, path, payload, debug=False):
+def send_post(worker, path, payload, debug=False, lang=None):
     headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+    if lang:
+        headers['Accept-Language'] = lang
     if debug:
         http.client.HTTPConnection.debuglevel = 1
     response = requests.post(worker.url + path, headers = headers, data = json.dumps(payload))
     http.client.HTTPConnection.debuglevel = 0
     return response
 
-def send_put(worker, path, payload, debug=False):
+def send_put(worker, path, payload, debug=False, lang=None):
     headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+    if lang:
+        headers['Accept-Language'] = lang
     if debug:
         http.client.HTTPConnection.debuglevel = 1
     response = requests.put(worker.url + path, headers = headers, data = json.dumps(payload))
     http.client.HTTPConnection.debuglevel = 0
     return response
 
-def send_delete(worker, path, debug=False):
+def send_delete(worker, path, debug=False, lang=None):
     headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+    if lang:
+        headers['Accept-Language'] = lang
     if debug:
         http.client.HTTPConnection.debuglevel = 1
     response = requests.delete(worker.url + path, headers = headers)

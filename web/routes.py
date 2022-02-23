@@ -10,18 +10,42 @@ import traceback
 from datetime import datetime
 from flask import Flask, flash, redirect, render_template, abort, \
         request, session, url_for, send_from_directory, make_response
+from flask_babel import _, lazy_gettext as _l
 
 from common.config import globals
+from common.utils import fiat
 from common.models import pools as po
 from web import app, utils
 from web.actions import chia, pools as p, plotman, chiadog, worker, log_handler, stats, warnings, forktools
+
+def get_lang(request):
+    lang = None
+    if "Accept-Language" in request.headers:
+        lang = request.headers["Accept-Language"]
+    return lang 
+
+def find_selected_worker(hosts, hostname, blockchain= None):
+    if len(hosts) == 0:
+        return None
+    if not blockchain:
+        hosts[0].workers[0]
+    for host in hosts:
+        for worker in host.workers:
+            if worker['hostname'] == hostname and worker['blockchain'] == blockchain:
+                return worker
+    return hosts[0].workers[0]
 
 @app.route('/')
 def landing():
     gc = globals.load()
     if not globals.is_setup():
         return redirect(url_for('setup'))
-    msg = random.choice(list(open('web/static/landings.txt')))
+    for accept in request.accept_languages.values():
+        app.logger.info("ACCEPT IS {0}".format(accept))
+    app.logger.info("LANGUAGES IS {0}".format(app.config['LANGUAGES']))
+    lang = request.accept_languages.best_match(app.config['LANGUAGES'])
+    app.logger.info("LANG IS {0}".format(lang))
+    msg = random.choice(list(open('web/static/landings/{0}.txt'.format(lang))))
     if msg.endswith(".png"):
         msg = "<img style='height: 150px' src='{0}' />".format(url_for('static', filename='/landings/' + msg))
     return render_template('landing.html', random_message=msg)
@@ -44,11 +68,16 @@ def index():
     return render_template('index.html', reload_seconds=120, farms=farm_summary.farms, \
         plotting=plotting, workers=workers, global_config=gc, selected_blockchain=selected_blockchain)
 
-@app.route('/summary')
+@app.route('/summary', methods=['GET', 'POST'])
 def summary():
     gc = globals.load()
+    if request.method == 'POST':
+        fiat.save_local_currency(request.form.get('local_currency'))
+        flash(_("Saved local currency setting."), 'success')
     summaries = chia.load_summaries()
-    return render_template('summary.html', reload_seconds=120, summaries=summaries, global_config=gc)
+    return render_template('summary.html', reload_seconds=120, summaries=summaries, global_config=gc,
+        exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
+        local_cur_sym=fiat.get_local_currency_symbol(), lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
@@ -63,7 +92,7 @@ def setup():
         elif request.form.get('action') == 'import':
             show_setup = not chia.import_key(key_paths[0], request.form.get('mnemonic'), globals.enabled_blockchains()[0])
     [download_percentage, blockchain_download_size] = globals.blockchain_downloading()
-    app.logger.info(f"Blockchain download @ {download_percentage}% - {blockchain_download_size}")
+    app.logger.info(_("Blockchain download") + f" @ {download_percentage}% - {blockchain_download_size}")
     if show_setup:
         return render_template('setup.html', key_paths = key_paths, 
             blockchain_download_size=blockchain_download_size, download_percentage=download_percentage)
@@ -95,13 +124,13 @@ def plotting_jobs():
             plot_ids = request.form.getlist('plot_id')
             plotman.action_plots(action, plot_ids)
         else:
-            app.logger.info("Unknown plotting form: {0}".format(request.form))
+            app.logger.info(_("Unknown plotting form") + ": {0}".format(request.form))
         return redirect(url_for('plotting_jobs')) # Force a redirect to allow time to update status
     plotters = plotman.load_plotters()
     plotting = plotman.load_plotting_summary()
     job_stats = stats.load_plotting_stats()
     return render_template('plotting/jobs.html', reload_seconds=120,  plotting=plotting, 
-        plotters=plotters, job_stats=job_stats, global_config=gc)
+        plotters=plotters, job_stats=job_stats, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/plotting/workers', methods=['GET', 'POST'])
 def plotting_workers():
@@ -135,7 +164,8 @@ def farming_plots():
     gc = globals.load()
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()
-    return render_template('farming/plots.html', farmers=farmers, plots=plots, global_config=gc)
+    return render_template('farming/plots.html', farmers=farmers, plots=plots, global_config=gc, 
+        lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/farming/data')
 def farming_data():
@@ -144,7 +174,7 @@ def farming_data():
         return make_response({'draw': draw, 'recordsTotal': recordsTotal, 'recordsFiltered': recordsFiltered, "data": data}, 200)
     except: 
         traceback.print_exc()
-    return make_response("Error! Please see logs.", 500)
+    return make_response(_("Error! Please see logs."), 500)
 
 @app.route('/farming/workers')
 def farming_workers():
@@ -170,22 +200,31 @@ def alerts():
         elif request.form.get('action') == 'purge':
             chiadog.remove_all_alerts()
         else:
-            app.logger.info("Unknown alerts form: {0}".format(request.form))
+            app.logger.info(_("Unknown alerts form") + ": {0}".format(request.form))
         return redirect(url_for('alerts')) # Force a redirect to allow time to update status
     farmers = chiadog.load_farmers()
     notifications = chiadog.get_notifications()
     return render_template('alerts.html', reload_seconds=120, farmers=farmers,
-        notifications=notifications, global_config=gc)
+        notifications=notifications, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/wallet', methods=['GET', 'POST'])    
 def wallet():
     gc = globals.load()
     selected_blockchain = worker.default_blockchain()
     if request.method == 'POST':
-        selected_blockchain = request.form.get('blockchain')
-        chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
+        if request.form.get('local_currency'):
+            app.logger.info("Saving local currency setting of: {0}".format(request.form.get('local_currency')))
+            fiat.save_local_currency(request.form.get('local_currency'))
+            flash(_("Saved local currency setting."), 'success')
+        else:
+            app.logger.info("Saving {0} cold wallet address of: {1}".format(request.form.get('blockchain'), request.form.get('cold_wallet_address')))
+            selected_blockchain = request.form.get('blockchain')
+            chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
+            flash(_("Saved cold wallet addresses."), 'success')
     wallets = chia.load_wallets()
-    return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, reload_seconds=120)
+    return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, 
+        reload_seconds=120, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
+        local_cur_sym=fiat.get_local_currency_symbol(), lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/keys')
 def keys():
@@ -204,7 +243,7 @@ def workers():
             worker.prune_workers_status(request.form.getlist('worker'))
     wkrs = worker.load_worker_summary()
     return render_template('workers.html', reload_seconds=120, 
-        workers=wkrs, global_config=gc)
+        workers=wkrs, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/worker', methods=['GET'])
 def worker_route():
@@ -218,7 +257,8 @@ def worker_route():
     warnings = worker.generate_warnings(wkr)
     return render_template('worker.html', worker=wkr, 
         plotting=plotting, plots_disk_usage=plots_disk_usage, 
-        plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc)
+        plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc,
+        lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/blockchains')
 def blockchains():
@@ -226,7 +266,7 @@ def blockchains():
     selected_blockchain = worker.default_blockchain()
     blockchains = chia.load_blockchains()
     return render_template('blockchains.html', reload_seconds=120, selected_blockchain = selected_blockchain, 
-        blockchains=blockchains, global_config=gc)
+        blockchains=blockchains, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/connections', methods=['GET', 'POST'])
 def connections():
@@ -239,21 +279,10 @@ def connections():
         elif request.form.get('action') == 'remove':
             chia.remove_connection(request.form.getlist('nodeid'), request.form.get('hostname'), request.form.get('blockchain'))
         else:
-            app.logger.info("Unknown form action: {0}".format(request.form))
+            app.logger.info(_("Unknown form action") + ": {0}".format(request.form))
     connections = chia.load_connections()
     return render_template('connections.html', reload_seconds=120, selected_blockchain = selected_blockchain,
-        connections=connections, global_config=gc)
-
-def find_selected_worker(hosts, hostname, blockchain= None):
-    if len(hosts) == 0:
-        return None
-    if not blockchain:
-        hosts[0].workers[0]
-    for host in hosts:
-        for worker in host.workers:
-            if worker['hostname'] == hostname and worker['blockchain'] == blockchain:
-                return worker
-    return hosts[0].workers[0]
+        connections=connections, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
 
 @app.route('/settings/plotting', methods=['GET', 'POST'])
 def settings_plotting():
@@ -354,31 +383,31 @@ def views_settings_config(path):
     config_type = request.args.get('type')
     w = worker.get_worker(request.args.get('worker'), request.args.get('blockchain'))
     if not w:
-        app.logger.info("No worker at {0} for fork {1}. Please select another fork.".format(
-                request.args.get('worker'), request.args.get('blockchain')))
+        app.logger.info(_l("No worker at %{worker} for blockchain %{blockchain}. Please select another blockchain.",
+            worker=request.args.get('worker'), blockchain=request.args.get('blockchain')))
         abort(404)
     if config_type == "alerts":
         try:
             response = make_response(chiadog.load_config(w, request.args.get('blockchain')), 200)
         except requests.exceptions.ConnectionError as ex:
-            response = make_response("For Alerts config, found no responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
+            response = make_response(_("For Alerts config, found no responding fullnode found for %{blockchain}. Please check your workers.", blockchain=request.args.get('blockchain')))
     elif config_type == "farming":
         try:
             response = make_response(chia.load_config(w, request.args.get('blockchain')), 200)
         except requests.exceptions.ConnectionError as ex:
-            response = make_response("For Farming config, found no responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
+            response = make_response(_("For Farming config, found no responding fullnode found for %{blockchain}. Please check your workers.", blockchain=request.args.get('blockchain')))
     elif config_type == "plotting":
         try:
             [replaced, config] = plotman.load_config(w, request.args.get('blockchain'))
             response = make_response(config, 200)
             response.headers.set('ConfigReplacementsOccurred', replaced)
         except requests.exceptions.ConnectionError as ex:
-            response = make_response("For Plotting config, found no responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
+            response = make_response(_("For Plotting config, found no responding fullnode found for %{blockchain}. Please check your workers.", blockchain=request.args.get('blockchain')))
     elif config_type == "tools":
         try:
             response = make_response(forktools.load_config(w, request.args.get('blockchain')), 200)
         except requests.exceptions.ConnectionError as ex:
-            response = make_response("No responding fullnode found for {0}. Please check your workers.".format(request.args.get('blockchain')))
+            response = make_response(_("No responding fullnode found for %{blockchain}. Please check your workers.", blockchain=request.args.get('blockchain')))
     else:
         abort("Unsupported config type: {0}".format(config_type), 400)
     response.mimetype = "application/x-yaml"
@@ -386,7 +415,7 @@ def views_settings_config(path):
 
 @app.route('/logs')
 def logs():
-    return render_template('logs.html')
+    return render_template('logs.html') 
 
 @app.route('/logfile')
 def logfile():
@@ -395,9 +424,9 @@ def logfile():
     if log_type in [ 'alerts', 'farming', 'plotting', 'archiving', 'apisrv', 'webui', 'pooling']:
         log_id = request.args.get("log_id")
         blockchain = request.args.get("blockchain")
-        return log_handler.get_log_lines(w, log_type, log_id, blockchain)
+        return log_handler.get_log_lines(get_lang(request), w, log_type, log_id, blockchain)
     else:
-        abort(500, "Unsupported log type: {0}".format(log_type))
+        abort(500, _("Unsupported log type") + ": {0}".format(log_type))
 
 @app.route('/worker_launch')
 def worker_launch():

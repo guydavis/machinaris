@@ -31,7 +31,7 @@ def reward_recovery(wallet_id, launcher_id, pool_contract_address):
     fd_env = os.environ.copy()
     fd_env.update(vars)
     cmd = f"/usr/local/bin/fd-cli nft-recover -l {launcher_id} -p {pool_contract_address} -nh 127.0.0.1 -np {rpc_port} -ct {network_path}/config/ssl/full_node/private_full_node.crt -ck {network_path}/config/ssl/full_node/private_full_node.key"
-    app.logger.info(f"Executing NFT 1/8 win recovery for {blockchain}: {cmd}")
+    app.logger.info(f"Executing NFT 7/8 win recovery for {blockchain}: {cmd}")
     log_fo.write("\n\nExecuted at: {0}\n{1}".format(time.strftime("%Y-%m-%d-%H:%M:%S"), cmd))
     log_fo.flush()
     proc = Popen(cmd,cwd="/fd-cli", env=fd_env, shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)

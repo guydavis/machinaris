@@ -37,3 +37,7 @@ class DefaultConfig:
     CONTROLLER_PORT = os.environ['controller_api_port'] if 'controller_api_port' in os.environ else '8926'
 
     MAX_CHART_CHALLENGES_MINS = 15
+
+    # Note, babel looks in /machinaris/web/translations with this path.
+    BABEL_TRANSLATION_DIRECTORIES = "translations"
+    LANGUAGES = ['en', 'de', 'fr', 'it', 'zh']

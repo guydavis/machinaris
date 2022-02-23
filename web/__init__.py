@@ -3,7 +3,7 @@ import os
 import pytz
 import re
 
-from flask import Flask
+from flask import Flask, request
 from flask_babel import Babel
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.engine import Engine
@@ -17,6 +17,13 @@ app.config.from_object(DefaultConfig)
 # Override config with optional settings file
 app.config.from_envvar('WEB_SETTINGS_FILE', silent=True)
 babel = Babel(app)
+
+@babel.localeselector
+def get_locale():
+    for d in babel.translation_directories:
+        app.logger.debug(d)
+    app.logger.info("WEB=> Returning locale: {0}".format(request.accept_languages.best_match(app.config['LANGUAGES'])))
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):

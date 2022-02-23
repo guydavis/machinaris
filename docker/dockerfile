@@ -44,6 +44,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/stor_install.sh ${STOR_BRANCH} \
     && /usr/bin/bash /machinaris/scripts/pull_3rd_party_libs.sh \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
+	&& /usr/bin/bash /machinaris/scripts/i18n/compile.sh \
 	&& rm -rf \
 		/root/.cache \
 		/tmp/* \
@@ -85,6 +86,9 @@ ENV FORKTOOLSHIDDENDIRS=/root
 
 ENV PATH="${PATH}:/chia-blockchain/venv/bin:/forktools:/mmx-node/build"
 ENV TZ=Etc/UTC
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
 ENV FLASK_ENV=production
 ENV XDG_CONFIG_HOME=/root/.chia
 ENV AUTO_PLOT=false
