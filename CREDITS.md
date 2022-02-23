@@ -41,8 +41,10 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Stor](https://github.com/Stor-Network/stor-blockchain)
 
 ## Other Resources
-* [Blockchain DB Downloads](https://chiaforksblockchain.com/) - from Maize
+* [FD-CLI](https://github.com/Flora-Network/flora-dev-cli) - script to regularly recover 7/8 rewards 
+* [Chia DB Downloads](https://www.chia-database.com/) - for Chia blockchain database
 * [All the Blocks](https://alltheblocks.net/) - blockchain, wallet, and pricing info
+* [Coin Gecko](https://coingecko.com/) - fiat currency exchange info
 
 ## Testers and Developers
 
