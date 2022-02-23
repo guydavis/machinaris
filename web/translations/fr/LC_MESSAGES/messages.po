@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-02-21 17:14-0700\n"
+"POT-Creation-Date: 2022-02-22 20:40-0700\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: fr\n"
@@ -189,7 +189,7 @@ msgstr "Worker"
 #: templates/alerts.html:73 templates/blockchains.html:31
 #: templates/settings/alerts.html:45 templates/settings/farming.html:46
 #: templates/settings/plotting.html:46 templates/settings/tools.html:45
-#: templates/summary.html:57 templates/wallet.html:107 templates/worker.html:47
+#: templates/summary.html:73 templates/wallet.html:108 templates/worker.html:47
 #: templates/workers.html:43
 msgid "Blockchain"
 msgstr "Blockchain"
@@ -296,13 +296,13 @@ msgstr "Pools"
 
 #: templates/base.html:85 templates/farming/plots.html:69
 #: templates/farming/workers.html:28 templates/plotting/jobs.html:94
-#: templates/plotting/workers.html:96 templates/summary.html:61
+#: templates/plotting/workers.html:96 templates/summary.html:77
 #: templates/workers.html:14
 msgid "Workers"
 msgstr "Workers"
 
-#: templates/base.html:91 templates/summary.html:9 templates/summary.html:37
-#: templates/wallet.html:22 templates/wallet.html:45
+#: templates/base.html:91 templates/summary.html:25 templates/summary.html:53
+#: templates/wallet.html:23 templates/wallet.html:46
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -354,8 +354,8 @@ msgstr "Plotman"
 msgid "Blockchain Summary"
 msgstr "Blockchain"
 
-#: templates/blockchains.html:32 templates/summary.html:58
-#: templates/wallet.html:108
+#: templates/blockchains.html:32 templates/summary.html:74
+#: templates/wallet.html:109
 msgid "Status"
 msgstr "Statut"
 
@@ -367,7 +367,7 @@ msgstr "Hauteur maximale"
 msgid "Peak Time"
 msgstr "Heure de pointe"
 
-#: templates/blockchains.html:35 templates/wallet.html:113
+#: templates/blockchains.html:35 templates/wallet.html:114
 msgid "Updated At"
 msgstr "Mis à jour à"
 
@@ -459,7 +459,7 @@ msgstr "Plots totales"
 msgid "Total Plots Size"
 msgstr "Taille totale des plots"
 
-#: templates/index.html:89 templates/wallet.html:112
+#: templates/index.html:89 templates/wallet.html:113
 msgid "Balance"
 msgstr "Total"
 
@@ -664,110 +664,110 @@ msgstr ""
 "mnenmoic vous-même sur la ligne de commande, consultez les %(wiki_link)s "
 "pour plus de détails."
 
-#: templates/summary.html:15 templates/wallet.html:51
+#: templates/summary.html:31 templates/wallet.html:52
 msgid "Local Currency:"
 msgstr "Monnaie locale:"
 
 #: templates/plotting/jobs.html:16 templates/plotting/jobs.html:34
 #: templates/plotting/jobs.html:52 templates/plotting/workers.html:16
 #: templates/plotting/workers.html:34 templates/settings/pools.html:39
-#: templates/summary.html:28 templates/wallet.html:64 templates/wallet.html:91
+#: templates/summary.html:44 templates/wallet.html:65 templates/wallet.html:92
 msgid "Cancel"
 msgstr "Annuler"
 
 #: templates/settings/alerts.html:55 templates/settings/farming.html:56
 #: templates/settings/plotting.html:56 templates/settings/pools.html:41
-#: templates/settings/tools.html:55 templates/summary.html:29
-#: templates/wallet.html:65 templates/wallet.html:92
+#: templates/settings/tools.html:55 templates/summary.html:45
+#: templates/wallet.html:66 templates/wallet.html:93
 msgid "Save"
 msgstr "Sauvegarder"
 
-#: templates/summary.html:59
+#: templates/summary.html:75
 msgid "Height"
 msgstr "Hauteur"
 
 #: templates/farming/plots.html:66 templates/farming/workers.html:25
-#: templates/summary.html:60
+#: templates/summary.html:76
 msgid "Plots"
 msgstr "Plots"
 
-#: templates/summary.html:62
+#: templates/summary.html:78
 msgid "Max Resp."
 msgstr "Resp. Max"
 
-#: templates/summary.html:63
+#: templates/summary.html:79
 msgid "Partials"
 msgstr "Partiels"
 
-#: templates/summary.html:64
+#: templates/summary.html:80
 msgid "ETW"
 msgstr "ETW"
 
-#: templates/summary.html:66
+#: templates/summary.html:82
 msgid "Wallet"
 msgstr "Portefeuille"
 
-#: templates/summary.html:67 templates/summary.html:68
+#: templates/summary.html:83 templates/summary.html:84
 msgid "EDV"
 msgstr "EDV"
 
-#: templates/summary.html:79 templates/worker.html:78 templates/workers.html:72
+#: templates/summary.html:95 templates/worker.html:78 templates/workers.html:72
 msgid "Offline"
 msgstr "Hors ligne"
 
-#: templates/summary.html:81
+#: templates/summary.html:97
 msgid "Synced"
 msgstr "Synchronisé"
 
-#: templates/summary.html:83
+#: templates/summary.html:99
 msgid "Syncing"
 msgstr "Synchronisation"
 
-#: templates/summary.html:85
+#: templates/summary.html:101
 msgid "Not Synced"
 msgstr "Non synchronisé"
 
-#: templates/summary.html:108
+#: templates/summary.html:124
 msgid "No blockchains found from any farmers. Just starting up?"
 msgstr "Aucune blockchain trouvée chez les farmers. Pas ajouté?"
 
-#: templates/summary.html:109
+#: templates/summary.html:125
 msgid "Please allow at least 15 minutes for blockchains to get started."
 msgstr "Veuillez prévoir au moins 15 minutes pour que les blockchains commencent."
 
-#: templates/wallet.html:75
+#: templates/wallet.html:76
 msgid "Wallet Settings"
 msgstr "Paramètres du portefeuille"
 
-#: templates/wallet.html:85
+#: templates/wallet.html:86
 msgid "Cold Wallet Address:"
 msgstr "Adresse du portefeuille froid:"
 
-#: templates/wallet.html:99
+#: templates/wallet.html:100
 msgid "Wallet Summary"
 msgstr "Résumé quotidien"
 
-#: templates/wallet.html:109
+#: templates/wallet.html:110
 msgid "Wallet Balance"
 msgstr "Solde du portefeuille"
 
-#: templates/wallet.html:110
+#: templates/wallet.html:111
 msgid "Cold Wallet Balance"
 msgstr "Solde de portefeuille froid"
 
-#: templates/wallet.html:111
+#: templates/wallet.html:112
 msgid "Total Balance"
 msgstr "Solde total"
 
-#: templates/wallet.html:136
+#: templates/wallet.html:137
 msgid "Edit Wallet"
 msgstr "Modifier le portefeuille"
 
-#: templates/wallet.html:147
+#: templates/wallet.html:148
 msgid "Wallet Details"
 msgstr "Détails du portefeuille"
 
-#: templates/wallet.html:171
+#: templates/wallet.html:172
 msgid ""
 "No wallet status received.  Perhaps just starting?  Please allow at least"
 " 10 minutes to update."
@@ -775,7 +775,7 @@ msgstr ""
 "Aucun statut de portefeuille reçu. Peut-être que vous venez juste de "
 "commencer? Veuillez autoriser au moins 10 minutes pour mettre à jour."
 
-#: templates/wallet.html:172
+#: templates/wallet.html:173
 msgid ""
 "You can also try running \"chia wallet show\" on your fullnode's in-"
 "container shell to verify."
@@ -1388,3 +1388,4 @@ msgstr "Commencer..."
 #: templates/settings/pools.html:197
 msgid "PlotNFT Log on "
 msgstr "Journaux PlotNFT de"
+
