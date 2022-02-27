@@ -14,9 +14,9 @@ from api import app
 
 ALLTHEBLOCKS_REQUEST_INTERVAL_MINS = 15
 COLD_WALLET_ADDRESSES_FILE = '/root/.chia/machinaris/config/cold_wallet_addresses.json'
-COLD_WALLET_CACHE_FILE = '/root/.chia/machinaris/dbs/cold_wallet_cache.json'
-BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/dbs/blockchain_prices_cache.json'
-EXCHANGE_RATES_CACHE_FILE = '/root/.chia/machinaris/dbs/exchange_rates_cache.json'
+COLD_WALLET_CACHE_FILE = '/root/.chia/machinaris/cache/cold_wallet_cache.json'
+BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/cache/blockchain_prices_cache.json'
+EXCHANGE_RATES_CACHE_FILE = '/root/.chia/machinaris/cache/exchange_rates_cache.json'
 
 MOJO_PER_COIN = {
     'btcgreen': 1000000000000,

@@ -34,6 +34,11 @@ wget -O ${BASEPATH}/bs.zip -nv "https://github.com/twbs/bootstrap/releases/downl
 unzip -o -j ${BASEPATH}/bs.zip -d $BASEPATH/ bootstrap-${BOOTSTRAP_VERSION}*/css/bootstrap.min.css* bootstrap-${BOOTSTRAP_VERSION}*/js/bootstrap.bundle.min.js*  && \
 rm -f ${BASEPATH}/bs.zip
 
+# Leaflet
+wget -O ${BASEPATH}/leaflet.zip -nv "https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/v1.7.1/leaflet.zip" && \
+unzip -o ${BASEPATH}/leaflet.zip -d $BASEPATH/ && \
+rm -f ${BASEPATH}/leaflet.zip
+
 # Pull localization files for DataTables.js
 mkdir -p $BASEPATH/i18n/
 LANGS=$(grep -oP "LANGUAGES = \[\K(.*)\]" $BASEPATH/../../default_settings.py | cut -d ']' -f 1 | tr -d \'\" | tr -d ' ')

@@ -8,7 +8,7 @@ import traceback
 from flask_babel import _, lazy_gettext as _l
 
 from web import app
-from web.actions import worker as w
+from web.actions import worker as w, mapping
 from common.config import globals
 from common.utils import converters, fiat
 
@@ -509,9 +509,10 @@ class Blockchains:
 
 class Connections:
 
-    def __init__(self, connections):
+    def __init__(self, connections, lang):
         self.rows = []
         self.blockchains = {}
+        geoip_cache = mapping.load_geoip_cache()
         for connection in connections:
             worker_status = None
             try:
@@ -532,9 +533,9 @@ class Connections:
                 'add_exmample': self.get_add_connection_example(connection.blockchain)
             })
             if connection.blockchain == 'mmx':
-                self.blockchains[connection.blockchain] = self.parse_mmx(connection, connection.blockchain)
+                self.blockchains[connection.blockchain] = self.parse_mmx(connection, connection.blockchain, geoip_cache, lang)
             else:
-                self.blockchains[connection.blockchain] = self.parse_chia(connection, connection.blockchain)
+                self.blockchains[connection.blockchain] = self.parse_chia(connection, connection.blockchain, geoip_cache, lang)
         self.rows.sort(key=lambda conn: conn['blockchain'])
     
     def get_add_connection_example(self, blockchain):
@@ -603,7 +604,39 @@ class Connections:
 
         raise("Unknown blockchain fork of selected: " + blockchain)
 
-    def parse_chia(self, connection, blockchain):
+    def set_geolocation(self, geoip_cache, connection, lang):
+        latitude = None
+        longitude = None
+        city = ''
+        country = ''
+        if connection['ip'] in geoip_cache:
+            geoip = geoip_cache[connection['ip']]
+            latitude = geoip['latitude']
+            longitude = geoip['longitude']
+            try:
+                for key in geoip['city']:
+                    if key.startswith(lang):
+                        city = geoip['city'][key]
+                        break
+                if not city:
+                    city = geoip['city']['en']
+            except:
+                pass
+            try:
+                for key in geoip['country']:
+                    if key.startswith(lang):
+                        country = geoip['country'][key]
+                        break
+                if not country:
+                    country = geoip['country']['en']
+            except:
+                pass
+        connection['latitude'] = latitude
+        connection['longitude'] = longitude
+        connection['city'] = city
+        connection['country'] = country
+
+    def parse_chia(self, connection, blockchain, geoip_cache, lang):
         conns = []
         for line in connection.details.split('\n'):
             try:
@@ -642,6 +675,10 @@ class Connections:
                         if len(vals) > 9: # HDDCoin keeps SBHeight and Hash on same line
                             connection['height'] = vals[8]
                             connection['hash'] = vals[9]
+                        try:
+                            self.set_geolocation(geoip_cache, connection, lang)
+                        except:
+                            traceback.print_exc()
                         if blockchain == 'hddcoin' or vals[0] != "FULL_NODE":  # FARMER and WALLET only on one line 
                             conns.append(connection)
                     else:
@@ -651,7 +688,7 @@ class Connections:
                 app.logger.info(traceback.format_exc())
         return conns
 
-    def parse_mmx(self, connection, blockchain):
+    def parse_mmx(self, connection, blockchain, geoip_cache, lang):
         conns = []
         for line in connection.details.split('\n'):
             try:
@@ -669,6 +706,10 @@ class Connections:
                         'mib_down': "%.1f"% round(self.rate_to_mb(m.group(4), m.group(5)) * int(m.group(8)) * 60, 2),
                         'timeout': m.group(9)
                     }
+                    try:
+                        self.set_geolocation(geoip_cache, connection, lang)
+                    except:
+                        traceback.print_exc()
                     conns.append(connection)
                 elif line.strip():
                     app.logger.info("Bad peer line: {0}".format(line))

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-02-22 20:40-0700\n"
+"POT-Creation-Date: 2022-02-27 11:47-0700\n"
 "PO-Revision-Date: 2022-02-15 10:14-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: zh\n"
@@ -18,63 +18,69 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: routes.py:76 routes.py:218
+#: routes.py:77 routes.py:219
 msgid "Saved local currency setting."
 msgstr ""
 
-#: routes.py:95
+#: routes.py:96
 msgid "Blockchain download"
 msgstr ""
 
-#: routes.py:127
+#: routes.py:128
 msgid "Unknown plotting form"
 msgstr ""
 
-#: routes.py:177
+#: routes.py:178
 msgid "Error! Please see logs."
 msgstr ""
 
-#: routes.py:203
+#: routes.py:204
 msgid "Unknown alerts form"
 msgstr ""
 
-#: routes.py:223
+#: routes.py:224
 msgid "Saved cold wallet addresses."
 msgstr ""
 
-#: routes.py:282
+#: routes.py:279
+msgid ""
+"Saved mapping settings.  Please allow 10 minutes to generate location "
+"information for the map."
+msgstr ""
+
+#: routes.py:287
 msgid "Unknown form action"
 msgstr ""
 
-#: routes.py:387
+#: routes.py:393
 msgid ""
 "No worker at %{worker} for blockchain %{blockchain}. Please select "
 "another blockchain."
 msgstr ""
 
-#: routes.py:393
+#: routes.py:399
 msgid ""
 "For Alerts config, found no responding fullnode found for %{blockchain}. "
 "Please check your workers."
 msgstr ""
 
-#: routes.py:398
+#: routes.py:404
 msgid ""
 "For Farming config, found no responding fullnode found for %{blockchain}."
 " Please check your workers."
 msgstr ""
 
-#: routes.py:405
+#: routes.py:411
 msgid ""
 "For Plotting config, found no responding fullnode found for "
 "%{blockchain}. Please check your workers."
 msgstr ""
 
-#: routes.py:410
+#: routes.py:416
 msgid "No responding fullnode found for %{blockchain}. Please check your workers."
 msgstr ""
 
-#: routes.py:429
+#: routes.py:435
 msgid "Unsupported log type"
 msgstr ""
 
@@ -218,11 +224,11 @@ msgstr ""
 msgid "Chiadog Log on "
 msgstr ""
 
-#: templates/alerts.html:146 templates/plotting/jobs.html:363
+#: templates/alerts.html:146 templates/plotting/jobs.html:367
 msgid "Starting..."
 msgstr ""
 
-#: templates/alerts.html:153 templates/plotting/jobs.html:373
+#: templates/alerts.html:153 templates/plotting/jobs.html:377
 msgid "Stopping..."
 msgstr ""
 
@@ -234,103 +240,104 @@ msgstr ""
 msgid "Purging..."
 msgstr ""
 
-#: templates/base.html:10 templates/base.html:25 templates/base.html:170
+#: templates/base.html:11 templates/base.html:26 templates/base.html:171
 #: templates/controller.html:10
 msgid "Machinaris"
 msgstr ""
 
-#: templates/base.html:31
+#: templates/base.html:32
 msgid "Summary"
 msgstr ""
 
-#: templates/base.html:37 templates/base.html:108 templates/index.html:41
+#: templates/base.html:38 templates/base.html:109 templates/index.html:41
 #: templates/plotting/jobs.html:101 templates/settings/plotting.html:14
 msgid "Plotting"
 msgstr ""
 
-#: templates/base.html:43 templates/base.html:102 templates/index.html:50
+#: templates/base.html:44 templates/base.html:103 templates/index.html:50
 #: templates/settings/farming.html:15
 msgid "Farming"
 msgstr ""
 
-#: templates/base.html:49
+#: templates/base.html:50
 msgid "Wallets"
 msgstr ""
 
-#: templates/base.html:55
+#: templates/base.html:56
 msgid "Keys"
 msgstr ""
 
-#: templates/base.html:62
+#: templates/base.html:63
 msgid "Blockchains"
 msgstr ""
 
-#: templates/base.html:69
+#: templates/base.html:70
 msgid "Connections"
 msgstr ""
 
-#: templates/base.html:75 templates/base.html:96
+#: templates/base.html:76 templates/base.html:97
 #: templates/settings/alerts.html:14
 msgid "Alerts"
 msgstr ""
 
-#: templates/base.html:81 templates/base.html:114
+#: templates/base.html:82 templates/base.html:115
 msgid "Pools"
 msgstr ""
 
-#: templates/base.html:85 templates/farming/plots.html:69
+#: templates/base.html:86 templates/farming/plots.html:69
 #: templates/farming/workers.html:28 templates/plotting/jobs.html:94
 #: templates/plotting/workers.html:96 templates/summary.html:77
 #: templates/workers.html:14
 msgid "Workers"
 msgstr ""
 
-#: templates/base.html:91 templates/summary.html:25 templates/summary.html:53
-#: templates/wallet.html:23 templates/wallet.html:46
+#: templates/base.html:92 templates/connections.html:25
+#: templates/connections.html:59 templates/summary.html:25
+#: templates/summary.html:53 templates/wallet.html:23 templates/wallet.html:46
 msgid "Settings"
 msgstr ""
 
-#: templates/base.html:120 templates/settings/tools.html:14
+#: templates/base.html:121 templates/settings/tools.html:14
 msgid "Tools"
 msgstr ""
 
-#: templates/base.html:131
+#: templates/base.html:132
 msgid "About"
 msgstr ""
 
-#: templates/base.html:134
+#: templates/base.html:135
 msgid "Install"
 msgstr ""
 
-#: templates/base.html:136
+#: templates/base.html:137
 msgid "Project"
 msgstr ""
 
-#: templates/base.html:138
+#: templates/base.html:139
 msgid "Wiki"
 msgstr ""
 
-#: templates/base.html:140
+#: templates/base.html:141
 msgid "Issues"
 msgstr ""
 
-#: templates/base.html:142
+#: templates/base.html:143
 msgid "License"
 msgstr ""
 
-#: templates/base.html:144
+#: templates/base.html:145
 msgid "Credits"
 msgstr ""
 
-#: templates/base.html:160
+#: templates/base.html:161
 msgid "Bladebit"
 msgstr ""
 
-#: templates/base.html:175
+#: templates/base.html:176
 msgid "Madmax"
 msgstr ""
 
-#: templates/base.html:179
+#: templates/base.html:180
 msgid "Plotman"
 msgstr ""
 
@@ -367,55 +374,94 @@ msgstr ""
 msgid "Try running \"chia show --state\" on your farmers to verify."
 msgstr ""
 
-#: templates/connections.html:70
+#: templates/connections.html:34
+msgid "Maxmind Account (Required):"
+msgstr ""
+
+#: templates/connections.html:39
+msgid "Maxmind License Key (Required):"
+msgstr ""
+
+#: templates/connections.html:44
+msgid "Mapbox Access Token (Optional):"
+msgstr ""
+
+#: templates/connections.html:50 templates/plotting/jobs.html:16
+#: templates/plotting/jobs.html:34 templates/plotting/jobs.html:52
+#: templates/plotting/workers.html:16 templates/plotting/workers.html:34
+#: templates/settings/pools.html:39 templates/summary.html:44
+#: templates/wallet.html:65 templates/wallet.html:92
+msgid "Cancel"
+msgstr ""
+
+#: templates/connections.html:51 templates/settings/alerts.html:55
+#: templates/settings/farming.html:56 templates/settings/plotting.html:56
+#: templates/settings/pools.html:41 templates/settings/tools.html:55
+#: templates/summary.html:45 templates/wallet.html:66 templates/wallet.html:93
+msgid "Save"
+msgstr ""
+
+#: templates/connections.html:84
+msgid "Connections Map"
+msgstr ""
+
+#: templates/connections.html:98
+msgid "Connection Details"
+msgstr ""
+
+#: templates/connections.html:134
 msgid "Type"
 msgstr ""
 
-#: templates/connections.html:71 templates/worker.html:39
+#: templates/connections.html:135 templates/worker.html:39
 msgid "IP Address"
 msgstr ""
 
-#: templates/connections.html:72
+#: templates/connections.html:137
+msgid "City"
+msgstr ""
+
+#: templates/connections.html:138
+msgid "Country"
+msgstr ""
+
+#: templates/connections.html:140
 msgid "Ports"
 msgstr ""
 
-#: templates/connections.html:73
-msgid "Node ID"
-msgstr ""
-
-#: templates/connections.html:74
+#: templates/connections.html:141
 msgid "SB Height"
 msgstr ""
 
-#: templates/connections.html:75
+#: templates/connections.html:142
 msgid "Last Connect"
 msgstr ""
 
-#: templates/connections.html:76
+#: templates/connections.html:143
 msgid "MiB Up"
 msgstr ""
 
-#: templates/connections.html:77
+#: templates/connections.html:144
 msgid "MiB Down"
 msgstr ""
 
-#: templates/connections.html:109
+#: templates/connections.html:179
 msgid "Disconnect Selected"
 msgstr ""
 
-#: templates/connections.html:115
+#: templates/connections.html:185
 msgid "Check Port Forwarding"
 msgstr ""
 
-#: templates/connections.html:131
+#: templates/connections.html:201
 msgid "Add New Connection"
 msgstr ""
 
-#: templates/connections.html:143
+#: templates/connections.html:213
 msgid "No connections found from any farmers yet. Perhaps just starting?"
 msgstr ""
 
-#: templates/connections.html:144
+#: templates/connections.html:214
 msgid ""
 "After a while, try running \"chia show --connections\" on your farmers to"
 " verify."
@@ -624,20 +670,6 @@ msgstr ""
 
 #: templates/summary.html:31 templates/wallet.html:52
 msgid "Local Currency:"
-msgstr ""
-
-#: templates/plotting/jobs.html:16 templates/plotting/jobs.html:34
-#: templates/plotting/jobs.html:52 templates/plotting/workers.html:16
-#: templates/plotting/workers.html:34 templates/settings/pools.html:39
-#: templates/summary.html:44 templates/wallet.html:65 templates/wallet.html:92
-msgid "Cancel"
-msgstr ""
-
-#: templates/settings/alerts.html:55 templates/settings/farming.html:56
-#: templates/settings/plotting.html:56 templates/settings/pools.html:41
-#: templates/settings/tools.html:55 templates/summary.html:45
-#: templates/wallet.html:66 templates/wallet.html:93
-msgid "Save"
 msgstr ""
 
 #: templates/summary.html:75
@@ -1162,15 +1194,15 @@ msgstr ""
 msgid "Plotting Speed - k%(k_size)s Plots"
 msgstr ""
 
-#: templates/plotting/jobs.html:337
+#: templates/plotting/jobs.html:341
 msgid "Suspending..."
 msgstr ""
 
-#: templates/plotting/jobs.html:345
+#: templates/plotting/jobs.html:349
 msgid "Resuming..."
 msgstr ""
 
-#: templates/plotting/jobs.html:354
+#: templates/plotting/jobs.html:358
 msgid "Killing..."
 msgstr ""
 

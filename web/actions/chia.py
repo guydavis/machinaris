@@ -144,9 +144,9 @@ def load_summaries():
         traceback.print_exc()
     return None
 
-def load_connections():
+def load_connections(lang='en'):
     connections = db.session.query(co.Connection).all()
-    return Connections(connections)
+    return Connections(connections, lang)
 
 def load_keys():
     keys = db.session.query(k.Key).order_by(k.Key.blockchain).all()

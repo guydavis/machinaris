@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-02-22 20:40-0700\n"
+"POT-Creation-Date: 2022-02-27 11:47-0700\n"
 "PO-Revision-Date: 2022-02-25 15:32-0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: pt\n"
@@ -48,7 +48,7 @@ msgid ""
 "patient! View the log for details."
 msgstr ""
 
-#: views/ping/resources.py:25 views/ping/resources.py:28
+#: views/ping/resources.py:28
 msgid "Pong!"
 msgstr ""
 
