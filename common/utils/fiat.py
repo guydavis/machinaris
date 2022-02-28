@@ -53,6 +53,8 @@ def get_fiat_exchange_to_usd():
     return 1.0 # Default fiat is $USD
 
 def get_local_currency():
+    if not os.path.exists(LOCALE_SETTINGS):
+        return None
     try:
         with open(LOCALE_SETTINGS) as f:
             data = json.load(f)
