@@ -20,11 +20,11 @@ msgstr ""
 
 #: commands/chia_cli.py:66
 msgid "Updated config.yaml failed validation!"
-msgstr ""
+msgstr "A validação do ficheiro config.yaml falhou!"
 
 #: commands/pools_cli.py:68
 msgid "No requested pool modifications were sent. Current settings are unchanged."
-msgstr ""
+msgstr "Nenhuma das modificações efectuadas à pool foi enviada. A configuração actual não foi modificada."
 
 #: commands/pools_cli.py:151
 msgid ""
@@ -32,6 +32,9 @@ msgid ""
 "minutes or more to complete. DO NOT immediately re-submit your request. "
 "View the log for details."
 msgstr ""
+"Saida da pool bem sucedida, mudando para o modo self plotting. Por favor aguarde uns "
+"minutos, ou mais algum tempo, para a operação terminar. NÃO FAÇA novamente a mesma operação. "
+"Consultar o log para ver mais detalhes."
 
 #: commands/pools_cli.py:195
 #, python-format
@@ -40,6 +43,9 @@ msgid ""
 "a few minutes or more to complete. DO NOT immediately re-submit your "
 "request. Be patient! View the log for details."
 msgstr ""
+"Juntou-se à pool %(pool_url)s com sucesso através da criação de um Chia NFT. Por favor aguade "
+"uns minutos, ou mais algum tempo, para a operação terminar. NÃO FAÇA novamente a mesma operação. "
+"Seja paciente. Pode consultar o log para ver mais detalhes."
 
 #: commands/pools_cli.py:224
 msgid ""
@@ -47,8 +53,11 @@ msgid ""
 "or more to complete. DO NOT immediately re-submit your request. Be "
 "patient! View the log for details."
 msgstr ""
+"O NFT para self-pooling foi criado com sucesso. Por favor aguarde uns minutos, "
+"ou mais algum tempo, para a operação terminar. NÃO FAÇA novamente a mesma operação. "
+"Seja paciente. Pode consultar o log para ver mais detalhes."
 
 #: views/ping/resources.py:28
 msgid "Pong!"
-msgstr ""
+msgstr "Pong!"
 
