@@ -85,8 +85,9 @@
         <div class="col-7 mt-2">
             <b>Blockchains:</b>
             {% for blockchain in marker_hues.keys() %}
-                <img src="{{ url_for('static', filename='3rd_party/images/marker-icon.png') }}" 
-                    class="hue_{{blockchain}}" style="padding-left:3px; height:25px;" title="{{blockchain}}" />
+            <a href="#" id="{{blockchain}}_toggle"><img 
+                src="{{ url_for('static', filename='3rd_party/images/marker-icon.png') }}" 
+                class="hue_{{blockchain}}" style="padding-left:3px; height:25px;" title="{{blockchain}}" /></a>
             {% endfor %}
         </div>
     </div>
@@ -240,14 +241,19 @@
                 {% endif %}
             ]
         });
+        var layerGroups = {};
         function load_map_points(map) {
             {% for connection in connections.rows %}
+                var layerGroup = L.layerGroup().addTo(map);
                 {% for row in connections.blockchains[connection.blockchain] %}
                     {% if row.latitude %}
-                        var marker = L.marker([{{row.latitude}},{{row.longitude}}]).addTo(map).bindPopup('{{connection.blockchain|capitalize}} - {{row.ip}}<br>{% if row.city %}{{row.city}}, {% endif %}{{row.country}}');
+                        var marker = L.marker([{{row.latitude}},{{row.longitude}}]).addTo(map);
+                        marker.bindPopup('{{connection.blockchain|capitalize}} - {{row.ip}}<br>{% if row.city %}{{row.city}}, {% endif %}{{row.country}}');
                         marker._icon.classList.add("hue_{{connection.blockchain}}");
+                        layerGroup.addLayer(marker);
                     {% endif %}
                 {% endfor %}
+                layerGroups['{{connection.blockchain}}'] = layerGroup;
             {% endfor %}
         }
         {% endif %}
@@ -284,6 +290,17 @@
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...`
                 );
                 $("#settings-form").submit();
+            });
+            $("#{{connection.blockchain}}_toggle").click(function(event) {
+                event.preventDefault();
+                for (const [blockchain, layerGroup] of Object.entries(layerGroups)) {
+                    if (layerGroup == layerGroups['{{connection.blockchain}}']) {
+                        layerGroup.show();
+                    } 
+                    else {
+                        layerGroup.hide();
+                    }
+                }
             });
             {% endfor %}
             {% if mapbox_license %}

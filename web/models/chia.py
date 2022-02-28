@@ -609,7 +609,7 @@ class Connections:
         longitude = None
         city = ''
         country = ''
-        if connection['ip'] in geoip_cache:
+        if connection['ip'] in geoip_cache and geoip_cache[connection['ip']]:
             geoip = geoip_cache[connection['ip']]
             latitude = geoip['latitude']
             longitude = geoip['longitude']

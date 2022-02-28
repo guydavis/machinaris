@@ -24,6 +24,9 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [DataTables.js](https://datatables.net/): Filter/search/pagination of dynamic tables, as per [this tutorial](https://blog.miguelgrinberg.com/post/beautiful-interactive-tables-for-your-flask-templates).
 * [Charts.js](https://www.chartjs.org/): dynamic charting library.
 * [Flask-Babel](https://pythonhosted.org/Flask-BabelEx/): internationaliztion and localization, as per [this tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xiii-i18n-and-l10n).
+* [Leaflet](https://leafletjs.com/): Web mapping toolkit.  Fantastic maps, easy to use!
+* [Maxmind](https://maxmind.com/): Geolocation API for mapping IP addresses of peer connections.
+* [Mapbox](https://mapbox.com): Nice looking map tiles for use with Leaflet on the Connections page map.
 
 ## Blockchains
 * [BTCgreen](https://github.com/BTCgreen-Network/btcgreen-blockchain)
