@@ -140,11 +140,6 @@ $(document).ready(function () {
         $("#settings-form").submit();
     });
     $('#data').DataTable({
-        {% if lang != 'en' %}
-        "language": {
-            "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
-        },
-        {% endif %}
         "pageLength": 25,
         "columnDefs": [
             { 
@@ -194,6 +189,11 @@ $(document).ready(function () {
                 }
             },
         ],
+        {% if lang != 'en' %}
+        "language": {
+            "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+        },
+        {% endif %}
     });
 })
 </script>

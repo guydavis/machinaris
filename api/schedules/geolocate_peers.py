@@ -66,13 +66,17 @@ def geolocate_ip_addresses(ip_addresses):
     with geoip2.webservice.Client(license["account"], license['license_key'], host="geolite.info") as client:
         for ip_address in ip_addresses:
             if ip_address in geoip_cache:
+                #app.logger.info("GEOLOCATE: Have a cache entry for {0}".format(ip_address))
                 if geoip_cache[ip_address]:
+                    #app.logger.info("GEOLOCATE: Already have a valid location for {0} at {1}".format(ip_address, geoip_cache[ip_address]))
                     continue
-                if not missing_retry:
+                elif not missing_retry:
+                    app.logger.info("GEOLOCATE: No valid location, but not retrying yet. {0}".format(ip_address))
                     continue  # Don't request location too often for IPs which weren't resolved earlier
                 else:
-                    app.logger.info("Retrying {0}, as previously returned {1}.".format(ip_address, geoip_cache[ip_address]))
+                    app.logger.info("GEOLOCATE: Retrying {0}, as previously returned {1}.".format(ip_address, geoip_cache[ip_address]))
             try:
+                app.logger.info("GEOLOCATE: Querying maxmind for a valid location of {0}".format(ip_address))
                 response = client.city(ip_address)
                 app.logger.info("{0} located at {1}".format(ip_address, response.location))
                 geoip_cache[ip_address] = { 

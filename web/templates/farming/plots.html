@@ -171,11 +171,6 @@
                 "pageLength": 25,
                 "serverSide": true,
                 "ajax": "{{ url_for('farming_data') }}",
-                {% if lang != 'en' %}
-                "language": {
-                    "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
-                },
-                {% endif %}
                 "order": [[6, "desc"]],
                 "columnDefs": [
                     { 
@@ -207,6 +202,11 @@
                         }
                     }, 
                 ],
+                {% if lang != 'en' %}
+                "language": {
+                    "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+                },
+                {% endif %}
             });
         });
     </script>

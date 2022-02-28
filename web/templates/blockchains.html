@@ -95,12 +95,12 @@
 <script>
 $(document).ready(function () {
     $('#data').DataTable({
+        "pageLength": 25,
         {% if lang != 'en' %}
         "language": {
             "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
         },
         {% endif %}
-        "pageLength": 25,
     });
 })
 </script>

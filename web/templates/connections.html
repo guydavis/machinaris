@@ -266,12 +266,13 @@
         $(document).ready(function () {
             {% for connection in connections.rows %}
             $('#conns_{{connection.displayname}}_{{connection.blockchain}}').DataTable({
+                // Note, without an "order" here, first column of checkboxes still shows as orderable. It's fine...
+                "columnDefs": [{ "orderable": false, targets: [0] }],
                 {% if lang != 'en' %}
                 "language": {
                     "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
                 },
                 {% endif %}
-                "columnDefs": [{ "orderable": false, targets: [0] }],
             });
             $("#btnAdd_{{connection.displayname}}_{{connection.blockchain}}").click(function () {
                 $(this).prop("disabled", true);

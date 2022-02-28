@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-02-27 11:47-0700\n"
+"POT-Creation-Date: 2022-02-28 14:57-0700\n"
 "PO-Revision-Date: 2022-02-15 10:14-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: zh\n"
@@ -405,63 +405,63 @@ msgstr ""
 msgid "Connections Map"
 msgstr ""
 
-#: templates/connections.html:98
+#: templates/connections.html:105
 msgid "Connection Details"
 msgstr ""
 
-#: templates/connections.html:134
+#: templates/connections.html:141
 msgid "Type"
 msgstr ""
 
-#: templates/connections.html:135 templates/worker.html:39
+#: templates/connections.html:142 templates/worker.html:39
 msgid "IP Address"
 msgstr ""
 
-#: templates/connections.html:137
+#: templates/connections.html:144
 msgid "City"
 msgstr ""
 
-#: templates/connections.html:138
+#: templates/connections.html:145
 msgid "Country"
 msgstr ""
 
-#: templates/connections.html:140
+#: templates/connections.html:147
 msgid "Ports"
 msgstr ""
 
-#: templates/connections.html:141
+#: templates/connections.html:148
 msgid "SB Height"
 msgstr ""
 
-#: templates/connections.html:142
+#: templates/connections.html:149
 msgid "Last Connect"
 msgstr ""
 
-#: templates/connections.html:143
+#: templates/connections.html:150
 msgid "MiB Up"
 msgstr ""
 
-#: templates/connections.html:144
+#: templates/connections.html:151
 msgid "MiB Down"
 msgstr ""
 
-#: templates/connections.html:179
+#: templates/connections.html:186
 msgid "Disconnect Selected"
 msgstr ""
 
-#: templates/connections.html:185
+#: templates/connections.html:192
 msgid "Check Port Forwarding"
 msgstr ""
 
-#: templates/connections.html:201
+#: templates/connections.html:208
 msgid "Add New Connection"
 msgstr ""
 
-#: templates/connections.html:213
+#: templates/connections.html:220
 msgid "No connections found from any farmers yet. Perhaps just starting?"
 msgstr ""
 
-#: templates/connections.html:214
+#: templates/connections.html:221
 msgid ""
 "After a while, try running \"chia show --connections\" on your farmers to"
 " verify."
@@ -1045,15 +1045,15 @@ msgstr ""
 msgid "New Worker"
 msgstr ""
 
-#: templates/workers.html:103
+#: templates/workers.html:104
 msgid "No Machinaris workers have reported status successfully."
 msgstr ""
 
-#: templates/workers.html:104
+#: templates/workers.html:105
 msgid "Please check each expected worker's log files."
 msgstr ""
 
-#: templates/workers.html:105
+#: templates/workers.html:106
 #, python-format
 msgid "For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
 msgstr ""

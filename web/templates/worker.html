@@ -162,13 +162,13 @@
   <script>
     $(document).ready(function () {
       $('#plots').DataTable({
+        "pageLength": 10,
+        "order": [[5, "desc"]],
         {% if lang != 'en' %}
         "language": {
             "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
         },
         {% endif %}
-        "pageLength": 10,
-        "order": [[5, "desc"]]
       });
       $('#plotting').DataTable({ "ordering": false, });
       $('[data-toggle="tooltip"]').tooltip();

@@ -601,8 +601,22 @@ class Connections:
             return 1999
         if blockchain == 'stor':
             return 8668
-
         raise("Unknown blockchain fork of selected: " + blockchain)
+
+    def get_geoname_for_lang(self, location, lang):
+        lang_codes = [ lang, ]
+        if '_' in lang: 
+            lang_codes.append(lang.split('_')[0]) # Secondarily, add more generic code
+        for lang_code in lang_codes:
+            for key in location:
+                if key.startswith(lang_code): # Note, means a pt_PT user may get pt_BR as that's the only 'pt' that Maxmind provides
+                    #app.logger.info('Found matching geoname for {0} in {1}'.format(lang, location))
+                    return location[key]
+        if 'en' in location: # Default fallback is 'en'
+            app.logger.info('Falling back to English geoname for {0} in {1}'.format(lang, location))
+            return location['en']
+        app.logger.info('Unable to find a geoname for {0} in {1}'.format(lang, location))
+        return '' # Blank if no such match
 
     def set_geolocation(self, geoip_cache, connection, lang):
         latitude = None
@@ -614,23 +628,13 @@ class Connections:
             latitude = geoip['latitude']
             longitude = geoip['longitude']
             try:
-                for key in geoip['city']:
-                    if key.startswith(lang):
-                        city = geoip['city'][key]
-                        break
-                if not city:
-                    city = geoip['city']['en']
+                city = self.get_geoname_for_lang(geoip['city'], lang)
             except:
-                pass
+                traceback.print_exc()
             try:
-                for key in geoip['country']:
-                    if key.startswith(lang):
-                        country = geoip['country'][key]
-                        break
-                if not country:
-                    country = geoip['country']['en']
+                country = self.get_geoname_for_lang(geoip['country'], lang)
             except:
-                pass
+                traceback.print_exc()
         connection['latitude'] = latitude
         connection['longitude'] = longitude
         connection['city'] = city

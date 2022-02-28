@@ -1,4 +1,4 @@
-# French translations for Machinaris.
+# Portuguese translations for Machinaris.
 # Copyright (C) 2022 Guy Davis
 # This file is distributed under the same license as the Machinaris project.
 #
@@ -7,12 +7,12 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-02-27 11:47-0700\n"
-"PO-Revision-Date: 2022-02-15 14:29-0700\n"
-"Last-Translator: Guy Davis\n"
-"Language: fr\n"
-"Language-Team: fr <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"POT-Creation-Date: 2022-02-28 14:57-0700\n"
+"PO-Revision-Date: 2022-02-13 13:45-0700\n"
+"Last-Translator: FULL NAME\n"
+"Language: pt\n"
+"Language-Team: pt <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -20,13 +20,13 @@ msgstr ""
 
 #: commands/chia_cli.py:66
 msgid "Updated config.yaml failed validation!"
-msgstr "Échec de la validation du fichier config.yaml mis à jour!"
+msgstr "A validação do ficheiro config.yaml falhou!"
 
 #: commands/pools_cli.py:68
 msgid "No requested pool modifications were sent. Current settings are unchanged."
 msgstr ""
-"Aucune modification de pool demandée n'a été envoyée. Les paramètres "
-"actuels sont inchangés."
+"Nenhuma das modificações efectuadas à pool foi enviada. A configuração "
+"actual não foi modificada."
 
 #: commands/pools_cli.py:151
 msgid ""
@@ -34,10 +34,9 @@ msgid ""
 "minutes or more to complete. DO NOT immediately re-submit your request. "
 "View the log for details."
 msgstr ""
-"Le pool a été quitté avec succès, passant à self-plotting. Veuillez "
-"patienter quelques instantsminutes ou plus pour terminer. NE PAS "
-"soumettre à nouveau votre demande immédiatement.Afficher le journal pour "
-"plus de détails."
+"Saida da pool bem sucedida, mudando para o modo self plotting. Por favor "
+"aguarde uns minutos, ou mais algum tempo, para a operação terminar. NÃO "
+"FAÇA novamente a mesma operação. Consultar o log para ver mais detalhes."
 
 #: commands/pools_cli.py:195
 #, python-format
@@ -46,10 +45,10 @@ msgid ""
 "a few minutes or more to complete. DO NOT immediately re-submit your "
 "request. Be patient! View the log for details."
 msgstr ""
-"Rejoindre avec succès le pool %(pool_url)s en créant Chia NFT. Veuillez "
-"patienterquelques minutes ou plus pour terminer. NE RENOUVELEZ PAS "
-"immédiatement votre demande. Soyez patient! Consultez le journal pour "
-"plus de détails."
+"Juntou-se à pool %(pool_url)s com sucesso através da criação de um Chia "
+"NFT. Por favor aguade uns minutos, ou mais algum tempo, para a operação "
+"terminar. NÃO FAÇA novamente a mesma operação. Seja paciente. Pode "
+"consultar o log para ver mais detalhes."
 
 #: commands/pools_cli.py:224
 msgid ""
@@ -57,12 +56,12 @@ msgid ""
 "or more to complete. DO NOT immediately re-submit your request. Be "
 "patient! View the log for details."
 msgstr ""
-"Un NFT a été créé avec succès pour l'auto-pooling. Veuillez patienter "
-"quelques minutes ou plus à compléter. NE PAS soumettre à nouveau votre "
-"demande immédiatement. Soyez patient! Consultez le journal pour plus de "
-"détails."
+"O NFT para self-pooling foi criado com sucesso. Por favor aguarde uns "
+"minutos, ou mais algum tempo, para a operação terminar. NÃO FAÇA "
+"novamente a mesma operação. Seja paciente. Pode consultar o log para ver "
+"mais detalhes."
 
 #: views/ping/resources.py:28
 msgid "Pong!"
-msgstr "Le pong!"
+msgstr "Pong!"
 
