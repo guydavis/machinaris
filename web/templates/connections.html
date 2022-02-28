@@ -81,14 +81,20 @@
 
 <header class="pb-3">
     <div class="row justify-content-between">
-        <div class="col-5 fs-4">{{_('Connections Map')}}</div>
-        <div class="col-7 mt-2">
-            <b>Blockchains:</b>
-            {% for blockchain in marker_hues.keys() %}
-            <a href="#" id="{{blockchain}}_toggle"><img 
-                src="{{ url_for('static', filename='3rd_party/images/marker-icon.png') }}" 
-                class="hue_{{blockchain}}" style="padding-left:3px; height:25px;" title="{{blockchain}}" /></a>
-            {% endfor %}
+        <div class="col-3 fs-4">{{_('Connections Map')}}</div>
+        <div class="col-3 mt-2">
+            <div class="btn-group" style="z-index: 2000;">
+                <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false" id="blockchain_btn">Blockchain
+                </button>
+                <ul class="dropdown-menu bg-dark btn-outline-success">
+                {% for blockchain in marker_hues.keys() %}
+                    <li><a class="dropdown-item text-white text-decoration-none"  href="#" id="{{blockchain}}_toggle"><img 
+                        src="{{ url_for('static', filename='3rd_party/images/marker-icon.png') }}" 
+                        class="hue_{{blockchain}}" style="padding-left:3px; height:25px;" /> {{blockchain|capitalize}}</a></li>
+                {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
 </header>
