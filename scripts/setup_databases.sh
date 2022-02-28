@@ -5,6 +5,7 @@
 
 mkdir -p /root/.chia/machinaris/logs
 mkdir -p /root/.chia/machinaris/dbs
+mkdir -p /root/.chia/machinaris/cache
 
 # Optional reset parameter will remove broken DBs, allowing fresh setup of status
 if [[ $1 == "reset" ]]; then

@@ -99,6 +99,7 @@
 
   {% else %}
 
+  {% autoescape false %}
   <div class="text-center" style="padding-top:100 px; padding-bottom: 0px">
     <h6>{{_('No Machinaris workers have reported status successfully.')}}</h6>
     <h6>{{_('Please check each expected worker\'s log files.')}}</h6>
@@ -107,6 +108,7 @@
         wiki_link_close='</a>')}}
     </h6>
   </div>
+  {% endautoescape %}
   <br />
   <br />
   {% endif %}
