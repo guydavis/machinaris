@@ -6,8 +6,8 @@ import json
 import os
 import traceback
 
-BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/dbs/blockchain_prices_cache.json'
-EXCHANGE_RATES_CACHE_FILE = '/root/.chia/machinaris/dbs/exchange_rates_cache.json'
+BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/cache/blockchain_prices_cache.json'
+EXCHANGE_RATES_CACHE_FILE = '/root/.chia/machinaris/cache/exchange_rates_cache.json'
 LOCALE_SETTINGS = '/root/.chia/machinaris/config/locale_settings.json'
 
 def to_fiat(blockchain, coins):

@@ -4,6 +4,7 @@
 #
 
 import ast
+import datetime
 import geoip2.webservice
 import json
 import os
@@ -16,6 +17,9 @@ from api import app
 
 MAXMIND_LICENSE_FILE = '/root/.chia/machinaris/config/maxmind_license.json'
 GEOIP_CACHE_FILE = '/root/.chia/machinaris/cache/geoip_cache.json'
+
+MISSING_LOCATION_RETRY_HOURS = 24
+last_missing_location_retry_time = None
 
 def load_maxmind_license():
     if not os.path.exists(MAXMIND_LICENSE_FILE):
@@ -48,15 +52,26 @@ def save_geoip_cache(data):
         app.logger.error("Failed to store geoip cache in {0} because {1}".format(GEOIP_CACHE_FILE, str(ex)))
 
 def geolocate_ip_addresses(ip_addresses):
+    global last_missing_location_retry_time
     license = load_maxmind_license()
     if not license:
         app.logger.info("Skipping geolocation of peer connections by IP address as no Maxmind license found.")
         return
     geoip_cache = load_geoip_cache()
+    missing_retry = False
+    if not last_missing_location_retry_time or last_missing_location_retry_time <= \
+        (datetime.datetime.now() - datetime.timedelta(hours=MISSING_LOCATION_RETRY_HOURS)):
+        missing_retry = True  # Since its been a while, retry all missing locations for ips
+        last_missing_location_retry_time = datetime.datetime.now()
     with geoip2.webservice.Client(license["account"], license['license_key'], host="geolite.info") as client:
         for ip_address in ip_addresses:
             if ip_address in geoip_cache:
-                continue
+                if geoip_cache[ip_address]:
+                    continue
+                if not missing_retry:
+                    continue  # Don't request location too often for IPs which weren't resolved earlier
+                else:
+                    app.logger.info("Retrying {0}, as previously returned {1}.".format(ip_address, geoip_cache[ip_address]))
             try:
                 response = client.city(ip_address)
                 app.logger.info("{0} located at {1}".format(ip_address, response.location))
