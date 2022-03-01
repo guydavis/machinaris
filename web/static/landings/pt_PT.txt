@@ -64,5 +64,5 @@ Pico de tensão! A tua UPS está a funcionar?
 Faltou a luz! Os teus discos rígidos ficaram com bad sectors?
 Faltou a luz! O sistema ainda arranca?
 Faltou a luz! Bora lá criar novamente o Plot!
-Quem me dera que o paizinho me tivesse oferecido uma UPS no último Natal, agora todos os meus disco rígidos ficaram estragado!
+Quem me dera que o paizinho me tivesse oferecido uma UPS no último Natal, agora todos os meus disco rígidos ficaram estragados!
 1337.png
