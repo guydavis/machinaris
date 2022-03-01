@@ -60,4 +60,9 @@ Error in Error reporting, cannot Error @$Error. Starting Log4j in 3... 2... 1...
 10 PRINT "WITTY TEXT GOES HERE"
 Just Remember...... You could have bought GPUs instead
 Congratulations you've won $0.00! Please pay the Gas fee to receive your winnings.
+Power surge! Is your UPS working?
+Light out! Are your hard drives with bad sectors now?
+Light out! Does the system still boot?
+Light out! Lets replot again!
+I wish daddy had given me an UPS last Christmas, now my hard drives are all dead!
 1337.png

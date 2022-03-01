@@ -46,7 +46,9 @@ msgstr "O endereço da Cold Wallet foi gravado."
 msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
-msgstr "TODO"
+msgstr ""
+"A definições do mapa foram gravadas. Por favor aguarde 10 minutos para que o mapa "
+"seja actualizado com a geolocalização."
 
 #: routes.py:287
 msgid "Unknown form action"
@@ -65,24 +67,24 @@ msgid ""
 "For Alerts config, found no responding fullnode found for %{blockchain}. "
 "Please check your workers."
 msgstr ""
-"For Alerts config, foi encontrado um fullnode que não responde para o "
-"%{blockchain}. Por favor verifica os teus workers."
+"Na configuração dos Alertas, foi encontrado um fullnode que não responde para o %{blockchain}. "
+"Por favor verifica os teus workers."
 
 #: routes.py:404
 msgid ""
 "For Farming config, found no responding fullnode found for %{blockchain}."
 " Please check your workers."
 msgstr ""
-"For Farming config, foi encontrado um fullnode que não responde para o "
-"%{blockchain}. Por favor verifica os teus workers."
+"Na configuração de Farming, foi encontrado um fullnode que não responde para o %{blockchain}. "
+"Por favor verifica os teus workers."
 
 #: routes.py:411
 msgid ""
 "For Plotting config, found no responding fullnode found for "
 "%{blockchain}. Please check your workers."
 msgstr ""
-"For Plotting config, foi encontrado um fullnode que não responde para o "
-"%{blockchain}. Por favor verifica os teus workers."
+"Na configuração de Plotting, foi encontrado um fullnode que não responde para o %{blockchain}. "
+"Por favor verifica os teus workers."
 
 #: routes.py:416
 msgid "No responding fullnode found for %{blockchain}. Please check your workers."
@@ -154,9 +156,7 @@ msgstr "A hora do Worker não coincide com a do Controlador"
 
 #: actions/worker.py:110
 msgid "Please ensure worker and controller share same timezone."
-msgstr ""
-"Por favor certifique-se que o Worker e o Controlador estão no mesmo fuso "
-"horário"
+msgstr "Por favor certifique-se que o Worker e o Controlador estão no mesmo fuso horário."
 
 #: actions/worker.py:116
 msgid "Machinaris version does not match controller."
@@ -164,9 +164,7 @@ msgstr "A versão do Machinaris não é a mesma da versão do controller."
 
 #: actions/worker.py:117
 msgid "Please use a consistent Machinaris version to avoid issues."
-msgstr ""
-"Por favor usa a mesma versão do Machinaris para evitar ocorrerem "
-"problemas inesperados."
+msgstr "Por favor usa a mesma versão do Machinaris para evitar ocorrerem problemas inesperados."
 
 #: models/chia.py:133 models/chia.py:230
 msgid "days"
@@ -286,9 +284,7 @@ msgstr "Remover todos"
 
 #: templates/alerts.html:105
 msgid "No notifications from Chiadog yet... so check back soon."
-msgstr ""
-"Ainda não existem notificações do Chiadog... por isso, verifique "
-"novamente, dentro de alguns minutos."
+msgstr "Ainda não existem notificações do Chiadog... por isso, verifique novamente, dentro de alguns minutos."
 
 #: templates/alerts.html:106
 msgid ""
@@ -442,13 +438,11 @@ msgstr "Actualizado em"
 
 #: templates/blockchains.html:62
 msgid "Blockchain Details"
-msgstr "Blockchain detalhes"
+msgstr "Blockchain: Detalhes"
 
 #: templates/blockchains.html:87
 msgid "No blockchains found from any farmers. Not added?"
-msgstr ""
-"Não foi encontrado nenhum blockchain para os farmers. Não foram "
-"adicionados?"
+msgstr "Não foi encontrado nenhum blockchain para os farmers. Não foram adicionados?"
 
 #: templates/blockchains.html:88
 msgid "Try running \"chia show --state\" on your farmers to verify."
@@ -483,11 +477,11 @@ msgstr "Gravar"
 
 #: templates/connections.html:84
 msgid "Connections Map"
-msgstr "Mapa de conexões"
+msgstr "Mapa de ligações"
 
 #: templates/connections.html:105
 msgid "Connection Details"
-msgstr "Detalhe da conexão"
+msgstr "Detalhe da ligação"
 
 #: templates/connections.html:141
 msgid "Type"
@@ -531,7 +525,7 @@ msgstr "Desligar os seleccionados"
 
 #: templates/connections.html:192
 msgid "Check Port Forwarding"
-msgstr "Verifique o Port Forwarding"
+msgstr "Verificar o Port Forwarding"
 
 #: templates/connections.html:208
 msgid "Add New Connection"
@@ -573,7 +567,7 @@ msgstr "Plots: Total de espaço ocupado"
 
 #: templates/index.html:89 templates/wallet.html:113
 msgid "Balance"
-msgstr "Balanço"
+msgstr "Saldo"
 
 #: templates/index.html:96
 msgid "Farmed"
@@ -608,8 +602,8 @@ msgid ""
 "However, you may view it yourself by executing this from within the "
 "Docker container."
 msgstr ""
-"No entanto, podes vê-la executando este comando dentro do Docker "
-"container."
+"No entanto, podes vê-la executando este comando dentro do "
+"container Docker."
 
 #: templates/keys.html:54
 msgid "Best Practices"
@@ -649,7 +643,7 @@ msgstr "Dificuldade actual:"
 
 #: templates/pools.html:73
 msgid "Current Points Balance:"
-msgstr "Pontos actuais"
+msgstr "Pontos actuais:"
 
 #: templates/pools.html:74
 msgid "Points Found Since Start:"
@@ -673,9 +667,7 @@ msgstr "Launcher ID:"
 
 #: templates/pools.html:97
 msgid "No pools have been found yet. Perhaps the wallet is still syncing?"
-msgstr ""
-"Ainda não foram encontrados Pools. Talvez a wallet ainda esteja a "
-"sincronizar?"
+msgstr "Ainda não foram encontrados Pools. Talvez a wallet ainda esteja a sincronizar?"
 
 #: templates/pools.html:98
 msgid ""
@@ -734,12 +726,12 @@ msgid ""
 "To get started with Machinaris as a Chia%(trademark)s fullnode, either "
 "import your existing 24-word mnemonic seed phrase"
 msgstr ""
-"Para começares a usar o Machinaris como um Chia%(trademark)s fullnode, "
-"podes importar a tua própria mnemônica de 24 palavras"
+"Para começares a usar o Machinaris como um fullnode do Chia%(trademark)s, podes "
+"importar a tua própria mnemônica de 24 palavras"
 
 #: templates/setup.html:90
 msgid "Import Existing Key"
-msgstr "Importar uma chave existe"
+msgstr "Importar uma chave existente"
 
 #: templates/setup.html:91
 msgid "OR"
@@ -764,7 +756,7 @@ msgid ""
 "yourself at the command-line, see the %(wiki_link)s for details."
 msgstr ""
 "NOTA: Se preferires importar a tua própria mnemônica de 24 palavras "
-"usando a linha de comandos, vê %(wiki_link)s para mais detalhes."
+"usando a linha de comandos, vê o %(wiki_link)s para mais detalhes."
 
 #: templates/summary.html:31 templates/wallet.html:52
 msgid "Local Currency:"
@@ -831,15 +823,15 @@ msgstr "Wallet: Sumário"
 
 #: templates/wallet.html:110
 msgid "Wallet Balance"
-msgstr "Wallet: Balanço"
+msgstr "Wallet: Saldo"
 
 #: templates/wallet.html:111
 msgid "Cold Wallet Balance"
-msgstr "Cold Wallet: Balanço"
+msgstr "Cold Wallet: Saldo"
 
 #: templates/wallet.html:112
 msgid "Total Balance"
-msgstr "Balanço total"
+msgstr "Saldo"
 
 #: templates/wallet.html:137
 msgid "Edit Wallet"
@@ -1210,18 +1202,15 @@ msgstr "Sumário diário"
 #: templates/farming/workers.html:70
 #, python-format
 msgid "No daily summary found for %(blockchain)s on %(displayname)s."
-msgstr ""
-"Não foi encontrado um sumário diário para %(blockchain)s no "
-"%(displayname)s."
+msgstr "Não foi encontrado o sumário diário para %(blockchain)s no %(displayname)s."
 
 #: templates/farming/workers.html:72
 msgid ""
 "Please check that your Machinaris container for this blockchain is "
 "running. Also please verify settings on the Alerts page."
 msgstr ""
-"Por favor verifique que o seu Machinaris container para este blockchain "
-"está a correr. Por favor verifique também as definições na página de "
-"Alertas."
+"Por favor verifique que o container Machinaris para este blockchain está a "
+"correr. Por favor verifique também as definições na página de Alertas."
 
 #: templates/farming/workers.html:93
 #, python-format
@@ -1414,9 +1403,9 @@ msgid ""
 "the same, %(break)sbut it is much less volatile. You can easily switch "
 "pools without having to re-plot."
 msgstr ""
-"Junte-se a uma Pool e obtenha recompensas por estar farming de forma "
-"consistente. O ganho médio é o mesmo, %(break)smas muito menos volátil. "
-"Pode facilmente mudar de Pools sem ter de recriar novamente os Plots."
+"Junte-se a uma Pool e obtenha recompensas por estar farming de forma consistente. O ganho médio é "
+"o mesmo, %(break)smas muito menos volátil. Pode facilmente mudar de Pool "
+"sem ter de recriar novamente os Plots."
 
 #: templates/settings/pools.html:88
 msgid "ERROR: Unable to join a pool because:"

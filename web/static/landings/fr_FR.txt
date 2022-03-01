@@ -60,4 +60,9 @@ Erreur dans le rapport d'erreur, impossible d'erreur @$Error. Démarrage de Log4
 10 PRINT "WITTY TEXTE VA ICI"
 N'oubliez pas ...... Vous auriez pu acheter des GPU à la place
 Félicitations, vous avez gagné 0,00$ Veuillez payer les frais d'essence pour recevoir vos gains.
+Power surge! Is your UPS working?
+Light out! Are your hard drives with bad sectors now?
+Light out! Does the system still boot?
+Light out! Lets replot again!
+I wish daddy had given me an UPS last Christmas, now my hard drives are all dead!
 1337.png
