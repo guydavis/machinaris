@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-02-28 14:57-0700\n"
+"POT-Creation-Date: 2022-03-01 11:37-0700\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: fr\n"
@@ -96,13 +96,49 @@ msgstr ""
 msgid "Unsupported log type"
 msgstr "Type de journal non pris en charge"
 
+#: actions/chia.py:44
+msgid ""
+"Relax and grab a coffee. Status is being gathered from active workers.  "
+"Please allow 15 minutes..."
+msgstr ""
+
+#: actions/plotman.py:44 models/plotman.py:70
+msgid "Idle"
+msgstr "Inactif"
+
+#: actions/plotman.py:47 actions/plotman.py:48 models/chia.py:196
+#: models/plotman.py:67 templates/index.html:42 templates/index.html:52
+msgid "Active"
+msgstr "Sauvegarder"
+
+#: actions/plotman.py:49 models/plotman.py:64
+msgid "Suspended"
+msgstr "Suspendu"
+
 #: actions/stats.py:338
 msgid "secs"
 msgstr "secs"
 
-#: actions/stats.py:348 models/chia.py:228
+#: actions/stats.py:348 models/chia.py:236
 msgid "hour"
 msgstr "heure"
+
+#: actions/warnings.py:38
+msgid "Dismiss Warning"
+msgstr "Ignorer l'avertissement"
+
+#: actions/warnings.py:39 templates/keys.html:58
+#, python-format
+msgid ""
+"Machinaris uses an online wallet for farming. It is strongly recommended "
+"that you use a cold wallet for your payout instructions. Tutorial on the "
+"%(wiki_link_open)swiki%(wiki_link_close)s. Please add \"Setup a Cold "
+"Wallet\" to your To-Do list!"
+msgstr ""
+"Machinaris utilise un portefeuille en ligne pour farming. Il est fortement recommandé "
+"que vous utilisez un portefeuille froid pour vos instructions de paiement. Tutoriel sur le "
+"%(wiki_link_open)swiki%(wiki_link_close)s. Veuillez ajouter \"Configurer un Cold "
+"Portefeuille\" à votre liste de tâches!"
 
 #: actions/worker.py:106
 msgid "Worker not responding to pings."
@@ -132,57 +168,78 @@ msgstr ""
 "Veuillez utiliser une version cohérente de Machinaris pour éviter les "
 "problèmes."
 
-#: models/chia.py:133 models/chia.py:222
+#: models/chia.py:133 models/chia.py:230
 msgid "days"
 msgstr "jours"
 
-#: models/chia.py:210
+#: models/chia.py:198 templates/summary.html:99
+msgid "Syncing"
+msgstr "Synchronisation"
+
+#: models/chia.py:200 templates/index.html:54
+msgid "Not available"
+msgstr "Indisponible"
+
+#: models/chia.py:202
+msgid "Not synced"
+msgstr "Non synchronisé"
+
+#: models/chia.py:205 templates/index.html:54 templates/summary.html:95
+#: templates/worker.html:78 templates/workers.html:72
+msgid "Offline"
+msgstr "Hors ligne"
+
+#: models/chia.py:218
 msgid "years"
 msgstr "ans"
 
-#: models/chia.py:212
+#: models/chia.py:220
 msgid "year"
 msgstr "an"
 
-#: models/chia.py:214
+#: models/chia.py:222
 msgid "months"
 msgstr "mois"
 
-#: models/chia.py:216
+#: models/chia.py:224
 msgid "month"
 msgstr "mois"
 
-#: models/chia.py:218
+#: models/chia.py:226
 msgid "weeks"
 msgstr "semaines"
 
-#: models/chia.py:220
+#: models/chia.py:228
 msgid "week"
 msgstr "semaine"
 
-#: models/chia.py:224
+#: models/chia.py:232
 msgid "day"
 msgstr "jour"
 
-#: models/chia.py:226
+#: models/chia.py:234
 msgid "hours"
 msgstr "heures"
 
-#: models/chia.py:230
+#: models/chia.py:238
 msgid "minutes"
 msgstr "minutes"
 
-#: models/chia.py:232
+#: models/chia.py:240
 msgid "minute"
 msgstr "minute"
 
-#: models/chia.py:234
+#: models/chia.py:242
 msgid "Never (no plots)"
 msgstr "Jamais (pas de plots)"
 
-#: models/chia.py:236
+#: models/chia.py:244
 msgid "Soon"
 msgstr "Bientôt"
+
+#: models/chia.py:246
+msgid "and"
+msgstr "et"
 
 #: templates/alerts.html:14
 msgid "Alerts: Recent Notifications"
@@ -242,19 +299,19 @@ msgstr ""
 msgid "Chiadog Log on "
 msgstr "Journaux Chiadog de "
 
-#: templates/alerts.html:146 templates/plotting/jobs.html:367
+#: templates/alerts.html:147 templates/plotting/jobs.html:367
 msgid "Starting..."
 msgstr "Commencer..."
 
-#: templates/alerts.html:153 templates/plotting/jobs.html:377
+#: templates/alerts.html:154 templates/plotting/jobs.html:377
 msgid "Stopping..."
 msgstr "Arrêt..."
 
-#: templates/alerts.html:160
+#: templates/alerts.html:161
 msgid "Removing..."
 msgstr "Reprendre..."
 
-#: templates/alerts.html:168
+#: templates/alerts.html:169
 msgid "Purging..."
 msgstr "Arrêt..."
 
@@ -549,15 +606,6 @@ msgstr ""
 msgid "Best Practices"
 msgstr ""
 
-#: templates/keys.html:58
-#, python-format
-msgid ""
-"Machinaris uses an online wallet for farming. It is strongly recommended "
-"that you use a cold wallet for your payout instructions. Tutorial on the "
-"%(wiki_link_open)swiki%(wiki_link_close)s. Please add \"Setup a Cold "
-"Wallet\" to your To-Do list!"
-msgstr ""
-
 #: templates/keys.html:71
 #, fuzzy
 msgid "No keys found from any farmers. Not added?"
@@ -745,17 +793,9 @@ msgstr "Portefeuille"
 msgid "EDV"
 msgstr "EDV"
 
-#: templates/summary.html:95 templates/worker.html:78 templates/workers.html:72
-msgid "Offline"
-msgstr "Hors ligne"
-
 #: templates/summary.html:97
 msgid "Synced"
 msgstr "Synchronisé"
-
-#: templates/summary.html:99
-msgid "Syncing"
-msgstr "Synchronisation"
 
 #: templates/summary.html:101
 msgid "Not Synced"
@@ -1146,11 +1186,11 @@ msgstr "Farming n'a pas démarré avec succès."
 msgid "Farming Log for "
 msgstr "Journaux Farming de "
 
-#: templates/farming/plots.html:201
+#: templates/farming/plots.html:196
 msgid "Good Plot"
 msgstr "Bon Plot"
 
-#: templates/farming/plots.html:203
+#: templates/farming/plots.html:198
 msgid "Bad Plot"
 msgstr "Mauvais Plot"
 
