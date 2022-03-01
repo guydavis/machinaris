@@ -3,13 +3,17 @@
 # Installs Plotman for plotting management; customized for non-interactive use by Machinaris
 #
 
-PLOTMAN_REPO_URL=https://github.com/guydavis/plotman@development
+PLOTMAN_BRANCH=development
 
 if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia' || ${blockchains} == 'chives' || ${blockchains} == 'mmx') ]]; then
     if [[ ! -f /chia-blockchain/venv/bin/plotman ]]; then
-        cd /chia-blockchain
         echo 'Installing Plotman...'
-        venv/bin/pip3 install git+${PLOTMAN_REPO_URL} || venv/bin/pip3 install git+${PLOTMAN_REPO_URL}
+        cd /
+        git clone --branch ${PLOTMAN_BRANCH} https://github.com/guydavis/plotman.git
+        cd plotman
+        # Chia 1.3 requires packaging==21.0
+        sed -i 's/20.9/21.0/g' setup.cfg
+        /chia-blockchain/venv/bin/python setup.py install
         apt update && apt install -y rsync
     fi
 fi

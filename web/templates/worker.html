@@ -11,7 +11,7 @@
 </div>
 
 <header class="pb-3 mb-4 border-bottom">
-  <span class="fs-4">Worker - {{ worker.displayname }}</span>
+  <span class="fs-4">{{_('Worker')}} - {{ worker.displayname }}</span>
 </header>
 
 <div>
@@ -32,47 +32,62 @@
 
   <div class="row" style="padding-left: 1em; padding-right: 1em; ">
     <div class="col mb-4 bg-light border rounded-3" style="margin-right: 1em">
-      <div class="fs-4">Details</div>
+      <div class="fs-4">{{_('Details')}}</div>
       <table id="worker" class="table table-dark">
         <tbody>
           <tr>
-            <th scope="col" class="text-success">IP Address</th>
+            <th scope="col" class="text-success">{{_('IP Address')}}</th>
             <td>{{worker.hostname}}</td>
           </tr>
           <tr>
-            <th scope="col" class="text-success">Hostname</th>
+            <th scope="col" class="text-success">{{_('Hostname')}}</th>
             <td>{{worker.displayname}}</td>
           </tr>
           <tr>
-            <th scope="col" class="text-success">Blockchain</th>
+            <th scope="col" class="text-success">{{_('Blockchain')}}</th>
             <td>{{worker.blockchain}}</td>
           </tr>
           <tr>
-            <th scope="col" class="text-success">Port</th>
+            <th scope="col" class="text-success">{{_('Port')}}</th>
             <td>{{worker.port}}</td>
           </tr>
           <tr>
-            <th scope="col" class="text-success">System Type</th>
+            <th scope="col" class="text-success">{{_('System Type')}}</th>
             <td>{{worker.mode}}</td>
           </tr>
           <tr>
-            <th scope="col" class="text-success">Last Status Received At</th>
+            <th scope="col" class="text-success">{{_('Last Status Received At')}}</th>
             <td>{{worker.updated_at | datetimefilter}}</td>
           </tr>
           <tr>
-            <th scope="col" class="text-success">Local Time on Worker</th>
+            <th scope="col" class="text-success">{{_('Local Time on Worker')}}</th>
             <td>{{worker.time_on_worker | timesecondstrimmer}}</td>
           </tr>
           <tr>
-            <th scope="col" class="text-success">Last Ping to Worker</th>
-            <td>{{worker.latest_ping_result}}</td>
+            <th scope="col" class="text-success">{{_('Last Ping to Worker')}}</th>
+            <td>
+              {% if worker.latest_ping_result == 'Responding' %}
+                <i class="bi-check-circle text-success"></i> {{_('Responding')}}
+              {% elif worker.connection_status() == 'Connection Refused' %}
+                <i class="bi-dash-circle text-danger"></i> {{_('Connection Refused')}}
+              {% elif worker.connection_status() == 'Connection Timeout' %}
+                <i class="bi-dash-circle text-danger"></i> {{_('Connection Timeout')}}
+              {% elif worker.connection_status() == 'Connection Error' %}
+                <i class="bi-dash-circle text-danger"></i> {{_('Connection Error')}}
+              % elif worker.connection_status() == 'offline' %}
+                <i class="bi-dash-circle text-danger"></i> {{_('Offline')}}
+              {% else %}
+                <i class="bi-exclamation-triangle text-warning" title="{{ worker.connection_status }}"></i>
+                {{_(worker.latest_ping_result)}}
+              {% endif %}
+            </td>
           </tr>
           <tr>
-            <th scope="col" class="text-success">Last Successful Ping to Worker</th>
+            <th scope="col" class="text-success">{{_('Last Successful Ping to Worker')}}</th>
             <td>{{worker.ping_success_at | datetimefilter}}</td>
           </tr>
           <tr>
-            <th scope="col" class="text-success">Version</th>
+            <th scope="col" class="text-success">{{_('Version')}}</th>
             <td><a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true"
                 title="{{worker.versions.components}}">{{worker.versions.machinaris}}</a></td>
           </tr>
@@ -80,7 +95,7 @@
           <tr>
             <td colspan=2>
               <div class="float-end">{{worker.farmr_device_id}}</div>
-              <a href="https://farmr.net/" target="_blank" class="text-success">Farmr ID</a> 
+              <a href="https://farmr.net/" target="_blank" class="text-success">{{_('Farmr ID')}}</a> 
             </td>
           </tr>
           {% endif %}
@@ -88,7 +103,7 @@
       </table>
     </div>
     <div class="col mb-4 bg-light border rounded-3">
-      <div class="fs-4">Recent Warnings</div>
+      <div class="fs-4">{{_('Recent Warnings')}}</div>
       <table id="worker" class="table table-dark">
         <tbody>
           {% if warnings|length > 0 %}
@@ -103,7 +118,7 @@
           {% endfor %}
           {% else %}
           <tr>
-            <td>Yay! No issues currently.</td>
+            <td>{{_('Yay! No issues currently.')}}</td>
           </tr>
           {% endif %}
         </tbody>
@@ -148,7 +163,12 @@
     $(document).ready(function () {
       $('#plots').DataTable({
         "pageLength": 10,
-        "order": [[5, "desc"]]
+        "order": [[5, "desc"]],
+        {% if lang != 'en' %}
+        "language": {
+            "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+        },
+        {% endif %}
       });
       $('#plotting').DataTable({ "ordering": false, });
       $('[data-toggle="tooltip"]').tooltip();
@@ -160,13 +180,13 @@
       data: {
         labels: {{ plots_disk_usage[worker.hostname].paths | safe }},
     datasets: [{
-      label: "Disk Space Used (TB)",
+      label: "{{_('Disk Space Used (TB)')}}",
       data: {{ plots_disk_usage[worker.hostname].used | safe }},
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
       borderColor: 'rgba(255, 99, 132, 1)',
                 },
     {
-      label: 'Disk Space Free (TB)',
+      label: "{{_('Disk Space Free (TB)')}}",
       data: {{ plots_disk_usage[worker.hostname].free | safe }},
       backgroundColor: 'rgba(54, 162, 235, 0.2)',
       borderColor: 'rgba(54, 162, 235, 1)',

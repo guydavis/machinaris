@@ -30,6 +30,12 @@ if [ -f /root/.chia/mainnet/log/plotnft.log ]; then
   mv /root/.chia/mainnet/log/plotnft.log /root/.chia/machinaris/logs/plotnft.log
 fi
 
+# v0.7.0 upgrade step - move location of cache json
+if [[ ! -d /root/.chia/machinaris/cache ]] && [[ -f /root/.chia/machinaris/dbs/cold_wallet_cache.json ]] ; then
+  mkdir -p /root/.chia/machinaris/cache
+  mv /root/.chia/machinaris/dbs/*cache.json /root/.chia/machinaris/cache/
+fi
+
 # Refuse to run if Portainer launched containers out of order and created a directory for mnemonic.txt
 if [[ "${mode}" == 'fullnode' ]] && [[ -d /root/.chia/mnemonic.txt ]]; then
   echo "Portainer (or similar) launched a fork container before the main Machinaris container on first run."

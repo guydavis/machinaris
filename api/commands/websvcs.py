@@ -14,8 +14,9 @@ from api import app
 
 ALLTHEBLOCKS_REQUEST_INTERVAL_MINS = 15
 COLD_WALLET_ADDRESSES_FILE = '/root/.chia/machinaris/config/cold_wallet_addresses.json'
-COLD_WALLET_CACHE_FILE = '/root/.chia/machinaris/dbs/cold_wallet_cache.json'
-BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/dbs/blockchain_prices_cache.json'
+COLD_WALLET_CACHE_FILE = '/root/.chia/machinaris/cache/cold_wallet_cache.json'
+BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/cache/blockchain_prices_cache.json'
+EXCHANGE_RATES_CACHE_FILE = '/root/.chia/machinaris/cache/exchange_rates_cache.json'
 
 MOJO_PER_COIN = {
     'btcgreen': 1000000000000,
@@ -163,4 +164,23 @@ def get_prices():
             request_prices(prices)
             last_price_request_time = datetime.datetime.now()
     save_prices_cache(prices)
+    save_exchange_rates()
     return prices
+
+def save_exchange_rates(debug=False):
+    url = "https://api.coingecko.com/api/v3/exchange_rates"
+    app.logger.info("Requesting exchange rates vs bitcoin from {0}".format(url))
+    try:
+        if debug:
+            http.client.HTTPConnection.debuglevel = 1
+        resp = requests.get(url)
+        http.client.HTTPConnection.debuglevel = 0
+        if resp.status_code == 200:
+            data = json.loads(resp.text)
+            with open(EXCHANGE_RATES_CACHE_FILE, 'w') as f:
+                json.dump(data['rates'], f)
+        else:
+            app.logger.error("Received {0} from {1}".format(resp.status_code, url))
+    except Exception as ex:
+            app.logger.error("Failed to store exchange cache in {0} because {1}".format(EXCHANGE_RATES_CACHE_FILE, str(ex)))
+ 

@@ -18,6 +18,7 @@ import traceback
 import urllib
 import yaml
 
+from flask_babel import _, lazy_gettext as _l
 from flask import Flask, jsonify, abort, request, flash, url_for
 from flask.helpers import make_response
 from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
@@ -40,7 +41,7 @@ def load_farm_summary():
     farms = db.session.query(f.Farm).order_by(f.Farm.hostname).all()
     wallets = db.session.query(w.Wallet).order_by(w.Wallet.blockchain).all()
     if len(farms) == 0:
-        flash("Relax and grab a coffee. Status is being gathered from active workers.  Please allow 15 minutes...", 'info')
+        flash(_("Relax and grab a coffee. Status is being gathered from active workers.  Please allow 15 minutes..."), 'info')
     return FarmSummary(farms, wallets)
 
 def load_plots_farming(hostname=None):
@@ -130,18 +131,23 @@ def load_blockchains():
     return None
 
 def load_summaries():
+    app.logger.info("Loading Summary page data...")
     try:
         blockchains = load_blockchains()
+        app.logger.info("Found {0} blockchains states for summary page.".format(len(blockchains.rows)))
         farms = load_farm_summary()
+        app.logger.info("Found {0} blockchain farms for summary page.".format(len(farms.farms)))
         summary_stats = stats.load_summary_stats(blockchains.rows)
+        app.logger.info("Found {0} blockchain stats.".format(len(summary_stats)))
         return Summaries(blockchains, farms.farms, farms.wallets, summary_stats)
     except Exception as ex:
         app.logger.error("Error loading summary: {0}".format(str(ex)))
+        traceback.print_exc()
     return None
 
-def load_connections():
+def load_connections(lang='en'):
     connections = db.session.query(co.Connection).all()
-    return Connections(connections)
+    return Connections(connections, lang)
 
 def load_keys():
     keys = db.session.query(k.Key).order_by(k.Key.blockchain).all()

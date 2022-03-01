@@ -16,6 +16,7 @@ import traceback
 import yaml
 
 from flask import Flask, jsonify, abort, request, flash
+from flask_babel import _, lazy_gettext as _l
 from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
 from subprocess import Popen, TimeoutExpired, PIPE, STDOUT
 from os import path
@@ -62,7 +63,7 @@ def save_config(config, blockchain):
             writer.write(config)
     except Exception as ex:
         app.logger.info(traceback.format_exc())
-        raise Exception('Updated config.yaml failed validation!\n' + str(ex))
+        raise Exception(_('Updated config.yaml failed validation!') + '\n' + str(ex))
     else:
         pass
 

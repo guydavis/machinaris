@@ -58,30 +58,30 @@
               {% for pool in pools.blockchains[blockchain] %}
               <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
                 <div class="h-20 p-2 bg-light border rounded-3">
-                  <h6 class="display-7">Pool:
+                  <h6 class="display-7">{{_('Pool:')}}
                     <span class="text-success">
                       {% if pool.pool_state.pool_config.pool_url %}
                         {{ pool.pool_state.pool_config.pool_url }}
                       {% else %}
-                        SELF_POOL
+                        {{_('SELF_POOL')}}
                       {% endif %}
                     </span>
                   </h6>
                   <ul>
-                    <li>Status: {{pool.status}}</li>
-                    <li>Current Difficulty: {{pool.pool_state.current_difficulty}}</li>
-                    <li>Current Points Balance: {{pool.pool_state.current_points}}</li>
-                    <li>Points Found Since Start: {{pool.pool_state.points_found_since_start}}</li>
-                    <li>Points Found in Last 24 Hours: {{pool.pool_state.points_found_24h|length}}</li>
-                    <li>Points Successful in Last 24 Hours: {{ pool.points_successful_last_24h }}</li>
-                    <li>Number of Plots: {{pool.num_plots}}</li>
+                    <li>{{_('Status:')}} {{pool.status}}</li>
+                    <li>{{_('Current Difficulty:')}} {{pool.pool_state.current_difficulty}}</li>
+                    <li>{{_('Current Points Balance:')}} {{pool.pool_state.current_points}}</li>
+                    <li>{{_('Points Found Since Start:')}} {{pool.pool_state.points_found_since_start}}</li>
+                    <li>{{_('Points Found in Last 24 Hours:')}} {{pool.pool_state.points_found_24h|length}}</li>
+                    <li>{{_('Points Successful in Last 24 Hours:')}} {{ pool.points_successful_last_24h }}</li>
+                    <li>{{_('Number of Plots:')}} {{pool.num_plots}}</li>
                   </ul>
-                  <b>Launcher ID:</b>
+                  <b>{{_('Launcher ID:')}}</b>
                   <span>
                     {% if pool.login_link %}
-                    <a target="_blank" class="text-white" href="{{ pool.login_link }}">{{ pool.launcher_id }}</a>
+                      <a target="_blank" class="text-white" href="{{ pool.login_link }}">{{ pool.launcher_id }}</a>
                     {% else %}
-                    {{ pool.launcher_id }}
+                      {{ pool.launcher_id }}
                     {% endif %}
                   </span>
                 </div>
@@ -94,9 +94,9 @@
   </nav>
   {% else %}
   <div class="text-center" style="padding-top:100 px; padding-bottom: 0px">
-    <h6>No {{blockchain|capitalize}} pools have been found yet. Perhaps the wallet is still syncing?</h6>
-    <h6>If you would like to join a pool, please select the "Settings | Pools" page to get started.</h6>
-    <h6>For more, see the Machinaris <a href="https://github.com/guydavis/machinaris/wiki/Pooling"
+    <h6>{{_('No pools have been found yet. Perhaps the wallet is still syncing?')}}</h6>
+    <h6>{{_('If you would like to join a pool, please select the "Settings | Pools" page to get started.')}}</h6>
+    <h6>{{_('For more, see the Machinaris')}} <a href="https://github.com/guydavis/machinaris/wiki/Pooling"
         target="_blank">wiki.</a></h6>
   </div>
   {% endif %}

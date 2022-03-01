@@ -1,15 +1,16 @@
+import datetime
 import json
 import locale
 import os
 import re
 import traceback
 
-import datetime
+from flask_babel import _, lazy_gettext as _l
 
 from web import app
-from web.actions import worker as w
+from web.actions import worker as w, mapping
 from common.config import globals
-from common.utils import converters
+from common.utils import converters, fiat
 
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
 MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
@@ -21,22 +22,96 @@ class Summaries:
     def __init__(self, blockchains, farms, wallets, stats):
         self.rows = []
         for blockchain in blockchains.rows:
+            app.logger.info("Adding summary row for {0}".format(blockchain['blockchain']))
             farm = self.find_farm(farms, blockchain['blockchain'])
+            if not farm:
+                app.logger.error("No farm summary found for {0}".format(blockchain['blockchain']))
+                continue
             wallet = self.find_wallet(wallets, blockchain['blockchain'])
+            if not wallet:
+                app.logger.error("No wallet found for {0}".format(blockchain['blockchain']))
+                continue
+            if not blockchain['blockchain'] in stats:
+                app.logger.error("No blockhain stats for {0} in {1}".format(blockchain['blockchain'], stats.keys()))
+                continue
+            blockchain_stats = stats[blockchain['blockchain']]
+            # Now collect each value in a separate try/except to guard against missing data
+            try:
+                status = blockchain['status']
+            except:
+                status = ''
+                app.logger.error("No status found for blockchain: {0}".format(blockchain))
+            try:
+                farmed = farm['total_coins']
+            except:
+                farmed = ''
+                app.logger.error("No total_coins found for farm: {0}".format(farm))
+            try:
+                wallet_balance_float = wallet['total_balance_float']
+                wallet_balance = wallet['total_balance']
+            except:
+                wallet_balance_float = 0
+                wallet_balance = ''
+                app.logger.error("No total_balance found for wallet: {0}".format(wallet))
+            try:
+                height = blockchain['peak_height']
+            except:
+                height = ''
+                app.logger.error("No peak_height found for blockchain: {0}".format(blockchain))
+            try:
+                height = blockchain['peak_height']
+            except:
+                height = ''
+                app.logger.error("No peak_height found for blockchain: {0}".format(blockchain))
+            try:
+                plots = farm['plot_count']
+            except:
+                plots = ''
+                app.logger.error("No plot_count found for farm: {0}".format(farm))
+            try:
+                etw = farm['expected_time_to_win']
+            except:
+                etw = ''
+                app.logger.error("No expected_time_to_win found for farm: {0}".format(farm))
+            try:
+                harvesters = blockchain_stats['harvesters']
+            except:
+                harvesters = ''
+                app.logger.error("No harvesters found for blockchain stats: {0}".format(blockchain_stats))
+            try:
+                max_resp = blockchain_stats['max_resp']
+            except:
+                max_resp = ''
+                app.logger.error("No max_resp found for blockchain stats: {0}".format(blockchain_stats))
+            try:
+                partials_per_hour = blockchain_stats['partials_per_hour']
+            except:
+                partials_per_hour = ''
+                app.logger.error("No partials_per_hour found for blockchain stats: {0}".format(blockchain_stats))
+            try:
+                edv = blockchain_stats['edv']
+            except:
+                edv = ''
+                app.logger.error("No edv found for blockchain stats: {0}".format(blockchain_stats))
+            try:
+                edv_fiat = blockchain_stats['edv_fiat']
+            except:
+                edv_fiat = ''
+                app.logger.error("No edv_fiat found for blockchain stats: {0}".format(blockchain_stats))
             self.rows.append({
                 'blockchain': blockchain['blockchain'],
-                'status': blockchain['status'],
-                'farmed': farm['total_coins'],
-                'wallet': wallet['total_balance'],
-                'usd': converters.to_usd(blockchain['blockchain'], wallet['total_balance']),
-                'height': blockchain['peak_height'],
-                'plots': farm['plot_count'],
-                'harvesters': stats[blockchain['blockchain']]['harvesters'], 
-                'max_resp': stats[blockchain['blockchain']]['max_resp'], 
-                'partials_per_hour': stats[blockchain['blockchain']]['partials_per_hour'],
-                'edv': stats[blockchain['blockchain']]['edv'], 
-                'edv_usd': stats[blockchain['blockchain']]['edv_usd'], 
-                'etw': self.etw_to_days(blockchain['blockchain'], farm['expected_time_to_win']),
+                'status': status,
+                'farmed': farmed,
+                'wallet': wallet_balance,
+                'fiat': fiat.to_fiat(blockchain['blockchain'], wallet_balance_float),
+                'height': height,
+                'plots': plots,
+                'harvesters': harvesters, 
+                'max_resp': max_resp, 
+                'partials_per_hour': partials_per_hour,
+                'edv': edv, 
+                'edv_fiat': edv_fiat, 
+                'etw': self.etw_to_days(blockchain['blockchain'], etw),
             })
 
     def find_farm(self, farms, blockchain):
@@ -55,7 +130,7 @@ class Summaries:
         try:
             minutes = converters.etw_to_minutes(etw)
             #app.logger.info("Converting {0} minutes.".format(minutes))
-            return "%.1f days"% round(( minutes / 60 / 24), 2)
+            return "%.1f"% round(( minutes / 60 / 24), 2) + " " + _('days')
         except Exception as ex:
             app.logger.info("Unable to convert ETW to minutes '{0}' because {1}.".format(etw, str(ex)))
             return etw
@@ -99,11 +174,11 @@ class FarmSummary:
                     "status": farm_rec.status,
                     "display_status": self.status_if_responding(displayname, farm_rec.blockchain, connection_status, farm_rec.status),
                     "total_coins": total_coins,
-                    "wallet_balance": wallet_balance,
+                    "wallet_balance": converters.round_balance(wallet_balance),
                     "currency_symbol": globals.get_blockchain_symbol(farm_rec.blockchain),
                     "netspace_display_size": '?' if not farm_rec.netspace_size else converters.gib_to_fmt(farm_rec.netspace_size),
                     "netspace_size": farm_rec.netspace_size,
-                    "expected_time_to_win": farm_rec.expected_time_to_win,
+                    "expected_time_to_win": self.i18n_etw(farm_rec.expected_time_to_win),
                 }
                 if not farm_rec.blockchain in self.farms:
                     self.farms[farm_rec.blockchain] = farm
@@ -117,9 +192,17 @@ class FarmSummary:
 
     def status_if_responding(self, displayname, blockchain, connection_status, last_status):
         if connection_status == 'Responding':
-            return "Active" if last_status == "Farming" else last_status
+            if last_status == "Farming":
+                return _("Active")
+            if last_status == "Syncing":
+                return _("Syncing")
+            if last_status == "Not available":
+                return _("Not available")
+            if last_status == "Not synced or not connected to peers":
+                return _("Not synced")
+            return last_status
         #app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
-        return "Offline"
+        return _("Offline")
 
     def selected_blockchain(self):
         blockchains = list(self.farms.keys())
@@ -128,6 +211,40 @@ class FarmSummary:
             if blockchain == globals.enabled_blockchains()[0]:
                 return blockchain
         return blockchains[0]
+
+    # This is intentionally verbose to allow Babel to extract each english date unit
+    def i18n_etw(self, etw):
+        if 'years' in etw:
+            etw = etw.replace('years', _('years'))
+        if 'year' in etw:
+            etw = etw.replace('year', _('year'))
+        if 'months' in etw:
+            etw = etw.replace('months', _('months'))
+        if 'month' in etw:
+            etw = etw.replace('month', _('month'))
+        if 'weeks' in etw:
+            etw = etw.replace('weeks', _('weeks'))
+        if 'week' in etw:
+            etw = etw.replace('week', _('week'))
+        if 'days' in etw:
+            etw = etw.replace('days', _('days'))
+        if 'day' in etw:
+            etw = etw.replace('day', _('day'))
+        if 'hours' in etw:
+            etw = etw.replace('hours', _('hours'))
+        if 'hour' in etw:
+            etw = etw.replace('hour', _('hour'))
+        if 'minutes' in etw:
+            etw = etw.replace('minutes', _('minutes'))
+        if 'minute' in etw:
+            etw = etw.replace('minute', _('minute'))
+        if 'never (no plots)' in etw.lower():
+            etw = etw.replace('Never (no plots)', _('Never (no plots)'))
+        if 'soon' in etw.lower():
+            etw = etw.replace('Soon', _('Soon'))
+        if 'and' in etw:
+            etw = etw.replace('and', _('and'))
+        return etw
 
 class FarmPlots:
 
@@ -206,9 +323,12 @@ class Wallets:
                 hot_balance = self.sum_mmx_wallet_balance(wallet.hostname, wallet.blockchain, False)
             else:
                 hot_balance = self.sum_chia_wallet_balance(wallet.hostname, wallet.blockchain, False)
-            cold_balance = wallet.cold_balance
             try:
-                total_balance = converters.round_balance(float(hot_balance) + float(cold_balance))
+                cold_balance = converters.round_balance(float(wallet.cold_balance))
+            except:
+                cold_balance = ''
+            try:
+                total_balance = float(hot_balance) + float(cold_balance)
             except:
                 total_balance = hot_balance
             self.rows.append({ 
@@ -217,22 +337,35 @@ class Wallets:
                 'blockchain': wallet.blockchain,
                 'status': self.extract_status(wallet.blockchain, wallet.details, worker_status),
                 'details': wallet.details, 
-                'hot_balance': hot_balance,
+                'hot_balance': converters.round_balance(hot_balance),
                 'cold_balance': cold_balance,
                 'cold_address': ','.join(cold_wallet_addresses[wallet.blockchain]) if wallet.blockchain in cold_wallet_addresses else '',
-                'total_balance': total_balance,
-                'usd_balance': converters.to_usd(wallet.blockchain, total_balance),
+                'total_balance_float': total_balance,
+                'total_balance': converters.round_balance(total_balance),
+                'blockchain_symbol': globals.get_blockchain_symbol(wallet.blockchain).lower(),
+                'fiat_balance': fiat.to_fiat(wallet.blockchain, total_balance),
                 'updated_at': wallet.updated_at }) 
+
+    def exclude_cat_wallets(self, wallet_details):
+        skip = 0
+        details = []
+        for line in wallet_details.split('\n'):
+            if "type CAT" in line:
+                skip = 3 # Skip next 3 lines for this CAT wallet
+            elif skip > 0:
+                skip = skip -1 
+            else:
+                details.append(line)
+        return '\n'.join(details)
 
     def sum_chia_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
         numeric_const_pattern = '-Total\sBalance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
         rx = re.compile(numeric_const_pattern, re.VERBOSE)
-        found_balance = False
         sum = 0
         for wallet in self.wallets:
             if wallet.hostname == hostname and wallet.blockchain == blockchain:
                 try:
-                    for balance in rx.findall(wallet.details):
+                    for balance in rx.findall(self.exclude_cat_wallets(wallet.details)):
                         #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
                         # wallet.hostname, wallet.blockchain))
                         sum += locale.atof(balance)
@@ -242,14 +375,11 @@ class Wallets:
                         wallet.hostname, wallet.blockchain, str(ex)))
                 if include_cold_balance and wallet.cold_balance:
                     sum += locale.atof(wallet.cold_balance)
-        if found_balance:
-            return converters.round_balance(sum)
-        return '?'
+        return sum
 
     def sum_mmx_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
         numeric_const_pattern = 'Balance:\s+((?: (?: \d*\.\d+ ) | (?: \d+\.? ) )(?: [Ee] [+-]? \d+ )?)'
         rx = re.compile(numeric_const_pattern, re.VERBOSE)
-        found_balance = False
         sum = 0
         for wallet in self.wallets:
             if wallet.hostname == hostname and wallet.blockchain == blockchain:
@@ -264,9 +394,7 @@ class Wallets:
                         wallet.hostname, wallet.blockchain, str(ex)))
                 if include_cold_balance and wallet.cold_balance:
                     sum += locale.atof(wallet.cold_balance)
-        if found_balance:
-            return converters.round_balance(sum)
-        return '0' # Initially MMX reports nothing at all for a balance.  This implies zero.
+        return sum
 
     def extract_status(self, blockchain, details, worker_status):
         if worker_status == 'Responding':
@@ -391,9 +519,10 @@ class Blockchains:
 
 class Connections:
 
-    def __init__(self, connections):
+    def __init__(self, connections, lang):
         self.rows = []
         self.blockchains = {}
+        geoip_cache = mapping.load_geoip_cache()
         for connection in connections:
             worker_status = None
             try:
@@ -414,9 +543,9 @@ class Connections:
                 'add_exmample': self.get_add_connection_example(connection.blockchain)
             })
             if connection.blockchain == 'mmx':
-                self.blockchains[connection.blockchain] = self.parse_mmx(connection, connection.blockchain)
+                self.blockchains[connection.blockchain] = self.parse_mmx(connection, connection.blockchain, geoip_cache, lang)
             else:
-                self.blockchains[connection.blockchain] = self.parse_chia(connection, connection.blockchain)
+                self.blockchains[connection.blockchain] = self.parse_chia(connection, connection.blockchain, geoip_cache, lang)
         self.rows.sort(key=lambda conn: conn['blockchain'])
     
     def get_add_connection_example(self, blockchain):
@@ -439,9 +568,11 @@ class Connections:
         if blockchain == 'maize':
             return "212.159.183.209:8644"
         if blockchain == 'nchain':
-            return "218.88.205.216:58445"
+            return "218.88.205.216:58445"     
         if blockchain == 'shibgreen':
             return "218.89.239.144:7442"
+        if blockchain == 'silicoin':
+            return "67.172.84.54:22222"
         if blockchain == 'staicoin':
             return "173.54.12.193:1999"
         if blockchain == 'stor':
@@ -467,9 +598,11 @@ class Connections:
         if blockchain == 'nchain':
             return 58445
         if blockchain == 'mmx':
-            return 12331
+            return 12334
         if blockchain == 'maize':
             return 8644
+        if blockchain == 'silicoin':
+            return 22447
         if blockchain == 'shibgreen':
             return 7442
         if blockchain == 'silicoin':
@@ -478,14 +611,52 @@ class Connections:
             return 1999
         if blockchain == 'stor':
             return 8668
-
         raise("Unknown blockchain fork of selected: " + blockchain)
 
-    def parse_chia(self, connection, blockchain):
+    def get_geoname_for_lang(self, location, lang):
+        lang_codes = [ lang, ]
+        if '_' in lang: 
+            lang_codes.append(lang.split('_')[0]) # Secondarily, add more generic code
+        for lang_code in lang_codes:
+            for key in location:
+                if key.startswith(lang_code): # Note, means a pt_PT user may get pt_BR as that's the only 'pt' that Maxmind provides
+                    #app.logger.info('Found matching geoname for {0} in {1}'.format(lang, location))
+                    return location[key]
+        if 'en' in location: # Default fallback is 'en'
+            app.logger.info('Falling back to English geoname for {0} in {1}'.format(lang, location))
+            return location['en']
+        app.logger.info('Unable to find a geoname for {0} in {1}'.format(lang, location))
+        return '' # Blank if no such match
+
+    def set_geolocation(self, geoip_cache, connection, lang):
+        latitude = None
+        longitude = None
+        city = ''
+        country = ''
+        if connection['ip'] in geoip_cache and geoip_cache[connection['ip']]:
+            geoip = geoip_cache[connection['ip']]
+            latitude = geoip['latitude']
+            longitude = geoip['longitude']
+            try:
+                city = self.get_geoname_for_lang(geoip['city'], lang)
+            except:
+                traceback.print_exc()
+            try:
+                country = self.get_geoname_for_lang(geoip['country'], lang)
+            except:
+                traceback.print_exc()
+        connection['latitude'] = latitude
+        connection['longitude'] = longitude
+        connection['city'] = city
+        connection['country'] = country
+
+    def parse_chia(self, connection, blockchain, geoip_cache, lang):
         conns = []
         for line in connection.details.split('\n'):
             try:
-                if line.strip().startswith('Connections:'):
+                if line.strip().startswith('Connections:') or \
+                    line.strip().startswith('Connection error.') or \
+                    line.strip().startswith('This is normal if full node'):
                     pass
                 elif line.strip().startswith('Type'):
                     self.columns = line.lower().replace('last connect', 'last_connect') \
@@ -505,46 +676,54 @@ class Connections:
                 else:
                     vals = line.strip().split()
                     if len(vals) > 7:
+                        last_connect = str(datetime.datetime.today().year) + ' ' + vals[4] + ' ' + vals[5] + ' ' + vals[6]
                         connection = {
                             'type': vals[0],
                             'ip': vals[1],
                             'ports': vals[2],
                             'nodeid': vals[3].replace('...',''),
-                            'last_connect': datetime.datetime.strptime( \
-                                str(datetime.datetime.today().year) + ' ' + vals[4] + ' ' + vals[5] + ' ' + vals[6], 
-                                '%Y %b %d %H:%M:%S'),
+                            'last_connect': datetime.datetime.strptime(last_connect, '%Y %b %d %H:%M:%S'),
                             'mib_up': float(vals[7].split('|')[0]),
                             'mib_down': float(vals[7].split('|')[1])
                         }
                         if len(vals) > 9: # HDDCoin keeps SBHeight and Hash on same line
                             connection['height'] = vals[8]
                             connection['hash'] = vals[9]
+                        try:
+                            self.set_geolocation(geoip_cache, connection, lang)
+                        except:
+                            traceback.print_exc()
                         if blockchain == 'hddcoin' or vals[0] != "FULL_NODE":  # FARMER and WALLET only on one line 
                             conns.append(connection)
                     else:
                         app.logger.info("Bad connection line: {0}".format(line))
             except:
+                app.logger.info("Exception parsing connection line: {0}".format(line))
                 app.logger.info(traceback.format_exc())
         return conns
 
-    def parse_mmx(self, connection, blockchain):
+    def parse_mmx(self, connection, blockchain, geoip_cache, lang):
         conns = []
         for line in connection.details.split('\n'):
             try:
                 #app.logger.info(line)
-                m = re.match("\[(.+)\]   height =  (\d+), (\d+\.?\d*) MB recv, (\d*\.?\d*) MB sent, timeout = (\d+\.?\d*) sec", line.strip(), re.IGNORECASE)
+                m = re.match("\[(.+)\]\s+height\s+=\s+(\!?\d+), (\w+) \(\d+\.\d+\), (\d+\.?\d*) (\w)B/s recv, (\d*\.?\d*) (\w)B/s send,.* since (\d+) min, .* (\d+\.?\d?) sec timeout", line.strip(), re.IGNORECASE)
                 if m:
                     connection = {
-                        'type': 'peer',
+                        'type': m.group(3),
                         'ip': m.group(1),
                         'height': m.group(2),
                         'ports': '',
                         'nodeid': '',
-                        'last_connect': '',
-                        'mib_up': m.group(4),
-                        'mib_down': m.group(3),
-                        'timeout': m.group(5)
+                        'last_connect': 'since {0} min'.format(m.group(8)),
+                        'mib_up': "%.1f"% round(self.rate_to_mb(m.group(6), m.group(7)) * int(m.group(8)) * 60, 2),
+                        'mib_down': "%.1f"% round(self.rate_to_mb(m.group(4), m.group(5)) * int(m.group(8)) * 60, 2),
+                        'timeout': m.group(9)
                     }
+                    try:
+                        self.set_geolocation(geoip_cache, connection, lang)
+                    except:
+                        traceback.print_exc()
                     conns.append(connection)
                 elif line.strip():
                     app.logger.info("Bad peer line: {0}".format(line))
@@ -552,3 +731,15 @@ class Connections:
                 app.logger.info(traceback.format_exc())
         return conns
 
+    def rate_to_mb(self, rate, unit):
+        if unit.lower() == 'k':
+            try:
+                return float(rate) / 1024
+            except:
+                app.logger.error("Invalid transmission rate in KB/sec provided: {0}".format(rate))
+                return rate
+        elif unit.lower() == 'm':
+            return float(rate)
+        else:
+            app.logger.error("Unknown transmission rate unit character of {0} encountered.".format(unit))
+            return rate

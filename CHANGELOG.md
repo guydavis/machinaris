@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.0] - 2022-03-04
+ - [Chia](https://www.chia.net/2022/02/09/1.3-beta-release.en.html) - beta of v1.3 release (chia version reports v1.2.12dev254 currently)
+ - [Silicoin](https://github.com/silicoin-network/silicoin-blockchain) - supported again as per Discord votes.
+ - Internationalization support for locale-specific text, numbers, and currencies.  [Translators wanted](https://github.com/guydavis/machinaris/wiki/Localization)!
+ - Geolocation of peer connections for each blockchain by their IP address. [Optionally enabled](https://github.com/guydavis/machinaris/wiki/Connections).
+
 ## [0.6.9] - 2022-02-04
  - [MMX](https://github.com/madMAx43v3r/mmx-node) - support for this new blockchain, which requires its own plot files.
  - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain/releases) - update to version 2.0.0

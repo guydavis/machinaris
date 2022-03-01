@@ -41,7 +41,7 @@ jobs:
           push: true
           build-args: |
             "MACHINARIS_STREAM=develop"
-            "CHIA_BRANCH=1.2.11"
+            "CHIA_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:develop
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:develop
