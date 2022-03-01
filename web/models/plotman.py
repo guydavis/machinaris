@@ -1,9 +1,10 @@
 import os
 import traceback
 
+from flask_babel import _, lazy_gettext as _l
+
 from web import app
 from web.actions import worker as w
-
 
 class PlottingSummary:
 
@@ -60,13 +61,13 @@ class PlottingSummary:
 
     def calc_status(self):
         if len(self.rows) > 0:
-            self.display_status = "Suspended"
+            self.display_status = _("Suspended")
             for row in self.rows:
                 if row['stat'] != 'STP':
-                    self.display_status = "Active"
+                    self.display_status = _("Active")
                     return
         else:
-            self.display_status = "Idle"
+            self.display_status = _("Idle")
 
     def strip_trailing_slash(self, path):
         if path.endswith('/'):

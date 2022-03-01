@@ -192,9 +192,17 @@ class FarmSummary:
 
     def status_if_responding(self, displayname, blockchain, connection_status, last_status):
         if connection_status == 'Responding':
-            return "Active" if last_status == "Farming" else last_status
+            if last_status == "Farming":
+                return _("Active")
+            if last_status == "Syncing":
+                return _("Syncing")
+            if last_status == "Not available":
+                return _("Not available")
+            if last_status == "Not synced or not connected to peers":
+                return _("Not synced")
+            return last_status
         #app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
-        return "Offline"
+        return _("Offline")
 
     def selected_blockchain(self):
         blockchains = list(self.farms.keys())
@@ -234,6 +242,8 @@ class FarmSummary:
             etw = etw.replace('Never (no plots)', _('Never (no plots)'))
         if 'soon' in etw.lower():
             etw = etw.replace('Soon', _('Soon'))
+        if 'and' in etw:
+            etw = etw.replace('and', _('and'))
         return etw
 
 class FarmPlots:
