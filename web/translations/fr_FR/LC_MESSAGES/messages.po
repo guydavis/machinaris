@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-01 11:37-0700\n"
+"POT-Creation-Date: 2022-03-01 12:05-0700\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: fr\n"
@@ -123,11 +123,11 @@ msgstr "secs"
 msgid "hour"
 msgstr "heure"
 
-#: actions/warnings.py:38
+#: actions/warnings.py:56
 msgid "Dismiss Warning"
 msgstr "Ignorer l'avertissement"
 
-#: actions/warnings.py:39 templates/keys.html:58
+#: actions/warnings.py:57 templates/keys.html:58
 #, python-format
 msgid ""
 "Machinaris uses an online wallet for farming. It is strongly recommended "
@@ -135,10 +135,11 @@ msgid ""
 "%(wiki_link_open)swiki%(wiki_link_close)s. Please add \"Setup a Cold "
 "Wallet\" to your To-Do list!"
 msgstr ""
-"Machinaris utilise un portefeuille en ligne pour farming. Il est fortement recommandé "
-"que vous utilisez un portefeuille froid pour vos instructions de paiement. Tutoriel sur le "
-"%(wiki_link_open)swiki%(wiki_link_close)s. Veuillez ajouter \"Configurer un Cold "
-"Portefeuille\" à votre liste de tâches!"
+"Machinaris utilise un portefeuille en ligne pour farming. Il est "
+"fortement recommandé que vous utilisez un portefeuille froid pour vos "
+"instructions de paiement. Tutoriel sur le "
+"%(wiki_link_open)swiki%(wiki_link_close)s. Veuillez ajouter \"Configurer "
+"un Cold Portefeuille\" à votre liste de tâches!"
 
 #: actions/worker.py:106
 msgid "Worker not responding to pings."

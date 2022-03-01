@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-01 11:37-0700\n"
+"POT-Creation-Date: 2022-03-01 12:05-0700\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: pt\n"
@@ -47,8 +47,8 @@ msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
 msgstr ""
-"A definições do mapa foram gravadas. Por favor aguarde 10 minutos para que o mapa "
-"seja actualizado com a geolocalização."
+"A definições do mapa foram gravadas. Por favor aguarde 10 minutos para "
+"que o mapa seja actualizado com a geolocalização."
 
 #: routes.py:287
 msgid "Unknown form action"
@@ -67,24 +67,24 @@ msgid ""
 "For Alerts config, found no responding fullnode found for %{blockchain}. "
 "Please check your workers."
 msgstr ""
-"Na configuração dos Alertas, foi encontrado um fullnode que não responde para o %{blockchain}. "
-"Por favor verifica os teus workers."
+"Na configuração dos Alertas, foi encontrado um fullnode que não responde "
+"para o %{blockchain}. Por favor verifica os teus workers."
 
 #: routes.py:404
 msgid ""
 "For Farming config, found no responding fullnode found for %{blockchain}."
 " Please check your workers."
 msgstr ""
-"Na configuração de Farming, foi encontrado um fullnode que não responde para o %{blockchain}. "
-"Por favor verifica os teus workers."
+"Na configuração de Farming, foi encontrado um fullnode que não responde "
+"para o %{blockchain}. Por favor verifica os teus workers."
 
 #: routes.py:411
 msgid ""
 "For Plotting config, found no responding fullnode found for "
 "%{blockchain}. Please check your workers."
 msgstr ""
-"Na configuração de Plotting, foi encontrado um fullnode que não responde para o %{blockchain}. "
-"Por favor verifica os teus workers."
+"Na configuração de Plotting, foi encontrado um fullnode que não responde "
+"para o %{blockchain}. Por favor verifica os teus workers."
 
 #: routes.py:416
 msgid "No responding fullnode found for %{blockchain}. Please check your workers."
@@ -125,11 +125,11 @@ msgstr "segs"
 msgid "hour"
 msgstr "hora"
 
-#: actions/warnings.py:38
+#: actions/warnings.py:56
 msgid "Dismiss Warning"
 msgstr ""
 
-#: actions/warnings.py:39 templates/keys.html:58
+#: actions/warnings.py:57 templates/keys.html:58
 #, python-format
 msgid ""
 "Machinaris uses an online wallet for farming. It is strongly recommended "
@@ -156,7 +156,9 @@ msgstr "A hora do Worker não coincide com a do Controlador"
 
 #: actions/worker.py:110
 msgid "Please ensure worker and controller share same timezone."
-msgstr "Por favor certifique-se que o Worker e o Controlador estão no mesmo fuso horário."
+msgstr ""
+"Por favor certifique-se que o Worker e o Controlador estão no mesmo fuso "
+"horário."
 
 #: actions/worker.py:116
 msgid "Machinaris version does not match controller."
@@ -164,7 +166,9 @@ msgstr "A versão do Machinaris não é a mesma da versão do controller."
 
 #: actions/worker.py:117
 msgid "Please use a consistent Machinaris version to avoid issues."
-msgstr "Por favor usa a mesma versão do Machinaris para evitar ocorrerem problemas inesperados."
+msgstr ""
+"Por favor usa a mesma versão do Machinaris para evitar ocorrerem "
+"problemas inesperados."
 
 #: models/chia.py:133 models/chia.py:230
 msgid "days"
@@ -284,7 +288,9 @@ msgstr "Remover todos"
 
 #: templates/alerts.html:105
 msgid "No notifications from Chiadog yet... so check back soon."
-msgstr "Ainda não existem notificações do Chiadog... por isso, verifique novamente, dentro de alguns minutos."
+msgstr ""
+"Ainda não existem notificações do Chiadog... por isso, verifique "
+"novamente, dentro de alguns minutos."
 
 #: templates/alerts.html:106
 msgid ""
@@ -442,7 +448,9 @@ msgstr "Blockchain: Detalhes"
 
 #: templates/blockchains.html:87
 msgid "No blockchains found from any farmers. Not added?"
-msgstr "Não foi encontrado nenhum blockchain para os farmers. Não foram adicionados?"
+msgstr ""
+"Não foi encontrado nenhum blockchain para os farmers. Não foram "
+"adicionados?"
 
 #: templates/blockchains.html:88
 msgid "Try running \"chia show --state\" on your farmers to verify."
@@ -602,8 +610,8 @@ msgid ""
 "However, you may view it yourself by executing this from within the "
 "Docker container."
 msgstr ""
-"No entanto, podes vê-la executando este comando dentro do "
-"container Docker."
+"No entanto, podes vê-la executando este comando dentro do container "
+"Docker."
 
 #: templates/keys.html:54
 msgid "Best Practices"
@@ -667,7 +675,9 @@ msgstr "Launcher ID:"
 
 #: templates/pools.html:97
 msgid "No pools have been found yet. Perhaps the wallet is still syncing?"
-msgstr "Ainda não foram encontrados Pools. Talvez a wallet ainda esteja a sincronizar?"
+msgstr ""
+"Ainda não foram encontrados Pools. Talvez a wallet ainda esteja a "
+"sincronizar?"
 
 #: templates/pools.html:98
 msgid ""
@@ -726,8 +736,8 @@ msgid ""
 "To get started with Machinaris as a Chia%(trademark)s fullnode, either "
 "import your existing 24-word mnemonic seed phrase"
 msgstr ""
-"Para começares a usar o Machinaris como um fullnode do Chia%(trademark)s, podes "
-"importar a tua própria mnemônica de 24 palavras"
+"Para começares a usar o Machinaris como um fullnode do Chia%(trademark)s,"
+" podes importar a tua própria mnemônica de 24 palavras"
 
 #: templates/setup.html:90
 msgid "Import Existing Key"
@@ -1202,15 +1212,17 @@ msgstr "Sumário diário"
 #: templates/farming/workers.html:70
 #, python-format
 msgid "No daily summary found for %(blockchain)s on %(displayname)s."
-msgstr "Não foi encontrado o sumário diário para %(blockchain)s no %(displayname)s."
+msgstr ""
+"Não foi encontrado o sumário diário para %(blockchain)s no "
+"%(displayname)s."
 
 #: templates/farming/workers.html:72
 msgid ""
 "Please check that your Machinaris container for this blockchain is "
 "running. Also please verify settings on the Alerts page."
 msgstr ""
-"Por favor verifique que o container Machinaris para este blockchain está a "
-"correr. Por favor verifique também as definições na página de Alertas."
+"Por favor verifique que o container Machinaris para este blockchain está "
+"a correr. Por favor verifique também as definições na página de Alertas."
 
 #: templates/farming/workers.html:93
 #, python-format
@@ -1403,9 +1415,9 @@ msgid ""
 "the same, %(break)sbut it is much less volatile. You can easily switch "
 "pools without having to re-plot."
 msgstr ""
-"Junte-se a uma Pool e obtenha recompensas por estar farming de forma consistente. O ganho médio é "
-"o mesmo, %(break)smas muito menos volátil. Pode facilmente mudar de Pool "
-"sem ter de recriar novamente os Plots."
+"Junte-se a uma Pool e obtenha recompensas por estar farming de forma "
+"consistente. O ganho médio é o mesmo, %(break)smas muito menos volátil. "
+"Pode facilmente mudar de Pool sem ter de recriar novamente os Plots."
 
 #: templates/settings/pools.html:88
 msgid "ERROR: Unable to join a pool because:"

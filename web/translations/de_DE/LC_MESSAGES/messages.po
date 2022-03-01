@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-01 11:37-0700\n"
+"POT-Creation-Date: 2022-03-01 12:05-0700\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: de\n"
@@ -111,11 +111,11 @@ msgstr ""
 msgid "hour"
 msgstr ""
 
-#: actions/warnings.py:38
+#: actions/warnings.py:56
 msgid "Dismiss Warning"
 msgstr ""
 
-#: actions/warnings.py:39 templates/keys.html:58
+#: actions/warnings.py:57 templates/keys.html:58
 #, python-format
 msgid ""
 "Machinaris uses an online wallet for farming. It is strongly recommended "
