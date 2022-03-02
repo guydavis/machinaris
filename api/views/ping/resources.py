@@ -21,8 +21,8 @@ blp = Blueprint(
 class Logs(MethodView):
 
     def get(self):
-        app.logger.info("IN PING, MATCH IS {0}".format(request.accept_languages.best_match(app.config['LANGUAGES'])))
-        app.logger.info("IN PING, PONG IS {0}".format(_('Pong!')))
+        #app.logger.info("IN PING, MATCH IS {0}".format(request.accept_languages.best_match(app.config['LANGUAGES'])))
+        #app.logger.info("IN PING, PONG IS {0}".format(_('Pong!')))
         response = make_response(
             """{0}
 """.format(_('Pong!')), 200)

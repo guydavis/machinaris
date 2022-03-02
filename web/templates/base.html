@@ -7,6 +7,7 @@
     <link href="{{ url_for('static', filename='3rd_party/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='3rd_party/icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='3rd_party/dataTables.bootstrap5.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='3rd_party/leaflet.css') }}" />
     <title>{{_('Machinaris')}}</title>
     {% if reload_seconds %}
     <meta http-equiv="refresh" content="{{ reload_seconds }}">
@@ -192,6 +193,8 @@
     <script src="{{ url_for('static', filename='3rd_party/chart.min.js') }}"></script>
     <script src="{{ url_for('static', filename='3rd_party/luxon.min.js') }}"></script>
     <script src="{{ url_for('static', filename='3rd_party/chartjs-adapter-luxon.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='3rd_party/leaflet.js') }}"></script>
+    <script src="{{ url_for('static', filename='3rd_party/leaflet-layervisibility.js') }}"></script>
     {% block scripts %}{% endblock %}
 </body>
 

@@ -8,7 +8,7 @@ import traceback
 from flask_babel import _, lazy_gettext as _l
 
 from web import app
-from web.actions import worker as w
+from web.actions import worker as w, mapping
 from common.config import globals
 from common.utils import converters, fiat
 
@@ -192,9 +192,17 @@ class FarmSummary:
 
     def status_if_responding(self, displayname, blockchain, connection_status, last_status):
         if connection_status == 'Responding':
-            return "Active" if last_status == "Farming" else last_status
+            if last_status == "Farming":
+                return _("Active")
+            if last_status == "Syncing":
+                return _("Syncing")
+            if last_status == "Not available":
+                return _("Not available")
+            if last_status == "Not synced or not connected to peers":
+                return _("Not synced")
+            return last_status
         #app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
-        return "Offline"
+        return _("Offline")
 
     def selected_blockchain(self):
         blockchains = list(self.farms.keys())
@@ -234,6 +242,8 @@ class FarmSummary:
             etw = etw.replace('Never (no plots)', _('Never (no plots)'))
         if 'soon' in etw.lower():
             etw = etw.replace('Soon', _('Soon'))
+        if 'and' in etw:
+            etw = etw.replace('and', _('and'))
         return etw
 
 class FarmPlots:
@@ -509,9 +519,10 @@ class Blockchains:
 
 class Connections:
 
-    def __init__(self, connections):
+    def __init__(self, connections, lang):
         self.rows = []
         self.blockchains = {}
+        geoip_cache = mapping.load_geoip_cache()
         for connection in connections:
             worker_status = None
             try:
@@ -532,9 +543,9 @@ class Connections:
                 'add_exmample': self.get_add_connection_example(connection.blockchain)
             })
             if connection.blockchain == 'mmx':
-                self.blockchains[connection.blockchain] = self.parse_mmx(connection, connection.blockchain)
+                self.blockchains[connection.blockchain] = self.parse_mmx(connection, connection.blockchain, geoip_cache, lang)
             else:
-                self.blockchains[connection.blockchain] = self.parse_chia(connection, connection.blockchain)
+                self.blockchains[connection.blockchain] = self.parse_chia(connection, connection.blockchain, geoip_cache, lang)
         self.rows.sort(key=lambda conn: conn['blockchain'])
     
     def get_add_connection_example(self, blockchain):
@@ -600,10 +611,46 @@ class Connections:
             return 1999
         if blockchain == 'stor':
             return 8668
-
         raise("Unknown blockchain fork of selected: " + blockchain)
 
-    def parse_chia(self, connection, blockchain):
+    def get_geoname_for_lang(self, location, lang):
+        lang_codes = [ lang, ]
+        if '_' in lang: 
+            lang_codes.append(lang.split('_')[0]) # Secondarily, add more generic code
+        for lang_code in lang_codes:
+            for key in location:
+                if key.startswith(lang_code): # Note, means a pt_PT user may get pt_BR as that's the only 'pt' that Maxmind provides
+                    #app.logger.info('Found matching geoname for {0} in {1}'.format(lang, location))
+                    return location[key]
+        if 'en' in location: # Default fallback is 'en'
+            app.logger.info('Falling back to English geoname for {0} in {1}'.format(lang, location))
+            return location['en']
+        app.logger.info('Unable to find a geoname for {0} in {1}'.format(lang, location))
+        return '' # Blank if no such match
+
+    def set_geolocation(self, geoip_cache, connection, lang):
+        latitude = None
+        longitude = None
+        city = ''
+        country = ''
+        if connection['ip'] in geoip_cache and geoip_cache[connection['ip']]:
+            geoip = geoip_cache[connection['ip']]
+            latitude = geoip['latitude']
+            longitude = geoip['longitude']
+            try:
+                city = self.get_geoname_for_lang(geoip['city'], lang)
+            except:
+                traceback.print_exc()
+            try:
+                country = self.get_geoname_for_lang(geoip['country'], lang)
+            except:
+                traceback.print_exc()
+        connection['latitude'] = latitude
+        connection['longitude'] = longitude
+        connection['city'] = city
+        connection['country'] = country
+
+    def parse_chia(self, connection, blockchain, geoip_cache, lang):
         conns = []
         for line in connection.details.split('\n'):
             try:
@@ -642,6 +689,10 @@ class Connections:
                         if len(vals) > 9: # HDDCoin keeps SBHeight and Hash on same line
                             connection['height'] = vals[8]
                             connection['hash'] = vals[9]
+                        try:
+                            self.set_geolocation(geoip_cache, connection, lang)
+                        except:
+                            traceback.print_exc()
                         if blockchain == 'hddcoin' or vals[0] != "FULL_NODE":  # FARMER and WALLET only on one line 
                             conns.append(connection)
                     else:
@@ -651,7 +702,7 @@ class Connections:
                 app.logger.info(traceback.format_exc())
         return conns
 
-    def parse_mmx(self, connection, blockchain):
+    def parse_mmx(self, connection, blockchain, geoip_cache, lang):
         conns = []
         for line in connection.details.split('\n'):
             try:
@@ -669,6 +720,10 @@ class Connections:
                         'mib_down': "%.1f"% round(self.rate_to_mb(m.group(4), m.group(5)) * int(m.group(8)) * 60, 2),
                         'timeout': m.group(9)
                     }
+                    try:
+                        self.set_geolocation(geoip_cache, connection, lang)
+                    except:
+                        traceback.print_exc()
                     conns.append(connection)
                 elif line.strip():
                     app.logger.info("Bad peer line: {0}".format(line))

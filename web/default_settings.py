@@ -40,4 +40,4 @@ class DefaultConfig:
 
     # Note, babel looks in /machinaris/web/translations with this path.
     BABEL_TRANSLATION_DIRECTORIES = "translations"
-    LANGUAGES = ['en', 'de', 'fr', 'it', 'zh']
+    LANGUAGES = ['en', 'de_DE', 'fr_FR', 'it_IT', 'pt_PT', 'zh']

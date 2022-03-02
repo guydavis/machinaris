@@ -15,6 +15,7 @@ import yaml
 
 from flask import Flask, jsonify, abort, request, flash
 from flask.helpers import make_response
+from flask_babel import _, lazy_gettext as _l
 from subprocess import Popen, TimeoutExpired, PIPE
 
 from common.models import plottings as pl, keys as k
@@ -40,12 +41,12 @@ def load_plotting_summary(hostname=None):
 def load_plotting_summary_by_blockchains(blockchains):
     summary = {}
     for blockchain in blockchains:
-        summary[blockchain] = 'Idle' # Default, unless a job found
+        summary[blockchain] = _('Idle') # Default, unless a job found
     for plotting in db.session.query(pl.Plotting).all():
         if plotting.stat != 'STP':
-            summary[plotting.blockchain] = 'Active'
-        elif plotting.stat == 'STP' and summary[plotting.blockchain] != 'Active':
-            summary[plotting.blockchain] = 'Suspended'
+            summary[plotting.blockchain] = _('Active')
+        elif plotting.stat == 'STP' and summary[plotting.blockchain] != _('Active'):
+            summary[plotting.blockchain] = _('Suspended')
     if 'chia' in summary and summary['chia']:
         for blockchain in blockchains: # All forks sharing Chia plots show as "Active" too
             if not blockchain in PLOTTABLE_BLOCKCHAINS:
