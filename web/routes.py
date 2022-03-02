@@ -8,7 +8,7 @@ import time
 import traceback
 
 from datetime import datetime
-from flask import Flask, flash, redirect, render_template, abort, \
+from flask import Flask, flash, redirect, render_template, abort, escape, \
         request, session, url_for, send_from_directory, make_response
 from flask_babel import _, lazy_gettext as _l
 
@@ -396,24 +396,24 @@ def views_settings_config(path):
         try:
             response = make_response(chiadog.load_config(w, request.args.get('blockchain')), 200)
         except requests.exceptions.ConnectionError as ex:
-            response = make_response(_("For Alerts config, found no responding fullnode found for %{blockchain}. Please check your workers.", blockchain=request.args.get('blockchain')))
+            response = make_response(_("For Alerts config, found no responding fullnode found for %{blockchain}. Please check your workers.", blockchain=escape(request.args.get('blockchain'))))
     elif config_type == "farming":
         try:
             response = make_response(chia.load_config(w, request.args.get('blockchain')), 200)
         except requests.exceptions.ConnectionError as ex:
-            response = make_response(_("For Farming config, found no responding fullnode found for %{blockchain}. Please check your workers.", blockchain=request.args.get('blockchain')))
+            response = make_response(_("For Farming config, found no responding fullnode found for %{blockchain}. Please check your workers.", blockchain=escape(request.args.get('blockchain'))))
     elif config_type == "plotting":
         try:
             [replaced, config] = plotman.load_config(w, request.args.get('blockchain'))
             response = make_response(config, 200)
             response.headers.set('ConfigReplacementsOccurred', replaced)
         except requests.exceptions.ConnectionError as ex:
-            response = make_response(_("For Plotting config, found no responding fullnode found for %{blockchain}. Please check your workers.", blockchain=request.args.get('blockchain')))
+            response = make_response(_("For Plotting config, found no responding fullnode found for %{blockchain}. Please check your workers.", blockchain=escape(request.args.get('blockchain'))))
     elif config_type == "tools":
         try:
             response = make_response(forktools.load_config(w, request.args.get('blockchain')), 200)
         except requests.exceptions.ConnectionError as ex:
-            response = make_response(_("No responding fullnode found for %{blockchain}. Please check your workers.", blockchain=request.args.get('blockchain')))
+            response = make_response(_("No responding fullnode found for %{blockchain}. Please check your workers.", blockchain=escape(request.args.get('blockchain'))))
     else:
         abort("Unsupported config type: {0}".format(config_type), 400)
     response.mimetype = "application/x-yaml"
