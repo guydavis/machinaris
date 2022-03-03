@@ -800,13 +800,15 @@ msgstr "Dettagli Portafoglio"
 msgid ""
 "No wallet status received.  Perhaps just starting?  Please allow at least"
 " 10 minutes to update."
-msgstr ""
+msgstr "Stato del portafogli non ricevuto. Forse hai appena avviato? Attendi"
+" almeno 10 minuti affinché si aggiorni."
 
 #: templates/wallet.html:173
 msgid ""
 "You can also try running \"chia wallet show\" on your fullnode's in-"
 "container shell to verify."
-msgstr ""
+msgstr "Puoi anche provare ad eseguire \"chia wallet show\" nella shell"
+" del container del tuo fullnode per verificare."
 
 #: templates/worker.html:35
 msgid "Details"
