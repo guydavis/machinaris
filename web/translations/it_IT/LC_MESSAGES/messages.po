@@ -531,43 +531,43 @@ msgstr ""
 
 #: templates/index.html:30
 msgid "Expected Time to Win"
-msgstr ""
+msgstr "Tempo Previsto per Vincere"
 
 #: templates/index.html:72
 msgid "Total Plots"
-msgstr ""
+msgstr "Plots Totali"
 
 #: templates/index.html:79
 msgid "Total Plots Size"
-msgstr ""
+msgstr "Dimensione Totale PLots"
 
 #: templates/index.html:89 templates/wallet.html:113
 msgid "Balance"
-msgstr ""
+msgstr "Saldo"
 
 #: templates/index.html:96
 msgid "Farmed"
-msgstr ""
+msgstr "Farmati"
 
 #: templates/index.html:105
 msgid "Netspace"
-msgstr ""
+msgstr "Spazio Rete"
 
 #: templates/index.html:120
 msgid "Challenges from Harvesters"
-msgstr ""
+msgstr "Challenges per Harvester"
 
 #: templates/index.html:136
 msgid "Partial Proofs for Pools"
-msgstr ""
+msgstr "Partial Proofs per Pool"
 
 #: templates/farming/workers.html:80 templates/index.html:147
 msgid "Previous"
-msgstr ""
+msgstr "Precedente"
 
 #: templates/farming/workers.html:84 templates/index.html:151
 msgid "Next"
-msgstr ""
+msgstr "Successivo"
 
 #: templates/keys.html:43
 msgid "NOTE: Machinaris will never display your private key here."
