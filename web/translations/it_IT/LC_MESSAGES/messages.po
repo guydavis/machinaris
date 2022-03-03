@@ -20,7 +20,7 @@ msgstr ""
 
 #: routes.py:77 routes.py:219
 msgid "Saved local currency setting."
-msgstr ""
+msgstr "Impostazione valuta locale salvata."
 
 #: routes.py:96
 msgid "Blockchain download"
@@ -28,15 +28,15 @@ msgstr ""
 
 #: routes.py:128
 msgid "Unknown plotting form"
-msgstr ""
+msgstr "Formato plotting sconosciuto"
 
 #: routes.py:178
 msgid "Error! Please see logs."
-msgstr ""
+msgstr "Errore! Controlla i logs."
 
 #: routes.py:204
 msgid "Unknown alerts form"
-msgstr ""
+msgstr "Formato avvisi sconosciuto"
 
 #: routes.py:224
 msgid "Saved cold wallet addresses."
@@ -56,7 +56,7 @@ msgstr ""
 msgid ""
 "No worker at %{worker} for blockchain %{blockchain}. Please select "
 "another blockchain."
-msgstr ""
+msgstr "Nessun worker in %{worker} per la blockchain %{blockchain}. Scegli un'altra blockchain."
 
 #: routes.py:399
 msgid ""
@@ -78,42 +78,43 @@ msgstr ""
 
 #: routes.py:416
 msgid "No responding fullnode found for %{blockchain}. Please check your workers."
-msgstr ""
+msgstr "Non è stato trovato alcun fullnode che risponden per %{blockchain}. Controlla i tuoi workers."
 
 #: routes.py:435
 msgid "Unsupported log type"
-msgstr ""
+msgstr "Formato log non supportato"
 
 #: actions/chia.py:44
 msgid ""
 "Relax and grab a coffee. Status is being gathered from active workers.  "
 "Please allow 15 minutes..."
-msgstr ""
+msgstr "Rilassati e prendi un caffè. Lo status sta per essere recuperato dai workers attivi.  "
+"Attendi 15 minuti..."
 
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
-msgstr ""
+msgstr "Inattivo"
 
 #: actions/plotman.py:47 actions/plotman.py:48 models/chia.py:196
 #: models/plotman.py:67 templates/index.html:42 templates/index.html:52
 msgid "Active"
-msgstr ""
+msgstr "Attivo"
 
 #: actions/plotman.py:49 models/plotman.py:64
 msgid "Suspended"
-msgstr ""
+msgstr "Sospeso"
 
 #: actions/stats.py:338
 msgid "secs"
-msgstr ""
+msgstr "secondi"
 
 #: actions/stats.py:348 models/chia.py:236
 msgid "hour"
-msgstr ""
+msgstr "ora"
 
 #: actions/warnings.py:56
 msgid "Dismiss Warning"
-msgstr ""
+msgstr "Ignora Avvertenza"
 
 #: actions/warnings.py:57 templates/keys.html:58
 #, python-format
@@ -126,43 +127,43 @@ msgstr ""
 
 #: actions/worker.py:106
 msgid "Worker not responding to pings."
-msgstr ""
+msgstr "Il worker non risponde ai ping."
 
 #: actions/worker.py:107
 msgid "Please check the worker container and restart if necessary."
-msgstr ""
+msgstr "Controlla il container del worker e riavvialo se necessario."
 
 #: actions/worker.py:109
 msgid "Worker time is offset from controller."
-msgstr ""
+msgstr "L'ora del worker è sfalsata rispetto a quella del controller."
 
 #: actions/worker.py:110
 msgid "Please ensure worker and controller share same timezone."
-msgstr ""
+msgstr "Assicurati che worker e controlle condividano lo stesso fuso orario."
 
 #: actions/worker.py:116
 msgid "Machinaris version does not match controller."
-msgstr ""
+msgstr "La versione di Machinaris non corrisponde con quella del controller."
 
 #: actions/worker.py:117
 msgid "Please use a consistent Machinaris version to avoid issues."
-msgstr ""
+msgstr "Usa una versione di Machinaris coerente per evitare problemi."
 
 #: models/chia.py:133 models/chia.py:230
 msgid "days"
-msgstr ""
+msgstr "giorni"
 
 #: models/chia.py:198 templates/summary.html:99
 msgid "Syncing"
-msgstr ""
+msgstr "Sincronizzazione"
 
 #: models/chia.py:200 templates/index.html:54
 msgid "Not available"
-msgstr ""
+msgstr "Non disponibile"
 
 #: models/chia.py:202
 msgid "Not synced"
-msgstr ""
+msgstr "non sincronizzato"
 
 #: models/chia.py:205 templates/index.html:54 templates/summary.html:95
 #: templates/worker.html:78 templates/workers.html:72
@@ -171,59 +172,59 @@ msgstr ""
 
 #: models/chia.py:218
 msgid "years"
-msgstr ""
+msgstr "anni"
 
 #: models/chia.py:220
 msgid "year"
-msgstr ""
+msgstr "anno"
 
 #: models/chia.py:222
 msgid "months"
-msgstr ""
+msgstr "mesi"
 
 #: models/chia.py:224
 msgid "month"
-msgstr ""
+msgstr "mese"
 
 #: models/chia.py:226
 msgid "weeks"
-msgstr ""
+msgstr "settimane"
 
 #: models/chia.py:228
 msgid "week"
-msgstr ""
+msgstr "settimana"
 
 #: models/chia.py:232
 msgid "day"
-msgstr ""
+msgstr "giorno"
 
 #: models/chia.py:234
 msgid "hours"
-msgstr ""
+msgstr "ore"
 
 #: models/chia.py:238
 msgid "minutes"
-msgstr ""
+msgstr "minuti"
 
 #: models/chia.py:240
 msgid "minute"
-msgstr ""
+msgstr "minuto"
 
 #: models/chia.py:242
 msgid "Never (no plots)"
-msgstr ""
+msgstr "Mai (nessun plot)"
 
 #: models/chia.py:244
 msgid "Soon"
-msgstr ""
+msgstr "Presto"
 
 #: models/chia.py:246
 msgid "and"
-msgstr ""
+msgstr "e"
 
 #: templates/alerts.html:14
 msgid "Alerts: Recent Notifications"
-msgstr ""
+msgstr "Avvisi: Notifiche Recenti"
 
 #: templates/alerts.html:72 templates/settings/alerts.html:36
 #: templates/settings/farming.html:37 templates/settings/plotting.html:37
@@ -241,11 +242,11 @@ msgstr ""
 
 #: templates/alerts.html:74
 msgid "Service"
-msgstr ""
+msgstr "Servizio"
 
 #: templates/alerts.html:75
 msgid "Notification"
-msgstr ""
+msgstr "Notifica"
 
 #: templates/alerts.html:76
 msgid "Recorded At"
@@ -253,19 +254,19 @@ msgstr ""
 
 #: templates/alerts.html:77
 msgid "Priority"
-msgstr ""
+msgstr "Priorità"
 
 #: templates/alerts.html:99
 msgid "Remove Selected"
-msgstr ""
+msgstr "Rimuovi Selezionato"
 
 #: templates/alerts.html:101
 msgid "Remove All"
-msgstr ""
+msgstr "Rimuovi Tutti"
 
 #: templates/alerts.html:105
 msgid "No notifications from Chiadog yet... so check back soon."
-msgstr ""
+msgstr "Nessuna notifica da Chiadog fino ad ora... ricontrolla tra poco."
 
 #: templates/alerts.html:106
 msgid ""
@@ -279,15 +280,15 @@ msgstr ""
 
 #: templates/alerts.html:147 templates/plotting/jobs.html:367
 msgid "Starting..."
-msgstr ""
+msgstr "Avvio in corso..."
 
 #: templates/alerts.html:154 templates/plotting/jobs.html:377
 msgid "Stopping..."
-msgstr ""
+msgstr "Arresto in corso..."
 
 #: templates/alerts.html:161
 msgid "Removing..."
-msgstr ""
+msgstr "Rimozione in corso..."
 
 #: templates/alerts.html:169
 msgid "Purging..."
@@ -300,7 +301,7 @@ msgstr ""
 
 #: templates/base.html:32
 msgid "Summary"
-msgstr ""
+msgstr "Riepilogo"
 
 #: templates/base.html:38 templates/base.html:109 templates/index.html:41
 #: templates/plotting/jobs.html:101 templates/settings/plotting.html:14
@@ -314,11 +315,11 @@ msgstr ""
 
 #: templates/base.html:50
 msgid "Wallets"
-msgstr ""
+msgstr "Portafogli"
 
 #: templates/base.html:56
 msgid "Keys"
-msgstr ""
+msgstr "Chiavi"
 
 #: templates/base.html:63
 msgid "Blockchains"
@@ -326,12 +327,12 @@ msgstr ""
 
 #: templates/base.html:70
 msgid "Connections"
-msgstr ""
+msgstr "Connessioni"
 
 #: templates/base.html:76 templates/base.html:97
 #: templates/settings/alerts.html:14
 msgid "Alerts"
-msgstr ""
+msgstr "Avvisi"
 
 #: templates/base.html:82 templates/base.html:115
 msgid "Pools"
@@ -348,11 +349,11 @@ msgstr ""
 #: templates/connections.html:59 templates/summary.html:25
 #: templates/summary.html:53 templates/wallet.html:23 templates/wallet.html:46
 msgid "Settings"
-msgstr ""
+msgstr "Impostazioni"
 
 #: templates/base.html:121 templates/settings/tools.html:14
 msgid "Tools"
-msgstr ""
+msgstr "Strumenti"
 
 #: templates/base.html:132
 msgid "About"
@@ -360,11 +361,11 @@ msgstr ""
 
 #: templates/base.html:135
 msgid "Install"
-msgstr ""
+msgstr "Installa"
 
 #: templates/base.html:137
 msgid "Project"
-msgstr ""
+msgstr "Progetto"
 
 #: templates/base.html:139
 msgid "Wiki"
@@ -372,11 +373,11 @@ msgstr ""
 
 #: templates/base.html:141
 msgid "Issues"
-msgstr ""
+msgstr "Problemi"
 
 #: templates/base.html:143
 msgid "License"
-msgstr ""
+msgstr "Licenza"
 
 #: templates/base.html:145
 msgid "Credits"
@@ -396,12 +397,12 @@ msgstr ""
 
 #: templates/blockchains.html:23
 msgid "Blockchain Summary"
-msgstr ""
+msgstr "Riepilogo Blockchain"
 
 #: templates/blockchains.html:32 templates/summary.html:74
 #: templates/wallet.html:109
 msgid "Status"
-msgstr ""
+msgstr "Stato"
 
 #: templates/blockchains.html:33
 msgid "Peak Height"
@@ -413,31 +414,31 @@ msgstr ""
 
 #: templates/blockchains.html:35 templates/wallet.html:114
 msgid "Updated At"
-msgstr ""
+msgstr "Aggiornato a"
 
 #: templates/blockchains.html:62
 msgid "Blockchain Details"
-msgstr ""
+msgstr "Dettagli Blockchain"
 
 #: templates/blockchains.html:87
 msgid "No blockchains found from any farmers. Not added?"
-msgstr ""
+msgstr "Nessuna blockchain trovata da nessun farmer. Non ancora aggiunte?"
 
 #: templates/blockchains.html:88
 msgid "Try running \"chia show --state\" on your farmers to verify."
-msgstr ""
+msgstr "Prova ad eseguire \"chia show --state\" sui tuoi farmer per verificare."
 
 #: templates/connections.html:34
 msgid "Maxmind Account (Required):"
-msgstr ""
+msgstr "Account Maxmind (Richiesto):"
 
 #: templates/connections.html:39
 msgid "Maxmind License Key (Required):"
-msgstr ""
+msgstr "Chiave di Licenza Maxmind (Richiesto):"
 
 #: templates/connections.html:44
 msgid "Mapbox Access Token (Optional):"
-msgstr ""
+msgstr "Mapbox Access Token (Opzionale):"
 
 #: templates/connections.html:50 templates/plotting/jobs.html:16
 #: templates/plotting/jobs.html:34 templates/plotting/jobs.html:52
@@ -445,14 +446,14 @@ msgstr ""
 #: templates/settings/pools.html:39 templates/summary.html:44
 #: templates/wallet.html:65 templates/wallet.html:92
 msgid "Cancel"
-msgstr ""
+msgstr "Annulla"
 
 #: templates/connections.html:51 templates/settings/alerts.html:55
 #: templates/settings/farming.html:56 templates/settings/plotting.html:56
 #: templates/settings/pools.html:41 templates/settings/tools.html:55
 #: templates/summary.html:45 templates/wallet.html:66 templates/wallet.html:93
 msgid "Save"
-msgstr ""
+msgstr "Salva"
 
 #: templates/connections.html:84
 msgid "Connections Map"
@@ -460,7 +461,7 @@ msgstr ""
 
 #: templates/connections.html:105
 msgid "Connection Details"
-msgstr ""
+msgstr "Dettagli Connessione"
 
 #: templates/connections.html:141
 msgid "Type"
@@ -468,19 +469,19 @@ msgstr ""
 
 #: templates/connections.html:142 templates/worker.html:39
 msgid "IP Address"
-msgstr ""
+msgstr "Indirizzo IP"
 
 #: templates/connections.html:144
 msgid "City"
-msgstr ""
+msgstr "Città"
 
 #: templates/connections.html:145
 msgid "Country"
-msgstr ""
+msgstr "Regione"
 
 #: templates/connections.html:147
 msgid "Ports"
-msgstr ""
+msgstr "Porte"
 
 #: templates/connections.html:148
 msgid "SB Height"
@@ -488,7 +489,7 @@ msgstr ""
 
 #: templates/connections.html:149
 msgid "Last Connect"
-msgstr ""
+msgstr "Ultima Connessione"
 
 #: templates/connections.html:150
 msgid "MiB Up"
@@ -500,19 +501,19 @@ msgstr ""
 
 #: templates/connections.html:186
 msgid "Disconnect Selected"
-msgstr ""
+msgstr "Discoonnetti Selezionato"
 
 #: templates/connections.html:192
 msgid "Check Port Forwarding"
-msgstr ""
+msgstr "Controlla Apertura Porta"
 
 #: templates/connections.html:208
 msgid "Add New Connection"
-msgstr ""
+msgstr "Aggiungi Nuova Connessione"
 
 #: templates/connections.html:220
 msgid "No connections found from any farmers yet. Perhaps just starting?"
-msgstr ""
+msgstr "Non è stata trovata ancora alcuna connessione da nessun farmer. Forse hai appena avviato?"
 
 #: templates/connections.html:221
 msgid ""
