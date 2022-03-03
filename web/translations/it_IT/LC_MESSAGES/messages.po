@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-01 12:05-0700\n"
+"POT-Creation-Date: 2022-03-03 13:51-0700\n"
 "PO-Revision-Date: 2022-02-15 10:14-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: it\n"
@@ -817,8 +817,8 @@ msgstr ""
 msgid "Port"
 msgstr ""
 
-#: templates/worker.html:55
-msgid "System Type"
+#: templates/worker.html:55 templates/workers.html:44
+msgid "Mode"
 msgstr ""
 
 #: templates/worker.html:59
@@ -1051,10 +1051,6 @@ msgstr ""
 
 #: templates/worker_launch.html:667
 msgid "Docker Compose"
-msgstr ""
-
-#: templates/workers.html:44
-msgid "Mode"
 msgstr ""
 
 #: templates/workers.html:45
