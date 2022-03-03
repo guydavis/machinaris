@@ -690,7 +690,7 @@ msgstr ""
 
 #: templates/setup.html:90
 msgid "Import Existing Key"
-msgstr ""
+msgstr "Importa Chiave Esistente"
 
 #: templates/setup.html:91
 msgid "OR"
@@ -700,26 +700,28 @@ msgstr ""
 msgid ""
 "You can generate a brand-new mnemonic phrase that will be written to this"
 " in-container path"
-msgstr ""
+msgstr "Puoi generare una nuova frase mnemonica che sarà scritta in questo" 
+" percorso (relativo al container)"
 
 #: templates/setup.html:96
 msgid "Generate New Key"
-msgstr ""
+msgstr "Genera Nuova Chiave"
 
 #: templates/setup.html:110
 #, python-format
 msgid ""
 "NOTE: If you would prefer to instead import your mnenmoic seed phrase "
 "yourself at the command-line, see the %(wiki_link)s for details."
-msgstr ""
+msgstr "Se invece preferiresti importate la tua frase seed mnemonica "
+"da te usando la riga di comando, vedi i %(wiki_link) per dettagli."
 
 #: templates/summary.html:31 templates/wallet.html:52
 msgid "Local Currency:"
-msgstr ""
+msgstr "Valuta Locale:"
 
 #: templates/summary.html:75
 msgid "Height"
-msgstr ""
+msgstr "Altezza"
 
 #: templates/farming/plots.html:66 templates/farming/workers.html:25
 #: templates/summary.html:76
@@ -732,7 +734,7 @@ msgstr ""
 
 #: templates/summary.html:79
 msgid "Partials"
-msgstr ""
+msgstr "Parziali"
 
 #: templates/summary.html:80
 msgid "ETW"
@@ -740,7 +742,7 @@ msgstr ""
 
 #: templates/summary.html:82
 msgid "Wallet"
-msgstr ""
+msgstr "Portafogli"
 
 #: templates/summary.html:83 templates/summary.html:84
 msgid "EDV"
@@ -748,51 +750,51 @@ msgstr ""
 
 #: templates/summary.html:97
 msgid "Synced"
-msgstr ""
+msgstr "Sincronizzato"
 
 #: templates/summary.html:101
 msgid "Not Synced"
-msgstr ""
+msgstr "Non Sincronizzato"
 
 #: templates/summary.html:124
 msgid "No blockchains found from any farmers. Just starting up?"
-msgstr ""
+msgstr "Nessuna blockchain trovata da nessun farmer. Hai appena avviato?"
 
 #: templates/summary.html:125
 msgid "Please allow at least 15 minutes for blockchains to get started."
-msgstr ""
+msgstr "Attendi almeno 15 minuti affinché le blockchain si avviino."
 
 #: templates/wallet.html:76
 msgid "Wallet Settings"
-msgstr ""
+msgstr "Impostazioni Portafoglio"
 
 #: templates/wallet.html:86
 msgid "Cold Wallet Address:"
-msgstr ""
+msgstr "Indirizzo Cold Wallet:"
 
 #: templates/wallet.html:100
 msgid "Wallet Summary"
-msgstr ""
+msgstr "Riepilogo Portafoglio"
 
 #: templates/wallet.html:110
 msgid "Wallet Balance"
-msgstr ""
+msgstr "Saldo portafoglio"
 
 #: templates/wallet.html:111
 msgid "Cold Wallet Balance"
-msgstr ""
+msgstr "Saldo Cold Wallet"
 
 #: templates/wallet.html:112
 msgid "Total Balance"
-msgstr ""
+msgstr "Saldo Totale"
 
 #: templates/wallet.html:137
 msgid "Edit Wallet"
-msgstr ""
+msgstr "Modifica Portafoglio"
 
 #: templates/wallet.html:148
 msgid "Wallet Details"
-msgstr ""
+msgstr "Dettagli Portafoglio"
 
 #: templates/wallet.html:172
 msgid ""
@@ -808,15 +810,15 @@ msgstr ""
 
 #: templates/worker.html:35
 msgid "Details"
-msgstr ""
+msgstr "Dettagli"
 
 #: templates/worker.html:43 templates/workers.html:42
 msgid "Hostname"
-msgstr ""
+msgstr "Nome host"
 
 #: templates/worker.html:51
 msgid "Port"
-msgstr ""
+msgstr "Porta"
 
 #: templates/worker.html:55
 msgid "System Type"
