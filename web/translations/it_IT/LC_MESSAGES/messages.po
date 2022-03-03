@@ -253,7 +253,7 @@ msgstr "Notifica"
 
 #: templates/alerts.html:76
 msgid "Recorded At"
-msgstr ""
+msgstr "Registrato alle"
 
 #: templates/alerts.html:77
 msgid "Priority"
@@ -275,7 +275,8 @@ msgstr "Nessuna notifica da Chiadog fino ad ora... ricontrolla tra poco."
 msgid ""
 "Expect at least a summary notification once daily as long as running "
 "above."
-msgstr ""
+msgstr "Aspettati almeno una notifica di riepilogo una volta al giorno "
+"fintantoché è in esecuzione."
 
 #: templates/alerts.html:120
 msgid "Chiadog Log on "
@@ -295,7 +296,7 @@ msgstr "Rimozione in corso..."
 
 #: templates/alerts.html:169
 msgid "Purging..."
-msgstr ""
+msgstr "Pulizia in corso..."
 
 #: templates/base.html:11 templates/base.html:26 templates/base.html:171
 #: templates/controller.html:10
