@@ -460,7 +460,7 @@ msgstr "Salva"
 
 #: templates/connections.html:84
 msgid "Connections Map"
-msgstr ""
+msgstr "Mappa Connessioni"
 
 #: templates/connections.html:105
 msgid "Connection Details"
@@ -468,7 +468,7 @@ msgstr "Dettagli Connessione"
 
 #: templates/connections.html:141
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: templates/connections.html:142 templates/worker.html:39
 msgid "IP Address"
@@ -522,7 +522,8 @@ msgstr "Non è stata trovata ancora alcuna connessione da nessun farmer. Forse h
 msgid ""
 "After a while, try running \"chia show --connections\" on your farmers to"
 " verify."
-msgstr ""
+msgstr "Dopo un po', prova ad eseguire \"chia show --connections\" sui tuoi"
+" farmers per verificare."
 
 #: templates/controller.html:23
 msgid "Machinaris Worker"
