@@ -123,7 +123,10 @@ msgid ""
 "that you use a cold wallet for your payout instructions. Tutorial on the "
 "%(wiki_link_open)swiki%(wiki_link_close)s. Please add \"Setup a Cold "
 "Wallet\" to your To-Do list!"
-msgstr ""
+msgstr "Machinaris usa un portafogli online per il farming. È fortemente "
+"raccomandato usare un cold wallet (portafogli offline) per i tuoi pagamenti. "
+" Trovi il tutorial su %(wiki_link_open)swiki%(wiki_link_close). Aggiungi "
+"\"Imposta un Cold Wallet\" alla tua lista delle cose da fare."
 
 #: actions/worker.py:106
 msgid "Worker not responding to pings."
@@ -571,13 +574,13 @@ msgstr "Successivo"
 
 #: templates/keys.html:43
 msgid "NOTE: Machinaris will never display your private key here."
-msgstr ""
+msgstr "NOTA: Machinaris non mostrerà mai la tua chiave privata qui."
 
 #: templates/keys.html:44
 msgid ""
 "However, you may view it yourself by executing this from within the "
 "Docker container."
-msgstr ""
+msgstr "Tuttavia, puoi vederla eseguendo questo da dentro il Docker container."
 
 #: templates/keys.html:54
 msgid "Best Practices"
@@ -585,11 +588,11 @@ msgstr ""
 
 #: templates/keys.html:71
 msgid "No keys found from any farmers. Not added?"
-msgstr ""
+msgstr "Non state trovate chiavi da nessun farmer. Non ne hai aggiunte?"
 
 #: templates/keys.html:72
 msgid "Try running \"chia keys show\" on your farmers to verify."
-msgstr ""
+msgstr "Prova ad eseguire \"chia keys show\" sui tuoi farmer per verificare."
 
 #: templates/logs.html:11
 msgid "Machinaris Logs"
