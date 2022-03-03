@@ -730,7 +730,7 @@ msgstr ""
 
 #: templates/summary.html:78
 msgid "Max Resp."
-msgstr ""
+msgstr "Max Risp."
 
 #: templates/summary.html:79
 msgid "Partials"
@@ -826,39 +826,39 @@ msgstr ""
 
 #: templates/worker.html:59
 msgid "Last Status Received At"
-msgstr ""
+msgstr "Ultimo Stato Ricevuto alle"
 
 #: templates/worker.html:63
 msgid "Local Time on Worker"
-msgstr ""
+msgstr "Ora Locale sul Worker"
 
 #: templates/worker.html:67
 msgid "Last Ping to Worker"
-msgstr ""
+msgstr "Ultimo Ping dal Worker"
 
 #: templates/worker.html:70 templates/workers.html:64
 msgid "Responding"
-msgstr ""
+msgstr "Sta rispondendo"
 
 #: templates/worker.html:72 templates/workers.html:66
 msgid "Connection Refused"
-msgstr ""
+msgstr "Connessione Rifiutata"
 
 #: templates/worker.html:74 templates/workers.html:68
 msgid "Connection Timeout"
-msgstr ""
+msgstr "Connessione Scaduta"
 
 #: templates/worker.html:76 templates/workers.html:70
 msgid "Connection Error"
-msgstr ""
+msgstr "Errore di Connessione"
 
 #: templates/worker.html:86
 msgid "Last Successful Ping to Worker"
-msgstr ""
+msgstr "Ultimo Ping Riuscito dal Worker"
 
 #: templates/worker.html:90 templates/workers.html:48
 msgid "Version"
-msgstr ""
+msgstr "Versione"
 
 #: templates/worker.html:98
 msgid "Farmr ID"
@@ -866,29 +866,29 @@ msgstr ""
 
 #: templates/worker.html:106
 msgid "Recent Warnings"
-msgstr ""
+msgstr "Avvertimenti Recenti"
 
 #: templates/worker.html:121
 msgid "Yay! No issues currently."
-msgstr ""
+msgstr "Evviva! Nessun problema attualmente."
 
 #: templates/farming/workers.html:114 templates/worker.html:183
 msgid "Disk Space Used (TB)"
-msgstr ""
+msgstr "Spazio Usato su Disco (TB)"
 
 #: templates/farming/workers.html:120 templates/worker.html:189
 msgid "Disk Space Free (TB)"
-msgstr ""
+msgstr "Spazio Libero su Disco (TB)"
 
 #: templates/worker_launch.html:50 templates/worker_launch.html:609
 #: templates/worker_launch.html:630
 msgid "Host Path"
-msgstr ""
+msgstr "Percorso Host"
 
 #: templates/worker_launch.html:55 templates/worker_launch.html:614
 #: templates/worker_launch.html:635
 msgid "Container Path"
-msgstr ""
+msgstr "Percorso Container"
 
 #: templates/worker_launch.html:60 templates/worker_launch.html:619
 #: templates/worker_launch.html:640
