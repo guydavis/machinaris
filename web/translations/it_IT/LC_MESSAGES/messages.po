@@ -614,31 +614,31 @@ msgstr ""
 
 #: templates/pools.html:71
 msgid "Status:"
-msgstr ""
+msgstr "Stato:"
 
 #: templates/pools.html:72
 msgid "Current Difficulty:"
-msgstr ""
+msgstr "Difficoltà Attuale:s"
 
 #: templates/pools.html:73
 msgid "Current Points Balance:"
-msgstr ""
+msgstr "Saldo Punti Attuale:"
 
 #: templates/pools.html:74
 msgid "Points Found Since Start:"
-msgstr ""
+msgstr "Punti Trovati dall'Inizio:"
 
 #: templates/pools.html:75
 msgid "Points Found in Last 24 Hours:"
-msgstr ""
+msgstr "Punti Trovati nelle ultime 24 ore:"
 
 #: templates/pools.html:76
 msgid "Points Successful in Last 24 Hours:"
-msgstr ""
+msgstr "Percentuale di Punti con Successo nelle ultime 24 ore:"
 
 #: templates/pools.html:77
 msgid "Number of Plots:"
-msgstr ""
+msgstr "Numero di Plots:"
 
 #: templates/pools.html:79
 msgid "Launcher ID:"
@@ -646,17 +646,18 @@ msgstr ""
 
 #: templates/pools.html:97
 msgid "No pools have been found yet. Perhaps the wallet is still syncing?"
-msgstr ""
+msgstr "Non sono state ancora trovate pools. Forse il portafogli si sta ancora sincronizzando?"
 
 #: templates/pools.html:98
 msgid ""
 "If you would like to join a pool, please select the \"Settings | Pools\" "
 "page to get started."
-msgstr ""
+msgstr "Se vuoi unirti ad una pool, seleziona la pagina \"Impostazioni | Pools\" "
+"per iniziare."
 
 #: templates/pools.html:99
 msgid "For more, see the Machinaris"
-msgstr ""
+msgstr "Per maggiori informazioni, guarda"
 
 #: templates/setup.html:27
 msgid "Welcome to Machinaris!"
@@ -1297,14 +1298,16 @@ msgstr ""
 
 #: templates/settings/pools.html:32
 msgid "Confirm Pool Change"
-msgstr ""
+msgstr "Conferma Cambio pool"
 
 #: templates/settings/pools.html:36
 msgid ""
 "This action will switch your current pooling selection, possibly "
 "resulting in a small charge (few mojos) against your wallet. Continue "
 "anyway?"
-msgstr ""
+msgstr "Questa azione cambierà la tua scelta di pooling, comportanto "
+"possibilmente in un piccolo addebito (qualche mojos) dal tuo portafogli. "
+"Vuoi continuare comunque?"
 
 #: templates/settings/pools.html:85
 #, python-format
@@ -1312,49 +1315,52 @@ msgid ""
 "Join a pool and get consistent farming rewards. The average returns are "
 "the same, %(break)sbut it is much less volatile. You can easily switch "
 "pools without having to re-plot."
-msgstr ""
+msgstr "Unisciti ad una pool e ottieni ricompense di farming consistenti. "
+"I rendimenti medi sono gli stessi, %(break) ma è meno volatile. Puoi "
+"facilmente cambiare pool senza bisogno di riplottare."
 
 #: templates/settings/pools.html:88
 msgid "ERROR: Unable to join a pool because:"
-msgstr ""
+msgstr "ERRORE: Impossibile unirsi alla pool perché: "
 
 #: templates/settings/pools.html:111
 msgid "Self pool. When you win a block, you will earn rewards."
-msgstr ""
+msgstr "Pooling da solo. Quando vinci un blocco, guadagni tu la ricompensa."
 
 #: templates/settings/pools.html:122
 msgid "Connected to pool:"
-msgstr ""
+msgstr "Connesso alla pool:"
 
 #: templates/settings/pools.html:122
 msgid "Connect to pool:"
-msgstr ""
+msgstr "Connetti alla pool:"
 
 #: templates/settings/pools.html:132
 msgid "Compare Pools"
-msgstr ""
+msgstr "Confronta Pools"
 
 #: templates/settings/pools.html:135
 msgid "Get Mojos"
-msgstr ""
+msgstr "Ottieni Mojos"
 
 #: templates/settings/pools.html:157
 msgid "Save Changes"
-msgstr ""
+msgstr "Salva Modifiche"
 
 #: templates/settings/pools.html:161
 msgid "View Log"
-msgstr ""
+msgstr "Vedi Log"
 
 #: templates/settings/pools.html:172
 msgid ""
 "No wallets found yet.  Perhaps this is a brand-new installation? If so, "
 "please wait for complete start-up."
-msgstr ""
+msgstr "Nessun portafogli ancora trovato. Forse questa è una nuova installazione? "
+"Se sì, aspetta che si completi l'avvio."
 
 #: templates/settings/pools.html:173
 msgid "For more on Pooling, see the Machinaris"
-msgstr ""
+msgstr "Per maggiori informazioni sul Pooling, vedi"
 
 #: templates/settings/pools.html:173
 msgid "wiki"
@@ -1362,7 +1368,7 @@ msgstr ""
 
 #: templates/settings/pools.html:185
 msgid "Saving..."
-msgstr ""
+msgstr "Salvataggio in corso..."
 
 #: templates/settings/pools.html:197
 msgid "PlotNFT Log on "
