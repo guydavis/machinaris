@@ -41,7 +41,7 @@ msgstr ""
 #: commands/pools_cli.py:195
 #, python-format
 msgid ""
-"Successfully joined %(pool_url)s pool by creating Chia NFT.  Please wait "
+"Successfully joined %(pool_url)s pool by creating Chia NFT. Please wait "
 "a few minutes or more to complete. DO NOT immediately re-submit your "
 "request. Be patient! View the log for details."
 msgstr ""
@@ -52,7 +52,7 @@ msgstr ""
 
 #: commands/pools_cli.py:224
 msgid ""
-"Successfully created a NFT for self-pooling.  Please wait a few minutes "
+"Successfully created a NFT for self-pooling. Please wait a few minutes "
 "or more to complete. DO NOT immediately re-submit your request. Be "
 "patient! View the log for details."
 msgstr ""
