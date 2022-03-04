@@ -830,7 +830,7 @@ msgstr "Porta"
 
 #: templates/worker.html:55 templates/workers.html:44
 msgid "Mode"
-msgstr ""
+msgstr "Modalità"
 
 #: templates/worker.html:59
 msgid "Last Status Received At"
