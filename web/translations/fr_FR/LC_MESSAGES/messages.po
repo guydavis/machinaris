@@ -44,7 +44,7 @@ msgstr "Adresses de portefeuille froid enregistrées."
 
 #: routes.py:279
 msgid ""
-"Saved mapping settings.  Please allow 10 minutes to generate location "
+"Saved mapping settings. Please allow 10 minutes to generate location "
 "information for the map."
 msgstr ""
 "Paramètres de cartographie enregistrés. Veuillez patienter 10 minutes "
@@ -98,7 +98,7 @@ msgstr "Type de journal non pris en charge"
 
 #: actions/chia.py:44
 msgid ""
-"Relax and grab a coffee. Status is being gathered from active workers.  "
+"Relax and grab a coffee. Status is being gathered from active workers. "
 "Please allow 15 minutes..."
 msgstr ""
 
@@ -844,7 +844,7 @@ msgstr "Détails du portefeuille"
 
 #: templates/wallet.html:172
 msgid ""
-"No wallet status received.  Perhaps just starting?  Please allow at least"
+"No wallet status received. Perhaps just starting? Please allow at least"
 " 10 minutes to update."
 msgstr ""
 "Aucun statut de portefeuille reçu. Peut-être que vous venez juste de "
@@ -964,7 +964,7 @@ msgstr "Blockchain inconnue de la sélection:"
 
 #: templates/worker_launch.html:266
 msgid ""
-"Missing worker hostname.  Please provide a short name to identify your "
+"Missing worker hostname. Please provide a short name to identify your "
 "worker."
 msgstr ""
 "Nom d'hôte du worker de calcul manquant. Veuillez fournir un nom court "
@@ -995,14 +995,14 @@ msgid "Please provide a container path."
 msgstr "Veuillez fournir un chemin de conteneur."
 
 #: templates/worker_launch.html:332
-msgid "Neither Harvester or Plottter mode selected.  Please choose one or both."
+msgid "Neither Harvester or Plottter mode selected. Please choose one or both."
 msgstr ""
 "Aucun mode Harvester ou Plotter n'est sélectionné. Veuillez en choisir un"
 " ou les deux."
 
 #: templates/worker_launch.html:338
 msgid ""
-"Missing worker IP address.  Please provide the IP the conntroller will "
+"Missing worker IP address. Please provide the IP the conntroller will "
 "connect to for commands."
 msgstr ""
 "Adresse IP du worker manquante. Veuillez fournir l'adresse IP que le "
@@ -1268,7 +1268,7 @@ msgstr "Arrête Plotting"
 
 #: templates/plotting/jobs.html:49
 msgid ""
-"This action will stop Plotman from launching new plotting jobs.  Running "
+"This action will stop Plotman from launching new plotting jobs. Running "
 "jobs will run to completion. Continue?"
 msgstr ""
 "This action will stop Plotman from launching new plotting jobs. Running "
@@ -1286,7 +1286,7 @@ msgstr "Worker est hors ligne."
 #: templates/plotting/jobs.html:67 templates/plotting/workers.html:67
 msgid ""
 "This worker is not currently online and responding to pings from the "
-"controller.  Please check the Workers page and bring the system back "
+"controller. Please check the Workers page and bring the system back "
 "online."
 msgstr ""
 "Ce worker n'est pas en ligne actuellement et répond aux pings du "
@@ -1358,7 +1358,7 @@ msgstr ""
 msgid ""
 "This worker is not currently configured for Plotman "
 "%(wiki_link_open)sarchiving%(wiki_link_open)s to enable local or remote "
-"transfer of completed plots.  Please visit the Settings | Plotting page "
+"transfer of completed plots. Please visit the Settings | Plotting page "
 "to configure this worker."
 msgstr ""
 "Ce worker n'est actuellement pas configuré pour "
@@ -1371,7 +1371,7 @@ msgid "Archiving"
 msgstr "Archivage"
 
 #: templates/plotting/workers.html:119
-msgid "Archiving is disabled.  See Settings | Plotting page."
+msgid "Archiving is disabled. See Settings | Plotting page."
 msgstr "L'archivage est désactivé. Voir page Paramètres | Traçage."
 
 #: templates/settings/alerts.html:57 templates/settings/farming.html:58
@@ -1438,7 +1438,7 @@ msgstr "Afficher le journal"
 
 #: templates/settings/pools.html:172
 msgid ""
-"No wallets found yet.  Perhaps this is a brand-new installation? If so, "
+"No wallets found yet. Perhaps this is a brand-new installation? If so, "
 "please wait for complete start-up."
 msgstr ""
 "Aucun portefeuille trouvé pour le moment. Peut-être s'agit-il d'une toute"

@@ -44,7 +44,7 @@ msgstr "O endereço da Cold Wallet foi gravado."
 
 #: routes.py:279
 msgid ""
-"Saved mapping settings.  Please allow 10 minutes to generate location "
+"Saved mapping settings. Please allow 10 minutes to generate location "
 "information for the map."
 msgstr ""
 "A definições do mapa foram gravadas. Por favor aguarde 10 minutos para "
@@ -98,7 +98,7 @@ msgstr "Tipo de log não suportado"
 
 #: actions/chia.py:44
 msgid ""
-"Relax and grab a coffee. Status is being gathered from active workers.  "
+"Relax and grab a coffee. Status is being gathered from active workers. "
 "Please allow 15 minutes..."
 msgstr ""
 
@@ -853,7 +853,7 @@ msgstr "Detalhes da Wallet"
 
 #: templates/wallet.html:172
 msgid ""
-"No wallet status received.  Perhaps just starting?  Please allow at least"
+"No wallet status received. Perhaps just starting? Please allow at least"
 " 10 minutes to update."
 msgstr ""
 "O estado da Wallet ainda não foi recebido. Acabaste de arrancar o "
@@ -975,7 +975,7 @@ msgstr "Unknown blockchain fork of selected:"
 
 #: templates/worker_launch.html:266
 msgid ""
-"Missing worker hostname.  Please provide a short name to identify your "
+"Missing worker hostname. Please provide a short name to identify your "
 "worker."
 msgstr ""
 "Falta o hostname do Worker. Por favor indique um nome cursto para "
@@ -1006,14 +1006,14 @@ msgid "Please provide a container path."
 msgstr "Por favor indique um container path."
 
 #: templates/worker_launch.html:332
-msgid "Neither Harvester or Plottter mode selected.  Please choose one or both."
+msgid "Neither Harvester or Plottter mode selected. Please choose one or both."
 msgstr ""
 "Não foi seleccionado o modo Harvester nem o modo Plottter. Por favor "
 "escolha um ou ambos."
 
 #: templates/worker_launch.html:338
 msgid ""
-"Missing worker IP address.  Please provide the IP the conntroller will "
+"Missing worker IP address. Please provide the IP the conntroller will "
 "connect to for commands."
 msgstr ""
 "Falta o endereço IP do Worker. Por favor indique o endereço IP que o "
@@ -1247,7 +1247,7 @@ msgid ""
 msgstr ""
 "Esta acção irá terminar os Plots seleccionados, estejam estes a correr ou"
 " parados, e apagar todos os ficheiros temporários. Se o Plotman ainda "
-"está a correr, outro  Plot será iniciado automaticamente, por isso "
+"está a correr, outro Plot será iniciado automaticamente, por isso "
 "primeiro pare o Plotman a partir do canto superior direito. Continuar?"
 
 #: templates/plotting/jobs.html:17 templates/plotting/jobs.html:193
@@ -1278,7 +1278,7 @@ msgstr "Parar Plotting"
 
 #: templates/plotting/jobs.html:49
 msgid ""
-"This action will stop Plotman from launching new plotting jobs.  Running "
+"This action will stop Plotman from launching new plotting jobs. Running "
 "jobs will run to completion. Continue?"
 msgstr ""
 "Esta acção irá impedir que o Plotman lance novos plotting jobs. Os jobs "
@@ -1296,7 +1296,7 @@ msgstr "Worker offline"
 #: templates/plotting/jobs.html:67 templates/plotting/workers.html:67
 msgid ""
 "This worker is not currently online and responding to pings from the "
-"controller.  Please check the Workers page and bring the system back "
+"controller. Please check the Workers page and bring the system back "
 "online."
 msgstr ""
 "Este Worker não está actualmente online e a responder a pings do "
@@ -1369,10 +1369,10 @@ msgstr ""
 msgid ""
 "This worker is not currently configured for Plotman "
 "%(wiki_link_open)sarchiving%(wiki_link_open)s to enable local or remote "
-"transfer of completed plots.  Please visit the Settings | Plotting page "
+"transfer of completed plots. Please visit the Settings | Plotting page "
 "to configure this worker."
 msgstr ""
-"Este  Worker não está actualmente configurado para o Plotman "
+"Este Worker não está actualmente configurado para o Plotman "
 "%(wiki_link_open)sarchiving%(wiki_link_open)s para activar transferencias"
 " locais ou remotas de Plots que tenham terminado para. Por favor veja a "
 "página Definições | Plotting para configurar este Worker."
@@ -1382,7 +1382,7 @@ msgid "Archiving"
 msgstr "Arquivar"
 
 #: templates/plotting/workers.html:119
-msgid "Archiving is disabled.  See Settings | Plotting page."
+msgid "Archiving is disabled. See Settings | Plotting page."
 msgstr "Arquivar: Desactivado. Veja a página Definições | Plotting."
 
 #: templates/settings/alerts.html:57 templates/settings/farming.html:58
@@ -1451,7 +1451,7 @@ msgstr "Ver log"
 
 #: templates/settings/pools.html:172
 msgid ""
-"No wallets found yet.  Perhaps this is a brand-new installation? If so, "
+"No wallets found yet. Perhaps this is a brand-new installation? If so, "
 "please wait for complete start-up."
 msgstr ""
 "Ainda não foi encontrado nenhuma Wallet. Talvez tenha acabado de instalar"
