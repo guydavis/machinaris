@@ -1165,7 +1165,7 @@ msgstr "Non ci sono statistiche disco registrate recentemente per %(hostname) "
 
 #: templates/plotting/jobs.html:9
 msgid "Confirm Kill"
-msgstr ""
+msgstr "Conferma Terminazione"
 
 #: templates/plotting/jobs.html:13
 msgid ""
@@ -1173,22 +1173,28 @@ msgid ""
 "stopped, and delete all their temporary files. If Plotman is still "
 "running, another plot will be immediately started, so please stop Plotman"
 " first from the top-right. Continue?"
-msgstr ""
+msgstr "Questa azione terminerà i plots selezionati, sia che siano in "
+"esecuzione o fermi, a cancellerà tutti i loro relativi file temporanei. "
+"Se Plotman è ancora in esecuzione, un altro plot partirà immediatamente. "
+"Se non è quello che desideri prima ferma Plotman dal selettore in alto a destra. "
+"Continuare?"
 
 #: templates/plotting/jobs.html:17 templates/plotting/jobs.html:193
 msgid "Kill Selected"
-msgstr ""
+msgstr "Termina Seleionati"
 
 #: templates/plotting/jobs.html:27 templates/plotting/jobs.html:123
 msgid "Start Plotting"
-msgstr ""
+msgstr "Inizia Plotting"
 
 #: templates/plotting/jobs.html:31
 msgid ""
 "This action will start Plotman and launch a plotting run using your "
 "configured plotter. Be careful about running more than one plotter on a "
 "single machine at a time. Continue?"
-msgstr ""
+msgstr "Questa azione avvierà Plotman e lancierà una sessione di plotting "
+"usando il plotter che hai configurato. Fai attenzione ad eseguire più di un "
+"plotter alla volta in una singola macchina. Continuare?"
 
 #: templates/plotting/jobs.html:35 templates/plotting/workers.html:17
 msgid "Start"
@@ -1202,7 +1208,9 @@ msgstr "Ferma Plotting"
 msgid ""
 "This action will stop Plotman from launching new plotting jobs.  Running "
 "jobs will run to completion. Continue?"
-msgstr ""
+msgstr "Questa azione fermerà Plotman dal lanciare nuovi jobs di plotting. "
+"I job in esecuzione proseguiranno fino al completamento senza interrompersi. "
+"Continuare?"
 
 #: templates/plotting/jobs.html:53 templates/plotting/workers.html:35
 msgid "Stop"
@@ -1233,28 +1241,28 @@ msgstr ""
 
 #: templates/plotting/jobs.html:189
 msgid "Suspend Selected"
-msgstr ""
+msgstr "Sospendi Selezionati"
 
 #: templates/plotting/jobs.html:191
 msgid "Resume Selected"
-msgstr ""
+msgstr "Riprendi Selezionati"
 
 #: templates/plotting/jobs.html:204
 #, python-format
 msgid "Plotting Speed - k%(k_size)s Plots"
-msgstr ""
+msgstr "Velocità di Plotting - k%(k_size)s Plots"
 
 #: templates/plotting/jobs.html:341
 msgid "Suspending..."
-msgstr ""
+msgstr "Sospensione in corso..."
 
 #: templates/plotting/jobs.html:349
 msgid "Resuming..."
-msgstr ""
+msgstr "Ripresa in corso..."
 
 #: templates/plotting/jobs.html:358
 msgid "Killing..."
-msgstr ""
+msgstr "Terminazione in corso..."
 
 #: templates/plotting/workers.html:9 templates/plotting/workers.html:128
 msgid "Start Archiving"
