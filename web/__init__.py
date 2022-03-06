@@ -20,9 +20,9 @@ babel = Babel(app)
 
 @babel.localeselector
 def get_locale():
-    for d in babel.translation_directories:
-        app.logger.debug(d)
-    app.logger.info("WEB=> Returning locale: {0}".format(request.accept_languages.best_match(app.config['LANGUAGES'])))
+    #for d in babel.translation_directories:
+    #    app.logger.info(d)
+    #app.logger.info("WEB=> Returning locale: {0}".format(request.accept_languages.best_match(app.config['LANGUAGES'])))
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 @event.listens_for(Engine, "connect")
