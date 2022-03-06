@@ -103,7 +103,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.sit/farmer_ca/private_ca.crt ]; then
+    if [[ -f /root/.sit/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       sit init -c /root/.sit/farmer_ca 2>&1 > /root/.sit/mainnet/log/init.log
       chmod 755 -R /root/.sit/mainnet/config/ssl/ &> /dev/null
       sit init --fix-ssl-permissions > /dev/null 

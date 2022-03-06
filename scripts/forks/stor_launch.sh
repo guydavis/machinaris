@@ -91,7 +91,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.stor/farmer_ca/private_ca.crt ]; then
+    if [[ -f /root/.stor/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       stor init -c /root/.stor/farmer_ca 2>&1 > /root/.stor/mainnet/log/init.log
       chmod 755 -R /root/.stor/mainnet/config/ssl/ &> /dev/null
       stor init --fix-ssl-permissions > /dev/null 
