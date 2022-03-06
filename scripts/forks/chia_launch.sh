@@ -18,7 +18,9 @@ cd /chia-blockchain
 . ./activate
 
 mkdir -p /root/.chia/mainnet/log
-chia init >> /root/.chia/mainnet/log/init.log 2>&1 
+if [[ ! ${keys} == "persistent" ]]; then
+  chia init >> /root/.chia/mainnet/log/init.log 2>&1
+fi
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
@@ -78,8 +80,10 @@ for p in ${plots_dir//:/ }; do
     chia plots add -d ${p}
 done
 
-chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
-chia init --fix-ssl-permissions > /dev/null 
+if [[ ! ${keys} == "persistent" ]]; then
+  chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
+  chia init --fix-ssl-permissions > /dev/null 
+fi
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
@@ -101,7 +105,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.chia/farmer_ca/chia_ca.crt ]; then
+    if [[ -f /root/.chia/farmer_ca/chia_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       chia init -c /root/.chia/farmer_ca 2>&1 > /root/.chia/mainnet/log/init.log
       chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
       chia init --fix-ssl-permissions > /dev/null 
