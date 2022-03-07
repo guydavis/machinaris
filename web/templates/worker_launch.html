@@ -65,8 +65,20 @@
                             <option value="other">{{_('Other')}}</option>
                           </select>
                     </div>
+                    <div class="col-auto volume_location" style="display:none">
+                        <label for="volume_location0" class="form-label">{{_('Location')}}</label>
+                        <select class="form-select" id="volume_location0" name="volume_location" aria-label="volume_location0"
+                            onchange="updateDocker()">
+                            <option value="local" selected>{{_('Local')}}</option>
+                            <option value="remote">{{_('Remote')}}</option>
+                        </select>
+                    </div>
                 </div>`;
             new_vol_row = new_vol_row.replaceAll('0', cur_vols)
+            var os = getRadioButtonValue('os');
+            if (os == 'windows') {
+                new_vol_row = new_vol_row.replaceAll('style="display:none"', '');
+            }
             $('#volumes').append(new_vol_row);
             setTimeout(updateDocker, 1000);
         }
@@ -108,14 +120,20 @@
         function updateVolumes() {
             var os = getRadioButtonValue('os')
             if (os == 'windows') {
-                document.getElementById('volume_host_path0').placeholder = "C:/my_chia_plots";
+                document.getElementById('volume_host_path0').placeholder = "C:/my_chia_plots or //192.168.1.100/myshare";
                 document.getElementById('volume_host_path1').placeholder = "C:/my_chia_plotting";
+                $('#windows_volume_mount_warning').show();
+                $('.volume_location').show();
             } else if (os == 'macintosh') {
                 document.getElementById('volume_host_path0').placeholder = "/Volumes/disk1";
                 document.getElementById('volume_host_path1').placeholder = "/Volumes/temp1";
+                $('#windows_volume_mount_warning').hide();
+                $('.volume_location').hide();
             } else {
                 document.getElementById('volume_host_path0').placeholder = "/mnt/disk1";
                 document.getElementById('volume_host_path1').placeholder = "/mnt/temp1";
+                $('#windows_volume_mount_warning').hide();
+                $('.volume_location').hide();
             }
         }
         function updateDocker() {
@@ -274,28 +292,33 @@
                     }
                     var cur_vols = $('#volumes').children().length
                     var plots_dir = []
+                    var remote_windows_shares = [];
                     $('#volumes').children().each((index, element) => {
                         volume_host_path = document.getElementById("volume_host_path" + index).value;
                         volume_container_path = document.getElementById("volume_container_path" + index).value;
-                        if (i == 0) { // Record error on first pass
-                            if (volume_host_path.endsWith(':')) {
-                                errors.push("{{_('Invalid host path ending with colon. Try adding a slash to the end like this')}} " + volume_host_path + '/');
-                            } 
-                            if (!volume_host_path) {
-                                errors.push("{{_('Empty host path provided for volume at ')}}" + volume_container_path + "'. {{_('Please provide a host path.')}}");
-                            } else if (!volume_container_path) {
-                                errors.push("{{_('Empty container path provided for volume at ')}}" + volume_host_path + "'. {{_('Please provide a container path.')}}");
+                        if (os == 'windows' && ($('#volume_location' + index).val() == 'remote')) {
+                            remote_windows_shares.push(volume_host_path + ':' + volume_container_path);
+                        } else {
+                            if (i == 0) { // Record error on first pass
+                                if (volume_host_path.endsWith(':')) {
+                                    errors.push("{{_('Invalid host path ending with colon. Try adding a slash to the end like this')}} " + volume_host_path + '/');
+                                } 
+                                if (!volume_host_path) {
+                                    errors.push("{{_('Empty host path provided for volume at ')}}" + volume_container_path + "'. {{_('Please provide a host path.')}}");
+                                } else if (!volume_container_path) {
+                                    errors.push("{{_('Empty container path provided for volume at ')}}" + volume_host_path + "'. {{_('Please provide a container path.')}}");
+                                }
                             }
-                        }
-                        if ((blockchain == "chives") && ($('#volume_type' + index).val() == 'plots')) {
-                            volume_host_path += '/chives'
-                        }
-                        if ((blockchain == "mmx") && ($('#volume_type' + index).val() == 'plots')) {
-                            volume_host_path += '/mmx'
-                        }
-                        cmd += '            - "' + volume_host_path + ':' + volume_container_path + '"' + line_end;
-                        if ($('#volume_type' + index).val() == 'plots') {
-                            plots_dir.push(volume_container_path)
+                            if ((blockchain == "chives") && ($('#volume_type' + index).val() == 'plots')) {
+                                volume_host_path += '/chives'
+                            }
+                            if ((blockchain == "mmx") && ($('#volume_type' + index).val() == 'plots')) {
+                                volume_host_path += '/mmx'
+                            }
+                            cmd += '            - "' + volume_host_path + ':' + volume_container_path + '"' + line_end;
+                            if ($('#volume_type' + index).val() == 'plots') {
+                                plots_dir.push(volume_container_path)
+                            }
                         }
                     });
                     cmd += '        environment:' + line_end;
@@ -345,12 +368,20 @@
                     if ((blockchain == "chia") && (auto_plot == "true")) {
                         cmd += '            - AUTO_PLOT=' + auto_plot + line_end;
                     }
+                    if (remote_windows_shares.length > 0) {
+                        cmd += '            - remote_shares=' + remote_windows_shares.join() + line_end;
+                    }
                     cmd += '        ports:' + line_end;
                     if (blockchain == "chia") {
                         cmd += '            - 8926:8926' + line_end;
                     }
                     var worker_port = lookup_worker_port(blockchain);
                     cmd += '            - ' + worker_port + ':' + worker_port + line_end;
+                    if (remote_windows_shares.length > 0) {
+                        cmd += '        cap_add:' + line_end;
+                        cmd += '            - SYS_ADMIN' + line_end;
+                        cmd += '            - DAC_READ_SEARCH' + line_end;
+                    }
                     cmd += line_end;
                 }
             }
@@ -622,6 +653,14 @@
                             <option value="plots" selected>{{_('Final Plots')}}</option>
                             <option value="plotting">{{_('Plotting Temp')}}</option>
                             <option value="other">{{_('Other')}}</option>
+                        </select>
+                    </div>
+                    <div class="col-auto volume_location" style="display:none">
+                        <label for="volume_location0" class="form-label">{{_('Location')}}</label>
+                        <select class="form-select" id="volume_location0" name="volume_location" aria-label="volume_location0"
+                            onchange="updateDocker()">
+                            <option value="local" selected>{{_('Local')}}</option>
+                            <option value="remote">{{_('Remote')}}</option>
                         </select>
                     </div>
                 </div>
