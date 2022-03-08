@@ -2,9 +2,8 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.7.0] - 2022-03-?
- - PENDING: Waiting for MMX testnet5 and Chia full release of v1.3...
- - [Chia](https://www.chia.net/2022/02/09/1.3-beta-release.en.html) - beta of v1.3 release (chia version reports v1.2.12dev254 currently)
+## [0.7.0] - 2022-03-11
+ - [Chia](https://chia.net) - [v1.3 release](https://www.reddit.com/r/chia/comments/t95vuk/13_is_live/)
  - [Silicoin](https://github.com/silicoin-network/silicoin-blockchain) - supported again as per Discord votes.
  - Internationalization support for locale-specific text, numbers, and currencies.  [Translators wanted](https://github.com/guydavis/machinaris/wiki/Localization)!
  - Geolocation of peer connections for each blockchain by their IP address. [Optionally enabled](https://github.com/guydavis/machinaris/wiki/Connections).
