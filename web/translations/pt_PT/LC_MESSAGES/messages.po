@@ -137,7 +137,7 @@ msgid ""
 "%(wiki_link_open)swiki%(wiki_link_close)s. Please add \"Setup a Cold "
 "Wallet\" to your To-Do list!"
 msgstr ""
-"Machinaris usa uma Wallet onlime para farming. É fortemente recomendado "
+"Machinaris usa uma Wallet online para farming. É fortemente recomendado "
 "que utilizes uma Cold Wallet para guardares o que ganhas. Existe um "
 "tutorial no %(wiki_link_open)swiki%(wiki_link_close)s. Por favor inclui "
 "\"Configurar uma Cold Wallet\" na tua lista das coisas a fazer!"
@@ -1030,9 +1030,9 @@ msgid ""
 "folder named \"machinaris\", then execute \"docker-compose up\" from a "
 "shell."
 msgstr ""
-"Complete o formulário abaixo para correr novos harvesters/plotters nos "
-"outros computadores na sua rede. Grave o ficheiro docker-compose.yml para"
-" uma pasta chamada \"machinaris\", depois execute \"docker-compose up\" a"
+"Completa o formulário abaixo para correr novos harvesters/plotters "
+"noutros computadores na tua rede. Grava o ficheiro docker-compose.yml "
+" numa pasta chamada \"machinaris\", depois executa \"docker-compose up\" a"
 " partir da linha de comandos."
 
 #: templates/worker_launch.html:385
@@ -1157,7 +1157,7 @@ msgstr "Nenhum Worker do Machinaris reportou um estado com sucesso."
 
 #: templates/workers.html:105
 msgid "Please check each expected worker's log files."
-msgstr "Por favor verifique o ficherio de log de cada Worker."
+msgstr "Por favor verifique o ficheiro de log de cada Worker."
 
 #: templates/workers.html:106
 #, python-format
