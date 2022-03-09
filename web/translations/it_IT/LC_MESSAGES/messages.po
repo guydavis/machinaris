@@ -1009,7 +1009,7 @@ msgstr ""
 
 #: templates/worker_launch.html:411
 msgid "Machinaris Mode"
-msgstr ""
+msgstr "Modalità"
 
 #: templates/worker_launch.html:417
 msgid "Harvester"
