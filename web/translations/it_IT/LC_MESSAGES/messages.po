@@ -971,7 +971,7 @@ msgstr "Non hai selezionato né modalità Harvester né plotter. Scegline una o 
 
 #: templates/worker_launch.html:338
 msgid ""
-"Missing worker IP address.  Please provide the IP the conntroller will "
+"Missing worker IP address.  Please provide the IP the controller will "
 "connect to for commands."
 msgstr "Indirizzo IP worker mancante. Fornisci l'indirizzo IP a cui il "
 "controller si connetterà per i comandi."
