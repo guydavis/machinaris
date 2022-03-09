@@ -1103,15 +1103,16 @@ msgstr "Per maggiori informazioni, guarda %(wiki_link_open)swiki%(wiki_link_clos
 
 #: templates/farming/plots.html:9
 msgid "Plotting Analysis"
-msgstr ""
+msgstr "Analisi Plotting"
 
 #: templates/farming/plots.html:13
 msgid "Analysis of the plotting job log shows time (seconds) spent in each phase:"
-msgstr ""
+msgstr "L'analisi dei log dei job di ploting mostra il tempo (in secondi) speso "
+"in ciascuna fase:"
 
 #: templates/farming/plots.html:24
 msgid "Plot Check"
-msgstr ""
+msgstr "Controllo Plot"
 
 #: templates/farming/plots.html:86 templates/plotting/jobs.html:117
 #: templates/plotting/workers.html:122
@@ -1120,19 +1121,19 @@ msgstr "Il Worker è offline."
 
 #: templates/farming/plots.html:88
 msgid "Farming not started successfully."
-msgstr ""
+msgstr "Farming non avviato correttamente."
 
 #: templates/farming/plots.html:147
 msgid "Farming Log for "
-msgstr ""
+msgstr "Farming Log per "
 
 #: templates/farming/plots.html:196
 msgid "Good Plot"
-msgstr ""
+msgstr "Plot Buono"
 
 #: templates/farming/plots.html:198
 msgid "Bad Plot"
-msgstr ""
+msgstr "Plot Difettoso"
 
 #: templates/farming/workers.html:66
 msgid "Daily Summary"
