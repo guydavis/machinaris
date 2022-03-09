@@ -30,11 +30,11 @@ msgstr ""
 
 #: commands/pools_cli.py:151
 msgid ""
-"Successfully left pool, switching to self plotting. Please wait a few "
+"Successfully left pool, switching to self-pooling. Please wait a few "
 "minutes or more to complete. DO NOT immediately re-submit your request. "
 "View the log for details."
 msgstr ""
-"Le pool a été quitté avec succès, passant à self-plotting. Veuillez "
+"Le pool a été quitté avec succès, passant à self-pooling. Veuillez "
 "patienter quelques instantsminutes ou plus pour terminer. NE PAS "
 "soumettre à nouveau votre demande immédiatement.Afficher le journal pour "
 "plus de détails."

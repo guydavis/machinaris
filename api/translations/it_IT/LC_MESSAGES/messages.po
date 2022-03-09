@@ -29,7 +29,7 @@ msgstr "Non è stata inviata alcuna richiesta di modifica di pool. Le impostazio
 
 #: commands/pools_cli.py:151
 msgid ""
-"Successfully left pool, switching to self plotting. Please wait a few "
+"Successfully left pool, switching to self-pooling. Please wait a few "
 "minutes or more to complete. DO NOT immediately re-submit your request. "
 "View the log for details."
 msgstr "Hai lasciato il pool con successo, passando al self pooling. Attendi "
