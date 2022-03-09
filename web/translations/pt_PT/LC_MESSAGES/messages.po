@@ -1013,7 +1013,7 @@ msgstr ""
 
 #: templates/worker_launch.html:338
 msgid ""
-"Missing worker IP address.  Please provide the IP the conntroller will "
+"Missing worker IP address.  Please provide the IP the controller will "
 "connect to for commands."
 msgstr ""
 "Falta o endereço IP do Worker. Por favor indique o endereço IP que o "
