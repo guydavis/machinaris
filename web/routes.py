@@ -20,9 +20,10 @@ from web.actions import chia, pools as p, plotman, chiadog, worker, \
         log_handler, stats, warnings, forktools, mapping
 
 def get_lang(request):
-    lang = None
-    if "Accept-Language" in request.headers:
-        lang = request.headers["Accept-Language"]
+    lang = request.accept_languages.best_match(app.config['LANGUAGES'])
+    if not lang:
+        lang = 'en'
+    app.logger.info("USING LANG={0}".format(lang))
     return lang 
 
 def find_selected_worker(hosts, hostname, blockchain= None):
@@ -44,8 +45,7 @@ def landing():
     for accept in request.accept_languages.values():
         app.logger.info("ACCEPT IS {0}".format(accept))
     app.logger.info("LANGUAGES IS {0}".format(app.config['LANGUAGES']))
-    lang = request.accept_languages.best_match(app.config['LANGUAGES'])
-    app.logger.info("LANG IS {0}".format(lang))
+    lang = get_lang(request)
     msg = random.choice(list(open('web/static/landings/{0}.txt'.format(lang))))
     if msg.endswith(".png"):
         msg = "<img style='height: 150px' src='{0}' />".format(url_for('static', filename='/landings/' + msg))
@@ -78,7 +78,7 @@ def summary():
     summaries = chia.load_summaries()
     return render_template('summary.html', reload_seconds=120, summaries=summaries, global_config=gc,
         exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
-        local_cur_sym=fiat.get_local_currency_symbol(), lang=request.accept_languages.best_match(app.config['LANGUAGES']))
+        local_cur_sym=fiat.get_local_currency_symbol(), lang=get_lang(request))
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
@@ -131,7 +131,7 @@ def plotting_jobs():
     plotting = plotman.load_plotting_summary()
     job_stats = stats.load_plotting_stats()
     return render_template('plotting/jobs.html', reload_seconds=120,  plotting=plotting, 
-        plotters=plotters, job_stats=job_stats, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
+        plotters=plotters, job_stats=job_stats, global_config=gc, lang=get_lang(request))
 
 @app.route('/plotting/workers', methods=['GET', 'POST'])
 def plotting_workers():
@@ -166,7 +166,7 @@ def farming_plots():
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()
     return render_template('farming/plots.html', farmers=farmers, plots=plots, global_config=gc, 
-        lang=request.accept_languages.best_match(app.config['LANGUAGES']))
+        lang=get_lang(request))
 
 @app.route('/farming/data')
 def farming_data():
@@ -206,7 +206,7 @@ def alerts():
     farmers = chiadog.load_farmers()
     notifications = chiadog.get_notifications()
     return render_template('alerts.html', reload_seconds=120, farmers=farmers,
-        notifications=notifications, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
+        notifications=notifications, global_config=gc, lang=get_lang(request))
 
 @app.route('/wallet', methods=['GET', 'POST'])    
 def wallet():
@@ -225,7 +225,7 @@ def wallet():
     wallets = chia.load_wallets()
     return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, 
         reload_seconds=120, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
-        local_cur_sym=fiat.get_local_currency_symbol(), lang=request.accept_languages.best_match(app.config['LANGUAGES']))
+        local_cur_sym=fiat.get_local_currency_symbol(), lang=get_lang(request))
 
 @app.route('/keys')
 def keys():
@@ -244,7 +244,7 @@ def workers():
             worker.prune_workers_status(request.form.getlist('worker'))
     wkrs = worker.load_worker_summary()
     return render_template('workers.html', reload_seconds=120, 
-        workers=wkrs, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
+        workers=wkrs, global_config=gc, lang=get_lang(request))
 
 @app.route('/worker', methods=['GET'])
 def worker_route():
@@ -259,7 +259,7 @@ def worker_route():
     return render_template('worker.html', worker=wkr, 
         plotting=plotting, plots_disk_usage=plots_disk_usage, 
         plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc,
-        lang=request.accept_languages.best_match(app.config['LANGUAGES']))
+        lang=get_lang(request))
 
 @app.route('/blockchains')
 def blockchains():
@@ -267,7 +267,7 @@ def blockchains():
     selected_blockchain = worker.default_blockchain()
     blockchains = chia.load_blockchains()
     return render_template('blockchains.html', reload_seconds=120, selected_blockchain = selected_blockchain, 
-        blockchains=blockchains, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
+        blockchains=blockchains, global_config=gc, lang=get_lang(request))
 
 @app.route('/connections', methods=['GET', 'POST'])
 def connections():
@@ -285,10 +285,10 @@ def connections():
                 chia.remove_connection(request.form.getlist('nodeid'), request.form.get('hostname'), request.form.get('blockchain'))
             else:
                 app.logger.info(_("Unknown form action") + ": {0}".format(request.form))
-    connections = chia.load_connections(lang=request.accept_languages.best_match(app.config['LANGUAGES']))
+    connections = chia.load_connections(lang=get_lang(request))
     return render_template('connections.html', reload_seconds=120, selected_blockchain = selected_blockchain,
         maxmind_license = mapping.load_maxmind_license(), mapbox_license = mapping.load_mapbox_license(), marker_hues=mapping.generate_marker_hues(connections),
-        connections=connections, global_config=gc, lang=request.accept_languages.best_match(app.config['LANGUAGES']))
+        connections=connections, global_config=gc, lang=get_lang(request))
 
 @app.route('/settings/plotting', methods=['GET', 'POST'])
 def settings_plotting():
