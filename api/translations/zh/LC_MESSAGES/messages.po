@@ -1,15 +1,16 @@
-# Chinese translations for Machinaris.
-# Copyright (C) 2022 Guy Davis
-# This file is distributed under the same license as the Machinaris project.
+# Chinese translations for PROJECT.
+# Copyright (C) 2022 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-03 13:51-0700\n"
+"POT-Creation-Date: 2022-03-09 13:07-0700\n"
 "PO-Revision-Date: 2022-02-15 14:29-0700\n"
-"Last-Translator: FULL NAME\n"
+"Last-Translator: Guy Davis\n"
 "Language: zh\n"
 "Language-Team: zh <LL@li.org>\n"
 "Plural-Forms: nplurals=1; plural=0\n"

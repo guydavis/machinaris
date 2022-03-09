@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-03 13:51-0700\n"
+"POT-Creation-Date: 2022-03-09 13:07-0700\n"
 "PO-Revision-Date: 2022-02-15 10:14-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: it\n"
@@ -46,43 +46,58 @@ msgstr "Indirizzi cold wallet salvati."
 msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
-msgstr "Impostazioni salvate. Attendi 10 minuti affinché le informazioni "
-"vengano generate."
+msgstr ""
+"Impostazioni salvate. Attendi 10 minuti affinché le informazioni vengano "
+"generate."
 
 #: routes.py:287
 msgid "Unknown form action"
 msgstr "Azione sconosciuta."
 
 #: routes.py:393
+#, python-format
 msgid ""
-"No worker at %{worker} for blockchain %{blockchain}. Please select "
+"No worker at %(worker)s for blockchain %(blockchain)s. Please select "
 "another blockchain."
-msgstr "Nessun worker in %{worker} per la blockchain %{blockchain}. Scegli un'altra blockchain."
+msgstr ""
+"Nessun worker in %(worker)s per la blockchain %(blockchain)s. Scegli "
+"un'altra blockchain."
 
 #: routes.py:399
+#, python-format
 msgid ""
-"For Alerts config, found no responding fullnode found for %{blockchain}. "
-"Please check your workers."
-msgstr "Per le configurazioni degli Avvisi, non è stato trovato alcun fullnode "
-"per %{blockchain}. Controlla i tuoi worker."
+"For Alerts config, found no responding fullnode found for %(blockchain)s."
+" Please check your workers."
+msgstr ""
+"Per le configurazioni degli Avvisi, non è stato trovato alcun fullnode "
+"per %(blockchain)s. Controlla i tuoi worker."
 
 #: routes.py:404
+#, python-format
 msgid ""
-"For Farming config, found no responding fullnode found for %{blockchain}."
-" Please check your workers."
-msgstr "Per le configurazioni del Farming, non è stato trovato alcun fullnode "
-"per %{blockchain}. Controlla i tuoi worker."
+"For Farming config, found no responding fullnode found for "
+"%(blockchain)s. Please check your workers."
+msgstr ""
+"Per le configurazioni del Farming, non è stato trovato alcun fullnode per"
+" %(blockchain)s. Controlla i tuoi worker."
 
 #: routes.py:411
+#, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
-"%{blockchain}. Please check your workers."
-msgstr "Per le configurazioni del Plotting, non è stato trovato alcun fullnode "
-"per %{blockchain}. Controlla i tuoi worker."
+"%(blockchain)s. Please check your workers."
+msgstr ""
+"Per le configurazioni del Plotting, non è stato trovato alcun fullnode "
+"per %(blockchain)s. Controlla i tuoi worker."
 
 #: routes.py:416
-msgid "No responding fullnode found for %{blockchain}. Please check your workers."
-msgstr "Non è stato trovato alcun fullnode che risponden per %{blockchain}. Controlla i tuoi workers."
+#, python-format
+msgid ""
+"No responding fullnode found for %(blockchain)s. Please check your "
+"workers."
+msgstr ""
+"Non è stato trovato alcun fullnode che risponden per %(blockchain)s. "
+"Controlla i tuoi workers."
 
 #: routes.py:435
 msgid "Unsupported log type"
@@ -92,8 +107,9 @@ msgstr "Formato log non supportato"
 msgid ""
 "Relax and grab a coffee. Status is being gathered from active workers.  "
 "Please allow 15 minutes..."
-msgstr "Rilassati e prendi un caffè. Lo status sta per essere recuperato dai workers attivi.  "
-"Attendi 15 minuti..."
+msgstr ""
+"Rilassati e prendi un caffè. Lo status sta per essere recuperato dai "
+"workers attivi.  Attendi 15 minuti..."
 
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
@@ -107,6 +123,11 @@ msgstr "Attivo"
 #: actions/plotman.py:49 models/plotman.py:64
 msgid "Suspended"
 msgstr "Sospeso"
+
+#: actions/stats.py:56 actions/stats.py:90 actions/stats.py:108
+#: actions/stats.py:110
+msgid "in last day."
+msgstr "nell'ultimo giorno."
 
 #: actions/stats.py:338
 msgid "secs"
@@ -127,10 +148,12 @@ msgid ""
 "that you use a cold wallet for your payout instructions. Tutorial on the "
 "%(wiki_link_open)swiki%(wiki_link_close)s. Please add \"Setup a Cold "
 "Wallet\" to your To-Do list!"
-msgstr "Machinaris usa un portafogli online per il farming. È fortemente "
-"raccomandato usare un cold wallet (portafogli offline) per i tuoi pagamenti. "
-" Trovi il tutorial su %(wiki_link_open)swiki%(wiki_link_close). Aggiungi "
-"\"Imposta un Cold Wallet\" alla tua lista delle cose da fare."
+msgstr ""
+"Machinaris usa un portafogli online per il farming. È fortemente "
+"raccomandato usare un cold wallet (portafogli offline) per i tuoi "
+"pagamenti.  Trovi il tutorial su "
+"%(wiki_link_open)swiki%(wiki_link_close)s. Aggiungi \"Imposta un Cold "
+"Wallet\" alla tua lista delle cose da fare."
 
 #: actions/worker.py:106
 msgid "Worker not responding to pings."
@@ -279,7 +302,8 @@ msgstr "Nessuna notifica da Chiadog fino ad ora... ricontrolla tra poco."
 msgid ""
 "Expect at least a summary notification once daily as long as running "
 "above."
-msgstr "Aspettati almeno una notifica di riepilogo una volta al giorno "
+msgstr ""
+"Aspettati almeno una notifica di riepilogo una volta al giorno "
 "fintantoché è in esecuzione."
 
 #: templates/alerts.html:120
@@ -521,14 +545,17 @@ msgstr "Aggiungi Nuova Connessione"
 
 #: templates/connections.html:220
 msgid "No connections found from any farmers yet. Perhaps just starting?"
-msgstr "Non è stata trovata ancora alcuna connessione da nessun farmer. Forse hai appena avviato?"
+msgstr ""
+"Non è stata trovata ancora alcuna connessione da nessun farmer. Forse hai"
+" appena avviato?"
 
 #: templates/connections.html:221
 msgid ""
 "After a while, try running \"chia show --connections\" on your farmers to"
 " verify."
-msgstr "Dopo un po', prova ad eseguire \"chia show --connections\" sui tuoi"
-" farmers per verificare."
+msgstr ""
+"Dopo un po', prova ad eseguire \"chia show --connections\" sui tuoi "
+"farmers per verificare."
 
 #: templates/controller.html:23
 msgid "Machinaris Worker"
@@ -590,7 +617,7 @@ msgstr "Tuttavia, puoi vederla eseguendo questo da dentro il Docker container."
 
 #: templates/keys.html:54
 msgid "Best Practices"
-msgstr ""
+msgstr "Migliori pratiche"
 
 #: templates/keys.html:71
 msgid "No keys found from any farmers. Not added?"
@@ -650,13 +677,16 @@ msgstr ""
 
 #: templates/pools.html:97
 msgid "No pools have been found yet. Perhaps the wallet is still syncing?"
-msgstr "Non sono state ancora trovate pools. Forse il portafogli si sta ancora sincronizzando?"
+msgstr ""
+"Non sono state ancora trovate pools. Forse il portafogli si sta ancora "
+"sincronizzando?"
 
 #: templates/pools.html:98
 msgid ""
 "If you would like to join a pool, please select the \"Settings | Pools\" "
 "page to get started."
-msgstr "Se vuoi unirti ad una pool, seleziona la pagina \"Impostazioni | Pools\" "
+msgstr ""
+"Se vuoi unirti ad una pool, seleziona la pagina \"Impostazioni | Pools\" "
 "per iniziare."
 
 #: templates/pools.html:99
@@ -670,8 +700,9 @@ msgstr "Benvenuto in Machinaris!"
 #: templates/setup.html:28
 #, python-format
 msgid "An easy-to-use WebUI for Chia%(trademark)s plotting and farming."
-msgstr "Una interfaccia Web facile da usare per il plotting ed il "
-"farming di Chia%(trademark)s."
+msgstr ""
+"Una interfaccia Web facile da usare per il plotting ed il farming di "
+"Chia%(trademark)s."
 
 #: templates/setup.html:61
 #, python-format
@@ -681,11 +712,12 @@ msgid ""
 "%(uncompressed)s in uncompressed size (progress shown above), this will "
 "take a while. However minutes of download now, will save you multiple "
 "days of blockchain syncing later. Please be patient!"
-msgstr "Al primo avvio, viene scaricato il database compresso %(compressed)s"
-"della blockchain Chia. A circa %(uncompressed)s in formato non compresso "
-"(progresso mostrato sopra), potrebbe volerci un po'. Tuttavia, i minuti di "
-"download che stai attendendo adesso ti faranno risparmiare svariati giorni "
-"di sincronizzazione della blockchain in futuro. Sii paziente!"
+msgstr ""
+"Al primo avvio, viene scaricato il database compresso %(compressed)sdella"
+" blockchain Chia. A circa %(uncompressed)s in formato non compresso "
+"(progresso mostrato sopra), potrebbe volerci un po'. Tuttavia, i minuti "
+"di download che stai attendendo adesso ti faranno risparmiare svariati "
+"giorni di sincronizzazione della blockchain in futuro. Sii paziente!"
 
 #: templates/setup.html:75
 #, python-format
@@ -694,9 +726,10 @@ msgid ""
 "days, see the %(init_link)s for details. Similarly, you may instead "
 "%(import_link_open)s import your own blockchain %(import_link_close)s if "
 "you have one from a previous Chia install."
-msgstr "NOTA: se preferisci che Chia sincronizzi normalmente la blockchain "
-"in più giorni, guarda il %(init_link)s per dettagli. Alternativamente, "
-"potresti %(import_link_open)s importare una tua versione locale della blockchain "
+msgstr ""
+"NOTA: se preferisci che Chia sincronizzi normalmente la blockchain in più"
+" giorni, guarda il %(init_link)s per dettagli. Alternativamente, potresti"
+" %(import_link_open)s importare una tua versione locale della blockchain "
 "se ne hai una da una precedente installazione di Chia."
 
 #: templates/setup.html:83
@@ -704,8 +737,9 @@ msgstr "NOTA: se preferisci che Chia sincronizzi normalmente la blockchain "
 msgid ""
 "To get started with Machinaris as a Chia%(trademark)s fullnode, either "
 "import your existing 24-word mnemonic seed phrase"
-msgstr "Per iniziare con Machinaris come un fullnode Chia%(trademark)s, "
-"importa la frase seed mnemonica da 24 parole che hai già"
+msgstr ""
+"Per iniziare con Machinaris come un fullnode Chia%(trademark)s, importa "
+"la frase seed mnemonica da 24 parole che hai già"
 
 #: templates/setup.html:90
 msgid "Import Existing Key"
@@ -719,8 +753,9 @@ msgstr "O"
 msgid ""
 "You can generate a brand-new mnemonic phrase that will be written to this"
 " in-container path"
-msgstr "Puoi generare una nuova frase mnemonica che sarà scritta in questo" 
-" percorso (relativo al container)"
+msgstr ""
+"Puoi generare una nuova frase mnemonica che sarà scritta in questo "
+"percorso (relativo al container)"
 
 #: templates/setup.html:96
 msgid "Generate New Key"
@@ -731,8 +766,9 @@ msgstr "Genera Nuova Chiave"
 msgid ""
 "NOTE: If you would prefer to instead import your mnenmoic seed phrase "
 "yourself at the command-line, see the %(wiki_link)s for details."
-msgstr "Se invece preferiresti importate la tua frase seed mnemonica "
-"da te usando la riga di comando, vedi i %(wiki_link) per dettagli."
+msgstr ""
+"Se invece preferiresti importate la tua frase seed mnemonica da te usando"
+" la riga di comando, vedi i %(wiki_link)s per dettagli."
 
 #: templates/summary.html:31 templates/wallet.html:52
 msgid "Local Currency:"
@@ -819,15 +855,17 @@ msgstr "Dettagli Portafoglio"
 msgid ""
 "No wallet status received.  Perhaps just starting?  Please allow at least"
 " 10 minutes to update."
-msgstr "Stato del portafogli non ricevuto. Forse hai appena avviato? Attendi"
-" almeno 10 minuti affinché si aggiorni."
+msgstr ""
+"Stato del portafogli non ricevuto. Forse hai appena avviato? Attendi "
+"almeno 10 minuti affinché si aggiorni."
 
 #: templates/wallet.html:173
 msgid ""
 "You can also try running \"chia wallet show\" on your fullnode's in-"
 "container shell to verify."
-msgstr "Puoi anche provare ad eseguire \"chia wallet show\" nella shell"
-" del container del tuo fullnode per verificare."
+msgstr ""
+"Puoi anche provare ad eseguire \"chia wallet show\" nella shell del "
+"container del tuo fullnode per verificare."
 
 #: templates/worker.html:35
 msgid "Details"
@@ -901,185 +939,204 @@ msgstr "Spazio Usato su Disco (TB)"
 msgid "Disk Space Free (TB)"
 msgstr "Spazio Libero su Disco (TB)"
 
-#: templates/worker_launch.html:50 templates/worker_launch.html:609
-#: templates/worker_launch.html:630
+#: templates/worker_launch.html:50 templates/worker_launch.html:640
+#: templates/worker_launch.html:669
 msgid "Host Path"
 msgstr "Percorso Host"
 
-#: templates/worker_launch.html:55 templates/worker_launch.html:614
-#: templates/worker_launch.html:635
+#: templates/worker_launch.html:55 templates/worker_launch.html:645
+#: templates/worker_launch.html:674
 msgid "Container Path"
 msgstr "Percorso Container"
 
-#: templates/worker_launch.html:60 templates/worker_launch.html:619
-#: templates/worker_launch.html:640
+#: templates/worker_launch.html:60 templates/worker_launch.html:650
+#: templates/worker_launch.html:679
 msgid "Used for:"
 msgstr "Usato per:"
 
-#: templates/worker_launch.html:63 templates/worker_launch.html:622
-#: templates/worker_launch.html:643
+#: templates/worker_launch.html:63 templates/worker_launch.html:653
+#: templates/worker_launch.html:682
 msgid "Final Plots"
 msgstr "Plots Completati"
 
-#: templates/worker_launch.html:64 templates/worker_launch.html:623
-#: templates/worker_launch.html:644
+#: templates/worker_launch.html:64 templates/worker_launch.html:654
+#: templates/worker_launch.html:683
 msgid "Plotting Temp"
 msgstr "Plotting"
 
-#: templates/worker_launch.html:65 templates/worker_launch.html:624
-#: templates/worker_launch.html:645
+#: templates/worker_launch.html:65 templates/worker_launch.html:655
+#: templates/worker_launch.html:684
 msgid "Other"
 msgstr "Altro"
 
-#: templates/worker_launch.html:234
+#: templates/worker_launch.html:69 templates/worker_launch.html:659
+#, fuzzy
+msgid "Location"
+msgstr "Notifica"
+
+#: templates/worker_launch.html:72 templates/worker_launch.html:662
+msgid "Local"
+msgstr ""
+
+#: templates/worker_launch.html:73 templates/worker_launch.html:663
+msgid "Remote"
+msgstr ""
+
+#: templates/worker_launch.html:252
 msgid "Unknown blockchain fork of selected:"
 msgstr "Fork sconosciuto per:"
 
-#: templates/worker_launch.html:266
+#: templates/worker_launch.html:284
 msgid ""
 "Missing worker hostname.  Please provide a short name to identify your "
 "worker."
-msgstr "Nome host del worker mancante. Fornisci un nome breve per identificare "
-"il tuo worker."
+msgstr ""
+"Nome host del worker mancante. Fornisci un nome breve per identificare il"
+" tuo worker."
 
-#: templates/worker_launch.html:282
+#: templates/worker_launch.html:304
 msgid ""
 "Invalid host path ending with colon. Try adding a slash to the end like "
 "this"
-msgstr "Percorso host non valido, non può finire con i due punti. Prova ad "
+msgstr ""
+"Percorso host non valido, non può finire con i due punti. Prova ad "
 "aggiungere uno slash alla fine, in questo modo"
 
-#: templates/worker_launch.html:285
+#: templates/worker_launch.html:307
 msgid "Empty host path provided for volume at "
 msgstr "Hai fornito un percorso host vuoto per il volume a "
 
-#: templates/worker_launch.html:285
+#: templates/worker_launch.html:307
 msgid "Please provide a host path."
 msgstr "Fornisci un percorso host."
 
-#: templates/worker_launch.html:287
+#: templates/worker_launch.html:309
 msgid "Empty container path provided for volume at "
 msgstr "Hai fornito un percorso container vuoto per il volume a "
 
-#: templates/worker_launch.html:287
+#: templates/worker_launch.html:309
 msgid "Please provide a container path."
 msgstr "Fornisci un percorso container."
 
-#: templates/worker_launch.html:332
+#: templates/worker_launch.html:355
 msgid "Neither Harvester or Plottter mode selected.  Please choose one or both."
-msgstr "Non hai selezionato né modalità Harvester né plotter. Scegline una o entrambe."
+msgstr ""
+"Non hai selezionato né modalità Harvester né plotter. Scegline una o "
+"entrambe."
 
-#: templates/worker_launch.html:338
+#: templates/worker_launch.html:361
 msgid ""
 "Missing worker IP address.  Please provide the IP the controller will "
 "connect to for commands."
-msgstr "Indirizzo IP worker mancante. Fornisci l'indirizzo IP a cui il "
-"controller si connetterà per i comandi."
+msgstr ""
+"Indirizzo IP worker mancante. Fornisci l'indirizzo IP a cui il controller"
+" si connetterà per i comandi."
 
-#: templates/worker_launch.html:380
+#: templates/worker_launch.html:411
 msgid "Machinaris Worker - Launch Config"
 msgstr "Machinaris Worker - Avvia Configurazione"
 
-#: templates/worker_launch.html:381
+#: templates/worker_launch.html:412
 msgid ""
 "Complete the form below to run new harvesters/plotters on other computers"
 " across your network. Save the generated docker-compose.yml file to a "
 "folder named \"machinaris\", then execute \"docker-compose up\" from a "
 "shell."
-msgstr "Completa il modulo sotto per lanciare nuovi harvesters/plotters su "
-"altri computer sulla tua rete. Salva il docker-compose.yml generato in una "
-"cartella chiamata \"machinaris\", ed esegui il comando \"docker-compose up\" "
-"dalla shell."
+msgstr ""
+"Completa il modulo sotto per lanciare nuovi harvesters/plotters su altri "
+"computer sulla tua rete. Salva il docker-compose.yml generato in una "
+"cartella chiamata \"machinaris\", ed esegui il comando \"docker-compose "
+"up\" dalla shell."
 
-#: templates/worker_launch.html:385
+#: templates/worker_launch.html:416
 msgid "Operating System"
 msgstr "Sistema Operativo"
 
-#: templates/worker_launch.html:391
+#: templates/worker_launch.html:422
 msgid "Linux"
 msgstr ""
 
-#: templates/worker_launch.html:398
+#: templates/worker_launch.html:429
 msgid "Macintosh"
 msgstr ""
 
-#: templates/worker_launch.html:405
+#: templates/worker_launch.html:436
 msgid "Windows"
 msgstr ""
 
-#: templates/worker_launch.html:411
+#: templates/worker_launch.html:442
 msgid "Machinaris Mode"
 msgstr "Modalità"
 
-#: templates/worker_launch.html:417
+#: templates/worker_launch.html:448
 msgid "Harvester"
 msgstr ""
 
-#: templates/worker_launch.html:424
+#: templates/worker_launch.html:455
 msgid "Plotter"
 msgstr ""
 
-#: templates/worker_launch.html:432
+#: templates/worker_launch.html:463
 msgid "Farmer Public Key"
 msgstr "Chiave Pubblica Farmer"
 
-#: templates/worker_launch.html:437
+#: templates/worker_launch.html:468
 msgid "Pool Public Key"
 msgstr "Chiave Pubblica Pool"
 
-#: templates/worker_launch.html:442
+#: templates/worker_launch.html:473
 msgid "Pool Contract Address"
 msgstr ""
 
-#: templates/worker_launch.html:447
+#: templates/worker_launch.html:478
 msgid "Plot on Startup"
 msgstr "Plotta all'avvio"
 
-#: templates/worker_launch.html:453
+#: templates/worker_launch.html:484
 msgid "True"
 msgstr "Vero"
 
-#: templates/worker_launch.html:460
+#: templates/worker_launch.html:491
 msgid "False"
 msgstr "Falso"
 
-#: templates/worker_launch.html:468
+#: templates/worker_launch.html:499
 msgid "Controller IP Address"
 msgstr "Indirizzo IP Controller"
 
-#: templates/worker_launch.html:473
+#: templates/worker_launch.html:504
 msgid "Controller API Port"
 msgstr "Porta API Controller"
 
-#: templates/worker_launch.html:480
+#: templates/worker_launch.html:511
 msgid "Worker Hostname"
 msgstr "Nome host Worker"
 
-#: templates/worker_launch.html:485
+#: templates/worker_launch.html:516
 msgid "Worker IP Address"
 msgstr "Indirizzo IP Worker"
 
-#: templates/worker_launch.html:492
+#: templates/worker_launch.html:523
 msgid "Blockchains to Farm"
 msgstr "Blockchains da Farmare"
 
-#: templates/worker_launch.html:605
+#: templates/worker_launch.html:636
 msgid "Volume Mounts"
 msgstr "Volumi da Montare"
 
-#: templates/worker_launch.html:654
+#: templates/worker_launch.html:693
 msgid "Add New Volume"
 msgstr "Aggiungi Nuovo Volume"
 
-#: templates/worker_launch.html:656
+#: templates/worker_launch.html:695
 msgid "Remove Last Volume"
 msgstr "Rimuovi Ultimo Volume"
 
-#: templates/worker_launch.html:663
+#: templates/worker_launch.html:702
 msgid "Copy"
 msgstr "Copia"
 
-#: templates/worker_launch.html:667
+#: templates/worker_launch.html:706
 msgid "Docker Compose"
 msgstr ""
 
@@ -1118,7 +1175,9 @@ msgstr "Controlla i file di log di ciascun worker previsto."
 #: templates/workers.html:106
 #, python-format
 msgid "For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
-msgstr "Per maggiori informazioni, guarda %(wiki_link_open)swiki%(wiki_link_close)s."
+msgstr ""
+"Per maggiori informazioni, guarda "
+"%(wiki_link_open)swiki%(wiki_link_close)s."
 
 #: templates/farming/plots.html:9
 msgid "Plotting Analysis"
@@ -1126,7 +1185,8 @@ msgstr "Analisi Plotting"
 
 #: templates/farming/plots.html:13
 msgid "Analysis of the plotting job log shows time (seconds) spent in each phase:"
-msgstr "L'analisi dei log dei job di ploting mostra il tempo (in secondi) speso "
+msgstr ""
+"L'analisi dei log dei job di ploting mostra il tempo (in secondi) speso "
 "in ciascuna fase:"
 
 #: templates/farming/plots.html:24
@@ -1161,14 +1221,17 @@ msgstr "Riepilogo Giornaliero."
 #: templates/farming/workers.html:70
 #, python-format
 msgid "No daily summary found for %(blockchain)s on %(displayname)s."
-msgstr "Nessun riepilogo giornaliero trovato per %(blockchain) su %(displayname)."
+msgstr ""
+"Nessun riepilogo giornaliero trovato per %(blockchain)s su "
+"%(displayname)s."
 
 #: templates/farming/workers.html:72
 msgid ""
 "Please check that your Machinaris container for this blockchain is "
 "running. Also please verify settings on the Alerts page."
-msgstr "Controlla che il Machinaris container per questa blockchain sia "
-"in esecuzione. Verifica inoltre le impostazioni nella pagina Avvisi."
+msgstr ""
+"Controlla che il Machinaris container per questa blockchain sia in "
+"esecuzione. Verifica inoltre le impostazioni nella pagina Avvisi."
 
 #: templates/farming/workers.html:93
 #, python-format
@@ -1177,9 +1240,10 @@ msgid ""
 "blockchain. Please ensure all paths containing plots have been "
 "%(wiki_link_open)s configured %(wiki_link_close)s. Also ensure the Chia "
 "worker is reporting into the controller on the Workers page."
-msgstr "Non ci sono statistiche disco registrate recentemente per %(hostname) "
-"relativa alla blockchain Chia. Assicurati che tutti i percorsi contenenti "
-"plots siano stati %(wiki_link_open) configurati %(wiki_link_close). "
+msgstr ""
+"Non ci sono statistiche disco registrate recentemente per %(hostname)s "
+"relativa alla blockchain Chia. Assicurati che tutti i percorsi contenenti"
+" plots siano stati %(wiki_link_open)s configurati %(wiki_link_close)s. "
 "Assicurati inoltre che il worker di Chia stia rispondendo nel controller "
 "dalla pagina Workers."
 
@@ -1193,10 +1257,11 @@ msgid ""
 "stopped, and delete all their temporary files. If Plotman is still "
 "running, another plot will be immediately started, so please stop Plotman"
 " first from the top-right. Continue?"
-msgstr "Questa azione terminerà i plots selezionati, sia che siano in "
-"esecuzione o fermi, a cancellerà tutti i loro relativi file temporanei. "
-"Se Plotman è ancora in esecuzione, un altro plot partirà immediatamente. "
-"Se non è quello che desideri prima ferma Plotman dal selettore in alto a destra. "
+msgstr ""
+"Questa azione terminerà i plots selezionati, sia che siano in esecuzione "
+"o fermi, a cancellerà tutti i loro relativi file temporanei. Se Plotman è"
+" ancora in esecuzione, un altro plot partirà immediatamente. Se non è "
+"quello che desideri prima ferma Plotman dal selettore in alto a destra. "
 "Continuare?"
 
 #: templates/plotting/jobs.html:17 templates/plotting/jobs.html:193
@@ -1212,8 +1277,9 @@ msgid ""
 "This action will start Plotman and launch a plotting run using your "
 "configured plotter. Be careful about running more than one plotter on a "
 "single machine at a time. Continue?"
-msgstr "Questa azione avvierà Plotman e lancierà una sessione di plotting "
-"usando il plotter che hai configurato. Fai attenzione ad eseguire più di un "
+msgstr ""
+"Questa azione avvierà Plotman e lancierà una sessione di plotting usando "
+"il plotter che hai configurato. Fai attenzione ad eseguire più di un "
 "plotter alla volta in una singola macchina. Continuare?"
 
 #: templates/plotting/jobs.html:35 templates/plotting/workers.html:17
@@ -1228,8 +1294,9 @@ msgstr "Ferma Plotting"
 msgid ""
 "This action will stop Plotman from launching new plotting jobs.  Running "
 "jobs will run to completion. Continue?"
-msgstr "Questa azione fermerà Plotman dal lanciare nuovi jobs di plotting. "
-"I job in esecuzione proseguiranno fino al completamento senza interrompersi. "
+msgstr ""
+"Questa azione fermerà Plotman dal lanciare nuovi jobs di plotting. I job "
+"in esecuzione proseguiranno fino al completamento senza interrompersi. "
 "Continuare?"
 
 #: templates/plotting/jobs.html:53 templates/plotting/workers.html:35
@@ -1246,9 +1313,10 @@ msgid ""
 "This worker is not currently online and responding to pings from the "
 "controller.  Please check the Workers page and bring the system back "
 "online."
-msgstr "Questo worker non è online attualmente e non sta rispondendo ai "
-"ping del controller. Controlla la pagina Workers a riporta il sitema "
-"nuovamente online."
+msgstr ""
+"Questo worker non è online attualmente e non sta rispondendo ai ping del "
+"controller. Controlla la pagina Workers a riporta il sitema nuovamente "
+"online."
 
 #: templates/plotting/jobs.html:70 templates/plotting/workers.html:53
 #: templates/plotting/workers.html:70
@@ -1293,9 +1361,10 @@ msgid ""
 "This action will start Plotman archiving from the configured dst folder. "
 "Completed plots will be disributed locally or transferred remotely. "
 "Continue?"
-msgstr "Questa azione avvierà l'archiviazione tramite Plotman verso la cartella "
-"di destinazione configurata. I plots completato saranno distribuiti localmente "
-"o trasferiti da remoto. Continuare?"
+msgstr ""
+"Questa azione avvierà l'archiviazione tramite Plotman verso la cartella "
+"di destinazione configurata. I plots completato saranno distribuiti "
+"localmente o trasferiti da remoto. Continuare?"
 
 #: templates/plotting/workers.html:27 templates/plotting/workers.html:125
 msgid "Stop Archiving"
@@ -1305,9 +1374,10 @@ msgstr "Ferma Archiviazione"
 msgid ""
 "This action will stop Plotman archiving from the configured dst folder, "
 "preventing further completed plot transfers. Continue?"
-msgstr "Questa azione fermerà l'archiviazione tramite Plotman verso la cartella "
-" di destinazione configurata, prevenendo il trasferimento di ulteriori plot "
-"completati. Continuare?"
+msgstr ""
+"Questa azione fermerà l'archiviazione tramite Plotman verso la cartella  "
+"di destinazione configurata, prevenendo il trasferimento di ulteriori "
+"plot completati. Continuare?"
 
 #: templates/plotting/workers.html:49
 #, python-format
@@ -1316,10 +1386,11 @@ msgid ""
 "%(wiki_link_open)sarchiving%(wiki_link_open)s to enable local or remote "
 "transfer of completed plots.  Please visit the Settings | Plotting page "
 "to configure this worker."
-msgstr "Questo worker non è attualmente configurato per l'archiviazione  "
-"tramite Plotman che abilità il trasferimento locale o remoto di plots "
-"completati. Visita la pagina \"Impostazioni | Plotting\" per configurare "
-"questo worker."
+msgstr ""
+"Questo worker non è attualmente configurato per "
+"%(wiki_link_open)sl'archiviazione%(wiki_link_open)s tramite Plotman che "
+"abilità il trasferimento locale o remoto di plots completati. Visita la "
+"pagina \"Impostazioni | Plotting\" per configurare questo worker."
 
 #: templates/plotting/workers.html:103
 msgid "Archiving"
@@ -1327,12 +1398,14 @@ msgstr "Archiviazione in corso"
 
 #: templates/plotting/workers.html:119
 msgid "Archiving is disabled.  See Settings | Plotting page."
-msgstr "L'archiviazione è disabilitata. Vedi la pagina \"Impostazioni | Plotting\"."
+msgstr ""
+"L'archiviazione è disabilitata. Vedi la pagina \"Impostazioni | "
+"Plotting\"."
 
 #: templates/settings/alerts.html:57 templates/settings/farming.html:58
 #: templates/settings/plotting.html:58 templates/settings/tools.html:57
 msgid "Download"
-msgstr ""
+msgstr "Scaricamento"
 
 #: templates/settings/pools.html:32
 msgid "Confirm Pool Change"
@@ -1343,7 +1416,8 @@ msgid ""
 "This action will switch your current pooling selection, possibly "
 "resulting in a small charge (few mojos) against your wallet. Continue "
 "anyway?"
-msgstr "Questa azione cambierà la tua scelta di pooling, comportanto "
+msgstr ""
+"Questa azione cambierà la tua scelta di pooling, comportanto "
 "possibilmente in un piccolo addebito (qualche mojos) dal tuo portafogli. "
 "Vuoi continuare comunque?"
 
@@ -1353,8 +1427,9 @@ msgid ""
 "Join a pool and get consistent farming rewards. The average returns are "
 "the same, %(break)sbut it is much less volatile. You can easily switch "
 "pools without having to re-plot."
-msgstr "Unisciti ad una pool e ottieni ricompense di farming consistenti. "
-"I rendimenti medi sono gli stessi, ma sono meno volatili. Puoi "
+msgstr ""
+"Unisciti ad una pool e ottieni ricompense di farming consistenti. I "
+"rendimenti medi sono gli stessi, %(break)sma sono meno volatili. Puoi "
 "facilmente cambiare pool senza bisogno di riplottare."
 
 #: templates/settings/pools.html:88
@@ -1393,8 +1468,9 @@ msgstr "Vedi Log"
 msgid ""
 "No wallets found yet.  Perhaps this is a brand-new installation? If so, "
 "please wait for complete start-up."
-msgstr "Nessun portafogli ancora trovato. Forse questa è una nuova installazione? "
-"Se sì, aspetta che si completi l'avvio."
+msgstr ""
+"Nessun portafogli ancora trovato. Forse questa è una nuova installazione?"
+" Se sì, aspetta che si completi l'avvio."
 
 #: templates/settings/pools.html:173
 msgid "For more on Pooling, see the Machinaris"

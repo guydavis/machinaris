@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-03 13:51-0700\n"
+"POT-Creation-Date: 2022-03-09 13:07-0700\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: pt\n"
@@ -55,41 +55,48 @@ msgid "Unknown form action"
 msgstr "Form action desconhecida"
 
 #: routes.py:393
+#, fuzzy, python-format
 msgid ""
-"No worker at %{worker} for blockchain %{blockchain}. Please select "
+"No worker at %(worker)s for blockchain %(blockchain)s. Please select "
 "another blockchain."
 msgstr ""
-"Não existe worker no %{worker} para o blockchain %{blockchain}. Por favor"
-" seleccione outro blockchain."
+"Não existe worker no %(worker)s para o blockchain %(blockchain)s. Por "
+"favor seleccione outro blockchain."
 
 #: routes.py:399
+#, fuzzy, python-format
 msgid ""
-"For Alerts config, found no responding fullnode found for %{blockchain}. "
-"Please check your workers."
-msgstr ""
-"Na configuração dos Alertas, foi encontrado um fullnode que não responde "
-"para o %{blockchain}. Por favor verifica os teus workers."
-
-#: routes.py:404
-msgid ""
-"For Farming config, found no responding fullnode found for %{blockchain}."
+"For Alerts config, found no responding fullnode found for %(blockchain)s."
 " Please check your workers."
 msgstr ""
+"Na configuração dos Alertas, foi encontrado um fullnode que não responde "
+"para o %(blockchain)s. Por favor verifica os teus workers."
+
+#: routes.py:404
+#, fuzzy, python-format
+msgid ""
+"For Farming config, found no responding fullnode found for "
+"%(blockchain)s. Please check your workers."
+msgstr ""
 "Na configuração de Farming, foi encontrado um fullnode que não responde "
-"para o %{blockchain}. Por favor verifica os teus workers."
+"para o %(blockchain)s. Por favor verifica os teus workers."
 
 #: routes.py:411
+#, fuzzy, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
-"%{blockchain}. Please check your workers."
+"%(blockchain)s. Please check your workers."
 msgstr ""
 "Na configuração de Plotting, foi encontrado um fullnode que não responde "
-"para o %{blockchain}. Por favor verifica os teus workers."
+"para o %(blockchain)s. Por favor verifica os teus workers."
 
 #: routes.py:416
-msgid "No responding fullnode found for %{blockchain}. Please check your workers."
+#, fuzzy, python-format
+msgid ""
+"No responding fullnode found for %(blockchain)s. Please check your "
+"workers."
 msgstr ""
-"Foi encontrado um fullnode que não responde para o %{blockchain}. Por "
+"Foi encontrado um fullnode que não responde para o %(blockchain)s. Por "
 "favor verifica os teus workers."
 
 #: routes.py:435
@@ -116,6 +123,11 @@ msgstr "Gravar"
 #, fuzzy
 msgid "Suspended"
 msgstr "Suspender os seleccionados"
+
+#: actions/stats.py:56 actions/stats.py:90 actions/stats.py:108
+#: actions/stats.py:110
+msgid "in last day."
+msgstr "no último dia."
 
 #: actions/stats.py:338
 msgid "secs"
@@ -939,41 +951,54 @@ msgstr "Espaço em disco usado (TB)"
 msgid "Disk Space Free (TB)"
 msgstr "Espaço em disco livre (TB)"
 
-#: templates/worker_launch.html:50 templates/worker_launch.html:609
-#: templates/worker_launch.html:630
+#: templates/worker_launch.html:50 templates/worker_launch.html:640
+#: templates/worker_launch.html:669
 msgid "Host Path"
 msgstr "Host path"
 
-#: templates/worker_launch.html:55 templates/worker_launch.html:614
-#: templates/worker_launch.html:635
+#: templates/worker_launch.html:55 templates/worker_launch.html:645
+#: templates/worker_launch.html:674
 msgid "Container Path"
 msgstr "Container path"
 
-#: templates/worker_launch.html:60 templates/worker_launch.html:619
-#: templates/worker_launch.html:640
+#: templates/worker_launch.html:60 templates/worker_launch.html:650
+#: templates/worker_launch.html:679
 msgid "Used for:"
 msgstr "Usado para:"
 
-#: templates/worker_launch.html:63 templates/worker_launch.html:622
-#: templates/worker_launch.html:643
+#: templates/worker_launch.html:63 templates/worker_launch.html:653
+#: templates/worker_launch.html:682
 msgid "Final Plots"
 msgstr "Plots finais"
 
-#: templates/worker_launch.html:64 templates/worker_launch.html:623
-#: templates/worker_launch.html:644
+#: templates/worker_launch.html:64 templates/worker_launch.html:654
+#: templates/worker_launch.html:683
 msgid "Plotting Temp"
 msgstr "Plotting temp"
 
-#: templates/worker_launch.html:65 templates/worker_launch.html:624
-#: templates/worker_launch.html:645
+#: templates/worker_launch.html:65 templates/worker_launch.html:655
+#: templates/worker_launch.html:684
 msgid "Other"
 msgstr "Outros"
 
-#: templates/worker_launch.html:234
+#: templates/worker_launch.html:69 templates/worker_launch.html:659
+#, fuzzy
+msgid "Location"
+msgstr "Notifcação"
+
+#: templates/worker_launch.html:72 templates/worker_launch.html:662
+msgid "Local"
+msgstr ""
+
+#: templates/worker_launch.html:73 templates/worker_launch.html:663
+msgid "Remote"
+msgstr ""
+
+#: templates/worker_launch.html:252
 msgid "Unknown blockchain fork of selected:"
 msgstr "Unknown blockchain fork of selected:"
 
-#: templates/worker_launch.html:266
+#: templates/worker_launch.html:284
 msgid ""
 "Missing worker hostname.  Please provide a short name to identify your "
 "worker."
@@ -981,7 +1006,7 @@ msgstr ""
 "Falta o hostname do Worker. Por favor indique um nome cursto para "
 "identificar o Worker."
 
-#: templates/worker_launch.html:282
+#: templates/worker_launch.html:304
 msgid ""
 "Invalid host path ending with colon. Try adding a slash to the end like "
 "this"
@@ -989,29 +1014,29 @@ msgstr ""
 "Host path inválido terminado com dois pontos. Tente adicionar o caracter "
 "'/' no final assim"
 
-#: templates/worker_launch.html:285
+#: templates/worker_launch.html:307
 msgid "Empty host path provided for volume at "
 msgstr "Foi indicado um host path vazio para o volume em "
 
-#: templates/worker_launch.html:285
+#: templates/worker_launch.html:307
 msgid "Please provide a host path."
 msgstr "Por favor indique um host path."
 
-#: templates/worker_launch.html:287
+#: templates/worker_launch.html:309
 msgid "Empty container path provided for volume at "
 msgstr "Foi indicado um container path vazio para o volume em "
 
-#: templates/worker_launch.html:287
+#: templates/worker_launch.html:309
 msgid "Please provide a container path."
 msgstr "Por favor indique um container path."
 
-#: templates/worker_launch.html:332
+#: templates/worker_launch.html:355
 msgid "Neither Harvester or Plottter mode selected.  Please choose one or both."
 msgstr ""
 "Não foi seleccionado o modo Harvester nem o modo Plottter. Por favor "
 "escolha um ou ambos."
 
-#: templates/worker_launch.html:338
+#: templates/worker_launch.html:361
 msgid ""
 "Missing worker IP address.  Please provide the IP the controller will "
 "connect to for commands."
@@ -1019,11 +1044,11 @@ msgstr ""
 "Falta o endereço IP do Worker. Por favor indique o endereço IP que o "
 "controlador irá ligar-se para comandos."
 
-#: templates/worker_launch.html:380
+#: templates/worker_launch.html:411
 msgid "Machinaris Worker - Launch Config"
 msgstr "Machinaris Worker - Configuração de arranque"
 
-#: templates/worker_launch.html:381
+#: templates/worker_launch.html:412
 msgid ""
 "Complete the form below to run new harvesters/plotters on other computers"
 " across your network. Save the generated docker-compose.yml file to a "
@@ -1031,99 +1056,99 @@ msgid ""
 "shell."
 msgstr ""
 "Completa o formulário abaixo para correr novos harvesters/plotters "
-"noutros computadores na tua rede. Grava o ficheiro docker-compose.yml "
-" numa pasta chamada \"machinaris\", depois executa \"docker-compose up\" a"
+"noutros computadores na tua rede. Grava o ficheiro docker-compose.yml  "
+"numa pasta chamada \"machinaris\", depois executa \"docker-compose up\" a"
 " partir da linha de comandos."
 
-#: templates/worker_launch.html:385
+#: templates/worker_launch.html:416
 msgid "Operating System"
 msgstr "Sistema operativo"
 
-#: templates/worker_launch.html:391
+#: templates/worker_launch.html:422
 msgid "Linux"
 msgstr "Linux"
 
-#: templates/worker_launch.html:398
+#: templates/worker_launch.html:429
 msgid "Macintosh"
 msgstr "Macintosh"
 
-#: templates/worker_launch.html:405
+#: templates/worker_launch.html:436
 msgid "Windows"
 msgstr "Windows"
 
-#: templates/worker_launch.html:411
+#: templates/worker_launch.html:442
 msgid "Machinaris Mode"
 msgstr "Modo do Machinaris"
 
-#: templates/worker_launch.html:417
+#: templates/worker_launch.html:448
 msgid "Harvester"
 msgstr "Harvester"
 
-#: templates/worker_launch.html:424
+#: templates/worker_launch.html:455
 msgid "Plotter"
 msgstr "Plotter"
 
-#: templates/worker_launch.html:432
+#: templates/worker_launch.html:463
 msgid "Farmer Public Key"
 msgstr "Farmer chave pública"
 
-#: templates/worker_launch.html:437
+#: templates/worker_launch.html:468
 msgid "Pool Public Key"
 msgstr "Pool chave pública"
 
-#: templates/worker_launch.html:442
+#: templates/worker_launch.html:473
 msgid "Pool Contract Address"
 msgstr "Pool endereço do contrato"
 
-#: templates/worker_launch.html:447
+#: templates/worker_launch.html:478
 msgid "Plot on Startup"
 msgstr "Iniciar plotting ao arrancar"
 
-#: templates/worker_launch.html:453
+#: templates/worker_launch.html:484
 msgid "True"
 msgstr "Verdadeiro"
 
-#: templates/worker_launch.html:460
+#: templates/worker_launch.html:491
 msgid "False"
 msgstr "False"
 
-#: templates/worker_launch.html:468
+#: templates/worker_launch.html:499
 msgid "Controller IP Address"
 msgstr "Controlador: Endereço IP"
 
-#: templates/worker_launch.html:473
+#: templates/worker_launch.html:504
 msgid "Controller API Port"
 msgstr "Controlador: Porto da API"
 
-#: templates/worker_launch.html:480
+#: templates/worker_launch.html:511
 msgid "Worker Hostname"
 msgstr "Worker: Hostname"
 
-#: templates/worker_launch.html:485
+#: templates/worker_launch.html:516
 msgid "Worker IP Address"
 msgstr "Worker: Endereço IP"
 
-#: templates/worker_launch.html:492
+#: templates/worker_launch.html:523
 msgid "Blockchains to Farm"
 msgstr "Blockchains to Farm"
 
-#: templates/worker_launch.html:605
+#: templates/worker_launch.html:636
 msgid "Volume Mounts"
 msgstr "Volumes montados"
 
-#: templates/worker_launch.html:654
+#: templates/worker_launch.html:693
 msgid "Add New Volume"
 msgstr "Adicionar um novo volume"
 
-#: templates/worker_launch.html:656
+#: templates/worker_launch.html:695
 msgid "Remove Last Volume"
 msgstr "Remover o último volume"
 
-#: templates/worker_launch.html:663
+#: templates/worker_launch.html:702
 msgid "Copy"
 msgstr "Copiar"
 
-#: templates/worker_launch.html:667
+#: templates/worker_launch.html:706
 msgid "Docker Compose"
 msgstr "Docker Compose"
 
