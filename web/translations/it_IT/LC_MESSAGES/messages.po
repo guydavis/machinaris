@@ -40,17 +40,18 @@ msgstr "Formato avvisi sconosciuto"
 
 #: routes.py:224
 msgid "Saved cold wallet addresses."
-msgstr ""
+msgstr "Indirizzi cold wallet salvati."
 
 #: routes.py:279
 msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
-msgstr ""
+msgstr "Impostazioni salvate. Attendi 10 minuti affinché le informazioni "
+"vengano generate."
 
 #: routes.py:287
 msgid "Unknown form action"
-msgstr ""
+msgstr "Azione sconosciuta."
 
 #: routes.py:393
 msgid ""
@@ -62,19 +63,22 @@ msgstr "Nessun worker in %{worker} per la blockchain %{blockchain}. Scegli un'al
 msgid ""
 "For Alerts config, found no responding fullnode found for %{blockchain}. "
 "Please check your workers."
-msgstr ""
+msgstr "Per le configurazioni degli Avvisi, non è stato trovato alcun fullnode "
+"per %{blockchain}. Controlla i tuoi worker."
 
 #: routes.py:404
 msgid ""
 "For Farming config, found no responding fullnode found for %{blockchain}."
 " Please check your workers."
-msgstr ""
+msgstr "Per le configurazioni del Farming, non è stato trovato alcun fullnode "
+"per %{blockchain}. Controlla i tuoi worker."
 
 #: routes.py:411
 msgid ""
 "For Plotting config, found no responding fullnode found for "
 "%{blockchain}. Please check your workers."
-msgstr ""
+msgstr "Per le configurazioni del Plotting, non è stato trovato alcun fullnode "
+"per %{blockchain}. Controlla i tuoi worker."
 
 #: routes.py:416
 msgid "No responding fullnode found for %{blockchain}. Please check your workers."
@@ -385,7 +389,7 @@ msgstr "Licenza"
 
 #: templates/base.html:145
 msgid "Credits"
-msgstr ""
+msgstr "Crediti"
 
 #: templates/base.html:161
 msgid "Bladebit"
@@ -532,7 +536,7 @@ msgstr ""
 
 #: templates/controller.html:26
 msgid "This Machinaris worker is controlled at:"
-msgstr ""
+msgstr "Questo Machinaris worker è accessibile all'indirizzo:"
 
 #: templates/index.html:30
 msgid "Expected Time to Win"
@@ -661,12 +665,13 @@ msgstr "Per maggiori informazioni, guarda"
 
 #: templates/setup.html:27
 msgid "Welcome to Machinaris!"
-msgstr ""
+msgstr "Benvenuto in Machinaris!"
 
 #: templates/setup.html:28
 #, python-format
 msgid "An easy-to-use WebUI for Chia%(trademark)s plotting and farming."
-msgstr ""
+msgstr "Una interfaccia Web facile da usare per il plotting ed il "
+"farming di Chia%(trademark)s."
 
 #: templates/setup.html:61
 #, python-format
@@ -676,7 +681,11 @@ msgid ""
 "%(uncompressed)s in uncompressed size (progress shown above), this will "
 "take a while. However minutes of download now, will save you multiple "
 "days of blockchain syncing later. Please be patient!"
-msgstr ""
+msgstr "Al primo avvio, viene scaricato il database compresso %(compressed)s"
+"della blockchain Chia. A circa %(uncompressed)s in formato non compresso "
+"(progresso mostrato sopra), potrebbe volerci un po'. Tuttavia, i minuti di "
+"download che stai attendendo adesso ti faranno risparmiare svariati giorni "
+"di sincronizzazione della blockchain in futuro. Sii paziente!"
 
 #: templates/setup.html:75
 #, python-format
@@ -685,14 +694,18 @@ msgid ""
 "days, see the %(init_link)s for details. Similarly, you may instead "
 "%(import_link_open)s import your own blockchain %(import_link_close)s if "
 "you have one from a previous Chia install."
-msgstr ""
+msgstr "NOTA: se preferisci che Chia sincronizzi normalmente la blockchain "
+"in più giorni, guarda il %(init_link)s per dettagli. Alternativamente, "
+"potresti %(import_link_open)s importare una tua versione locale della blockchain "
+"se ne hai una da una precedente installazione di Chia."
 
 #: templates/setup.html:83
 #, python-format
 msgid ""
 "To get started with Machinaris as a Chia%(trademark)s fullnode, either "
 "import your existing 24-word mnemonic seed phrase"
-msgstr ""
+msgstr "Per iniziare con Machinaris come un fullnode Chia%(trademark)s, "
+"importa la frase seed mnemonica da 24 parole che hai già"
 
 #: templates/setup.html:90
 msgid "Import Existing Key"
@@ -700,7 +713,7 @@ msgstr "Importa Chiave Esistente"
 
 #: templates/setup.html:91
 msgid "OR"
-msgstr ""
+msgstr "O"
 
 #: templates/setup.html:93
 msgid ""
@@ -901,68 +914,71 @@ msgstr "Percorso Container"
 #: templates/worker_launch.html:60 templates/worker_launch.html:619
 #: templates/worker_launch.html:640
 msgid "Used for:"
-msgstr ""
+msgstr "Usato per:"
 
 #: templates/worker_launch.html:63 templates/worker_launch.html:622
 #: templates/worker_launch.html:643
 msgid "Final Plots"
-msgstr ""
+msgstr "Plots Completati"
 
 #: templates/worker_launch.html:64 templates/worker_launch.html:623
 #: templates/worker_launch.html:644
 msgid "Plotting Temp"
-msgstr ""
+msgstr "Plotting"
 
 #: templates/worker_launch.html:65 templates/worker_launch.html:624
 #: templates/worker_launch.html:645
 msgid "Other"
-msgstr ""
+msgstr "Altro"
 
 #: templates/worker_launch.html:234
 msgid "Unknown blockchain fork of selected:"
-msgstr ""
+msgstr "Fork sconosciuto per:"
 
 #: templates/worker_launch.html:266
 msgid ""
 "Missing worker hostname.  Please provide a short name to identify your "
 "worker."
-msgstr ""
+msgstr "Nome host del worker mancante. Fornisci un nome breve per identificare "
+"il tuo worker."
 
 #: templates/worker_launch.html:282
 msgid ""
 "Invalid host path ending with colon. Try adding a slash to the end like "
 "this"
-msgstr ""
+msgstr "Percorso host non valido, non può finire con i due punti. Prova ad "
+"aggiungere uno slash alla fine, in questo modo"
 
 #: templates/worker_launch.html:285
 msgid "Empty host path provided for volume at "
-msgstr ""
+msgstr "Hai fornito un percorso host vuoto per il volume a "
 
 #: templates/worker_launch.html:285
 msgid "Please provide a host path."
-msgstr ""
+msgstr "Fornisci un percorso host."
 
 #: templates/worker_launch.html:287
 msgid "Empty container path provided for volume at "
-msgstr ""
+msgstr "Hai fornito un percorso container vuoto per il volume a "
 
 #: templates/worker_launch.html:287
 msgid "Please provide a container path."
-msgstr ""
+msgstr "Fornisci un percorso container."
 
 #: templates/worker_launch.html:332
 msgid "Neither Harvester or Plottter mode selected.  Please choose one or both."
-msgstr ""
+msgstr "Non hai selezionato né modalità Harvester né plotter. Scegline una o entrambe."
 
 #: templates/worker_launch.html:338
 msgid ""
 "Missing worker IP address.  Please provide the IP the conntroller will "
 "connect to for commands."
-msgstr ""
+msgstr "Indirizzo IP worker mancante. Fornisci l'indirizzo IP a cui il "
+"controller si connetterà per i comandi."
 
 #: templates/worker_launch.html:380
 msgid "Machinaris Worker - Launch Config"
-msgstr ""
+msgstr "Machinaris Worker - Avvia Configurazione"
 
 #: templates/worker_launch.html:381
 msgid ""
@@ -970,11 +986,14 @@ msgid ""
 " across your network. Save the generated docker-compose.yml file to a "
 "folder named \"machinaris\", then execute \"docker-compose up\" from a "
 "shell."
-msgstr ""
+msgstr "Completa il modulo sotto per lanciare nuovi harvesters/plotters su "
+"altri computer sulla tua rete. Salva il docker-compose.yml generato in una "
+"cartella chiamata \"machinaris\", ed esegui il comando \"docker-compose up\" "
+"dalla shell."
 
 #: templates/worker_launch.html:385
 msgid "Operating System"
-msgstr ""
+msgstr "Sistema Operativo"
 
 #: templates/worker_launch.html:391
 msgid "Linux"
@@ -1002,11 +1021,11 @@ msgstr ""
 
 #: templates/worker_launch.html:432
 msgid "Farmer Public Key"
-msgstr ""
+msgstr "Chiave Pubblica Farmer"
 
 #: templates/worker_launch.html:437
 msgid "Pool Public Key"
-msgstr ""
+msgstr "Chiave Pubblica Pool"
 
 #: templates/worker_launch.html:442
 msgid "Pool Contract Address"
@@ -1014,51 +1033,51 @@ msgstr ""
 
 #: templates/worker_launch.html:447
 msgid "Plot on Startup"
-msgstr ""
+msgstr "Plotta all'avvio"
 
 #: templates/worker_launch.html:453
 msgid "True"
-msgstr ""
+msgstr "Vero"
 
 #: templates/worker_launch.html:460
 msgid "False"
-msgstr ""
+msgstr "Falso"
 
 #: templates/worker_launch.html:468
 msgid "Controller IP Address"
-msgstr ""
+msgstr "Indirizzo IP Controller"
 
 #: templates/worker_launch.html:473
 msgid "Controller API Port"
-msgstr ""
+msgstr "Porta API Controller"
 
 #: templates/worker_launch.html:480
 msgid "Worker Hostname"
-msgstr ""
+msgstr "Nome host Worker"
 
 #: templates/worker_launch.html:485
 msgid "Worker IP Address"
-msgstr ""
+msgstr "Indirizzo IP Worker"
 
 #: templates/worker_launch.html:492
 msgid "Blockchains to Farm"
-msgstr ""
+msgstr "Blockchains da Farmare"
 
 #: templates/worker_launch.html:605
 msgid "Volume Mounts"
-msgstr ""
+msgstr "Volumi da Montare"
 
 #: templates/worker_launch.html:654
 msgid "Add New Volume"
-msgstr ""
+msgstr "Aggiungi Nuovo Volume"
 
 #: templates/worker_launch.html:656
 msgid "Remove Last Volume"
-msgstr ""
+msgstr "Rimuovi Ultimo Volume"
 
 #: templates/worker_launch.html:663
 msgid "Copy"
-msgstr ""
+msgstr "Copia"
 
 #: templates/worker_launch.html:667
 msgid "Docker Compose"
