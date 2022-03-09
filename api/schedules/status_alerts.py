@@ -19,7 +19,10 @@ from common.config import globals
 from api.commands import chiadog_cli
 from api import app, utils
 
+first_run = True
+
 def update():
+    global first_run
     if globals.load()['is_controller']:
         #app.logger.info("Skipping alerts polling on fullnode are already placed in database directly via chiadog_notifier.sh script.")
         return
@@ -27,7 +30,11 @@ def update():
         try:
             from api import db
             hostname = utils.get_hostname()
-            since = (datetime.datetime.now() - datetime.timedelta(minutes=15)).strftime("%Y-%m-%d %H:%M:%S")
+            if first_run:  # On first launch, load last hour of notifications
+                since = (datetime.datetime.now() - datetime.timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S")
+                first_run = False
+            else: # On subsequent schedules, load only last 15 minutes.
+                since = (datetime.datetime.now() - datetime.timedelta(minutes=15)).strftime("%Y-%m-%d %H:%M:%S")
             alerts = db.session.query(a.Alert).filter(a.Alert.created_at >= since).order_by(a.Alert.created_at.desc()).limit(20).all()
             payload = []
             for alert in alerts:
