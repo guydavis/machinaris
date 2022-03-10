@@ -2,7 +2,7 @@
 # Access to public web APIs
 #
 
-import bs4
+import traceback
 import datetime
 import http
 import json
@@ -130,29 +130,19 @@ def save_prices_cache(data):
         app.logger.error("Failed to store prices cache in {0} because {1}".format(BLOCKCHAIN_PRICES_CACHE_FILE, str(ex)))
 
 def request_prices(prices, debug=False):
-    url = "https://alltheblocks.net"
+    url = "https://api.alltheblocks.net/atb/blockchain/settings-and-stats"
     app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
     if debug:
         http.client.HTTPConnection.debuglevel = 1
-    data = requests.get(url).text
+    data = json.loads(requests.get(url).content)
     http.client.HTTPConnection.debuglevel = 0
-    soup = bs4.BeautifulSoup(data, 'html.parser')
-    table = soup.find('table', class_="table b-table table-sm")
-    for row in table.tbody.find_all('tr'):
-        if 'data-pk' in row.attrs:
-            blockchain = row['data-pk'].replace('stai', 'staicoin')
-            price_column = row.find('td', class_='text-right')
-            if len(price_column.contents) == 1:
-                price_value = price_column.contents[0].string.strip()
-                if price_value.startswith('$'):
-                    #app.logger.info("{0} @ {1}".format(blockchain, price_value[1:].strip()))
-                    try:
-                        prices[blockchain] = float(price_value[1:].strip())
-                    except Exception as ex:
-                        app.logger.info("Failed to parse a decimal number from {0}".format(price_value[1:].strip()))
-                else:
-                    #app.logger.info("No price found for blockchain: {0}".format(blockchain))
-                    pass
+    for coin in data:
+        app.logger.info("{0} @ {1}".format(coin['displayName'].lower(),coin['stats']['priceUsd']))
+        try:
+            if coin['stats']['priceUsd'] > 0:  # -1 means no exchange value found
+                prices[coin['displayName'].lower()] = coin['stats']['priceUsd']
+        except Exception as ex:
+            traceback.print_exc()
     return prices
 
 last_price_request_time = None
@@ -161,10 +151,16 @@ def get_prices():
     prices = load_prices_cache()
     if not last_price_request_time or last_price_request_time <= \
             (datetime.datetime.now() - datetime.timedelta(minutes=ALLTHEBLOCKS_REQUEST_INTERVAL_MINS)):
-            request_prices(prices)
+            try:
+                request_prices(prices)
+            except:
+                traceback.print_exc()
             last_price_request_time = datetime.datetime.now()
     save_prices_cache(prices)
-    save_exchange_rates()
+    try:
+        save_exchange_rates()
+    except: 
+        traceback.print_exc()
     return prices
 
 def save_exchange_rates(debug=False):
