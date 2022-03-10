@@ -85,7 +85,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.btcgreen/farmer_ca/private_ca.crt ]; then
+    if [[ -f /root/.btcgreen/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       btcgreen init -c /root/.btcgreen/farmer_ca 2>&1 > /root/.btcgreen/mainnet/log/init.log
       chmod 755 -R /root/.btcgreen/mainnet/config/ssl/ &> /dev/null
       btcgreen init --fix-ssl-permissions > /dev/null 

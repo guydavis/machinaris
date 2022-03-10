@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-03 13:51-0700\n"
+"POT-Creation-Date: 2022-03-09 13:07-0700\n"
 "PO-Revision-Date: 2022-02-15 14:29-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: it\n"
@@ -20,18 +20,23 @@ msgstr ""
 
 #: commands/chia_cli.py:66
 msgid "Updated config.yaml failed validation!"
-msgstr ""
+msgstr "Validazione del config.yaml aggiornato fallita."
 
 #: commands/pools_cli.py:68
 msgid "No requested pool modifications were sent. Current settings are unchanged."
 msgstr ""
+"Non è stata inviata alcuna richiesta di modifica di pool. Le impostazioni"
+" attuali sono invariate."
 
 #: commands/pools_cli.py:151
 msgid ""
-"Successfully left pool, switching to self plotting. Please wait a few "
+"Successfully left pool, switching to self-pooling. Please wait a few "
 "minutes or more to complete. DO NOT immediately re-submit your request. "
 "View the log for details."
 msgstr ""
+"Hai lasciato il pool con successo, passando al self pooling. Attendi "
+"qualche minuto affinché il passaggio sia completato. NON reinviare "
+"immediatamente la tua richiesta. Vedi i log per i dettagli."
 
 #: commands/pools_cli.py:195
 #, python-format
@@ -40,6 +45,10 @@ msgid ""
 "a few minutes or more to complete. DO NOT immediately re-submit your "
 "request. Be patient! View the log for details."
 msgstr ""
+"Ti sei unito con successo al pool %(pool_url)s creando un Chia NFT. "
+"Attendi qualche minuto affinché il passaggio sia completato. NON "
+"reinviare immediatamente la tua richiesa. Abbi pazienza! Vedi i log per i"
+" dettagli."
 
 #: commands/pools_cli.py:224
 msgid ""
@@ -47,6 +56,8 @@ msgid ""
 "or more to complete. DO NOT immediately re-submit your request. Be "
 "patient! View the log for details."
 msgstr ""
+"Hai creato con successo un NFT per il self pooling. NON reinviare "
+"immediatamente la tua richiesta. Vedi i log per i dettagli."
 
 #: views/ping/resources.py:28
 msgid "Pong!"

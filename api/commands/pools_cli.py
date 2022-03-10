@@ -80,7 +80,7 @@ def get_pool_login_link(launcher_id):
         stream = os.popen("chia plotnft get_login_link -l {0}".format(launcher_id))
         return stream.read()
     except Exception as ex:
-        app.logger.error("Failed to get_login_link: {0}".format(str(ex)))
+        app.logger.debug("Failed to get_login_link: {0}".format(str(ex)))
     return ""
 
 def load_plotnft_show(blockchain):
@@ -148,7 +148,7 @@ def process_pool_leave(blockchain, pool_wallet_id):
     for line in stdout_lines:
         if "Error" in line:
             raise Exception('Error while leaving pool: ' + line)
-    return _('Successfully left pool, switching to self plotting. Please wait a few minutes or more to complete. DO NOT immediately re-submit your request. View the log for details.')
+    return _('Successfully left pool, switching to self-pooling. Please wait a few minutes or more to complete. DO NOT immediately re-submit your request. View the log for details.')
 
 def process_pool_join(blockchain, pool_url, pool_wallet_id):
     chia_binary = globals.get_blockchain_binary(blockchain)

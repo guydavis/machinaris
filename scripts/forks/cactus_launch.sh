@@ -90,7 +90,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.cactus/farmer_ca/private_ca.crt ]; then
+    if [[ -f /root/.cactus/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       cactus init -c /root/.cactus/farmer_ca 2>&1 > /root/.cactus/mainnet/log/init.log
       chmod 755 -R /root/.cactus/mainnet/config/ssl/ &> /dev/null
       cactus init --fix-ssl-permissions > /dev/null 

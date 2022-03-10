@@ -613,7 +613,7 @@ class Connections:
             return 8668
         raise("Unknown blockchain fork of selected: " + blockchain)
 
-    def get_geoname_for_lang(self, location, lang):
+    def get_geoname_for_lang(self, ip, location, lang):
         lang_codes = [ lang, ]
         if '_' in lang: 
             lang_codes.append(lang.split('_')[0]) # Secondarily, add more generic code
@@ -623,9 +623,9 @@ class Connections:
                     #app.logger.info('Found matching geoname for {0} in {1}'.format(lang, location))
                     return location[key]
         if 'en' in location: # Default fallback is 'en'
-            app.logger.info('Falling back to English geoname for {0} in {1}'.format(lang, location))
+            app.logger.info('Falling back to English geoname at {0} for {1} in {2}'.format(ip, lang, location))
             return location['en']
-        app.logger.info('Unable to find a geoname for {0} in {1}'.format(lang, location))
+        app.logger.debug('Unable to find a geoname at {0} for {1} in {2}'.format(ip, lang, location))
         return '' # Blank if no such match
 
     def set_geolocation(self, geoip_cache, connection, lang):
@@ -638,11 +638,11 @@ class Connections:
             latitude = geoip['latitude']
             longitude = geoip['longitude']
             try:
-                city = self.get_geoname_for_lang(geoip['city'], lang)
+                city = self.get_geoname_for_lang(connection['ip'], geoip['city'], lang)
             except:
                 traceback.print_exc()
             try:
-                country = self.get_geoname_for_lang(geoip['country'], lang)
+                country = self.get_geoname_for_lang(connection['ip'], geoip['country'], lang)
             except:
                 traceback.print_exc()
         connection['latitude'] = latitude
@@ -661,10 +661,10 @@ class Connections:
                 elif line.strip().startswith('Type'):
                     self.columns = line.lower().replace('last connect', 'last_connect') \
                         .replace('mib up|down', 'mib_up mib_down').strip().split()
-                elif line.strip().startswith('-SB Height'):
-                    groups = re.search("-SB Height:\s+(\d+)\s+-Hash:\s+(\w+)...", line.strip())
+                elif line.strip().startswith('-SB Height') or line.strip().startswith('-Height'):
+                    groups = re.search("Height:\s+(\d+)\s+-Hash:\s+(\w+)...", line.strip())
                     if not groups:
-                        app.logger.info("Malformed SB Height line: {0}".format(line))
+                        app.logger.info("Malformed Height line: {0}".format(line))
                     else:
                         height = groups[1]
                         hash = groups[2]

@@ -87,7 +87,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.chives/farmer_ca/chives_ca.crt ]; then
+    if [[ -f /root/.chives/farmer_ca/chives_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       chives init -c /root/.chives/farmer_ca 2>&1 > /root/.chives/mainnet/log/init.log
     else
       echo "Did not find your farmer's certificates within /root/.chives/farmer_ca."

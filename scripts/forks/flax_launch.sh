@@ -87,7 +87,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.flax/farmer_ca/private_ca.crt ]; then
+    if [[ -f /root/.flax/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       flax init -c /root/.flax/farmer_ca 2>&1 > /root/.flax/mainnet/log/init.log
       chmod 755 -R /root/.flax/mainnet/config/ssl/ &> /dev/null
       flax init --fix-ssl-permissions > /dev/null 

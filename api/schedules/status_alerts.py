@@ -30,8 +30,8 @@ def update():
         try:
             from api import db
             hostname = utils.get_hostname()
-            if first_run:  # On first launch, load last week of notifications
-                since = (datetime.datetime.now() - datetime.timedelta(weeks=1)).strftime("%Y-%m-%d %H:%M:%S")
+            if first_run:  # On first launch, load last hour of notifications
+                since = (datetime.datetime.now() - datetime.timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S")
                 first_run = False
             else: # On subsequent schedules, load only last 15 minutes.
                 since = (datetime.datetime.now() - datetime.timedelta(minutes=15)).strftime("%Y-%m-%d %H:%M:%S")
