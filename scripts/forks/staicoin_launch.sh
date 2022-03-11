@@ -95,7 +95,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.stai/farmer_ca/private_ca.crt ]; then
+    if [[ -f /root/.stai/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       stai init -c /root/.stai/farmer_ca 2>&1 > /root/.stai/mainnet/log/init.log
       chmod 755 -R /root/.stai/mainnet/config/ssl/ &> /dev/null
       stai init --fix-ssl-permissions > /dev/null 

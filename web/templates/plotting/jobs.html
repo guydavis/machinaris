@@ -6,18 +6,15 @@
     <div class="modal-dialog bg-dark rounded-3">
         <div class="modal-content bg-dark">
             <div class="modal-header bg-dark">
-                <h5 class="modal-title" id="killModalLabel">Confirm Kill</h5>
+                <h5 class="modal-title" id="killModalLabel">{{_('Confirm Kill')}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-dark">
-                This action will terminate the selected plots, whether running or stopped, and delete all
-                their temporary files. If Plotman is still running, another plot will be immediately started, 
-                so please stop Plotman first from the top-right. Continue?
+                {{_('This action will terminate the selected plots, whether running or stopped, and delete all their temporary files. If Plotman is still running, another plot will be immediately started, so please stop Plotman first from the top-right. Continue?')}}
             </div>
             <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelKill">Cancel</button>
-                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" id="btnConfirmKill">Kill
-                    Selected</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelKill">{{_('Cancel')}}</button>
+                <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal" id="btnConfirmKill">{{_('Kill Selected')}}</button>
             </div>
         </div>
     </div>
@@ -27,19 +24,15 @@
     <div class="modal-dialog bg-dark rounded-3">
         <div class="modal-content bg-dark">
             <div class="modal-header bg-dark">
-                <h5 class="modal-title" id="startModalLabel">Start Plotting</h5>
+                <h5 class="modal-title" id="startModalLabel">{{_('Start Plotting')}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-dark">
-                This action will start Plotman and launch a plotting run using your configured
-                plotter. Be careful about running more than one plotter on a single machine at a time. 
-                Continue?
+                {{_('This action will start Plotman and launch a plotting run using your configured plotter. Be careful about running more than one plotter on a single machine at a time. Continue?')}}
             </div>
             <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStart">Cancel</button>
-                <button type="button" class="btn btn-outline-success" id="btnConfirmStart">
-                    Start
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStart">{{_('Cancel')}}</button>
+                <button type="button" class="btn btn-outline-success" id="btnConfirmStart">{{_('Start')}}</button>
             </div>
         </div>
     </div>
@@ -49,18 +42,15 @@
     <div class="modal-dialog bg-dark rounded-3">
         <div class="modal-content bg-dark">
             <div class="modal-header bg-dark">
-                <h5 class="modal-title" id="stopModalLabel">Stop Plotting</h5>
+                <h5 class="modal-title" id="stopModalLabel">{{_('Stop Plotting')}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-dark">
-                This action will stop Plotman from launching new plotting jobs.  Running jobs will
-                run to completion. Continue?
+                {{_('This action will stop Plotman from launching new plotting jobs.  Running jobs will run to completion. Continue?')}}
             </div>
             <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStop">Cancel</button>
-                <button type="button" class="btn btn-outline-success" id="btnConfirmStop">
-                    Stop
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStop">{{_('Cancel')}}</button>
+                <button type="button" class="btn btn-outline-success" id="btnConfirmStop">{{_('Stop')}}</button>
             </div>
         </div>
     </div>
@@ -70,15 +60,14 @@
     <div class="modal-dialog bg-dark rounded-3">
         <div class="modal-content bg-dark">
             <div class="modal-header bg-dark">
-                <h5 class="modal-title" id="disabledModalLabel">Worker Offline</h5>
+                <h5 class="modal-title" id="disabledModalLabel">{{_('Worker Offline')}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-dark">
-                This worker is not currently online and responding to pings from the controller.  Please
-                check the Workers page and bring the system back online.
+                {{_('This worker is not currently online and responding to pings from the controller.  Please check the Workers page and bring the system back online.')}}
             </div>
             <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnOk">OK</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnOk">{{_('OK')}}</button>
             </div>
         </div>
     </div>
@@ -99,17 +88,17 @@
     <div class="container-fluid">
         <ul class="nav nav-tabs bg-dark">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{ url_for('plotting_jobs') }}">Jobs</a>
+                <a class="nav-link active" aria-current="page" href="{{ url_for('plotting_jobs') }}">{{_('Jobs')}}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('plotting_workers') }}">Workers</a>
+                <a class="nav-link" href="{{ url_for('plotting_workers') }}">{{_('Workers')}}</a>
             </li>
         </ul>
         <form method="POST" id="plotman-form" style="padding-bottom: 10px;">
             <input type="hidden" id="hostname" name="hostname" />
             <input type="hidden" id="blockchain" name="blockchain" />
             <fieldset>
-                <b style="vertical-align: bottom; font-weight: 500">Plotting: </b>
+                <b style="vertical-align: bottom; font-weight: 500">{{_('Plotting')}}: </b>
                 {% for plotter in plotters %}
                 <div class="btn-group">
                     <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
@@ -125,13 +114,13 @@
                                 href="#" {% 
                                 if worker.plotting_status == 'offline' %}
                                 data-bs-toggle="modal" data-bs-target="#disabledModal">
-                                <i class="fs-4 bi-dash-circle text-danger" title="Worker is offline."></i>
+                                <i class="fs-4 bi-dash-circle text-danger" title="{{_('Worker is offline.')}}"></i>
                                 {% elif worker.plotting_status == 'running' %}
                                 data-bs-toggle="modal" data-bs-target="#stopModal">
-                                <i class="fs-4 bi-pause-circle text-success" title="Stop Plotting"></i>
+                                <i class="fs-4 bi-pause-circle text-success" title="{{_('Stop Plotting')}}"></i>
                                 {% else %}
                                 data-bs-toggle="modal" data-bs-target="#startModal">
-                                <i class="fs-4 bi-play-circle text-success" title="Start Plotting"></i>
+                                <i class="fs-4 bi-play-circle text-success" title="{{_('Start Plotting')}}"></i>
                                 {% endif %}
                                 &nbsp;
                                 <span class="align-text-bottom">{{ worker.blockchain }}</span>
@@ -197,11 +186,11 @@
             {% if plotting.rows|length > 0 %}
             <fieldset>
                 <button form="plotting-form" type="submit" name="action" value="suspend" class="btn btn-outline-success"
-                    id="btnSuspend">Suspend Selected</button>
+                    id="btnSuspend">{{_('Suspend Selected')}}</button>
                 <button form="plotting-form" type="submit" name="action" value="resume" class="btn btn-outline-success"
-                    id="btnResume">Resume Selected</button>
+                    id="btnResume">{{_('Resume Selected')}}</button>
                 <button type="button" data-bs-toggle="modal" data-bs-target="#killModal" class="btn btn-outline-success"
-                    id="btnKill">Kill Selected</button>
+                    id="btnKill">{{_('Kill Selected')}}</button>
             </fieldset>
             {% endif %}
         </div>
@@ -212,7 +201,7 @@
         <div class="row">
             <div class="col" style="margin-top:5px; margin-bottom:5px;">
                 <div class="h-100 p-2 text-white">
-                    <h6 class="display-6 text-center">Plotting Speed - k{{ k_size }} Plots</h6>
+                    <h6 class="display-6 text-center">{{_('Plotting Speed - k%(k_size)s Plots', k_size=k_size)}}</h6>
                 </div>
             </div>
         </div>
@@ -334,11 +323,22 @@
             $('#modal_spinner').modal('show');
         }
         $(document).ready(function () {
-            $('#data').DataTable({ "ordering": false, });
+            $('#data').DataTable({ 
+                "columnDefs": [
+                    { 
+                        targets: [0,4,5,6,7,8,9,10,11,12,13,14,15,16,17], "orderable": false
+                    }
+                ],
+                {% if lang != 'en' %}
+                "language": {
+                    "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+                },
+                {% endif %}
+            });
             $("#btnSuspend").click(function () {
                 $(this).prop("disabled", true);
                 $(this).html(
-                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Suspending...`
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Suspending...')}}`
                 );
                 $('#plotting-form').append('<input type="hidden" id="action" name="action" value="suspend" />');
                 $("#plotting-form").submit();
@@ -346,7 +346,7 @@
             $("#btnResume").click(function () {
                 $(this).prop("disabled", true);
                 $(this).html(
-                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Resuming...`
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Resuming...')}}`
                 );
                 $('#plotting-form').append('<input type="hidden" id="action" name="action" value="resume" />');
                 $("#plotting-form").submit();
@@ -355,7 +355,7 @@
                 $("#btnCancelKill").prop("disabled", true);
                 $('#btnKill').prop("disabled", true);
                 $('#btnKill').html(
-                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Killing...`
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Killing...')}}`
                 );
                 $('#plotting-form').append('<input type="hidden" id="action" name="action" value="kill" />');
                 $("#plotting-form").submit();
@@ -364,7 +364,7 @@
                 $("#btnCancelStart").prop("disabled", true);
                 $(this).prop("disabled", true);
                 $(this).html(
-                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Starting...`
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Starting...')}}`
                 );
                 $('#plotman-form').append('<input type="hidden" id="service" name="service" value="plotting" />');
                 $('#plotman-form').append('<input type="hidden" id="action" name="action" value="start" />');
@@ -374,7 +374,7 @@
                 $("#btnCancelStop").prop("disabled", true);
                 $(this).prop("disabled", true);
                 $(this).html(
-                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Stopping...`
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Stopping...')}}`
                 );
                 $('#plotman-form').append('<input type="hidden" id="service" name="service" value="plotting" />');
                 $('#plotman-form').append('<input type="hidden" id="action" name="action" value="stop" />');

@@ -20,7 +20,7 @@
 </style>
 
 <header class="pb-3 mb-4 border-bottom">
-    <span class="fs-4">Blockchain Summary</span>
+    <span class="fs-4">{{_('Blockchain Summary')}}</span>
 </header>
 
 {% if blockchains.rows|length > 0 %}
@@ -28,11 +28,11 @@
     <table id="data" class="table table-dark">
         <thead>
             <tr>
-                <th scope="col" class="text-success">Blockchain</th>
-                <th scope="col" class="text-success">Status</th>
-                <th scope="col" class="text-success">Peak Height</th>
-                <th scope="col" class="text-success">Peak Time</th>
-                <th scope="col" class="text-success">Updated At</th>
+                <th scope="col" class="text-success">{{_('Blockchain')}}</th>
+                <th scope="col" class="text-success">{{_('Status')}}</th>
+                <th scope="col" class="text-success">{{_('Peak Height')}}</th>
+                <th scope="col" class="text-success">{{_('Peak Time')}}</th>
+                <th scope="col" class="text-success">{{_('Updated At')}}</th>
             </tr>
         </thead>
         <tbody>
@@ -59,7 +59,7 @@
 </form>
 
 <header class="pb-3 mt-4">
-    <span class="fs-4">Blockchain Details</span>
+    <span class="fs-4">{{_('Blockchain Details')}}</span>
 </header>
 
 <nav class="navbar navbar-expand-lg navbar-dark" style="padding-bottom: 0px;">
@@ -84,8 +84,8 @@
 </nav>
 {% else %}
 <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
-    <h6>No blockchains found from any farmers. Not added?</h6>
-    <h6>Try running 'chia show --state' on your farmers to verify.</h6>
+    <h6>{{_('No blockchains found from any farmers. Not added?')}}</h6>
+    <h6>{{_('Try running "chia show --state" on your farmers to verify.')}}</h6>
 </div>
 {% endif %}
 
@@ -96,6 +96,11 @@
 $(document).ready(function () {
     $('#data').DataTable({
         "pageLength": 25,
+        {% if lang != 'en' %}
+        "language": {
+            "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+        },
+        {% endif %}
     });
 })
 </script>

@@ -46,9 +46,9 @@ def execute():
     if blockchain == 'mmx':
         return # Chia+forks only right now
     with app.app_context():
-        #app.logger.info("***************** RESTART STUCK FARMER ******************")
         try:
             if stale_peak(chia_cli.load_blockchain_show(blockchain).text.replace('\r', '').split('\n')):
+                app.logger.info("***************** RESTARTING STUCK FARMER!!! ******************")
                 chia_cli.start_farmer(blockchain)
         except Exception as ex:
             app.logger.info("Skipping stuck farmer check due to exception: {0}".format(str(ex)))

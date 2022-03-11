@@ -17,6 +17,8 @@ RUN apt-get update \
 		iproute2 \
 		iputils-ping \
 		jq \
+		locales \
+		locales-all \
 		logrotate \
 		lsb-release \
 		openssl \

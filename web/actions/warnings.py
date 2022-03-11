@@ -5,6 +5,7 @@
 import datetime
 import os
 
+from flask_babel import _, lazy_gettext as _l
 from flask import flash, url_for
 from configparser import ConfigParser
 
@@ -32,15 +33,6 @@ def check_cold_wallet(msg):
     flash(msg.format(url_for("index")), 'warning')
     return True
 
-WARNINGS = {
-    'cold_wallet': [check_cold_wallet, """
-            <a class="btn btn-primary" style="float:right; margin-left:20px" role="button"href="{0}?cold_wallet=dismiss">Dismiss Warning</a>
-                Machinaris uses an online wallet for farming.  It is strongly recommended that you eventually use a cold wallet for your Chia payout instructions.
-                Tutorial on the <a target="_blank" href="https://github.com/guydavis/machinaris/wiki/Keys#using-a-cold-wallet">wiki</a>.
-                Please add "Setup a Cold Wallet" to your To-Do list!
-                """],
-}
-
 def load_warnings():
     try:
         config = ConfigParser()
@@ -57,6 +49,15 @@ def check_warnings(args):
         return # No warnings on very first Summary page load.
 
     config = load_warnings()
+
+    # declare the warnings at runtime for translation
+    WARNINGS = {
+    'cold_wallet': [check_cold_wallet, \
+            '<a class="btn btn-primary" style="float:right; margin-left:20px" role="button"href="{0}?cold_wallet=dismiss">' + _('Dismiss Warning') +'</a>' + \
+                _("Machinaris uses an online wallet for farming. It is strongly recommended that you use a cold wallet for your payout instructions. Tutorial on the %(wiki_link_open)swiki%(wiki_link_close)s. Please add \"Setup a Cold Wallet\" to your To-Do list!", \
+                    wiki_link_open='<a target="_blank" href="https://github.com/guydavis/machinaris/wiki/Keys#using-a-cold-wallet">', wiki_link_close='</a>')
+        ],
+    }
 
     # Now check if any warnings were dismissed by user
     updated = False

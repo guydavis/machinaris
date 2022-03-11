@@ -1,4 +1,3 @@
-import locale
 import os
 import sys
 import unittest
@@ -8,9 +7,6 @@ from common.utils import converters
 
 class TestRoundBalance(unittest.TestCase):
 
-    def setUp(self):
-        locale.setlocale(locale.LC_ALL, '')
-
     def test_zero(self):
         data = 0
         result = converters.round_balance(data)
@@ -19,12 +15,12 @@ class TestRoundBalance(unittest.TestCase):
     def test_neg_one(self):
         data = -1
         result = converters.round_balance(data)
-        self.assertEqual(result, "-1.0")
+        self.assertEqual(result, "-1")
 
     def test_plus_one(self):
         data = 1
         result = converters.round_balance(data)
-        self.assertEqual(result, "1.0")
+        self.assertEqual(result, "1")
 
     def test_tenths(self):
         data = 0.2
@@ -44,22 +40,22 @@ class TestRoundBalance(unittest.TestCase):
     def test_tenthousandths(self):
         data = 0.0002
         result = converters.round_balance(data)
-        self.assertEqual(result, "0.0002")
+        self.assertEqual(result, "0")
 
     def test_hundredthousandths(self):
         data = 0.00002
         result = converters.round_balance(data)
-        self.assertEqual(result, "0.0")
+        self.assertEqual(result, "0")
     
     def test_millionths(self):
         data = 0.000002
         result = converters.round_balance(data)
-        self.assertEqual(result, "0.0")
+        self.assertEqual(result, "0")
 
     def test_singledigit(self):
         data = 2
         result = converters.round_balance(data)
-        self.assertEqual(result, "2.0")
+        self.assertEqual(result, "2")
 
     def test_thousand(self):
         data = 2000

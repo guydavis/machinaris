@@ -85,7 +85,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.cryptodoge/farmer_ca/private_ca.crt ]; then
+    if [[ -f /root/.cryptodoge/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       cryptodoge init -c /root/.cryptodoge/farmer_ca 2>&1 > /root/.cryptodoge/mainnet/log/init.log
       chmod 755 -R /root/.cryptodoge/mainnet/config/ssl/ &> /dev/null
       cryptodoge init --fix-ssl-permissions > /dev/null 

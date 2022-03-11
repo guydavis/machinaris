@@ -85,7 +85,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.shibgreen/farmer_ca/private_ca.crt ]; then
+    if [[ -f /root/.shibgreen/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       shibgreen init -c /root/.shibgreen/farmer_ca 2>&1 > /root/.shibgreen/mainnet/log/init.log
       chmod 755 -R /root/.shibgreen/mainnet/config/ssl/ &> /dev/null
       shibgreen init --fix-ssl-permissions > /dev/null 

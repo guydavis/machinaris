@@ -23,6 +23,10 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Toplevel](https://github.com/and-semakin/marshmallow-toplevel): Used for list of objects sent to REST API.
 * [DataTables.js](https://datatables.net/): Filter/search/pagination of dynamic tables, as per [this tutorial](https://blog.miguelgrinberg.com/post/beautiful-interactive-tables-for-your-flask-templates).
 * [Charts.js](https://www.chartjs.org/): dynamic charting library.
+* [Flask-Babel](https://pythonhosted.org/Flask-BabelEx/): internationaliztion and localization, as per [this tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xiii-i18n-and-l10n).
+* [Leaflet](https://leafletjs.com/): Web mapping toolkit.  Fantastic maps, easy to use!
+* [Maxmind](https://maxmind.com/): Geolocation API for mapping IP addresses of peer connections.
+* [Mapbox](https://mapbox.com): Nice looking map tiles for use with Leaflet on the Connections page map.
 
 ## Blockchains
 * [BTCgreen](https://github.com/BTCgreen-Network/btcgreen-blockchain)
@@ -40,8 +44,10 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Stor](https://github.com/Stor-Network/stor-blockchain)
 
 ## Other Resources
-* [Blockchain DB Downloads](https://chiaforksblockchain.com/) - from Maize
+* [FD-CLI](https://github.com/Flora-Network/flora-dev-cli) - script to regularly recover 7/8 rewards 
+* [Chia DB Downloads](https://www.chia-database.com/) - for Chia blockchain database
 * [All the Blocks](https://alltheblocks.net/) - blockchain, wallet, and pricing info
+* [Coin Gecko](https://coingecko.com/) - fiat currency exchange info
 
 ## Testers and Developers
 
@@ -90,6 +96,8 @@ A big thanks to all that contributed with dev and test including:
 * bafff
 * tjb_altf4
 * halfroom (aka Sagittarius)
+* @antcasq (Antonio Casqueiro)
+* @fabriziocacicia
 
 ## Trademark Notice
 CHIA NETWORK INC, CHIA™, the CHIA BLOCKCHAIN™, the CHIA PROTOCOL™, CHIALISP™ and the “leaf Logo” (including the leaf logo alone when it refers to or indicates Chia), are trademarks or registered trademarks of Chia Network, Inc., a Delaware corporation.  *There is no affliation between this Machinaris project and the main Chia Network project.*

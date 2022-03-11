@@ -2,11 +2,57 @@
 
 {% block content %}
 
-<div class="position-relative">
-    <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -8px;">
-      <a href="https://github.com/guydavis/machinaris/wiki/Summary" target="_blank">
-        <i class="fs-4 bi-question-circle"></i>
-      </a>
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+      {% else %}
+      <div class="alert alert-{{ category }}" role="alert">
+        {% endif %}
+        {{ message|safe }}
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% endwith %}
+    </div>
+
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3 modal-sm">
+      <div class="modal-content bg-dark">
+        <div class="modal-header bg-dark">
+          <h5 class="modal-title" id="settingsModalLabel">{{_('Settings')}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-dark">
+          <form method="POST" id="settings-form">
+            <div class="mb-3">
+              <label for="local_currency" class="col-form-label">{{_('Local Currency:')}}</label>
+              <select type="text" class="form-control" id="local_currency_field" name="local_currency">
+                {% for rate in exchange_rates %}
+                  {% if exchange_rates[rate]['type'] == 'fiat' %}
+                    <option {% if local_currency == rate %} selected {% endif %}
+                        value="{{rate}}">{{exchange_rates[rate]['name']}} ({{exchange_rates[rate]['unit']}})</option>
+                    {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">{{_('Cancel')}}</button>
+          <button type="button" class="btn btn-outline-success" id="btnSave">{{_('Save')}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="position-relative">
+    <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -20px; margin-right: -8px;">
+      <a href="#" title="{{_('Settings')}}" data-bs-toggle="modal" data-bs-target="#settingsModal" target="_blank"><i class="fs-4 bi-gear"></i></a>
+      &nbsp;
+      <a href="https://github.com/guydavis/machinaris/wiki/Summary" target="_blank"><i class="fs-4 bi-question-circle"></i></a>
     </div>
   </div>
 
@@ -24,18 +70,18 @@
     <table id="data" class="table table-dark">
         <thead>
             <tr>
-                <th scope="col" class="text-success">Blockchain</th>
-                <th scope="col" class="text-success">Status</th>
-                <th scope="col" class="text-success">Height</th>
-                <th scope="col" class="text-success">Plots</th>
-                <th scope="col" class="text-success">Workers</th>
-                <th scope="col" class="text-success">Max Resp.</th>
-                <th scope="col" class="text-success">Partials</th>
-                <th scope="col" class="text-success">ETW</th>
+                <th scope="col" class="text-success">{{_('Blockchain')}}</th>
+                <th scope="col" class="text-success">{{_('Status')}}</th>
+                <th scope="col" class="text-success">{{_('Height')}}</th>
+                <th scope="col" class="text-success">{{_('Plots')}}</th>
+                <th scope="col" class="text-success">{{_('Workers')}}</th>
+                <th scope="col" class="text-success">{{_('Max Resp.')}}</th>
+                <th scope="col" class="text-success">{{_('Partials')}}</th>
+                <th scope="col" class="text-success">{{_('ETW')}}</th>
                 <!--th scope="col" class="text-success">Farmed</th-->
-                <th scope="col" class="text-success">Wallet</th>
-                <th scope="col" class="text-success">EDV</th>
-                <th scope="col" class="text-success">EDV US</th>
+                <th scope="col" class="text-success">{{_('Wallet')}}</th>
+                <th scope="col" class="text-success">{{_('EDV')}}</th>
+                <th scope="col" class="text-success">{{_('EDV')}} {{local_cur_sym|upper}}</th>
                 <!--th scope="col" class="text-success">Drives</th-->
                 <!--th scope="col" class="text-success">Effort</th-->
             </tr>
@@ -46,13 +92,16 @@
                 <td>{{summary.blockchain}}</td>
                 <td>
                     {% if summary.status == 'Offline' %}
-                      <i class="bi-dash-circle text-danger"></i>
+                      <i class="bi-dash-circle text-danger"></i> {{_('Offline')}}
                     {% elif summary.status.lower().startswith('synced') %}
-                        <i class="bi-check-circle text-success"></i>
+                        <i class="bi-check-circle text-success"></i> {{_('Synced')}}
+                    {% elif summary.status.lower().startswith('syncing') %}
+                        <i class="bi-check-circle text-warning"></i> {{_('Syncing')}}
+                    {% elif summary.status.lower().startswith('not synced') %}
+                        <i class="bi-check-circle text-danger"></i> {{_('Not Synced')}}
                     {% else %}
-                      <i class="bi-exclamation-triangle text-warning"></i>
+                      <i class="bi-exclamation-triangle text-warning"></i> {{summary.status}}
                     {% endif %} &nbsp;
-                    {{summary.status}}
                 </td>
                 <td>{{summary.height}}</td>
                 <td>{{summary.plots}}</td>
@@ -63,7 +112,7 @@
                 <!--td>{{summary.farmed}}</td-->
                 <td>{{summary.wallet}}</td>
                 <td>{{summary.edv}}</td>
-                <td>{{summary.edv_usd}}</td>
+                <td>{{summary.edv_fiat}}</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -72,8 +121,8 @@
 
 {% else %}
 <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
-    <h6>No blockchains found from any farmers. Just starting up?</h6>
-    <h6>Please allow at least 15 minutes for blockchains to get started.</h6>
+    <h6>{{_('No blockchains found from any farmers. Just starting up?')}}</h6>
+    <h6>{{_('Please allow at least 15 minutes for blockchains to get started.')}}</h6>
 </div>
 {% endif %}
 
@@ -82,6 +131,14 @@
 {% block scripts %}
 <script>
 $(document).ready(function () {
+    $("#btnSave").click(function () {
+        $("#btnCancel").prop("disabled", true);
+        $(this).prop("disabled", true);
+        $(this).html(
+            `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...`
+        );
+        $("#settings-form").submit();
+    });
     $('#data').DataTable({
         "pageLength": 25,
         "columnDefs": [
@@ -132,6 +189,11 @@ $(document).ready(function () {
                 }
             },
         ],
+        {% if lang != 'en' %}
+        "language": {
+            "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+        },
+        {% endif %}
     });
 })
 </script>

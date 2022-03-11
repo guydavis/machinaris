@@ -29,16 +29,16 @@
     <div class="modal-dialog bg-dark rounded-3">
         <div class="modal-content bg-dark">
             <div class="modal-header bg-dark">
-                <h5 class="modal-title" id="confirmModalLabel">Confirm Pool Change</h5>
+                <h5 class="modal-title" id="confirmModalLabel">{{_('Confirm Pool Change')}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-dark">
-                This action will switch your current pooling selection, possibly resulting in a small charge (few mojos) against your wallet. Continue anyway?
+                {{_('This action will switch your current pooling selection, possibly resulting in a small charge (few mojos) against your wallet. Continue anyway?')}}
             </div>
             <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{_('Cancel')}}</button>
                 <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal"
-                    id="btnConfirmSave">Save</button>
+                    id="btnConfirmSave">{{_('Save')}}</button>
             </div>
         </div>
     </div>
@@ -81,10 +81,11 @@
                     <form method="POST" id="{{blockchain}}-pooling-form">
                     <div class="p-1 mb-4 bg-light border rounded-3">
                         <div class="container m-4">
-                            <p>Join a pool and get consistent farming rewards. The average returns are the same,<br />
-                                but it is much less volatile. You can easily switch pools without having to re-plot.</p>
+                            {% autoescape false %}
+                            <p>{{_('Join a pool and get consistent farming rewards. The average returns are the same, %(break)sbut it is much less volatile. You can easily switch pools without having to re-plot.', break='<br/>')}}</p>
+                            {% endautoescape %}
                             {% if pool_configs[blockchain].warnings|length > 0 %}
-                            <p>ERROR: Unable to join a pool because:</p>
+                            <p>{{_('ERROR: Unable to join a pool because:')}}</p>
                             <ul>
                                 {% for warning in pool_configs[blockchain].warnings %}
                                 <li>{{ warning|safe }}</li>
@@ -103,35 +104,35 @@
                                 </div>
                                 {% endif %}
                                 <div class="col-12">
-                                    <input class="form-check-input" type="radio" name="{{blockchain}}-choice" 
-                                        id="{{blockchain}}-{{plotnft.wallnet_num}}-self_pool" value="self" 
+                                    <input class="form-check-input" type="radio" name="{{blockchain}}-choice-{{plotnft.wallet_num}}" 
+                                        id="{{blockchain}}-{{plotnft.wallet_num}}-self_pool" value="self" 
                                     {% if not plotnft.current_pool_url() %} checked {% endif %}/>
                                     <label class="form-check-label" for="self_pool">
-                                        Self pool. When you win a block, you will earn rewards.
+                                        {{_('Self pool. When you win a block, you will earn rewards.')}}
                                     </label>
                                 </div>
                             </div>
                             <div class="row mt-1 g-3">
                                 <div class="col-lg-2 d-flex align-items-center">
-                                    <input class="form-check-input" type="radio" name="{{blockchain}}-choice" 
-                                        id="{{blockchain}}-{{plotnft.wallnet_num}}-join_pool" value="join"
+                                    <input class="form-check-input" type="radio" name="{{blockchain}}-choice-{{plotnft.wallet_num}}" 
+                                        id="{{blockchain}}-{{plotnft.wallet_num}}-join_pool" value="join"
                                     {% if plotnft.current_pool_url() %} checked {% endif %}/>
                                     &nbsp;
                                     <label class="form-check-label" for="join_pool">
-                                    {% if plotnft.current_pool_url() %} Connected to pool: {% else %} Connect to pool: {% endif %} 
+                                    {% if plotnft.current_pool_url() %} {{_('Connected to pool:')}} {% else %} {{_('Connect to pool:')}} {% endif %} 
                                     </label>
                                 </div>
                                 <div class="col-lg-3">
-                                    <input class="form-control" id="{{blockchain}}-{{plotnft.wallnet_num}}-pool_url" name="{{blockchain}}-pool_url" type="text"
+                                    <input class="form-control" id="{{blockchain}}-{{plotnft.wallet_num}}-pool_url" name="{{blockchain}}-pool_url" type="text"
                                         placeholder="https://myfave.pool.org" 
                                         {% if plotnft.current_pool_url() %} value="{{ plotnft.current_pool_url() }}" {% endif %}>
                                 </div>
                                 <div class="col-lg-1"></div>
                                 <div class="col-auto d-flex align-items-center">
-                                    <a href="{{pool_configs[blockchain].links.compare_pools}}" target='_blank' class="text-white">Compare Pools</a>
+                                    <a href="{{pool_configs[blockchain].links.compare_pools}}" target='_blank' class="text-white">{{_('Compare Pools')}}</a>
                                     &nbsp;
                                     {% if pool_configs[blockchain].links.get_mojos %} |&nbsp;
-                                    <a href="{{pool_configs[blockchain].links.get_mojos}}" target="_blank" class="text-white">Get Mojos</a>
+                                    <a href="{{pool_configs[blockchain].links.get_mojos}}" target="_blank" class="text-white">{{_('Get Mojos')}}</a>
                                     {% endif %}
                                 </div>
                                 <input type="hidden" name="blockchain" value="{{blockchain}}"/>
@@ -153,11 +154,11 @@
                     <div class="row g-3">
                         <div class="col-sm">
                             <button type="button" data-bs-toggle="modal" data-bs-target="#confirmModal"
-                                class="btn btn-outline-success m-2 btnSave" id="{{blockchain}}-btnSave">Save Changes</button>
+                                class="btn btn-outline-success m-2 btnSave" id="{{blockchain}}-btnSave">{{_('Save Changes')}}</button>
                         </div>
                         <div class="col-sm">
                             <button type="button" onclick='viewLogs("{{fullnodes_by_blockchain[blockchain].hostname}}","{{blockchain}}");return false;'
-                                class="btn btn-outline-success m-2" id="{{blockchain}}-btnLog">View Log</button>
+                                class="btn btn-outline-success m-2" id="{{blockchain}}-btnLog">{{_('View Log')}}</button>
                         </div>
                     </div>
                     </form>
@@ -168,8 +169,8 @@
   </nav>
   {% else %}
   <div class="text-center" style="padding-top:100 px; padding-bottom: 0px">
-    <h6>No wallets found yet.  Perhaps this is a brand-new installation? If so, please wait for complete start-up.</h6>
-    <h6>For more on Pooling, see the Machinaris <a href="https://github.com/guydavis/machinaris/wiki/Pooling" target="_blank">wiki.</a></h6>
+    <h6>{{_('No wallets found yet.  Perhaps this is a brand-new installation? If so, please wait for complete start-up.')}}</h6>
+    <h6>{{_('For more on Pooling, see the Machinaris')}} <a href="https://github.com/guydavis/machinaris/wiki/Pooling" target="_blank">{{_('wiki')}}.</a></h6>
   </div>
   {% endif %}
   </form>
@@ -181,7 +182,7 @@
             $("#btnConfirmSave").click(function () {
                 $('.btnSave').prop("disabled", true);
                 $('.btnSave').html(
-                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...`
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Saving...')}}`
                 );
                 var selected_blockchain = $(".nav-link.active").attr('data-bs-blockchain');
                 $('#' + selected_blockchain + '-pooling-form').submit();
@@ -193,7 +194,7 @@
             var width = 900;
             var top = (screen.height - height) / 2;
             var left = (screen.width - width) / 2;
-            window.open("{{ url_for('logs') }}?log=pooling&hostname=" + hostname + "&blockchain=" + blockchain, 'PlotNFT Log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+            window.open("{{ url_for('logs') }}?log=pooling&hostname=" + hostname + "&blockchain=" + blockchain, '{{_('PlotNFT Log on ')}}' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
         }
     </script>
     {% endblock %}

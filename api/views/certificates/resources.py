@@ -57,12 +57,12 @@ class Certificates(MethodView):
         elif type == "maize":
             blockchain = "maize"
             dir = "/root/.maize/mainnet/config/ssl/ca"
-        elif type == "silicoin":
-            blockchain = "silicoin"
-            dir = "/root/.silicoin/mainnet/config/ssl/ca"
         elif type == "shibgreen":
             blockchain = "shibgreen"
             dir = "/root/.shibgreen/mainnet/config/ssl/ca"
+        elif type == "silicoin":
+            blockchain = "silicoin"
+            dir = "/root/.sit/mainnet/config/ssl/ca"
         elif type == "stai":
             blockchain = "staicoin"
             dir = "/root/.stai/mainnet/config/ssl/ca"

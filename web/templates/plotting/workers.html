@@ -6,18 +6,15 @@
     <div class="modal-dialog bg-dark rounded-3">
         <div class="modal-content bg-dark">
             <div class="modal-header bg-dark">
-                <h5 class="modal-title" id="startModalLabel">Start Archiving</h5>
+                <h5 class="modal-title" id="startModalLabel">{{_('Start Archiving')}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-dark">
-                This action will start Plotman archiving from the configured 'dst' folder. Completed
-                plots will be disributed locally or transferred remotely. Continue?
+                {{_('This action will start Plotman archiving from the configured dst folder. Completed plots will be disributed locally or transferred remotely. Continue?')}}
             </div>
             <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStart">Cancel</button>
-                <button type="button" class="btn btn-outline-success" id="btnConfirmStart">
-                    Start
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStart">{{_('Cancel')}}</button>
+                <button type="button" class="btn btn-outline-success" id="btnConfirmStart">{{_('Start')}}</button>
             </div>
         </div>
     </div>
@@ -27,18 +24,15 @@
     <div class="modal-dialog bg-dark rounded-3">
         <div class="modal-content bg-dark">
             <div class="modal-header bg-dark">
-                <h5 class="modal-title" id="stopModalLabel">Stop Archiving</h5>
+                <h5 class="modal-title" id="stopModalLabel">{{_('Stop Archiving')}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-dark">
-                This action will stop Plotman archiving from the configured 'dst' folder, preventing further completed plot transfers.
-                Continue?
+                {{_('This action will stop Plotman archiving from the configured dst folder, preventing further completed plot transfers. Continue?')}}
             </div>
             <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStop">Cancel</button>
-                <button type="button" class="btn btn-outline-success" id="btnConfirmStop">
-                    Stop
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStop">{{_('Cancel')}}</button>
+                <button type="button" class="btn btn-outline-success" id="btnConfirmStop">{{_('Stop')}}</button>
             </div>
         </div>
     </div>
@@ -48,16 +42,15 @@
     <div class="modal-dialog bg-dark rounded-3">
         <div class="modal-content bg-dark">
             <div class="modal-header bg-dark">
-                <h5 class="modal-title" id="disabledModalLabel">Worker Offline</h5>
+                <h5 class="modal-title" id="disabledModalLabel">{{_('Worker Offline')}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-dark">
-                This worker is not currently configured for Plotman <a target="_blank" 
-                href="https://github.com/guydavis/machinaris/wiki/Plotman#archiving">archiving</a> to enable local 
-                or remote transfer of completed plots.  Please visit the Settings | Plotting page to configure this worker.
+                {{_('This worker is not currently configured for Plotman %(wiki_link_open)sarchiving%(wiki_link_open)s to enable local or remote transfer of completed plots.  Please visit the Settings | Plotting page to configure this worker.', 
+                wiki_link_open='<a target="_blank" href="https://github.com/guydavis/machinaris/wiki/Plotman#archiving">', wiki_like_close='</a>')}}
             </div>
             <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnOk">OK</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnOk">{{_('OK')}}</button>
             </div>
         </div>
     </div>
@@ -67,15 +60,14 @@
     <div class="modal-dialog bg-dark rounded-3">
         <div class="modal-content bg-dark">
             <div class="modal-header bg-dark">
-                <h5 class="modal-title" id="offlineModalLabel">Worker Offline</h5>
+                <h5 class="modal-title" id="offlineModalLabel">{{_('Worker Offline')}}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-dark">
-                This worker is not currently online and responding to pings from the controller.  Please
-                check the Workers page and bring the system back online.
+                {{_('This worker is not currently online and responding to pings from the controller.  Please check the Workers page and bring the system back online.')}}
             </div>
             <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnOk">OK</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnOk">{{_('OK')}}</button>
             </div>
         </div>
     </div>
@@ -98,17 +90,17 @@
     <div class="container-fluid">
         <ul class="nav nav-tabs bg-dark">
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('plotting_jobs') }}">Jobs</a>
+                <a class="nav-link" href="{{ url_for('plotting_jobs') }}">{{_('Jobs')}}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{ url_for('plotting_workers') }}">Workers</a>
+                <a class="nav-link active" aria-current="page" href="{{ url_for('plotting_workers') }}">{{_('Workers')}}</a>
             </li>
         </ul>
         <form method="POST" id="plotman-form" style="padding-bottom: 10px;">
             <input type="hidden" id="hostname" name="hostname" />
             <input type="hidden" id="blockchain" name="blockchain" />
             <fieldset>
-                <b style="vertical-align: bottom; font-weight: 500">Archiving: </b>
+                <b style="vertical-align: bottom; font-weight: 500">{{_('Archiving')}}: </b>
                 {% for plotter in plotters %}
                 <div class="btn-group">
                     <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
@@ -124,16 +116,16 @@
                                 href="#" {% 
                                 if worker.archiving_status == 'disabled' %}
                                 data-bs-toggle="modal" data-bs-target="#disabledModal">
-                                <i class="fs-4 bi-dash-circle text-warning" title="Archiving is disabled.  See Settings | Plotting page."></i>
+                                <i class="fs-4 bi-dash-circle text-warning" title="{{_('Archiving is disabled.  See Settings | Plotting page.')}}"></i>
                                 {% elif worker.archiving_status == 'offline' %}
                                 data-bs-toggle="modal" data-bs-target="#offlineModal">
-                                <i class="fs-4 bi-dash-circle text-danger" title="Worker is offline."></i>
+                                <i class="fs-4 bi-dash-circle text-danger" title="{{_('Worker is offline.')}}"></i>
                                 {% elif worker.archiving_status == 'running' %}
                                 data-bs-toggle="modal" data-bs-target="#stopModal">
-                                <i class="fs-4 bi-pause-circle text-success" title="Stop Archiving"></i>
+                                <i class="fs-4 bi-pause-circle text-success" title="{{_('Stop Archiving')}}"></i>
                                 {% else %}
                                 data-bs-toggle="modal" data-bs-target="#startModal">
-                                <i class="fs-4 bi-play-circle text-success" title="Start Archiving"></i>
+                                <i class="fs-4 bi-play-circle text-success" title="{{_('Start Archiving')}}"></i>
                                 {% endif %}
                                 &nbsp;
                                 <span class="align-text-bottom">{{ worker.blockchain }}</span>

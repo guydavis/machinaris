@@ -2,15 +2,13 @@
 # Common utility methods
 #
 
+import babel
+import flask_babel
 import json
 import math
 import os
 import re
 import traceback
-
-#from flask_babel import format_number
-
-BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/dbs/blockchain_prices_cache.json'
 
 def sizeof_fmt(num, suffix='B'):
     for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
@@ -62,28 +60,22 @@ def convert_date_for_luxon(datestr):
     return "{0}-{1}-{2}T{3}".format(year, month, day, time)
 
 def round_balance(value):
-    if abs(value) < 10 and abs(value) >= 1:
-        return "%.1f"% round(value, 2)
-    elif value >= 1000:
-        return "{:,}".format(int(value))
-    elif value > 1:
-        return f"{value:n}"
-    return str(round(value, 4))
-    #return format_number(value)
-
-def to_usd(blockchain, coins):
-    if os.path.exists(BLOCKCHAIN_PRICES_CACHE_FILE):
-        try:
-            with open(BLOCKCHAIN_PRICES_CACHE_FILE) as f:
-                data = json.load(f)
-                if blockchain in data:
-                    if isinstance(coins, str):
-                        coins = float(coins.replace(',',''))
-                    return "${:,.2f}".format(float(data[blockchain]) * coins)
-                return ''
-        except Exception as ex:
-            print("Unable to convert to $USD because {0}".format(str(ex)))
-    return ''
+    # First round the coin balance
+    if abs(value) >= 1000:
+        value = round(value, 0)
+    elif abs(value) >= 100:
+        value = round(value, 1)
+    elif abs(value) >= 10:
+        value = round(value, 2)
+    elif abs(value) >= 1:
+        value = round(value, 3)
+    else:
+        value = round(value, 4)
+    # Then return the locale-specific format as str
+    if flask_babel.get_locale(): # Regular web request
+        return flask_babel.format_decimal(value)  
+    else: # Workaround for inability to test flask-babel without a request
+        return babel.numbers.format_decimal(value)
 
 ##################################################################################################
 #

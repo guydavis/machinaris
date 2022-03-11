@@ -1,0 +1,65 @@
+# Italian translations for Machinaris.
+# Copyright (C) 2022 Guy Davis
+# This file is distributed under the same license as the Machinaris project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Machinaris VERSION\n"
+"Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
+"Creation-Date: 2022-02-16 15:00-0700\n"
+"POT-Creation-Date: 2022-03-09 13:07-0700\n"
+"PO-Revision-Date: 2022-02-15 14:29-0700\n"
+"Last-Translator: FULL NAME\n"
+"Language: it\n"
+"Language-Team: it <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: commands/chia_cli.py:66
+msgid "Updated config.yaml failed validation!"
+msgstr "Validazione del config.yaml aggiornato fallita."
+
+#: commands/pools_cli.py:68
+msgid "No requested pool modifications were sent. Current settings are unchanged."
+msgstr ""
+"Non è stata inviata alcuna richiesta di modifica di pool. Le impostazioni"
+" attuali sono invariate."
+
+#: commands/pools_cli.py:151
+msgid ""
+"Successfully left pool, switching to self-pooling. Please wait a few "
+"minutes or more to complete. DO NOT immediately re-submit your request. "
+"View the log for details."
+msgstr ""
+"Hai lasciato il pool con successo, passando al self pooling. Attendi "
+"qualche minuto affinché il passaggio sia completato. NON reinviare "
+"immediatamente la tua richiesta. Vedi i log per i dettagli."
+
+#: commands/pools_cli.py:195
+#, python-format
+msgid ""
+"Successfully joined %(pool_url)s pool by creating Chia NFT.  Please wait "
+"a few minutes or more to complete. DO NOT immediately re-submit your "
+"request. Be patient! View the log for details."
+msgstr ""
+"Ti sei unito con successo al pool %(pool_url)s creando un Chia NFT. "
+"Attendi qualche minuto affinché il passaggio sia completato. NON "
+"reinviare immediatamente la tua richiesa. Abbi pazienza! Vedi i log per i"
+" dettagli."
+
+#: commands/pools_cli.py:224
+msgid ""
+"Successfully created a NFT for self-pooling.  Please wait a few minutes "
+"or more to complete. DO NOT immediately re-submit your request. Be "
+"patient! View the log for details."
+msgstr ""
+"Hai creato con successo un NFT per il self pooling. NON reinviare "
+"immediatamente la tua richiesta. Vedi i log per i dettagli."
+
+#: views/ping/resources.py:28
+msgid "Pong!"
+msgstr ""
+

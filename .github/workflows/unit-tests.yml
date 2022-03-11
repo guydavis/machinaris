@@ -5,13 +5,18 @@ on:
     branches:
       - 'develop'
 
+env:
+  LANG: "en_US.UTF-8"
+  LANGUAGE: "en_US:en"
+  LC_ALL: "en_US.UTF-8"
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.9
-        uses: actions/setup-python@v2.3.1
+        uses: actions/setup-python@v3
         with:
           python-version: 3.9
       - name: Install dependencies

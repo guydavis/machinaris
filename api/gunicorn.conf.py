@@ -11,7 +11,8 @@ def on_starting(server):
         status_plots, status_challenges, status_wallets, status_blockchains, \
         status_connections, status_keys, status_alerts, status_controller, \
         status_plotnfts, status_pools, status_partials
-    from api.schedules import stats_disk, stats_farm, nft_recover, plots_check, log_rotate, db_backup, restart_stuck_farmer
+    from api.schedules import stats_disk, stats_farm, nft_recover, plots_check, \
+        log_rotate, db_backup, restart_stuck_farmer, geolocate_peers
     from common.config import globals
 
     from api.commands import websvcs
@@ -71,9 +72,11 @@ def on_starting(server):
         scheduler.add_job(func=status_controller.update, name="controller", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=websvcs.get_prices, name="get_prices", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', hours=12)
+        scheduler.add_job(func=geolocate_peers.execute, name="geolocate_peers", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        
 
     # Testing only
-    #scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', seconds=120) # Test immediately
+    #scheduler.add_job(func=websvcs.get_prices, name="get_prices", trigger='interval', seconds=10) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()

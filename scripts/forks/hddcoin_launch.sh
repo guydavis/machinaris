@@ -87,7 +87,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       fi
       rm -f /tmp/certs.zip 
     fi
-    if [ -f /root/.hddcoin/farmer_ca/private_ca.crt ]; then
+    if [[ -f /root/.hddcoin/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       hddcoin init -c /root/.hddcoin/farmer_ca 2>&1 > /root/.hddcoin/mainnet/log/init.log
       chmod 755 -R /root/.hddcoin/mainnet/config/ssl/ &> /dev/null
       hddcoin init --fix-ssl-permissions > /dev/null 

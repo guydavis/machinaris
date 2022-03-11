@@ -4,8 +4,8 @@
 #
 
 CHIA_BRANCH=$1
-# On 2021-11-06
-HASH=b74a3f3849cadeece2fac3efa3cb55d7d3a0647f
+# On 2022-03-08
+HASH=0e7cc5a88393ef02b4057dd4bf894be2e73bc00b
 
 if [ -z ${CHIA_BRANCH} ]; then
 	echo 'Skipping Chia install as not requested.'
@@ -15,7 +15,5 @@ else
 	git submodule update --init mozilla-ca 
 	git checkout $HASH
 	chmod +x install.sh
-	# 2022-01-30: pip broke due to https://github.com/pypa/pip/issues/10825
-	sed -i 's/upgrade\ pip$/upgrade\ "pip<22.0"/' install.sh
 	/usr/bin/sh ./install.sh
 fi

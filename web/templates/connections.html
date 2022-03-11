@@ -18,23 +18,94 @@
         {% endwith %}
     </div>
 
-    <div class="position-relative">
-        <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -8px;">
-          <a href="https://github.com/guydavis/machinaris/wiki/Workers" target="_blank">
-            <i class="fs-4 bi-question-circle"></i>
-          </a>
+    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog bg-dark rounded-3 modal-sm">
+          <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+              <h5 class="modal-title" id="settingsModalLabel">{{_('Settings')}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+              <form method="POST" id="settings-form">
+                <div class="mb-3">
+                    <a style='float:right' href="https://github.com/guydavis/machinaris/wiki/Connections#maxmind" target="_blank">
+                        <i class="fs-4 bi-question-circle"></i>
+                    </a>
+                    <label for="maxmind_account" class="col-form-label">{{_('Maxmind Account (Required):')}}</label>
+                    <input type="text" class="form-control" id="maxmind_account_field" name="maxmind_account" value="{{maxmind_license.account}}" />
+                    <a style='float:right' href="https://github.com/guydavis/machinaris/wiki/Connections#maxmind" target="_blank">
+                        <i class="fs-4 bi-question-circle"></i>
+                    </a>
+                    <label for="maxmind_license_key" class="col-form-label">{{_('Maxmind License Key (Required):')}}</label>
+                    <input type="text" class="form-control" id="maxmind_license_key_field" name="maxmind_license_key" value="{{maxmind_license.license_key}}"/>
+                    <a style='float:right' href="https://github.com/guydavis/machinaris/wiki/Connections#mapbox" target="_blank">
+                        <i class="fs-4 bi-question-circle"></i>
+                    </a>
+                    <label for="mapbox_access_token" class="col-form-label">{{_('Mapbox Access Token (Optional):')}}</label>
+                    <input type="text" class="form-control" id="mapbox_access_token_field" name="mapbox_access_token" value="{{mapbox_license.access_token}}"/>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" id="btnCancelSettings" data-bs-dismiss="modal">{{_('Cancel')}}</button>
+              <button type="button" class="btn btn-outline-success" id="btnSaveSettings">{{_('Save')}}</button>
+            </div>
+          </div>
         </div>
       </div>
+
+    <div class="position-relative">
+        <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -20px; margin-right: -8px;">
+            <a href="#" title="{{_('Settings')}}" data-bs-toggle="modal" data-bs-target="#settingsModal" target="_blank"><i class="fs-4 bi-gear"></i></a>
+            &nbsp;
+            <a href="https://github.com/guydavis/machinaris/wiki/Connections" target="_blank"><i class="fs-4 bi-question-circle"></i></a>
+        </div>
+    </div>
 
     <style>
         a.active.nav-link {
             background-color: #3d3f42 !important
         }
-
         button.active.nav-link {
             background-color: #3d3f42 !important
         }
+        #map { 
+            height: 500px; 
+        }
+        {% for blockchain in marker_hues.keys() %}
+        img.hue_{{blockchain}} { filter: hue-rotate({{marker_hues[blockchain]}}deg); }
+        {% endfor %}
     </style>
+
+{% if maxmind_license %}
+
+<header class="pb-3">
+    <div class="row justify-content-between">
+        <div class="col-3 fs-4">{{_('Connections Map')}}</div>
+        <div class="col-3 mt-2">
+            <div class="btn-group" style="z-index: 2000;">
+                <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false" id="blockchain_btn">Blockchain
+                </button>
+                <ul class="dropdown-menu bg-dark btn-outline-success">
+                {% for blockchain in marker_hues.keys() %}
+                    <li><a class="dropdown-item text-white text-decoration-none"  href="#" id="{{blockchain}}_toggle"><img 
+                        src="{{ url_for('static', filename='3rd_party/images/marker-icon.png') }}" 
+                        class="hue_{{blockchain}}" style="padding-left:3px; height:25px;" /> {{blockchain|capitalize}}</a></li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div id="map"></div>
+
+<header class="pb-3 mt-4">
+    <span class="fs-4">{{_('Connection Details')}}</span>
+</header>
+
+{% endif %}
 
     {% if connections.rows|length > 0 %}
     <nav class="navbar navbar-expand-lg navbar-dark" style="padding-bottom: 0px; display: block">
@@ -67,14 +138,17 @@
                                 <thead>
                                     <tr>
                                         <th scope="col" class="text-success"></th>
-                                        <th scope="col" class="text-success">Type</th>
-                                        <th scope="col" class="text-success">IP Address</th>
-                                        <th scope="col" class="text-success">Ports</th>
-                                        <th scope="col" class="text-success">Node ID</th>
-                                        <th scope="col" class="text-success">SB Height</th>
-                                        <th scope="col" class="text-success">Last Connect</th>
-                                        <th scope="col" class="text-success">MiB Up</th>
-                                        <th scope="col" class="text-success">MiB Down</th>
+                                        <th scope="col" class="text-success">{{_('Type')}}</th>
+                                        <th scope="col" class="text-success">{{_('IP Address')}}</th>
+                                        {% if maxmind_license %}
+                                        <th scope="col" class="text-success">{{_('City')}}</th>
+                                        <th scope="col" class="text-success">{{_('Country')}}</th>
+                                        {% endif %}
+                                        <th scope="col" class="text-success">{{_('Ports')}}</th>
+                                        <th scope="col" class="text-success">{{_('SB Height')}}</th>
+                                        <th scope="col" class="text-success">{{_('Last Connect')}}</th>
+                                        <th scope="col" class="text-success">{{_('MiB Up')}}</th>
+                                        <th scope="col" class="text-success">{{_('MiB Down')}}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -88,8 +162,11 @@
                                         </td>
                                         <td>{{row.type}}</td>
                                         <td>{{row.ip}}</td>
+                                        {% if maxmind_license %}
+                                        <td>{{row.city}}</td>
+                                        <td>{{row.country}}</td>
+                                        {% endif %}
                                         <td>{{row.ports}}</td>
-                                        <td>{{row.nodeid}}</td>
                                         <td>{{row.height}}</td>
                                         <td>{{row.last_connect}}</td>
                                         <td>{{row.mib_up}}</td>
@@ -103,29 +180,33 @@
                         <fieldset>
                             <div class="row g-3 mt-2">
                                 <div class="col-sm">
+                                    {% if connection.blockchain != 'mmx' %}
                                     <button form="form_{{connection.displayname}}_{{connection.blockchain}}"
                                         type="submit" name="action" value="remove" class="btn btn-outline-success"
-                                        id="btnRemove_{{connection.displayname}}_{{connection.blockchain}}">Disconnect
-                                        Selected</button>
+                                        id="btnRemove_{{connection.displayname}}_{{connection.blockchain}}">{{_('Disconnect Selected')}}</button>
+                                    {% endif %}
                                 </div>
-
                                 <div class="col-sm"><a class="btn btn-outline-success" role="button"
                                         href="https://www.yougetsignal.com/tools/open-ports/?port={{connection.farmer_port}}"
                                         target="_blank" class="text-white">
-                                        Check Port Forwarding
+                                        {{_('Check Port Forwarding')}}
                                     </a>
                                 </div>
                                 <div class="col-sm-3">
+                                    {% if connection.blockchain != 'mmx' %}
                                     <input class="form-control me-2"
                                         id="connection_{{connection.displayname}}_{{connection.blockchain}}"
                                         name="connection" type="text" placeholder="{{connection.add_exmample}}"
                                         aria-label="Add">
+                                    {% endif %}
                                 </div>
                                 <div class="col-sm-2">
+                                    {% if connection.blockchain != 'mmx' %}
                                     <button class="btn btn-outline-success text-nowrap text-right" type="submit"
                                         name="action" value="add"
                                         id="btnAdd_{{connection.displayname}}_{{connection.blockchain}}"
-                                        form="main-form">Add New Connection</button>
+                                        form="main-form">{{_('Add New Connection')}}</button>
+                                    {% endif %}
                                 </div>
                         </fieldset>
                     </form>
@@ -136,8 +217,8 @@
     </nav>
     {% else %}
     <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
-        <h6>No connections found from any farmers yet. Perhaps just starting?</h6>
-        <h6>After a while, try running 'chia show --connections' on your farmers to verify.</h6>
+        <h6>{{_('No connections found from any farmers yet. Perhaps just starting?')}}</h6>
+        <h6>{{_('After a while, try running "chia show --connections" on your farmers to verify.')}}</h6>
     </div>
     {% endif %}
 
@@ -145,10 +226,53 @@
 
     {% block scripts %}
     <script>
+        {% if maxmind_license %}
+        var map = new L.Map('map', {
+            center: [20, 0],
+            zoom: 2,
+            layers: [
+                {% if mapbox_license %}
+                new L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: '{{mapbox_license['access_token']}}'
+                })
+                {% else %}
+                new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    'attribution': 'Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+                })
+                {% endif %}
+            ]
+        });
+        var layerGroups = {};
+        function load_map_points(map) {
+            {% for connection in connections.rows %}
+                var layerGroup = L.layerGroup().addTo(map);
+                {% for row in connections.blockchains[connection.blockchain] %}
+                    {% if row.latitude %}
+                        var marker = L.marker([{{row.latitude}},{{row.longitude}}]).addTo(map);
+                        marker.bindPopup('{{connection.blockchain|capitalize}} - {{row.ip}}<br>{% if row.city %}{{row.city}}, {% endif %}{{row.country}}');
+                        marker._icon.classList.add("hue_{{connection.blockchain}}");
+                        layerGroup.addLayer(marker);
+                    {% endif %}
+                {% endfor %}
+                layerGroups['{{connection.blockchain}}'] = layerGroup;
+            {% endfor %}
+        }
+        {% endif %}
         $(document).ready(function () {
             {% for connection in connections.rows %}
             $('#conns_{{connection.displayname}}_{{connection.blockchain}}').DataTable({
+                // Note, without an "order" here, first column of checkboxes still shows as orderable. It's fine...
                 "columnDefs": [{ "orderable": false, targets: [0] }],
+                {% if lang != 'en' %}
+                "language": {
+                    "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+                },
+                {% endif %}
             });
             $("#btnAdd_{{connection.displayname}}_{{connection.blockchain}}").click(function () {
                 $(this).prop("disabled", true);
@@ -166,7 +290,29 @@
                 $('#form_{{connection.displayname}}_{{connection.blockchain}}').append('<input type="hidden" id="action" name="action" value="remove" />');
                 $("#form_{{connection.displayname}}_{{connection.blockchain}}").submit();
             });
+            $("#btnSaveSettings").click(function () {
+                $("#btnCancelSettings").prop("disabled", true);
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...`
+                );
+                $("#settings-form").submit();
+            });
+            $("#{{connection.blockchain}}_toggle").click(function(event) {
+                event.preventDefault();
+                for (const [blockchain, layerGroup] of Object.entries(layerGroups)) {
+                    if (layerGroup == layerGroups['{{connection.blockchain}}']) {
+                        layerGroup.show();
+                    } 
+                    else {
+                        layerGroup.hide();
+                    }
+                }
+            });
             {% endfor %}
+            {% if maxmind_license %}
+            load_map_points(map);
+            {% endif %}
         })
     </script>
     {% endblock %}
