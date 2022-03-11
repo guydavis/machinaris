@@ -2,10 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Known Issues
+ - Chiadog will sporadically replay alerts when the Machinaris container is restarted. #588
+ - Coin prices are unavailable from [AllTheBlocks](https://alltheblocks.net), so no fiat conversion in Machinaris currently.
+
 ## [0.7.0] - 2022-03-11
  - [Chia](https://chia.net) - [v1.3](https://www.reddit.com/r/chia/comments/t95vuk/13_is_live/), please note reports of issues in this new Chia release...  double-check your Wallet and Pools settings after upgrading!
- - [Internationalization](https://github.com/guydavis/machinaris/wiki/Localization) for locale-specific text, numbers, and currencies.  Huge thanks to @antcasq and @fabriziocacicia for providing translations!
- - Geolocation of peer connections for each blockchain by their IP address. [Optionally enabled](https://github.com/guydavis/machinaris/wiki/Connections).
+ - [Internationalization](https://github.com/guydavis/machinaris/wiki/Localization) for locale-specific text, numbers, and currencies.  Huge thanks to @antcasq (pt_PT) and @fabriziocacicia (it_IT) for providing translations!
+ - Geolocation of peer connections for each blockchain by their IP address. [Optionally enabled](https://github.com/guydavis/machinaris/wiki/Connections) using a free Maxmind account.
   - [Silicoin](https://github.com/silicoin-network/silicoin-blockchain) - supported again as per Discord votes.
 
 ## [0.6.9] - 2022-02-04
