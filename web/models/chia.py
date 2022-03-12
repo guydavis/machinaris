@@ -310,9 +310,10 @@ class Wallets:
         self.rows = []
         self.cold_wallet_addresses = cold_wallet_addresses
         for wallet in wallets:
+            app.logger.info("Wallets.init(): Parsing wallet for blockchain: {0}".format(wallet.blockchain))
             worker_status = None
             try:
-                app.logger.debug("Found worker with hostname '{0}'".format(wallet.hostname))
+                app.logger.info("Wallets.init(): Found worker with hostname '{0}'".format(wallet.hostname))
                 worker = w.get_worker(wallet.hostname, wallet.blockchain)
                 worker_status = worker.connection_status()
                 displayname = worker.displayname
