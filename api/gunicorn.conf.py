@@ -73,7 +73,6 @@ def on_starting(server):
         scheduler.add_job(func=websvcs.get_prices, name="get_prices", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', hours=12)
         scheduler.add_job(func=geolocate_peers.execute, name="geolocate_peers", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
-        
 
     # Testing only
     #scheduler.add_job(func=websvcs.get_prices, name="get_prices", trigger='interval', seconds=10) # Test immediately
