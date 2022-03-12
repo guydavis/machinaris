@@ -90,9 +90,11 @@
                 {% if disk_usage[farmer.hostname] %}
                 <canvas id="disk_{{farmer.hostname}}" width="400"></canvas>
                 {% else %}
+                {% autoescape false %}
                 <p>{{_('No plots disk stats recorded recently for %(hostname)s with Chia blockchain. Please ensure all paths containing plots have been %(wiki_link_open)s configured %(wiki_link_close)s. Also ensure the Chia worker is reporting into the controller on the Workers page.', 
-                    hostname=farmer.hostname, wiki_link='<a target="_blank" href="https://github.com/guydavis/machinaris/wiki/FAQ#can-i-use-two-or-more-final-destination-directories-to-hold-my-plots">', wiki_link_close='</a>')}}
+                    hostname=farmer.hostname, wiki_link_open='<a target="_blank" href="https://github.com/guydavis/machinaris/wiki/FAQ#can-i-use-two-or-more-final-destination-directories-to-hold-my-plots">', wiki_link_close='</a>')}}
                 </p>
+                {% endautoescape %}
                 {% endif %}
             </div>
         </div>
