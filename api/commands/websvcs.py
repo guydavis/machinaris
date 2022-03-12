@@ -2,13 +2,13 @@
 # Access to public web APIs
 #
 
-import traceback
+import bs4
 import datetime
 import http
 import json
 import os
 import requests
-import socket
+import traceback
 
 from api import app
 
@@ -130,6 +130,33 @@ def save_prices_cache(data):
         app.logger.error("Failed to store prices cache in {0} because {1}".format(BLOCKCHAIN_PRICES_CACHE_FILE, str(ex)))
 
 def request_prices(prices, debug=False):
+    url = "https://alltheblocks.net"
+    app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
+    if debug:
+        http.client.HTTPConnection.debuglevel = 1
+    data = requests.get(url).text
+    http.client.HTTPConnection.debuglevel = 0
+    soup = bs4.BeautifulSoup(data, 'html.parser')
+    table = soup.find('table', class_="table b-table table-sm")
+    for row in table.tbody.find_all('tr'):
+        if 'data-pk' in row.attrs:
+            blockchain = row['data-pk'].replace('stai', 'staicoin')
+            price_column = row.find('td', class_='text-right')
+            if len(price_column.contents) == 1:
+                price_value = price_column.contents[0].string.strip()
+                if price_value.startswith('$'):
+                    #app.logger.info("{0} @ {1}".format(blockchain, price_value[1:].strip()))
+                    try:
+                        prices[blockchain] = float(price_value[1:].strip())
+                    except Exception as ex:
+                        app.logger.info("Failed to parse a decimal number from {0}".format(price_value[1:].strip()))
+                else:
+                    app.logger.info("No price found for blockchain: {0}".format(blockchain))
+                    pass
+    return prices
+
+# NOT USED: ATB api does not provide prices as of 2022-03-12
+def request_prices_api(prices, debug=False):
     url = "https://api.alltheblocks.net/atb/blockchain/settings-and-stats"
     app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
     if debug:
