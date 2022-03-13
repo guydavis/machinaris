@@ -4,8 +4,8 @@
 #
 
 FLAX_BRANCH=$1
-# On 2021-11-06
-HASH=80add4e545ad22a317244f7fd958d118a5a75c5d
+# On 2022-03-13
+HASH=e72b47ca1c7086330b0facba6a2e7fc5967000eb
 
 if [ -z ${FLAX_BRANCH} ]; then
 	echo 'Skipping Flax install as not requested.'

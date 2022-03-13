@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-09 13:07-0700\n"
+"POT-Creation-Date: 2022-03-13 10:29-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: pt\n"
@@ -943,11 +943,11 @@ msgstr "Avisos recentes"
 msgid "Yay! No issues currently."
 msgstr "Yay! Sem problemas actualmente."
 
-#: templates/farming/workers.html:114 templates/worker.html:183
+#: templates/farming/workers.html:116 templates/worker.html:183
 msgid "Disk Space Used (TB)"
 msgstr "Espaço em disco usado (TB)"
 
-#: templates/farming/workers.html:120 templates/worker.html:189
+#: templates/farming/workers.html:122 templates/worker.html:189
 msgid "Disk Space Free (TB)"
 msgstr "Espaço em disco livre (TB)"
 
@@ -1245,7 +1245,7 @@ msgstr ""
 "Por favor verifique que o container Machinaris para este blockchain está "
 "a correr. Por favor verifique também as definições na página de Alertas."
 
-#: templates/farming/workers.html:93
+#: templates/farming/workers.html:94
 #, python-format
 msgid ""
 "No plots disk stats recorded recently for %(hostname)s with Chia "
