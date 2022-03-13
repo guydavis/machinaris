@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "POT-Creation-Date: 2022-03-13 10:30-0600\n"
 "PO-Revision-Date: 2022-03-13 10:29-0600\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Bernie Deprez\n"
 "Language: nl_NL\n"
 "Language-Team: nl_NL <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -19,11 +19,11 @@ msgstr ""
 
 #: commands/chia_cli.py:67
 msgid "Updated config.yaml failed validation!"
-msgstr ""
+msgstr "Gewijzigde config.yaml kon niet gevalideerd worden!"
 
 #: commands/pools_cli.py:68
 msgid "No requested pool modifications were sent. Current settings are unchanged."
-msgstr ""
+msgstr "Geen pool wijzigingen verstuurd. Huidige configuratie is ongewijzigd."
 
 #: commands/pools_cli.py:151
 msgid ""
@@ -31,6 +31,9 @@ msgid ""
 "minutes or more to complete. DO NOT immediately re-submit your request. "
 "View the log for details."
 msgstr ""
+"Pool succesvol verlaten, overgeschakeld naar self-pooling. Gelieve enkele minuten "
+"(of meer) te wachten. Stuur NIET ONMIDDELLIJK een nieuwe aanvraag maar controleer "
+"de logs voor meer details."
 
 #: commands/pools_cli.py:195
 #, python-format
@@ -39,6 +42,9 @@ msgid ""
 "a few minutes or more to complete. DO NOT immediately re-submit your "
 "request. Be patient! View the log for details."
 msgstr ""
+"Succesvol aangesloten bij de %(pool_url) pool door creatie van een Chia NFT. "
+"Gelieve enkele minuten (of meer) te wachten. Stuur NIET ONMIDDELLIJK een nieuwe "
+"aanvraag. Wees geduldig! Controleer de logs voor meer details."
 
 #: commands/pools_cli.py:224
 msgid ""
@@ -46,8 +52,10 @@ msgid ""
 "or more to complete. DO NOT immediately re-submit your request. Be "
 "patient! View the log for details."
 msgstr ""
+"Succesvol een NFT gemaakt voor self-pooling. Gelieve enkele minuten (of meer) "
+"te wachten. Stuur NIET ONMIDDELLIJK een nieuwe aanvraag. Wees geduldig! "
+"Controleer de logs voor meer details."
 
 #: views/ping/resources.py:28
 msgid "Pong!"
-msgstr ""
-
+msgstr "Pong!"
