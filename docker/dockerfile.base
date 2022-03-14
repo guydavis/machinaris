@@ -14,6 +14,7 @@ RUN apt-get update \
 		cifs-utils \
 		curl \
 		git \
+		hddtemp \
 		iproute2 \
 		iputils-ping \
 		jq \
