@@ -20,11 +20,20 @@ from web.actions import chia, pools as p, plotman, chiadog, worker, \
         log_handler, stats, warnings, forktools, mapping
 
 def get_lang(request):
-    lang = request.accept_languages.best_match(app.config['LANGUAGES'])
-    if not lang:
-        lang = 'en'
-    app.logger.info("USING LANG={0}".format(lang))
-    return lang 
+    try:
+        accept = request.headers['Accept-Language']
+        match = request.accept_languages.best_match(app.config['LANGUAGES'])
+        # Workaround for dumb babel match method suggesting 'en' for 'nl' instead of 'nl_NL'
+        if match == 'en' and not accept.startswith('en'):
+            first_accept = accept.split(',')[0]  # Like 'nl'
+            alternative = "{0}_{1}".format(first_accept, first_accept.upper())
+            if alternative in app.config['LANGUAGES']:
+                return alternative
+        app.logger.info("ROUTES: Accept-Language: {0}  ---->  matched locale: {1}".format(accept, match))
+        return request.accept_languages.best_match(app.config['LANGUAGES'])
+    except:
+        app.logger.info("ROUTES: Request had no Accept-Language, returning default locale of 'en'")
+        return "en" 
 
 def find_selected_worker(hosts, hostname, blockchain= None):
     if len(hosts) == 0:

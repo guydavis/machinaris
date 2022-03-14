@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file. The format 
  - 
 
 ## [0.7.1] - 2022-04-?
- - 
+ - Dutch translations (nl_NL) provided by Bernie Deprez.  Thanks!
 
 ## [0.7.0] - 2022-03-11
  - [Chia](https://chia.net) - [v1.3](https://www.reddit.com/r/chia/comments/t95vuk/13_is_live/), please note reports of issues in this new Chia release...  double-check your Wallet and Pools settings after upgrading!

@@ -5,8 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
+"Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issues"
 "POT-Creation-Date: 2022-03-13 10:29-0600\n"
+"POT-Creation-Date: 2022-03-13 17:26-0600\n"
 "PO-Revision-Date: 2022-03-13 10:29-0600\n"
 "Last-Translator: Bernie Deprez\n"
 "Language: nl_NL\n"
@@ -46,8 +47,8 @@ msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
 msgstr ""
-"Kaart instellingen opgeslagen. Wacht 10 minuten terwijl lokatie informatie "
-"voor de kaart wordt gegenereerd."
+"Kaart instellingen opgeslagen. Wacht 10 minuten terwijl lokatie "
+"informatie voor de kaart wordt gegenereerd."
 
 #: routes.py:287
 msgid "Unknown form action"
@@ -59,8 +60,8 @@ msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
 "another blockchain."
 msgstr ""
-"Geen werker op %(worker)s voor blockchain %(blockchain)s. Gelieve een ander "
-"blockchain te kiezen."
+"Geen werker op %(worker)s voor blockchain %(blockchain)s. Gelieve een "
+"ander blockchain te kiezen."
 
 #: routes.py:399
 #, python-format
@@ -68,8 +69,8 @@ msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
 " Please check your workers."
 msgstr ""
-"Voor Waarschuwingsconfiguratie, geen reagerende fullnode voor %(blockchain)s gevonden."
-" Gelieve uw werkers te controleren."
+"Voor Waarschuwingsconfiguratie, geen reagerende fullnode voor "
+"%(blockchain)s gevonden. Gelieve uw werkers te controleren."
 
 #: routes.py:404
 #, python-format
@@ -77,8 +78,8 @@ msgid ""
 "For Farming config, found no responding fullnode found for "
 "%(blockchain)s. Please check your workers."
 msgstr ""
-"Voor Farming configuratie, geen reagerende fullnode voor %(blockchain)s gevonden."
-" Gelieve uw werkers te controleren."
+"Voor Farming configuratie, geen reagerende fullnode voor %(blockchain)s "
+"gevonden. Gelieve uw werkers te controleren."
 
 #: routes.py:411
 #, python-format
@@ -95,8 +96,8 @@ msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
 "workers."
 msgstr ""
-"Geen reagerende fullnode gevonden voor %(blockchain)s. Gelieve uw "
-"werkers te controleren."
+"Geen reagerende fullnode gevonden voor %(blockchain)s. Gelieve uw werkers"
+" te controleren."
 
 #: routes.py:435
 msgid "Unsupported log type"
@@ -107,8 +108,8 @@ msgid ""
 "Relax and grab a coffee. Status is being gathered from active workers.  "
 "Please allow 15 minutes..."
 msgstr ""
-"Relax en neem een koffie. Status van actieve werkers wordt verzameld. "
-"Dit kan 15 minuten duren..."
+"Relax en neem een koffie. Status van actieve werkers wordt verzameld. Dit"
+" kan 15 minuten duren..."
 
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
@@ -148,10 +149,11 @@ msgid ""
 "%(wiki_link_open)swiki%(wiki_link_close)s. Please add \"Setup a Cold "
 "Wallet\" to your To-Do list!"
 msgstr ""
-"Machinaris gebruikt een online portefeuille voor farming. Het is ten sterkste "
-"aangeraden om een koude portefeuille te gebruiken voor uw uitbetalingsinstructies. "
-"Handleiding op de %(wiki_link_open)swiki%(wiki_link_close)s. Voeg \"Koude "
-"portefeuille maken\" toe aan uw takenlijst!"
+"Machinaris gebruikt een online portefeuille voor farming. Het is ten "
+"sterkste aangeraden om een koude portefeuille te gebruiken voor uw "
+"uitbetalingsinstructies. Handleiding op de "
+"%(wiki_link_open)swiki%(wiki_link_close)s. Voeg \"Koude portefeuille "
+"maken\" toe aan uw takenlijst!"
 
 #: actions/worker.py:106
 msgid "Worker not responding to pings."
@@ -456,7 +458,9 @@ msgstr "Geen blockchains gevonden in uw farmers. Niet toegevoegd?"
 
 #: templates/blockchains.html:88
 msgid "Try running \"chia show --state\" on your farmers to verify."
-msgstr "Probeer \"chia show --state\" uit te voeren op uw farmers om te controleren."
+msgstr ""
+"Probeer \"chia show --state\" uit te voeren op uw farmers om te "
+"controleren."
 
 #: templates/connections.html:34
 msgid "Maxmind Account (Required):"
@@ -696,7 +700,9 @@ msgstr "Welkom bij Machinaris!"
 #: templates/setup.html:28
 #, python-format
 msgid "An easy-to-use WebUI for Chia%(trademark)s plotting and farming."
-msgstr "Een gebruiksvriendelijke interface voor Chia%(trademark)s plotting en farming"
+msgstr ""
+"Een gebruiksvriendelijke interface voor Chia%(trademark)s plotting en "
+"farming"
 
 #: templates/setup.html:61
 #, python-format
@@ -708,10 +714,10 @@ msgid ""
 "days of blockchain syncing later. Please be patient!"
 msgstr ""
 "Tijdens de allereerste start wordt de gecomprimeerde Chia blockchain "
-"databank %(compressed)s gedownload van %(dl_link)s. Met de huidge "
-"grootte van %(uncompressed)s in ongecomprimeerde vorm (zie vooruitgang "
-"hierboven) kan dit wel even duren. Echter, nu meerdere minuten downloaden "
-"zal meerdere dagen uitsparen in het synchroniseren van de blockchain. "
+"databank %(compressed)s gedownload van %(dl_link)s. Met de huidge grootte"
+" van %(uncompressed)s in ongecomprimeerde vorm (zie vooruitgang "
+"hierboven) kan dit wel even duren. Echter, nu meerdere minuten downloaden"
+" zal meerdere dagen uitsparen in het synchroniseren van de blockchain. "
 "Heb geduld!"
 
 #: templates/setup.html:75
@@ -723,9 +729,10 @@ msgid ""
 "you have one from a previous Chia install."
 msgstr ""
 "NOTA: Indien u echter prefereert om Chia toe te laten om de blockchain "
-"gedurende meerdere dagen te synchroniseren, zie dan %(init_link)s voor details. "
-"U kunt ook evenwel %(import_link_open)s uw eigen blockchain importeren %(import_link_close)s "
-"indien u er een heeft van een eerdere Chia installatie."
+"gedurende meerdere dagen te synchroniseren, zie dan %(init_link)s voor "
+"details. U kunt ook evenwel %(import_link_open)s uw eigen blockchain "
+"importeren %(import_link_close)s indien u er een heeft van een eerdere "
+"Chia installatie."
 
 #: templates/setup.html:83
 #, python-format
@@ -733,8 +740,8 @@ msgid ""
 "To get started with Machinaris as a Chia%(trademark)s fullnode, either "
 "import your existing 24-word mnemonic seed phrase"
 msgstr ""
-"Om Machinaris te starten als een Chia%(trademark)s fullnode, "
-"importeer uw bestaande mnemonische zin (24 woorden)"
+"Om Machinaris te starten als een Chia%(trademark)s fullnode, importeer uw"
+" bestaande mnemonische zin (24 woorden)"
 
 #: templates/setup.html:90
 msgid "Import Existing Key"
@@ -749,8 +756,8 @@ msgid ""
 "You can generate a brand-new mnemonic phrase that will be written to this"
 " in-container path"
 msgstr ""
-"U kan een gloednieuwe mnemonische zin genereren dewelke zal worden opgeslagen "
-"in dit container pad"
+"U kan een gloednieuwe mnemonische zin genereren dewelke zal worden "
+"opgeslagen in dit container pad"
 
 #: templates/setup.html:96
 msgid "Generate New Key"
@@ -762,8 +769,8 @@ msgid ""
 "NOTE: If you would prefer to instead import your mnenmoic seed phrase "
 "yourself at the command-line, see the %(wiki_link)s for details."
 msgstr ""
-"NOTA: Indien u prefereert om uw mnemonische zin zelf te importeren "
-"via de commandoprompt, zie de %(wiki_link)s voor details."
+"NOTA: Indien u prefereert om uw mnemonische zin zelf te importeren via de"
+" commandoprompt, zie de %(wiki_link)s voor details."
 
 #: templates/summary.html:31 templates/wallet.html:52
 msgid "Local Currency:"
@@ -859,8 +866,8 @@ msgid ""
 "You can also try running \"chia wallet show\" on your fullnode's in-"
 "container shell to verify."
 msgstr ""
-"U can ook \"chia wallet show\" uitvoeren binnen de container op uw fullnode "
-"om dit na te zien."
+"U can ook \"chia wallet show\" uitvoeren binnen de container op uw "
+"fullnode om dit na te zien."
 
 #: templates/worker.html:35
 msgid "Details"
@@ -993,8 +1000,8 @@ msgid ""
 "Invalid host path ending with colon. Try adding a slash to the end like "
 "this"
 msgstr ""
-"Ongeldig pad eindigend met een dubbele punt. Probeer een slash toe te voegen "
-"aan het einde, als volgt"
+"Ongeldig pad eindigend met een dubbele punt. Probeer een slash toe te "
+"voegen aan het einde, als volgt"
 
 #: templates/worker_launch.html:307
 msgid "Empty host path provided for volume at "
@@ -1021,8 +1028,8 @@ msgid ""
 "Missing worker IP address.  Please provide the IP the controller will "
 "connect to for commands."
 msgstr ""
-"Werker IP adres ontbreekt. Gelieve een IP op te geven waarmee de controller "
-"zal verbinden voor commandos."
+"Werker IP adres ontbreekt. Gelieve een IP op te geven waarmee de "
+"controller zal verbinden voor commandos."
 
 #: templates/worker_launch.html:411
 msgid "Machinaris Worker - Launch Config"
@@ -1035,10 +1042,10 @@ msgid ""
 "folder named \"machinaris\", then execute \"docker-compose up\" from a "
 "shell."
 msgstr ""
-"Vervolledig onderstaand formulier om nieuwe harvesters/plotters te starten op "
-"computers in uw netwerk. Sla het gegenereerde docker-compose.yml bestand op in "
-"een map genaamd \"machinaris\", en voer dan het commando \"docker-compose up\" "
-"uit via de commandoprompt." 
+"Vervolledig onderstaand formulier om nieuwe harvesters/plotters te "
+"starten op computers in uw netwerk. Sla het gegenereerde docker-"
+"compose.yml bestand op in een map genaamd \"machinaris\", en voer dan het"
+" commando \"docker-compose up\" uit via de commandoprompt."
 
 #: templates/worker_launch.html:416
 msgid "Operating System"
@@ -1167,7 +1174,9 @@ msgstr "Verifieer de logs van iedere verwachte werker."
 #: templates/workers.html:106
 #, python-format
 msgid "For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
-msgstr "Voor meer info, zie de Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
+msgstr ""
+"Voor meer info, zie de Machinaris "
+"%(wiki_link_open)swiki%(wiki_link_close)s."
 
 #: templates/farming/plots.html:9
 msgid "Plotting Analysis"
@@ -1209,15 +1218,17 @@ msgstr "Dagelijkse Samenvatting"
 #: templates/farming/workers.html:70
 #, python-format
 msgid "No daily summary found for %(blockchain)s on %(displayname)s."
-msgstr "Geen dagelijkse samenvatting gevonden voor %(blockchain)s op %(displayname)s."
+msgstr ""
+"Geen dagelijkse samenvatting gevonden voor %(blockchain)s op "
+"%(displayname)s."
 
 #: templates/farming/workers.html:72
 msgid ""
 "Please check that your Machinaris container for this blockchain is "
 "running. Also please verify settings on the Alerts page."
 msgstr ""
-"Gelieve na te zien of uw Machinaris container voor deze blockchain "
-"actief is. Verifieer ook de instellingen op de pagina Waarschuwingen."
+"Gelieve na te zien of uw Machinaris container voor deze blockchain actief"
+" is. Verifieer ook de instellingen op de pagina Waarschuwingen."
 
 #: templates/farming/workers.html:94
 #, python-format
@@ -1243,10 +1254,10 @@ msgid ""
 "running, another plot will be immediately started, so please stop Plotman"
 " first from the top-right. Continue?"
 msgstr ""
-"Deze actie beëindigt de geselecteerde plots, onafgezien of deze actief "
-"of gestopt zijn en verwijdert alle tijdelijke bestanden. Als Plotman nog "
+"Deze actie beëindigt de geselecteerde plots, onafgezien of deze actief of"
+" gestopt zijn en verwijdert alle tijdelijke bestanden. Als Plotman nog "
 "actief is zal onmiddellijk een nieuwe plot starten, zorg er dus voor om "
-"eerst Plotman te stoppen (bovenaan rechts op de pagina). Verder gaan?" 
+"eerst Plotman te stoppen (bovenaan rechts op de pagina). Verder gaan?"
 
 #: templates/plotting/jobs.html:17 templates/plotting/jobs.html:193
 msgid "Kill Selected"
@@ -1298,8 +1309,8 @@ msgid ""
 "online."
 msgstr ""
 "Deze werker is momenteel niet online noch antwoord op pings van de "
-"controller. Gelieve de pagina Werkers te controleren en het systeem "
-"terug online te brengen."
+"controller. Gelieve de pagina Werkers te controleren en het systeem terug"
+" online te brengen."
 
 #: templates/plotting/jobs.html:70 templates/plotting/workers.html:53
 #: templates/plotting/workers.html:70
@@ -1358,8 +1369,8 @@ msgid ""
 "This action will stop Plotman archiving from the configured dst folder, "
 "preventing further completed plot transfers. Continue?"
 msgstr ""
-"Deze actie stopt Plotman archivering vanuit de geconfigureerde dst map "
-"en voorkomt verdere transferts van afgewerkte plots. Verder gaan?"
+"Deze actie stopt Plotman archivering vanuit de geconfigureerde dst map en"
+" voorkomt verdere transferts van afgewerkte plots. Verder gaan?"
 
 #: templates/plotting/workers.html:49
 #, python-format
@@ -1397,8 +1408,8 @@ msgid ""
 "resulting in a small charge (few mojos) against your wallet. Continue "
 "anyway?"
 msgstr ""
-"Deze actie wisselt uw huidige pooling selectie, mogelijks leidend "
-"tot een kleine kost (enkele mojos) in uw portefeuille.  Verder gaan?"
+"Deze actie wisselt uw huidige pooling selectie, mogelijks leidend tot een"
+" kleine kost (enkele mojos) in uw portefeuille.  Verder gaan?"
 
 #: templates/settings/pools.html:85
 #, python-format
@@ -1407,9 +1418,9 @@ msgid ""
 "the same, %(break)sbut it is much less volatile. You can easily switch "
 "pools without having to re-plot."
 msgstr ""
-"Vervoeg een pool en ontvang consistente farming compensaties. Het gemiddelde "
-"rendement is gelijk, %(break)sechter het is minder volatiel. U kunt "
-"gemakkelijk pools wisselen zonder plots te hoeven hermaken."
+"Vervoeg een pool en ontvang consistente farming compensaties. Het "
+"gemiddelde rendement is gelijk, %(break)sechter het is minder volatiel. U"
+" kunt gemakkelijk pools wisselen zonder plots te hoeven hermaken."
 
 #: templates/settings/pools.html:88
 msgid "ERROR: Unable to join a pool because:"
@@ -1448,8 +1459,8 @@ msgid ""
 "No wallets found yet.  Perhaps this is a brand-new installation? If so, "
 "please wait for complete start-up."
 msgstr ""
-"Nog geen portefeuilles gevonden. Misschie is dit een gloednieuwe installatie? "
-"Indien zo, wacht tot het opstarten is beëindigt."
+"Nog geen portefeuilles gevonden. Misschie is dit een gloednieuwe "
+"installatie? Indien zo, wacht tot het opstarten is beëindigt."
 
 #: templates/settings/pools.html:173
 msgid "For more on Pooling, see the Machinaris"

@@ -22,7 +22,7 @@ class Summaries:
     def __init__(self, blockchains, farms, wallets, stats):
         self.rows = []
         for blockchain in blockchains.rows:
-            app.logger.info("Adding summary row for {0}".format(blockchain['blockchain']))
+            app.logger.debug("Adding summary row for {0}".format(blockchain['blockchain']))
             farm = self.find_farm(farms, blockchain['blockchain'])
             if not farm:
                 app.logger.error("No farm summary found for {0}".format(blockchain['blockchain']))
@@ -310,10 +310,10 @@ class Wallets:
         self.rows = []
         self.cold_wallet_addresses = cold_wallet_addresses
         for wallet in wallets:
-            app.logger.info("Wallets.init(): Parsing wallet for blockchain: {0}".format(wallet.blockchain))
+            app.logger.debug("Wallets.init(): Parsing wallet for blockchain: {0}".format(wallet.blockchain))
             worker_status = None
             try:
-                app.logger.info("Wallets.init(): Found worker with hostname '{0}'".format(wallet.hostname))
+                app.logger.debug("Wallets.init(): Found worker with hostname '{0}'".format(wallet.hostname))
                 worker = w.get_worker(wallet.hostname, wallet.blockchain)
                 worker_status = worker.connection_status()
                 displayname = worker.displayname
