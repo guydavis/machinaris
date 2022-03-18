@@ -17,7 +17,7 @@ from common.utils import fiat
 from common.models import pools as po
 from web import app, utils
 from web.actions import chia, pools as p, plotman, chiadog, worker, \
-        log_handler, stats, warnings, forktools, mapping
+        log_handler, stats, warnings, forktools, mapping, drives as d
 
 def get_lang(request):
     try:
@@ -269,6 +269,13 @@ def worker_route():
         plotting=plotting, plots_disk_usage=plots_disk_usage, 
         plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc,
         lang=get_lang(request))
+
+@app.route('/drives')
+def drives():
+    gc = globals.load()
+    drvs = d.load_drive_summary()
+    return render_template('drives.html', reload_seconds=120, 
+        drives=drvs, global_config=gc, lang=get_lang(request))
 
 @app.route('/blockchains')
 def blockchains():
