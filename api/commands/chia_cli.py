@@ -55,8 +55,9 @@ def save_config(config, blockchain):
         # Validate the YAML first
         yaml.safe_load(config)
         # Save a copy of the old config file
-        src="/root/.{0}/mainnet/config/config.yaml".format(blockchain)
-        dst="/root/.{0}/mainnet/config/config.".format(blockchain) + time.strftime("%Y%m%d-%H%M%S")+".yaml"
+        mainnet = globals.get_blockchain_network_path(blockchain)
+        src=f'{mainnet}/config/config.yaml'
+        dst=f'{mainnet}/config/config.' + time.strftime("%Y%m%d-%H%M%S")+".yaml"
         shutil.copy(src,dst)
         # Now save the new contents to main config file
         with open(src, 'w') as writer:

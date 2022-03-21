@@ -75,7 +75,7 @@ def on_starting(server):
         scheduler.add_job(func=geolocate_peers.execute, name="geolocate_peers", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
 
     # Testing only
-    #scheduler.add_job(func=websvcs.get_prices, name="get_prices", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=status_drives.update, name="status_drives", trigger='interval', seconds=10) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()

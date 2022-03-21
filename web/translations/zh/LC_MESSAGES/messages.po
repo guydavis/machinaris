@@ -1,14 +1,14 @@
-# Chinese translations for PROJECT.
+# Chinese translations for Machinaris.
 # Copyright (C) 2022 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
+# This file is distributed under the same license as the Machinaris project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
+"Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issues"
 "Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-09 13:07-0700\n"
+"POT-Creation-Date: 2022-03-13 17:26-0600\n"
 "PO-Revision-Date: 2022-02-15 14:29-0700\n"
 "Last-Translator: Guy Davis\n"
 "Language: zh\n"
@@ -882,11 +882,11 @@ msgstr ""
 msgid "Yay! No issues currently."
 msgstr ""
 
-#: templates/farming/workers.html:114 templates/worker.html:183
+#: templates/farming/workers.html:116 templates/worker.html:183
 msgid "Disk Space Used (TB)"
 msgstr ""
 
-#: templates/farming/workers.html:120 templates/worker.html:189
+#: templates/farming/workers.html:122 templates/worker.html:189
 msgid "Disk Space Free (TB)"
 msgstr ""
 
@@ -1163,7 +1163,7 @@ msgid ""
 "running. Also please verify settings on the Alerts page."
 msgstr ""
 
-#: templates/farming/workers.html:93
+#: templates/farming/workers.html:94
 #, python-format
 msgid ""
 "No plots disk stats recorded recently for %(hostname)s with Chia "

@@ -14,6 +14,7 @@ RUN apt-get update \
 		cifs-utils \
 		curl \
 		git \
+		hddtemp \
 		iproute2 \
 		iputils-ping \
 		jq \
@@ -28,6 +29,7 @@ RUN apt-get update \
 		python3-dev \
 		python3-pip \
 		python-is-python3 \
+		smartmontools \
 		sqlite3 \
 		sudo \
 		tar \
