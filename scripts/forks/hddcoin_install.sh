@@ -4,8 +4,8 @@
 #
 
 HDDCOIN_BRANCH=$1
-# On 2022-01-22
-HASH=75d13c065a417f97f335849adf41ed5592f49543
+# On 2022-03-20
+HASH=42403754da1d819632b0442964eabc2962e30484
 
 if [ -z ${HDDCOIN_BRANCH} ]; then
 	echo 'Skipping HDDCoin install as not requested.'
