@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="position-relative">
+  <div class="position-absolute top-0 end-0">
+      <a href="https://github.com/guydavis/machinaris/wiki/Drives" target="_blank">
+          <i class="fs-4 bi-question-circle"></i>
+      </a>
+  </div>
+</div>
+
+<header class="pb-3 mb-4 border-bottom">
+  <span class="fs-4">{{_('Drives')}}</span>
+</header>
+
+<div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  {% if category == 'message' %}
+  <div class="alert alert-warning" role="alert">
+    {% else %}
+    <div class="alert alert-{{ category }}" role="alert">
+      {% endif %}
+      {{ message|safe }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+  </div>
+
+  {% if drives.rows|length > 0 %}
+  <form method="POST" id="drives-form" style="padding-bottom: 10px;">
+    <fieldset>
+      <table id="data" class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col" class="text-success">{{_('Worker')}}</th>
+            <th scope="col" class="text-success">{{_('Device')}}</th>
+            <th scope="col" class="text-success">{{_('Model')}}</th>
+            <th scope="col" class="text-success">{{_('Capacity')}}</th>
+            <th scope="col" class="text-success">{{_('Status')}}</th>
+            <th scope="col" class="text-success">{{_('Temperature')}}</th>
+            <th scope="col" class="text-success">{{_('Updated At')}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for drive in drives.rows %}
+          <tr>
+            <td>{{drive.worker}}</td>
+            <td>{{drive.device}}</td>
+            <td> {% if drive.model_family %}
+                   {{drive.model_family}}
+                 {% else %}
+                  {{drive.device_model}}
+                 {% endif %}
+            </td>
+            <td>{{drive.capacity}}</td>
+            <td>
+              {% if drive.status == 'PASSED' %}
+                <i class="bi-check-circle text-success"></i> {{_('Passed')}}
+              {% else %}
+                <i class="bi-dash-circle text-danger" title="{{ drive.status }}"></i>
+                {{_(drive.status)}}
+              {% endif %}
+            </td>
+            <td>
+              {% if drive.temperature < 40 %}
+                <i class="bi-check-circle text-success"></i> {{ drive.temperature }}
+              {% elif drive.temperature < 50 %}
+                <i class="bi-exclamation-triangle text-warning"></i> {{ drive.temperature }}
+              {% else %}
+                <i class="bi-dash-circle text-danger"></i> {{ drive.temperature }}
+              {% endif %}
+            </td>
+            
+            <td>{{drive.updated_at | datetimefilter}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  </form>
+
+  {% else %}
+
+  {% autoescape false %}
+  <div class="text-center" style="padding-top:100 px; padding-bottom: 0px">
+    <h6>{{_('No drives accessible to smartctl inside the Machinaris containers.')}}</h6>
+    <h6>{{_('Please configure Docker to allow smartctl access to host devices.')}}</h6>
+    <h6>{{_('For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s.', 
+        wiki_link_open='<a href="https://github.com/guydavis/machinaris/wiki/Drives" target="_blank">',
+        wiki_link_close='</a>')}}
+    </h6>
+  </div>
+  {% endautoescape %}
+  <br />
+  <br />
+  {% endif %}
+
+
+  {% endblock %}
+
+  {% block scripts %}
+  <script>
+    function MachinarisLog(type, hostname, blockchain) {
+        var d = new Date();
+        var height = 600;
+        var width = 900;
+        var top = (screen.height - height) / 2;
+        var left = (screen.width - width) / 2;
+        window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname + "&blockchain=" + blockchain, 'Machinaris ' + type + '.log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+    }
+    $(document).ready(function () {
+      $('#data').DataTable({
+          "pageLength": 25,
+          "lengthMenu": [ [25, 50, 100, 200, -1], [25, 50, 100, 200, "All"] ],
+          "order": [[1, "asc"]],
+          "columnDefs": [{ "orderable": false, targets: [0,8] }],
+          {% if lang != 'en' %}
+          "language": {
+              "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+          },
+          {% endif %}
+      });
+    })
+  </script>
+  {% endblock %}

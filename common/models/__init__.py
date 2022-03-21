@@ -2,6 +2,7 @@ from .alerts import Alert
 from .blockchains import Blockchain
 from .challenges import Challenge
 from .connections import Connection
+from .drives import Drive
 from .farms import Farm 
 from .keys import Key
 from .partials import Partial

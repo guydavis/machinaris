@@ -6,6 +6,7 @@ from . import certificates
 from . import challenges
 from . import configs
 from . import connections
+from . import drives
 from . import farms
 from . import keys
 from . import logs
@@ -32,6 +33,7 @@ MODULES = (
     certificates,
     configs,
     connections,
+    drives,
     farms,
     keys,
     logs,

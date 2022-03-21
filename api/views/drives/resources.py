@@ -1,0 +1,52 @@
+import datetime as dt
+
+from flask.views import MethodView
+
+from api import app
+from api.extensions.api import Blueprint, SQLCursorPage
+from common.extensions.database import db
+from common.models import Drive
+
+from .schemas import DriveSchema, DriveQueryArgsSchema, BatchOfDriveSchema, BatchOfDriveQueryArgsSchema
+
+
+blp = Blueprint(
+    'Drive',
+    __name__,
+    url_prefix='/drives',
+    description="Details on all drives recorded on the worker."
+)
+
+
+@blp.route('/')
+class Drives(MethodView):
+
+    @blp.etag
+    @blp.arguments(BatchOfDriveQueryArgsSchema, location='query')
+    @blp.response(200, DriveSchema(many=True))
+    @blp.paginate(SQLCursorPage)
+    def get(self, args):
+        ret = db.session.query(Drive).filter_by(**args)
+        return ret
+
+    @blp.etag
+    @blp.arguments(BatchOfDriveSchema)
+    @blp.response(201, DriveSchema(many=True))
+    def post(self, new_items):
+        if len(new_items) == 0:
+            return "No drives provided.", 400
+        items = []
+        for new_item in new_items:
+            item = db.session.query(Drive).get(new_item['serial_number'])
+            if item: # upsert
+                #app.logger.info("Upserting: {0}".format(new_item['serial_number']))
+                new_item['created_at'] = item.created_at
+                new_item['updated_at'] = dt.datetime.now()
+                DriveSchema().update(item, new_item)
+            else: # insert
+                #app.logger.info("Inserting: {0}".format(new_item['serial_number']))
+                new_item['created_at'] = new_item['updated_at'] = dt.datetime.now()
+                item = Drive(**new_item)
+            db.session.add(item)
+        db.session.commit()
+        return items
