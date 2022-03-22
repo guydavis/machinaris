@@ -41,10 +41,10 @@
             <th scope="col" class="text-success">{{_('Worker')}}</th>
             <th scope="col" class="text-success">{{_('Device')}}</th>
             <th scope="col" class="text-success">{{_('Model')}}</th>
+            <th scope="col" class="text-success">{{_('Serial #')}}</th>
             <th scope="col" class="text-success">{{_('Capacity')}}</th>
             <th scope="col" class="text-success">{{_('Status')}}</th>
             <th scope="col" class="text-success">{{_('Temperature')}}</th>
-            <th scope="col" class="text-success">{{_('Serial #')}}</th>
             <th scope="col" class="text-success">{{_('Updated At')}}</th>
           </tr>
         </thead>
@@ -91,7 +91,7 @@
       {% endif %}
         <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
           <div class="h-100 p-2 text-white bg-dark rounded-3">
-            <h5 class="text-white">{{drive.device}} -
+            <h5 class="text-white">{{drive.worker}} - {{drive.device}} -
                  {% if drive.model_family %}
                    {{drive.model_family}}
                  {% else %}
@@ -135,7 +135,7 @@
       </div>
       {% endif %}
       {% endfor %}
-      <small class="text-muted" style="float:right">Drive Status Updated {{drives.rows[0].updated_at | datetimefilter}}</small>
+      <small class="text-muted text-center">Drive status updated {{drives.rows[0].updated_at | datetimefilter}}</small>
       {% endif %}
     </fieldset>
   </form>

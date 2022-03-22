@@ -27,7 +27,7 @@ class Drives:
                 'status': drive.status,
                 'type': drive.type,
                 'comment': drive.comment,
-                'temperature': drive.temperature,
+                'temperature': round(drive.temperature) if drive.temperature else '',
                 'power_on_hours': self.convert_hours_days_etc(drive.power_on_hours),
                 'size_gibs': drive.size_gibs,
                 'capacity': drive.capacity,
