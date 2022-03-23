@@ -2,6 +2,21 @@
 
 {% block content %}
 
+<div class="modal fade" id="smartctlModal" tabindex="-1" aria-labelledby="smartctlModalLabel" aria-hidden="true">
+  <div class="modal-dialog bg-dark rounded-3 modal-lg">
+      <div class="modal-content bg-dark">
+          <div class="modal-header bg-dark">
+              <h5 class="modal-title" id="smartctlModalLabel">{{_('Smartctl Status')}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body bg-dark">
+              <p id='smartctlHeader'></p>
+              <pre id="smartctlContent"></pre>
+          </div>
+      </div>
+  </div>
+</div>
+
 <div class="position-relative">
   <div class="position-absolute top-0 end-0">
       <a href="{{ url_for('drives') }}?view=grid" title="Grid View"><i class="fs-4 bi-grid"></i></a>
@@ -46,6 +61,7 @@
             <th scope="col" class="text-success">{{_('Status')}}</th>
             <th scope="col" class="text-success">{{_('Temperature')}}</th>
             <th scope="col" class="text-success">{{_('Updated At')}}</th>
+            <th scope="col" class="text-success"></th>
           </tr>
         </thead>
         <tbody>
@@ -80,6 +96,9 @@
               &deg;C
             </td>
             <td>{{drive.updated_at | datetimefilter}}</td>
+            <td style="padding:0px">
+              <a href="#" title="View Details" data-bs-toggle="modal" data-bs-target="#smartctlModal" onclick='SmartctlDeviceInfo("{{ drive.serial_number }}", "{{ drive.worker }}", "{{ drive.device_model }}", "{{ drive.model_family }}");return false;'><i class="fs-4 bi-text-indent-left"></i></a>&nbsp;
+            </td>  
           </tr>
           {% endfor %}
         </tbody>
@@ -91,7 +110,10 @@
       {% endif %}
         <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
           <div class="h-100 p-2 text-white bg-dark rounded-3">
-            <h5 class="text-white">{{drive.worker}} - {{drive.device}} -
+            <h5 class="text-white">
+              <a href="#" title="View Details" data-bs-toggle="modal" data-bs-target="#smartctlModal" style="float:right"
+                onclick='SmartctlDeviceInfo("{{ drive.serial_number }}", "{{ drive.worker }}", "{{ drive.device_model }}", "{{ drive.model_family }}");return false;'><i class="fs-4 bi-text-indent-left"></i></a>
+                 {{drive.worker}} - {{drive.device}} -
                  {% if drive.model_family %}
                    {{drive.model_family}}
                  {% else %}
@@ -126,7 +148,7 @@
                   &deg;C
                 </td>
                 <td>{{drive.capacity}}</td>
-                <td>{{drive.power_on_hours}}</td>
+                <td>{{drive.power_on_hours}}</td>  
             </tr>
             </table>
           </div>
@@ -169,11 +191,28 @@
         var left = (screen.width - width) / 2;
         window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname + "&blockchain=" + blockchain, 'Machinaris ' + type + '.log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
     }
+    function SmartctlDeviceInfo(serial_number, hostname, device, model) {
+            var output = document.getElementById('smartctlHeader');
+            output.textContent = model + ' - ' + device + ' (' + hostname + ')';
+            var output = document.getElementById('smartctlContent');
+            output.textContent = ""; // Clear any old info before requesting
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', "{{ url_for('drives') }}?smartctl=" + serial_number);
+            xhr.send();
+            xhr.onload = function () {
+                output.textContent = xhr.responseText;
+            };
+        }
     $(document).ready(function () {
       $('#data').DataTable({
           "pageLength": 25,
           "lengthMenu": [ [25, 50, 100, 200, -1], [25, 50, 100, 200, "All"] ],
           "order": [[1, "asc"]],
+          "columnDefs": [
+            {
+                targets: [8], "orderable": false,
+            }
+          ],
           {% if lang != 'en' %}
           "language": {
               "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"

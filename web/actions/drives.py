@@ -22,3 +22,7 @@ from web.models import drives
 def load_drive_summary():
     drvs = db.session.query(d.Drive).order_by(d.Drive.hostname).all()
     return drives.Drives(drvs)
+
+def load_smartctl_info(serial_number):
+    drv = db.session.query(d.Drive).filter(d.Drive.serial_number == serial_number).first()
+    return drv.smart_info

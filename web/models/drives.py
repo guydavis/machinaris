@@ -31,7 +31,6 @@ class Drives:
                 'power_on_hours': self.convert_hours_days_etc(drive.power_on_hours),
                 'size_gibs': drive.size_gibs,
                 'capacity': drive.capacity,
-                'smart_info': drive.smart_info,
                 'created_at': drive.created_at,
                 'updated_at': drive.updated_at
             })
