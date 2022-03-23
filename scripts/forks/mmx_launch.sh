@@ -51,19 +51,19 @@ else
 	echo "No OPENCL_GPU provided.  MMX blockchain will use use CPU instead."
 fi
 
-# Symlink the NETWORK file, use 'test4' for now
+# Symlink the NETWORK file, use 'test5' for now
 #if [ ! -f /root/.chia/mmx/NETWORK ]; then
-echo 'test4' > /root/.chia/mmx/NETWORK
+echo 'test5' > /root/.chia/mmx/NETWORK
 #fi
 rm -f ./NETWORK
 ln -s /root/.chia/mmx/NETWORK /mmx-node/NETWORK
 
-# Symlink the testnet4 folder
-if [ ! -d /root/.chia/mmx/testnet4 ]; then
-	mkdir /root/.chia/mmx/testnet4
+# Symlink the testnet5 folder
+if [ ! -d /root/.chia/mmx/testnet5 ]; then
+	mkdir /root/.chia/mmx/testnet5
 fi
-rm -rf ./testnet4
-ln -s /root/.chia/mmx/testnet4 /mmx-node/testnet4
+rm -rf ./testnet5
+ln -s /root/.chia/mmx/testnet5 /mmx-node/testnet5
 
 # Create a key if none found from previous runs
 if [[ ${mode} == 'fullnode' ]]; then

@@ -599,7 +599,7 @@ class Connections:
         if blockchain == 'nchain':
             return 58445
         if blockchain == 'mmx':
-            return 12334
+            return 12335
         if blockchain == 'maize':
             return 8644
         if blockchain == 'silicoin':
