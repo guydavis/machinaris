@@ -28,6 +28,9 @@ if [ ! -d /root/.chia/mmx/config ]; then
 EOF
 	# For a fresh install of Machinaris-MMX, disable timelord by default to save CPU usage
 	echo false > /root/.chia/mmx/config/local/timelord
+elif [ ! -d /root/.chia/mmx/config/testnet5 ]; then # Handle an upgrade from older testnet
+	echo 'Copying over new testnet configs to /root/.chia/mmx/config/'
+	cp -r ./config/testnet5 /root/.chia/mmx/config/
 fi
 rm -rf ./config
 ln -s /root/.chia/mmx/config /mmx-node/config
@@ -51,9 +54,9 @@ else
 	echo "No OPENCL_GPU provided.  MMX blockchain will use use CPU instead."
 fi
 
-# Symlink the NETWORK file, use 'test5' for now
+# Symlink the NETWORK file, use 'testnet5' for now
 #if [ ! -f /root/.chia/mmx/NETWORK ]; then
-echo 'test5' > /root/.chia/mmx/NETWORK
+echo 'testnet5' > /root/.chia/mmx/NETWORK
 #fi
 rm -f ./NETWORK
 ln -s /root/.chia/mmx/NETWORK /mmx-node/NETWORK

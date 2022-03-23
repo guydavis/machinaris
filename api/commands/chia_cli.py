@@ -66,7 +66,10 @@ def save_config(config, blockchain):
         app.logger.info(traceback.format_exc())
         raise Exception(_('Updated config.yaml failed validation!') + '\n' + str(ex))
     else:
-        pass
+        try:
+            start_farmer(blockchain)
+        except Exception as ex:
+            app.logger.info("Failed to restart farmer because {0}.".format(str(ex)))
 
 def load_wallet_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
