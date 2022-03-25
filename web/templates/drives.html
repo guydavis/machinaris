@@ -49,7 +49,7 @@
   {% if drives.rows|length > 0 %}
   <form method="POST" id="drives-form" style="padding-bottom: 10px;">
     <fieldset>
-      {% if drives.rows|length > 10 or (request.args.get('view') == 'table' and request.args.get('view') != 'grid') %}
+      {% if (request.args.get('view') == 'table' or drives.rows|length >= 10) and request.args.get('view') != 'grid' %}
       <table id="data" class="table table-dark">
         <thead>
           <tr>
