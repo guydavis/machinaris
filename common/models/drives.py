@@ -8,13 +8,12 @@ from common.extensions.database import db
 class Drive(db.Model):
     __bind_key__ = 'drives'
     __tablename__ = "drives"
-
-    serial_number = sa.Column(sa.String(), primary_key=True)
-    hostname = sa.Column(sa.String(length=255), nullable=False)
+    device = sa.Column(sa.String(), primary_key=True)
+    hostname = sa.Column(sa.String(length=255), primary_key=True)
     blockchain = sa.Column(sa.String(length=64), nullable=False)
+    serial_number = sa.Column(sa.String(), nullable=True)
     model_family = sa.Column(sa.String(), nullable=True)
     device_model = sa.Column(sa.String(), nullable=True)
-    device = sa.Column(sa.String(), nullable=True)
     status = sa.Column(sa.String(), nullable=True)
     type = sa.Column(sa.String(), nullable=True)
     comment = sa.Column(sa.String(), nullable=True)

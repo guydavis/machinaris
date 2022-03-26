@@ -37,14 +37,14 @@ class Drives(MethodView):
             return "No drives provided.", 400
         items = []
         for new_item in new_items:
-            item = db.session.query(Drive).get(new_item['serial_number'])
+            item = db.session.query(Drive).filter(Drive.hostname==new_item['hostname'], Drive.device==new_item['device']).first()
             if item: # upsert
-                #app.logger.info("Upserting: {0}".format(new_item['serial_number']))
+                app.logger.info("Upserting: {0} on {1}".format(new_item['device'], new_item['hostname']))
                 new_item['created_at'] = item.created_at
                 new_item['updated_at'] = dt.datetime.now()
                 DriveSchema().update(item, new_item)
             else: # insert
-                #app.logger.info("Inserting: {0}".format(new_item['serial_number']))
+                app.logger.info("Inserting: {0} on {1}".format(new_item['device'], new_item['hostname']))
                 new_item['created_at'] = new_item['updated_at'] = dt.datetime.now()
                 item = Drive(**new_item)
             db.session.add(item)

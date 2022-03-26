@@ -273,9 +273,8 @@ def worker_route():
 
 @app.route('/drives')
 def drives():
-    if request.args.get('smartctl'):  # serial number of a drive
-        serial_number = request.args.get('smartctl')
-        return d.load_smartctl_info(serial_number)
+    if request.args.get('device') and request.args.get('hostname'):
+        return d.load_smartctl_info(request.args.get('hostname'), request.args.get('device'))
     gc = globals.load()
     drvs = d.load_drive_summary()
     return render_template('drives.html', reload_seconds=120, 
