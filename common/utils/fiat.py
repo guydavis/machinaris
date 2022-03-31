@@ -21,8 +21,9 @@ def to_fiat(blockchain, coins):
                     usd_per_coin = float(data[blockchain])
                     fiat_per_usd = get_fiat_exchange_to_usd()
                     fiat_cur_sym = get_local_currency_symbol().lower()
-                    #print("Converting {0} coins of {1} with {2}".format(coins, usd_per_coin, fiat_per_usd))
-                    return "{:,.2f} {fiat_cur_sym}".format(usd_per_coin * fiat_per_usd * coins, fiat_cur_sym=fiat_cur_sym)
+                    if usd_per_coin and fiat_per_usd:
+                        #print("Converting {0} coins of {1} with {2}".format(coins, usd_per_coin, fiat_per_usd))
+                        return "{:,.2f} {fiat_cur_sym}".format(usd_per_coin * fiat_per_usd * coins, fiat_cur_sym=fiat_cur_sym)
                 return ''
         except Exception as ex:
             print("Unable to convert to fiat because {0}".format(str(ex)))
