@@ -17,7 +17,7 @@ from common.utils import fiat
 from common.models import pools as po
 from web import app, utils
 from web.actions import chia, pools as p, plotman, chiadog, worker, \
-        log_handler, stats, warnings, forktools, mapping
+        log_handler, stats, warnings, forktools, mapping, drives as d
 
 def get_lang(request):
     try:
@@ -85,9 +85,10 @@ def summary():
         fiat.save_local_currency(request.form.get('local_currency'))
         flash(_("Saved local currency setting."), 'success')
     summaries = chia.load_summaries()
+    fullnodes = worker.get_fullnodes_by_blockchain()
     return render_template('summary.html', reload_seconds=120, summaries=summaries, global_config=gc,
         exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
-        local_cur_sym=fiat.get_local_currency_symbol(), lang=get_lang(request))
+        local_cur_sym=fiat.get_local_currency_symbol(), fullnodes=fullnodes, lang=get_lang(request))
 
 @app.route('/setup', methods=['GET', 'POST'])
 def setup():
@@ -270,13 +271,23 @@ def worker_route():
         plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc,
         lang=get_lang(request))
 
+@app.route('/drives')
+def drives():
+    if request.args.get('device') and request.args.get('hostname'):
+        return d.load_smartctl_info(request.args.get('hostname'), request.args.get('device'))
+    gc = globals.load()
+    drvs = d.load_drive_summary()
+    return render_template('drives.html', reload_seconds=120, 
+        drives=drvs, global_config=gc, lang=get_lang(request))
+
 @app.route('/blockchains')
 def blockchains():
     gc = globals.load()
     selected_blockchain = worker.default_blockchain()
     blockchains = chia.load_blockchains()
+    fullnodes = worker.get_fullnodes_by_blockchain()
     return render_template('blockchains.html', reload_seconds=120, selected_blockchain = selected_blockchain, 
-        blockchains=blockchains, global_config=gc, lang=get_lang(request))
+        blockchains=blockchains, fullnodes=fullnodes, global_config=gc, lang=get_lang(request))
 
 @app.route('/connections', methods=['GET', 'POST'])
 def connections():

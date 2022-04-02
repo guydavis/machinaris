@@ -152,6 +152,7 @@ async def load_all_plots():
             # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
             host = harvester["connection"]["host"]
             plots = harvester["plots"]
+            app.logger.info("Listing plots found {0} plots on {1}.".format(len(plots), host))
             for plot in plots:
                 all_plots.append({
                     "hostname": host,

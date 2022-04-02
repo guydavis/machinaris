@@ -4,8 +4,8 @@
 #
 
 SILICOIN_BRANCH=$1
-# On 2022-02-05
-HASH=ca482fa66f05e883891705c86bfdff63e101e3a4
+# On 2022-03-20
+HASH=ebe7880e24b22d8f3bf8d0c8b31ad5397b3e7af3
 
 if [ -z ${SILICOIN_BRANCH} ]; then
 	echo 'Skipping Silicoin install as not requested.'

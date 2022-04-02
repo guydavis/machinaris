@@ -63,6 +63,7 @@ def get_fullnodes_by_blockchain():
     fullnodes = {}
     for worker in db.session.query(workers.Worker).filter(workers.Worker.mode=='fullnode').all():
         fullnodes[worker.blockchain] = worker
+        app.logger.debug("{0} -> {1}".format(worker.blockchain, worker.hostname))
     return fullnodes
 
 def default_blockchain():

@@ -4,8 +4,8 @@
 #
 
 MMX_BRANCH=$1
-# On 2021-12-29 - temporarily disable as no releases are happening
-#HASH=00fdc419a6b5d9ad7c00839dbf9af93014673a18
+# On 2022-04-01
+HASH=23643e7c58097536ffea5f83953b1374337854e5
 
 if [ -z ${MMX_BRANCH} ]; then
 	echo 'Skipping MMX install as not requested.'

@@ -1,0 +1,224 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="modal fade" id="smartctlModal" tabindex="-1" aria-labelledby="smartctlModalLabel" aria-hidden="true">
+  <div class="modal-dialog bg-dark rounded-3 modal-lg">
+      <div class="modal-content bg-dark">
+          <div class="modal-header bg-dark">
+              <h5 class="modal-title" id="smartctlModalLabel">{{_('Smartctl Status')}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body bg-dark">
+              <p id='smartctlHeader'></p>
+              <pre id="smartctlContent"></pre>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="position-relative">
+  <div class="position-absolute top-0 end-0">
+      <a href="{{ url_for('drives') }}?view=grid" title="Grid View"><i class="fs-4 bi-grid"></i></a>
+      <a href="{{ url_for('drives') }}?view=table" title="Table View"><i class="fs-4 bi-table"></i></a>
+      &nbsp;
+      <a href="https://github.com/guydavis/machinaris/wiki/Drives" target="_blank"><i class="fs-4 bi-question-circle"></i></a>
+  </div>
+</div>
+
+<header class="pb-3 mb-4 border-bottom">
+  <span class="fs-4">{{_('Drives')}}</span>
+</header>
+
+<div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  {% if category == 'message' %}
+  <div class="alert alert-warning" role="alert">
+    {% else %}
+    <div class="alert alert-{{ category }}" role="alert">
+      {% endif %}
+      {{ message|safe }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+  </div>
+
+  {% if drives.rows|length > 0 %}
+  <form method="POST" id="drives-form" style="padding-bottom: 10px;">
+    <fieldset>
+      {% if (request.args.get('view') == 'table' or drives.rows|length >= 10) and request.args.get('view') != 'grid' %}
+      <table id="data" class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col" class="text-success">{{_('Worker')}}</th>
+            <th scope="col" class="text-success">{{_('Device')}}</th>
+            <th scope="col" class="text-success">{{_('Model')}}</th>
+            <th scope="col" class="text-success">{{_('Serial #')}}</th>
+            <th scope="col" class="text-success">{{_('Capacity')}}</th>
+            <th scope="col" class="text-success">{{_('Status')}}</th>
+            <th scope="col" class="text-success">{{_('Temperature')}}</th>
+            <th scope="col" class="text-success">{{_('Updated At')}}</th>
+            <th scope="col" class="text-success"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for drive in drives.rows %}
+          <tr>
+            <td>{{drive.worker}}</td>
+            <td>{{drive.device}}</td>
+            <td> {% if drive.model_family %}
+                   {{drive.model_family}}
+                 {% else %}
+                  {{drive.device_model}}
+                 {% endif %}
+            </td>
+            <td>{{drive.serial_number}}</td>
+            <td>{{drive.capacity}}</td>
+            <td>
+              {% if drive.status == 'PASSED' %}
+                <i class="bi-check-circle text-success"></i> {{_('Passed')}}
+              {% else %}
+                <i class="bi-dash-circle text-danger" title="{{ drive.status }}"></i>
+                {{_(drive.status)}}
+              {% endif %}
+            </td>
+            <td>
+              {% if drive.temperature < 40 %}
+                <i class="bi-check-circle text-success"></i> {{ drive.temperature }}
+              {% elif drive.temperature < 50 %}
+                <i class="bi-exclamation-triangle text-warning"></i> {{ drive.temperature }}
+              {% else %}
+                <i class="bi-dash-circle text-danger"></i> {{ drive.temperature }}
+              {% endif %}
+              &deg;C
+            </td>
+            <td>{{drive.updated_at | datetimefilter}}</td>
+            <td style="padding:0px">
+              <a href="#" title="View Details" data-bs-toggle="modal" data-bs-target="#smartctlModal" onclick='SmartctlDeviceInfo("{{ drive.hostname }}", "{{ drive.device }}", "{{ drive.worker }}", "{{ drive.device_model }}", "{{ drive.model_family }}");return false;'><i class="fs-4 bi-text-indent-left"></i></a>&nbsp;
+            </td>  
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      {% for drive in drives.rows %}
+      {% if loop.index % 2 == 1 %}
+      <div class="row align-items-md-stretch">
+      {% endif %}
+        <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
+          <div class="h-100 p-2 text-white bg-dark rounded-3">
+            <h5 class="text-white">
+              <a href="#" title="View Details" data-bs-toggle="modal" data-bs-target="#smartctlModal" style="float:right"
+                onclick='SmartctlDeviceInfo("{{ drive.hostname }}", "{{ drive.device }}", "{{ drive.worker }}", "{{ drive.device_model }}", "{{ drive.model_family }}");return false;'><i class="fs-4 bi-text-indent-left"></i></a>
+                 {{drive.worker}} - {{drive.device}} -
+                 {% if drive.model_family %}
+                   {{drive.model_family}}
+                 {% else %}
+                   {{drive.device_model}}
+                 {% endif %}
+            </h5>
+            <small class="text-success">{{ drive.device_model }} ({{ drive.serial_number }})</small>
+            <table class="text-muted" style="width: 100%">
+              <tr>
+                <td>S.M.A.R.T</td>
+                <td>Temperature</td>
+                <td>Capacity</td>
+                <td>Powered On</td>
+              </tr>
+              <tr>
+                <td>
+                  {% if drive.status == 'PASSED' %}
+                    <i class="bi-check-circle text-success"></i> {{_('Passed')}}
+                  {% else %}
+                    <i class="bi-dash-circle text-danger" title="{{ drive.status }}"></i>
+                    {{_(drive.status)}}
+                  {% endif %}
+                </td>
+                <td>
+                  {% if drive.temperature < 40 %}
+                    <i class="bi-check-circle text-success"></i> {{ drive.temperature }}
+                  {% elif drive.temperature < 50 %}
+                    <i class="bi-exclamation-triangle text-warning"></i> {{ drive.temperature }}
+                  {% else %}
+                    <i class="bi-dash-circle text-danger"></i> {{ drive.temperature }}
+                  {% endif %}
+                  &deg;C
+                </td>
+                <td>{{drive.capacity}}</td>
+                <td>{{drive.power_on_hours}}</td>  
+            </tr>
+            </table>
+          </div>
+        </div>
+      {% if loop.index % 2 == 0 %}
+      </div>
+      {% endif %}
+      {% endfor %}
+      <small class="text-muted text-center">Drive status updated {{drives.rows[0].updated_at | datetimefilter}}</small>
+      {% endif %}
+    </fieldset>
+  </form>
+
+  {% else %}
+
+  {% autoescape false %}
+  <div class="text-center" style="padding-top:100 px; padding-bottom: 0px">
+    <h6>{{_('No drives accessible to smartctl inside the Machinaris containers.')}}</h6>
+    <h6>{{_('Please configure Docker to allow smartctl access to host devices.')}}</h6>
+    <h6>{{_('For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s.', 
+        wiki_link_open='<a href="https://github.com/guydavis/machinaris/wiki/Drives" target="_blank">',
+        wiki_link_close='</a>')}}
+    </h6>
+  </div>
+  {% endautoescape %}
+  <br />
+  <br />
+  {% endif %}
+
+
+  {% endblock %}
+
+  {% block scripts %}
+  <script>
+    function MachinarisLog(type, hostname, blockchain) {
+        var d = new Date();
+        var height = 600;
+        var width = 900;
+        var top = (screen.height - height) / 2;
+        var left = (screen.width - width) / 2;
+        window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname + "&blockchain=" + blockchain, 'Machinaris ' + type + '.log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+    }
+    function SmartctlDeviceInfo(ip_addr, device, hostname, model, family) {
+            var output = document.getElementById('smartctlHeader');
+            output.textContent = device + ' - ' + family + ' - ' + model + ' (' + hostname + ')';
+            var output = document.getElementById('smartctlContent');
+            output.textContent = ""; // Clear any old info before requesting
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', "{{ url_for('drives') }}?hostname=" + encodeURIComponent(ip_addr) + "&device=" + encodeURIComponent(device));
+            xhr.send();
+            xhr.onload = function () {
+                output.textContent = xhr.responseText;
+            };
+        }
+    $(document).ready(function () {
+      $('#data').DataTable({
+          "pageLength": 25,
+          "lengthMenu": [ [25, 50, 100, 200, -1], [25, 50, 100, 200, "All"] ],
+          "order": [[1, "asc"]],
+          "columnDefs": [
+            {
+                targets: [8], "orderable": false,
+            }
+          ],
+          {% if lang != 'en' %}
+          "language": {
+              "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+          },
+          {% endif %}
+      });
+    })
+  </script>
+  {% endblock %}
