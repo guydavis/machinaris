@@ -5,11 +5,12 @@ All notable changes to this project will be documented in this file. The format 
 ## Known Issues
  - 
 
-## [0.7.1] - 2022-04-?
- - Drive monitoring using Smartctl (still a work-in-progress)
+## [0.7.1] - 2022-04-
+ - Drive monitoring using Smartctl (WebUI status currently, alerting to come soon)
  - Dutch translations (nl_NL) provided by Bernie Deprez.  Thanks!
- - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.3.1) - v1.3.1 patch release
  - Updates to various fork blockchains and tools including BTCGreen, HDDCoin, Madmax, MMX and Shibgreen
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.3.1) - v1.3.1 patch release
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.3.2) - v1.3.2 patch release
 
 ## [0.7.0] - 2022-03-11
  - [Chia](https://chia.net) - [v1.3](https://www.reddit.com/r/chia/comments/t95vuk/13_is_live/), please note reports of issues in this new Chia release...  double-check your Wallet and Pools settings after upgrading!
