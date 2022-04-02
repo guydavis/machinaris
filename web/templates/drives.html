@@ -67,18 +67,20 @@
         <tbody>
           {% for drive in drives.rows %}
           <tr>
-            <td>{{drive.worker}}</td>
-            <td>{{drive.device}}</td>
+            <td>{% if drive.worker %}{{drive.worker}}{% endif %}</td>
+            <td>{% if drive.device %}{{drive.device}}{% endif %}</td>
             <td> {% if drive.model_family %}
                    {{drive.model_family}}
-                 {% else %}
+                 {% elif drive.device_model %}
                   {{drive.device_model}}
                  {% endif %}
             </td>
-            <td>{{drive.serial_number}}</td>
-            <td>{{drive.capacity}}</td>
+            <td>{% if drive.serial_number %}{{drive.serial_number}}{% endif %}</td>
+            <td>{% if drive.capcacity %}{{drive.capacity}}{% endif %}</td>
             <td>
-              {% if drive.status == 'PASSED' %}
+              {% if not drive.status %}
+                &nbsp;
+              {% elif drive.status == 'PASSED' %}
                 <i class="bi-check-circle text-success"></i> {{_('Passed')}}
               {% else %}
                 <i class="bi-dash-circle text-danger" title="{{ drive.status }}"></i>
@@ -86,14 +88,15 @@
               {% endif %}
             </td>
             <td>
-              {% if drive.temperature < 40 %}
-                <i class="bi-check-circle text-success"></i> {{ drive.temperature }}
+              {% if not drive.temperature %}
+                &nbsp;
+              {% elif drive.temperature < 40 %}
+                <i class="bi-check-circle text-success"></i> {{ drive.temperature }} &deg;C
               {% elif drive.temperature < 50 %}
-                <i class="bi-exclamation-triangle text-warning"></i> {{ drive.temperature }}
+                <i class="bi-exclamation-triangle text-warning"></i> {{ drive.temperature }} &deg;C
               {% else %}
-                <i class="bi-dash-circle text-danger"></i> {{ drive.temperature }}
+                <i class="bi-dash-circle text-danger"></i> {{ drive.temperature }} &deg;C
               {% endif %}
-              &deg;C
             </td>
             <td>{{drive.updated_at | datetimefilter}}</td>
             <td style="padding:0px">
@@ -120,7 +123,11 @@
                    {{drive.device_model}}
                  {% endif %}
             </h5>
-            <small class="text-success">{{ drive.device_model }} ({{ drive.serial_number }})</small>
+            <small class="text-success">{{ drive.device_model }} 
+              {% if drive.serial_number %}
+                ({{ drive.serial_number }})
+              {% endif %}
+            </small>
             <table class="text-muted" style="width: 100%">
               <tr>
                 <td>S.M.A.R.T</td>
@@ -130,7 +137,9 @@
               </tr>
               <tr>
                 <td>
-                  {% if drive.status == 'PASSED' %}
+                  {% if not drive.status %}
+                    &nbsp;
+                  {% elif drive.status == 'PASSED' %}
                     <i class="bi-check-circle text-success"></i> {{_('Passed')}}
                   {% else %}
                     <i class="bi-dash-circle text-danger" title="{{ drive.status }}"></i>
@@ -138,17 +147,26 @@
                   {% endif %}
                 </td>
                 <td>
-                  {% if drive.temperature < 40 %}
-                    <i class="bi-check-circle text-success"></i> {{ drive.temperature }}
+                  {% if not drive.temperature %}
+                    &nbsp;
+                  {% elif drive.temperature < 40 %}
+                    <i class="bi-check-circle text-success"></i> {{ drive.temperature }} &deg;C
                   {% elif drive.temperature < 50 %}
-                    <i class="bi-exclamation-triangle text-warning"></i> {{ drive.temperature }}
+                    <i class="bi-exclamation-triangle text-warning"></i> {{ drive.temperature }} &deg;C
                   {% else %}
-                    <i class="bi-dash-circle text-danger"></i> {{ drive.temperature }}
+                    <i class="bi-dash-circle text-danger"></i> {{ drive.temperature }} &deg;C
                   {% endif %}
-                  &deg;C
                 </td>
-                <td>{{drive.capacity}}</td>
-                <td>{{drive.power_on_hours}}</td>  
+                <td>
+                  {% if drive.capacity %}
+                    {{drive.capacity}}
+                  {% endif %}
+                </td>
+                <td>
+                  {% if drive.power_on_hours %}
+                    {{drive.power_on_hours}}
+                  {% endif %}
+                </td>  
             </tr>
             </table>
           </div>

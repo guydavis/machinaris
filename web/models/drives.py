@@ -27,7 +27,7 @@ class Drives:
                 'status': drive.status,
                 'type': drive.type,
                 'comment': drive.comment,
-                'temperature': round(drive.temperature) if drive.temperature else '',
+                'temperature': round(drive.temperature) if drive.temperature else None,
                 'power_on_hours': self.convert_hours_days_etc(drive.power_on_hours),
                 'size_gibs': drive.size_gibs,
                 'capacity': drive.capacity,
@@ -36,6 +36,8 @@ class Drives:
             })
 
     def convert_hours_days_etc(self, hours):
+        if not hours:
+            return None
         if hours < 24:
             return "{0} ".format(round(hours, 1)) + _('hours')
         if hours < 24 * 7:

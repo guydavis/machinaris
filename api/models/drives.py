@@ -24,11 +24,11 @@ class DriveStatus:
         self.model_family = ''
         self.device_model = ''
         self.serial_number = ''
-        self.size_gibs = 0
+        self.size_gibs = None
         self.capacity = ''
         self.status = ''
-        self.power_on_hours = ''
-        self.temperature = ''
+        self.power_on_hours = None
+        self.temperature = None
         for line in data:
             if line.startswith('Model Family'):
                 # Example: "Model Family:     Seagate BarraCuda 3.5"

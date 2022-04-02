@@ -14,6 +14,7 @@ import traceback
 import yaml
 
 from flask import Flask, jsonify, abort, request, flash
+from flask_babel import _, lazy_gettext as _l
 
 from common.models import drives as d
 from web import app, db, utils
@@ -25,4 +26,6 @@ def load_drive_summary():
 
 def load_smartctl_info(hostname, device):
     drv = db.session.query(d.Drive).filter(d.Drive.hostname == hostname, d.Drive.device == device).first()
+    if not drv or not drv.smart_info:
+        return _('Oops! No smartcl info found device {0} on {1}.'.format(device, hostname))
     return drv.smart_info
