@@ -346,3 +346,8 @@ def downgrade_stat_plotting_disk_free():
     pass
     # ### end Alembic commands ###
 
+def upgrade_drives():
+    pass
+
+def downgrade_drives():
+    pass

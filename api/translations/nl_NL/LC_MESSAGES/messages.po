@@ -1,0 +1,64 @@
+# Dutch (Netherlands) translations for Machinaris.
+# Copyright (C) 2022 Guy Davis
+# This file is distributed under the same license as the Machinaris project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Machinaris VERSION\n"
+"Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
+"Creation-Date: 2022-03-13 10:30-0600\n"
+"POT-Creation-Date: 2022-03-30 20:47-0600\n"
+"PO-Revision-Date: 2022-03-13 10:29-0600\n"
+"Last-Translator: Bernie Deprez\n"
+"Language: nl_NL\n"
+"Language-Team: nl_NL <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: commands/chia_cli.py:67
+msgid "Updated config.yaml failed validation!"
+msgstr "Gewijzigde config.yaml kon niet gevalideerd worden!"
+
+#: commands/pools_cli.py:68
+msgid "No requested pool modifications were sent. Current settings are unchanged."
+msgstr "Geen pool wijzigingen verstuurd. Huidige configuratie is ongewijzigd."
+
+#: commands/pools_cli.py:151
+msgid ""
+"Successfully left pool, switching to self-pooling. Please wait a few "
+"minutes or more to complete. DO NOT immediately re-submit your request. "
+"View the log for details."
+msgstr ""
+"Pool succesvol verlaten, overgeschakeld naar self-pooling. Gelieve enkele"
+" minuten (of meer) te wachten. Stuur NIET ONMIDDELLIJK een nieuwe "
+"aanvraag maar controleer de logs voor meer details."
+
+#: commands/pools_cli.py:195
+#, python-format
+msgid ""
+"Successfully joined %(pool_url)s pool by creating Chia NFT.  Please wait "
+"a few minutes or more to complete. DO NOT immediately re-submit your "
+"request. Be patient! View the log for details."
+msgstr ""
+"Succesvol aangesloten bij de %(pool_url) pool door creatie van een Chia "
+"NFT. Gelieve enkele minuten (of meer) te wachten. Stuur NIET ONMIDDELLIJK"
+" een nieuwe aanvraag. Wees geduldig! Controleer de logs voor meer "
+"details."
+
+#: commands/pools_cli.py:224
+msgid ""
+"Successfully created a NFT for self-pooling.  Please wait a few minutes "
+"or more to complete. DO NOT immediately re-submit your request. Be "
+"patient! View the log for details."
+msgstr ""
+"Succesvol een NFT gemaakt voor self-pooling. Gelieve enkele minuten (of "
+"meer) te wachten. Stuur NIET ONMIDDELLIJK een nieuwe aanvraag. Wees "
+"geduldig! Controleer de logs voor meer details."
+
+#: views/ping/resources.py:28
+msgid "Pong!"
+msgstr "Pong!"
+

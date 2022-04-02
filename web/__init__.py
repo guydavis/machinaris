@@ -20,9 +20,18 @@ babel = Babel(app)
 
 @babel.localeselector
 def get_locale():
-    #for d in babel.translation_directories:
-    #    app.logger.info(d)
-    #app.logger.info("WEB=> Returning locale: {0}".format(request.accept_languages.best_match(app.config['LANGUAGES'])))
+    try:
+        accept = request.headers['Accept-Language']
+        match = request.accept_languages.best_match(app.config['LANGUAGES'])
+        # Workaround for dumb babel match method suggesting 'en' for 'nl' instead of 'nl_NL'
+        if match == 'en' and not accept.startswith('en'):
+            first_accept = accept.split(',')[0]  # Like 'nl'
+            alternative = "{0}_{1}".format(first_accept, first_accept.upper())
+            if alternative in app.config['LANGUAGES']:
+                return alternative
+        app.logger.info("INIT: Accept-Language: {0}  ---->  matched locale: {1}".format(accept, match))
+    except:
+        app.logger.info("INIT: Request had no Accept-Language, returning default locale of en.")
     return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 @event.listens_for(Engine, "connect")

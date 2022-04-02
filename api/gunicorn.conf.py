@@ -10,7 +10,7 @@ def on_starting(server):
     from api.schedules import status_worker, status_farm, status_plotting, \
         status_plots, status_challenges, status_wallets, status_blockchains, \
         status_connections, status_keys, status_alerts, status_controller, \
-        status_plotnfts, status_pools, status_partials
+        status_plotnfts, status_pools, status_partials, status_drives
     from api.schedules import stats_disk, stats_farm, nft_recover, plots_check, \
         log_rotate, db_backup, restart_stuck_farmer, geolocate_peers
     from common.config import globals
@@ -36,6 +36,7 @@ def on_starting(server):
     # Collect disk stats from all modes where blockchain is chia, avoiding duplicate disks from multiple forks on same host
     if 'chia' in globals.enabled_blockchains():
         scheduler.add_job(func=stats_disk.collect, name="stats_disk", trigger='cron', minute="*/10") # Every 10 minutes
+        scheduler.add_job(func=status_drives.update, name="status_drives", trigger='cron', minute="*/5") # Every 5 minutes
         
     # MMX needs to report plots from harvesters directly as they are not listed via the fullnode like Chia does
     if not utils.is_fullnode() and globals.harvesting_enabled() and 'mmx' in globals.enabled_blockchains():
@@ -75,7 +76,7 @@ def on_starting(server):
         scheduler.add_job(func=geolocate_peers.execute, name="geolocate_peers", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
 
     # Testing only
-    #scheduler.add_job(func=websvcs.get_prices, name="get_prices", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=status_drives.update, name="status_drives", trigger='interval', seconds=10) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()

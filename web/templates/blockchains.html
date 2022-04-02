@@ -33,12 +33,13 @@
                 <th scope="col" class="text-success">{{_('Peak Height')}}</th>
                 <th scope="col" class="text-success">{{_('Peak Time')}}</th>
                 <th scope="col" class="text-success">{{_('Updated At')}}</th>
+                <th scope="col" class="text-success">{{_('Logs')}}</th>
             </tr>
         </thead>
         <tbody>
             {% for blockchain in blockchains.rows %}
             <tr>
-                <td>{{blockchain.blockchain}}</td>
+                <td><a class="text-white" href="{{ url_for('worker_route') }}?hostname={{ fullnodes[blockchain.blockchain].hostname }}&blockchain={{ blockchain.blockchain }}">{{blockchain.blockchain}}</a></td>
                 <td>
                     {% if blockchain.status == 'Offline' %}
                       <i class="bi-dash-circle text-danger"></i>
@@ -52,6 +53,9 @@
                 <td>{{blockchain.peak_height}}</td>
                 <td>{{blockchain.peak_time}}</td>
                 <td>{{blockchain.updated_at | datetimefilter}}</td>
+                <td style="padding:0px">
+                    <a href="#" title="View Blockchain Log" onclick='ViewLogs("{{ fullnodes[blockchain.blockchain].hostname }}","{{ blockchain.blockchain }}");return false;'><i class="fs-4 bi-text-indent-left"></i></a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
@@ -93,9 +97,22 @@
 
 {% block scripts %}
 <script>
+function ViewLogs(hostname, blockchain) {
+    var d = new Date();
+    var height = 600;
+    var width = 900;
+    var top = (screen.height - height) / 2;
+    var left = (screen.width - width) / 2;
+    window.open("{{ url_for('logs') }}?log=farming" + "&hostname=" + hostname + "&blockchain=" + blockchain, '{{_('Fullnode Log for ')}}' + blockchain + ' - ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+}
 $(document).ready(function () {
     $('#data').DataTable({
         "pageLength": 25,
+        "columnDefs": [
+            {
+                targets: [5], "orderable": false,
+            }
+        ],
         {% if lang != 'en' %}
         "language": {
             "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"

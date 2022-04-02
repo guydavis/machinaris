@@ -9,6 +9,7 @@ class DefaultConfig:
         'blockchains':      'sqlite:////root/.chia/machinaris/dbs/blockchains.db',
         'challenges':       'sqlite:////root/.chia/machinaris/dbs/challenges.db',
         'connections':      'sqlite:////root/.chia/machinaris/dbs/connections.db',
+        'drives':           'sqlite:////root/.chia/machinaris/dbs/drives.db',
         'farms':            'sqlite:////root/.chia/machinaris/dbs/farms.db',
         'keys':             'sqlite:////root/.chia/machinaris/dbs/keys.db',
         'partials':         'sqlite:////root/.chia/machinaris/dbs/partials.db',
@@ -40,4 +41,4 @@ class DefaultConfig:
 
     # Note, babel looks in /machinaris/web/translations with this path.
     BABEL_TRANSLATION_DIRECTORIES = "translations"
-    LANGUAGES = ['en', 'de_DE', 'fr_FR', 'it_IT', 'pt_PT', 'zh']
+    LANGUAGES = ['en', 'de_DE', 'fr_FR', 'it_IT', 'nl_NL', 'pt_PT', 'zh']

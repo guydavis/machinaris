@@ -9,8 +9,6 @@ import sqlite3
 import socket
 import traceback
 
-from flask import g
-
 from common.config import globals
 from common.models import stats
 from api import app, utils, db

@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
-"Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
-"Creation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-09 13:07-0700\n"
+"Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
+"/issuesCreation-Date: 2022-02-16 15:00-0700\n"
+"POT-Creation-Date: 2022-03-30 20:47-0600\n"
 "PO-Revision-Date: 2022-02-15 14:29-0700\n"
 "Last-Translator: Guy Davis\n"
 "Language: fr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.9.1\n"
 
-#: commands/chia_cli.py:66
+#: commands/chia_cli.py:67
 msgid "Updated config.yaml failed validation!"
 msgstr "Échec de la validation du fichier config.yaml mis à jour!"
 
