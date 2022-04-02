@@ -30,21 +30,21 @@ class DriveStatus:
         self.power_on_hours = None
         self.temperature = None
         for line in data:
-            if line.startswith('Model Family'):
+            if line.strip().startswith('Model Family'):
                 # Example: "Model Family:     Seagate BarraCuda 3.5"
                 self.model_family = line.split(':')[1].strip()
-            elif line.startswith('Device Model'):
+            elif line.strip().startswith('Device Model'):
                 # Example: "Device Model:     ST8000DM004-2CX188"
                 self.device_model = line.split(':')[1].strip()
-            elif line.startswith('Serial Number'):
+            elif line.strip().startswith('Serial Number'):
                 # Example: "Serial Number:    ZR106HWB"
                 self.serial_number = line.split(':')[1].strip()
-            elif line.startswith('User Capacity'):
+            elif line.strip().startswith('User Capacity'):
                 # Example: "User Capacity:    8,001,563,222,016 bytes [8.00 TB]""
                 size = line.split(':')[1].strip()
                 self.size_gibs = round(float(int(size.split('bytes')[0].strip().replace(',', '')) / 1024 / 1024 / 1024), 3)
                 self.capacity = size.split('bytes')[1].strip()[1:-1] # Drop square brackets
-            elif line.startswith('SMART overall-health self-assessment test result:'):
+            elif line.strip().startswith('SMART overall-health self-assessment test result:'):
                 # Example: "SMART overall-health self-assessment test result: PASSED"
                 self.status = line.split(':')[1].strip()
             elif 'Power_On_Hours' in line:
