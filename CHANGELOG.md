@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file. The format 
 ## [0.7.1] - 2022-04-02
  - Drive monitoring using Smartctl (WebUI status currently, alerting to come soon)
  - Dutch translations (nl_NL) provided by Bernie Deprez.  Thanks!
- - Updates to various fork blockchains and tools including BTCGreen, HDDCoin, Madmax, MMX and Shibgreen
+ - Updates to various fork blockchains and tools including BTCGreen, Flax, HDDCoin, Madmax, MMX and Shibgreen
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.3.1) - v1.3.1 patch release
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.3.2) - v1.3.2 patch release
 
