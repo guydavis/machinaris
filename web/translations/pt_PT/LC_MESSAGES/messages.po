@@ -386,7 +386,7 @@ msgstr "Workers"
 
 #: templates/base.html:90 templates/drives.html:30
 msgid "Drives"
-msgstr ""
+msgstr "Discos"
 
 #: templates/base.html:96 templates/connections.html:25
 #: templates/connections.html:59 templates/summary.html:25
@@ -590,41 +590,41 @@ msgstr "Este worker do Machinaris é controlado de:"
 
 #: templates/drives.html:9
 msgid "Smartctl Status"
-msgstr ""
+msgstr "Smartctl - Estado"
 
 #: templates/drives.html:57
 #, fuzzy
 msgid "Device"
-msgstr "Serviço"
+msgstr "Disco"
 
 #: templates/drives.html:58
 #, fuzzy
 msgid "Model"
-msgstr "Modo"
+msgstr "Modelo"
 
 #: templates/drives.html:59
 msgid "Serial #"
-msgstr ""
+msgstr "Num série"
 
 #: templates/drives.html:60
 msgid "Capacity"
-msgstr ""
+msgstr "Capacidade"
 
 #: templates/drives.html:62
 msgid "Temperature"
-msgstr ""
+msgstr "Temperatura"
 
 #: templates/drives.html:82 templates/drives.html:134
 msgid "Passed"
-msgstr ""
+msgstr "Passou"
 
 #: templates/drives.html:169
 msgid "No drives accessible to smartctl inside the Machinaris containers."
-msgstr ""
+msgstr "Nenhum disco acessivel pelo smartctl dentro do container do Machinaris"
 
 #: templates/drives.html:170
 msgid "Please configure Docker to allow smartctl access to host devices."
-msgstr ""
+msgstr "Por favor configure o Docker para permitir ao smartctl aceder aos discos."
 
 #: templates/drives.html:171 templates/workers.html:106
 #, python-format
