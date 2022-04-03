@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-04-03 16:37-0600\n"
+"POT-Creation-Date: 2022-04-03 17:05-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: Antonio Casqueiro\n"
 "Language: pt\n"
@@ -191,7 +191,7 @@ msgstr ""
 msgid "days"
 msgstr "dias"
 
-#: models/chia.py:198 templates/summary.html:100
+#: models/chia.py:198 templates/summary.html:100 templates/wallet.html:128
 msgid "Syncing"
 msgstr "A sincronizar"
 
@@ -205,7 +205,7 @@ msgid "Not synced"
 msgstr "Não sincronizado"
 
 #: models/chia.py:205 templates/index.html:54 templates/summary.html:96
-#: templates/worker.html:78 templates/workers.html:72
+#: templates/wallet.html:124 templates/worker.html:78 templates/workers.html:72
 msgid "Offline"
 msgstr "Offline"
 
@@ -886,11 +886,11 @@ msgstr "Wallet"
 msgid "EDV"
 msgstr "EDV"
 
-#: templates/summary.html:98
+#: templates/summary.html:98 templates/wallet.html:126
 msgid "Synced"
 msgstr "Sincronizado"
 
-#: templates/summary.html:102
+#: templates/summary.html:102 templates/wallet.html:130
 msgid "Not Synced"
 msgstr "Não sincronizado"
 
@@ -928,15 +928,15 @@ msgstr "Cold Wallet: Saldo"
 msgid "Total Balance"
 msgstr "Saldo"
 
-#: templates/wallet.html:137
+#: templates/wallet.html:140
 msgid "Edit Wallet"
 msgstr "Editar wallet"
 
-#: templates/wallet.html:148
+#: templates/wallet.html:151
 msgid "Wallet Details"
 msgstr "Detalhes da Wallet"
 
-#: templates/wallet.html:172
+#: templates/wallet.html:175
 msgid ""
 "No wallet status received.  Perhaps just starting?  Please allow at least"
 " 10 minutes to update."
@@ -944,7 +944,7 @@ msgstr ""
 "O estado da Wallet ainda não foi recebido. Acabaste de arrancar o "
 "sistema? Por favor aguarda pelo menos 10 minutos para a actualização."
 
-#: templates/wallet.html:173
+#: templates/wallet.html:176
 msgid ""
 "You can also try running \"chia wallet show\" on your fullnode's in-"
 "container shell to verify."

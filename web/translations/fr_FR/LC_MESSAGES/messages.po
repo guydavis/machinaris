@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-04-03 16:37-0600\n"
+"POT-Creation-Date: 2022-04-03 17:05-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: fr\n"
@@ -192,7 +192,7 @@ msgstr ""
 msgid "days"
 msgstr "jours"
 
-#: models/chia.py:198 templates/summary.html:100
+#: models/chia.py:198 templates/summary.html:100 templates/wallet.html:128
 msgid "Syncing"
 msgstr "Synchronisation"
 
@@ -205,7 +205,7 @@ msgid "Not synced"
 msgstr "Non synchronisé"
 
 #: models/chia.py:205 templates/index.html:54 templates/summary.html:96
-#: templates/worker.html:78 templates/workers.html:72
+#: templates/wallet.html:124 templates/worker.html:78 templates/workers.html:72
 msgid "Offline"
 msgstr "Hors ligne"
 
@@ -881,11 +881,11 @@ msgstr "Portefeuille"
 msgid "EDV"
 msgstr "EDV"
 
-#: templates/summary.html:98
+#: templates/summary.html:98 templates/wallet.html:126
 msgid "Synced"
 msgstr "Synchronisé"
 
-#: templates/summary.html:102
+#: templates/summary.html:102 templates/wallet.html:130
 msgid "Not Synced"
 msgstr "Non synchronisé"
 
@@ -921,15 +921,15 @@ msgstr "Solde de portefeuille froid"
 msgid "Total Balance"
 msgstr "Solde total"
 
-#: templates/wallet.html:137
+#: templates/wallet.html:140
 msgid "Edit Wallet"
 msgstr "Modifier le portefeuille"
 
-#: templates/wallet.html:148
+#: templates/wallet.html:151
 msgid "Wallet Details"
 msgstr "Détails du portefeuille"
 
-#: templates/wallet.html:172
+#: templates/wallet.html:175
 msgid ""
 "No wallet status received.  Perhaps just starting?  Please allow at least"
 " 10 minutes to update."
@@ -937,7 +937,7 @@ msgstr ""
 "Aucun statut de portefeuille reçu. Peut-être que vous venez juste de "
 "commencer? Veuillez autoriser au moins 10 minutes pour mettre à jour."
 
-#: templates/wallet.html:173
+#: templates/wallet.html:176
 msgid ""
 "You can also try running \"chia wallet show\" on your fullnode's in-"
 "container shell to verify."
