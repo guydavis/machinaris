@@ -493,7 +493,7 @@ class Blockchains:
         if not details:
             return None
         if blockchain == 'mmx':
-            pattern = '^Height: (\d+)$'
+            pattern = '^Height:\s+(\d+)$'
         else:
             pattern = '^.* Height:\s+(\d+)$'
         for line in details.split('\n'):
