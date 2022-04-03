@@ -1456,7 +1456,7 @@ msgstr ""
 
 #: templates/plotting/workers.html:103
 msgid "Archiving"
-msgstr "Archiviazione in corso"
+msgstr "Archiviazione"
 
 #: templates/plotting/workers.html:119
 msgid "Archiving is disabled.  See Settings | Plotting page."
