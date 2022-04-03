@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-30 20:46-0600\n"
+"POT-Creation-Date: 2022-04-03 09:14-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: de\n"
@@ -97,6 +97,11 @@ msgid ""
 "Please allow 15 minutes..."
 msgstr ""
 
+#: actions/drives.py:30
+#, python-format
+msgid "Oops! No smartcl info found device %(device)s on %(hostname)s."
+msgstr ""
+
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
 msgstr ""
@@ -160,7 +165,7 @@ msgstr ""
 msgid "Please use a consistent Machinaris version to avoid issues."
 msgstr ""
 
-#: models/chia.py:133 models/chia.py:230 models/drives.py:42
+#: models/chia.py:133 models/chia.py:230 models/drives.py:44
 msgid "days"
 msgstr ""
 
@@ -181,7 +186,7 @@ msgstr ""
 msgid "Offline"
 msgstr ""
 
-#: models/chia.py:218 models/drives.py:47
+#: models/chia.py:218 models/drives.py:49
 msgid "years"
 msgstr ""
 
@@ -189,7 +194,7 @@ msgstr ""
 msgid "year"
 msgstr ""
 
-#: models/chia.py:222 models/drives.py:46
+#: models/chia.py:222 models/drives.py:48
 msgid "months"
 msgstr ""
 
@@ -197,7 +202,7 @@ msgstr ""
 msgid "month"
 msgstr ""
 
-#: models/chia.py:226 models/drives.py:44
+#: models/chia.py:226 models/drives.py:46
 msgid "weeks"
 msgstr ""
 
@@ -209,7 +214,7 @@ msgstr ""
 msgid "day"
 msgstr ""
 
-#: models/chia.py:234 models/drives.py:40
+#: models/chia.py:234 models/drives.py:42
 msgid "hours"
 msgstr ""
 
@@ -573,27 +578,35 @@ msgstr ""
 msgid "Serial #"
 msgstr ""
 
-#: templates/drives.html:60
+#: templates/drives.html:60 templates/drives.html:135
 msgid "Capacity"
 msgstr ""
 
-#: templates/drives.html:62
+#: templates/drives.html:62 templates/drives.html:134
 msgid "Temperature"
 msgstr ""
 
-#: templates/drives.html:82 templates/drives.html:134
+#: templates/drives.html:84 templates/drives.html:143
 msgid "Passed"
 msgstr ""
 
-#: templates/drives.html:169
+#: templates/drives.html:136
+msgid "Powered On"
+msgstr ""
+
+#: templates/drives.html:178
+msgid "Drive status updated"
+msgstr ""
+
+#: templates/drives.html:187
 msgid "No drives accessible to smartctl inside the Machinaris containers."
 msgstr ""
 
-#: templates/drives.html:170
+#: templates/drives.html:188
 msgid "Please configure Docker to allow smartctl access to host devices."
 msgstr ""
 
-#: templates/drives.html:171 templates/workers.html:106
+#: templates/drives.html:189 templates/workers.html:106
 #, python-format
 msgid "For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
 msgstr ""
@@ -1429,4 +1442,3 @@ msgstr ""
 #: templates/settings/pools.html:197
 msgid "PlotNFT Log on "
 msgstr ""
-

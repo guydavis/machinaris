@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-30 20:46-0600\n"
+"POT-Creation-Date: 2022-04-03 09:14-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: fr\n"
@@ -109,6 +109,11 @@ msgid ""
 "Please allow 15 minutes..."
 msgstr ""
 
+#: actions/drives.py:30
+#, python-format
+msgid "Oops! No smartcl info found device %(device)s on %(hostname)s."
+msgstr "Oups ! Aucune information smartcl n'a été trouvée pour l'appareil %(device)s sur %(hostname)s."
+
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
 msgstr "Inactif"
@@ -181,7 +186,7 @@ msgstr ""
 "Veuillez utiliser une version cohérente de Machinaris pour éviter les "
 "problèmes."
 
-#: models/chia.py:133 models/chia.py:230 models/drives.py:42
+#: models/chia.py:133 models/chia.py:230 models/drives.py:44
 msgid "days"
 msgstr "jours"
 
@@ -202,7 +207,7 @@ msgstr "Non synchronisé"
 msgid "Offline"
 msgstr "Hors ligne"
 
-#: models/chia.py:218 models/drives.py:47
+#: models/chia.py:218 models/drives.py:49
 msgid "years"
 msgstr "ans"
 
@@ -210,7 +215,7 @@ msgstr "ans"
 msgid "year"
 msgstr "an"
 
-#: models/chia.py:222 models/drives.py:46
+#: models/chia.py:222 models/drives.py:48
 msgid "months"
 msgstr "mois"
 
@@ -218,7 +223,7 @@ msgstr "mois"
 msgid "month"
 msgstr "mois"
 
-#: models/chia.py:226 models/drives.py:44
+#: models/chia.py:226 models/drives.py:46
 msgid "weeks"
 msgstr "semaines"
 
@@ -230,7 +235,7 @@ msgstr "semaine"
 msgid "day"
 msgstr "jour"
 
-#: models/chia.py:234 models/drives.py:40
+#: models/chia.py:234 models/drives.py:42
 msgid "hours"
 msgstr "heures"
 
@@ -582,43 +587,49 @@ msgstr "Ce worker Machinaris est contrôlé à:"
 
 #: templates/drives.html:9
 msgid "Smartctl Status"
-msgstr ""
+msgstr "Statut Smartctl"
 
 #: templates/drives.html:57
-#, fuzzy
 msgid "Device"
-msgstr "Service"
+msgstr "Appareil"
 
 #: templates/drives.html:58
-#, fuzzy
 msgid "Model"
-msgstr "Mode"
+msgstr "Modèle"
 
 #: templates/drives.html:59
 msgid "Serial #"
-msgstr ""
+msgstr "Numéro de série"
 
-#: templates/drives.html:60
+#: templates/drives.html:60 templates/drives.html:135
 msgid "Capacity"
-msgstr ""
+msgstr "Capacity"
 
-#: templates/drives.html:62
+#: templates/drives.html:62 templates/drives.html:134
 msgid "Temperature"
-msgstr ""
+msgstr "Température"
 
-#: templates/drives.html:82 templates/drives.html:134
+#: templates/drives.html:84 templates/drives.html:143
 msgid "Passed"
-msgstr ""
+msgstr "Passé"
 
-#: templates/drives.html:169
+#: templates/drives.html:136
+msgid "Powered On"
+msgstr "Durée de fonctionnement"
+
+#: templates/drives.html:178
+msgid "Drive status updated"
+msgstr "État du disque mis à jour"
+
+#: templates/drives.html:187
 msgid "No drives accessible to smartctl inside the Machinaris containers."
-msgstr ""
+msgstr "Aucun disque accessible à smartctl à l'intérieur des conteneurs Machinaris."
 
-#: templates/drives.html:170
+#: templates/drives.html:188
 msgid "Please configure Docker to allow smartctl access to host devices."
-msgstr ""
+msgstr "Veuillez configurer Docker pour autoriser l'accès smartctl aux appareils hôtes."
 
-#: templates/drives.html:171 templates/workers.html:106
+#: templates/drives.html:189 templates/workers.html:106
 #, python-format
 msgid "For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
 msgstr ""
@@ -673,19 +684,17 @@ msgstr ""
 msgid ""
 "However, you may view it yourself by executing this from within the "
 "Docker container."
-msgstr ""
+msgstr "REMARQUE : Machinaris n'affichera jamais votre clé privée ici."
 
 #: templates/keys.html:54
 msgid "Best Practices"
 msgstr "Les meilleures pratiques"
 
 #: templates/keys.html:71
-#, fuzzy
 msgid "No keys found from any farmers. Not added?"
 msgstr "Aucune blockchain trouvée chez les farmers. Pas ajouté?"
 
 #: templates/keys.html:72
-#, fuzzy
 msgid "Try running \"chia keys show\" on your farmers to verify."
 msgstr "Essayez d'exécuter \"chia show --state\" sur vos farmers pour vérifier."
 
@@ -1532,4 +1541,3 @@ msgstr "Commencer..."
 #: templates/settings/pools.html:197
 msgid "PlotNFT Log on "
 msgstr "Journaux PlotNFT de"
-

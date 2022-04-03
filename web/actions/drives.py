@@ -27,5 +27,6 @@ def load_drive_summary():
 def load_smartctl_info(hostname, device):
     drv = db.session.query(d.Drive).filter(d.Drive.hostname == hostname, d.Drive.device == device).first()
     if not drv or not drv.smart_info:
-        return _('Oops! No smartcl info found device {0} on {1}.'.format(device, hostname))
+        return _('Oops! No smartcl info found device %(device)s on %(hostname)s.', 
+            device=device, hostname=hostname)
     return drv.smart_info

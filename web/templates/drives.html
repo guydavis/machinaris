@@ -131,9 +131,9 @@
             <table class="text-muted" style="width: 100%">
               <tr>
                 <td>S.M.A.R.T</td>
-                <td>Temperature</td>
-                <td>Capacity</td>
-                <td>Powered On</td>
+                <td>{{_('Temperature')}}</td>
+                <td>{{_('Capacity')}}</td>
+                <td>{{_('Powered On')}}</td>
               </tr>
               <tr>
                 <td>
@@ -175,7 +175,7 @@
       </div>
       {% endif %}
       {% endfor %}
-      <small class="text-muted text-center">Drive status updated {{drives.rows[0].updated_at | datetimefilter}}</small>
+      <small class="text-muted text-center">{{_('Drive status updated')}} {{drives.rows[0].updated_at | datetimefilter}}</small>
       {% endif %}
     </fieldset>
   </form>
