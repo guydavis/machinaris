@@ -1467,7 +1467,7 @@ msgstr ""
 #: templates/settings/alerts.html:57 templates/settings/farming.html:58
 #: templates/settings/plotting.html:58 templates/settings/tools.html:57
 msgid "Download"
-msgstr "Scaricamento"
+msgstr "Scarica"
 
 #: templates/settings/pools.html:32
 msgid "Confirm Pool Change"
