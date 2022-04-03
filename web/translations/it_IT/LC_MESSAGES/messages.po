@@ -114,7 +114,7 @@ msgstr ""
 #: actions/drives.py:30
 #, python-format
 msgid "Oops! No smartctl info found for device %(device)s on %(hostname)s."
-msgstr ""
+msgstr "Oops! Nessuna informazione su smartctl trovata per il dispositivo %(device)s su %(hostname)s."
 
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
@@ -385,7 +385,7 @@ msgstr ""
 
 #: templates/base.html:90 templates/drives.html:30
 msgid "Drives"
-msgstr ""
+msgstr "Dischi"
 
 #: templates/base.html:96 templates/connections.html:25
 #: templates/connections.html:59 templates/summary.html:25
@@ -587,49 +587,49 @@ msgstr "Questo Machinaris worker è accessibile all'indirizzo:"
 
 #: templates/drives.html:9
 msgid "Smartctl Status"
-msgstr ""
+msgstr "Stato Smartctl"
 
 #: templates/drives.html:57
 #, fuzzy
 msgid "Device"
-msgstr "Servizio"
+msgstr "Dispositivo"
 
 #: templates/drives.html:58
 #, fuzzy
 msgid "Model"
-msgstr "Modalità"
+msgstr "Modello"
 
 #: templates/drives.html:59
 msgid "Serial #"
-msgstr ""
+msgstr "# Seriale"
 
 #: templates/drives.html:60 templates/drives.html:135
 msgid "Capacity"
-msgstr ""
+msgstr "Capacità"
 
 #: templates/drives.html:62 templates/drives.html:134
 msgid "Temperature"
-msgstr ""
+msgstr "Temperatura"
 
 #: templates/drives.html:84 templates/drives.html:143
 msgid "Passed"
-msgstr ""
+msgstr "Superato"
 
 #: templates/drives.html:136
 msgid "Powered On"
-msgstr ""
+msgstr "Acceso per"
 
 #: templates/drives.html:178
 msgid "Drive status updated"
-msgstr ""
+msgstr "Stato disco aggiornato"
 
 #: templates/drives.html:187
 msgid "No drives accessible to smartctl inside the Machinaris containers."
-msgstr ""
+msgstr "Non ci sono dischi accessibili a smartctl nei containers di Machinaris."
 
 #: templates/drives.html:188
 msgid "Please configure Docker to allow smartctl access to host devices."
-msgstr ""
+msgstr "Configura Docker per permettere a smartctl di accedere ai dischi dell'host."
 
 #: templates/drives.html:189 templates/workers.html:106
 #, python-format
