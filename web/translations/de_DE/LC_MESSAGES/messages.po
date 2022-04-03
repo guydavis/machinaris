@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-04-03 09:14-0600\n"
+"POT-Creation-Date: 2022-04-03 09:44-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: de\n"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: actions/drives.py:30
 #, python-format
-msgid "Oops! No smartcl info found device %(device)s on %(hostname)s."
+msgid "Oops! No smartcl info found for device %(device)s on %(hostname)s."
 msgstr ""
 
 #: actions/plotman.py:44 models/plotman.py:70
@@ -1442,3 +1442,4 @@ msgstr ""
 #: templates/settings/pools.html:197
 msgid "PlotNFT Log on "
 msgstr ""
+
