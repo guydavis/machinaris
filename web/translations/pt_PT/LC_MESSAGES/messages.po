@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-04-03 14:07-0600\n"
+"POT-Creation-Date: 2022-04-03 16:37-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: Antonio Casqueiro\n"
 "Language: pt\n"
@@ -1559,4 +1559,20 @@ msgstr "Gravando..."
 #: templates/settings/pools.html:197
 msgid "PlotNFT Log on "
 msgstr "PlotNFT Log de "
+
+#: templates/views/index_script_block.js:85
+msgid "Time - Recent"
+msgstr ""
+
+#: templates/views/index_script_block.js:102
+msgid "Time Taken (seconds)"
+msgstr ""
+
+#: templates/views/index_script_block.js:152
+msgid "Time - Last 24 Hours"
+msgstr ""
+
+#: templates/views/index_script_block.js:169
+msgid "Partials Submitted"
+msgstr ""
 
