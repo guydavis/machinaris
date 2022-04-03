@@ -4,8 +4,8 @@
 #
 
 CHIA_BRANCH=$1
-# On 2022-04-01
-HASH=cdb24ba5188ac6a7226e14cf717a2f626dc852a6
+# On 2022-04-03
+HASH=0269797b0ae12add512c9a6c9a3ffe422724c4b9
 
 if [ -z ${CHIA_BRANCH} ]; then
 	echo 'Skipping Chia install as not requested.'
