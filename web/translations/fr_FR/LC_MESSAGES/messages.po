@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-04-03 17:46-0600\n"
+"POT-Creation-Date: 2022-04-03 21:22-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: fr\n"
@@ -204,7 +204,8 @@ msgstr "Indisponible"
 msgid "Not synced"
 msgstr "Non synchronisé"
 
-#: models/chia.py:205 templates/index.html:54 templates/summary.html:96
+#: models/chia.py:205 templates/index.html:54 templates/plotting/jobs.html:114
+#: templates/plotting/workers.html:116 templates/summary.html:96
 #: templates/wallet.html:124 templates/worker.html:78 templates/workers.html:72
 msgid "Offline"
 msgstr "Hors ligne"
@@ -320,11 +321,11 @@ msgstr ""
 msgid "Chiadog Log on "
 msgstr "Journaux Chiadog de "
 
-#: templates/alerts.html:147 templates/plotting/jobs.html:367
+#: templates/alerts.html:147 templates/plotting/jobs.html:378
 msgid "Starting..."
 msgstr "Commencer..."
 
-#: templates/alerts.html:154 templates/plotting/jobs.html:377
+#: templates/alerts.html:154 templates/plotting/jobs.html:388
 msgid "Stopping..."
 msgstr "Arrêt..."
 
@@ -1007,19 +1008,19 @@ msgstr "Avertissements récents"
 msgid "Yay! No issues currently."
 msgstr "Yay! Aucun problème actuellement."
 
-#: templates/farming/workers.html:116 templates/worker.html:183
+#: templates/farming/workers.html:116 templates/worker.html:190
 msgid "Disk Space Used (TB)"
 msgstr "Espace disque utilisé (TB)"
 
-#: templates/farming/workers.html:122 templates/worker.html:189
+#: templates/farming/workers.html:122 templates/worker.html:196
 msgid "Disk Space Free (TB)"
 msgstr "Espace disque libre (TB)"
 
-#: templates/worker.html:239
+#: templates/worker.html:246
 msgid "Disk Space Used (GB)"
 msgstr "Espace disque utilisé (GB)"
 
-#: templates/worker.html:245
+#: templates/worker.html:252
 msgid "Disk Space Free (GB)"
 msgstr "Espace disque libre (GB)"
 
@@ -1266,8 +1267,8 @@ msgstr ""
 msgid "Plot Check"
 msgstr "Vérification de la plotes"
 
-#: templates/farming/plots.html:86 templates/plotting/jobs.html:117
-#: templates/plotting/workers.html:122
+#: templates/farming/plots.html:86 templates/plotting/jobs.html:128
+#: templates/plotting/workers.html:133
 msgid "Worker is offline."
 msgstr "Worker est hors ligne."
 
@@ -1336,11 +1337,11 @@ msgstr ""
 " alors s'il vous plaît arrêtez Plotman premier en haut à droite. "
 "Continuer?"
 
-#: templates/plotting/jobs.html:17 templates/plotting/jobs.html:193
+#: templates/plotting/jobs.html:17 templates/plotting/jobs.html:204
 msgid "Kill Selected"
 msgstr "Tuer la sélection"
 
-#: templates/plotting/jobs.html:27 templates/plotting/jobs.html:123
+#: templates/plotting/jobs.html:27 templates/plotting/jobs.html:134
 msgid "Start Plotting"
 msgstr "Commence Plotting"
 
@@ -1358,7 +1359,7 @@ msgstr ""
 msgid "Start"
 msgstr "Commence"
 
-#: templates/plotting/jobs.html:45 templates/plotting/jobs.html:120
+#: templates/plotting/jobs.html:45 templates/plotting/jobs.html:131
 msgid "Stop Plotting"
 msgstr "Arrête Plotting"
 
@@ -1398,40 +1399,52 @@ msgstr "OK"
 msgid "Jobs"
 msgstr "Jobs"
 
-#: templates/plotting/jobs.html:189
+#: templates/plotting/jobs.html:108 templates/plotting/workers.html:110
+msgid "Disabled"
+msgstr "Désactivé"
+
+#: templates/plotting/jobs.html:110 templates/plotting/workers.html:112
+msgid "Running"
+msgstr "Fonctionnement"
+
+#: templates/plotting/jobs.html:112 templates/plotting/workers.html:114
+msgid "Stopped"
+msgstr "Arrêté"
+
+#: templates/plotting/jobs.html:200
 msgid "Suspend Selected"
 msgstr "Suspendre la sélection"
 
-#: templates/plotting/jobs.html:191
+#: templates/plotting/jobs.html:202
 msgid "Resume Selected"
 msgstr "Continuer la sélection"
 
-#: templates/plotting/jobs.html:204
+#: templates/plotting/jobs.html:215
 #, python-format
 msgid "Plotting Speed - k%(k_size)s Plots"
 msgstr "Vitesse de Plotting - k%(k_size)s Plots"
 
-#: templates/plotting/jobs.html:274
+#: templates/plotting/jobs.html:285
 msgid "Date"
 msgstr "Date"
 
-#: templates/plotting/jobs.html:291
+#: templates/plotting/jobs.html:302
 msgid "Time (minutes)"
 msgstr "Temps (minutes)"
 
-#: templates/plotting/jobs.html:341
+#: templates/plotting/jobs.html:352
 msgid "Suspending..."
 msgstr "Suspendre..."
 
-#: templates/plotting/jobs.html:349
+#: templates/plotting/jobs.html:360
 msgid "Resuming..."
 msgstr "Reprendre..."
 
-#: templates/plotting/jobs.html:358
+#: templates/plotting/jobs.html:369
 msgid "Killing..."
 msgstr "Tuer..."
 
-#: templates/plotting/workers.html:9 templates/plotting/workers.html:128
+#: templates/plotting/workers.html:9 templates/plotting/workers.html:139
 msgid "Start Archiving"
 msgstr "Démarrer l'archivage"
 
@@ -1445,7 +1458,7 @@ msgstr ""
 "configuré.Les parcelles terminées seront distribuées localement ou "
 "transférées à distance.Continuez?"
 
-#: templates/plotting/workers.html:27 templates/plotting/workers.html:125
+#: templates/plotting/workers.html:27 templates/plotting/workers.html:136
 msgid "Stop Archiving"
 msgstr "Arrêter l'archivage"
 
@@ -1474,16 +1487,16 @@ msgstr ""
 msgid "Archiving"
 msgstr "Archivage"
 
-#: templates/plotting/workers.html:119
+#: templates/plotting/workers.html:130
 msgid "Archiving is disabled.  See Settings | Plotting page."
 msgstr "L'archivage est désactivé. Voir page Paramètres | Traçage."
 
-#: templates/plotting/workers.html:245
+#: templates/plotting/workers.html:256
 #: templates/views/index_script_block.js:152
 msgid "Time - Last 24 Hours"
 msgstr "Heure - Dernières 24 heures"
 
-#: templates/plotting/workers.html:262
+#: templates/plotting/workers.html:273
 msgid "Plotting Disk Usage (GB)"
 msgstr "Utilisation plotting du disque (GB)"
 
