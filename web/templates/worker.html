@@ -170,7 +170,14 @@
         },
         {% endif %}
       });
-      $('#plotting').DataTable({ "ordering": false, });
+      $('#plotting').DataTable({ 
+        "ordering": false,
+        {% if lang != 'en' %}
+        "language": {
+            "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+        },
+        {% endif %}
+      });
       $('[data-toggle="tooltip"]').tooltip();
     })
     {% if plots_disk_usage[worker.hostname] %}
@@ -236,13 +243,13 @@
       data: {
         labels: {{ plotting_disk_usage[worker.hostname].paths | safe }},
     datasets: [{
-      label: "Disk Space Used (GB)",
+      label: "{{_('Disk Space Used (GB)')}}",
       data: {{ plotting_disk_usage[worker.hostname].used | safe }},
       backgroundColor: 'rgba(255, 99, 132, 0.2)',
       borderColor: 'rgba(255, 99, 132, 1)',
                 },
     {
-      label: 'Disk Space Free (GB)',
+      label: "{{_('Disk Space Free (GB)')}}",
       data: {{ plotting_disk_usage[worker.hostname].free | safe }},
       backgroundColor: 'rgba(54, 162, 235, 0.2)',
       borderColor: 'rgba(54, 162, 235, 1)',

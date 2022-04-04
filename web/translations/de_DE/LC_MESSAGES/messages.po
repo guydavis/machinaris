@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-04-03 17:05-0600\n"
+"POT-Creation-Date: 2022-04-03 17:46-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: de\n"
@@ -961,6 +961,14 @@ msgstr ""
 msgid "Disk Space Free (TB)"
 msgstr ""
 
+#: templates/worker.html:239
+msgid "Disk Space Used (GB)"
+msgstr ""
+
+#: templates/worker.html:245
+msgid "Disk Space Free (GB)"
+msgstr ""
+
 #: templates/worker_launch.html:50 templates/worker_launch.html:640
 #: templates/worker_launch.html:669
 msgid "Host Path"
@@ -1315,6 +1323,14 @@ msgstr ""
 msgid "Plotting Speed - k%(k_size)s Plots"
 msgstr ""
 
+#: templates/plotting/jobs.html:274
+msgid "Date"
+msgstr ""
+
+#: templates/plotting/jobs.html:291
+msgid "Time (minutes)"
+msgstr ""
+
 #: templates/plotting/jobs.html:341
 msgid "Suspending..."
 msgstr ""
@@ -1363,6 +1379,15 @@ msgstr ""
 
 #: templates/plotting/workers.html:119
 msgid "Archiving is disabled.  See Settings | Plotting page."
+msgstr ""
+
+#: templates/plotting/workers.html:245
+#: templates/views/index_script_block.js:152
+msgid "Time - Last 24 Hours"
+msgstr ""
+
+#: templates/plotting/workers.html:262
+msgid "Plotting Disk Usage (GB)"
 msgstr ""
 
 #: templates/settings/alerts.html:57 templates/settings/farming.html:58
@@ -1449,10 +1474,6 @@ msgstr ""
 
 #: templates/views/index_script_block.js:102
 msgid "Time Taken (seconds)"
-msgstr ""
-
-#: templates/views/index_script_block.js:152
-msgid "Time - Last 24 Hours"
 msgstr ""
 
 #: templates/views/index_script_block.js:169

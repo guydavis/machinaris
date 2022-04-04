@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-04-03 17:05-0600\n"
+"POT-Creation-Date: 2022-04-03 17:46-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: fr\n"
@@ -1015,6 +1015,14 @@ msgstr "Espace disque utilisé (TB)"
 msgid "Disk Space Free (TB)"
 msgstr "Espace disque libre (TB)"
 
+#: templates/worker.html:239
+msgid "Disk Space Used (GB)"
+msgstr "Espace disque utilisé (GB)"
+
+#: templates/worker.html:245
+msgid "Disk Space Free (GB)"
+msgstr "Espace disque libre (GB)"
+
 #: templates/worker_launch.html:50 templates/worker_launch.html:640
 #: templates/worker_launch.html:669
 msgid "Host Path"
@@ -1403,6 +1411,14 @@ msgstr "Continuer la sélection"
 msgid "Plotting Speed - k%(k_size)s Plots"
 msgstr "Vitesse de Plotting - k%(k_size)s Plots"
 
+#: templates/plotting/jobs.html:274
+msgid "Date"
+msgstr "Date"
+
+#: templates/plotting/jobs.html:291
+msgid "Time (minutes)"
+msgstr "Temps (minutes)"
+
 #: templates/plotting/jobs.html:341
 msgid "Suspending..."
 msgstr "Suspendre..."
@@ -1461,6 +1477,15 @@ msgstr "Archivage"
 #: templates/plotting/workers.html:119
 msgid "Archiving is disabled.  See Settings | Plotting page."
 msgstr "L'archivage est désactivé. Voir page Paramètres | Traçage."
+
+#: templates/plotting/workers.html:245
+#: templates/views/index_script_block.js:152
+msgid "Time - Last 24 Hours"
+msgstr "Heure - Dernières 24 heures"
+
+#: templates/plotting/workers.html:262
+msgid "Plotting Disk Usage (GB)"
+msgstr "Utilisation plotting du disque (GB)"
 
 #: templates/settings/alerts.html:57 templates/settings/farming.html:58
 #: templates/settings/plotting.html:58 templates/settings/tools.html:57
@@ -1555,10 +1580,6 @@ msgstr "Heure - Récent"
 #: templates/views/index_script_block.js:102
 msgid "Time Taken (seconds)"
 msgstr "Temps pris (secondes)"
-
-#: templates/views/index_script_block.js:152
-msgid "Time - Last 24 Hours"
-msgstr "Heure - Dernières 24 heures"
 
 #: templates/views/index_script_block.js:169
 msgid "Partials Submitted"

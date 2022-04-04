@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-04-03 17:05-0600\n"
+"POT-Creation-Date: 2022-04-03 17:46-0600\n"
 "PO-Revision-Date: 2022-02-15 10:14-0700\n"
 "Last-Translator: Fabrizio Cacicia\n"
 "Language: it\n"
@@ -114,7 +114,9 @@ msgstr ""
 #: actions/drives.py:30
 #, python-format
 msgid "Oops! No smartctl info found for device %(device)s on %(hostname)s."
-msgstr "Oops! Nessuna informazione su smartctl trovata per il dispositivo %(device)s su %(hostname)s."
+msgstr ""
+"Oops! Nessuna informazione su smartctl trovata per il dispositivo "
+"%(device)s su %(hostname)s."
 
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
@@ -629,7 +631,9 @@ msgstr "Non ci sono dischi accessibili a smartctl nei containers di Machinaris."
 
 #: templates/drives.html:188
 msgid "Please configure Docker to allow smartctl access to host devices."
-msgstr "Configura Docker per permettere a smartctl di accedere ai dischi dell'host."
+msgstr ""
+"Configura Docker per permettere a smartctl di accedere ai dischi "
+"dell'host."
 
 #: templates/drives.html:189 templates/workers.html:106
 #, python-format
@@ -1011,6 +1015,14 @@ msgstr "Spazio Usato su Disco (TB)"
 #: templates/farming/workers.html:122 templates/worker.html:189
 msgid "Disk Space Free (TB)"
 msgstr "Spazio Libero su Disco (TB)"
+
+#: templates/worker.html:239
+msgid "Disk Space Used (GB)"
+msgstr "Spazio Usato su Disco (GB)"
+
+#: templates/worker.html:245
+msgid "Disk Space Free (GB)"
+msgstr "Spazio Libero su Disco (GB)"
 
 #: templates/worker_launch.html:50 templates/worker_launch.html:640
 #: templates/worker_launch.html:669
@@ -1402,6 +1414,14 @@ msgstr "Riprendi Selezionati"
 msgid "Plotting Speed - k%(k_size)s Plots"
 msgstr "Velocità di Plotting - k%(k_size)s Plots"
 
+#: templates/plotting/jobs.html:274
+msgid "Date"
+msgstr ""
+
+#: templates/plotting/jobs.html:291
+msgid "Time (minutes)"
+msgstr ""
+
 #: templates/plotting/jobs.html:341
 msgid "Suspending..."
 msgstr "Sospensione in corso..."
@@ -1463,6 +1483,15 @@ msgid "Archiving is disabled.  See Settings | Plotting page."
 msgstr ""
 "L'archiviazione è disabilitata. Vedi la pagina \"Impostazioni | "
 "Plotting\"."
+
+#: templates/plotting/workers.html:245
+#: templates/views/index_script_block.js:152
+msgid "Time - Last 24 Hours"
+msgstr ""
+
+#: templates/plotting/workers.html:262
+msgid "Plotting Disk Usage (GB)"
+msgstr ""
 
 #: templates/settings/alerts.html:57 templates/settings/farming.html:58
 #: templates/settings/plotting.html:58 templates/settings/tools.html:57
@@ -1556,10 +1585,6 @@ msgstr ""
 
 #: templates/views/index_script_block.js:102
 msgid "Time Taken (seconds)"
-msgstr ""
-
-#: templates/views/index_script_block.js:152
-msgid "Time - Last 24 Hours"
 msgstr ""
 
 #: templates/views/index_script_block.js:169
