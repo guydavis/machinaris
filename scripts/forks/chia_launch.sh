@@ -22,7 +22,8 @@ chia init >> /root/.chia/mainnet/log/init.log 2>&1
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
-  && [[ ! -f /root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+  && [[ ! -f /root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
+  && [[ ! -f /root/.chia/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   # Create machinaris dbs and launch web only while blockchain database downloads
   . /machinaris/scripts/setup_databases.sh
   mkdir -p /root/.chia/machinaris/config
