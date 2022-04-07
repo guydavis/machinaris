@@ -40,12 +40,15 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/mainnet/db/chia && cd /root/.chia/mainnet/db/chia
   # Latest Blockchain DB download from direct from https://www.chia-database.com/
-  db_url=$(curl -s https://chia-database.com | grep -Po "https:.*/blockchain_v1_mainnet-\d{2}-\d{2}-\d{4}.zip" | shuf -n 1)
+  db_url=$(curl -s https://chia-database.com | grep -Po "https:.*/blockchain_v2_mainnet-\d{2}-\d{2}-\d{4}.zip" | shuf -n 1)
   echo "Please be patient! Downloading blockchain database from: "
   echo "    ${db_url}"
-  curl -skLJ -o - ${db_url} | zcat >> blockchain_v1_mainnet.sqlite
+  # Unused alternative to save the zip and unzip.  Prefer to zcat and unzip on the fly to save space
+  #curl -kLJ -O ${db_url}
+  #unzip blockchain_v2_mainnet*.zip
+  curl -skLJ -o - ${db_url} | zcat >> blockchain_v2_mainnet.sqlite
   cd /root/.chia/mainnet/db
-  mv /root/.chia/mainnet/db/chia/blockchain_v1_mainnet.sqlite .
+  mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.sqlite .
   rm -rf /root/.chia/mainnet/db/chia
 fi
 

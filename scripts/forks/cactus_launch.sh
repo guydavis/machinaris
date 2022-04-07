@@ -17,7 +17,7 @@ cactus init >> /root/.cactus/mainnet/log/init.log 2>&1
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
-  && [[ ! -f /root/.cactus/mainnet/db/blockchain_v1_mainnet.sqlite ]] \ 
+  && [[ ! -f /root/.cactus/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
   && [[ ! -f /root/.cactus/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   echo "Downloading Cactus blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."

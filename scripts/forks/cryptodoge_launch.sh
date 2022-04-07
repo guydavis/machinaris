@@ -17,7 +17,7 @@ cryptodoge init >> /root/.cryptodoge/mainnet/log/init.log 2>&1
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
-  && [[ ! -f /root/.cryptodoge/mainnet/db/blockchain_v1_mainnet.sqlite ]] \ 
+  && [[ ! -f /root/.cryptodoge/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
   && [[ ! -f /root/.cryptodoge/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   mkdir -p /root/.cryptodoge/mainnet/db/ && cd /root/.cryptodoge/mainnet/db/
   echo "Sorry, Cryptodoge does not offer a recent blockchain DB for download.  Standard sync will happen over a few days..."
