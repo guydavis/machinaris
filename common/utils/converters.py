@@ -13,9 +13,9 @@ import traceback
 def sizeof_fmt(num, suffix='B'):
     for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
         if abs(num) < 1024.0:
-            return "%3.3f %s%s" % (num, unit, suffix)
+            return "{0} {1}{2}".format(flask_babel.format_decimal(num), unit, suffix)
         num /= 1024.0
-    value = "%.3f %s%s" % (num, 'Yi', suffix)
+    value = "{0} {1}{2}".format(flask_babel.format_decimal(num, 'Yi', suffix))
     if value == "0.000 B":
         return "0"
     return value
