@@ -21,13 +21,16 @@ def load_drives_status():
             app.logger.info("Error from smartctl scan because {0}".format(outs.decode('utf-8')))
         devices = []
         for line in outs.decode('utf-8').splitlines():
-            device = line.split()[0]
+            pieces = line.split()
+            device = pieces[0]
             info = load_drive_info(device)
             devices.append(drives.DriveStatus(line, info))
         return devices
 
 def load_drive_info(device):
-    proc = Popen("smartctl -a {0}".format(device), stdout=PIPE, stderr=PIPE, shell=True)
+    cmd = "smartctl -a {0}".format(device)
+    #app.logger.info(cmd)
+    proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
