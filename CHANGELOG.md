@@ -2,12 +2,17 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.2] - 2022-05-?
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.3.3) - v1.3.3 release
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.3.4) - v1.3.4 release - update full node before harvesters
+ - [Staicoin](https://github.com/STATION-I/stai-blockchain) - v1.2.0 release
+
 ## [0.7.1] - 2022-04-02
  - Drive monitoring using Smartctl (WebUI status currently, alerting to come soon)
  - Dutch translations (nl_NL) provided by Bernie Deprez.  Thanks!
  - Updates to various fork blockchains and tools including BTCGreen, Flax, HDDCoin, Madmax, MMX and Shibgreen
- - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.3.1) - v1.3.1 patch release
- - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.3.2) - v1.3.2 patch release
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.3.1) - v1.3.1 release
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.3.2) - v1.3.2 release
 
 ## [0.7.0] - 2022-03-11
  - [Chia](https://chia.net) - [v1.3](https://www.reddit.com/r/chia/comments/t95vuk/13_is_live/), please note reports of issues in this new Chia release...  double-check your Wallet and Pools settings after upgrading!
@@ -127,7 +132,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Machinaris - Docker images now available for [Apple M1](https://github.com/guydavis/machinaris/issues/43) and [Raspberry Pi OS](https://github.com/guydavis/machinaris/issues/155) architectures. 
 - Chiadog - Update to new v0.7.0 to [support for parsing partials and solo blocks](https://github.com/martomi/chiadog/pull/268).
-- Chia - Update to patch release of 1.2.3.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.3).
+- Chia - Update to release of 1.2.3.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.3).
 - Flax - Update to version 0.1.1.  See their [changelog for details](https://github.com/Flax-Network/flax-blockchain/releases/tag/0.1.1).
 - TrueNAS - Support for Machinaris deployment via helm chart. [Issue #78](https://github.com/guydavis/machinaris/issues/78) - Big thanks to @kmoore134 for this!
 - Machinaris - Daily Farming Summary now available on Farming page for both Chia and Flax.  Add new plot type column.
@@ -140,7 +145,7 @@ All notable changes to this project will be documented in this file. The format 
 
 - Wizard on Workers page to create a Docker run/compose based on your settings. [Issue #97](https://github.com/guydavis/machinaris/issues/97)
 - Latest Madmax plotter with support for n_buckets3 and n_rmulti2 settings in Plotman.
-- Update to patch release of Chia 1.2.2, including a fix for harvester cache updates.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.2).
+- Update to release of Chia 1.2.2, including a fix for harvester cache updates.  See their [changelog for details](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.2.2).
 
 ## [0.5.0] - 2021-07-09
 

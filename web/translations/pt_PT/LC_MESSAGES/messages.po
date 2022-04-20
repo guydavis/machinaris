@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-30 20:46-0600\n"
+"POT-Creation-Date: 2022-04-03 21:22-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: Antonio Casqueiro\n"
 "Language: pt\n"
@@ -109,6 +109,11 @@ msgid ""
 "Please allow 15 minutes..."
 msgstr ""
 
+#: actions/drives.py:30
+#, python-format
+msgid "Oops! No smartctl info found for device %(device)s on %(hostname)s."
+msgstr ""
+
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
 msgstr ""
@@ -182,11 +187,11 @@ msgstr ""
 "Por favor usa a mesma versão do Machinaris para evitar ocorrerem "
 "problemas inesperados."
 
-#: models/chia.py:133 models/chia.py:230 models/drives.py:42
+#: models/chia.py:133 models/chia.py:230 models/drives.py:44
 msgid "days"
 msgstr "dias"
 
-#: models/chia.py:198 templates/summary.html:100
+#: models/chia.py:198 templates/summary.html:100 templates/wallet.html:128
 msgid "Syncing"
 msgstr "A sincronizar"
 
@@ -199,12 +204,13 @@ msgstr ""
 msgid "Not synced"
 msgstr "Não sincronizado"
 
-#: models/chia.py:205 templates/index.html:54 templates/summary.html:96
-#: templates/worker.html:78 templates/workers.html:72
+#: models/chia.py:205 templates/index.html:54 templates/plotting/jobs.html:114
+#: templates/plotting/workers.html:116 templates/summary.html:96
+#: templates/wallet.html:124 templates/worker.html:78 templates/workers.html:72
 msgid "Offline"
 msgstr "Offline"
 
-#: models/chia.py:218 models/drives.py:47
+#: models/chia.py:218 models/drives.py:49
 msgid "years"
 msgstr "anos"
 
@@ -212,7 +218,7 @@ msgstr "anos"
 msgid "year"
 msgstr "ano"
 
-#: models/chia.py:222 models/drives.py:46
+#: models/chia.py:222 models/drives.py:48
 msgid "months"
 msgstr "meses"
 
@@ -220,7 +226,7 @@ msgstr "meses"
 msgid "month"
 msgstr "mês"
 
-#: models/chia.py:226 models/drives.py:44
+#: models/chia.py:226 models/drives.py:46
 msgid "weeks"
 msgstr "semanas"
 
@@ -232,7 +238,7 @@ msgstr "semana"
 msgid "day"
 msgstr "dia"
 
-#: models/chia.py:234 models/drives.py:40
+#: models/chia.py:234 models/drives.py:42
 msgid "hours"
 msgstr "horas"
 
@@ -317,11 +323,11 @@ msgstr ""
 msgid "Chiadog Log on "
 msgstr "Chiadog Log on "
 
-#: templates/alerts.html:147 templates/plotting/jobs.html:367
+#: templates/alerts.html:147 templates/plotting/jobs.html:378
 msgid "Starting..."
 msgstr "Iniciando..."
 
-#: templates/alerts.html:154 templates/plotting/jobs.html:377
+#: templates/alerts.html:154 templates/plotting/jobs.html:388
 msgid "Stopping..."
 msgstr "Parando..."
 
@@ -606,27 +612,35 @@ msgstr "Modelo"
 msgid "Serial #"
 msgstr "Num série"
 
-#: templates/drives.html:60
+#: templates/drives.html:60 templates/drives.html:135
 msgid "Capacity"
 msgstr "Capacidade"
 
-#: templates/drives.html:62
+#: templates/drives.html:62 templates/drives.html:134
 msgid "Temperature"
 msgstr "Temperatura"
 
-#: templates/drives.html:82 templates/drives.html:134
+#: templates/drives.html:84 templates/drives.html:143
 msgid "Passed"
 msgstr "Passou"
 
-#: templates/drives.html:169
+#: templates/drives.html:136
+msgid "Powered On"
+msgstr ""
+
+#: templates/drives.html:178
+msgid "Drive status updated"
+msgstr ""
+
+#: templates/drives.html:187
 msgid "No drives accessible to smartctl inside the Machinaris containers."
 msgstr "Nenhum disco acessivel pelo smartctl dentro do container do Machinaris"
 
-#: templates/drives.html:170
+#: templates/drives.html:188
 msgid "Please configure Docker to allow smartctl access to host devices."
 msgstr "Por favor configure o Docker para permitir ao smartctl aceder aos discos."
 
-#: templates/drives.html:171 templates/workers.html:106
+#: templates/drives.html:189 templates/workers.html:106
 #, python-format
 msgid "For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
 msgstr ""
@@ -873,11 +887,11 @@ msgstr "Wallet"
 msgid "EDV"
 msgstr "EDV"
 
-#: templates/summary.html:98
+#: templates/summary.html:98 templates/wallet.html:126
 msgid "Synced"
 msgstr "Sincronizado"
 
-#: templates/summary.html:102
+#: templates/summary.html:102 templates/wallet.html:130
 msgid "Not Synced"
 msgstr "Não sincronizado"
 
@@ -915,15 +929,15 @@ msgstr "Cold Wallet: Saldo"
 msgid "Total Balance"
 msgstr "Saldo"
 
-#: templates/wallet.html:137
+#: templates/wallet.html:140
 msgid "Edit Wallet"
 msgstr "Editar wallet"
 
-#: templates/wallet.html:148
+#: templates/wallet.html:151
 msgid "Wallet Details"
 msgstr "Detalhes da Wallet"
 
-#: templates/wallet.html:172
+#: templates/wallet.html:175
 msgid ""
 "No wallet status received.  Perhaps just starting?  Please allow at least"
 " 10 minutes to update."
@@ -931,7 +945,7 @@ msgstr ""
 "O estado da Wallet ainda não foi recebido. Acabaste de arrancar o "
 "sistema? Por favor aguarda pelo menos 10 minutos para a actualização."
 
-#: templates/wallet.html:173
+#: templates/wallet.html:176
 msgid ""
 "You can also try running \"chia wallet show\" on your fullnode's in-"
 "container shell to verify."
@@ -1003,13 +1017,21 @@ msgstr "Avisos recentes"
 msgid "Yay! No issues currently."
 msgstr "Yay! Sem problemas actualmente."
 
-#: templates/farming/workers.html:116 templates/worker.html:183
+#: templates/farming/workers.html:116 templates/worker.html:190
 msgid "Disk Space Used (TB)"
 msgstr "Espaço em disco usado (TB)"
 
-#: templates/farming/workers.html:122 templates/worker.html:189
+#: templates/farming/workers.html:122 templates/worker.html:196
 msgid "Disk Space Free (TB)"
 msgstr "Espaço em disco livre (TB)"
+
+#: templates/worker.html:246
+msgid "Disk Space Used (GB)"
+msgstr "Espaço em disco usado (GB)"
+
+#: templates/worker.html:252
+msgid "Disk Space Free (GB)"
+msgstr "Espaço em disco livre (GB)"
 
 #: templates/worker_launch.html:50 templates/worker_launch.html:640
 #: templates/worker_launch.html:669
@@ -1254,8 +1276,8 @@ msgstr ""
 msgid "Plot Check"
 msgstr "Verificação do Plot"
 
-#: templates/farming/plots.html:86 templates/plotting/jobs.html:117
-#: templates/plotting/workers.html:122
+#: templates/farming/plots.html:86 templates/plotting/jobs.html:128
+#: templates/plotting/workers.html:133
 msgid "Worker is offline."
 msgstr "Worker offline."
 
@@ -1324,11 +1346,11 @@ msgstr ""
 "está a correr, outro  Plot será iniciado automaticamente, por isso "
 "primeiro pare o Plotman a partir do canto superior direito. Continuar?"
 
-#: templates/plotting/jobs.html:17 templates/plotting/jobs.html:193
+#: templates/plotting/jobs.html:17 templates/plotting/jobs.html:204
 msgid "Kill Selected"
 msgstr "Matar os seleccionados"
 
-#: templates/plotting/jobs.html:27 templates/plotting/jobs.html:123
+#: templates/plotting/jobs.html:27 templates/plotting/jobs.html:134
 msgid "Start Plotting"
 msgstr "Plotting: Iniciar"
 
@@ -1346,7 +1368,7 @@ msgstr ""
 msgid "Start"
 msgstr "Iniciar"
 
-#: templates/plotting/jobs.html:45 templates/plotting/jobs.html:120
+#: templates/plotting/jobs.html:45 templates/plotting/jobs.html:131
 msgid "Stop Plotting"
 msgstr "Parar Plotting"
 
@@ -1386,32 +1408,52 @@ msgstr "OK"
 msgid "Jobs"
 msgstr "Jobs"
 
-#: templates/plotting/jobs.html:189
+#: templates/plotting/jobs.html:108 templates/plotting/workers.html:110
+msgid "Disabled"
+msgstr ""
+
+#: templates/plotting/jobs.html:110 templates/plotting/workers.html:112
+msgid "Running"
+msgstr ""
+
+#: templates/plotting/jobs.html:112 templates/plotting/workers.html:114
+msgid "Stopped"
+msgstr ""
+
+#: templates/plotting/jobs.html:200
 msgid "Suspend Selected"
 msgstr "Suspender os seleccionados"
 
-#: templates/plotting/jobs.html:191
+#: templates/plotting/jobs.html:202
 msgid "Resume Selected"
 msgstr "Retomar os seleccionados"
 
-#: templates/plotting/jobs.html:204
+#: templates/plotting/jobs.html:215
 #, python-format
 msgid "Plotting Speed - k%(k_size)s Plots"
 msgstr "Velocidade de Plotting - k%(k_size)s Plots"
 
-#: templates/plotting/jobs.html:341
+#: templates/plotting/jobs.html:285
+msgid "Date"
+msgstr ""
+
+#: templates/plotting/jobs.html:302
+msgid "Time (minutes)"
+msgstr ""
+
+#: templates/plotting/jobs.html:352
 msgid "Suspending..."
 msgstr "A suspender..."
 
-#: templates/plotting/jobs.html:349
+#: templates/plotting/jobs.html:360
 msgid "Resuming..."
 msgstr "A retomar..."
 
-#: templates/plotting/jobs.html:358
+#: templates/plotting/jobs.html:369
 msgid "Killing..."
 msgstr "Matando..."
 
-#: templates/plotting/workers.html:9 templates/plotting/workers.html:128
+#: templates/plotting/workers.html:9 templates/plotting/workers.html:139
 msgid "Start Archiving"
 msgstr "Iniciar arquivar"
 
@@ -1425,7 +1467,7 @@ msgstr ""
 "configurada. Os Plots completos irão ser distribuidos localmente ou "
 "transferidos remotamente. Continuar?"
 
-#: templates/plotting/workers.html:27 templates/plotting/workers.html:125
+#: templates/plotting/workers.html:27 templates/plotting/workers.html:136
 msgid "Stop Archiving"
 msgstr "Parar arquivar"
 
@@ -1455,9 +1497,18 @@ msgstr ""
 msgid "Archiving"
 msgstr "Arquivar"
 
-#: templates/plotting/workers.html:119
+#: templates/plotting/workers.html:130
 msgid "Archiving is disabled.  See Settings | Plotting page."
 msgstr "Arquivar: Desactivado. Veja a página Definições | Plotting."
+
+#: templates/plotting/workers.html:256
+#: templates/views/index_script_block.js:152
+msgid "Time - Last 24 Hours"
+msgstr ""
+
+#: templates/plotting/workers.html:273
+msgid "Plotting Disk Usage (GB)"
+msgstr ""
 
 #: templates/settings/alerts.html:57 templates/settings/farming.html:58
 #: templates/settings/plotting.html:58 templates/settings/tools.html:57
@@ -1546,4 +1597,16 @@ msgstr "Gravando..."
 #: templates/settings/pools.html:197
 msgid "PlotNFT Log on "
 msgstr "PlotNFT Log de "
+
+#: templates/views/index_script_block.js:85
+msgid "Time - Recent"
+msgstr ""
+
+#: templates/views/index_script_block.js:102
+msgid "Time Taken (seconds)"
+msgstr ""
+
+#: templates/views/index_script_block.js:169
+msgid "Partials Submitted"
+msgstr ""
 

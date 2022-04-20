@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-30 20:46-0600\n"
+"POT-Creation-Date: 2022-04-03 21:22-0600\n"
 "PO-Revision-Date: 2022-02-15 14:29-0700\n"
 "Last-Translator: Guy Davis\n"
 "Language: zh\n"
@@ -98,6 +98,11 @@ msgid ""
 "Please allow 15 minutes..."
 msgstr ""
 
+#: actions/drives.py:30
+#, python-format
+msgid "Oops! No smartctl info found for device %(device)s on %(hostname)s."
+msgstr ""
+
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
 msgstr ""
@@ -161,11 +166,11 @@ msgstr ""
 msgid "Please use a consistent Machinaris version to avoid issues."
 msgstr ""
 
-#: models/chia.py:133 models/chia.py:230 models/drives.py:42
+#: models/chia.py:133 models/chia.py:230 models/drives.py:44
 msgid "days"
 msgstr ""
 
-#: models/chia.py:198 templates/summary.html:100
+#: models/chia.py:198 templates/summary.html:100 templates/wallet.html:128
 msgid "Syncing"
 msgstr ""
 
@@ -177,12 +182,13 @@ msgstr ""
 msgid "Not synced"
 msgstr ""
 
-#: models/chia.py:205 templates/index.html:54 templates/summary.html:96
-#: templates/worker.html:78 templates/workers.html:72
+#: models/chia.py:205 templates/index.html:54 templates/plotting/jobs.html:114
+#: templates/plotting/workers.html:116 templates/summary.html:96
+#: templates/wallet.html:124 templates/worker.html:78 templates/workers.html:72
 msgid "Offline"
 msgstr ""
 
-#: models/chia.py:218 models/drives.py:47
+#: models/chia.py:218 models/drives.py:49
 msgid "years"
 msgstr ""
 
@@ -190,7 +196,7 @@ msgstr ""
 msgid "year"
 msgstr ""
 
-#: models/chia.py:222 models/drives.py:46
+#: models/chia.py:222 models/drives.py:48
 msgid "months"
 msgstr ""
 
@@ -198,7 +204,7 @@ msgstr ""
 msgid "month"
 msgstr ""
 
-#: models/chia.py:226 models/drives.py:44
+#: models/chia.py:226 models/drives.py:46
 msgid "weeks"
 msgstr ""
 
@@ -210,7 +216,7 @@ msgstr ""
 msgid "day"
 msgstr ""
 
-#: models/chia.py:234 models/drives.py:40
+#: models/chia.py:234 models/drives.py:42
 msgid "hours"
 msgstr ""
 
@@ -291,11 +297,11 @@ msgstr ""
 msgid "Chiadog Log on "
 msgstr ""
 
-#: templates/alerts.html:147 templates/plotting/jobs.html:367
+#: templates/alerts.html:147 templates/plotting/jobs.html:378
 msgid "Starting..."
 msgstr ""
 
-#: templates/alerts.html:154 templates/plotting/jobs.html:377
+#: templates/alerts.html:154 templates/plotting/jobs.html:388
 msgid "Stopping..."
 msgstr ""
 
@@ -572,27 +578,35 @@ msgstr ""
 msgid "Serial #"
 msgstr ""
 
-#: templates/drives.html:60
+#: templates/drives.html:60 templates/drives.html:135
 msgid "Capacity"
 msgstr ""
 
-#: templates/drives.html:62
+#: templates/drives.html:62 templates/drives.html:134
 msgid "Temperature"
 msgstr ""
 
-#: templates/drives.html:82 templates/drives.html:134
+#: templates/drives.html:84 templates/drives.html:143
 msgid "Passed"
 msgstr ""
 
-#: templates/drives.html:169
+#: templates/drives.html:136
+msgid "Powered On"
+msgstr ""
+
+#: templates/drives.html:178
+msgid "Drive status updated"
+msgstr ""
+
+#: templates/drives.html:187
 msgid "No drives accessible to smartctl inside the Machinaris containers."
 msgstr ""
 
-#: templates/drives.html:170
+#: templates/drives.html:188
 msgid "Please configure Docker to allow smartctl access to host devices."
 msgstr ""
 
-#: templates/drives.html:171 templates/workers.html:106
+#: templates/drives.html:189 templates/workers.html:106
 #, python-format
 msgid "For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
 msgstr ""
@@ -814,11 +828,11 @@ msgstr ""
 msgid "EDV"
 msgstr ""
 
-#: templates/summary.html:98
+#: templates/summary.html:98 templates/wallet.html:126
 msgid "Synced"
 msgstr ""
 
-#: templates/summary.html:102
+#: templates/summary.html:102 templates/wallet.html:130
 msgid "Not Synced"
 msgstr ""
 
@@ -854,21 +868,21 @@ msgstr ""
 msgid "Total Balance"
 msgstr ""
 
-#: templates/wallet.html:137
+#: templates/wallet.html:140
 msgid "Edit Wallet"
 msgstr ""
 
-#: templates/wallet.html:148
+#: templates/wallet.html:151
 msgid "Wallet Details"
 msgstr ""
 
-#: templates/wallet.html:172
+#: templates/wallet.html:175
 msgid ""
 "No wallet status received.  Perhaps just starting?  Please allow at least"
 " 10 minutes to update."
 msgstr ""
 
-#: templates/wallet.html:173
+#: templates/wallet.html:176
 msgid ""
 "You can also try running \"chia wallet show\" on your fullnode's in-"
 "container shell to verify."
@@ -938,12 +952,20 @@ msgstr ""
 msgid "Yay! No issues currently."
 msgstr ""
 
-#: templates/farming/workers.html:116 templates/worker.html:183
+#: templates/farming/workers.html:116 templates/worker.html:190
 msgid "Disk Space Used (TB)"
 msgstr ""
 
-#: templates/farming/workers.html:122 templates/worker.html:189
+#: templates/farming/workers.html:122 templates/worker.html:196
 msgid "Disk Space Free (TB)"
+msgstr ""
+
+#: templates/worker.html:246
+msgid "Disk Space Used (GB)"
+msgstr ""
+
+#: templates/worker.html:252
+msgid "Disk Space Free (GB)"
 msgstr ""
 
 #: templates/worker_launch.html:50 templates/worker_launch.html:640
@@ -1174,8 +1196,8 @@ msgstr ""
 msgid "Plot Check"
 msgstr ""
 
-#: templates/farming/plots.html:86 templates/plotting/jobs.html:117
-#: templates/plotting/workers.html:122
+#: templates/farming/plots.html:86 templates/plotting/jobs.html:128
+#: templates/plotting/workers.html:133
 msgid "Worker is offline."
 msgstr ""
 
@@ -1231,11 +1253,11 @@ msgid ""
 " first from the top-right. Continue?"
 msgstr ""
 
-#: templates/plotting/jobs.html:17 templates/plotting/jobs.html:193
+#: templates/plotting/jobs.html:17 templates/plotting/jobs.html:204
 msgid "Kill Selected"
 msgstr ""
 
-#: templates/plotting/jobs.html:27 templates/plotting/jobs.html:123
+#: templates/plotting/jobs.html:27 templates/plotting/jobs.html:134
 msgid "Start Plotting"
 msgstr ""
 
@@ -1250,7 +1272,7 @@ msgstr ""
 msgid "Start"
 msgstr ""
 
-#: templates/plotting/jobs.html:45 templates/plotting/jobs.html:120
+#: templates/plotting/jobs.html:45 templates/plotting/jobs.html:131
 msgid "Stop Plotting"
 msgstr ""
 
@@ -1285,32 +1307,52 @@ msgstr ""
 msgid "Jobs"
 msgstr ""
 
-#: templates/plotting/jobs.html:189
+#: templates/plotting/jobs.html:108 templates/plotting/workers.html:110
+msgid "Disabled"
+msgstr ""
+
+#: templates/plotting/jobs.html:110 templates/plotting/workers.html:112
+msgid "Running"
+msgstr ""
+
+#: templates/plotting/jobs.html:112 templates/plotting/workers.html:114
+msgid "Stopped"
+msgstr ""
+
+#: templates/plotting/jobs.html:200
 msgid "Suspend Selected"
 msgstr ""
 
-#: templates/plotting/jobs.html:191
+#: templates/plotting/jobs.html:202
 msgid "Resume Selected"
 msgstr ""
 
-#: templates/plotting/jobs.html:204
+#: templates/plotting/jobs.html:215
 #, python-format
 msgid "Plotting Speed - k%(k_size)s Plots"
 msgstr ""
 
-#: templates/plotting/jobs.html:341
+#: templates/plotting/jobs.html:285
+msgid "Date"
+msgstr ""
+
+#: templates/plotting/jobs.html:302
+msgid "Time (minutes)"
+msgstr ""
+
+#: templates/plotting/jobs.html:352
 msgid "Suspending..."
 msgstr ""
 
-#: templates/plotting/jobs.html:349
+#: templates/plotting/jobs.html:360
 msgid "Resuming..."
 msgstr ""
 
-#: templates/plotting/jobs.html:358
+#: templates/plotting/jobs.html:369
 msgid "Killing..."
 msgstr ""
 
-#: templates/plotting/workers.html:9 templates/plotting/workers.html:128
+#: templates/plotting/workers.html:9 templates/plotting/workers.html:139
 msgid "Start Archiving"
 msgstr ""
 
@@ -1321,7 +1363,7 @@ msgid ""
 "Continue?"
 msgstr ""
 
-#: templates/plotting/workers.html:27 templates/plotting/workers.html:125
+#: templates/plotting/workers.html:27 templates/plotting/workers.html:136
 msgid "Stop Archiving"
 msgstr ""
 
@@ -1344,8 +1386,17 @@ msgstr ""
 msgid "Archiving"
 msgstr ""
 
-#: templates/plotting/workers.html:119
+#: templates/plotting/workers.html:130
 msgid "Archiving is disabled.  See Settings | Plotting page."
+msgstr ""
+
+#: templates/plotting/workers.html:256
+#: templates/views/index_script_block.js:152
+msgid "Time - Last 24 Hours"
+msgstr ""
+
+#: templates/plotting/workers.html:273
+msgid "Plotting Disk Usage (GB)"
 msgstr ""
 
 #: templates/settings/alerts.html:57 templates/settings/farming.html:58
@@ -1424,5 +1475,17 @@ msgstr ""
 
 #: templates/settings/pools.html:197
 msgid "PlotNFT Log on "
+msgstr ""
+
+#: templates/views/index_script_block.js:85
+msgid "Time - Recent"
+msgstr ""
+
+#: templates/views/index_script_block.js:102
+msgid "Time Taken (seconds)"
+msgstr ""
+
+#: templates/views/index_script_block.js:169
+msgid "Partials Submitted"
 msgstr ""
 

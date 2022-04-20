@@ -17,7 +17,8 @@ stor init >> /root/.stor/mainnet/log/init.log 2>&1
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
-  && [[ ! -f /root/.stor/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+  && [[ ! -f /root/.stor/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
+  && [[ ! -f /root/.stor/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   echo "Downloading Stor blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.stor/mainnet/db/ && cd /root/.stor/mainnet/db/

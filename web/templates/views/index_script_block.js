@@ -82,7 +82,7 @@ var myChart = new Chart(ctx, {
                 },
                 title: {
                     display: true,
-                    text: 'Time - Recent',
+                    text: "{{_('Time - Recent')}}",
                     color: "#c7c7c7",  
                     font: {
                       size: 18 
@@ -99,7 +99,7 @@ var myChart = new Chart(ctx, {
                 },
                 title: {
                     display: true,
-                    text: "Time Taken (seconds)",
+                    text: "{{_('Time Taken (seconds)')}}",
                     color: "#c7c7c7",  
                     font: {
                       size: 18 
@@ -149,7 +149,7 @@ var myChart = new Chart(ctx, {
                 },
                 title: {
                     display: true,
-                    text: 'Time - Last 24 Hours',
+                    text: "{{_('Time - Last 24 Hours')}}",
                     color: "#c7c7c7",  
                     font: {
                       size: 18 
@@ -166,7 +166,7 @@ var myChart = new Chart(ctx, {
                 beginAtZero: true,
                 title: {
                     display: true,
-                    text: "Partials Submitted",
+                    text: "{{_('Partials Submitted')}}",
                     color: "#c7c7c7",  
                     font: {
                       size: 18 
