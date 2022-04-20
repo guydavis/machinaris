@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. The format 
 ## [0.7.2] - 2022-05-?
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.3.3) - v1.3.3 release
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.3.4) - v1.3.4 release - update full node before harvesters
+ - [Staicoin](https://github.com/STATION-I/stai-blockchain) - v1.2.0 release
 
 ## [0.7.1] - 2022-04-02
  - Drive monitoring using Smartctl (WebUI status currently, alerting to come soon)

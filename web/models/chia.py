@@ -130,7 +130,14 @@ class Summaries:
         try:
             minutes = converters.etw_to_minutes(etw)
             #app.logger.info("Converting {0} minutes.".format(minutes))
-            return "{0} {1}".format(format_decimal(round((minutes/60/24),2)), _('days'))
+            days = minutes/60/24
+            if days > 10:
+                days = round(days)
+            elif days > 1:
+                days = round(days, 1)
+            else:
+                days = round(days, 2)
+            return "{0} {1}".format(format_decimal(days), _('days'))
         except Exception as ex:
             app.logger.info("Unable to convert ETW to minutes '{0}' because {1}.".format(etw, str(ex)))
             return etw
