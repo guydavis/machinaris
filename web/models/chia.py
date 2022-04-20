@@ -359,8 +359,8 @@ class Wallets:
         skip = 0
         details = []
         for line in wallet_details.split('\n'):
-            if "type CAT" in line:
-                skip = 3 # Skip next 3 lines for this CAT wallet
+            if "Token:" in line:  # Example: "Chia Holiday 2021 Token:"
+                skip = 3 # Skip next 3 lines for these useless CAT wallets
             elif skip > 0:
                 skip = skip -1 
             else:
