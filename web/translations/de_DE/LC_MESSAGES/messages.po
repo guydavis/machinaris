@@ -750,7 +750,9 @@ msgid ""
 "%(uncompressed)s in uncompressed size (progress shown above), this will "
 "take a while. However minutes of download now, will save you multiple "
 "days of blockchain syncing later. Please be patient!"
-msgstr ""
+msgstr "Beim ersten start wird die Blockchain DB von"
+"%(dl_link)s heruntergeladen. Dies kann ein bisschen dauern."
+"Allerdings erspart es dir Stunden/Tage an Synchronisationszeit"
 
 #: templates/setup.html:75
 #, python-format
@@ -759,47 +761,50 @@ msgid ""
 "days, see the %(init_link)s for details. Similarly, you may instead "
 "%(import_link_open)s import your own blockchain %(import_link_close)s if "
 "you have one from a previous Chia install."
-msgstr ""
+msgstr "Achtung: Wenn du Chia über mehrere Tage synchronisieren lassen willst"
+"gibt es hier %(init_link)s mehr informationen
 
 #: templates/setup.html:83
 #, python-format
 msgid ""
 "To get started with Machinaris as a Chia%(trademark)s fullnode, either "
 "import your existing 24-word mnemonic seed phrase"
-msgstr ""
+msgstr "U zu beginnen kannst du entweder deinen bereits existierenden"
+"24 Wort schlüssel importieren"
 
 #: templates/setup.html:90
 msgid "Import Existing Key"
-msgstr ""
+msgstr "Importiere vorhandenen Schlüssel"
 
 #: templates/setup.html:91
 msgid "OR"
-msgstr ""
+msgstr "ODER"
 
 #: templates/setup.html:93
 msgid ""
 "You can generate a brand-new mnemonic phrase that will be written to this"
 " in-container path"
-msgstr ""
+msgstr "du kannst eine brand neuen Schlüssel generieren lassen"
 
 #: templates/setup.html:96
 msgid "Generate New Key"
-msgstr ""
+msgstr "Neuen Schlüssel generieren"
 
 #: templates/setup.html:110
 #, python-format
 msgid ""
 "NOTE: If you would prefer to instead import your mnenmoic seed phrase "
 "yourself at the command-line, see the %(wiki_link)s for details."
-msgstr ""
+msgstr "Achtung: Du kannst deinen 24 Wort schlüssel auch über die Komandozeile"
+"selbst importieren. Mehr dazu findest du hier: %(wiki_link)s"
 
 #: templates/summary.html:31 templates/wallet.html:52
 msgid "Local Currency:"
-msgstr ""
+msgstr "Lokale Währung"
 
 #: templates/summary.html:75
 msgid "Height"
-msgstr ""
+msgstr "Höhe"
 
 #: templates/farming/plots.html:66 templates/farming/workers.html:25
 #: templates/summary.html:76
@@ -808,7 +813,7 @@ msgstr ""
 
 #: templates/summary.html:78
 msgid "Max Resp."
-msgstr ""
+msgstr "Max. Antwortdauer"
 
 #: templates/summary.html:79
 msgid "Partials"
@@ -828,47 +833,47 @@ msgstr ""
 
 #: templates/summary.html:98
 msgid "Synced"
-msgstr ""
+msgstr "Synchronisiert"
 
 #: templates/summary.html:102
 msgid "Not Synced"
-msgstr ""
+msgstr "Nicht Synchronisiert"
 
 #: templates/summary.html:128
 msgid "No blockchains found from any farmers. Just starting up?"
-msgstr ""
+msgstr "Es konnte keine Blockchain gefunden werden. Wurde gerade erst neu gestartet?"
 
 #: templates/summary.html:129
 msgid "Please allow at least 15 minutes for blockchains to get started."
-msgstr ""
+msgstr "Bitte warte 15 min damit die Blockchain statrten kann"
 
 #: templates/wallet.html:76
 msgid "Wallet Settings"
-msgstr ""
+msgstr "Wallet Einstellungen"
 
 #: templates/wallet.html:86
 msgid "Cold Wallet Address:"
-msgstr ""
+msgstr "Cold Wallet Adresse:"
 
 #: templates/wallet.html:100
 msgid "Wallet Summary"
-msgstr ""
+msgstr "Wallet Zusammenfassung"
 
 #: templates/wallet.html:110
 msgid "Wallet Balance"
-msgstr ""
+msgstr "Wallet Bilanz"
 
 #: templates/wallet.html:111
 msgid "Cold Wallet Balance"
-msgstr ""
+msgstr "Cold Wallet Bilanz"
 
 #: templates/wallet.html:112
 msgid "Total Balance"
-msgstr ""
+msgstr "Totale Bilanz"
 
 #: templates/wallet.html:137
 msgid "Edit Wallet"
-msgstr ""
+msgstr "Wallet editieren"
 
 #: templates/wallet.html:148
 msgid "Wallet Details"
@@ -878,13 +883,14 @@ msgstr ""
 msgid ""
 "No wallet status received.  Perhaps just starting?  Please allow at least"
 " 10 minutes to update."
-msgstr ""
+msgstr "Es wurde keine Wallet gefunden. Wurde gerade erst gestartet? Es "
+"kann bis zu 10 min dauern"
 
 #: templates/wallet.html:173
 msgid ""
 "You can also try running \"chia wallet show\" on your fullnode's in-"
 "container shell to verify."
-msgstr ""
+msgstr "versuche \"chia wallet show\" bei deine Fullnodes"
 
 #: templates/worker.html:35
 msgid "Details"
@@ -900,39 +906,39 @@ msgstr ""
 
 #: templates/worker.html:55 templates/workers.html:44
 msgid "Mode"
-msgstr ""
+msgstr "Modus"
 
 #: templates/worker.html:59
 msgid "Last Status Received At"
-msgstr ""
+msgstr "Letzter Status um"
 
 #: templates/worker.html:63
 msgid "Local Time on Worker"
-msgstr ""
+msgstr "Lokale Zeit beim Worker"
 
 #: templates/worker.html:67
 msgid "Last Ping to Worker"
-msgstr ""
+msgstr "Letzter Ping beim Worker"
 
 #: templates/worker.html:70 templates/workers.html:64
 msgid "Responding"
-msgstr ""
+msgstr "Antwortet"
 
 #: templates/worker.html:72 templates/workers.html:66
 msgid "Connection Refused"
-msgstr ""
+msgstr "Verbindung verweigert"
 
 #: templates/worker.html:74 templates/workers.html:68
 msgid "Connection Timeout"
-msgstr ""
+msgstr "Verbindung unterbrochen"
 
 #: templates/worker.html:76 templates/workers.html:70
 msgid "Connection Error"
-msgstr ""
+msgstr "Verbindungsfehler"
 
 #: templates/worker.html:86
 msgid "Last Successful Ping to Worker"
-msgstr ""
+msgstr "Letzter erfolgreicher Ping zum Worker"
 
 #: templates/worker.html:90 templates/workers.html:48
 msgid "Version"
@@ -944,39 +950,39 @@ msgstr ""
 
 #: templates/worker.html:106
 msgid "Recent Warnings"
-msgstr ""
+msgstr "Letzte Warnungen"
 
 #: templates/worker.html:121
 msgid "Yay! No issues currently."
-msgstr ""
+msgstr "Yax! Momentan läuft alles einwandfrei"
 
 #: templates/farming/workers.html:116 templates/worker.html:183
 msgid "Disk Space Used (TB)"
-msgstr ""
+msgstr "Platten Speicher benutzt (TB)"
 
 #: templates/farming/workers.html:122 templates/worker.html:189
 msgid "Disk Space Free (TB)"
-msgstr ""
+msgstr "Platten Speicher frei (TB)"
 
 #: templates/worker_launch.html:50 templates/worker_launch.html:640
 #: templates/worker_launch.html:669
 msgid "Host Path"
-msgstr ""
+msgstr "Host Pfad"
 
 #: templates/worker_launch.html:55 templates/worker_launch.html:645
 #: templates/worker_launch.html:674
 msgid "Container Path"
-msgstr ""
+msgstr "Container Pfad"
 
 #: templates/worker_launch.html:60 templates/worker_launch.html:650
 #: templates/worker_launch.html:679
 msgid "Used for:"
-msgstr ""
+msgstr "Benutzt für:"
 
 #: templates/worker_launch.html:63 templates/worker_launch.html:653
 #: templates/worker_launch.html:682
 msgid "Final Plots"
-msgstr ""
+msgstr "Finale Plots"
 
 #: templates/worker_launch.html:64 templates/worker_launch.html:654
 #: templates/worker_launch.html:683
@@ -986,11 +992,11 @@ msgstr ""
 #: templates/worker_launch.html:65 templates/worker_launch.html:655
 #: templates/worker_launch.html:684
 msgid "Other"
-msgstr ""
+msgstr "Andere"
 
 #: templates/worker_launch.html:69 templates/worker_launch.html:659
 msgid "Location"
-msgstr ""
+msgstr "Ort"
 
 #: templates/worker_launch.html:72 templates/worker_launch.html:662
 msgid "Local"
@@ -1002,50 +1008,50 @@ msgstr ""
 
 #: templates/worker_launch.html:252
 msgid "Unknown blockchain fork of selected:"
-msgstr ""
+msgstr "Unbekannter Blockschain Fork der ausgewählten:"
 
 #: templates/worker_launch.html:284
 msgid ""
 "Missing worker hostname.  Please provide a short name to identify your "
 "worker."
-msgstr ""
+msgstr "Der Worker Hostname fehlt. Bitte einen kurzen Namen vergeben"
 
 #: templates/worker_launch.html:304
 msgid ""
 "Invalid host path ending with colon. Try adding a slash to the end like "
 "this"
-msgstr ""
+msgstr "Der Host pfad endet mit einem Komma. Versuche es mit Slash wie hier"
 
 #: templates/worker_launch.html:307
 msgid "Empty host path provided for volume at "
-msgstr ""
+msgstr "Leerer Host Pfad für Volumen "
 
 #: templates/worker_launch.html:307
 msgid "Please provide a host path."
-msgstr ""
+msgstr "Bitte Hostpfad angeben"
 
 #: templates/worker_launch.html:309
 msgid "Empty container path provided for volume at "
-msgstr ""
+msgstr "Leerer container Pfad für Volumen "
 
 #: templates/worker_launch.html:309
 msgid "Please provide a container path."
-msgstr ""
+msgstr "Bitte Containerpfad angeben"
 
 #: templates/worker_launch.html:355
 msgid "Neither Harvester or Plottter mode selected.  Please choose one or both."
-msgstr ""
+msgstr "Weder Harvester noch Plotter Modus ausgewählt. Bitte einen oder beide wählen"
 
 #: templates/worker_launch.html:361
 msgid ""
 "Missing worker IP address.  Please provide the IP the controller will "
 "connect to for commands."
-msgstr ""
+msgstr "Worker IP Adresse fehlt"
 
 #: templates/worker_launch.html:411
 #, fuzzy
 msgid "Machinaris Worker - Launch Config"
-msgstr "Willkommen zu"
+msgstr "Machinaris Worker - Configuration starten"
 
 #: templates/worker_launch.html:412
 msgid ""
@@ -1053,11 +1059,12 @@ msgid ""
 " across your network. Save the generated docker-compose.yml file to a "
 "folder named \"machinaris\", then execute \"docker-compose up\" from a "
 "shell."
-msgstr ""
+msgstr "Um die Harvester/Plotter auf einem anderen System laufen zu lassen,"
+"bitte folgendes ausfüllen"
 
 #: templates/worker_launch.html:416
 msgid "Operating System"
-msgstr ""
+msgstr "Betriebssystem"
 
 #: templates/worker_launch.html:422
 msgid "Linux"
@@ -1074,7 +1081,7 @@ msgstr ""
 #: templates/worker_launch.html:442
 #, fuzzy
 msgid "Machinaris Mode"
-msgstr "Willkommen zu"
+msgstr "Machinaris Modus"
 
 #: templates/worker_launch.html:448
 msgid "Harvester"
