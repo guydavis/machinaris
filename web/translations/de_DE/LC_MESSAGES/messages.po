@@ -1129,11 +1129,11 @@ msgstr ""
 
 #: templates/worker_launch.html:516
 msgid "Worker IP Address"
-msgstr ""
+msgstr "Worker IP Adresse"
 
 #: templates/worker_launch.html:523
 msgid "Blockchains to Farm"
-msgstr ""
+msgstr "Gefarmte Blockchains"
 
 #: templates/worker_launch.html:636
 msgid "Volume Mounts"
@@ -1141,15 +1141,15 @@ msgstr ""
 
 #: templates/worker_launch.html:693
 msgid "Add New Volume"
-msgstr ""
+msgstr "Neues Volumen hinzufügen"
 
 #: templates/worker_launch.html:695
 msgid "Remove Last Volume"
-msgstr ""
+msgstr "Letztes Volumen entfernen"
 
 #: templates/worker_launch.html:702
 msgid "Copy"
-msgstr ""
+msgstr "Kopieren"
 
 #: templates/worker_launch.html:706
 msgid "Docker Compose"
@@ -1157,79 +1157,80 @@ msgstr ""
 
 #: templates/workers.html:45
 msgid "Last Status Received"
-msgstr ""
+msgstr "Letzter empfangener Status"
 
 #: templates/workers.html:46
 msgid "Last Ping"
-msgstr ""
+msgstr "Letzter Ping"
 
 #: templates/workers.html:47
 msgid "Last Successful Ping"
-msgstr ""
+msgstr "Letzter erfolgreicher Ping"
 
 #: templates/workers.html:94
 msgid "Prune Selected"
-msgstr ""
+msgstr "Entferne ausgewählte"
 
 #: templates/workers.html:96
 msgid "New Worker"
-msgstr ""
+msgstr "Neuer Worker"
 
 #: templates/workers.html:104
 msgid "No Machinaris workers have reported status successfully."
-msgstr ""
+msgstr "Keine Machinaris Worker haben ihren Status erfolgreich mitgeteilt"
 
 #: templates/workers.html:105
 msgid "Please check each expected worker's log files."
-msgstr ""
+msgstr "Bitte Logfile des entsprechenden Workers überprüfen"
 
 #: templates/farming/plots.html:9
 msgid "Plotting Analysis"
-msgstr ""
+msgstr "Plotting Analyse"
 
 #: templates/farming/plots.html:13
 msgid "Analysis of the plotting job log shows time (seconds) spent in each phase:"
-msgstr ""
+msgstr "Die Analyse des Plotting Jobs zeigt die Zeit der entsprechenden Phasen"
 
 #: templates/farming/plots.html:24
 msgid "Plot Check"
-msgstr ""
+msgstr "Plot überprüfung"
 
 #: templates/farming/plots.html:86 templates/plotting/jobs.html:117
 #: templates/plotting/workers.html:122
 msgid "Worker is offline."
-msgstr ""
+msgstr "Worker ist offline"
 
 #: templates/farming/plots.html:88
 msgid "Farming not started successfully."
-msgstr ""
+msgstr "Farming wurde nicht erfolgreich gestartet"
 
 #: templates/farming/plots.html:147
 msgid "Farming Log for "
-msgstr ""
+msgstr "Farming Log für"
 
 #: templates/farming/plots.html:196
 msgid "Good Plot"
-msgstr ""
+msgstr "Guter Plot"
 
 #: templates/farming/plots.html:198
 msgid "Bad Plot"
-msgstr ""
+msgstr "Schlechter Plot"
 
 #: templates/farming/workers.html:66
 msgid "Daily Summary"
-msgstr ""
+msgstr "Tägliche Zusammenfassung"
 
 #: templates/farming/workers.html:70
 #, python-format
 msgid "No daily summary found for %(blockchain)s on %(displayname)s."
-msgstr ""
+msgstr "Keine Tägliche Zusammenfassung für %(blockchain)s auf %(displayname)s gefunden."
 
 #: templates/farming/workers.html:72
 msgid ""
 "Please check that your Machinaris container for this blockchain is "
 "running. Also please verify settings on the Alerts page."
-msgstr ""
+msgstr "Bitte überprüfe ob der Container der entsprechenden Blockchain läuft."
+"Überprüfe auch die Einstellung der Benachrichtigungen"
 
 #: templates/farming/workers.html:94
 #, python-format
@@ -1242,7 +1243,7 @@ msgstr ""
 
 #: templates/plotting/jobs.html:9
 msgid "Confirm Kill"
-msgstr ""
+msgstr "Bestätige Abbruch"
 
 #: templates/plotting/jobs.html:13
 msgid ""
@@ -1254,11 +1255,11 @@ msgstr ""
 
 #: templates/plotting/jobs.html:17 templates/plotting/jobs.html:193
 msgid "Kill Selected"
-msgstr ""
+msgstr "Ausgewählte beenden"
 
 #: templates/plotting/jobs.html:27 templates/plotting/jobs.html:123
 msgid "Start Plotting"
-msgstr ""
+msgstr "Plotting beginnen"
 
 #: templates/plotting/jobs.html:31
 msgid ""
@@ -1273,7 +1274,7 @@ msgstr ""
 
 #: templates/plotting/jobs.html:45 templates/plotting/jobs.html:120
 msgid "Stop Plotting"
-msgstr ""
+msgstr "Plotting beenden"
 
 #: templates/plotting/jobs.html:49
 msgid ""
@@ -1295,7 +1296,8 @@ msgid ""
 "This worker is not currently online and responding to pings from the "
 "controller.  Please check the Workers page and bring the system back "
 "online."
-msgstr ""
+msgstr "Dieser Worker reagiert gerade nicht auf Pings."
+"Überprüfe den Worker und starte ihn ggf neu"
 
 #: templates/plotting/jobs.html:70 templates/plotting/workers.html:53
 #: templates/plotting/workers.html:70
@@ -1308,11 +1310,11 @@ msgstr ""
 
 #: templates/plotting/jobs.html:189
 msgid "Suspend Selected"
-msgstr ""
+msgstr "ausgewählte unterbrechen"
 
 #: templates/plotting/jobs.html:191
 msgid "Resume Selected"
-msgstr ""
+msgstr "ausgewählte wiederaufnehmen"
 
 #: templates/plotting/jobs.html:204
 #, python-format
@@ -1321,19 +1323,19 @@ msgstr ""
 
 #: templates/plotting/jobs.html:341
 msgid "Suspending..."
-msgstr ""
+msgstr "Unterbrechen..."
 
 #: templates/plotting/jobs.html:349
 msgid "Resuming..."
-msgstr ""
+msgstr "Wiederaufnehmen..."
 
 #: templates/plotting/jobs.html:358
 msgid "Killing..."
-msgstr ""
+msgstr "Beenden..."
 
 #: templates/plotting/workers.html:9 templates/plotting/workers.html:128
 msgid "Start Archiving"
-msgstr ""
+msgstr "Archivieren Starten"
 
 #: templates/plotting/workers.html:13
 msgid ""
@@ -1344,7 +1346,7 @@ msgstr ""
 
 #: templates/plotting/workers.html:27 templates/plotting/workers.html:125
 msgid "Stop Archiving"
-msgstr ""
+msgstr "Archivieren stoppen"
 
 #: templates/plotting/workers.html:31
 msgid ""
@@ -1363,11 +1365,11 @@ msgstr ""
 
 #: templates/plotting/workers.html:103
 msgid "Archiving"
-msgstr ""
+msgstr "Archivieren"
 
 #: templates/plotting/workers.html:119
 msgid "Archiving is disabled.  See Settings | Plotting page."
-msgstr ""
+msgstr "Archivierung ist ausgeschaltet"
 
 #: templates/settings/alerts.html:57 templates/settings/farming.html:58
 #: templates/settings/plotting.html:58 templates/settings/tools.html:57
@@ -1376,14 +1378,14 @@ msgstr ""
 
 #: templates/settings/pools.html:32
 msgid "Confirm Pool Change"
-msgstr ""
+msgstr "Bestätige Pool wechsel"
 
 #: templates/settings/pools.html:36
 msgid ""
 "This action will switch your current pooling selection, possibly "
 "resulting in a small charge (few mojos) against your wallet. Continue "
 "anyway?"
-msgstr ""
+msgstr "Diese Aktion wechselt den Pool. Das kann wenige Mojos kosten. Fortsetzen?"
 
 #: templates/settings/pools.html:85
 #, python-format
@@ -1391,59 +1393,60 @@ msgid ""
 "Join a pool and get consistent farming rewards. The average returns are "
 "the same, %(break)sbut it is much less volatile. You can easily switch "
 "pools without having to re-plot."
-msgstr ""
+msgstr "Trete einem Pool bei und bekomme coins über zeit. Kommt ungefähr aufs gleiche Ergebnis"
+"wie beim Solo Farmen"
 
 #: templates/settings/pools.html:88
 msgid "ERROR: Unable to join a pool because:"
-msgstr ""
+msgstr "ERROR: Kann den Pool nicht beitreten! Begründung:"
 
 #: templates/settings/pools.html:111
 msgid "Self pool. When you win a block, you will earn rewards."
-msgstr ""
+msgstr "Self Pool. Wenn du einen Block gewinnst bekommst du alle Coins"
 
 #: templates/settings/pools.html:122
 msgid "Connected to pool:"
-msgstr ""
+msgstr "Verbindung zu Pool:"
 
 #: templates/settings/pools.html:122
 msgid "Connect to pool:"
-msgstr ""
+msgstr "Verbinde zu Pool:"
 
 #: templates/settings/pools.html:132
 msgid "Compare Pools"
-msgstr ""
+msgstr "Vergleiche Pools"
 
 #: templates/settings/pools.html:135
 msgid "Get Mojos"
-msgstr ""
+msgstr "Du brauchst Mojos?"
 
 #: templates/settings/pools.html:157
 msgid "Save Changes"
-msgstr ""
+msgstr "Änderungen speichern"
 
 #: templates/settings/pools.html:161
 msgid "View Log"
-msgstr ""
+msgstr "Log anzeigen"
 
 #: templates/settings/pools.html:172
 msgid ""
 "No wallets found yet.  Perhaps this is a brand-new installation? If so, "
 "please wait for complete start-up."
-msgstr ""
+msgstr "Keine Wallet gefunden. Vielleicht ist das eine neue Installation?"
 
 #: templates/settings/pools.html:173
 msgid "For more on Pooling, see the Machinaris"
-msgstr ""
+msgstr "Mehr zum Pooling in der Machinaris Wiki"
 
 #: templates/settings/pools.html:173
 msgid "wiki"
-msgstr ""
+msgstr "Wiki"
 
 #: templates/settings/pools.html:185
 msgid "Saving..."
-msgstr ""
+msgstr "Speichern..."
 
 #: templates/settings/pools.html:197
 msgid "PlotNFT Log on "
-msgstr ""
+msgstr "PlotNFT Login"
 
