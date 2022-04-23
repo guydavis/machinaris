@@ -140,7 +140,9 @@ msgid ""
 "that you use a cold wallet for your payout instructions. Tutorial on the "
 "%(wiki_link_open)swiki%(wiki_link_close)s. Please add \"Setup a Cold "
 "Wallet\" to your To-Do list!"
-msgstr ""
+msgstr "Machinaris benutzt ein online wallet um zu farmen. es ist empfohlem"
+"ein cold wallet zu benutzen! Ein tutorial dazu findest du hier"
+"%(wiki_link_open)swiki%(wiki_link_close)s"
 
 #: actions/worker.py:107
 msgid "Worker not responding to pings."
@@ -317,11 +319,11 @@ msgstr ""
 #: templates/controller.html:10
 #, fuzzy
 msgid "Machinaris"
-msgstr ""
+msgstr "Machinaris"
 
 #: templates/base.html:32
 msgid "Summary"
-msgstr ""
+msgstr "Zusammenfassung"
 
 #: templates/base.html:38 templates/base.html:113 templates/index.html:41
 #: templates/plotting/jobs.html:101 templates/settings/plotting.html:14
@@ -339,7 +341,7 @@ msgstr ""
 
 #: templates/base.html:56
 msgid "Keys"
-msgstr ""
+msgstr "Schlüssel"
 
 #: templates/base.html:63
 msgid "Blockchains"
@@ -352,7 +354,7 @@ msgstr ""
 #: templates/base.html:76 templates/base.html:101
 #: templates/settings/alerts.html:14
 msgid "Alerts"
-msgstr ""
+msgstr "Benachrichtigungen"
 
 #: templates/base.html:82 templates/base.html:119
 msgid "Pools"
@@ -367,13 +369,13 @@ msgstr ""
 
 #: templates/base.html:90 templates/drives.html:30
 msgid "Drives"
-msgstr ""
+msgstr "Festplatten"
 
 #: templates/base.html:96 templates/connections.html:25
 #: templates/connections.html:59 templates/summary.html:25
 #: templates/summary.html:53 templates/wallet.html:23 templates/wallet.html:46
 msgid "Settings"
-msgstr ""
+msgstr "Einstellungen"
 
 #: templates/base.html:125 templates/settings/tools.html:14
 msgid "Tools"
@@ -381,11 +383,11 @@ msgstr ""
 
 #: templates/base.html:136
 msgid "About"
-msgstr ""
+msgstr "Über"
 
 #: templates/base.html:139
 msgid "Install"
-msgstr ""
+msgstr "Installieren"
 
 #: templates/base.html:141
 msgid "Project"
@@ -401,7 +403,7 @@ msgstr "Fehler"
 
 #: templates/base.html:147
 msgid "License"
-msgstr ""
+msgstr "Lizenz"
 
 #: templates/base.html:149
 msgid "Credits"
@@ -456,19 +458,19 @@ msgstr "Es konnten keine Blockchains gefunden werden. Wurden Blockchains hinzuge
 
 #: templates/blockchains.html:92
 msgid "Try running \"chia show --state\" on your farmers to verify."
-msgstr ""
+msgstr "Versuche \"chia show --state\" "
 
 #: templates/blockchains.html:106 templates/summary.html:143
 msgid "Fullnode Log for "
-msgstr ""
+msgstr "Fullnode Log für"
 
 #: templates/connections.html:34
 msgid "Maxmind Account (Required):"
-msgstr ""
+msgstr "Maxmind Account (Benötigt):"
 
 #: templates/connections.html:39
 msgid "Maxmind License Key (Required):"
-msgstr ""
+msgstr "Maxmind License Key (Benötigt):"
 
 #: templates/connections.html:44
 msgid "Mapbox Access Token (Optional):"
@@ -480,26 +482,26 @@ msgstr ""
 #: templates/settings/pools.html:39 templates/summary.html:44
 #: templates/wallet.html:65 templates/wallet.html:92
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
 #: templates/connections.html:51 templates/settings/alerts.html:55
 #: templates/settings/farming.html:56 templates/settings/plotting.html:56
 #: templates/settings/pools.html:41 templates/settings/tools.html:55
 #: templates/summary.html:45 templates/wallet.html:66 templates/wallet.html:93
 msgid "Save"
-msgstr ""
+msgstr "Speichern"
 
 #: templates/connections.html:84
 msgid "Connections Map"
-msgstr ""
+msgstr "Verbindungs karte"
 
 #: templates/connections.html:105
 msgid "Connection Details"
-msgstr ""
+msgstr "Verbindungs Details"
 
 #: templates/connections.html:141
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: templates/connections.html:142 templates/worker.html:39
 msgid "IP Address"
@@ -507,11 +509,11 @@ msgstr ""
 
 #: templates/connections.html:144
 msgid "City"
-msgstr ""
+msgstr "Stadt"
 
 #: templates/connections.html:145
 msgid "Country"
-msgstr ""
+msgstr "Land"
 
 #: templates/connections.html:147
 msgid "Ports"
@@ -535,25 +537,25 @@ msgstr ""
 
 #: templates/connections.html:186
 msgid "Disconnect Selected"
-msgstr ""
+msgstr "Ausgewählte Verbindungen unterbrechen"
 
 #: templates/connections.html:192
 msgid "Check Port Forwarding"
-msgstr ""
+msgstr "Portfreigaben checken"
 
 #: templates/connections.html:208
 msgid "Add New Connection"
-msgstr ""
+msgstr "Neue Verbindung hinzufügen"
 
 #: templates/connections.html:220
 msgid "No connections found from any farmers yet. Perhaps just starting?"
-msgstr ""
+msgstr "Keine Verbindungen zu Farmern gefunden. Gerade erst gestartet?"
 
 #: templates/connections.html:221
 msgid ""
 "After a while, try running \"chia show --connections\" on your farmers to"
 " verify."
-msgstr ""
+msgstr "Versuche \"chia show --connections\" nach ein paar minuten"
 
 #: templates/controller.html:23
 #, fuzzy
@@ -562,7 +564,7 @@ msgstr ""
 
 #: templates/controller.html:26
 msgid "This Machinaris worker is controlled at:"
-msgstr ""
+msgstr "Dieser Machinaris Worker wird gesteuert:"
 
 #: templates/drives.html:9
 msgid "Smartctl Status"
@@ -570,60 +572,60 @@ msgstr ""
 
 #: templates/drives.html:57
 msgid "Device"
-msgstr ""
+msgstr "Gerät"
 
 #: templates/drives.html:58
 msgid "Model"
-msgstr ""
+msgstr "Modell"
 
 #: templates/drives.html:59
 msgid "Serial #"
-msgstr ""
+msgstr "Seriennummer"
 
 #: templates/drives.html:60
 msgid "Capacity"
-msgstr ""
+msgstr "Größe"
 
 #: templates/drives.html:62
 msgid "Temperature"
-msgstr ""
+msgstr "Temperatur"
 
 #: templates/drives.html:82 templates/drives.html:134
 msgid "Passed"
-msgstr ""
+msgstr "Bestanden"
 
 #: templates/drives.html:169
 msgid "No drives accessible to smartctl inside the Machinaris containers."
-msgstr ""
+msgstr "Es sind keine Geräte von Machinaris erreichbar"
 
 #: templates/drives.html:170
 msgid "Please configure Docker to allow smartctl access to host devices."
-msgstr ""
+msgstr "Bitte configuriere smartctl so damit Zugriff auf die Geräte möglich ist"
 
 #: templates/drives.html:171 templates/workers.html:106
 #, python-format
 msgid "For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
-msgstr ""
+msgstr "Für mehr, schau dir das Machinaris %(wiki_link_open)swiki%(wiki_link_close)s an"
 
 #: templates/index.html:30
 msgid "Expected Time to Win"
-msgstr ""
+msgstr "Erwartete TTW"
 
 #: templates/index.html:72
 msgid "Total Plots"
-msgstr ""
+msgstr "Gesamte Plots"
 
 #: templates/index.html:79
 msgid "Total Plots Size"
-msgstr ""
+msgstr "Gesamte Plot Größe"
 
 #: templates/index.html:89 templates/wallet.html:113
 msgid "Balance"
-msgstr ""
+msgstr "Bilanz"
 
 #: templates/index.html:96
 msgid "Farmed"
-msgstr ""
+msgstr "Erfarmt"
 
 #: templates/index.html:105
 msgid "Netspace"
@@ -631,46 +633,46 @@ msgstr ""
 
 #: templates/index.html:120
 msgid "Challenges from Harvesters"
-msgstr ""
+msgstr "Challenges der Harvester"
 
 #: templates/index.html:136
 msgid "Partial Proofs for Pools"
-msgstr ""
+msgstr "Partial Proofs der Pools"
 
 #: templates/farming/workers.html:80 templates/index.html:147
 msgid "Previous"
-msgstr ""
+msgstr "Vorherige"
 
 #: templates/farming/workers.html:84 templates/index.html:151
 msgid "Next"
-msgstr ""
+msgstr "Nächste"
 
 #: templates/keys.html:43
 msgid "NOTE: Machinaris will never display your private key here."
-msgstr ""
+msgstr "ACHTUNG: Machinaris wird hier nie deinen privaten Key anzeigen"
 
 #: templates/keys.html:44
 msgid ""
 "However, you may view it yourself by executing this from within the "
 "Docker container."
-msgstr ""
+msgstr "Du kannst ihn dir aber in der Konsole anzeigen lassen"
 
 #: templates/keys.html:54
 msgid "Best Practices"
-msgstr ""
+msgstr "Beste Vorgehensweisen"
 
 #: templates/keys.html:71
 msgid "No keys found from any farmers. Not added?"
-msgstr ""
+msgstr "Es wurden keine keys gefunden. Noch nicht hinzugefügt?"
 
 #: templates/keys.html:72
 msgid "Try running \"chia keys show\" on your farmers to verify."
-msgstr ""
+msgstr "Versuche \"chia keys show\" bei deinen Farmern"
 
 #: templates/logs.html:11
 #, fuzzy
 msgid "Machinaris Logs"
-msgstr "Willkommen zu"
+msgstr "Machinaris Logs"
 
 #: templates/logs.html:62
 msgid "Autoscroll"
@@ -690,27 +692,27 @@ msgstr ""
 
 #: templates/pools.html:72
 msgid "Current Difficulty:"
-msgstr ""
+msgstr "Derzeitliche Difficulty:"
 
 #: templates/pools.html:73
 msgid "Current Points Balance:"
-msgstr ""
+msgstr "Derzeitige Bilanz:"
 
 #: templates/pools.html:74
 msgid "Points Found Since Start:"
-msgstr ""
+msgstr "Punkte seit Start des Containers:"
 
 #: templates/pools.html:75
 msgid "Points Found in Last 24 Hours:"
-msgstr ""
+msgstr "Punkte in den letzten 24 Stunden:"
 
 #: templates/pools.html:76
 msgid "Points Successful in Last 24 Hours:"
-msgstr ""
+msgstr "Erfolgreiche Punkte in den letzten 24Stunden:"
 
 #: templates/pools.html:77
 msgid "Number of Plots:"
-msgstr ""
+msgstr "Anzahl der Plots"
 
 #: templates/pools.html:79
 msgid "Launcher ID:"
@@ -718,26 +720,27 @@ msgstr ""
 
 #: templates/pools.html:97
 msgid "No pools have been found yet. Perhaps the wallet is still syncing?"
-msgstr ""
+msgstr "Es wurden keine Pools gefunden. Noch nichts hinzugefügt?"
 
 #: templates/pools.html:98
 msgid ""
 "If you would like to join a pool, please select the \"Settings | Pools\" "
 "page to get started."
-msgstr ""
+msgstr "Wenn du einem Pool beitreten möchtest schau bei \"Settings | Pools\" "
+"vorbei"
 
 #: templates/pools.html:99
 msgid "For more, see the Machinaris"
-msgstr ""
+msgstr "mehr Infos dazu auf dem Machinaris"
 
 #: templates/setup.html:27
 msgid "Welcome to Machinaris!"
-msgstr "Willkommen zu"
+msgstr "Willkommen bei Machinaris"
 
 #: templates/setup.html:28
 #, python-format
 msgid "An easy-to-use WebUI for Chia%(trademark)s plotting and farming."
-msgstr ""
+msgstr "Ein einfach zu benutzendes WebUI für Chia%(trademark)s plottig und farming"
 
 #: templates/setup.html:61
 #, python-format
