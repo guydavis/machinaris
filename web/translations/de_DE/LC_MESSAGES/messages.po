@@ -9,7 +9,7 @@ msgstr ""
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
 "POT-Creation-Date: 2022-03-30 20:46-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
-"Last-Translator: FULL NAME\n"
+"Last-Translator: ApfelBirneKreis"
 "Language: de\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -20,112 +20,118 @@ msgstr ""
 
 #: routes.py:86 routes.py:229
 msgid "Saved local currency setting."
-msgstr ""
+msgstr "Lokale Währungseinstellung gespeichert"
 
 #: routes.py:106
 msgid "Blockchain download"
-msgstr ""
+msgstr "Blockchain herunterladen"
 
 #: routes.py:138
 msgid "Unknown plotting form"
-msgstr ""
+msgstr "Unbekannte Plotting Configuration"
 
 #: routes.py:188
 msgid "Error! Please see logs."
-msgstr ""
+msgstr "FEHLER! Bitte prüfe die Logs"
 
 #: routes.py:214
 msgid "Unknown alerts form"
-msgstr ""
+msgstr "Unbekannte Alarm Configuration"
 
 #: routes.py:234
 msgid "Saved cold wallet addresses."
-msgstr ""
+msgstr "Cold Wallet Adressen gespeichert"
 
 #: routes.py:299
 msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
-msgstr ""
+msgstr "Kartendaten gespeichert. Bitte warte bis zu 10 min bis die"
+"kartendaten generiert wurden"
 
 #: routes.py:307
 msgid "Unknown form action"
-msgstr ""
+msgstr "Unbekannte Aktions konfiguration"
 
 #: routes.py:413
 #, python-format
 msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
 "another blockchain."
-msgstr ""
+msgstr "Kein passender Worker für %(blockchain) auf %(worker) gefunden"
+"Bitte andere Blockchain wählen"
 
 #: routes.py:419
 #, python-format
 msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
 " Please check your workers."
-msgstr ""
+msgstr "Keine Fullnode für %(blockchain) Alerts gefunden"
+"Bitte Worker überprüfen"
 
 #: routes.py:424
 #, python-format
 msgid ""
 "For Farming config, found no responding fullnode found for "
 "%(blockchain)s. Please check your workers."
-msgstr ""
+msgstr "Keine Fullnode für %(blockchain) Farming gefunden"
+"Bitte Worker überprüfen"
 
 #: routes.py:431
 #, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
 "%(blockchain)s. Please check your workers."
-msgstr ""
+msgstr "Keine Fullnode für %(blockchain) Plotting gefunden"
+"Bitte Worker überprüfen"
 
 #: routes.py:436
 #, python-format
 msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
 "workers."
-msgstr ""
+msgstr "Keine Fullnode für %(blockchain) gefunden"
+"Bitte Worker überprüfen"
 
 #: routes.py:455
 msgid "Unsupported log type"
-msgstr ""
+msgstr "Nicht unterstützter Log Typ"
 
 #: actions/chia.py:44
 msgid ""
 "Relax and grab a coffee. Status is being gathered from active workers.  "
 "Please allow 15 minutes..."
-msgstr ""
+msgstr "Status wird generiert. Dies kann bis zu 15 min dauern"
 
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
-msgstr ""
+msgstr "Untätig"
 
 #: actions/plotman.py:47 actions/plotman.py:48 models/chia.py:196
 #: models/plotman.py:67 templates/index.html:42 templates/index.html:52
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #: actions/plotman.py:49 models/plotman.py:64
 msgid "Suspended"
-msgstr ""
+msgstr "Beendet"
 
 #: actions/stats.py:56 actions/stats.py:90 actions/stats.py:108
 #: actions/stats.py:110
 msgid "in last day."
-msgstr ""
+msgstr "währen des letzten Tags"
 
 #: actions/stats.py:338
 msgid "secs"
-msgstr ""
+msgstr "Sekunden"
 
 #: actions/stats.py:348 models/chia.py:236
 msgid "hour"
-msgstr ""
+msgstr "Stunde"
 
 #: actions/warnings.py:56
 msgid "Dismiss Warning"
-msgstr ""
+msgstr "Warnung entfernen"
 
 #: actions/warnings.py:57 templates/keys.html:58
 #, python-format
@@ -138,111 +144,112 @@ msgstr ""
 
 #: actions/worker.py:107
 msgid "Worker not responding to pings."
-msgstr ""
+msgstr "Worker reagiert nicht auf Pings"
 
 #: actions/worker.py:108
 msgid "Please check the worker container and restart if necessary."
-msgstr ""
+msgstr "Bitte den Worker container überprüfen und wenn nötig neu starten"
 
 #: actions/worker.py:110
 msgid "Worker time is offset from controller."
-msgstr ""
+msgstr "Die Worker Zeit unterscheidet sich vom Controller"
 
 #: actions/worker.py:111
 msgid "Please ensure worker and controller share same timezone."
-msgstr ""
+msgstr "Bitte stelle sicher, dass Worker und Controller sich die selbe Zeitzone teilen"
 
 #: actions/worker.py:117
 msgid "Machinaris version does not match controller."
-msgstr ""
+msgstr "Die Machinaris Version stimmt nicht mit dem Controler überein"
 
 #: actions/worker.py:118
 msgid "Please use a consistent Machinaris version to avoid issues."
-msgstr ""
+msgstr "Bitte stelle sicher, dass Machinaris überall dir gleiche Version entspricht"
+"um fehler zu vermeiden"
 
 #: models/chia.py:133 models/chia.py:230 models/drives.py:42
 msgid "days"
-msgstr ""
+msgstr "Tage"
 
 #: models/chia.py:198 templates/summary.html:100
 msgid "Syncing"
-msgstr ""
+msgstr "Synchronisierung"
 
 #: models/chia.py:200 templates/index.html:54
 msgid "Not available"
-msgstr ""
+msgstr "Nicht erreichbar"
 
 #: models/chia.py:202
 msgid "Not synced"
-msgstr ""
+msgstr "Nicht Syncronisiert"
 
 #: models/chia.py:205 templates/index.html:54 templates/summary.html:96
 #: templates/worker.html:78 templates/workers.html:72
 msgid "Offline"
-msgstr ""
+msgstr "Offline"
 
 #: models/chia.py:218 models/drives.py:47
 msgid "years"
-msgstr ""
+msgstr "Jahre"
 
 #: models/chia.py:220
 msgid "year"
-msgstr ""
+msgstr "Jahr"
 
 #: models/chia.py:222 models/drives.py:46
 msgid "months"
-msgstr ""
+msgstr "Monate"
 
 #: models/chia.py:224
 msgid "month"
-msgstr ""
+msgstr "Monat"
 
 #: models/chia.py:226 models/drives.py:44
 msgid "weeks"
-msgstr ""
+msgstr "Wochen"
 
 #: models/chia.py:228
 msgid "week"
-msgstr ""
+msgstr "Woche"
 
 #: models/chia.py:232
 msgid "day"
-msgstr ""
+msgstr "Tag"
 
 #: models/chia.py:234 models/drives.py:40
 msgid "hours"
-msgstr ""
+msgstr "Stunde"
 
 #: models/chia.py:238
 msgid "minutes"
-msgstr ""
+msgstr "Minuten"
 
 #: models/chia.py:240
 msgid "minute"
-msgstr ""
+msgstr "Minute"
 
 #: models/chia.py:242
 msgid "Never (no plots)"
-msgstr ""
+msgstr "Niemals (Keine Plots)"
 
 #: models/chia.py:244
 msgid "Soon"
-msgstr ""
+msgstr "Bald"
 
 #: models/chia.py:246
 msgid "and"
-msgstr ""
+msgstr "und"
 
 #: templates/alerts.html:14
 msgid "Alerts: Recent Notifications"
-msgstr ""
+msgstr "Alerts: Kürzliche Nachrichten"
 
 #: templates/alerts.html:72 templates/drives.html:56
 #: templates/settings/alerts.html:36 templates/settings/farming.html:37
 #: templates/settings/plotting.html:37 templates/settings/tools.html:36
 #: templates/worker.html:14
 msgid "Worker"
-msgstr ""
+msgstr "Worker"
 
 #: templates/alerts.html:73 templates/blockchains.html:31
 #: templates/settings/alerts.html:45 templates/settings/farming.html:46
@@ -250,41 +257,41 @@ msgstr ""
 #: templates/summary.html:73 templates/wallet.html:108 templates/worker.html:47
 #: templates/workers.html:43
 msgid "Blockchain"
-msgstr ""
+msgstr "Blockchain"
 
 #: templates/alerts.html:74
 msgid "Service"
-msgstr ""
+msgstr "Service"
 
 #: templates/alerts.html:75
 msgid "Notification"
-msgstr ""
+msgstr "Nachrichten"
 
 #: templates/alerts.html:76
 msgid "Recorded At"
-msgstr ""
+msgstr "Aufgenommen am"
 
 #: templates/alerts.html:77
 msgid "Priority"
-msgstr ""
+msgstr "Priorität"
 
 #: templates/alerts.html:99
 msgid "Remove Selected"
-msgstr ""
+msgstr "Ausgewählte entfernen"
 
 #: templates/alerts.html:101
 msgid "Remove All"
-msgstr ""
+msgstr "Alle entfernen"
 
 #: templates/alerts.html:105
 msgid "No notifications from Chiadog yet... so check back soon."
-msgstr ""
+msgstr "Noch keine Nachrichten von Chiadog...Schau später nochmal vorbei"
 
 #: templates/alerts.html:106
 msgid ""
 "Expect at least a summary notification once daily as long as running "
 "above."
-msgstr ""
+msgstr "Erwarte mindestens eine tägliche Benachrichtigung"
 
 #: templates/alerts.html:120
 msgid "Chiadog Log on "
@@ -310,7 +317,7 @@ msgstr ""
 #: templates/controller.html:10
 #, fuzzy
 msgid "Machinaris"
-msgstr "Willkommen zu"
+msgstr ""
 
 #: templates/base.html:32
 msgid "Summary"
@@ -390,7 +397,7 @@ msgstr ""
 
 #: templates/base.html:145
 msgid "Issues"
-msgstr ""
+msgstr "Fehler"
 
 #: templates/base.html:147
 msgid "License"
@@ -414,7 +421,7 @@ msgstr ""
 
 #: templates/blockchains.html:23
 msgid "Blockchain Summary"
-msgstr ""
+msgstr "Blockchain Zusammenfassung"
 
 #: templates/blockchains.html:32 templates/drives.html:61
 #: templates/summary.html:74 templates/wallet.html:109
@@ -445,7 +452,7 @@ msgstr ""
 
 #: templates/blockchains.html:91
 msgid "No blockchains found from any farmers. Not added?"
-msgstr ""
+msgstr "Es konnten keine Blockchains gefunden werden. Wurden Blockchains hinzugefügt?"
 
 #: templates/blockchains.html:92
 msgid "Try running \"chia show --state\" on your farmers to verify."
@@ -551,7 +558,7 @@ msgstr ""
 #: templates/controller.html:23
 #, fuzzy
 msgid "Machinaris Worker"
-msgstr "Willkommen zu"
+msgstr ""
 
 #: templates/controller.html:26
 msgid "This Machinaris worker is controlled at:"
