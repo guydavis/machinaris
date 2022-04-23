@@ -9,7 +9,7 @@ msgstr ""
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
 "POT-Creation-Date: 2022-03-30 20:47-0600\n"
 "PO-Revision-Date: 2022-02-15 14:29-0700\n"
-"Last-Translator: Guy Davis\n"
+"Last-Translator: ApfelBirneKreis\n"
 "Language: de\n"
 "Language-Team: de <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -20,18 +20,19 @@ msgstr ""
 
 #: commands/chia_cli.py:67
 msgid "Updated config.yaml failed validation!"
-msgstr ""
+msgstr "Geupdatete config.yaml hat die Validation nicht bestanden"
 
 #: commands/pools_cli.py:68
 msgid "No requested pool modifications were sent. Current settings are unchanged."
-msgstr ""
+msgstr "Keine Pool modifikationen wurden gesendet. Vorherige Einstellungen wurden beibehalten"
 
 #: commands/pools_cli.py:151
 msgid ""
 "Successfully left pool, switching to self-pooling. Please wait a few "
 "minutes or more to complete. DO NOT immediately re-submit your request. "
 "View the log for details."
-msgstr ""
+msgstr "Pool erfolgreich verlassen. Es wird zu self-pooling gewechselt."
+"Bitte warte ein paar minuten und sende die Anfrage NICHT sofort nochmal."
 
 #: commands/pools_cli.py:195
 #, python-format
@@ -39,14 +40,16 @@ msgid ""
 "Successfully joined %(pool_url)s pool by creating Chia NFT.  Please wait "
 "a few minutes or more to complete. DO NOT immediately re-submit your "
 "request. Be patient! View the log for details."
-msgstr ""
+msgstr "Pool %(pool_url)s erfolgreich beigetreten und PlotNFT erstellt"
+"Bitte warte ein paar minuten und sende die Anfrage NICHT sofort nochmal."
 
 #: commands/pools_cli.py:224
 msgid ""
 "Successfully created a NFT for self-pooling.  Please wait a few minutes "
 "or more to complete. DO NOT immediately re-submit your request. Be "
 "patient! View the log for details."
-msgstr ""
+msgstr "NFT für Self-pooling erfolgreich erstellt."
+"Bitte warte ein paar minuten und sende die Anfrage NICHT sofort nochmal."
 
 #: views/ping/resources.py:28
 msgid "Pong!"
