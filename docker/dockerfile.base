@@ -23,6 +23,8 @@ RUN apt-get update \
 		logrotate \
 		lsb-release \
 		openssl \
+		p7zip-full \
+		p7zip-rar \
 		python3 \
 		python3.9-distutils \
 		python3.9-venv \
