@@ -7,130 +7,143 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-04-03 21:22-0600\n"
+"POT-Creation-Date: 2022-04-23 11:14-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
-"Last-Translator: FULL NAME\n"
-"Language: de\n"
+"Last-Translator: ApfelBirneKreisLanguage: de\n"
+"Language: de_DE\n"
 "Language-Team: de <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.1\n"
 
-#: routes.py:86 routes.py:229
+#: routes.py:90 routes.py:233
 msgid "Saved local currency setting."
-msgstr ""
+msgstr "Lokale Währungseinstellung gespeichert"
 
-#: routes.py:106
+#: routes.py:110
 msgid "Blockchain download"
-msgstr ""
+msgstr "Blockchain herunterladen"
 
-#: routes.py:138
+#: routes.py:142
 msgid "Unknown plotting form"
-msgstr ""
+msgstr "Unbekannte Plotting Configuration"
 
-#: routes.py:188
+#: routes.py:192
 msgid "Error! Please see logs."
-msgstr ""
+msgstr "FEHLER! Bitte prüfe die Logs"
 
-#: routes.py:214
+#: routes.py:218
 msgid "Unknown alerts form"
-msgstr ""
+msgstr "Unbekannte Alarm Configuration"
 
-#: routes.py:234
+#: routes.py:238
 msgid "Saved cold wallet addresses."
-msgstr ""
+msgstr "Cold Wallet Adressen gespeichert"
 
-#: routes.py:299
+#: routes.py:306
 msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
 msgstr ""
+"Kartendaten gespeichert. Bitte warte bis zu 10 min bis diekartendaten "
+"generiert wurden"
 
-#: routes.py:307
+#: routes.py:314
 msgid "Unknown form action"
-msgstr ""
+msgstr "Unbekannte Aktions konfiguration"
 
-#: routes.py:413
+#: routes.py:420
 #, python-format
 msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
 "another blockchain."
 msgstr ""
+"Kein passender Worker für %(blockchain)s auf %(worker)s gefundenBitte "
+"andere Blockchain wählen"
 
-#: routes.py:419
+#: routes.py:426
 #, python-format
 msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
 " Please check your workers."
-msgstr ""
-
-#: routes.py:424
-#, python-format
-msgid ""
-"For Farming config, found no responding fullnode found for "
-"%(blockchain)s. Please check your workers."
-msgstr ""
+msgstr "Keine Fullnode für %(blockchain)s Alerts gefundenBitte Worker überprüfen"
 
 #: routes.py:431
 #, python-format
 msgid ""
+"For Farming config, found no responding fullnode found for "
+"%(blockchain)s. Please check your workers."
+msgstr "Keine Fullnode für %(blockchain)s Farming gefundenBitte Worker überprüfen"
+
+#: routes.py:438
+#, python-format
+msgid ""
 "For Plotting config, found no responding fullnode found for "
 "%(blockchain)s. Please check your workers."
-msgstr ""
+msgstr "Keine Fullnode für %(blockchain)s Plotting gefundenBitte Worker überprüfen"
 
-#: routes.py:436
+#: routes.py:443
 #, python-format
 msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
 "workers."
-msgstr ""
+msgstr "Keine Fullnode für %(blockchain)s gefundenBitte Worker überprüfen"
 
-#: routes.py:455
+#: routes.py:462
 msgid "Unsupported log type"
-msgstr ""
+msgstr "Nicht unterstützter Log Typ"
 
 #: actions/chia.py:44
 msgid ""
 "Relax and grab a coffee. Status is being gathered from active workers.  "
 "Please allow 15 minutes..."
-msgstr ""
+msgstr "Status wird generiert. Dies kann bis zu 15 min dauern"
 
-#: actions/drives.py:30
+#: actions/drives.py:33
 #, python-format
 msgid "Oops! No smartctl info found for device %(device)s on %(hostname)s."
 msgstr ""
 
-#: actions/plotman.py:44 models/plotman.py:70
-msgid "Idle"
+#: actions/drives.py:54
+msgid "Failed to save display settings.  Please check Web Log."
 msgstr ""
 
-#: actions/plotman.py:47 actions/plotman.py:48 models/chia.py:196
+#: actions/drives.py:56
+#, fuzzy
+msgid "Saved display settings."
+msgstr "Lokale Währungseinstellung gespeichert"
+
+#: actions/plotman.py:44 models/plotman.py:70
+msgid "Idle"
+msgstr "Untätig"
+
+#: actions/plotman.py:47 actions/plotman.py:48 models/chia.py:211
 #: models/plotman.py:67 templates/index.html:42 templates/index.html:52
 msgid "Active"
-msgstr ""
+msgstr "Aktiv"
 
 #: actions/plotman.py:49 models/plotman.py:64
 msgid "Suspended"
-msgstr ""
+msgstr "Beendet"
 
 #: actions/stats.py:56 actions/stats.py:90 actions/stats.py:108
 #: actions/stats.py:110
 msgid "in last day."
-msgstr ""
+msgstr "währen des letzten tags"
 
 #: actions/stats.py:338
 msgid "secs"
-msgstr ""
+msgstr "Sekunden"
 
-#: actions/stats.py:348 models/chia.py:236
+#: actions/stats.py:348 models/chia.py:251
 msgid "hour"
-msgstr ""
+msgstr "Stunde"
 
 #: actions/warnings.py:56
 msgid "Dismiss Warning"
-msgstr ""
+msgstr "Warnung entfernen"
 
 #: actions/warnings.py:57 templates/keys.html:58
 #, python-format
@@ -140,115 +153,122 @@ msgid ""
 "%(wiki_link_open)swiki%(wiki_link_close)s. Please add \"Setup a Cold "
 "Wallet\" to your To-Do list!"
 msgstr ""
+"Machinaris benutzt ein online wallet um zu farmen. es ist empfohlemein "
+"cold wallet zu benutzen! Ein tutorial dazu findest du hier "
+"%(wiki_link_open)swiki%(wiki_link_close)s"
 
 #: actions/worker.py:107
 msgid "Worker not responding to pings."
-msgstr ""
+msgstr "Worker reagiert nicht auf Pings"
 
 #: actions/worker.py:108
 msgid "Please check the worker container and restart if necessary."
-msgstr ""
+msgstr "Bitte den Worker container überprüfen und wenn nötig neu starten"
 
 #: actions/worker.py:110
 msgid "Worker time is offset from controller."
-msgstr ""
+msgstr "Die Worker Zeit unterscheidet sich vom Controller"
 
 #: actions/worker.py:111
 msgid "Please ensure worker and controller share same timezone."
 msgstr ""
+"Bitte stelle sicher, dass Worker und Controller sich die selbe Zeitzone "
+"teilen"
 
 #: actions/worker.py:117
 msgid "Machinaris version does not match controller."
-msgstr ""
+msgstr "Die Machinaris Version stimmt nicht mit dem Controler überein"
 
 #: actions/worker.py:118
 msgid "Please use a consistent Machinaris version to avoid issues."
 msgstr ""
+"Bitte stelle sicher, dass Machinaris überall dir gleiche Version "
+"entsprichtum fehler zu vermeiden"
 
-#: models/chia.py:133 models/chia.py:230 models/drives.py:44
+#: models/chia.py:140 models/chia.py:245 models/drives.py:44
 msgid "days"
-msgstr ""
+msgstr "Tage"
 
-#: models/chia.py:198 templates/summary.html:100 templates/wallet.html:128
+#: models/chia.py:213 templates/summary.html:100 templates/wallet.html:128
 msgid "Syncing"
-msgstr ""
+msgstr "Synchronisierung"
 
-#: models/chia.py:200 templates/index.html:54
+#: models/chia.py:215 templates/index.html:54
 msgid "Not available"
-msgstr ""
+msgstr "Nicht erreichbar"
 
-#: models/chia.py:202
+#: models/chia.py:217
 msgid "Not synced"
-msgstr ""
+msgstr "Nicht Syncronisiert"
 
-#: models/chia.py:205 templates/index.html:54 templates/plotting/jobs.html:114
+#: models/chia.py:220 templates/index.html:54 templates/plotting/jobs.html:114
 #: templates/plotting/workers.html:116 templates/summary.html:96
 #: templates/wallet.html:124 templates/worker.html:78 templates/workers.html:72
 msgid "Offline"
-msgstr ""
+msgstr "Offline"
 
-#: models/chia.py:218 models/drives.py:49
+#: models/chia.py:233 models/drives.py:49
 msgid "years"
-msgstr ""
+msgstr "Jahre"
 
-#: models/chia.py:220
+#: models/chia.py:235
 msgid "year"
-msgstr ""
+msgstr "Jahr"
 
-#: models/chia.py:222 models/drives.py:48
+#: models/chia.py:237 models/drives.py:48
 msgid "months"
-msgstr ""
+msgstr "Monate"
 
-#: models/chia.py:224
+#: models/chia.py:239
 msgid "month"
-msgstr ""
+msgstr "Monat"
 
-#: models/chia.py:226 models/drives.py:46
+#: models/chia.py:241 models/drives.py:46
 msgid "weeks"
-msgstr ""
+msgstr "Wochen"
 
-#: models/chia.py:228
+#: models/chia.py:243
 msgid "week"
-msgstr ""
+msgstr "Woche"
 
-#: models/chia.py:232
+#: models/chia.py:247
 msgid "day"
-msgstr ""
+msgstr "Tag"
 
-#: models/chia.py:234 models/drives.py:42
+#: models/chia.py:249 models/drives.py:42
 msgid "hours"
-msgstr ""
+msgstr "Stunde"
 
-#: models/chia.py:238
+#: models/chia.py:253
 msgid "minutes"
-msgstr ""
+msgstr "Minuten"
 
-#: models/chia.py:240
+#: models/chia.py:255
 msgid "minute"
-msgstr ""
+msgstr "Minute"
 
-#: models/chia.py:242
+#: models/chia.py:257
 msgid "Never (no plots)"
-msgstr ""
+msgstr "Niemals (Keine Plots)"
 
-#: models/chia.py:244
+#: models/chia.py:259
 msgid "Soon"
-msgstr ""
+msgstr "Bald"
 
-#: models/chia.py:246
+#: models/chia.py:261
 msgid "and"
-msgstr ""
+msgstr "und"
 
 #: templates/alerts.html:14
 msgid "Alerts: Recent Notifications"
-msgstr ""
+msgstr "Alerts: Kürzliche Nachrichten"
 
-#: templates/alerts.html:72 templates/drives.html:56
+#: templates/alerts.html:72 templates/drives.html:86
 #: templates/settings/alerts.html:36 templates/settings/farming.html:37
 #: templates/settings/plotting.html:37 templates/settings/tools.html:36
 #: templates/worker.html:14
 msgid "Worker"
-msgstr ""
+msgstr "Worker"
 
 #: templates/alerts.html:73 templates/blockchains.html:31
 #: templates/settings/alerts.html:45 templates/settings/farming.html:46
@@ -256,41 +276,41 @@ msgstr ""
 #: templates/summary.html:73 templates/wallet.html:108 templates/worker.html:47
 #: templates/workers.html:43
 msgid "Blockchain"
-msgstr ""
+msgstr "Blockchain"
 
 #: templates/alerts.html:74
 msgid "Service"
-msgstr ""
+msgstr "Service"
 
 #: templates/alerts.html:75
 msgid "Notification"
-msgstr ""
+msgstr "Nachrichten"
 
 #: templates/alerts.html:76
 msgid "Recorded At"
-msgstr ""
+msgstr "Aufgenommen am"
 
 #: templates/alerts.html:77
 msgid "Priority"
-msgstr ""
+msgstr "Priorität"
 
 #: templates/alerts.html:99
 msgid "Remove Selected"
-msgstr ""
+msgstr "Ausgewählte entfernen"
 
 #: templates/alerts.html:101
 msgid "Remove All"
-msgstr ""
+msgstr "Alle entfernen"
 
 #: templates/alerts.html:105
 msgid "No notifications from Chiadog yet... so check back soon."
-msgstr ""
+msgstr "Noch keine Nachrichten von Chiadog...Schau später nochmal vorbei"
 
 #: templates/alerts.html:106
 msgid ""
 "Expect at least a summary notification once daily as long as running "
 "above."
-msgstr ""
+msgstr "Erwarte mindestens eine tägliche Benachrichtigung"
 
 #: templates/alerts.html:120
 msgid "Chiadog Log on "
@@ -314,13 +334,12 @@ msgstr ""
 
 #: templates/base.html:11 templates/base.html:26 templates/base.html:175
 #: templates/controller.html:10
-#, fuzzy
 msgid "Machinaris"
-msgstr "Willkommen zu"
+msgstr "Machinaris"
 
 #: templates/base.html:32
 msgid "Summary"
-msgstr ""
+msgstr "Zusammenfassung"
 
 #: templates/base.html:38 templates/base.html:113 templates/index.html:41
 #: templates/plotting/jobs.html:101 templates/settings/plotting.html:14
@@ -338,7 +357,7 @@ msgstr ""
 
 #: templates/base.html:56
 msgid "Keys"
-msgstr ""
+msgstr "Schlüssel"
 
 #: templates/base.html:63
 msgid "Blockchains"
@@ -351,7 +370,7 @@ msgstr ""
 #: templates/base.html:76 templates/base.html:101
 #: templates/settings/alerts.html:14
 msgid "Alerts"
-msgstr ""
+msgstr "Benachrichtigungen"
 
 #: templates/base.html:82 templates/base.html:119
 msgid "Pools"
@@ -364,15 +383,16 @@ msgstr ""
 msgid "Workers"
 msgstr ""
 
-#: templates/base.html:90 templates/drives.html:30
+#: templates/base.html:90 templates/drives.html:60
 msgid "Drives"
-msgstr ""
+msgstr "Festplatten"
 
 #: templates/base.html:96 templates/connections.html:25
-#: templates/connections.html:59 templates/summary.html:25
-#: templates/summary.html:53 templates/wallet.html:23 templates/wallet.html:46
+#: templates/connections.html:59 templates/drives.html:24
+#: templates/drives.html:53 templates/summary.html:25 templates/summary.html:53
+#: templates/wallet.html:23 templates/wallet.html:46
 msgid "Settings"
-msgstr ""
+msgstr "Einstellungen"
 
 #: templates/base.html:125 templates/settings/tools.html:14
 msgid "Tools"
@@ -380,11 +400,11 @@ msgstr ""
 
 #: templates/base.html:136
 msgid "About"
-msgstr ""
+msgstr "Über"
 
 #: templates/base.html:139
 msgid "Install"
-msgstr ""
+msgstr "Installieren"
 
 #: templates/base.html:141
 msgid "Project"
@@ -396,11 +416,11 @@ msgstr ""
 
 #: templates/base.html:145
 msgid "Issues"
-msgstr ""
+msgstr "Fehler"
 
 #: templates/base.html:147
 msgid "License"
-msgstr ""
+msgstr "Lizenz"
 
 #: templates/base.html:149
 msgid "Credits"
@@ -420,9 +440,9 @@ msgstr ""
 
 #: templates/blockchains.html:23
 msgid "Blockchain Summary"
-msgstr ""
+msgstr "Blockchain Zusammenfassung"
 
-#: templates/blockchains.html:32 templates/drives.html:61
+#: templates/blockchains.html:32 templates/drives.html:91
 #: templates/summary.html:74 templates/wallet.html:109
 msgid "Status"
 msgstr ""
@@ -435,7 +455,7 @@ msgstr ""
 msgid "Peak Time"
 msgstr ""
 
-#: templates/blockchains.html:35 templates/drives.html:63
+#: templates/blockchains.html:35 templates/drives.html:93
 #: templates/wallet.html:114
 msgid "Updated At"
 msgstr ""
@@ -452,53 +472,56 @@ msgstr ""
 #: templates/blockchains.html:91
 msgid "No blockchains found from any farmers. Not added?"
 msgstr ""
+"Es konnten keine Blockchains gefunden werden. Wurden Blockchains "
+"hinzugefügt?"
 
 #: templates/blockchains.html:92
 msgid "Try running \"chia show --state\" on your farmers to verify."
-msgstr ""
+msgstr "Versuche \"chia show --state\" "
 
 #: templates/blockchains.html:106 templates/summary.html:143
 msgid "Fullnode Log for "
-msgstr ""
+msgstr "Fullnode Log für"
 
 #: templates/connections.html:34
 msgid "Maxmind Account (Required):"
-msgstr ""
+msgstr "Maxmind Account (Benötigt):"
 
 #: templates/connections.html:39
 msgid "Maxmind License Key (Required):"
-msgstr ""
+msgstr "Maxmind License Key (Benötigt):"
 
 #: templates/connections.html:44
 msgid "Mapbox Access Token (Optional):"
 msgstr ""
 
-#: templates/connections.html:50 templates/plotting/jobs.html:16
-#: templates/plotting/jobs.html:34 templates/plotting/jobs.html:52
-#: templates/plotting/workers.html:16 templates/plotting/workers.html:34
-#: templates/settings/pools.html:39 templates/summary.html:44
-#: templates/wallet.html:65 templates/wallet.html:92
+#: templates/connections.html:50 templates/drives.html:41
+#: templates/plotting/jobs.html:16 templates/plotting/jobs.html:34
+#: templates/plotting/jobs.html:52 templates/plotting/workers.html:16
+#: templates/plotting/workers.html:34 templates/settings/pools.html:39
+#: templates/summary.html:44 templates/wallet.html:65 templates/wallet.html:92
 msgid "Cancel"
-msgstr ""
+msgstr "Abbrechen"
 
-#: templates/connections.html:51 templates/settings/alerts.html:55
-#: templates/settings/farming.html:56 templates/settings/plotting.html:56
-#: templates/settings/pools.html:41 templates/settings/tools.html:55
-#: templates/summary.html:45 templates/wallet.html:66 templates/wallet.html:93
+#: templates/connections.html:51 templates/drives.html:42
+#: templates/settings/alerts.html:55 templates/settings/farming.html:56
+#: templates/settings/plotting.html:56 templates/settings/pools.html:41
+#: templates/settings/tools.html:55 templates/summary.html:45
+#: templates/wallet.html:66 templates/wallet.html:93
 msgid "Save"
-msgstr ""
+msgstr "Speichern"
 
 #: templates/connections.html:84
 msgid "Connections Map"
-msgstr ""
+msgstr "Verbindungs karte"
 
 #: templates/connections.html:105
 msgid "Connection Details"
-msgstr ""
+msgstr "Verbindungs Details"
 
 #: templates/connections.html:141
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: templates/connections.html:142 templates/worker.html:39
 msgid "IP Address"
@@ -506,11 +529,11 @@ msgstr ""
 
 #: templates/connections.html:144
 msgid "City"
-msgstr ""
+msgstr "Stadt"
 
 #: templates/connections.html:145
 msgid "Country"
-msgstr ""
+msgstr "Land"
 
 #: templates/connections.html:147
 msgid "Ports"
@@ -534,103 +557,118 @@ msgstr ""
 
 #: templates/connections.html:186
 msgid "Disconnect Selected"
-msgstr ""
+msgstr "Ausgewählte Verbindungen unterbrechen"
 
 #: templates/connections.html:192
 msgid "Check Port Forwarding"
-msgstr ""
+msgstr "Portfreigaben checken"
 
 #: templates/connections.html:208
 msgid "Add New Connection"
-msgstr ""
+msgstr "Neue Verbindung hinzufügen"
 
 #: templates/connections.html:220
 msgid "No connections found from any farmers yet. Perhaps just starting?"
-msgstr ""
+msgstr "Keine Verbindungen zu Farmern gefunden. Gerade erst gestartet?"
 
 #: templates/connections.html:221
 msgid ""
 "After a while, try running \"chia show --connections\" on your farmers to"
 " verify."
-msgstr ""
+msgstr "Versuche \"chia show --connections\" nach ein paar minuten"
 
 #: templates/controller.html:23
 #, fuzzy
 msgid "Machinaris Worker"
-msgstr "Willkommen zu"
+msgstr ""
 
 #: templates/controller.html:26
 msgid "This Machinaris worker is controlled at:"
-msgstr ""
+msgstr "Dieser Machinaris Worker wird gesteuert:"
 
 #: templates/drives.html:9
 msgid "Smartctl Status"
 msgstr ""
 
-#: templates/drives.html:57
+#: templates/drives.html:30
+msgid "Good"
+msgstr ""
+
+#: templates/drives.html:33
+msgid "Warn"
+msgstr ""
+
+#: templates/drives.html:37
+#, fuzzy
+msgid "Alert"
+msgstr "Benachrichtigungen"
+
+#: templates/drives.html:87
 msgid "Device"
-msgstr ""
+msgstr "Gerät"
 
-#: templates/drives.html:58
+#: templates/drives.html:88
 msgid "Model"
-msgstr ""
+msgstr "Modell"
 
-#: templates/drives.html:59
+#: templates/drives.html:89
 msgid "Serial #"
-msgstr ""
+msgstr "Seriennummer"
 
-#: templates/drives.html:60 templates/drives.html:135
+#: templates/drives.html:90 templates/drives.html:165
 msgid "Capacity"
-msgstr ""
+msgstr "Größe"
 
-#: templates/drives.html:62 templates/drives.html:134
+#: templates/drives.html:92 templates/drives.html:164
 msgid "Temperature"
-msgstr ""
+msgstr "Temperatur"
 
-#: templates/drives.html:84 templates/drives.html:143
+#: templates/drives.html:114 templates/drives.html:173
 msgid "Passed"
-msgstr ""
+msgstr "Bestanden"
 
-#: templates/drives.html:136
+#: templates/drives.html:166
 msgid "Powered On"
 msgstr ""
 
-#: templates/drives.html:178
+#: templates/drives.html:208
 msgid "Drive status updated"
 msgstr ""
 
-#: templates/drives.html:187
+#: templates/drives.html:217
 msgid "No drives accessible to smartctl inside the Machinaris containers."
-msgstr ""
+msgstr "Es sind keine Geräte von Machinaris erreichbar"
 
-#: templates/drives.html:188
+#: templates/drives.html:218
 msgid "Please configure Docker to allow smartctl access to host devices."
-msgstr ""
+msgstr "Bitte configuriere smartctl so damit Zugriff auf die Geräte möglich ist"
 
-#: templates/drives.html:189 templates/workers.html:106
+#: templates/drives.html:219 templates/workers.html:106
 #, python-format
 msgid "For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
 msgstr ""
+"Für mehr, schau dir das Machinaris "
+"%(wiki_link_open)swiki%(wiki_link_close)s an"
 
 #: templates/index.html:30
 msgid "Expected Time to Win"
-msgstr ""
+msgstr "Erwartete TTW"
 
 #: templates/index.html:72
 msgid "Total Plots"
-msgstr ""
+msgstr "Gesamte Plots"
 
 #: templates/index.html:79
 msgid "Total Plots Size"
-msgstr ""
+msgstr "Gesamte Plot Größe"
 
 #: templates/index.html:89 templates/wallet.html:113
 msgid "Balance"
-msgstr ""
+msgstr "Bilanz"
 
 #: templates/index.html:96
 msgid "Farmed"
-msgstr ""
+msgstr "Erfarmt"
 
 #: templates/index.html:105
 msgid "Netspace"
@@ -638,46 +676,45 @@ msgstr ""
 
 #: templates/index.html:120
 msgid "Challenges from Harvesters"
-msgstr ""
+msgstr "Challenges der Harvester"
 
 #: templates/index.html:136
 msgid "Partial Proofs for Pools"
-msgstr ""
+msgstr "Partial Proofs der Pools"
 
 #: templates/farming/workers.html:80 templates/index.html:147
 msgid "Previous"
-msgstr ""
+msgstr "Vorherige"
 
 #: templates/farming/workers.html:84 templates/index.html:151
 msgid "Next"
-msgstr ""
+msgstr "Nächste"
 
 #: templates/keys.html:43
 msgid "NOTE: Machinaris will never display your private key here."
-msgstr ""
+msgstr "ACHTUNG: Machinaris wird hier nie deinen privaten Key anzeigen"
 
 #: templates/keys.html:44
 msgid ""
 "However, you may view it yourself by executing this from within the "
 "Docker container."
-msgstr ""
+msgstr "Du kannst ihn dir aber in der Konsole anzeigen lassen"
 
 #: templates/keys.html:54
 msgid "Best Practices"
-msgstr ""
+msgstr "Beste Vorgehensweisen"
 
 #: templates/keys.html:71
 msgid "No keys found from any farmers. Not added?"
-msgstr ""
+msgstr "Es wurden keine keys gefunden. Noch nicht hinzugefügt?"
 
 #: templates/keys.html:72
 msgid "Try running \"chia keys show\" on your farmers to verify."
-msgstr ""
+msgstr "Versuche \"chia keys show\" bei deinen Farmern"
 
 #: templates/logs.html:11
-#, fuzzy
 msgid "Machinaris Logs"
-msgstr "Willkommen zu"
+msgstr "Machinaris Logs"
 
 #: templates/logs.html:62
 msgid "Autoscroll"
@@ -697,27 +734,27 @@ msgstr ""
 
 #: templates/pools.html:72
 msgid "Current Difficulty:"
-msgstr ""
+msgstr "Derzeitliche Difficulty:"
 
 #: templates/pools.html:73
 msgid "Current Points Balance:"
-msgstr ""
+msgstr "Derzeitige Bilanz:"
 
 #: templates/pools.html:74
 msgid "Points Found Since Start:"
-msgstr ""
+msgstr "Punkte seit Start des Containers:"
 
 #: templates/pools.html:75
 msgid "Points Found in Last 24 Hours:"
-msgstr ""
+msgstr "Punkte in den letzten 24 Stunden:"
 
 #: templates/pools.html:76
 msgid "Points Successful in Last 24 Hours:"
-msgstr ""
+msgstr "Erfolgreiche Punkte in den letzten 24Stunden:"
 
 #: templates/pools.html:77
 msgid "Number of Plots:"
-msgstr ""
+msgstr "Anzahl der Plots"
 
 #: templates/pools.html:79
 msgid "Launcher ID:"
@@ -725,26 +762,28 @@ msgstr ""
 
 #: templates/pools.html:97
 msgid "No pools have been found yet. Perhaps the wallet is still syncing?"
-msgstr ""
+msgstr "Es wurden keine Pools gefunden. Noch nichts hinzugefügt?"
 
 #: templates/pools.html:98
 msgid ""
 "If you would like to join a pool, please select the \"Settings | Pools\" "
 "page to get started."
 msgstr ""
+"Wenn du einem Pool beitreten möchtest schau bei \"Settings | Pools\" "
+"vorbei"
 
 #: templates/pools.html:99
 msgid "For more, see the Machinaris"
-msgstr ""
+msgstr "mehr Infos dazu auf dem Machinaris"
 
 #: templates/setup.html:27
 msgid "Welcome to Machinaris!"
-msgstr "Willkommen zu"
+msgstr "Willkommen bei Machinaris"
 
 #: templates/setup.html:28
 #, python-format
 msgid "An easy-to-use WebUI for Chia%(trademark)s plotting and farming."
-msgstr ""
+msgstr "Ein einfach zu benutzendes WebUI für Chia%(trademark)s plottig und farming"
 
 #: templates/setup.html:61
 #, python-format
@@ -755,6 +794,9 @@ msgid ""
 "take a while. However minutes of download now, will save you multiple "
 "days of blockchain syncing later. Please be patient!"
 msgstr ""
+"Beim ersten start wird die Blockchain DB von%(dl_link)s heruntergeladen. "
+"Dies kann ein bisschen dauern.Allerdings erspart es dir Stunden/Tage an "
+"Synchronisationszeit"
 
 #: templates/setup.html:75
 #, python-format
@@ -764,6 +806,8 @@ msgid ""
 "%(import_link_open)s import your own blockchain %(import_link_close)s if "
 "you have one from a previous Chia install."
 msgstr ""
+"Achtung: Wenn du Chia über mehrere Tage synchronisieren lassen willstgibt"
+" es hier %(init_link)s mehr informationen"
 
 #: templates/setup.html:83
 #, python-format
@@ -771,24 +815,26 @@ msgid ""
 "To get started with Machinaris as a Chia%(trademark)s fullnode, either "
 "import your existing 24-word mnemonic seed phrase"
 msgstr ""
+"U zu beginnen kannst du entweder deinen bereits existierenden24 Wort "
+"schlüssel importieren"
 
 #: templates/setup.html:90
 msgid "Import Existing Key"
-msgstr ""
+msgstr "Importiere vorhandenen Schlüssel"
 
 #: templates/setup.html:91
 msgid "OR"
-msgstr ""
+msgstr "ODER"
 
 #: templates/setup.html:93
 msgid ""
 "You can generate a brand-new mnemonic phrase that will be written to this"
 " in-container path"
-msgstr ""
+msgstr "du kannst eine brand neuen Schlüssel generieren lassen"
 
 #: templates/setup.html:96
 msgid "Generate New Key"
-msgstr ""
+msgstr "Neuen Schlüssel generieren"
 
 #: templates/setup.html:110
 #, python-format
@@ -796,14 +842,16 @@ msgid ""
 "NOTE: If you would prefer to instead import your mnenmoic seed phrase "
 "yourself at the command-line, see the %(wiki_link)s for details."
 msgstr ""
+"Achtung: Du kannst deinen 24 Wort schlüssel auch über die "
+"Komandozeileselbst importieren. Mehr dazu findest du hier: %(wiki_link)s"
 
 #: templates/summary.html:31 templates/wallet.html:52
 msgid "Local Currency:"
-msgstr ""
+msgstr "Lokale Währung"
 
 #: templates/summary.html:75
 msgid "Height"
-msgstr ""
+msgstr "Höhe"
 
 #: templates/farming/plots.html:66 templates/farming/workers.html:25
 #: templates/summary.html:76
@@ -812,7 +860,7 @@ msgstr ""
 
 #: templates/summary.html:78
 msgid "Max Resp."
-msgstr ""
+msgstr "Max. Antwortdauer"
 
 #: templates/summary.html:79
 msgid "Partials"
@@ -832,47 +880,49 @@ msgstr ""
 
 #: templates/summary.html:98 templates/wallet.html:126
 msgid "Synced"
-msgstr ""
+msgstr "Synchronisiert"
 
 #: templates/summary.html:102 templates/wallet.html:130
 msgid "Not Synced"
-msgstr ""
+msgstr "Nicht Synchronisiert"
 
 #: templates/summary.html:128
 msgid "No blockchains found from any farmers. Just starting up?"
 msgstr ""
+"Es konnte keine Blockchain gefunden werden. Wurde gerade erst neu "
+"gestartet?"
 
 #: templates/summary.html:129
 msgid "Please allow at least 15 minutes for blockchains to get started."
-msgstr ""
+msgstr "Bitte warte 15 min damit die Blockchain statrten kann"
 
 #: templates/wallet.html:76
 msgid "Wallet Settings"
-msgstr ""
+msgstr "Wallet Einstellungen"
 
 #: templates/wallet.html:86
 msgid "Cold Wallet Address:"
-msgstr ""
+msgstr "Cold Wallet Adresse:"
 
 #: templates/wallet.html:100
 msgid "Wallet Summary"
-msgstr ""
+msgstr "Wallet Zusammenfassung"
 
 #: templates/wallet.html:110
 msgid "Wallet Balance"
-msgstr ""
+msgstr "Wallet Bilanz"
 
 #: templates/wallet.html:111
 msgid "Cold Wallet Balance"
-msgstr ""
+msgstr "Cold Wallet Bilanz"
 
 #: templates/wallet.html:112
 msgid "Total Balance"
-msgstr ""
+msgstr "Totale Bilanz"
 
 #: templates/wallet.html:140
 msgid "Edit Wallet"
-msgstr ""
+msgstr "Wallet editieren"
 
 #: templates/wallet.html:151
 msgid "Wallet Details"
@@ -883,12 +933,14 @@ msgid ""
 "No wallet status received.  Perhaps just starting?  Please allow at least"
 " 10 minutes to update."
 msgstr ""
+"Es wurde keine Wallet gefunden. Wurde gerade erst gestartet? Es kann bis "
+"zu 10 min dauern"
 
 #: templates/wallet.html:176
 msgid ""
 "You can also try running \"chia wallet show\" on your fullnode's in-"
 "container shell to verify."
-msgstr ""
+msgstr "versuche \"chia wallet show\" bei deine Fullnodes"
 
 #: templates/worker.html:35
 msgid "Details"
@@ -904,39 +956,39 @@ msgstr ""
 
 #: templates/worker.html:55 templates/workers.html:44
 msgid "Mode"
-msgstr ""
+msgstr "Modus"
 
 #: templates/worker.html:59
 msgid "Last Status Received At"
-msgstr ""
+msgstr "Letzter Status um"
 
 #: templates/worker.html:63
 msgid "Local Time on Worker"
-msgstr ""
+msgstr "Lokale Zeit beim Worker"
 
 #: templates/worker.html:67
 msgid "Last Ping to Worker"
-msgstr ""
+msgstr "Letzter Ping beim Worker"
 
 #: templates/worker.html:70 templates/workers.html:64
 msgid "Responding"
-msgstr ""
+msgstr "Antwortet"
 
 #: templates/worker.html:72 templates/workers.html:66
 msgid "Connection Refused"
-msgstr ""
+msgstr "Verbindung verweigert"
 
 #: templates/worker.html:74 templates/workers.html:68
 msgid "Connection Timeout"
-msgstr ""
+msgstr "Verbindung unterbrochen"
 
 #: templates/worker.html:76 templates/workers.html:70
 msgid "Connection Error"
-msgstr ""
+msgstr "Verbindungsfehler"
 
 #: templates/worker.html:86
 msgid "Last Successful Ping to Worker"
-msgstr ""
+msgstr "Letzter erfolgreicher Ping zum Worker"
 
 #: templates/worker.html:90 templates/workers.html:48
 msgid "Version"
@@ -948,19 +1000,19 @@ msgstr ""
 
 #: templates/worker.html:106
 msgid "Recent Warnings"
-msgstr ""
+msgstr "Letzte Warnungen"
 
 #: templates/worker.html:121
 msgid "Yay! No issues currently."
-msgstr ""
+msgstr "Yax! Momentan läuft alles einwandfrei"
 
 #: templates/farming/workers.html:116 templates/worker.html:190
 msgid "Disk Space Used (TB)"
-msgstr ""
+msgstr "Platten Speicher benutzt (TB)"
 
 #: templates/farming/workers.html:122 templates/worker.html:196
 msgid "Disk Space Free (TB)"
-msgstr ""
+msgstr "Platten Speicher frei (TB)"
 
 #: templates/worker.html:246
 msgid "Disk Space Used (GB)"
@@ -973,22 +1025,22 @@ msgstr ""
 #: templates/worker_launch.html:50 templates/worker_launch.html:640
 #: templates/worker_launch.html:669
 msgid "Host Path"
-msgstr ""
+msgstr "Host Pfad"
 
 #: templates/worker_launch.html:55 templates/worker_launch.html:645
 #: templates/worker_launch.html:674
 msgid "Container Path"
-msgstr ""
+msgstr "Container Pfad"
 
 #: templates/worker_launch.html:60 templates/worker_launch.html:650
 #: templates/worker_launch.html:679
 msgid "Used for:"
-msgstr ""
+msgstr "Benutzt für:"
 
 #: templates/worker_launch.html:63 templates/worker_launch.html:653
 #: templates/worker_launch.html:682
 msgid "Final Plots"
-msgstr ""
+msgstr "Finale Plots"
 
 #: templates/worker_launch.html:64 templates/worker_launch.html:654
 #: templates/worker_launch.html:683
@@ -998,11 +1050,11 @@ msgstr ""
 #: templates/worker_launch.html:65 templates/worker_launch.html:655
 #: templates/worker_launch.html:684
 msgid "Other"
-msgstr ""
+msgstr "Andere"
 
 #: templates/worker_launch.html:69 templates/worker_launch.html:659
 msgid "Location"
-msgstr ""
+msgstr "Ort"
 
 #: templates/worker_launch.html:72 templates/worker_launch.html:662
 msgid "Local"
@@ -1014,50 +1066,51 @@ msgstr ""
 
 #: templates/worker_launch.html:252
 msgid "Unknown blockchain fork of selected:"
-msgstr ""
+msgstr "Unbekannter Blockschain Fork der ausgewählten:"
 
 #: templates/worker_launch.html:284
 msgid ""
 "Missing worker hostname.  Please provide a short name to identify your "
 "worker."
-msgstr ""
+msgstr "Der Worker Hostname fehlt. Bitte einen kurzen Namen vergeben"
 
 #: templates/worker_launch.html:304
 msgid ""
 "Invalid host path ending with colon. Try adding a slash to the end like "
 "this"
-msgstr ""
+msgstr "Der Host pfad endet mit einem Komma. Versuche es mit Slash wie hier"
 
 #: templates/worker_launch.html:307
 msgid "Empty host path provided for volume at "
-msgstr ""
+msgstr "Leerer Host Pfad für Volumen "
 
 #: templates/worker_launch.html:307
 msgid "Please provide a host path."
-msgstr ""
+msgstr "Bitte Hostpfad angeben"
 
 #: templates/worker_launch.html:309
 msgid "Empty container path provided for volume at "
-msgstr ""
+msgstr "Leerer container Pfad für Volumen "
 
 #: templates/worker_launch.html:309
 msgid "Please provide a container path."
-msgstr ""
+msgstr "Bitte Containerpfad angeben"
 
 #: templates/worker_launch.html:355
 msgid "Neither Harvester or Plottter mode selected.  Please choose one or both."
 msgstr ""
+"Weder Harvester noch Plotter Modus ausgewählt. Bitte einen oder beide "
+"wählen"
 
 #: templates/worker_launch.html:361
 msgid ""
 "Missing worker IP address.  Please provide the IP the controller will "
 "connect to for commands."
-msgstr ""
+msgstr "Worker IP Adresse fehlt"
 
 #: templates/worker_launch.html:411
-#, fuzzy
 msgid "Machinaris Worker - Launch Config"
-msgstr "Willkommen zu"
+msgstr "Machinaris Worker - Configuration starten"
 
 #: templates/worker_launch.html:412
 msgid ""
@@ -1066,10 +1119,12 @@ msgid ""
 "folder named \"machinaris\", then execute \"docker-compose up\" from a "
 "shell."
 msgstr ""
+"Um die Harvester/Plotter auf einem anderen System laufen zu lassen,bitte "
+"folgendes ausfüllen"
 
 #: templates/worker_launch.html:416
 msgid "Operating System"
-msgstr ""
+msgstr "Betriebssystem"
 
 #: templates/worker_launch.html:422
 msgid "Linux"
@@ -1084,9 +1139,8 @@ msgid "Windows"
 msgstr ""
 
 #: templates/worker_launch.html:442
-#, fuzzy
 msgid "Machinaris Mode"
-msgstr "Willkommen zu"
+msgstr "Machinaris Modus"
 
 #: templates/worker_launch.html:448
 msgid "Harvester"
@@ -1134,11 +1188,11 @@ msgstr ""
 
 #: templates/worker_launch.html:516
 msgid "Worker IP Address"
-msgstr ""
+msgstr "Worker IP Adresse"
 
 #: templates/worker_launch.html:523
 msgid "Blockchains to Farm"
-msgstr ""
+msgstr "Gefarmte Blockchains"
 
 #: templates/worker_launch.html:636
 msgid "Volume Mounts"
@@ -1146,15 +1200,15 @@ msgstr ""
 
 #: templates/worker_launch.html:693
 msgid "Add New Volume"
-msgstr ""
+msgstr "Neues Volumen hinzufügen"
 
 #: templates/worker_launch.html:695
 msgid "Remove Last Volume"
-msgstr ""
+msgstr "Letztes Volumen entfernen"
 
 #: templates/worker_launch.html:702
 msgid "Copy"
-msgstr ""
+msgstr "Kopieren"
 
 #: templates/worker_launch.html:706
 msgid "Docker Compose"
@@ -1162,79 +1216,83 @@ msgstr ""
 
 #: templates/workers.html:45
 msgid "Last Status Received"
-msgstr ""
+msgstr "Letzter empfangener Status"
 
 #: templates/workers.html:46
 msgid "Last Ping"
-msgstr ""
+msgstr "Letzter Ping"
 
 #: templates/workers.html:47
 msgid "Last Successful Ping"
-msgstr ""
+msgstr "Letzter erfolgreicher Ping"
 
 #: templates/workers.html:94
 msgid "Prune Selected"
-msgstr ""
+msgstr "Entferne ausgewählte"
 
 #: templates/workers.html:96
 msgid "New Worker"
-msgstr ""
+msgstr "Neuer Worker"
 
 #: templates/workers.html:104
 msgid "No Machinaris workers have reported status successfully."
-msgstr ""
+msgstr "Keine Machinaris Worker haben ihren Status erfolgreich mitgeteilt"
 
 #: templates/workers.html:105
 msgid "Please check each expected worker's log files."
-msgstr ""
+msgstr "Bitte Logfile des entsprechenden Workers überprüfen"
 
 #: templates/farming/plots.html:9
 msgid "Plotting Analysis"
-msgstr ""
+msgstr "Plotting Analyse"
 
 #: templates/farming/plots.html:13
 msgid "Analysis of the plotting job log shows time (seconds) spent in each phase:"
-msgstr ""
+msgstr "Die Analyse des Plotting Jobs zeigt die Zeit der entsprechenden Phasen"
 
 #: templates/farming/plots.html:24
 msgid "Plot Check"
-msgstr ""
+msgstr "Plot überprüfung"
 
 #: templates/farming/plots.html:86 templates/plotting/jobs.html:128
 #: templates/plotting/workers.html:133
 msgid "Worker is offline."
-msgstr ""
+msgstr "Worker ist offline"
 
 #: templates/farming/plots.html:88
 msgid "Farming not started successfully."
-msgstr ""
+msgstr "Farming wurde nicht erfolgreich gestartet"
 
 #: templates/farming/plots.html:147
 msgid "Farming Log for "
-msgstr ""
+msgstr "Farming Log für"
 
 #: templates/farming/plots.html:196
 msgid "Good Plot"
-msgstr ""
+msgstr "Guter Plot"
 
 #: templates/farming/plots.html:198
 msgid "Bad Plot"
-msgstr ""
+msgstr "Schlechter Plot"
 
 #: templates/farming/workers.html:66
 msgid "Daily Summary"
-msgstr ""
+msgstr "Tägliche Zusammenfassung"
 
 #: templates/farming/workers.html:70
 #, python-format
 msgid "No daily summary found for %(blockchain)s on %(displayname)s."
 msgstr ""
+"Keine Tägliche Zusammenfassung für %(blockchain)s auf %(displayname)s "
+"gefunden."
 
 #: templates/farming/workers.html:72
 msgid ""
 "Please check that your Machinaris container for this blockchain is "
 "running. Also please verify settings on the Alerts page."
 msgstr ""
+"Bitte überprüfe ob der Container der entsprechenden Blockchain "
+"läuft.Überprüfe auch die Einstellung der Benachrichtigungen"
 
 #: templates/farming/workers.html:94
 #, python-format
@@ -1247,7 +1305,7 @@ msgstr ""
 
 #: templates/plotting/jobs.html:9
 msgid "Confirm Kill"
-msgstr ""
+msgstr "Bestätige Abbruch"
 
 #: templates/plotting/jobs.html:13
 msgid ""
@@ -1259,11 +1317,11 @@ msgstr ""
 
 #: templates/plotting/jobs.html:17 templates/plotting/jobs.html:204
 msgid "Kill Selected"
-msgstr ""
+msgstr "Ausgewählte beenden"
 
 #: templates/plotting/jobs.html:27 templates/plotting/jobs.html:134
 msgid "Start Plotting"
-msgstr ""
+msgstr "Plotting beginnen"
 
 #: templates/plotting/jobs.html:31
 msgid ""
@@ -1278,7 +1336,7 @@ msgstr ""
 
 #: templates/plotting/jobs.html:45 templates/plotting/jobs.html:131
 msgid "Stop Plotting"
-msgstr ""
+msgstr "Plotting beenden"
 
 #: templates/plotting/jobs.html:49
 msgid ""
@@ -1301,6 +1359,8 @@ msgid ""
 "controller.  Please check the Workers page and bring the system back "
 "online."
 msgstr ""
+"Dieser Worker reagiert gerade nicht auf Pings.Überprüfe den Worker und "
+"starte ihn ggf neu"
 
 #: templates/plotting/jobs.html:70 templates/plotting/workers.html:53
 #: templates/plotting/workers.html:70
@@ -1325,11 +1385,11 @@ msgstr ""
 
 #: templates/plotting/jobs.html:200
 msgid "Suspend Selected"
-msgstr ""
+msgstr "ausgewählte unterbrechen"
 
 #: templates/plotting/jobs.html:202
 msgid "Resume Selected"
-msgstr ""
+msgstr "ausgewählte wiederaufnehmen"
 
 #: templates/plotting/jobs.html:215
 #, python-format
@@ -1346,19 +1406,19 @@ msgstr ""
 
 #: templates/plotting/jobs.html:352
 msgid "Suspending..."
-msgstr ""
+msgstr "Unterbrechen..."
 
 #: templates/plotting/jobs.html:360
 msgid "Resuming..."
-msgstr ""
+msgstr "Wiederaufnehmen..."
 
 #: templates/plotting/jobs.html:369
 msgid "Killing..."
-msgstr ""
+msgstr "Beenden..."
 
 #: templates/plotting/workers.html:9 templates/plotting/workers.html:139
 msgid "Start Archiving"
-msgstr ""
+msgstr "Archivieren Starten"
 
 #: templates/plotting/workers.html:13
 msgid ""
@@ -1369,7 +1429,7 @@ msgstr ""
 
 #: templates/plotting/workers.html:27 templates/plotting/workers.html:136
 msgid "Stop Archiving"
-msgstr ""
+msgstr "Archivieren stoppen"
 
 #: templates/plotting/workers.html:31
 msgid ""
@@ -1388,11 +1448,11 @@ msgstr ""
 
 #: templates/plotting/workers.html:103
 msgid "Archiving"
-msgstr ""
+msgstr "Archivieren"
 
 #: templates/plotting/workers.html:130
 msgid "Archiving is disabled.  See Settings | Plotting page."
-msgstr ""
+msgstr "Archivierung ist ausgeschaltet"
 
 #: templates/plotting/workers.html:256
 #: templates/views/index_script_block.js:152
@@ -1410,14 +1470,14 @@ msgstr ""
 
 #: templates/settings/pools.html:32
 msgid "Confirm Pool Change"
-msgstr ""
+msgstr "Bestätige Pool wechsel"
 
 #: templates/settings/pools.html:36
 msgid ""
 "This action will switch your current pooling selection, possibly "
 "resulting in a small charge (few mojos) against your wallet. Continue "
 "anyway?"
-msgstr ""
+msgstr "Diese Aktion wechselt den Pool. Das kann wenige Mojos kosten. Fortsetzen?"
 
 #: templates/settings/pools.html:85
 #, python-format
@@ -1426,60 +1486,62 @@ msgid ""
 "the same, %(break)sbut it is much less volatile. You can easily switch "
 "pools without having to re-plot."
 msgstr ""
+"Trete einem Pool bei und bekomme coins über zeit. Kommt ungefähr aufs "
+"gleiche Ergebniswie beim Solo Farmen"
 
 #: templates/settings/pools.html:88
 msgid "ERROR: Unable to join a pool because:"
-msgstr ""
+msgstr "ERROR: Kann den Pool nicht beitreten! Begründung:"
 
 #: templates/settings/pools.html:111
 msgid "Self pool. When you win a block, you will earn rewards."
-msgstr ""
+msgstr "Self Pool. Wenn du einen Block gewinnst bekommst du alle Coins"
 
 #: templates/settings/pools.html:122
 msgid "Connected to pool:"
-msgstr ""
+msgstr "Verbindung zu Pool:"
 
 #: templates/settings/pools.html:122
 msgid "Connect to pool:"
-msgstr ""
+msgstr "Verbinde zu Pool:"
 
 #: templates/settings/pools.html:132
 msgid "Compare Pools"
-msgstr ""
+msgstr "Vergleiche Pools"
 
 #: templates/settings/pools.html:135
 msgid "Get Mojos"
-msgstr ""
+msgstr "Du brauchst Mojos?"
 
 #: templates/settings/pools.html:157
 msgid "Save Changes"
-msgstr ""
+msgstr "Änderungen speichern"
 
 #: templates/settings/pools.html:161
 msgid "View Log"
-msgstr ""
+msgstr "Log anzeigen"
 
 #: templates/settings/pools.html:172
 msgid ""
 "No wallets found yet.  Perhaps this is a brand-new installation? If so, "
 "please wait for complete start-up."
-msgstr ""
+msgstr "Keine Wallet gefunden. Vielleicht ist das eine neue Installation?"
 
 #: templates/settings/pools.html:173
 msgid "For more on Pooling, see the Machinaris"
-msgstr ""
+msgstr "Mehr zum Pooling in der Machinaris Wiki"
 
 #: templates/settings/pools.html:173
 msgid "wiki"
-msgstr ""
+msgstr "Wiki"
 
 #: templates/settings/pools.html:185
 msgid "Saving..."
-msgstr ""
+msgstr "Speichern..."
 
 #: templates/settings/pools.html:197
 msgid "PlotNFT Log on "
-msgstr ""
+msgstr "PlotNFT Login"
 
 #: templates/views/index_script_block.js:85
 msgid "Time - Recent"

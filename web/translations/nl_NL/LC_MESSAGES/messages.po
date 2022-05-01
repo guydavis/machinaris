@@ -7,42 +7,42 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-03-13 10:29-0600\n"
-"POT-Creation-Date: 2022-04-03 21:22-0600\n"
+"POT-Creation-Date: 2022-04-23 11:14-0600\n"
 "PO-Revision-Date: 2022-03-13 10:29-0600\n"
 "Last-Translator: Bernie Deprez\n"
 "Language: nl_NL\n"
 "Language-Team: nl_NL <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.1\n"
 
-#: routes.py:86 routes.py:229
+#: routes.py:90 routes.py:233
 msgid "Saved local currency setting."
 msgstr "Lokale munt instelling opgeslagen."
 
-#: routes.py:106
+#: routes.py:110
 msgid "Blockchain download"
 msgstr "Blockchain download"
 
-#: routes.py:138
+#: routes.py:142
 msgid "Unknown plotting form"
 msgstr "Ongekend plottingformaat"
 
-#: routes.py:188
+#: routes.py:192
 msgid "Error! Please see logs."
 msgstr "Error! Controleer de logs."
 
-#: routes.py:214
+#: routes.py:218
 msgid "Unknown alerts form"
 msgstr "Ongekend waarschuwingsformaat"
 
-#: routes.py:234
+#: routes.py:238
 msgid "Saved cold wallet addresses."
 msgstr "Adres koude portefeuille opgeslagen."
 
-#: routes.py:299
+#: routes.py:306
 msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
@@ -50,11 +50,11 @@ msgstr ""
 "Kaart instellingen opgeslagen. Wacht 10 minuten terwijl lokatie "
 "informatie voor de kaart wordt gegenereerd."
 
-#: routes.py:307
+#: routes.py:314
 msgid "Unknown form action"
 msgstr "Ongekende formulier actie"
 
-#: routes.py:413
+#: routes.py:420
 #, python-format
 msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
@@ -63,7 +63,7 @@ msgstr ""
 "Geen werker op %(worker)s voor blockchain %(blockchain)s. Gelieve een "
 "ander blockchain te kiezen."
 
-#: routes.py:419
+#: routes.py:426
 #, python-format
 msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
@@ -72,7 +72,7 @@ msgstr ""
 "Voor Waarschuwingsconfiguratie, geen reagerende fullnode voor "
 "%(blockchain)s gevonden. Gelieve uw werkers te controleren."
 
-#: routes.py:424
+#: routes.py:431
 #, python-format
 msgid ""
 "For Farming config, found no responding fullnode found for "
@@ -81,7 +81,7 @@ msgstr ""
 "Voor Farming configuratie, geen reagerende fullnode voor %(blockchain)s "
 "gevonden. Gelieve uw werkers te controleren."
 
-#: routes.py:431
+#: routes.py:438
 #, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
@@ -90,7 +90,7 @@ msgstr ""
 "Voor Plotting configuratie, geen reagerende fullnode gevonden voor "
 "%(blockchain)s. Gelieve uw werkers te controleren."
 
-#: routes.py:436
+#: routes.py:443
 #, python-format
 msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
@@ -99,7 +99,7 @@ msgstr ""
 "Geen reagerende fullnode gevonden voor %(blockchain)s. Gelieve uw werkers"
 " te controleren."
 
-#: routes.py:455
+#: routes.py:462
 msgid "Unsupported log type"
 msgstr "Log type niet ondersteund"
 
@@ -111,16 +111,25 @@ msgstr ""
 "Relax en neem een koffie. Status van actieve werkers wordt verzameld. Dit"
 " kan 15 minuten duren..."
 
-#: actions/drives.py:30
+#: actions/drives.py:33
 #, python-format
 msgid "Oops! No smartctl info found for device %(device)s on %(hostname)s."
 msgstr ""
+
+#: actions/drives.py:54
+msgid "Failed to save display settings.  Please check Web Log."
+msgstr ""
+
+#: actions/drives.py:56
+#, fuzzy
+msgid "Saved display settings."
+msgstr "Lokale munt instelling opgeslagen."
 
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
 msgstr "Inactief"
 
-#: actions/plotman.py:47 actions/plotman.py:48 models/chia.py:196
+#: actions/plotman.py:47 actions/plotman.py:48 models/chia.py:211
 #: models/plotman.py:67 templates/index.html:42 templates/index.html:52
 msgid "Active"
 msgstr "Actief"
@@ -138,7 +147,7 @@ msgstr "in voorbije dag."
 msgid "secs"
 msgstr "seconden"
 
-#: actions/stats.py:348 models/chia.py:236
+#: actions/stats.py:348 models/chia.py:251
 msgid "hour"
 msgstr "uur"
 
@@ -184,77 +193,77 @@ msgstr "Machinaris versie is niet dezelfde als de controller."
 msgid "Please use a consistent Machinaris version to avoid issues."
 msgstr "Om problemen te voorkomen gebruik een consistente Machinaris versie."
 
-#: models/chia.py:133 models/chia.py:230 models/drives.py:44
+#: models/chia.py:140 models/chia.py:245 models/drives.py:44
 msgid "days"
 msgstr "dagen"
 
-#: models/chia.py:198 templates/summary.html:100 templates/wallet.html:128
+#: models/chia.py:213 templates/summary.html:100 templates/wallet.html:128
 msgid "Syncing"
 msgstr "Synchronisatie"
 
-#: models/chia.py:200 templates/index.html:54
+#: models/chia.py:215 templates/index.html:54
 msgid "Not available"
 msgstr "Niet beschikbaar"
 
-#: models/chia.py:202
+#: models/chia.py:217
 msgid "Not synced"
 msgstr "Niet gesynchroniseerd"
 
-#: models/chia.py:205 templates/index.html:54 templates/plotting/jobs.html:114
+#: models/chia.py:220 templates/index.html:54 templates/plotting/jobs.html:114
 #: templates/plotting/workers.html:116 templates/summary.html:96
 #: templates/wallet.html:124 templates/worker.html:78 templates/workers.html:72
 msgid "Offline"
 msgstr "Offline"
 
-#: models/chia.py:218 models/drives.py:49
+#: models/chia.py:233 models/drives.py:49
 msgid "years"
 msgstr "jaren"
 
-#: models/chia.py:220
+#: models/chia.py:235
 msgid "year"
 msgstr "jaar"
 
-#: models/chia.py:222 models/drives.py:48
+#: models/chia.py:237 models/drives.py:48
 msgid "months"
 msgstr "maanden"
 
-#: models/chia.py:224
+#: models/chia.py:239
 msgid "month"
 msgstr "maand"
 
-#: models/chia.py:226 models/drives.py:46
+#: models/chia.py:241 models/drives.py:46
 msgid "weeks"
 msgstr "weken"
 
-#: models/chia.py:228
+#: models/chia.py:243
 msgid "week"
 msgstr "week"
 
-#: models/chia.py:232
+#: models/chia.py:247
 msgid "day"
 msgstr "dag"
 
-#: models/chia.py:234 models/drives.py:42
+#: models/chia.py:249 models/drives.py:42
 msgid "hours"
 msgstr "uren"
 
-#: models/chia.py:238
+#: models/chia.py:253
 msgid "minutes"
 msgstr "minuten"
 
-#: models/chia.py:240
+#: models/chia.py:255
 msgid "minute"
 msgstr "minuut"
 
-#: models/chia.py:242
+#: models/chia.py:257
 msgid "Never (no plots)"
 msgstr "Nooit (geen plots)"
 
-#: models/chia.py:244
+#: models/chia.py:259
 msgid "Soon"
 msgstr "Binnenkort"
 
-#: models/chia.py:246
+#: models/chia.py:261
 msgid "and"
 msgstr "en"
 
@@ -262,7 +271,7 @@ msgstr "en"
 msgid "Alerts: Recent Notifications"
 msgstr "Waarschuwingen: Recente notificaties"
 
-#: templates/alerts.html:72 templates/drives.html:56
+#: templates/alerts.html:72 templates/drives.html:86
 #: templates/settings/alerts.html:36 templates/settings/farming.html:37
 #: templates/settings/plotting.html:37 templates/settings/tools.html:36
 #: templates/worker.html:14
@@ -384,13 +393,14 @@ msgstr "Pools"
 msgid "Workers"
 msgstr "Werkers"
 
-#: templates/base.html:90 templates/drives.html:30
+#: templates/base.html:90 templates/drives.html:60
 msgid "Drives"
 msgstr ""
 
 #: templates/base.html:96 templates/connections.html:25
-#: templates/connections.html:59 templates/summary.html:25
-#: templates/summary.html:53 templates/wallet.html:23 templates/wallet.html:46
+#: templates/connections.html:59 templates/drives.html:24
+#: templates/drives.html:53 templates/summary.html:25 templates/summary.html:53
+#: templates/wallet.html:23 templates/wallet.html:46
 msgid "Settings"
 msgstr "Instellingen"
 
@@ -442,7 +452,7 @@ msgstr "Plotman"
 msgid "Blockchain Summary"
 msgstr "Blockchain Samenvatting"
 
-#: templates/blockchains.html:32 templates/drives.html:61
+#: templates/blockchains.html:32 templates/drives.html:91
 #: templates/summary.html:74 templates/wallet.html:109
 msgid "Status"
 msgstr "Status"
@@ -455,7 +465,7 @@ msgstr "Piek Hoogte"
 msgid "Peak Time"
 msgstr "Piek Tijd"
 
-#: templates/blockchains.html:35 templates/drives.html:63
+#: templates/blockchains.html:35 templates/drives.html:93
 #: templates/wallet.html:114
 msgid "Updated At"
 msgstr "Bijgewerkt om"
@@ -495,18 +505,19 @@ msgstr "Maxmind License Key (Verplicht)"
 msgid "Mapbox Access Token (Optional):"
 msgstr "Mapbox Access Token (Verplicht)"
 
-#: templates/connections.html:50 templates/plotting/jobs.html:16
-#: templates/plotting/jobs.html:34 templates/plotting/jobs.html:52
-#: templates/plotting/workers.html:16 templates/plotting/workers.html:34
-#: templates/settings/pools.html:39 templates/summary.html:44
-#: templates/wallet.html:65 templates/wallet.html:92
+#: templates/connections.html:50 templates/drives.html:41
+#: templates/plotting/jobs.html:16 templates/plotting/jobs.html:34
+#: templates/plotting/jobs.html:52 templates/plotting/workers.html:16
+#: templates/plotting/workers.html:34 templates/settings/pools.html:39
+#: templates/summary.html:44 templates/wallet.html:65 templates/wallet.html:92
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: templates/connections.html:51 templates/settings/alerts.html:55
-#: templates/settings/farming.html:56 templates/settings/plotting.html:56
-#: templates/settings/pools.html:41 templates/settings/tools.html:55
-#: templates/summary.html:45 templates/wallet.html:66 templates/wallet.html:93
+#: templates/connections.html:51 templates/drives.html:42
+#: templates/settings/alerts.html:55 templates/settings/farming.html:56
+#: templates/settings/plotting.html:56 templates/settings/pools.html:41
+#: templates/settings/tools.html:55 templates/summary.html:45
+#: templates/wallet.html:66 templates/wallet.html:93
 msgid "Save"
 msgstr "Opslaan"
 
@@ -590,49 +601,62 @@ msgstr "Deze Machinaris werker wordt beheerd op: "
 msgid "Smartctl Status"
 msgstr ""
 
-#: templates/drives.html:57
+#: templates/drives.html:30
+msgid "Good"
+msgstr ""
+
+#: templates/drives.html:33
+msgid "Warn"
+msgstr ""
+
+#: templates/drives.html:37
+#, fuzzy
+msgid "Alert"
+msgstr "Portefeuille"
+
+#: templates/drives.html:87
 #, fuzzy
 msgid "Device"
 msgstr "Service"
 
-#: templates/drives.html:58
+#: templates/drives.html:88
 #, fuzzy
 msgid "Model"
 msgstr "Modus"
 
-#: templates/drives.html:59
+#: templates/drives.html:89
 msgid "Serial #"
 msgstr ""
 
-#: templates/drives.html:60 templates/drives.html:135
+#: templates/drives.html:90 templates/drives.html:165
 msgid "Capacity"
 msgstr ""
 
-#: templates/drives.html:62 templates/drives.html:134
+#: templates/drives.html:92 templates/drives.html:164
 msgid "Temperature"
 msgstr ""
 
-#: templates/drives.html:84 templates/drives.html:143
+#: templates/drives.html:114 templates/drives.html:173
 msgid "Passed"
 msgstr ""
 
-#: templates/drives.html:136
+#: templates/drives.html:166
 msgid "Powered On"
 msgstr ""
 
-#: templates/drives.html:178
+#: templates/drives.html:208
 msgid "Drive status updated"
 msgstr ""
 
-#: templates/drives.html:187
+#: templates/drives.html:217
 msgid "No drives accessible to smartctl inside the Machinaris containers."
 msgstr ""
 
-#: templates/drives.html:188
+#: templates/drives.html:218
 msgid "Please configure Docker to allow smartctl access to host devices."
 msgstr ""
 
-#: templates/drives.html:189 templates/workers.html:106
+#: templates/drives.html:219 templates/workers.html:106
 #, python-format
 msgid "For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
 msgstr ""

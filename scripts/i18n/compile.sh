@@ -10,7 +10,7 @@ fi
 for d in 'web' 'api'; 
 do
     pushd $d >/dev/null
-    /chia-blockchain/venv/bin/pybabel compile -d ./translations
+    /chia-blockchain/venv/bin/pybabel --verbose compile  -d ./translations
     chmod -R 777 $PWD/translations
     popd >/dev/null
 done

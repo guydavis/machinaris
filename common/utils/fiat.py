@@ -6,7 +6,7 @@ import json
 import os
 import traceback
 
-from flask_babel import _, lazy_gettext as _l, format_decimal
+from flask_babel import _, lazy_gettext as _l, format_decimal, format_currency
 
 BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/cache/blockchain_prices_cache.json'
 EXCHANGE_RATES_CACHE_FILE = '/root/.chia/machinaris/cache/exchange_rates_cache.json'
@@ -25,7 +25,7 @@ def to_fiat(blockchain, coins):
                     fiat_cur_sym = get_local_currency_symbol().lower()
                     if usd_per_coin and fiat_per_usd:
                         #print("Converting {0} coins of {1} with {2}".format(coins, usd_per_coin, fiat_per_usd))
-                        fiat_localized = format_decimal(round(usd_per_coin * fiat_per_usd * coins, 2))
+                        fiat_localized = format_currency(round(usd_per_coin * fiat_per_usd * coins, 2), '')
                         return "{0} {1}".format(fiat_localized, fiat_cur_sym)
                 return ''
         except Exception as ex:

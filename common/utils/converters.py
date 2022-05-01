@@ -37,6 +37,12 @@ def str_to_gibs(str):
         return 0.0
     try:
         val,unit = str.split(' ')
+        if unit.lower().strip() == 'tb': # MMX
+            val = float(val) * 0.909495
+            unit = 'TiB'
+        elif unit.lower().strip() == 'pb':
+            val = float(val) * 0.888178
+            unit = 'PiB'
         if unit.lower().strip().endswith('mib'):
             return float(val) / 1024
         elif unit.lower().strip().endswith('gib'):
