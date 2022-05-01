@@ -94,7 +94,7 @@ msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
 "workers."
 msgstr ""
-Für %(blockchain)s wurde kein aktiver Worker gefunden.
+"Für %(blockchain)s wurde kein aktiver Worker gefunden."
 " Bitte überprüfe den status deiner Worker."
 
 #: routes.py:455
