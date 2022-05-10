@@ -65,6 +65,8 @@ def load_drive_info(device, overrides):
         app.logger.debug("Error from {0} because {1}".format(cmd, outs.decode('utf-8')))
     return outs.decode('utf-8')
 
+# If enhanced Chiadog is running within container, then its listening on http://localhost:8925
+# Example: curl -X POST http://localhost:8925 -H 'Content-Type: application/json' -d '{"type":"user", "service":"farmer", "priority":"high", "message":"Hello World"}'
 def notify_failing_device(ipaddr, device, status, debug=False):
     try:
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}

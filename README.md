@@ -38,13 +38,13 @@ Immediately on setup, a [fast blockchain download](https://github.com/guydavis/m
 
 ## Configuration
 
-Configuration updates for Chia, Plotman, and Chiadog are available in the WebUI.  
+Configuration updating for Chia, Plotman, and Chiadog directly from the WebUI.  
 
-![Connections](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_settings.png)
+![Settings](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_settings.png)
 
-Details on Blockchain and Connection status as well:
+Summary and details for connections and blockchains highlights your farm's status:
 
-![Connections](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_network.png)
+![Connections](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/geolocation.png)
 
 ## Container CLI
 
@@ -60,6 +60,7 @@ When Machinaris is [deployed to multiple systems](https://github.com/guydavis/ma
 
 ![Workers](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_workers.png)
 
+Each worker will run one Machinaris container per blockchain: Chia, Flax, MMX, etc as a fullnode, harvester, or plotter.
 
 ## REST API
 
