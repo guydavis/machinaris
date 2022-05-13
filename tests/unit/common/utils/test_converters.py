@@ -40,17 +40,17 @@ class TestRoundBalance(unittest.TestCase):
     def test_tenthousandths(self):
         data = 0.0002
         result = converters.round_balance(data)
-        self.assertEqual(result, "0")
+        self.assertEqual(result, "0.0002")
 
     def test_hundredthousandths(self):
         data = 0.00002
         result = converters.round_balance(data)
-        self.assertEqual(result, "0")
+        self.assertEqual(result, "0.00002")
     
     def test_millionths(self):
         data = 0.000002
         result = converters.round_balance(data)
-        self.assertEqual(result, "0")
+        self.assertEqual(result, "0.000002")
 
     def test_singledigit(self):
         data = 2

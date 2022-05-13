@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Record notifications from Chiadog to event files for parsing by Machinaris
+# Receive notifications from Chiadog to into the Machinaris alerts database
 #
 
 event_priority_name="$1"

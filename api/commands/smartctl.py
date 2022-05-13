@@ -2,8 +2,10 @@
 # Collect stats on drives using smartctl
 #
 
+import http
 import json
 import os
+import requests
 
 from flask import Flask, jsonify, abort, request, flash
 from subprocess import Popen, TimeoutExpired, PIPE, STDOUT
@@ -62,3 +64,26 @@ def load_drive_info(device, overrides):
     if errs:
         app.logger.debug("Error from {0} because {1}".format(cmd, outs.decode('utf-8')))
     return outs.decode('utf-8')
+
+# If enhanced Chiadog is running within container, then its listening on http://localhost:8925
+# Example: curl -X POST http://localhost:8925 -H 'Content-Type: application/json' -d '{"type":"user", "service":"farmer", "priority":"high", "message":"Hello World"}'
+def notify_failing_device(ipaddr, device, status, debug=False):
+    try:
+        headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+        if debug:
+            http.client.HTTPConnection.debuglevel = 1
+        mode = 'full_node'
+        if 'mode' in os.environ and 'harvester' in os.environ['mode']:
+            mode = 'harvester'
+        response = requests.post("http://localhost:8925", headers = headers, data = json.dumps(
+            {
+                "type": "user", 
+                "service": mode, 
+                "priority": "high", 
+                "message": "Device {0} on {1} reported a bad status: {2}".format(device, ipaddr, status)
+            }
+        ))
+    except Exception as ex:
+        app.logger.info("Failed to notify Chiadog of drive status change.")
+    finally:
+        http.client.HTTPConnection.debuglevel = 0
