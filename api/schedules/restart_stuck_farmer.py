@@ -29,7 +29,7 @@ def stale_peak(blockchain_show):
             minutes_diff = math.ceil((dt.datetime.now() - last_peak_time).total_seconds() / 60.0)
             if last_peak == current_stale_peak:
                 if minutes_diff >= RESTART_IF_STUCK_MINUTES:
-                    app.logger.info("Executing unsycned blockchain restart due to stuck peak height of {0} for {1} minutes.".format(current_stale_peak, minutes_diff))
+                    app.logger.info("Executing unsynced blockchain restart due to stuck peak height of {0} for {1} minutes.".format(current_stale_peak, minutes_diff))
                     last_peak = None
                     last_peak_time = None
                     return True  # Request the restart

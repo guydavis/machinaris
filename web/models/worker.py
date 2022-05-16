@@ -109,7 +109,7 @@ class WorkerSummary:
     def status_if_responding(self, displayname, blockchain, connection_status, last_status):
         if connection_status == "Responding":
             return last_status
-        #app.logger.info("Oops! {0} ({1}) last connection status: {2}".format(displayname, blockchain, connection_status))
+        app.logger.info("Oops! {0} ({1}) last connection status: {2}".format(displayname, blockchain, connection_status))
         return "offline"
 
     def fullnodes(self):

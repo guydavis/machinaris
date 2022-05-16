@@ -7,24 +7,26 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-30 20:47-0600\n"
+"POT-Creation-Date: 2022-04-23 11:14-0600\n"
 "PO-Revision-Date: 2022-02-15 14:29-0700\n"
-"Last-Translator: Guy Davis\n"
+"Last-Translator: ApfelBirneKreis\n"
 "Language: de\n"
 "Language-Team: de <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.1\n"
 
 #: commands/chia_cli.py:67
 msgid "Updated config.yaml failed validation!"
-msgstr ""
+msgstr "Geupdatete config.yaml hat die Validation nicht bestanden"
 
 #: commands/pools_cli.py:68
 msgid "No requested pool modifications were sent. Current settings are unchanged."
 msgstr ""
+"Keine Pool modifikationen wurden gesendet. Vorherige Einstellungen wurden"
+" beibehalten"
 
 #: commands/pools_cli.py:151
 msgid ""
@@ -32,6 +34,8 @@ msgid ""
 "minutes or more to complete. DO NOT immediately re-submit your request. "
 "View the log for details."
 msgstr ""
+"Pool erfolgreich verlassen. Es wird zu self-pooling gewechselt.Bitte "
+"warte ein paar minuten und sende die Anfrage NICHT sofort nochmal."
 
 #: commands/pools_cli.py:195
 #, python-format
@@ -40,6 +44,8 @@ msgid ""
 "a few minutes or more to complete. DO NOT immediately re-submit your "
 "request. Be patient! View the log for details."
 msgstr ""
+"Pool %(pool_url)s erfolgreich beigetreten und PlotNFT erstelltBitte warte"
+" ein paar minuten und sende die Anfrage NICHT sofort nochmal."
 
 #: commands/pools_cli.py:224
 msgid ""
@@ -47,6 +53,8 @@ msgid ""
 "or more to complete. DO NOT immediately re-submit your request. Be "
 "patient! View the log for details."
 msgstr ""
+"NFT für Self-pooling erfolgreich erstellt.Bitte warte ein paar minuten "
+"und sende die Anfrage NICHT sofort nochmal."
 
 #: views/ping/resources.py:28
 msgid "Pong!"

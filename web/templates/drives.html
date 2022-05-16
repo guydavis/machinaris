@@ -17,10 +17,40 @@
   </div>
 </div>
 
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+  <div class="modal-dialog bg-dark rounded-3">
+    <div class="modal-content bg-dark">
+      <div class="modal-header bg-dark">
+        <h5 class="modal-title" id="settingsModalLabel">{{_('Settings')}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body bg-dark">
+        <form method="POST" id="settings-form">
+          <h6>Temperatures</h6>
+          <label class="col-form-label"><i class="bi-check-circle text-success"></i> {{_('Good')}}</label>
+          &nbsp;&lt;&nbsp;
+          <input name="good_below_temperature" size="1" style="direction: rtl;" value="{{settings.good_below_temperature}}"/> &deg;C
+          &nbsp;<label class="col-form-label"><i class="bi-check-circle text-warning"></i> {{_('Warn')}}</label>
+          &nbsp;&lt;&nbsp;
+          <input name="warn_below_temperature" size="1" style="direction: rtl;" value="{{settings.warn_below_temperature}}"/> &deg;C
+          &nbsp;&lt;&nbsp;
+          &nbsp;<label class="col-form-label"><i class="bi-check-circle text-danger"></i> {{_('Alert')}}</label>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">{{_('Cancel')}}</button>
+        <button type="button" class="btn btn-outline-success" id="btnSave">{{_('Save')}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="position-relative">
   <div class="position-absolute top-0 end-0">
       <a href="{{ url_for('drives') }}?view=grid" title="Grid View"><i class="fs-4 bi-grid"></i></a>
       <a href="{{ url_for('drives') }}?view=table" title="Table View"><i class="fs-4 bi-table"></i></a>
+      &nbsp;
+      <a href="#" title="{{_('Settings')}}" data-bs-toggle="modal" data-bs-target="#settingsModal" target="_blank"><i class="fs-4 bi-gear"></i></a>
       &nbsp;
       <a href="https://github.com/guydavis/machinaris/wiki/Drives" target="_blank"><i class="fs-4 bi-question-circle"></i></a>
   </div>
@@ -76,7 +106,7 @@
                  {% endif %}
             </td>
             <td>{% if drive.serial_number %}{{drive.serial_number}}{% endif %}</td>
-            <td>{% if drive.capcacity %}{{drive.capacity}}{% endif %}</td>
+            <td>{% if drive.capacity %}{{drive.capacity}}{% endif %}</td>
             <td>
               {% if not drive.status %}
                 &nbsp;
@@ -90,9 +120,9 @@
             <td>
               {% if not drive.temperature %}
                 &nbsp;
-              {% elif drive.temperature < 40 %}
+              {% elif drive.temperature < settings.good_below_temperature %}
                 <i class="bi-check-circle text-success"></i> {{ drive.temperature }} &deg;C
-              {% elif drive.temperature < 50 %}
+              {% elif drive.temperature < settings.warn_below_temperature %}
                 <i class="bi-exclamation-triangle text-warning"></i> {{ drive.temperature }} &deg;C
               {% else %}
                 <i class="bi-dash-circle text-danger"></i> {{ drive.temperature }} &deg;C
@@ -131,9 +161,9 @@
             <table class="text-muted" style="width: 100%">
               <tr>
                 <td>S.M.A.R.T</td>
-                <td>Temperature</td>
-                <td>Capacity</td>
-                <td>Powered On</td>
+                <td>{{_('Temperature')}}</td>
+                <td>{{_('Capacity')}}</td>
+                <td>{{_('Powered On')}}</td>
               </tr>
               <tr>
                 <td>
@@ -149,9 +179,9 @@
                 <td>
                   {% if not drive.temperature %}
                     &nbsp;
-                  {% elif drive.temperature < 40 %}
+                  {% elif drive.temperature < settings.good_below_temperature %}
                     <i class="bi-check-circle text-success"></i> {{ drive.temperature }} &deg;C
-                  {% elif drive.temperature < 50 %}
+                  {% elif drive.temperature < settings.warn_below_temperature %}
                     <i class="bi-exclamation-triangle text-warning"></i> {{ drive.temperature }} &deg;C
                   {% else %}
                     <i class="bi-dash-circle text-danger"></i> {{ drive.temperature }} &deg;C
@@ -175,7 +205,7 @@
       </div>
       {% endif %}
       {% endfor %}
-      <small class="text-muted text-center">Drive status updated {{drives.rows[0].updated_at | datetimefilter}}</small>
+      <small class="text-muted text-center">{{_('Drive status updated')}} {{drives.rows[0].updated_at | datetimefilter}}</small>
       {% endif %}
     </fieldset>
   </form>
@@ -222,6 +252,14 @@
             };
         }
     $(document).ready(function () {
+      $("#btnSave").click(function () {
+        $("#btnCancel").prop("disabled", true);
+        $(this).prop("disabled", true);
+        $(this).html(
+            `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...`
+        );
+        $("#settings-form").submit();
+      });
       $('#data').DataTable({
           "pageLength": 25,
           "lengthMenu": [ [25, 50, 100, 200, -1], [25, 50, 100, 200, "All"] ],

@@ -13,9 +13,9 @@ import traceback
 def sizeof_fmt(num, suffix='B'):
     for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
         if abs(num) < 1024.0:
-            return "%3.3f %s%s" % (num, unit, suffix)
+            return "{0} {1}{2}".format(flask_babel.format_decimal(num), unit, suffix)
         num /= 1024.0
-    value = "%.3f %s%s" % (num, 'Yi', suffix)
+    value = "{0} {1}{2}".format(flask_babel.format_decimal(num, 'Yi', suffix))
     if value == "0.000 B":
         return "0"
     return value
@@ -37,6 +37,12 @@ def str_to_gibs(str):
         return 0.0
     try:
         val,unit = str.split(' ')
+        if unit.lower().strip() == 'tb': # MMX
+            val = float(val) * 0.909495
+            unit = 'TiB'
+        elif unit.lower().strip() == 'pb':
+            val = float(val) * 0.888178
+            unit = 'PiB'
         if unit.lower().strip().endswith('mib'):
             return float(val) / 1024
         elif unit.lower().strip().endswith('gib'):
@@ -61,21 +67,47 @@ def convert_date_for_luxon(datestr):
 
 def round_balance(value):
     # First round the coin balance
-    if abs(value) >= 1000:
+    if abs(value) >= 10000:
         value = round(value, 0)
-    elif abs(value) >= 100:
+    elif abs(value) >= 1000:
         value = round(value, 1)
-    elif abs(value) >= 10:
+    elif abs(value) >= 100:
         value = round(value, 2)
-    elif abs(value) >= 1:
+    elif abs(value) >= 10:
         value = round(value, 3)
-    else:
+    elif abs(value) >= 1:
         value = round(value, 4)
+    elif abs(value) >= 0.1:
+        value = round(value, 5)
+    elif abs(value) >= 0.01:
+        value = round(value, 6)
+    elif abs(value) >= 0.001:
+        value = round(value, 7)
+    elif abs(value) >= 0.0001:
+        value = round(value, 8)
+    elif abs(value) >= 0.00001:
+        value = round(value, 9)
+    elif abs(value) >= 0.000001:
+        value = round(value, 10)
+    elif abs(value) >= 0.0000001:
+        value = round(value, 11)
+    elif abs(value) >= 0.00000001:
+        value = round(value, 12)
+    elif abs(value) >= 0.000000001:
+        value = round(value, 13)
+    elif abs(value) >= 0.0000000001:
+        value = round(value, 14)
+    elif abs(value) >= 0.000000000001:
+        value = round(value, 15)
+    elif abs(value) >= 0.0000000000001:
+        value = round(value, 16)
+    else:
+        value = round(value, 17)
     # Then return the locale-specific format as str
     if flask_babel.get_locale(): # Regular web request
-        return flask_babel.format_decimal(value)  
+        return flask_babel.format_decimal(value, format="#,##0.##################")  
     else: # Workaround for inability to test flask-babel without a request
-        return babel.numbers.format_decimal(value)
+        return babel.numbers.format_decimal(value, format="#,##0.##################")
 
 ##################################################################################################
 #

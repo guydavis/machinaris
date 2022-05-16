@@ -42,7 +42,7 @@ def update():
                         "capacity": drive.capacity,
                         "smart_info": drive.smart_info,
                     })
-            utils.send_post('/drives/', payload, debug=True)
+            utils.send_post('/drives/', payload, debug=False)
         except:
             app.logger.info("Failed to load and send drive status.")
             app.logger.info(traceback.format_exc())

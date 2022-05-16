@@ -22,7 +22,8 @@ chia init >> /root/.chia/mainnet/log/init.log 2>&1
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
-  && [[ ! -f /root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite ]]; then
+  && [[ ! -f /root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
+  && [[ ! -f /root/.chia/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   # Create machinaris dbs and launch web only while blockchain database downloads
   . /machinaris/scripts/setup_databases.sh
   mkdir -p /root/.chia/machinaris/config
@@ -38,13 +39,14 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Downloading Chia blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/mainnet/db/chia && cd /root/.chia/mainnet/db/chia
-  # Latest Blockchain DB download from direct from https://www.chia-database.com/
-  db_url=$(curl -s https://chia-database.com | grep -Po "https:.*/blockchain_v1_mainnet-\d{2}-\d{2}-\d{4}.zip" | shuf -n 1)
+  # Latest Blockchain DB download from direct from https://sweetchia.com/
+  db_url=$(curl -s https://sweetchia.com | grep -Po "https:.*/blockchain_v2_mainnet-\d{4}-\d{2}-\d{2}-\d{4}.7z" | shuf -n 1)
   echo "Please be patient! Downloading blockchain database from: "
   echo "    ${db_url}"
-  curl -skLJ -o - ${db_url} | zcat >> blockchain_v1_mainnet.sqlite
+  curl -kLJ -O ${db_url}
+  p7zip --decompress --force blockchain_v2_mainnet*.7z
   cd /root/.chia/mainnet/db
-  mv /root/.chia/mainnet/db/chia/blockchain_v1_mainnet.sqlite .
+  mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.sqlite .
   rm -rf /root/.chia/mainnet/db/chia
 fi
 

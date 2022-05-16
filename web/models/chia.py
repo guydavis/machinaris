@@ -5,7 +5,7 @@ import os
 import re
 import traceback
 
-from flask_babel import _, lazy_gettext as _l
+from flask_babel import _, lazy_gettext as _l, format_decimal
 
 from web import app
 from web.actions import worker as w, mapping
@@ -130,7 +130,14 @@ class Summaries:
         try:
             minutes = converters.etw_to_minutes(etw)
             #app.logger.info("Converting {0} minutes.".format(minutes))
-            return "%.1f"% round(( minutes / 60 / 24), 2) + " " + _('days')
+            days = minutes/60/24
+            if days > 10:
+                days = round(days)
+            elif days > 1:
+                days = round(days, 1)
+            else:
+                days = round(days, 2)
+            return "{0} {1}".format(format_decimal(days), _('days'))
         except Exception as ex:
             app.logger.info("Unable to convert ETW to minutes '{0}' because {1}.".format(etw, str(ex)))
             return etw
@@ -167,16 +174,24 @@ class FarmSummary:
                     total_coins = converters.round_balance(farm_rec.total_coins)
                 else:
                     total_coins = converters.round_balance(0)
+                try:
+                    plots_display_size = converters.gib_to_fmt(farm_rec.plots_size)
+                except:
+                    plots_display_size = ''
+                try:
+                    netspace_display_size = converters.gib_to_fmt(farm_rec.netspace_size)
+                except:
+                    netspace_display_size = '?'
                 farm = {
                     "plot_count": int(farm_rec.plot_count),
                     "plots_size": farm_rec.plots_size,
-                    "plots_display_size": converters.gib_to_fmt(farm_rec.plots_size),
+                    "plots_display_size": plots_display_size,
                     "status": farm_rec.status,
                     "display_status": self.status_if_responding(displayname, farm_rec.blockchain, connection_status, farm_rec.status),
                     "total_coins": total_coins,
                     "wallet_balance": converters.round_balance(wallet_balance),
                     "currency_symbol": globals.get_blockchain_symbol(farm_rec.blockchain),
-                    "netspace_display_size": '?' if not farm_rec.netspace_size else converters.gib_to_fmt(farm_rec.netspace_size),
+                    "netspace_display_size": netspace_display_size,
                     "netspace_size": farm_rec.netspace_size,
                     "expected_time_to_win": self.i18n_etw(farm_rec.expected_time_to_win),
                 }
@@ -351,8 +366,8 @@ class Wallets:
         skip = 0
         details = []
         for line in wallet_details.split('\n'):
-            if "type CAT" in line:
-                skip = 3 # Skip next 3 lines for this CAT wallet
+            if "Token:" in line:  # Example: "Chia Holiday 2021 Token:"
+                skip = 3 # Skip next 3 lines for these useless CAT wallets
             elif skip > 0:
                 skip = skip -1 
             else:
@@ -493,7 +508,7 @@ class Blockchains:
         if not details:
             return None
         if blockchain == 'mmx':
-            pattern = '^Height: (\d+)$'
+            pattern = '^Height:\s+(\d+)$'
         else:
             pattern = '^.* Height:\s+(\d+)$'
         for line in details.split('\n'):

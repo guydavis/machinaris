@@ -28,11 +28,15 @@ def get_lang(request):
             first_accept = accept.split(',')[0]  # Like 'nl'
             alternative = "{0}_{1}".format(first_accept, first_accept.upper())
             if alternative in app.config['LANGUAGES']:
+                app.logger.info("LOCALE: Accept-Language: {0}  ---->  using locale: {1}".format(accept, match))
                 return alternative
-        app.logger.info("ROUTES: Accept-Language: {0}  ---->  matched locale: {1}".format(accept, match))
-        return request.accept_languages.best_match(app.config['LANGUAGES'])
+        if match:
+            app.logger.info("LOCALE: Accept-Language: {0}  ---->  matched locale: {1}".format(accept, match))
+            return match
+        app.logger.info("LOCALE: Accept-Language: {0} returned no match so defaulting to 'en'.".format(accept))
+        return "en"
     except:
-        app.logger.info("ROUTES: Request had no Accept-Language, returning default locale of 'en'")
+        app.logger.info("LOCALE: Request had no Accept-Language header, returning default locale of 'en'")
         return "en" 
 
 def find_selected_worker(hosts, hostname, blockchain= None):
@@ -271,14 +275,17 @@ def worker_route():
         plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc,
         lang=get_lang(request))
 
-@app.route('/drives')
+@app.route('/drives', methods=['GET','POST'])
 def drives():
     if request.args.get('device') and request.args.get('hostname'):
         return d.load_smartctl_info(request.args.get('hostname'), request.args.get('device'))
+    if request.method == 'POST':
+        d.save_settings(request.form)
     gc = globals.load()
     drvs = d.load_drive_summary()
+    settings = d.load_settings()
     return render_template('drives.html', reload_seconds=120, 
-        drives=drvs, global_config=gc, lang=get_lang(request))
+        drives=drvs, settings=settings, global_config=gc, lang=get_lang(request))
 
 @app.route('/blockchains')
 def blockchains():

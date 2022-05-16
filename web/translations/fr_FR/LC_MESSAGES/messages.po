@@ -7,42 +7,42 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-03-30 20:46-0600\n"
+"POT-Creation-Date: 2022-04-23 11:14-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Generated-By: Babel 2.10.1\n"
 
-#: routes.py:86 routes.py:229
+#: routes.py:90 routes.py:233
 msgid "Saved local currency setting."
 msgstr "Paramètre de devise locale enregistré."
 
-#: routes.py:106
+#: routes.py:110
 msgid "Blockchain download"
 msgstr "Télécharger le blockchain"
 
-#: routes.py:138
+#: routes.py:142
 msgid "Unknown plotting form"
 msgstr "Forme inconnue"
 
-#: routes.py:188
+#: routes.py:192
 msgid "Error! Please see logs."
 msgstr "Erreur! Veuillez consulter les journaux."
 
-#: routes.py:214
+#: routes.py:218
 msgid "Unknown alerts form"
 msgstr "Forme inconnue"
 
-#: routes.py:234
+#: routes.py:238
 msgid "Saved cold wallet addresses."
 msgstr "Adresses de portefeuille froid enregistrées."
 
-#: routes.py:299
+#: routes.py:306
 msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
@@ -50,11 +50,11 @@ msgstr ""
 "Paramètres de cartographie enregistrés. Veuillez patienter 10 minutes "
 "pour générer l'emplacementinformations pour la carte."
 
-#: routes.py:307
+#: routes.py:314
 msgid "Unknown form action"
 msgstr "Action inconnue"
 
-#: routes.py:413
+#: routes.py:420
 #, python-format
 msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
@@ -63,7 +63,7 @@ msgstr ""
 "Aucun travailleur %(worker)s pour la blockchain %(blockchain)s. Veuillez "
 "sélectionner une autre blockchain."
 
-#: routes.py:419
+#: routes.py:426
 #, python-format
 msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
@@ -72,7 +72,7 @@ msgstr ""
 "Aucun fullnode répondant n'a été trouvé pour notifier %(blockchain)s. "
 "Veuillez vérifier vos travailleurs."
 
-#: routes.py:424
+#: routes.py:431
 #, python-format
 msgid ""
 "For Farming config, found no responding fullnode found for "
@@ -81,7 +81,7 @@ msgstr ""
 "Aucun fullnode répondant n'a été trouvé pour cultiver %(blockchain)s. "
 "Veuillez vérifier vos travailleurs."
 
-#: routes.py:431
+#: routes.py:438
 #, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
@@ -90,7 +90,7 @@ msgstr ""
 "Aucun fullnode répondant n'a été trouvé pour parceller %(blockchain)s. "
 "Veuillez vérifier vos travailleurs."
 
-#: routes.py:436
+#: routes.py:443
 #, python-format
 msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
@@ -99,7 +99,7 @@ msgstr ""
 "Aucun fullnode répondant n'a été trouvé pour %(blockchain)s. Veuillez "
 "vérifier vos travailleurs."
 
-#: routes.py:455
+#: routes.py:462
 msgid "Unsupported log type"
 msgstr "Type de journal non pris en charge"
 
@@ -109,11 +109,27 @@ msgid ""
 "Please allow 15 minutes..."
 msgstr ""
 
+#: actions/drives.py:33
+#, python-format
+msgid "Oops! No smartctl info found for device %(device)s on %(hostname)s."
+msgstr ""
+"Oups ! Aucune information smartcl n'a été trouvée pour l'appareil "
+"%(device)s sur %(hostname)s."
+
+#: actions/drives.py:54
+msgid "Failed to save display settings.  Please check Web Log."
+msgstr ""
+
+#: actions/drives.py:56
+#, fuzzy
+msgid "Saved display settings."
+msgstr "Paramètre de devise locale enregistré."
+
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
 msgstr "Inactif"
 
-#: actions/plotman.py:47 actions/plotman.py:48 models/chia.py:196
+#: actions/plotman.py:47 actions/plotman.py:48 models/chia.py:211
 #: models/plotman.py:67 templates/index.html:42 templates/index.html:52
 msgid "Active"
 msgstr "Sauvegarder"
@@ -131,7 +147,7 @@ msgstr "au dernier jour."
 msgid "secs"
 msgstr "secs"
 
-#: actions/stats.py:348 models/chia.py:236
+#: actions/stats.py:348 models/chia.py:251
 msgid "hour"
 msgstr "heure"
 
@@ -181,76 +197,77 @@ msgstr ""
 "Veuillez utiliser une version cohérente de Machinaris pour éviter les "
 "problèmes."
 
-#: models/chia.py:133 models/chia.py:230 models/drives.py:42
+#: models/chia.py:140 models/chia.py:245 models/drives.py:44
 msgid "days"
 msgstr "jours"
 
-#: models/chia.py:198 templates/summary.html:100
+#: models/chia.py:213 templates/summary.html:100 templates/wallet.html:128
 msgid "Syncing"
 msgstr "Synchronisation"
 
-#: models/chia.py:200 templates/index.html:54
+#: models/chia.py:215 templates/index.html:54
 msgid "Not available"
 msgstr "Indisponible"
 
-#: models/chia.py:202
+#: models/chia.py:217
 msgid "Not synced"
 msgstr "Non synchronisé"
 
-#: models/chia.py:205 templates/index.html:54 templates/summary.html:96
-#: templates/worker.html:78 templates/workers.html:72
+#: models/chia.py:220 templates/index.html:54 templates/plotting/jobs.html:114
+#: templates/plotting/workers.html:116 templates/summary.html:96
+#: templates/wallet.html:124 templates/worker.html:78 templates/workers.html:72
 msgid "Offline"
 msgstr "Hors ligne"
 
-#: models/chia.py:218 models/drives.py:47
+#: models/chia.py:233 models/drives.py:49
 msgid "years"
 msgstr "ans"
 
-#: models/chia.py:220
+#: models/chia.py:235
 msgid "year"
 msgstr "an"
 
-#: models/chia.py:222 models/drives.py:46
+#: models/chia.py:237 models/drives.py:48
 msgid "months"
 msgstr "mois"
 
-#: models/chia.py:224
+#: models/chia.py:239
 msgid "month"
 msgstr "mois"
 
-#: models/chia.py:226 models/drives.py:44
+#: models/chia.py:241 models/drives.py:46
 msgid "weeks"
 msgstr "semaines"
 
-#: models/chia.py:228
+#: models/chia.py:243
 msgid "week"
 msgstr "semaine"
 
-#: models/chia.py:232
+#: models/chia.py:247
 msgid "day"
 msgstr "jour"
 
-#: models/chia.py:234 models/drives.py:40
+#: models/chia.py:249 models/drives.py:42
 msgid "hours"
 msgstr "heures"
 
-#: models/chia.py:238
+#: models/chia.py:253
 msgid "minutes"
 msgstr "minutes"
 
-#: models/chia.py:240
+#: models/chia.py:255
 msgid "minute"
 msgstr "minute"
 
-#: models/chia.py:242
+#: models/chia.py:257
 msgid "Never (no plots)"
 msgstr "Jamais (pas de plots)"
 
-#: models/chia.py:244
+#: models/chia.py:259
 msgid "Soon"
 msgstr "Bientôt"
 
-#: models/chia.py:246
+#: models/chia.py:261
 msgid "and"
 msgstr "et"
 
@@ -258,7 +275,7 @@ msgstr "et"
 msgid "Alerts: Recent Notifications"
 msgstr "Alertes: notifications récentes"
 
-#: templates/alerts.html:72 templates/drives.html:56
+#: templates/alerts.html:72 templates/drives.html:86
 #: templates/settings/alerts.html:36 templates/settings/farming.html:37
 #: templates/settings/plotting.html:37 templates/settings/tools.html:36
 #: templates/worker.html:14
@@ -313,11 +330,11 @@ msgstr ""
 msgid "Chiadog Log on "
 msgstr "Journaux Chiadog de "
 
-#: templates/alerts.html:147 templates/plotting/jobs.html:367
+#: templates/alerts.html:147 templates/plotting/jobs.html:378
 msgid "Starting..."
 msgstr "Commencer..."
 
-#: templates/alerts.html:154 templates/plotting/jobs.html:377
+#: templates/alerts.html:154 templates/plotting/jobs.html:388
 msgid "Stopping..."
 msgstr "Arrêt..."
 
@@ -380,13 +397,14 @@ msgstr "Pools"
 msgid "Workers"
 msgstr "Workers"
 
-#: templates/base.html:90 templates/drives.html:30
+#: templates/base.html:90 templates/drives.html:60
 msgid "Drives"
 msgstr ""
 
 #: templates/base.html:96 templates/connections.html:25
-#: templates/connections.html:59 templates/summary.html:25
-#: templates/summary.html:53 templates/wallet.html:23 templates/wallet.html:46
+#: templates/connections.html:59 templates/drives.html:24
+#: templates/drives.html:53 templates/summary.html:25 templates/summary.html:53
+#: templates/wallet.html:23 templates/wallet.html:46
 msgid "Settings"
 msgstr "Paramètres"
 
@@ -438,7 +456,7 @@ msgstr "Plotman"
 msgid "Blockchain Summary"
 msgstr "Blockchain"
 
-#: templates/blockchains.html:32 templates/drives.html:61
+#: templates/blockchains.html:32 templates/drives.html:91
 #: templates/summary.html:74 templates/wallet.html:109
 msgid "Status"
 msgstr "Statut"
@@ -451,7 +469,7 @@ msgstr "Hauteur maximale"
 msgid "Peak Time"
 msgstr "Heure de pointe"
 
-#: templates/blockchains.html:35 templates/drives.html:63
+#: templates/blockchains.html:35 templates/drives.html:93
 #: templates/wallet.html:114
 msgid "Updated At"
 msgstr "Mis à jour à"
@@ -489,18 +507,19 @@ msgstr "Clé de licence Maxmind (obligatoire):"
 msgid "Mapbox Access Token (Optional):"
 msgstr "Jeton d'accès Mapbox (facultatif):"
 
-#: templates/connections.html:50 templates/plotting/jobs.html:16
-#: templates/plotting/jobs.html:34 templates/plotting/jobs.html:52
-#: templates/plotting/workers.html:16 templates/plotting/workers.html:34
-#: templates/settings/pools.html:39 templates/summary.html:44
-#: templates/wallet.html:65 templates/wallet.html:92
+#: templates/connections.html:50 templates/drives.html:41
+#: templates/plotting/jobs.html:16 templates/plotting/jobs.html:34
+#: templates/plotting/jobs.html:52 templates/plotting/workers.html:16
+#: templates/plotting/workers.html:34 templates/settings/pools.html:39
+#: templates/summary.html:44 templates/wallet.html:65 templates/wallet.html:92
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/connections.html:51 templates/settings/alerts.html:55
-#: templates/settings/farming.html:56 templates/settings/plotting.html:56
-#: templates/settings/pools.html:41 templates/settings/tools.html:55
-#: templates/summary.html:45 templates/wallet.html:66 templates/wallet.html:93
+#: templates/connections.html:51 templates/drives.html:42
+#: templates/settings/alerts.html:55 templates/settings/farming.html:56
+#: templates/settings/plotting.html:56 templates/settings/pools.html:41
+#: templates/settings/tools.html:55 templates/summary.html:45
+#: templates/wallet.html:66 templates/wallet.html:93
 msgid "Save"
 msgstr "Sauvegarder"
 
@@ -582,43 +601,65 @@ msgstr "Ce worker Machinaris est contrôlé à:"
 
 #: templates/drives.html:9
 msgid "Smartctl Status"
-msgstr ""
+msgstr "Statut Smartctl"
 
-#: templates/drives.html:57
-#, fuzzy
+#: templates/drives.html:30
+msgid "Good"
+msgstr "Bien"
+
+#: templates/drives.html:33
+msgid "Warn"
+msgstr "Avertissement"
+
+#: templates/drives.html:37
+msgid "Alert"
+msgstr "Alerte"
+
+#: templates/drives.html:87
 msgid "Device"
-msgstr "Service"
+msgstr "Appareil"
 
-#: templates/drives.html:58
-#, fuzzy
+#: templates/drives.html:88
 msgid "Model"
-msgstr "Mode"
+msgstr "Modèle"
 
-#: templates/drives.html:59
+#: templates/drives.html:89
 msgid "Serial #"
-msgstr ""
+msgstr "Numéro de série"
 
-#: templates/drives.html:60
+#: templates/drives.html:90 templates/drives.html:165
 msgid "Capacity"
-msgstr ""
+msgstr "Capacity"
 
-#: templates/drives.html:62
+#: templates/drives.html:92 templates/drives.html:164
 msgid "Temperature"
-msgstr ""
+msgstr "Température"
 
-#: templates/drives.html:82 templates/drives.html:134
+#: templates/drives.html:114 templates/drives.html:173
 msgid "Passed"
-msgstr ""
+msgstr "Passé"
 
-#: templates/drives.html:169
+#: templates/drives.html:166
+msgid "Powered On"
+msgstr "Durée de fonctionnement"
+
+#: templates/drives.html:208
+msgid "Drive status updated"
+msgstr "État du disque mis à jour"
+
+#: templates/drives.html:217
 msgid "No drives accessible to smartctl inside the Machinaris containers."
 msgstr ""
+"Aucun disque accessible à smartctl à l'intérieur des conteneurs "
+"Machinaris."
 
-#: templates/drives.html:170
+#: templates/drives.html:218
 msgid "Please configure Docker to allow smartctl access to host devices."
 msgstr ""
+"Veuillez configurer Docker pour autoriser l'accès smartctl aux appareils "
+"hôtes."
 
-#: templates/drives.html:171 templates/workers.html:106
+#: templates/drives.html:219 templates/workers.html:106
 #, python-format
 msgid "For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
 msgstr ""
@@ -673,19 +714,17 @@ msgstr ""
 msgid ""
 "However, you may view it yourself by executing this from within the "
 "Docker container."
-msgstr ""
+msgstr "REMARQUE : Machinaris n'affichera jamais votre clé privée ici."
 
 #: templates/keys.html:54
 msgid "Best Practices"
 msgstr "Les meilleures pratiques"
 
 #: templates/keys.html:71
-#, fuzzy
 msgid "No keys found from any farmers. Not added?"
 msgstr "Aucune blockchain trouvée chez les farmers. Pas ajouté?"
 
 #: templates/keys.html:72
-#, fuzzy
 msgid "Try running \"chia keys show\" on your farmers to verify."
 msgstr "Essayez d'exécuter \"chia show --state\" sur vos farmers pour vérifier."
 
@@ -866,11 +905,11 @@ msgstr "Portefeuille"
 msgid "EDV"
 msgstr "EDV"
 
-#: templates/summary.html:98
+#: templates/summary.html:98 templates/wallet.html:126
 msgid "Synced"
 msgstr "Synchronisé"
 
-#: templates/summary.html:102
+#: templates/summary.html:102 templates/wallet.html:130
 msgid "Not Synced"
 msgstr "Non synchronisé"
 
@@ -906,15 +945,15 @@ msgstr "Solde de portefeuille froid"
 msgid "Total Balance"
 msgstr "Solde total"
 
-#: templates/wallet.html:137
+#: templates/wallet.html:140
 msgid "Edit Wallet"
 msgstr "Modifier le portefeuille"
 
-#: templates/wallet.html:148
+#: templates/wallet.html:151
 msgid "Wallet Details"
 msgstr "Détails du portefeuille"
 
-#: templates/wallet.html:172
+#: templates/wallet.html:175
 msgid ""
 "No wallet status received.  Perhaps just starting?  Please allow at least"
 " 10 minutes to update."
@@ -922,7 +961,7 @@ msgstr ""
 "Aucun statut de portefeuille reçu. Peut-être que vous venez juste de "
 "commencer? Veuillez autoriser au moins 10 minutes pour mettre à jour."
 
-#: templates/wallet.html:173
+#: templates/wallet.html:176
 msgid ""
 "You can also try running \"chia wallet show\" on your fullnode's in-"
 "container shell to verify."
@@ -992,13 +1031,21 @@ msgstr "Avertissements récents"
 msgid "Yay! No issues currently."
 msgstr "Yay! Aucun problème actuellement."
 
-#: templates/farming/workers.html:116 templates/worker.html:183
+#: templates/farming/workers.html:116 templates/worker.html:190
 msgid "Disk Space Used (TB)"
 msgstr "Espace disque utilisé (TB)"
 
-#: templates/farming/workers.html:122 templates/worker.html:189
+#: templates/farming/workers.html:122 templates/worker.html:196
 msgid "Disk Space Free (TB)"
 msgstr "Espace disque libre (TB)"
+
+#: templates/worker.html:246
+msgid "Disk Space Used (GB)"
+msgstr "Espace disque utilisé (GB)"
+
+#: templates/worker.html:252
+msgid "Disk Space Free (GB)"
+msgstr "Espace disque libre (GB)"
 
 #: templates/worker_launch.html:50 templates/worker_launch.html:640
 #: templates/worker_launch.html:669
@@ -1243,8 +1290,8 @@ msgstr ""
 msgid "Plot Check"
 msgstr "Vérification de la plotes"
 
-#: templates/farming/plots.html:86 templates/plotting/jobs.html:117
-#: templates/plotting/workers.html:122
+#: templates/farming/plots.html:86 templates/plotting/jobs.html:128
+#: templates/plotting/workers.html:133
 msgid "Worker is offline."
 msgstr "Worker est hors ligne."
 
@@ -1313,11 +1360,11 @@ msgstr ""
 " alors s'il vous plaît arrêtez Plotman premier en haut à droite. "
 "Continuer?"
 
-#: templates/plotting/jobs.html:17 templates/plotting/jobs.html:193
+#: templates/plotting/jobs.html:17 templates/plotting/jobs.html:204
 msgid "Kill Selected"
 msgstr "Tuer la sélection"
 
-#: templates/plotting/jobs.html:27 templates/plotting/jobs.html:123
+#: templates/plotting/jobs.html:27 templates/plotting/jobs.html:134
 msgid "Start Plotting"
 msgstr "Commence Plotting"
 
@@ -1335,7 +1382,7 @@ msgstr ""
 msgid "Start"
 msgstr "Commence"
 
-#: templates/plotting/jobs.html:45 templates/plotting/jobs.html:120
+#: templates/plotting/jobs.html:45 templates/plotting/jobs.html:131
 msgid "Stop Plotting"
 msgstr "Arrête Plotting"
 
@@ -1375,32 +1422,52 @@ msgstr "OK"
 msgid "Jobs"
 msgstr "Jobs"
 
-#: templates/plotting/jobs.html:189
+#: templates/plotting/jobs.html:108 templates/plotting/workers.html:110
+msgid "Disabled"
+msgstr "Désactivé"
+
+#: templates/plotting/jobs.html:110 templates/plotting/workers.html:112
+msgid "Running"
+msgstr "Fonctionnement"
+
+#: templates/plotting/jobs.html:112 templates/plotting/workers.html:114
+msgid "Stopped"
+msgstr "Arrêté"
+
+#: templates/plotting/jobs.html:200
 msgid "Suspend Selected"
 msgstr "Suspendre la sélection"
 
-#: templates/plotting/jobs.html:191
+#: templates/plotting/jobs.html:202
 msgid "Resume Selected"
 msgstr "Continuer la sélection"
 
-#: templates/plotting/jobs.html:204
+#: templates/plotting/jobs.html:215
 #, python-format
 msgid "Plotting Speed - k%(k_size)s Plots"
 msgstr "Vitesse de Plotting - k%(k_size)s Plots"
 
-#: templates/plotting/jobs.html:341
+#: templates/plotting/jobs.html:285
+msgid "Date"
+msgstr "Date"
+
+#: templates/plotting/jobs.html:302
+msgid "Time (minutes)"
+msgstr "Temps (minutes)"
+
+#: templates/plotting/jobs.html:352
 msgid "Suspending..."
 msgstr "Suspendre..."
 
-#: templates/plotting/jobs.html:349
+#: templates/plotting/jobs.html:360
 msgid "Resuming..."
 msgstr "Reprendre..."
 
-#: templates/plotting/jobs.html:358
+#: templates/plotting/jobs.html:369
 msgid "Killing..."
 msgstr "Tuer..."
 
-#: templates/plotting/workers.html:9 templates/plotting/workers.html:128
+#: templates/plotting/workers.html:9 templates/plotting/workers.html:139
 msgid "Start Archiving"
 msgstr "Démarrer l'archivage"
 
@@ -1414,7 +1481,7 @@ msgstr ""
 "configuré.Les parcelles terminées seront distribuées localement ou "
 "transférées à distance.Continuez?"
 
-#: templates/plotting/workers.html:27 templates/plotting/workers.html:125
+#: templates/plotting/workers.html:27 templates/plotting/workers.html:136
 msgid "Stop Archiving"
 msgstr "Arrêter l'archivage"
 
@@ -1443,9 +1510,18 @@ msgstr ""
 msgid "Archiving"
 msgstr "Archivage"
 
-#: templates/plotting/workers.html:119
+#: templates/plotting/workers.html:130
 msgid "Archiving is disabled.  See Settings | Plotting page."
 msgstr "L'archivage est désactivé. Voir page Paramètres | Traçage."
+
+#: templates/plotting/workers.html:256
+#: templates/views/index_script_block.js:152
+msgid "Time - Last 24 Hours"
+msgstr "Heure - Dernières 24 heures"
+
+#: templates/plotting/workers.html:273
+msgid "Plotting Disk Usage (GB)"
+msgstr "Utilisation plotting du disque (GB)"
 
 #: templates/settings/alerts.html:57 templates/settings/farming.html:58
 #: templates/settings/plotting.html:58 templates/settings/tools.html:57
@@ -1532,4 +1608,16 @@ msgstr "Commencer..."
 #: templates/settings/pools.html:197
 msgid "PlotNFT Log on "
 msgstr "Journaux PlotNFT de"
+
+#: templates/views/index_script_block.js:85
+msgid "Time - Recent"
+msgstr "Heure - Récent"
+
+#: templates/views/index_script_block.js:102
+msgid "Time Taken (seconds)"
+msgstr "Temps pris (secondes)"
+
+#: templates/views/index_script_block.js:169
+msgid "Partials Submitted"
+msgstr "Partiels soumis"
 

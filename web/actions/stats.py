@@ -8,7 +8,7 @@ import sqlite3
 from flask import g
 from sqlalchemy import or_
 from shutil import disk_usage
-from flask_babel import _, lazy_gettext as _l
+from flask_babel import _, lazy_gettext as _l, format_decimal
 
 from common.config import globals
 from common.utils import converters, fiat
@@ -68,7 +68,7 @@ def plots_size_diff(since, blockchain):
         #app.logger.info(before.value)
         gibs = (latest.value - before.value)
         fmtted = converters.gib_to_fmt(gibs)
-        if fmtted == "0.000 B":
+        if fmtted == "0 B":
             result = ""
         elif not fmtted.startswith('-'):
             result = "+{0} in last day.".format(fmtted)
@@ -102,7 +102,7 @@ def netspace_size_diff(since, blockchain):
         #app.logger.info(before.value)
         gibs = (latest.value - before.value)
         fmtted = converters.gib_to_fmt(gibs)
-        if fmtted == "0.000 B":
+        if fmtted == "0 B":
             result = ""
         elif not fmtted.startswith('-'):
             result = ("+{0} ".format(fmtted))  + _('in last day.')
@@ -296,9 +296,9 @@ def calc_estimated_daily_value(blockchain):
         app.logger.info("Failed to calculate EDV for {0} because {1}".format(blockchain, str(ex)))
     if edv:
         if edv >= 1000:
-            result.append("{:,.0f} {}".format(edv, symbol))
+            result.append("{0} {1}".format(format_decimal(round(edv, 0)), symbol))
         else:
-            result.append("{:,.3f} {}".format(edv, symbol))
+            result.append("{0} {1}".format(format_decimal(round(edv, 3)), symbol))
     else:
         result.append('')
     try:
@@ -335,7 +335,7 @@ def load_summary_stats(blockchains):
         try:
             max_record = db.session.query(Challenge).filter(Challenge.blockchain==blockchain).order_by(Challenge.time_taken.desc()).first()
             if max_record:  # Strip of 'secs' unit before rounding
-                max_response = "%.2f " % float(max_record.time_taken.split()[0]) + _('secs')
+                max_response = "{0} / {1}".format(format_decimal(round(float(max_record.time_taken.split()[0]),2)), _('secs'))
         except Exception as ex:
             app.logger.error(ex)
             app.logger.info("No recent challenge response times found for {0}".format(blockchain))
@@ -345,7 +345,7 @@ def load_summary_stats(blockchains):
                 try:
                     day_ago = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M")
                     partial_records = db.session.query(Partial).filter(Partial.blockchain==blockchain, Partial.created_at >= day_ago ).order_by(Partial.created_at.desc()).all()
-                    partials_per_hour = "%.2f / " % (len(partial_records) / 24) + _('hour')
+                    partials_per_hour = "{0} / {1}".format(format_decimal(round(len(partial_records)/24,2)), _('hour'))
                 except Exception as ex:
                     app.logger.error(ex)
                     app.logger.info("No recent partials submitted for {0}".format(blockchain))

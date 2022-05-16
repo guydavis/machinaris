@@ -121,13 +121,16 @@
                 <td>{{wallet.blockchain}}</td>
                 <td>
                     {% if wallet.status == 'Offline' %}
-                      <i class="bi-dash-circle text-danger"></i>
+                      <i class="bi-dash-circle text-danger"></i> &nbsp; {{_('Offline')}}
                     {% elif wallet.status.lower().startswith('synced') %}
-                      <i class="bi-check-circle text-success"></i>
+                      <i class="bi-check-circle text-success"></i> &nbsp; {{_('Synced')}}
+                    {% elif wallet.status.lower().startswith('syncing') %}
+                      <i class="bi-check-circle text-warning"></i> &nbsp; {{_('Syncing')}}
+                      {% elif wallet.status.lower().startswith('not synced') %}
+                      <i class="bi-check-circle text-danger"></i> &nbsp; {{_('Not Synced')}}
                     {% else %}
-                      <i class="bi-exclamation-triangle text-warning"></i>
-                    {% endif %} &nbsp;
-                    {{wallet.status}}
+                      <i class="bi-exclamation-triangle text-warning"></i> &nbsp; {{wallet.status}}
+                    {% endif %} 
                 </td>
                 <td>{{wallet.hot_balance}}</td>
                 <td>{{wallet.cold_balance}}</td>

@@ -103,7 +103,18 @@
                 <div class="btn-group">
                     <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false" id="{{ plotter.hostname }}_btn">
-                        {{ plotter.displayname }}: {{plotter.plotting_status()}}
+                        {{ plotter.displayname }}: 
+                        {% if plotter.plotting_status().lower() == 'disabled' %}
+                            {{_('Disabled')}}
+                        {% elif plotter.plotting_status().lower() == 'running' %}
+                            {{_('Running')}}
+                        {% elif plotter.plotting_status().lower() == 'stopped' %}
+                            {{_('Stopped')}}
+                        {% elif plotter.plotting_status().lower() == 'offline' %}
+                            {{_('Offline')}}
+                        {% else %}
+                            {{plotter.plotting_status()}}
+                        {% endif %}
                     </button>
                     <ul class="dropdown-menu bg-dark btn-outline-success">
                         {% for worker in plotter.workers %}
@@ -271,7 +282,7 @@
                         },
                         title: {
                             display: true,
-                            text: 'Date',
+                            text: "{{_('Date')}}",
                             color: "#c7c7c7",  
                             font: {
                                 size: 18 
@@ -288,7 +299,7 @@
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: "Time (minutes)",
+                            text: "{{_('Time (minutes)')}}",
                             color: "#c7c7c7",  
                             font: {
                                 size: 18 
