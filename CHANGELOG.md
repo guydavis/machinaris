@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.7.2] - 2022-05-?
+## [0.7.2] - 2022-05-17
  - Drives monitoring page - allow [overrides of smartctl commands](https://github.com/guydavis/machinaris/wiki/Drives#override-command) for special hardware. Drive failure alerts thru our enhanced Chiadog.
  - Alerts: per-notifier [ignore setting](https://github.com/guydavis/machinaris/wiki/ChiaDog#ignore-alerts) to prevent unwanted alerts, based on criteria.
  - German translations of the Machinaris WebUI by @ApfelBirneKreis.  Big thanks!
