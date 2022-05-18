@@ -4,15 +4,15 @@
 #
 
 # Bootstrap Icons
-BSI_VERSION=1.8.1
-BOOTSTRAP_VERSION=5.1.3
+BSI_VERSION=1.8.2
+BOOTSTRAP_VERSION=5.2.0-beta1
 BASEPATH=${JS_LIBS_BASEPATH:-/machinaris/web/static/3rd_party}
 
 # List of other css/js links
 LIST="
-https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.css
-https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.js
-https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js
+https://cdn.datatables.net/1.12.0/css/dataTables.bootstrap5.css
+https://cdn.datatables.net/1.12.0/js/dataTables.bootstrap5.js
+https://cdn.datatables.net/1.12.0/js/jquery.dataTables.js
 https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js
 https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.1.0/dist/chartjs-adapter-luxon.min.js
 https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js

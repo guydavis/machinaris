@@ -4,8 +4,8 @@
 #
 
 CRYPTODOGE_BRANCH=$1
-# On 2021-11-11
-HASH=54926a63134e7aaa12e223afb0814583b779d17f
+# On 2022-05-18
+HASH=4ec389b615b9054afcf43d14f7d18434b6b4d2de
 
 if [ -z ${CRYPTODOGE_BRANCH} ]; then
 	echo 'Skipping Cryptodoge install as not requested.'
@@ -15,8 +15,6 @@ else
 	git submodule update --init mozilla-ca
 	git checkout $HASH
 	chmod +x install.sh
-	# 2022-01-30: pip broke due to https://github.com/pypa/pip/issues/10825
-	sed -i 's/upgrade\ pip$/upgrade\ "pip<22.0"/' install.sh
 	/usr/bin/sh ./install.sh
 
 	if [ ! -d /chia-blockchain/venv ]; then

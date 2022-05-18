@@ -4,8 +4,8 @@
 #
 
 FLAX_BRANCH=$1
-# On 2022-03-13
-HASH=e72b47ca1c7086330b0facba6a2e7fc5967000eb
+# On 2022-05-18
+HASH=5a314ca5f7f12adb16db8a9a13366f0df14ad17d
 
 if [ -z ${FLAX_BRANCH} ]; then
 	echo 'Skipping Flax install as not requested.'
@@ -16,8 +16,6 @@ else
 	git checkout $HASH
 	git submodule update --init mozilla-ca
 	chmod +x install.sh
-	# 2022-01-30: pip broke due to https://github.com/pypa/pip/issues/10825
-	sed -i 's/upgrade\ pip$/upgrade\ "pip<22.0"/' install.sh
 	/usr/bin/sh ./install.sh
 
 	if [ ! -d /chia-blockchain/venv ]; then

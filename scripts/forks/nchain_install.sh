@@ -1,6 +1,8 @@
 #!/bin/env bash
 #
 # Installs NChain as per https://gitee.com/ext9/ext9-blockchain
+# NOTE: As of 2022-05-18, the Gitee repository went "member-only" whatever that means. 
+#       So still using an old hash from 2021.  Seems like this blockchain fork is dead.
 #
 
 NCHAIN_BRANCH=$1

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.3] - 2022-06-?
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain) - v1.3.4, matches Chia 1.3.4, please run: `cactus db upgrade`
+ - [Cryptodoge](https://github.com/CryptoDoge-Network/cryptodoge) - v1.3.4, matches Chia 1.3.4, please run: `cryptodoge db upgrade`
+ - [Flax](https://github.com/Flax-Network/flax-blockchain) - v0.1.8, matches Chia 1.3.3
+
 ## [0.7.2] - 2022-05-17
  - Drives monitoring page - allow [overrides of smartctl commands](https://github.com/guydavis/machinaris/wiki/Drives#override-command) for special hardware. Drive failure alerts thru our enhanced Chiadog.
  - Alerts: per-notifier [ignore setting](https://github.com/guydavis/machinaris/wiki/ChiaDog#ignore-alerts) to prevent unwanted alerts, based on criteria.
@@ -23,7 +28,8 @@ All notable changes to this project will be documented in this file. The format 
  - [Internationalization](https://github.com/guydavis/machinaris/wiki/Localization) for locale-specific text, numbers, and currencies.  Huge thanks to @antcasq (pt_PT) and @fabriziocacicia (it_IT) for providing translations!
  - Geolocation of peer connections for each blockchain by their IP address. [Optionally enabled](https://github.com/guydavis/machinaris/wiki/Connections) using a free Maxmind account.
  - [Flax](https://github.com/Flax-Network/flax-blockchain) - updated to v0.1.6, supporting new v2 DB format.
- - [Silicoin](https://github.com/silicoin-network/silicoin-blockchain) - supported again as per Discord votes.
+ - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain/releases) - update to version 2.0.2
+ - [Silicoin](https://github.com/silicoin-network/silicoin-blockchain) - v1.2.2, supported again as per Discord votes.
 
 ## [0.6.9] - 2022-02-04
  - [MMX](https://github.com/madMAx43v3r/mmx-node) - support for this new blockchain, which requires its own plot files.
