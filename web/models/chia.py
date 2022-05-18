@@ -363,15 +363,18 @@ class Wallets:
                 'updated_at': wallet.updated_at }) 
 
     def exclude_cat_wallets(self, wallet_details):
-        skip = 0
         details = []
-        for line in wallet_details.split('\n'):
-            if "Token:" in line:  # Example: "Chia Holiday 2021 Token:"
-                skip = 3 # Skip next 3 lines for these useless CAT wallets
-            elif skip > 0:
-                skip = skip -1 
+        chunks = wallet_details.split('\n\n')
+        for chunk in chunks:
+            is_cat_wallet = False
+            lines = chunk.split('\n')
+            for line in lines:
+                if re.match('^\s+-Type:\s+CAT$', line):
+                    is_cat_wallet = True
+            if is_cat_wallet:
+                app.logger.info("Ignoring balance of CAT type wallet named: {0}".format(lines[0][:-1]))
             else:
-                details.append(line)
+                details.extend(chunk.split('\n'))
         return '\n'.join(details)
 
     def sum_chia_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
