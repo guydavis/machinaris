@@ -63,7 +63,7 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   /usr/bin/bash /machinaris/scripts/plotman_setup.sh > /tmp/plotman_setup.log 2>&1
 
   # Conditionally install chiadog on harvesters and fullnodes
-  /usr/bin/bash /machinaris/scripts/chiadog_setup.sh > /tmp/chiadog_setup.log 2>&1
+  /usr/bin/bash /machinaris/scripts/chiadog_setup.sh ${CHIADOG_BRANCH} > /tmp/chiadog_setup.log 2>&1
 
   # During concurrent startup of multiple fork containers, stagger less important setups
   sleep $[ ( $RANDOM % 180 )  + 1 ]s

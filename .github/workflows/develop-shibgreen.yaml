@@ -40,6 +40,7 @@ jobs:
           push: true
           build-args: |
             "MACHINARIS_STREAM=develop"
+            "CHIADOG_BRANCH=dev"
             "SHIBGREEN_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-shibgreen:develop
