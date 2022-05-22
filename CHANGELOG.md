@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.7.3] - 2022-06-?
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain) - v1.3.4, matches Chia 1.3.4, please run: `cactus db upgrade`
+ - [Chives](https://github.com/HiveProject2021/chives-blockchain) - v1.3.0 (pre-release)
  - [Cryptodoge](https://github.com/CryptoDoge-Network/cryptodoge) - v1.3.4, matches Chia 1.3.4, please run: `cryptodoge db upgrade`
  - [Flax](https://github.com/Flax-Network/flax-blockchain) - v0.1.8, matches Chia 1.3.3
 
