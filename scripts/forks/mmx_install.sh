@@ -21,6 +21,6 @@ else
 	git clone --branch ${MMX_BRANCH} --single-branch https://github.com/madMAx43v3r/mmx-node.git /mmx-node
 	cd /mmx-node
 	git submodule update --init --recursive 
-	#git checkout $HASH
-	./make_devel.sh
+	git checkout $HASH
+	./make_release.sh
 fi
