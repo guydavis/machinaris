@@ -22,7 +22,8 @@ from . import workers
 from . import metrics
 
 from .stats import plottingdiskused,plottingdiskfree,plotsdiskused, \
-    plotsdiskfree,plotcount,plotssize,totalcoins,netspacesize,timetowin
+    plotsdiskfree,plotcount,plotssize,totalcoins,netspacesize,timetowin, \
+    farmedblocks
 
 MODULES = (
     actions,
