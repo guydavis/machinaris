@@ -543,3 +543,9 @@ def upgrade_drives():
 
 def downgrade_drives():
     pass
+
+def upgrade_stat_farmed_blocks():
+    pass
+
+def downgrade_stat_farmed_blocks():
+    pass
