@@ -356,3 +356,8 @@ def downgrade_stat_plotting_disk_free():
     pass
     # ### end Alembic commands ###
 
+def upgrade_stat_farmed_blocks():
+    pass
+
+def downgrade_stat_farmed_blocks():
+    pass
