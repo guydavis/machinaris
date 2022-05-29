@@ -58,8 +58,8 @@ MODULES = (
     netspacesize,
     timetowin,
     metrics,
+    farmedblocks,
 )
-
 
 def register_blueprints(api):
     for module in MODULES:

@@ -37,8 +37,8 @@ class StatFarmedBlockss(MethodView):
             return "No farmed blocks provided.", 400
         items = []
         for new_item in new_items:
-            # Skip any previously sent by existing challenge_id from that host
-            if not db.session.query(StatFarmedBlocks).filter(StatFarmedBlocks.hostname==new_item['hostname'], StatFarmedBlocks.challenge_id==new_item['challenge_id']).first():
+            # Skip any previously sent by existing farmed_block from that host
+            if not db.session.query(StatFarmedBlocks).filter(StatFarmedBlocks.hostname==new_item['hostname'], StatFarmedBlocks.farmed_block==new_item['farmed_block']).first():
                 item = StatFarmedBlocks(**new_item)
                 items.append(item)
                 db.session.add(item)

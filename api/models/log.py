@@ -77,35 +77,43 @@ class Blocks:
         self.rows = []
         plot_files = []
         plots_past_filter = proofs_found = time_taken = farmed_block = None
+        cli_stdout.append('--') # add a trailing -- to force last parse
         for line in cli_stdout:
             try:
                 #app.logger.info(line)
                 if "proofs in" in line:
                     plot_files.append(re.search('proofs in (.*) in (\d+\.?\d*) s$', line, re.IGNORECASE).group(1))
                 elif "eligible for farming" in line:
-                    challenge_id = re.search('eligible for farming (\w+)', line, re.IGNORECASE).group(1) + '...',
+                    challenge_id = re.search('eligible for farming (\w+)', line, re.IGNORECASE).group(1)
                     plots_past_filter = str(re.search('INFO\s*(\d+) plots were eligible', line, re.IGNORECASE).group(1)) + \
                             '/' + str(re.search('Total (\d+) plots', line, re.IGNORECASE).group(1))
                     proofs_found = int(re.search('Found (\d+) proofs', line, re.IGNORECASE).group(1))
                     time_taken = str(re.search('Time: (\d+\.?\d*) s.', line, re.IGNORECASE).group(1)) + ' secs'
-                    created_at =  line.split()[0].replace('T', ' ')
                 elif "Farmed unfinished_block" in line:
-                    app.logger.info(line)
-                    farmed_block = re.search('Farmed unfinished_block (\w)+', line, re.IGNORECASE).group(1)
+                    created_at =  line[line.find(':')+1:].split()[0].replace('T', ' ')
+                    farmed_block = re.search('Farmed unfinished_block (\w+)', line, re.IGNORECASE).group(1)
                 elif "--" == line:
-                    if challenge_id and plots_past_filter and proofs_found and time_taken and farmed_block:
+                    if challenge_id and plots_past_filter and proofs_found and time_taken and farmed_block and len(plot_files):
                         self.rows.append({
                             'challenge_id': challenge_id,
-                            'plot_files': plot_files,
+                            'plot_files': ','.join(plot_files),
                             'plots_past_filter': plots_past_filter,
                             'proofs_found': proofs_found,
                             'time_taken': time_taken,
                             'farmed_block': farmed_block,
                             'created_at': created_at
                         })
+                        #app.logger.info(self.rows)
                         plots_past_filter = proofs_found = time_taken = farmed_block = None
+                        plot_files = []
                     else:
-                        app.logger.info("Missing farmed blocks data...")
+                        app.logger.info("challenge_id: {0}".format(challenge_id))
+                        app.logger.info("plot_files: {0}".format(plot_files))
+                        app.logger.info("plots_past_filter: {0}".format(plots_past_filter))
+                        app.logger.info("proofs_found: {0}".format(proofs_found))
+                        app.logger.info("time_taken: {0}".format(time_taken))
+                        app.logger.info("created_at: {0}".format(created_at))
+                        app.logger.info("Missing farmed blocks data for farmed_block {0}".format(farmed_block))
             except:
                 app.logger.info("Failed to parse blocks line: {0}".format(line))
                 app.logger.info(traceback.format_exc())

@@ -1,7 +1,7 @@
 Schema versioning with Flask-Migrate
 
 ## Creating a migration
-As developer, modify models, then run this to generate a new migration and commit it.
+As developer, modify models, then run this to generate a new migration and commit it.  When adding a new table, one must add the upgrade/downgrade method to past migration files with just a `pass` for method body.
 
 ```
 cd /code/machinaris/api
