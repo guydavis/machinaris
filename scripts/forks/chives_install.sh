@@ -10,9 +10,7 @@ HASH=c1111a79d7a1eb02a0bd2111307e266583bc67d1
 if [ -z ${CHIVES_BRANCH} ]; then
 	echo 'Skipping Chives install as not requested.'
 else
-	git config --system core.longpaths true
 	git clone --branch ${CHIVES_BRANCH} --recurse-submodules https://github.com/HiveProject2021/chives-blockchain.git /chives-blockchain 
-	/chives-blockchain/venv/bin/python -m pip install --upgrade pip
 	cd /chives-blockchain
 	git checkout $HASH
 	chmod +x install.sh
