@@ -12,7 +12,7 @@ if [ -z ${CHIVES_BRANCH} ]; then
 else
 	git clone --branch ${CHIVES_BRANCH} --recurse-submodules https://github.com/HiveProject2021/chives-blockchain.git /chives-blockchain 
 	cd /chives-blockchain
-	git checkout $HASH
+	#git checkout $HASH
 	chmod +x install.sh
 	/usr/bin/sh ./install.sh
 
