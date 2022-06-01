@@ -361,3 +361,9 @@ def downgrade_stat_farmed_blocks():
     op.drop_table('stat_farmed_blocks')
     # ### end Alembic commands ###
 
+def upgrade_stat_wallet_balances():
+    pass
+
+
+def downgrade_stat_wallet_balances():
+    pass

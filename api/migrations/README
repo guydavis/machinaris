@@ -5,6 +5,7 @@ As developer, modify models, then run this to generate a new migration and commi
 
 ```
 cd /code/machinaris/api
+FLASK_APP=__init__.py flask db stamp head
 FLASK_APP=__init__.py flask db migrate
 chown -R 1000.users .
 ```

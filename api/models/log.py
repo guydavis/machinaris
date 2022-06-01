@@ -76,7 +76,7 @@ class Blocks:
         self.columns = [ 'challenge_id', 'plot_files', 'proofs_found', 'time_taken', 'farmed_block', 'created_at']
         self.rows = []
         plot_files = []
-        plots_past_filter = proofs_found = time_taken = farmed_block = None
+        challenge_id = plots_past_filter = proofs_found = time_taken = farmed_block = None
         cli_stdout.append('--') # add a trailing -- to force last parse
         for line in cli_stdout:
             try:

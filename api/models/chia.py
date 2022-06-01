@@ -1,3 +1,4 @@
+import locale
 import os
 import re
 import traceback
@@ -6,7 +7,8 @@ from datetime import datetime
 
 from api import app, utils
 from common.config import globals
-from common.utils import converters
+from common.utils import converters, fiat
+from common.models import wallets as w
 
 class FarmSummary:
 
@@ -66,6 +68,86 @@ class Wallet:
                 "SIGWINCH" in line:
                 continue
             self.text += line + '\n'
+
+class Wallets:
+
+    def __init__(self, wallets, cold_wallet_addresses={}):
+        self.wallets = wallets
+        self.columns = ['hostname', 'details', 'updated_at']
+        self.rows = []
+        self.cold_wallet_addresses = cold_wallet_addresses
+        for wallet in wallets:
+            app.logger.debug("Wallets.init(): Parsing wallet for blockchain: {0}".format(wallet.blockchain))
+            if wallet.blockchain == 'mmx':
+                hot_balance = self.sum_mmx_wallet_balance(wallet.hostname, wallet.blockchain, False)
+            else:
+                hot_balance = self.sum_chia_wallet_balance(wallet.hostname, wallet.blockchain, False)
+            try:
+                cold_balance = float(wallet.cold_balance)
+            except:
+                cold_balance = 0.0
+            try:
+                total_balance = float(hot_balance) + float(cold_balance)
+            except:
+                total_balance = hot_balance
+            self.rows.append({ 
+                'hostname': wallet.hostname,
+                'blockchain': wallet.blockchain,
+                'total_balance': total_balance,
+                'updated_at': wallet.updated_at }) 
+
+    def exclude_cat_wallets(self, wallet_details):
+        details = []
+        chunks = wallet_details.split('\n\n')
+        for chunk in chunks:
+            is_cat_wallet = False
+            lines = chunk.split('\n')
+            for line in lines:
+                if re.match('^\s+-Type:\s+CAT$', line):
+                    is_cat_wallet = True
+            if is_cat_wallet:
+                app.logger.info("Ignoring balance of CAT type wallet named: {0}".format(lines[0][:-1]))
+            else:
+                details.extend(chunk.split('\n'))
+        return '\n'.join(details)
+
+    def sum_chia_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
+        numeric_const_pattern = '-Total\sBalance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
+        rx = re.compile(numeric_const_pattern, re.VERBOSE)
+        sum = 0
+        for wallet in self.wallets:
+            if wallet.hostname == hostname and wallet.blockchain == blockchain:
+                try:
+                    for balance in rx.findall(self.exclude_cat_wallets(wallet.details)):
+                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
+                        # wallet.hostname, wallet.blockchain))
+                        sum += locale.atof(balance)
+                        found_balance = True
+                except Exception as ex:
+                    app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
+                        wallet.hostname, wallet.blockchain, str(ex)))
+                if include_cold_balance and wallet.cold_balance:
+                    sum += locale.atof(wallet.cold_balance)
+        return sum
+
+    def sum_mmx_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
+        numeric_const_pattern = 'Balance:\s+((?: (?: \d*\.\d+ ) | (?: \d+\.? ) )(?: [Ee] [+-]? \d+ )?)'
+        rx = re.compile(numeric_const_pattern, re.VERBOSE)
+        sum = 0
+        for wallet in self.wallets:
+            if wallet.hostname == hostname and wallet.blockchain == blockchain:
+                try:
+                    #app.logger.info(wallet.details)
+                    for balance in rx.findall(wallet.details):
+                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, wallet.hostname, wallet.blockchain))
+                        sum += locale.atof(balance)
+                        found_balance = True
+                except Exception as ex:
+                    app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
+                        wallet.hostname, wallet.blockchain, str(ex)))
+                if include_cold_balance and wallet.cold_balance:
+                    sum += locale.atof(wallet.cold_balance)
+        return sum
 
 class Keys:
 

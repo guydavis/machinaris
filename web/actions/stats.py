@@ -21,7 +21,7 @@ from common.models.pools import Pool
 from common.models.partials import Partial
 from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalCoins, StatNetspaceSize, StatTimeToWin, \
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \
-        StatPlottingDiskUsed, StatPlottingDiskFree
+        StatPlottingDiskUsed, StatPlottingDiskFree, StatFarmedBlocks, StatWalletBalances
 from web import app, db, utils
 from web.actions import chia, worker
 
@@ -358,4 +358,37 @@ def load_summary_stats(blockchains):
             'edv_fiat': edv_fiat
         }
     return stats
-  
+
+def load_farmed_coins(blockchain):
+    dates = []
+    values = []
+    result = db.session.query(StatTotalCoins).order_by(StatTotalCoins.created_at.asc()).filter(
+            StatTotalCoins.blockchain == blockchain).all()
+    last_value = None
+    for i in range(len(result)):
+        s = result[i]
+        converted_date = converters.convert_date_for_luxon(s.created_at)
+        if (last_value != s.value) or (i % 24 == 0) or (i == len(result) - 1):
+            dates.append(converted_date)
+            values.append(s.value)
+            last_value = s.value
+    #app.logger.info(dates)
+    #app.logger.info(values)
+    return { 'title': blockchain.capitalize() + ' - ' + _('Farmed Coins'), 'dates': dates, 'vals': values}
+
+def load_wallet_balances(blockchain):
+    dates = []
+    values = []
+    result = db.session.query(StatWalletBalances).order_by(StatWalletBalances.created_at.asc()).filter(
+            StatWalletBalances.blockchain == blockchain).all()
+    last_value = None
+    for i in range(len(result)):
+        s = result[i]
+        converted_date = converters.convert_date_for_luxon(s.created_at)
+        if (last_value != s.value) or (i % 24 == 0) or (i == len(result) - 1):
+            dates.append(converted_date)
+            values.append(s.value)
+            last_value = s.value
+    #app.logger.info(dates)
+    #app.logger.info(values)
+    return { 'title': blockchain.capitalize() + ' - ' + _('Wallet Balances'), 'dates': dates, 'vals': values}

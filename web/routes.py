@@ -79,8 +79,20 @@ def index():
     p.partials_chart_data(farm_summary)
     stats.load_daily_diff(farm_summary)
     warnings.check_warnings(request.args)
-    return render_template('index.html', reload_seconds=120, farms=farm_summary.farms, \
+    return render_template('index/index.html', reload_seconds=120, farms=farm_summary.farms, \
         plotting=plotting, workers=workers, global_config=gc, selected_blockchain=selected_blockchain)
+
+@app.route('/index_chart')
+def index_chart():
+    gc = globals.load()
+    chart_type = request.args.get('type')
+    blockchain = request.args.get('blockchain')
+    if chart_type == 'wallet_balances':
+        data = stats.load_wallet_balances(blockchain)
+        return render_template('index/chart_balances.html', reload_seconds=120, global_config=gc, chart_data=data) 
+    elif chart_type == 'farmed_blocks':
+        data = stats.load_farmed_coins(blockchain)
+        return render_template('index/chart_farmed.html', reload_seconds=120, global_config=gc, chart_data=data)   
 
 @app.route('/summary', methods=['GET', 'POST'])
 def summary():

@@ -13,7 +13,7 @@ LIST="
 https://cdn.datatables.net/1.12.0/css/dataTables.bootstrap5.css
 https://cdn.datatables.net/1.12.0/js/dataTables.bootstrap5.js
 https://cdn.datatables.net/1.12.0/js/jquery.dataTables.js
-https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js
+https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js
 https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.1.0/dist/chartjs-adapter-luxon.min.js
 https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js
 https://moment.github.io/luxon/global/luxon.min.js"

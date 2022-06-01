@@ -128,3 +128,13 @@ class StatFarmedBlocks(db.Model):
     time_taken = db.Column(db.String(length=32))
     farmed_block = db.Column(db.String())
     created_at = db.Column(db.String())
+
+class StatWalletBalances(db.Model):
+    __bind_key__ = 'stat_wallet_balances'
+    __tablename__ = "stat_wallet_balances"
+
+    id = db.Column(db.Integer, primary_key=True)
+    hostname = db.Column(db.String())
+    blockchain = db.Column(db.String(length=64), nullable=False)
+    value = db.Column(db.REAL)
+    created_at = db.Column(db.String())
