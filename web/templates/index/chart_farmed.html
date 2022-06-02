@@ -7,6 +7,7 @@
     <link href="{{ url_for('static', filename='3rd_party/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='3rd_party/icons/bootstrap-icons.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='3rd_party/dataTables.bootstrap5.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='3rd_party/leaflet.css') }}" />
     <title>{{ chart_data.title }}</title>
     {% if reload_seconds %}
     <meta http-equiv="refresh" content="{{ reload_seconds }}">
@@ -28,18 +29,12 @@
             margin: 10px;
             padding: 10px;
             padding-top: 20px;
-            white-space: pre-wrap;
-            font-family: monospace;
-            overflow-y: auto;
         }
     </style>
     <script>
         function get(name) {
             if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
                 return decodeURIComponent(name[1]);
-        }
-        function load_chart() {
-            
         }
     </script>
 </head>
@@ -48,15 +43,58 @@
     <div class="rounded-3 small">
         <canvas id="chart_area"></canvas>
     </div>
+    {% if farmed_blocks|length > 0 %}
+    <div class="rounded-3 small">
+        <h2 class="text-center">{{_('Farmed Blocks')}}</h2>
+        <table id="data" class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-success">{{_('Worker')}}</th>
+                    <th scope="col" class="text-success">{{_('Plot File')}}</th>
+                    <th scope="col" class="text-success">{{_('Farmed Block')}}</th>
+                    <th scope="col" class="text-success">{{_('Farmed At')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for farmed_block in farmed_blocks %}
+                <tr>
+                    <td>{{farmed_block.hostname}}</td>
+                    <td>{{farmed_block.plot_files}}</td>
+                    <td>{{farmed_block.farmed_block|alltheblocks_blocklink(farmed_block.blockchain)|safe}}</td>
+                    <td>{{farmed_block.created_at[:-7]}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+
     <div class="text-center"><small><i>Loaded at: {{ global_config.now }}</small></i></div>
-    <script>
-        load_chart();
-    </script>
     <script src="{{ url_for('static', filename='3rd_party/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='3rd_party/jquery.min.js') }}"></script>
+    <script type="text/javascript" charset="utf8"
+        src="{{ url_for('static', filename='3rd_party/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" charset="utf8"
+        src="{{ url_for('static', filename='3rd_party/dataTables.bootstrap5.js') }}"></script>
     <script src="{{ url_for('static', filename='3rd_party/chart.min.js') }}"></script>
     <script src="{{ url_for('static', filename='3rd_party/luxon.min.js') }}"></script>
     <script src="{{ url_for('static', filename='3rd_party/chartjs-adapter-luxon.min.js') }}"></script>
     <script>
+        $(document).ready(function () {
+            $('#data').DataTable({
+                "pageLength": 25,
+                "order": [[3 , "desc"]],
+                "columnDefs": [
+                    {
+                    }
+                ],
+                {% if lang != 'en' %}
+                "language": {
+                    "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+                },
+                {% endif %}
+            });
+        })
         var ctx = document.getElementById('chart_area');
         var myChart = new Chart(ctx, {
             type: 'line',

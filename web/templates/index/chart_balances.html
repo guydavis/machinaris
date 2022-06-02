@@ -28,18 +28,12 @@
             margin: 10px;
             padding: 10px;
             padding-top: 20px;
-            white-space: pre-wrap;
-            font-family: monospace;
-            overflow-y: auto;
         }
     </style>
     <script>
         function get(name) {
             if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
                 return decodeURIComponent(name[1]);
-        }
-        function load_chart() {
-            
         }
     </script>
 </head>
@@ -49,9 +43,6 @@
         <canvas id="chart_area"></canvas>
     </div>
     <div class="text-center"><small><i>Loaded at: {{ global_config.now }}</small></i></div>
-    <script>
-        load_chart();
-    </script>
     <script src="{{ url_for('static', filename='3rd_party/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='3rd_party/chart.min.js') }}"></script>
     <script src="{{ url_for('static', filename='3rd_party/luxon.min.js') }}"></script>

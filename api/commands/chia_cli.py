@@ -121,7 +121,7 @@ def load_connections_show(blockchain):
 
 def load_keys_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    proc = Popen("{0} keys show".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} keys show -d".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:

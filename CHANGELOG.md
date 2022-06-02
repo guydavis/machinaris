@@ -3,10 +3,12 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.7.3] - 2022-06-?
+ - Wallets - chart each blockchain's farmed coins and wallet balances over the past month.
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain) - v1.3.4, matches Chia 1.3.4, please run: `cactus db upgrade`
  - [Chives](https://github.com/HiveProject2021/chives-blockchain) - v1.3.1, please run: `chives db upgrade`
  - [Cryptodoge](https://github.com/CryptoDoge-Network/cryptodoge) - v1.3.4, matches Chia 1.3.4, please run: `cryptodoge db upgrade`
  - [Flax](https://github.com/Flax-Network/flax-blockchain) - v0.1.8, matches Chia 1.3.3, please run: `flax db upgrade` if you haven't yet
+ - [MMX](https://github.com/madMAx43v3r/mmx-node) - updated version for their `testnet6` network.
 
 ## [0.7.2] - 2022-05-17
  - Drives monitoring page - allow [overrides of smartctl commands](https://github.com/guydavis/machinaris/wiki/Drives#override-command) for special hardware. Drive failure alerts thru our enhanced Chiadog.

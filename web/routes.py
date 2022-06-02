@@ -88,11 +88,12 @@ def index_chart():
     chart_type = request.args.get('type')
     blockchain = request.args.get('blockchain')
     if chart_type == 'wallet_balances':
-        data = stats.load_wallet_balances(blockchain)
-        return render_template('index/chart_balances.html', reload_seconds=120, global_config=gc, chart_data=data) 
+        chart_data = stats.load_wallet_balances(blockchain)
+        return render_template('index/chart_balances.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
     elif chart_type == 'farmed_blocks':
-        data = stats.load_farmed_coins(blockchain)
-        return render_template('index/chart_farmed.html', reload_seconds=120, global_config=gc, chart_data=data)   
+        chart_data = stats.load_farmed_coins(blockchain)
+        farmed_blocks = stats.load_farmed_blocks(blockchain)
+        return render_template('index/chart_farmed.html', reload_seconds=120, global_config=gc, chart_data=chart_data, farmed_blocks=farmed_blocks, lang=get_lang(request))
 
 @app.route('/summary', methods=['GET', 'POST'])
 def summary():

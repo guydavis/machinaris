@@ -411,3 +411,8 @@ def get_disks(disk_type):
             logging.info("Unable to find any plotting for stats.")
             logging.info(traceback.format_exc())
             return []
+
+def get_alltheblocks_name(blockchain):
+    if blockchain == 'staicoin':
+        return 'stai' # Special case for staicoin's inconsistent naming convention
+    return blockchain

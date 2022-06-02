@@ -38,15 +38,15 @@
             {% for key in keys.rows %}
             <div class="tab-pane {% if key.blockchain == selected_blockchain %}active{% endif %}" id="{{key.blockchain}}" role="tabpanel" aria-labelledby="{{key.blockchain}}-tab">
                 <br/>
-                <pre>{{ key.details}}</pre>
-                <br/><br/><br/>
+                <pre>{{ key.details|safe}}</pre>
+                <br/>
                 <p><b>{{_('NOTE: Machinaris will never display your private key here.')}}</b></p>
                 <p>{{_('However, you may view it yourself by executing this from within the Docker container.')}}</p>
                 <div style="padding-left: 50px;">
                     {% if key.blockchain == 'mmx' %}
-                    <code>mmx wallet get seed</code>
+                    <code class='text-white'>mmx wallet get seed</code>
                     {% else %}
-                    <code>chia keys show --show-mnemonic-seed</code>
+                    <code class='text-white'>chia keys show --show-mnemonic-seed</code>
                     {% endif %}
                 </div>
                 <br />
@@ -56,7 +56,7 @@
                     {% autoescape false %}
                     <li>
                         {{_('Machinaris uses an online wallet for farming. It is strongly recommended that you use a cold wallet for your payout instructions. Tutorial on the %(wiki_link_open)swiki%(wiki_link_close)s. Please add "Setup a Cold Wallet" to your To-Do list!', 
-                            wiki_link_open='<a target="_blank" href="https://github.com/guydavis/machinaris/wiki/Keys#using-a-cold-wallet">', wiki_link_close='</a>')}}
+                            wiki_link_open='<a class="text-white" target="_blank" href="https://github.com/guydavis/machinaris/wiki/Keys#using-a-cold-wallet">', wiki_link_close='</a>')}}
                     </li>
                     {% endautoescape %}
                 </ul>

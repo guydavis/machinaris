@@ -33,7 +33,7 @@
     button.active.nav-link {
         background-color: #3d3f42 !important
     }
-    td.edit_cell {
+    td.icon_cell {
         text-align: center;
         padding:0px 5px 0px 0px;
     }
@@ -113,6 +113,7 @@
                 <th scope="col" class="text-success">{{_('Balance')}} {{local_cur_sym}}</th>
                 <th scope="col" class="text-success">{{_('Updated At')}}</th>
                 <th scope="col" class="text-success"></th>
+                <th scope="col" class="text-success"></th>
             </tr>
         </thead>
         <tbody>
@@ -137,7 +138,10 @@
                 <td>{{wallet.total_balance}} {{wallet.blockchain_symbol}}</td>
                 <td>{{wallet.fiat_balance}}</td>
                 <td>{{wallet.updated_at | datetimefilter}}</td>
-                <td class='edit_cell'><a href="#" title="{{_('Edit Wallet')}}" data-bs-toggle="modal" 
+                <td class='icon_cell'><a 
+                  href="#" title="{{_('Chart Wallet')}}" onclick='PopupChart("wallet_balances","{{ wallet.blockchain }}");return false;'>
+                  <i class="fs-4 bi-graph-up-arrow"></i></a></td>
+                <td class='icon_cell'><a href="#" title="{{_('Edit Wallet')}}" data-bs-toggle="modal" 
                     data-bs-target="#walletModal" data-bs-blockchain="{{wallet.blockchain}}"
                     data-bs-cold-wallet-address="{{wallet.cold_address}}"><i 
                     class="fs-4 bi-pencil-square"></i></a></td>
@@ -184,7 +188,7 @@
         $(document).ready(function () {
             $('#data').DataTable({
                 "pageLength": 25,
-                "columnDefs": [{ "orderable": false, targets: [7] }],
+                "columnDefs": [{ "orderable": false, targets: [7,8] }],
                 {% if lang != 'en' %}
                 "language": {
                     "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
@@ -220,5 +224,13 @@
                 modalTitle.textContent = 'Wallet Settings - ' + blockchain
             })
         })
+        function PopupChart(chart_type, blockchain) {
+          var d = new Date();
+          var height = 600;
+          var width = 900;
+          var top = (screen.height - height) / 2;
+          var left = (screen.width - width) / 2;
+          window.open("{{ url_for('index_chart') }}?type=" + chart_type + "&blockchain=" + blockchain, blockchain + ' - ' + chart_type, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        }
 </script>
 {% endblock %}

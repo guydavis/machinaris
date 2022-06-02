@@ -106,7 +106,7 @@ class Wallets:
                 if re.match('^\s+-Type:\s+CAT$', line):
                     is_cat_wallet = True
             if is_cat_wallet:
-                app.logger.info("Ignoring balance of CAT type wallet named: {0}".format(lines[0][:-1]))
+                app.logger.debug("Ignoring balance of CAT type wallet named: {0}".format(lines[0][:-1]))
             else:
                 details.extend(chunk.split('\n'))
         return '\n'.join(details)
@@ -116,7 +116,9 @@ class Wallets:
         rx = re.compile(numeric_const_pattern, re.VERBOSE)
         sum = 0
         for wallet in self.wallets:
-            if wallet.hostname == hostname and wallet.blockchain == blockchain:
+            if not 'Sync status: Synced' in wallet.details:
+                raise Exception('{0} wallet is not synced, so balance is unknown.')
+            elif wallet.hostname == hostname and wallet.blockchain == blockchain:
                 try:
                     for balance in rx.findall(self.exclude_cat_wallets(wallet.details)):
                         #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 

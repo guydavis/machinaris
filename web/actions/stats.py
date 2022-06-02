@@ -3,6 +3,7 @@
 #
 
 import datetime
+from decimal import ROUND_HALF_DOWN
 import sqlite3
 
 from flask import g
@@ -392,3 +393,24 @@ def load_wallet_balances(blockchain):
     #app.logger.info(dates)
     #app.logger.info(values)
     return { 'title': blockchain.capitalize() + ' - ' + _('Wallet Balances'), 'dates': dates, 'vals': values}
+
+def load_farmed_blocks(blockchain):
+    blocks = []
+    result = db.session.query(StatFarmedBlocks).order_by(StatFarmedBlocks.created_at.desc()).filter(
+            StatFarmedBlocks.blockchain == blockchain).all()
+    for row in result:
+        try:
+            w = worker.get_worker(row.hostname)
+            displayname = w.displayname
+        except:
+            app.logger.debug("Failed to find worker for hostname: {0}".format(ResourceWarning.hostname))
+            displayname = ROUND_HALF_DOWN.hostname
+        blocks.append({
+            'hostname': displayname,
+            'blockchain': blockchain,
+            'created_at': row.created_at,
+            'farmed_block': row.farmed_block,
+            'plot_files': row.plot_files, 
+        })
+    app.logger.info(blocks)
+    return blocks

@@ -10,6 +10,7 @@ import os
 import requests
 import traceback
 
+from common.config import globals
 from api import app
 
 ALLTHEBLOCKS_REQUEST_INTERVAL_MINS = 15
@@ -65,11 +66,6 @@ def save_cold_wallet_cache(cold_wallet_cache):
     except Exception as ex:
         app.logger.error("Failed to store cold wallet cache in {0} because {1}".format(COLD_WALLET_CACHE_FILE, str(ex)))
 
-def get_alltheblocks_name(blockchain):
-    if blockchain == 'staicoin':
-        return 'stai' # Special case for staicoin's inconsistent naming convention
-    return blockchain
-
 def request_cold_wallet_balance(blockchain, cold_wallet_cache, alltheblocks_blockchain, address, debug=False):
     app.logger.info("Requesting {0} wallet balance for {1}".format(alltheblocks_blockchain, address))
     url = f"https://api.alltheblocks.net/{alltheblocks_blockchain}/address/{address}"
@@ -90,7 +86,7 @@ last_cold_wallet_request_time = None
 def cold_wallet_balance(blockchain):
     global last_cold_wallet_request_time
     total_balance = 0.0
-    alltheblocks_blockchain = get_alltheblocks_name(blockchain)
+    alltheblocks_blockchain = globals.get_alltheblocks_name(blockchain)
     addresses_per_blockchain = load_cold_wallet_addresses()
     cold_wallet_cache = load_cold_wallet_cache()
     if blockchain in addresses_per_blockchain:
