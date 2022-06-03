@@ -31,8 +31,8 @@ MADMAX_BINARY = '/usr/bin/chia_plot'
 BLADEBIT_BINARY = '/usr/bin/bladebit'
 CHIADOG_PATH = '/chiadog'
 
-MMX_NETWORK = 'testnet5'
-MMX_CONFIG = 'testnet5'
+MMX_NETWORK = 'testnet6'
+MMX_CONFIG = 'testnet6'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
 

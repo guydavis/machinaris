@@ -202,4 +202,3 @@ def save_exchange_rates(debug=False):
             app.logger.error("Received {0} from {1}".format(resp.status_code, url))
     except Exception as ex:
             app.logger.error("Failed to store exchange cache in {0} because {1}".format(EXCHANGE_RATES_CACHE_FILE, str(ex)))
- 

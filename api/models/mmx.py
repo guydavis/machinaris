@@ -26,6 +26,8 @@ class FarmSummary:
                 elif line.startswith('Synced'):
                     if 'Yes' == line.split(':')[1].strip():
                         self.calc_status('Farming')
+                    elif 'No' == line.split(':')[1].strip():
+                        self.calc_status('Syncing')
                     else:
                         self.calc_status(line.strip())
             if self.plots_size == "Total space: 0 TiB":

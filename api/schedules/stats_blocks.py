@@ -24,12 +24,13 @@ def collect():
                 "Skipping block win stats collection as not farming on this Machinaris instance.")
             return
         #app.logger.info("Collecting stats about won blocks.")
-        for blockchain in globals.enabled_blockchains():
-            if not blockchain == 'mmx':
-                blocks = log_parser.recent_farmed_blocks(blockchain)
-            store_locally(blockchain, blocks)
-            if not gc['is_controller']:
-                send_to_controller(blockchain, blocks)
+        blockchain = globals.enabled_blockchains()[0]
+        if blockchain == 'mmx':
+            return
+        blocks = log_parser.recent_farmed_blocks(blockchain)
+        store_locally(blockchain, blocks)
+        if not gc['is_controller']:
+            send_to_controller(blockchain, blocks)
 
 def store_locally(blockchain, blocks):
     hostname = utils.get_hostname()
