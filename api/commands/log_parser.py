@@ -2,7 +2,6 @@
 # Methods around reading and parsing service logs
 #
 
-
 import datetime
 import itertools
 import os
@@ -83,6 +82,32 @@ def recent_partials(blockchain):
     partials = log.Partials(cli_stdout.splitlines())
     # app.logger.debug(partials)
     return partials
+
+def recent_farmed_blocks(blockchain):
+    log_file = get_farming_log_file(blockchain)
+    if not os.path.exists(log_file):
+        app.logger.debug(
+            "Skipping farmed blocks parsing as no such log file: {0}".format(log_file))
+        return []
+    rotated_log_file = ''
+    if os.path.exists(log_file + '.1'):
+        rotated_log_file = log_file + '.1'
+    proc = Popen("grep -B 10 'Farmed unfinished_block' {0} {1}".format(rotated_log_file, log_file),
+                 stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        abort(500, description="The timeout is expired!")
+    if errs:
+        app.logger.error(errs.decode('utf-8'))
+        abort(500, description=errs.decode('utf-8'))
+    cli_stdout = outs.decode('utf-8')
+    app.logger.debug("Blocks grep: {0}".format(cli_stdout))
+    blocks = log.Blocks(cli_stdout.splitlines())
+    app.logger.debug(blocks)
+    return blocks
 
 def find_plotting_job_log(plot_id):
     dir_path = '/root/.chia/plotman/logs'

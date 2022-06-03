@@ -363,15 +363,18 @@ class Wallets:
                 'updated_at': wallet.updated_at }) 
 
     def exclude_cat_wallets(self, wallet_details):
-        skip = 0
         details = []
-        for line in wallet_details.split('\n'):
-            if "Token:" in line:  # Example: "Chia Holiday 2021 Token:"
-                skip = 3 # Skip next 3 lines for these useless CAT wallets
-            elif skip > 0:
-                skip = skip -1 
+        chunks = wallet_details.split('\n\n')
+        for chunk in chunks:
+            is_cat_wallet = False
+            lines = chunk.split('\n')
+            for line in lines:
+                if re.match('^\s+-Type:\s+CAT$', line):
+                    is_cat_wallet = True
+            if is_cat_wallet:
+                app.logger.debug("Ignoring balance of CAT type wallet named: {0}".format(lines[0][:-1]))
             else:
-                details.append(line)
+                details.extend(chunk.split('\n'))
         return '\n'.join(details)
 
     def sum_chia_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
@@ -446,13 +449,32 @@ class Keys:
             except:
                 app.logger.info("Keys.init(): Unable to find a worker with hostname '{0}'".format(key.hostname))
                 displayname = key.hostname
+            parsed_details = key.details
+            try:
+                parsed_details = self.link_first_wallet_address(key.blockchain, key.details)
+            except:
+                traceback.print_exc()
+                parsed_details = key.details
             self.rows.append({ 
                 'displayname': displayname, 
                 'hostname': key.hostname,
                 'blockchain': key.blockchain,
                 'status': worker_status,
-                'details': key.details,
+                'details': parsed_details,
                 'updated_at': key.updated_at }) 
+    
+    def link_first_wallet_address(self, blockchain, details):
+        alltheblocks_blockchain = globals.get_alltheblocks_name(blockchain)
+        lines = []
+        for line in details.split('\n'):
+            if line.startswith('First wallet address'):
+                label = line.split(':')[0]
+                address = line.split(':')[1].strip()
+                link = "https://alltheblocks.net/{0}/address/{1}".format(alltheblocks_blockchain, address)
+                lines.append("{0}: <a target='_blank' class='text-white' href='{1}'>{2}</a>".format(label, link, address))
+            else:
+                lines.append(line)
+        return '\n'.join(lines)
 
 class Blockchains:
 

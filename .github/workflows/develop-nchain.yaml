@@ -41,6 +41,7 @@ jobs:
           push: true
           build-args: |
             "MACHINARIS_STREAM=develop"
+            "CHIADOG_BRANCH=dev"
             "NCHAIN_BRANCH=net9.dev"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-nchain:develop

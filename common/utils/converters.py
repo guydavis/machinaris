@@ -63,6 +63,8 @@ def convert_date_for_luxon(datestr):
     month = datestr[4:6]
     day = datestr[6:8]
     time = datestr[8:]
+    if not ':' in time:
+        time = time[:2] + ':' + time[2:]
     return "{0}-{1}-{2}T{3}".format(year, month, day, time)
 
 def round_balance(value):

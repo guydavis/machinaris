@@ -130,7 +130,7 @@
             </td>
             <td>{{drive.updated_at | datetimefilter}}</td>
             <td style="padding:0px">
-              <a href="#" title="View Details" data-bs-toggle="modal" data-bs-target="#smartctlModal" onclick='SmartctlDeviceInfo("{{ drive.hostname }}", "{{ drive.device }}", "{{ drive.worker }}", "{{ drive.device_model }}", "{{ drive.model_family }}");return false;'><i class="fs-4 bi-text-indent-left"></i></a>&nbsp;
+              <a href="#" title="View Details" data-bs-toggle="modal" data-bs-target="#smartctlModal" onclick='SmartctlDeviceInfo("{{ drive.hostname }}", "{{ drive.device }}", "{{ drive.worker }}", "{{ drive.device_model }}", "{{ drive.model_family }}");return false;'><i class="fs-4 bi-file-text"></i></a>&nbsp;
             </td>  
           </tr>
           {% endfor %}
@@ -145,7 +145,7 @@
           <div class="h-100 p-2 text-white bg-dark rounded-3">
             <h5 class="text-white">
               <a href="#" title="View Details" data-bs-toggle="modal" data-bs-target="#smartctlModal" style="float:right"
-                onclick='SmartctlDeviceInfo("{{ drive.hostname }}", "{{ drive.device }}", "{{ drive.worker }}", "{{ drive.device_model }}", "{{ drive.model_family }}");return false;'><i class="fs-4 bi-text-indent-left"></i></a>
+                onclick='SmartctlDeviceInfo("{{ drive.hostname }}", "{{ drive.device }}", "{{ drive.worker }}", "{{ drive.device_model }}", "{{ drive.model_family }}");return false;'><i class="fs-4 bi-file-text"></i></a>
                  {{drive.worker}} - {{drive.device}} -
                  {% if drive.model_family %}
                    {{drive.model_family}}

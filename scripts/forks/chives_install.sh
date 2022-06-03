@@ -4,19 +4,17 @@
 #
 
 CHIVES_BRANCH=$1
-# On 2021-12-25
-HASH=ca078c8a2270e237437b0bab8e94d18d9f719951
+# On 2022-05-22  Not used anymore
+# HASH=c1111a79d7a1eb02a0bd2111307e266583bc67d1
 
 if [ -z ${CHIVES_BRANCH} ]; then
 	echo 'Skipping Chives install as not requested.'
 else
 	git clone --branch ${CHIVES_BRANCH} --recurse-submodules https://github.com/HiveProject2021/chives-blockchain.git /chives-blockchain 
-	cd /chives-blockchain 
-	git submodule update --init mozilla-ca 
-	git checkout $HASH
+	cd /chives-blockchain
+	# Can't checkout due to filename limit issue with AUFS inside container
+	#git checkout $HASH
 	chmod +x install.sh
-	# 2022-01-30: pip broke due to https://github.com/pypa/pip/issues/10825
-	sed -i 's/upgrade\ pip$/upgrade\ "pip<22.0"/' install.sh
 	/usr/bin/sh ./install.sh
 
 	if [ ! -d /chia-blockchain/venv ]; then

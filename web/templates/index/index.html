@@ -84,12 +84,14 @@
         <div class="row align-items-md-stretch">
           <div class="col-md-4" style="margin-top:5px; margin-bottom:5px;">
             <div class="h-100 p-2 text-white bg-dark rounded-3">
+              <a href="#" title="{{_('Wallet Balance')}}" onclick='PopupChart("wallet_balances","{{ blockchain }}");return false;'><i class="fs-4 bi-graph-up-arrow" style="float:right"></i></a>
               <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
                 data-html="true" title="{{ farms[blockchain].daily_diff.wallet_balance }}">{{farms[blockchain].wallet_balance }}</h4>
               <h6 class="display-6 text-center">{{ farms[blockchain].currency_symbol }} {{_('Balance')}}</h6>
             </div>
           </div>
           <div class="col-md-4" style="margin-top:5px; margin-bottom:5px;">
+            <a href="#" title="{{_('Farmed Blocks')}}" onclick='PopupChart("farmed_blocks","{{ blockchain }}");return false;'><i class="fs-4 bi-graph-up-arrow" style="float:right; margin-top: 7px; margin-right:7px"></i></a>
             <div class="h-100 p-2 text-white bg-dark rounded-3">
               <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
                 data-html="true" title="{{ farms[blockchain].daily_diff.total_coins }}">{{farms[blockchain].total_coins }}</h4>
@@ -97,6 +99,9 @@
             </div>
           </div>
           <div class="col-md-4" style="margin-top:5px; margin-bottom:5px;">
+            {% if blockchain != 'mmx' %}
+            <a href="{{ blockchain|alltheblocks_blockchainlink}}" target="_blank" title="{{_('Blockchain Details')}}" ><i class="fs-4 bi-box-arrow-up-right" style="float:right; margin-top: 7px; margin-right:7px"></i></a>
+            {% endif %}
             <div class="h-100 p-2 text-white bg-dark rounded-3"
               style="padding-top:12px !important; padding-bottom:12px !important;">
               <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
@@ -158,6 +163,14 @@
   {% if global_config.farming_enabled %}
   <script>
     {% include 'views/index_script_block.js' %}
+    function PopupChart(chart_type, blockchain) {
+      var d = new Date();
+      var height = 600;
+      var width = 900;
+      var top = (screen.height - height) / 2;
+      var left = (screen.width - width) / 2;
+      window.open("{{ url_for('index_chart') }}?type=" + chart_type + "&blockchain=" + blockchain, blockchain + ' - ' + chart_type, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+    }
   </script>
   {% endif %}
   {% endblock %}

@@ -4,11 +4,11 @@
 # using an enhanced and supported fork of the original project.
 #
 
-CHIADOG_BRANCH=main
+CHIADOG_BRANCH=$1
 
 if [[ (${mode} == 'fullnode' || ${mode} =~ "harvester") && ${blockchains} != 'mmx' ]]; then
     if [[ ! -f /chiadog/main.py ]]; then
-        echo 'Installing Chiadog...'
+        echo 'Installing Chiadog from https://github.com/guydavis/chiadog using branch: ${CHIADOG_BRANCH}'
         cd /
         git clone --branch ${CHIADOG_BRANCH} https://github.com/guydavis/chiadog.git
         cd /chia-blockchain/
