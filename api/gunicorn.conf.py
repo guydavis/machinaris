@@ -12,7 +12,7 @@ def on_starting(server):
         status_connections, status_keys, status_alerts, status_controller, \
         status_plotnfts, status_pools, status_partials, status_drives, \
         stats_blocks, stats_balances, stats_disk, stats_farm, nft_recover, plots_check, \
-        log_rotate, db_backup, restart_stuck_farmer, geolocate_peers
+        log_rotate, db_backup, restart_stuck_farmer, geolocate_peers, stats_effort
     from common.config import globals
 
     from api.commands import websvcs
@@ -78,7 +78,7 @@ def on_starting(server):
         scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='cron', minute=0)  # Hourly
         
     # Testing only
-    #scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=stats_effort.calculate, name="stats_effort", trigger='interval', seconds=10) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()
