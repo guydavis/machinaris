@@ -77,7 +77,7 @@ def load_wallet_show(blockchain):
     child = pexpect.spawn("{0} wallet show".format(chia_binary))
     wallet_index = 1
     while True:
-        i = child.expect(["Wallet height:.*\r\n", "Choose wallet key:.*\r\n", "No online backup file found.*\r\n"], timeout=120)
+        i = child.expect(["Wallet height:.*\r\n", "Wallet keys:.*\r\n", "No online backup file found.*\r\n"], timeout=120)
         if i == 0:
             app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
             wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
