@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.7.3] - 2022-06-?
  - Wallets - chart each blockchain's farmed coins and wallet balances over the past month.
+ - [Chia](https://github.com/Chia-Network/chia-blockchain) - v1.3.6 pre-release for testing
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain) - v1.3.4, matches Chia 1.3.4, please run: `cactus db upgrade`
  - [Chives](https://github.com/HiveProject2021/chives-blockchain) - v1.3.1, please run: `chives db upgrade`
  - [Cryptodoge](https://github.com/CryptoDoge-Network/cryptodoge) - v1.3.4, matches Chia 1.3.4, please run: `cryptodoge db upgrade`
