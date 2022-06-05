@@ -405,10 +405,9 @@ def load_netspace_size(blockchain):
             dates.append(converted_date)
             values.append(s.value)
     #app.logger.info(dates)
-    # TODO Handle data crossing single unit boundary (either up or down)
     unit = converters.gib_to_fmt(max(values)).split()[1]
-    converted_values = list(map(lambda x: float(converters.gib_to_fmt(x).split()[0]), values))
-    app.logger.info(converted_values)
+    converted_values = list(map(lambda x: float(converters.gib_to_fmt(x, target_unit=unit).split()[0]), values))
+    #app.logger.info(converted_values)
     return { 'title': blockchain.capitalize() + ' - ' + _('Netspace Size'), 'dates': dates, 'vals': converted_values, 
         'y_axis_title': _('Size') + ' (' + unit + ')'}
 
@@ -422,7 +421,7 @@ def load_farmed_blocks(blockchain):
             displayname = w.displayname
         except:
             app.logger.debug("Failed to find worker for hostname: {0}".format(ResourceWarning.hostname))
-            displayname = hostname
+            displayname = row.hostname
         blocks.append({
             'hostname': displayname,
             'blockchain': blockchain,
@@ -463,10 +462,10 @@ def load_plots_size(blockchain):
             dates.append(converted_date)
             values.append(s.value)
             last_value = s.value
-    # TODO Handle data crossing single unit boundary (either up or down)
+    #app.logger.info(dates)
     unit = converters.gib_to_fmt(max(values)).split()[1]
-    converted_values = list(map(lambda x: float(converters.gib_to_fmt(x).split()[0]), values))
-    app.logger.info(converted_values)
+    converted_values = list(map(lambda x: float(converters.gib_to_fmt(x, target_unit=unit).split()[0]), values))
+    #app.logger.info(converted_values)
     return { 'title': blockchain.capitalize() + ' - ' + _('Plots Size'), 'dates': dates, 'vals': converted_values, 
         'y_axis_title': _('Size') + ' (' + unit + ')'}
 
