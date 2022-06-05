@@ -78,6 +78,7 @@ def index():
     chia.challenges_chart_data(farm_summary)
     p.partials_chart_data(farm_summary)
     stats.load_daily_diff(farm_summary)
+    stats.wallet_chart_data(farm_summary)
     warnings.check_warnings(request.args)
     return render_template('index/index.html', reload_seconds=120, farms=farm_summary.farms, \
         plotting=plotting, workers=workers, global_config=gc, selected_blockchain=selected_blockchain)

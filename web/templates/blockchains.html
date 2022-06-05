@@ -17,6 +17,10 @@
     button.active.nav-link {
         background-color: #3d3f42 !important
     }
+    td.icon_cell {
+        text-align: center;
+        padding:0px 5px 0px 0px;
+    }
 </style>
 
 <header class="pb-3 mb-4 border-bottom">
@@ -33,7 +37,8 @@
                 <th scope="col" class="text-success">{{_('Peak Height')}}</th>
                 <th scope="col" class="text-success">{{_('Peak Time')}}</th>
                 <th scope="col" class="text-success">{{_('Updated At')}}</th>
-                <th scope="col" class="text-success">{{_('Logs')}}</th>
+                <th scope="col" class="text-success"></th>
+                <th scope="col" class="text-success"></th>
             </tr>
         </thead>
         <tbody>
@@ -53,8 +58,16 @@
                 <td>{{blockchain.peak_height}}</td>
                 <td>{{blockchain.peak_time}}</td>
                 <td>{{blockchain.updated_at | datetimefilter}}</td>
-                <td style="padding:0px">
-                    <a href="#" title="View Blockchain Log" onclick='ViewLogs("{{ fullnodes[blockchain.blockchain].hostname }}","{{ blockchain.blockchain }}");return false;'><i class="fs-4 bi-file-text"></i></a>
+                <td class='icon_cell'>{% 
+                    if blockchain == 'mmx' 
+                    %}<a href="#" title="{{_('View Blockchain Log')}}" target="_blank" href="https://github.com/madMAx43v3r/mmx-node#mmx-node"><i class="fs-4 bi-box-arrow-up-right"></i></a>{% 
+                     else 
+                     %}<a href="{{ blockchain|alltheblocks_blockchainlink}}" target="_blank" title="{{_('Blockchain Details')}}" ><i class="fs-4 bi-box-arrow-up-right"></i></a>{% 
+                    endif 
+                    %}</td>
+                <td class='icon_cell'>
+                    <a href="#" title="{{_('View Blockchain Log')}}" onclick='ViewLogs("{{ blockchain.hostname }}","{{ blockchain.blockchain }}");return false;'>
+                        <i class="fs-4 bi-file-text"></i></a>
                 </td>
             </tr>
             {% endfor %}
@@ -110,7 +123,7 @@ $(document).ready(function () {
         "pageLength": 25,
         "columnDefs": [
             {
-                targets: [5], "orderable": false,
+                targets: [5,6], "orderable": false,
             }
         ],
         {% if lang != 'en' %}

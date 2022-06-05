@@ -3,7 +3,6 @@
 #
 
 import datetime
-from decimal import ROUND_HALF_DOWN
 import sqlite3
 
 from flask import g
@@ -404,7 +403,7 @@ def load_farmed_blocks(blockchain):
             displayname = w.displayname
         except:
             app.logger.debug("Failed to find worker for hostname: {0}".format(ResourceWarning.hostname))
-            displayname = ROUND_HALF_DOWN.hostname
+            displayname = hostname
         blocks.append({
             'hostname': displayname,
             'blockchain': blockchain,
@@ -414,3 +413,35 @@ def load_farmed_blocks(blockchain):
         })
     app.logger.info(blocks)
     return blocks
+
+def wallet_chart_data(farm_summary):
+    for blockchain in farm_summary.farms:
+        balances = load_wallet_balances(blockchain)
+        coins = load_farmed_coins(blockchain)
+        chart_data = { 'dates': [], 'balances': [], 'coins': []}
+        i = j = 0
+        # First push thru wallet balances list
+        while i < len(balances['dates']):
+            balance_date = balances['dates'][i]
+            if j < len(coins['dates']):
+                coin_date = coins['dates'][j]
+            else:
+                coin_date = '2100-01-01' # far in future
+            if balance_date < coin_date:
+                chart_data['dates'].append(balance_date)
+                chart_data['balances'].append(converters.round_balance(balances['vals'][i]))
+                chart_data['coins'].append('null') # Javascript null
+                i += 1
+            else:
+                chart_data['dates'].append(coin_date)
+                chart_data['coins'].append(converters.round_balance(coins['vals'][j]))
+                chart_data['balances'].append('null') # Javascript null
+                j += 1
+        # Then add any remaining farmed coins
+        while j < len(coins['dates']):
+            chart_data['dates'].append(coins['dates'][j])
+            chart_data['coins'].append(converters.round_balance(coins['vals'][j]))
+            chart_data['balances'].append('null') # Javascript null
+            j += 1
+        #app.logger.info("{0} -> {1}".format(blockchain, chart_data))
+        farm_summary.farms[blockchain]['wallets'] = chart_data
