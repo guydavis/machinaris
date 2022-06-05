@@ -95,6 +95,15 @@ def index_chart():
         chart_data = stats.load_farmed_coins(blockchain)
         farmed_blocks = stats.load_farmed_blocks(blockchain)
         return render_template('index/chart_farmed.html', reload_seconds=120, global_config=gc, chart_data=chart_data, farmed_blocks=farmed_blocks, lang=get_lang(request))
+    elif chart_type == 'netspace_size':
+        chart_data = stats.load_netspace_size(blockchain)
+        return render_template('index/chart_netspace.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request))
+    elif chart_type == 'plot_count':
+        chart_data = stats.load_plot_count(blockchain)
+        return render_template('index/chart_plot_count.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
+    elif chart_type == 'plots_size':
+        chart_data = stats.load_plots_size(blockchain)
+        return render_template('index/chart_plots_size.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
 
 @app.route('/summary', methods=['GET', 'POST'])
 def summary():

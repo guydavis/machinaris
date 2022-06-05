@@ -67,6 +67,7 @@
         <div class="row align-items-md-stretch">
           <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
             <div class="h-100 p-2 text-white bg-dark rounded-3">
+              <a href="#" title="{{_('Plot Count')}}" onclick='PopupChart("plot_count","{{ blockchain }}");return false;'><i class="fs-4 bi-graph-up-arrow" style="float:right"></i></a>
               <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
                 data-html="true" title="{{ farms[blockchain].daily_diff.plot_count }}">{{farms[blockchain].plot_count }}</h4>
               <h6 class="display-6 text-center">{{_('Total Plots')}}</h6>
@@ -74,6 +75,7 @@
           </div>
           <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
             <div class="h-100 p-2 text-white bg-dark rounded-3">
+              <a href="#" title="{{_('Plots Size')}}" onclick='PopupChart("plots_size","{{ blockchain }}");return false;'><i class="fs-4 bi-graph-up-arrow" style="float:right"></i></a>
               <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
                 data-html="true" title="{{ farms[blockchain].daily_diff.plots_size }}">{{farms[blockchain].plots_display_size }}</h4>
               <h6 class="display-6 text-center">{{_('Total Plots Size')}}</h6>
@@ -99,7 +101,7 @@
             </div>
           </div>
           <div class="col-md-4" style="margin-top:5px; margin-bottom:5px;">
-            
+            <a href="#" title="{{_('Netspace Size')}}" onclick='PopupChart("netspace_size","{{ blockchain }}");return false;'><i class="fs-4 bi-graph-up-arrow" style="float:right; margin-top: 7px; margin-right:7px"></i></a>
             <div class="h-100 p-2 text-white bg-dark rounded-3"
               style="padding-top:12px !important; padding-bottom:12px !important;">
               <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
@@ -121,7 +123,9 @@
               </div>
             </div>
             <h6 class="display-6 text-center">{{blockchain|capitalize}} - {{_('Wallets')}}</h6>
-            <canvas id="{{blockchain}}_wallets_chart"></canvas>
+            <div style="position: relative; height: 350px">
+              <canvas id="{{blockchain}}_wallets_chart"></canvas>
+            </div>
           </div>
         </div>
         {% endif %}
@@ -137,7 +141,9 @@
               </div>
             </div>
             <h6 class="display-6 text-center">{{blockchain|capitalize}} - {{_('Challenges from Harvesters')}}</h6>
-            <canvas id="{{blockchain}}_challenges_chart"></canvas>
+            <div style="position: relative; height: 350px">
+              <canvas id="{{blockchain}}_challenges_chart" height="400"></canvas>
+            </div>
           </div>
         </div>
         {% endif %}
@@ -153,7 +159,9 @@
               </div>
             </div>
             <h6 class="display-6 text-center">{{blockchain|capitalize}} - {{_('Partial Proofs for Pools')}}</h6>
-            <canvas id="{{blockchain}}_partials_chart"></canvas>
+            <div style="position: relative; height: 350px">
+              <canvas id="{{blockchain}}_partials_chart" height="400px" width="100%"></canvas>
+            </div>
           </div>
         </div>
         {% endif %}

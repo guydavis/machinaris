@@ -61,6 +61,8 @@ var myChart = new Chart(ctx, {
     },
     borderWidth: 1,
     options: {
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: {  
         legend: {
             labels: {
@@ -132,6 +134,8 @@ var myChart = new Chart(ctx, {
     },
     borderWidth: 1,
     options: {
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: {  
           legend: {
               labels: {
@@ -203,6 +207,8 @@ var myChart = new Chart(ctx, {
     },
     borderWidth: 1,
     options: {
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: {  
           legend: {
               labels: {

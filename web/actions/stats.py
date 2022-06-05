@@ -393,6 +393,25 @@ def load_wallet_balances(blockchain):
     #app.logger.info(values)
     return { 'title': blockchain.capitalize() + ' - ' + _('Wallet Balances'), 'dates': dates, 'vals': values}
 
+def load_netspace_size(blockchain):
+    dates = []
+    values = []
+    result = db.session.query(StatNetspaceSize).order_by(StatNetspaceSize.created_at.asc()).filter(
+            StatNetspaceSize.blockchain == blockchain).all()
+    for i in range(len(result)):
+        s = result[i]
+        converted_date = converters.convert_date_for_luxon(s.created_at)
+        if (i == 0) or (i % 24 == 0) or (i == len(result) - 1):
+            dates.append(converted_date)
+            values.append(s.value)
+    #app.logger.info(dates)
+    # TODO Handle data crossing single unit boundary (either up or down)
+    unit = converters.gib_to_fmt(max(values)).split()[1]
+    converted_values = list(map(lambda x: float(converters.gib_to_fmt(x).split()[0]), values))
+    app.logger.info(converted_values)
+    return { 'title': blockchain.capitalize() + ' - ' + _('Netspace Size'), 'dates': dates, 'vals': converted_values, 
+        'y_axis_title': _('Size') + ' (' + unit + ')'}
+
 def load_farmed_blocks(blockchain):
     blocks = []
     result = db.session.query(StatFarmedBlocks).order_by(StatFarmedBlocks.created_at.desc()).filter(
@@ -413,6 +432,43 @@ def load_farmed_blocks(blockchain):
         })
     app.logger.info(blocks)
     return blocks
+
+def load_plot_count(blockchain):
+    dates = []
+    values = []
+    result = db.session.query(StatPlotCount).order_by(StatPlotCount.created_at.asc()).filter(
+            StatPlotCount.blockchain == blockchain).all()
+    last_value = None
+    for i in range(len(result)):
+        s = result[i]
+        converted_date = converters.convert_date_for_luxon(s.created_at)
+        if (last_value != s.value) or (i % 24 == 0) or (i == len(result) - 1):
+            dates.append(converted_date)
+            values.append(s.value)
+            last_value = s.value
+    #app.logger.info(dates)
+    #app.logger.info(values)
+    return { 'title': blockchain.capitalize() + ' - ' + _('Plot Counts'), 'dates': dates, 'vals': values}
+
+def load_plots_size(blockchain):
+    dates = []
+    values = []
+    result = db.session.query(StatPlotsSize).order_by(StatPlotsSize.created_at.asc()).filter(
+            StatPlotsSize.blockchain == blockchain).all()
+    last_value = None
+    for i in range(len(result)):
+        s = result[i]
+        converted_date = converters.convert_date_for_luxon(s.created_at)
+        if (last_value != s.value) or (i % 24 == 0) or (i == len(result) - 1):
+            dates.append(converted_date)
+            values.append(s.value)
+            last_value = s.value
+    # TODO Handle data crossing single unit boundary (either up or down)
+    unit = converters.gib_to_fmt(max(values)).split()[1]
+    converted_values = list(map(lambda x: float(converters.gib_to_fmt(x).split()[0]), values))
+    app.logger.info(converted_values)
+    return { 'title': blockchain.capitalize() + ' - ' + _('Plots Size'), 'dates': dates, 'vals': converted_values, 
+        'y_axis_title': _('Size') + ' (' + unit + ')'}
 
 def wallet_chart_data(farm_summary):
     for blockchain in farm_summary.farms:
