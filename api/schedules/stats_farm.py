@@ -17,7 +17,7 @@ from api.commands import chia_cli, mmx_cli
 DELETE_OLD_STATS_AFTER_DAYS = 30
 
 TABLES = [ stats.StatPlotCount, stats.StatPlotsSize, stats.StatTotalCoins,
-           stats.StatNetspaceSize, stats.StatTimeToWin ]
+           stats.StatNetspaceSize, stats.StatTimeToWin, stats.StatWalletBalances, ]
 
 def delete_old_stats():
     try:
