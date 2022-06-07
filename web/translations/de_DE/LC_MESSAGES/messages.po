@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-06-06 20:47-0600\n"
+"POT-Creation-Date: 2022-06-07 10:26-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: ApfelBirneKreisLanguage: de\n"
 "Language: de_DE\n"
@@ -142,14 +142,15 @@ msgstr "Sekunden"
 msgid "hour"
 msgstr "Stunde"
 
-#: actions/stats.py:399 templates/views/index_script_block.js:51
+#: actions/stats.py:399 templates/index/index.html:97
+#: templates/views/index_script_block.js:51
 msgid "Farmed Coins"
 msgstr ""
 
-#: actions/stats.py:416
-#, fuzzy
-msgid "Wallet Balances"
-msgstr "Wallet Bilanz"
+#: actions/stats.py:416 templates/index/index.html:89
+#: templates/views/index_script_block.js:56 templates/wallet.html:112
+msgid "Total Balance"
+msgstr "Totale Bilanz"
 
 #: actions/stats.py:433 templates/index/index.html:105
 msgid "Netspace Size"
@@ -543,67 +544,90 @@ msgstr "Abbrechen"
 msgid "Save"
 msgstr "Speichern"
 
-#: templates/connections.html:84
+#: templates/connections.html:82
 msgid "Connections Map"
 msgstr "Verbindungs karte"
 
-#: templates/connections.html:105
+#: templates/connections.html:112
+msgid "Map your network peers around the world"
+msgstr ""
+
+#: templates/connections.html:114
+#, python-format
+msgid ""
+"To get started, you'll need a "
+"%(maxmind_link)s%(b_tag_open)sFREE%(b_tag_close)s Maxmind "
+"account%(a_tag_close)s to \n"
+"        allow Machinaris to geolocate your network peer IP addresses. "
+"%(i_tag_open)sOptionally%(i_tag_close)s, you can also get\n"
+"        better looking map tiles with a "
+"%(mapbox_link)s%(b_tag_open)sFREE%(b_tag_close)s Mapbox "
+"account%(a_tag_close)s."
+msgstr ""
+
+#: templates/connections.html:120
+msgid ""
+"To enter your map account details, click the Settings (gear icon) button "
+"on the top-right of this page."
+msgstr ""
+
+#: templates/connections.html:128
 msgid "Connection Details"
 msgstr "Verbindungs Details"
 
-#: templates/connections.html:141
+#: templates/connections.html:162
 msgid "Type"
 msgstr "Typ"
 
-#: templates/connections.html:142 templates/worker.html:39
+#: templates/connections.html:163 templates/worker.html:39
 msgid "IP Address"
 msgstr ""
 
-#: templates/connections.html:144
+#: templates/connections.html:165
 msgid "City"
 msgstr "Stadt"
 
-#: templates/connections.html:145
+#: templates/connections.html:166
 msgid "Country"
 msgstr "Land"
 
-#: templates/connections.html:147
+#: templates/connections.html:168
 msgid "Ports"
 msgstr ""
 
-#: templates/connections.html:148
+#: templates/connections.html:169
 msgid "SB Height"
 msgstr ""
 
-#: templates/connections.html:149
+#: templates/connections.html:170
 msgid "Last Connect"
 msgstr ""
 
-#: templates/connections.html:150
+#: templates/connections.html:171
 msgid "MiB Up"
 msgstr ""
 
-#: templates/connections.html:151
+#: templates/connections.html:172
 msgid "MiB Down"
 msgstr ""
 
-#: templates/connections.html:186
+#: templates/connections.html:207
 msgid "Disconnect Selected"
 msgstr "Ausgewählte Verbindungen unterbrechen"
 
-#: templates/connections.html:192
+#: templates/connections.html:213
 msgid "Check Port Forwarding"
 msgstr "Portfreigaben checken"
 
-#: templates/connections.html:208
+#: templates/connections.html:229
 msgid "Add New Connection"
 msgstr "Neue Verbindung hinzufügen"
 
-#: templates/connections.html:220
+#: templates/connections.html:241
 msgid "No connections found from any farmers yet. Perhaps just starting?"
 msgstr "Keine Verbindungen zu Farmern gefunden. Gerade erst gestartet?"
 
-#: templates/connections.html:221
+#: templates/connections.html:242
 msgid ""
 "After a while, try running \"chia show --connections\" on your farmers to"
 " verify."
@@ -905,17 +929,13 @@ msgstr "Cold Wallet Adresse:"
 msgid "Wallet Summary"
 msgstr "Wallet Zusammenfassung"
 
-#: templates/index/index.html:89 templates/wallet.html:110
+#: templates/wallet.html:110
 msgid "Wallet Balance"
 msgstr "Wallet Bilanz"
 
 #: templates/wallet.html:111
 msgid "Cold Wallet Balance"
 msgstr "Cold Wallet Bilanz"
-
-#: templates/views/index_script_block.js:56 templates/wallet.html:112
-msgid "Total Balance"
-msgstr "Totale Bilanz"
 
 #: templates/index/index.html:92 templates/wallet.html:113
 msgid "Balance"
@@ -1316,7 +1336,7 @@ msgid ""
 "worker is reporting into the controller on the Workers page."
 msgstr ""
 
-#: templates/index/chart_balances.html:85 templates/index/chart_farmed.html:131
+#: templates/index/chart_balances.html:85 templates/index/chart_farmed.html:133
 #: templates/index/chart_netspace.html:91
 #: templates/index/chart_plot_count.html:84
 #: templates/index/chart_plots_size.html:84 templates/plotting/jobs.html:285
@@ -1325,12 +1345,12 @@ msgid "Date"
 msgstr ""
 
 #: templates/index/chart_balances.html:102
-#: templates/index/chart_farmed.html:148
+#: templates/index/chart_farmed.html:150
 #: templates/views/index_script_block.js:107
 msgid "Coins"
 msgstr ""
 
-#: templates/index/chart_farmed.html:48 templates/index/index.html:97
+#: templates/index/chart_farmed.html:48
 msgid "Farmed Blocks"
 msgstr ""
 
@@ -1626,4 +1646,7 @@ msgstr ""
 #: templates/views/index_script_block.js:249
 msgid "Partials Submitted"
 msgstr ""
+
+#~ msgid "Wallet Balances"
+#~ msgstr "Wallet Bilanz"
 

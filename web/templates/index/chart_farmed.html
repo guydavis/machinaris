@@ -41,7 +41,7 @@
 
 <body>
     <div class="rounded-3 small">
-        <canvas id="chart_area"></canvas>
+        <canvas id="chart_area" height="400px" width="100%"></canvas>
     </div>
     {% if farmed_blocks|length > 0 %}
     <div class="rounded-3 small">
@@ -110,6 +110,8 @@
             },
             borderWidth: 1,
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: {  
                     legend: {
                         labels: {

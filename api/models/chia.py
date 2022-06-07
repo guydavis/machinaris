@@ -97,7 +97,7 @@ class Wallets:
                     'total_balance': total_balance,
                     'updated_at': wallet.updated_at })
             else:
-                app.logger.info("Skipping blockchain {0}".format(wallet.blockchain))
+                app.logger.debug("api.models.Wallets.init(): Skipping blockchain {0}".format(wallet.blockchain))
 
     def exclude_cat_wallets(self, wallet_details):
         details = []

@@ -407,13 +407,13 @@ def load_wallet_balances(blockchain):
     for i in range(len(result)):
         s = result[i]
         converted_date = converters.convert_date_for_luxon(s.created_at)
-        if (last_value != s.value) or (i % 24 == 0) or (i == len(result) - 1):
+        if (last_value != s.value) or ((i + 12) % 24 == 0) or (i == len(result) - 1):
             dates.append(converted_date)
             values.append(s.value)
             last_value = s.value
     #app.logger.info(dates)
     #app.logger.info(values)
-    return { 'title': blockchain.capitalize() + ' - ' + _('Wallet Balances'), 'dates': dates, 'vals': values}
+    return { 'title': blockchain.capitalize() + ' - ' + _('Total Balance'), 'dates': dates, 'vals': values}
 
 def load_netspace_size(blockchain):
     dates = []
