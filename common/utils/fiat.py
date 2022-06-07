@@ -23,7 +23,7 @@ def to_fiat(blockchain, coins):
                     usd_per_coin = float(data[blockchain])
                     fiat_per_usd = get_fiat_exchange_to_usd()
                     fiat_cur_sym = get_local_currency_symbol().lower()
-                    if usd_per_coin and fiat_per_usd:
+                    if usd_per_coin and fiat_per_usd and coins:
                         #print("Converting {0} coins of {1} with {2}".format(coins, usd_per_coin, fiat_per_usd))
                         fiat_localized = format_currency(round(usd_per_coin * fiat_per_usd * coins, 2), '')
                         return "{0} {1}".format(fiat_localized, fiat_cur_sym)

@@ -3,7 +3,6 @@
 #
 
 import datetime
-from decimal import ROUND_HALF_DOWN
 import sqlite3
 
 from flask import g
@@ -41,7 +40,8 @@ def load_daily_diff(farm_summary):
         since_str = since_date.strftime("%Y%m%d%H%M%S")
         summary['plot_count'] = plot_count_diff(since_str, blockchain)
         summary['plots_size'] = plots_size_diff(since_str, blockchain)
-        summary['total_coin'] = total_coin_diff(since_str, blockchain)
+        summary['total_coins'] = total_coin_diff(since_str, blockchain)
+        summary['wallet_balance'] = wallet_balance_diff(since_str, blockchain)
         summary['netspace_size'] = netspace_size_diff(since_str, blockchain)
         #app.logger.info("{0} -> {1}".format(blockchain, summary))
         farm_summary.farms[blockchain]['daily_diff'] = summary
@@ -53,7 +53,7 @@ def plot_count_diff(since, blockchain):
         #app.logger.info(latest.value)
         before = db.session.query(StatPlotCount).filter(StatPlotCount.blockchain==blockchain, StatPlotCount.created_at <= since).order_by(StatPlotCount.created_at.desc()).limit(1).first()
         #app.logger.info(before.value)
-        if (latest.value - before.value) != 0:
+        if (latest and before) and (latest.value - before.value) != 0:
             result = ("%+0g " % (latest.value - before.value)) + _('in last day.')
     except Exception as ex:
         app.logger.debug("Failed to query for day diff of plot_count because {0}".format(str(ex)))
@@ -67,14 +67,15 @@ def plots_size_diff(since, blockchain):
         #app.logger.info(latest.value)
         before = db.session.query(StatPlotsSize).filter(StatPlotsSize.blockchain==blockchain, StatPlotsSize.created_at <= since).order_by(StatPlotsSize.created_at.desc()).limit(1).first()
         #app.logger.info(before.value)
-        gibs = (latest.value - before.value)
-        fmtted = converters.gib_to_fmt(gibs)
-        if fmtted == "0 B":
-            result = ""
-        elif not fmtted.startswith('-'):
-            result = "+{0} in last day.".format(fmtted)
-        else:
-            result = fmtted
+        if (latest and before):
+            gibs = (latest.value - before.value)
+            fmtted = converters.gib_to_fmt(gibs)
+            if fmtted == "0 B":
+                result = ""
+            elif not fmtted.startswith('-'):
+                result = "+{0} in last day.".format(fmtted)
+            else:
+                result = fmtted
     except Exception as ex:
         app.logger.debug("Failed to query for day diff of plots_size because {0}".format(str(ex)))
     #app.logger.info("Result is: {0}".format(result))
@@ -87,11 +88,30 @@ def total_coin_diff(since, blockchain):
         #app.logger.info(latest.value)
         before = db.session.query(StatTotalCoins).filter(StatTotalCoins.blockchain==blockchain, StatTotalCoins.created_at <= since).order_by(StatTotalCoins.created_at.desc()).limit(1).first()
         #app.logger.info(before.value)
-        if (latest.value - before.value) != 0:
+        if (latest and before) and (latest.value - before.value) != 0:
             result = ("%+6g " % (latest.value - before.value)) + _('in last day.')
+            #app.logger.info("Total coins daily diff: {0}".format(result))
     except Exception as ex:
         app.logger.debug("Failed to query for day diff of total_coin because {0}".format(str(ex)))
     #app.logger.info("Result is: {0}".format(result))
+    return result
+
+def wallet_balance_diff(since, blockchain):
+    result = ''
+    try:
+        latest = db.session.query(StatWalletBalances).filter(StatWalletBalances.blockchain==blockchain).order_by(StatWalletBalances.created_at.desc()).limit(1).first()
+        #if blockchain == 'cactus':
+        #    app.logger.info(latest.value)
+        before = db.session.query(StatWalletBalances).filter(StatWalletBalances.blockchain==blockchain, StatWalletBalances.created_at <= since).order_by(StatWalletBalances.created_at.desc()).limit(1).first()
+        #if blockchain == 'cactus':
+        #    app.logger.info(before.value)
+        if (latest and before) and (latest.value - before.value) != 0:
+            result = ("%+6g " % (latest.value - before.value)) + _('in last day.')
+            #app.logger.info("Total coins daily diff: {0}".format(result))
+    except Exception as ex:
+        app.logger.info("Failed to query for day diff of wallet_balances because {0}".format(str(ex)))
+    #if blockchain == 'cactus':
+    #    app.logger.info("Result is: {0}".format(result))
     return result
 
 def netspace_size_diff(since, blockchain):
@@ -101,14 +121,15 @@ def netspace_size_diff(since, blockchain):
         #app.logger.info(latest.value)
         before = db.session.query(StatNetspaceSize).filter(StatNetspaceSize.blockchain==blockchain, StatNetspaceSize.created_at <= since).order_by(StatNetspaceSize.created_at.desc()).limit(1).first()
         #app.logger.info(before.value)
-        gibs = (latest.value - before.value)
-        fmtted = converters.gib_to_fmt(gibs)
-        if fmtted == "0 B":
-            result = ""
-        elif not fmtted.startswith('-'):
-            result = ("+{0} ".format(fmtted))  + _('in last day.')
-        else:
-            result = ("{0} ".format(fmtted)) + _('in last day.')
+        if (latest and before):
+            gibs = (latest.value - before.value)
+            fmtted = converters.gib_to_fmt(gibs)
+            if fmtted == "0 B":
+                result = ""
+            elif not fmtted.startswith('-'):
+                result = ("+{0} ".format(fmtted))  + _('in last day.')
+            else:
+                result = ("{0} ".format(fmtted)) + _('in last day.')
     except Exception as ex:
         app.logger.debug("Failed to query for day diff of netspace_size because {0}".format(str(ex)))
     #app.logger.debug("Result is: {0}".format(result))
@@ -394,6 +415,24 @@ def load_wallet_balances(blockchain):
     #app.logger.info(values)
     return { 'title': blockchain.capitalize() + ' - ' + _('Wallet Balances'), 'dates': dates, 'vals': values}
 
+def load_netspace_size(blockchain):
+    dates = []
+    values = []
+    result = db.session.query(StatNetspaceSize).order_by(StatNetspaceSize.created_at.asc()).filter(
+            StatNetspaceSize.blockchain == blockchain).all()
+    for i in range(len(result)):
+        s = result[i]
+        converted_date = converters.convert_date_for_luxon(s.created_at)
+        if (i == 0) or (i % 24 == 0) or (i == len(result) - 1):
+            dates.append(converted_date)
+            values.append(s.value)
+    #app.logger.info(dates)
+    unit = converters.gib_to_fmt(max(values)).split()[1]
+    converted_values = list(map(lambda x: float(converters.gib_to_fmt(x, target_unit=unit).split()[0]), values))
+    #app.logger.info(converted_values)
+    return { 'title': blockchain.capitalize() + ' - ' + _('Netspace Size'), 'dates': dates, 'vals': converted_values, 
+        'y_axis_title': _('Size') + ' (' + unit + ')'}
+
 def load_farmed_blocks(blockchain):
     blocks = []
     result = db.session.query(StatFarmedBlocks).order_by(StatFarmedBlocks.created_at.desc()).filter(
@@ -404,7 +443,7 @@ def load_farmed_blocks(blockchain):
             displayname = w.displayname
         except:
             app.logger.debug("Failed to find worker for hostname: {0}".format(ResourceWarning.hostname))
-            displayname = ROUND_HALF_DOWN.hostname
+            displayname = row.hostname
         blocks.append({
             'hostname': displayname,
             'blockchain': blockchain,
@@ -414,3 +453,72 @@ def load_farmed_blocks(blockchain):
         })
     app.logger.info(blocks)
     return blocks
+
+def load_plot_count(blockchain):
+    dates = []
+    values = []
+    result = db.session.query(StatPlotCount).order_by(StatPlotCount.created_at.asc()).filter(
+            StatPlotCount.blockchain == blockchain).all()
+    last_value = None
+    for i in range(len(result)):
+        s = result[i]
+        converted_date = converters.convert_date_for_luxon(s.created_at)
+        if (last_value != s.value) or (i % 24 == 0) or (i == len(result) - 1):
+            dates.append(converted_date)
+            values.append(s.value)
+            last_value = s.value
+    #app.logger.info(dates)
+    #app.logger.info(values)
+    return { 'title': blockchain.capitalize() + ' - ' + _('Plot Counts'), 'dates': dates, 'vals': values}
+
+def load_plots_size(blockchain):
+    dates = []
+    values = []
+    result = db.session.query(StatPlotsSize).order_by(StatPlotsSize.created_at.asc()).filter(
+            StatPlotsSize.blockchain == blockchain).all()
+    last_value = None
+    for i in range(len(result)):
+        s = result[i]
+        converted_date = converters.convert_date_for_luxon(s.created_at)
+        if (last_value != s.value) or (i % 24 == 0) or (i == len(result) - 1):
+            dates.append(converted_date)
+            values.append(s.value)
+            last_value = s.value
+    #app.logger.info(dates)
+    unit = converters.gib_to_fmt(max(values)).split()[1]
+    converted_values = list(map(lambda x: float(converters.gib_to_fmt(x, target_unit=unit).split()[0]), values))
+    #app.logger.info(converted_values)
+    return { 'title': blockchain.capitalize() + ' - ' + _('Plots Size'), 'dates': dates, 'vals': converted_values, 
+        'y_axis_title': _('Size') + ' (' + unit + ')'}
+
+def wallet_chart_data(farm_summary):
+    for blockchain in farm_summary.farms:
+        balances = load_wallet_balances(blockchain)
+        coins = load_farmed_coins(blockchain)
+        chart_data = { 'dates': [], 'balances': [], 'coins': []}
+        i = j = 0
+        # First push thru wallet balances list
+        while i < len(balances['dates']):
+            balance_date = balances['dates'][i]
+            if j < len(coins['dates']):
+                coin_date = coins['dates'][j]
+            else:
+                coin_date = '2100-01-01' # far in future
+            if balance_date < coin_date:
+                chart_data['dates'].append(balance_date)
+                chart_data['balances'].append(converters.round_balance(balances['vals'][i]))
+                chart_data['coins'].append('null') # Javascript null
+                i += 1
+            else:
+                chart_data['dates'].append(coin_date)
+                chart_data['coins'].append(converters.round_balance(coins['vals'][j]))
+                chart_data['balances'].append('null') # Javascript null
+                j += 1
+        # Then add any remaining farmed coins
+        while j < len(coins['dates']):
+            chart_data['dates'].append(coins['dates'][j])
+            chart_data['coins'].append(converters.round_balance(coins['vals'][j]))
+            chart_data['balances'].append('null') # Javascript null
+            j += 1
+        #app.logger.info("{0} -> {1}".format(blockchain, chart_data))
+        farm_summary.farms[blockchain]['wallets'] = chart_data

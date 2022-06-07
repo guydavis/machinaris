@@ -67,6 +67,7 @@
         <div class="row align-items-md-stretch">
           <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
             <div class="h-100 p-2 text-white bg-dark rounded-3">
+              <a href="#" title="{{_('Plot Count')}}" onclick='PopupChart("plot_count","{{ blockchain }}");return false;'><i class="fs-4 bi-graph-up-arrow" style="float:right"></i></a>
               <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
                 data-html="true" title="{{ farms[blockchain].daily_diff.plot_count }}">{{farms[blockchain].plot_count }}</h4>
               <h6 class="display-6 text-center">{{_('Total Plots')}}</h6>
@@ -74,6 +75,7 @@
           </div>
           <div class="col-md-6" style="margin-top:5px; margin-bottom:5px;">
             <div class="h-100 p-2 text-white bg-dark rounded-3">
+              <a href="#" title="{{_('Plots Size')}}" onclick='PopupChart("plots_size","{{ blockchain }}");return false;'><i class="fs-4 bi-graph-up-arrow" style="float:right"></i></a>
               <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
                 data-html="true" title="{{ farms[blockchain].daily_diff.plots_size }}">{{farms[blockchain].plots_display_size }}</h4>
               <h6 class="display-6 text-center">{{_('Total Plots Size')}}</h6>
@@ -84,13 +86,14 @@
         <div class="row align-items-md-stretch">
           <div class="col-md-4" style="margin-top:5px; margin-bottom:5px;">
             <div class="h-100 p-2 text-white bg-dark rounded-3">
-              <a href="#" title="{{_('Wallet Balance')}}" onclick='PopupChart("wallet_balances","{{ blockchain }}");return false;'><i class="fs-4 bi-graph-up-arrow" style="float:right"></i></a>
+              <a href="#" title="{{_('Wallet Balance')}}" onclick='PopupChart("wallet_balances","{{ blockchain }}");return false;'><i class="fs-4 bi-graph-up-arrow" style="float:right;{% if farms[blockchain].daily_diff.total_coins %}margin-right:35px;{% endif %}"></i></a>
               <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
                 data-html="true" title="{{ farms[blockchain].daily_diff.wallet_balance }}">{{farms[blockchain].wallet_balance }}</h4>
               <h6 class="display-6 text-center">{{ farms[blockchain].currency_symbol }} {{_('Balance')}}</h6>
             </div>
           </div>
           <div class="col-md-4" style="margin-top:5px; margin-bottom:5px;">
+            <img id="{{blockchain}}_mario" src="{{ url_for('static', filename='mario_coin.gif') }}" style="{% if not farms[blockchain].daily_diff.total_coins %}display:none; {% endif %}float: left; width: 185px; height: 150px; margin-left:-60px; margin-right:-90px" />
             <a href="#" title="{{_('Farmed Blocks')}}" onclick='PopupChart("farmed_blocks","{{ blockchain }}");return false;'><i class="fs-4 bi-graph-up-arrow" style="float:right; margin-top: 7px; margin-right:7px"></i></a>
             <div class="h-100 p-2 text-white bg-dark rounded-3">
               <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
@@ -99,9 +102,7 @@
             </div>
           </div>
           <div class="col-md-4" style="margin-top:5px; margin-bottom:5px;">
-            {% if blockchain != 'mmx' %}
-            <a href="{{ blockchain|alltheblocks_blockchainlink}}" target="_blank" title="{{_('Blockchain Details')}}" ><i class="fs-4 bi-box-arrow-up-right" style="float:right; margin-top: 7px; margin-right:7px"></i></a>
-            {% endif %}
+            <a href="#" title="{{_('Netspace Size')}}" onclick='PopupChart("netspace_size","{{ blockchain }}");return false;'><i class="fs-4 bi-graph-up-arrow" style="float:right; margin-top: 7px; margin-right:7px"></i></a>
             <div class="h-100 p-2 text-white bg-dark rounded-3"
               style="padding-top:12px !important; padding-bottom:12px !important;">
               <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"
@@ -111,6 +112,24 @@
             </div>
           </div>
         </div>
+
+        {% if farms[blockchain].wallets.dates|length > 0 %}
+        <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
+          <div class="h-100 p-2 text-white bg-dark rounded-3">
+            <div class="position-relative">
+              <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -10px; margin-right: -3px;">
+                <a href="https://github.com/guydavis/machinaris/wiki/Wallets" target="_blank">
+                  <i class="fs-4 bi-question-circle"></i>
+                </a>
+              </div>
+            </div>
+            <h6 class="display-6 text-center">{{blockchain|capitalize}} - {{_('Wallets')}}</h6>
+            <div style="position: relative; height: 350px">
+              <canvas id="{{blockchain}}_wallets_chart"></canvas>
+            </div>
+          </div>
+        </div>
+        {% endif %}
 
         {% if farms[blockchain].challenges.labels|length > 0 %}
         <div class="col-md-12" style="margin-top:5px; margin-bottom:5px;">
@@ -123,7 +142,9 @@
               </div>
             </div>
             <h6 class="display-6 text-center">{{blockchain|capitalize}} - {{_('Challenges from Harvesters')}}</h6>
-            <canvas id="{{blockchain}}_challenges_chart"></canvas>
+            <div style="position: relative; height: 350px">
+              <canvas id="{{blockchain}}_challenges_chart" height="400"></canvas>
+            </div>
           </div>
         </div>
         {% endif %}
@@ -139,10 +160,13 @@
               </div>
             </div>
             <h6 class="display-6 text-center">{{blockchain|capitalize}} - {{_('Partial Proofs for Pools')}}</h6>
-            <canvas id="{{blockchain}}_partials_chart"></canvas>
+            <div style="position: relative; height: 350px">
+              <canvas id="{{blockchain}}_partials_chart" height="400px" width="100%"></canvas>
+            </div>
           </div>
         </div>
         {% endif %}
+
       </div>
       {% endfor %}
     </div>

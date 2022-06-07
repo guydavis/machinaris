@@ -56,7 +56,7 @@ def execute():
                     'pool_contract_address': pool_contract_address
                 }
                 try:
-                    utils.send_worker_post(fullnode, '/rewards/', payload, debug=True)
+                    utils.send_worker_post(fullnode, '/rewards/', payload, debug=False)
                 except Exception as ex:
                     app.logger.error("Failed to request reward recovery for {0} to {1}:{2} because {3}.".format(
                         fullnode.blockchain, fullnode.hostname, fullnode.port, str(ex)))

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{{ url_for('static', filename='3rd_party/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='3rd_party/icons/bootstrap-icons.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='3rd_party/dataTables.bootstrap5.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='3rd_party/leaflet.css') }}" />
+    <title>{{ chart_data.title }}</title>
+    {% if reload_seconds %}
+    <meta http-equiv="refresh" content="{{ reload_seconds }}">
+    {% endif %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <style>
+        body {
+            background-color: #15171a;
+            color: #c7c7c7;
+        }
+
+        .rounded-3 {
+            border-radius: .5rem !important;
+            background-color: #212529 !important;
+            -webkit-box-shadow: 0px 1px 0px 0px #000;
+            box-shadow: 0px 1px 0px 0px #000;
+            border: 0 !important;
+            margin: 10px;
+            padding: 10px;
+            padding-top: 20px;
+        }
+    </style>
+    <script>
+        function get(name) {
+            if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
+                return decodeURIComponent(name[1]);
+        }
+    </script>
+</head>
+
+<body>
+    <div class="rounded-3 small">
+        <canvas id="chart_area"></canvas>
+    </div>
+
+    <div class="text-center"><small><i>Loaded at: {{ global_config.now }}</small></i></div>
+    <script src="{{ url_for('static', filename='3rd_party/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='3rd_party/jquery.min.js') }}"></script>
+    <script type="text/javascript" charset="utf8"
+        src="{{ url_for('static', filename='3rd_party/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" charset="utf8"
+        src="{{ url_for('static', filename='3rd_party/dataTables.bootstrap5.js') }}"></script>
+    <script src="{{ url_for('static', filename='3rd_party/chart.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='3rd_party/luxon.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='3rd_party/chartjs-adapter-luxon.min.js') }}"></script>
+    <script>
+        var ctx = document.getElementById('chart_area');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ chart_data.dates | safe }},
+                datasets: [
+                    {
+                        label: '{{ chart_data.title }}',
+                        data: {{ chart_data.vals }},
+                        backgroundColor: '#3aac59',
+                    },
+                ],
+            },
+            borderWidth: 1,
+            options: {
+                plugins: {  
+                    legend: {
+                        labels: {
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            tooltipFormat: 'DD T'
+                        },
+                        title: {
+                            display: true,
+                            text: "{{_('Date')}}",
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        },
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "{{ chart_data.y_axis_title }}",
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        },
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

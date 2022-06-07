@@ -20,17 +20,30 @@ def sizeof_fmt(num, suffix='B'):
         return "0"
     return value
 
+def sizeof_fmt_unit(num, target_unit):
+    for unit in ['','KiB','MiB','GiB','TiB','PiB','EiB','ZiB']:
+        if target_unit == unit:
+            return "{0} {1}".format(flask_babel.format_decimal(num), unit)
+        num /= 1024.0
+    value = "{0} {1}".format(flask_babel.format_decimal(num, 'YiB'))
+    if value == "0.000 B":
+        return "0"
+    return value
+
 def convert_size(size_bytes):
    if size_bytes == 0:
-       return "0B"
+       return "0 B"
    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
    i = int(math.floor(math.log(size_bytes, 1024)))
    p = math.pow(1024, i)
    s = round(size_bytes / p, 2)
    return "%s %s" % (s, size_name[i])
 
-def gib_to_fmt(gibs):
-    return sizeof_fmt(gibs * 1024 * 1024 * 1024)
+def gib_to_fmt(gibs, target_unit=None):
+    if target_unit:
+        return sizeof_fmt_unit(gibs * 1024 * 1024 * 1024, target_unit=target_unit)
+    else:
+        return sizeof_fmt(gibs * 1024 * 1024 * 1024)
 
 def str_to_gibs(str):
     if str == "Unknown":

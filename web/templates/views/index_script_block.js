@@ -40,6 +40,82 @@ $('[data-toggle="tooltip"]').tooltip();
 
 {% for blockchain in farms %}
 
+{% if farms[blockchain].wallets.dates|length > 0 %}
+var ctx = document.getElementById('{{blockchain}}_wallets_chart');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ farms[blockchain].wallets.dates | safe }},
+        datasets: [
+            {
+                label: "{{_('Farmed Coins')}}",
+                data: {{ farms[blockchain].wallets.coins | safe }},
+                backgroundColor: color(0),
+            },
+            {
+              label: "{{_('Total Balance')}}",
+              data: {{ farms[blockchain].wallets.balances | safe }},
+              backgroundColor: color(1),
+            },
+        ],
+    },
+    borderWidth: 1,
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {  
+        legend: {
+            labels: {
+            color: "#c7c7c7",  
+            font: {
+              size: 18 
+            }
+          }
+        }
+      },
+      scales: {
+          x: {
+              type: 'time',
+              time: {
+                  tooltipFormat: 'DD T'
+              },
+              ticks: {
+                  color: "#c7c7c7",
+                  font: {
+                    size: 16 
+                  }  
+              },
+              title: {
+                  display: true,
+                  text: "{{_('Date')}}",
+                  color: "#c7c7c7",  
+                  font: {
+                    size: 18 
+                  }
+              }
+          },
+          y: {
+              ticks: {
+                  color: "#c7c7c7",  
+                  font: {
+                    size: 16 
+                  }
+              },
+              beginAtZero: true,
+              title: {
+                  display: true,
+                  text: "{{_('Coins')}}",
+                  color: "#c7c7c7",  
+                  font: {
+                    size: 18 
+                  }
+              }
+          }
+      }
+    }
+  });
+  {% endif %}
+
 {% if farms[blockchain].challenges.labels|length > 0 %}
 var ctx = document.getElementById('{{blockchain}}_challenges_chart');
 var myChart = new Chart(ctx, {
@@ -58,6 +134,8 @@ var myChart = new Chart(ctx, {
     },
     borderWidth: 1,
     options: {
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: {  
           legend: {
               labels: {
@@ -129,6 +207,8 @@ var myChart = new Chart(ctx, {
     },
     borderWidth: 1,
     options: {
+        responsive: true,
+        maintainAspectRatio: false,
         plugins: {  
           legend: {
               labels: {
