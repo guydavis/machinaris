@@ -93,7 +93,7 @@
             </div>
           </div>
           <div class="col-md-4" style="margin-top:5px; margin-bottom:5px;">
-            <img src="{{ url_for('static', filename='mario_coin.gif') }}" style="{% if not farms[blockchain].daily_diff.total_coins %}display:none; {% endif %}float: left; width: 185px; height: 150px; margin-left:-60px; margin-right:-90px" />
+            <img id="{{blockchain}}_mario" src="{{ url_for('static', filename='mario_coin.gif') }}" style="{% if not farms[blockchain].daily_diff.total_coins %}display:none; {% endif %}float: left; width: 185px; height: 150px; margin-left:-60px; margin-right:-90px" />
             <a href="#" title="{{_('Farmed Blocks')}}" onclick='PopupChart("farmed_blocks","{{ blockchain }}");return false;'><i class="fs-4 bi-graph-up-arrow" style="float:right; margin-top: 7px; margin-right:7px"></i></a>
             <div class="h-100 p-2 text-white bg-dark rounded-3">
               <h4 class="display-4 text-center text-success" data-toggle="tooltip" data-placement="left"

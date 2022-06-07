@@ -53,7 +53,7 @@ def plot_count_diff(since, blockchain):
         #app.logger.info(latest.value)
         before = db.session.query(StatPlotCount).filter(StatPlotCount.blockchain==blockchain, StatPlotCount.created_at <= since).order_by(StatPlotCount.created_at.desc()).limit(1).first()
         #app.logger.info(before.value)
-        if (latest.value - before.value) != 0:
+        if (latest and before) and (latest.value - before.value) != 0:
             result = ("%+0g " % (latest.value - before.value)) + _('in last day.')
     except Exception as ex:
         app.logger.debug("Failed to query for day diff of plot_count because {0}".format(str(ex)))
@@ -67,14 +67,15 @@ def plots_size_diff(since, blockchain):
         #app.logger.info(latest.value)
         before = db.session.query(StatPlotsSize).filter(StatPlotsSize.blockchain==blockchain, StatPlotsSize.created_at <= since).order_by(StatPlotsSize.created_at.desc()).limit(1).first()
         #app.logger.info(before.value)
-        gibs = (latest.value - before.value)
-        fmtted = converters.gib_to_fmt(gibs)
-        if fmtted == "0 B":
-            result = ""
-        elif not fmtted.startswith('-'):
-            result = "+{0} in last day.".format(fmtted)
-        else:
-            result = fmtted
+        if (latest and before):
+            gibs = (latest.value - before.value)
+            fmtted = converters.gib_to_fmt(gibs)
+            if fmtted == "0 B":
+                result = ""
+            elif not fmtted.startswith('-'):
+                result = "+{0} in last day.".format(fmtted)
+            else:
+                result = fmtted
     except Exception as ex:
         app.logger.debug("Failed to query for day diff of plots_size because {0}".format(str(ex)))
     #app.logger.info("Result is: {0}".format(result))
@@ -87,7 +88,7 @@ def total_coin_diff(since, blockchain):
         #app.logger.info(latest.value)
         before = db.session.query(StatTotalCoins).filter(StatTotalCoins.blockchain==blockchain, StatTotalCoins.created_at <= since).order_by(StatTotalCoins.created_at.desc()).limit(1).first()
         #app.logger.info(before.value)
-        if (latest.value - before.value) != 0:
+        if (latest and before) and (latest.value - before.value) != 0:
             result = ("%+6g " % (latest.value - before.value)) + _('in last day.')
             #app.logger.info("Total coins daily diff: {0}".format(result))
     except Exception as ex:
@@ -104,7 +105,7 @@ def wallet_balance_diff(since, blockchain):
         before = db.session.query(StatWalletBalances).filter(StatWalletBalances.blockchain==blockchain, StatWalletBalances.created_at <= since).order_by(StatWalletBalances.created_at.desc()).limit(1).first()
         #if blockchain == 'cactus':
         #    app.logger.info(before.value)
-        if (latest.value - before.value) != 0:
+        if (latest and before) and (latest.value - before.value) != 0:
             result = ("%+6g " % (latest.value - before.value)) + _('in last day.')
             #app.logger.info("Total coins daily diff: {0}".format(result))
     except Exception as ex:
@@ -120,14 +121,15 @@ def netspace_size_diff(since, blockchain):
         #app.logger.info(latest.value)
         before = db.session.query(StatNetspaceSize).filter(StatNetspaceSize.blockchain==blockchain, StatNetspaceSize.created_at <= since).order_by(StatNetspaceSize.created_at.desc()).limit(1).first()
         #app.logger.info(before.value)
-        gibs = (latest.value - before.value)
-        fmtted = converters.gib_to_fmt(gibs)
-        if fmtted == "0 B":
-            result = ""
-        elif not fmtted.startswith('-'):
-            result = ("+{0} ".format(fmtted))  + _('in last day.')
-        else:
-            result = ("{0} ".format(fmtted)) + _('in last day.')
+        if (latest and before):
+            gibs = (latest.value - before.value)
+            fmtted = converters.gib_to_fmt(gibs)
+            if fmtted == "0 B":
+                result = ""
+            elif not fmtted.startswith('-'):
+                result = ("+{0} ".format(fmtted))  + _('in last day.')
+            else:
+                result = ("{0} ".format(fmtted)) + _('in last day.')
     except Exception as ex:
         app.logger.debug("Failed to query for day diff of netspace_size because {0}".format(str(ex)))
     #app.logger.debug("Result is: {0}".format(result))

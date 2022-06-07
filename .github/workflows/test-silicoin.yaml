@@ -41,6 +41,7 @@ jobs:
           push: true
           build-args: |
             "MACHINARIS_STREAM=test"
+            "CHIADOG_BRANCH=dev"
             "SILICOIN_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-silicoin:test

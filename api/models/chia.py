@@ -90,11 +90,14 @@ class Wallets:
                 total_balance = float(hot_balance) + float(cold_balance)
             except:
                 total_balance = hot_balance
-            self.rows.append({ 
-                'hostname': wallet.hostname,
-                'blockchain': wallet.blockchain,
-                'total_balance': total_balance,
-                'updated_at': wallet.updated_at }) 
+            if hot_balance:
+                self.rows.append({ 
+                    'hostname': wallet.hostname,
+                    'blockchain': wallet.blockchain,
+                    'total_balance': total_balance,
+                    'updated_at': wallet.updated_at })
+            else:
+                app.logger.info("Skipping blockchain {0}".format(wallet.blockchain))
 
     def exclude_cat_wallets(self, wallet_details):
         details = []
@@ -116,9 +119,7 @@ class Wallets:
         rx = re.compile(numeric_const_pattern, re.VERBOSE)
         sum = 0
         for wallet in self.wallets:
-            if not 'Sync status: Synced' in wallet.details:
-                raise Exception('{0} wallet is not synced, so balance is unknown.')
-            elif wallet.hostname == hostname and wallet.blockchain == blockchain:
+            if wallet.hostname == hostname and wallet.blockchain == blockchain and wallet.is_synced():
                 try:
                     for balance in rx.findall(self.exclude_cat_wallets(wallet.details)):
                         #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
