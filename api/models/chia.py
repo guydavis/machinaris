@@ -95,6 +95,7 @@ class Wallets:
                     'hostname': wallet.hostname,
                     'blockchain': wallet.blockchain,
                     'total_balance': total_balance,
+                    'fiat_balance': fiat.to_fiat_float(wallet.blockchain, total_balance),
                     'updated_at': wallet.updated_at })
             else:
                 app.logger.debug("api.models.Wallets.init(): Skipping blockchain {0}".format(wallet.blockchain))

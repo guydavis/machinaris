@@ -260,9 +260,10 @@ def wallet():
             chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
             flash(_("Saved cold wallet addresses."), 'success')
     wallets = chia.load_wallets()
+    chart_data = stats.load_total_balances(fiat.get_local_currency_symbol().lower())
     return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, 
         reload_seconds=120, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
-        local_cur_sym=fiat.get_local_currency_symbol(), lang=get_lang(request))
+        chart_data=chart_data, local_cur_sym=fiat.get_local_currency_symbol(), lang=get_lang(request))
 
 @app.route('/keys')
 def keys():

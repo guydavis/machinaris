@@ -21,7 +21,7 @@ from common.models.pools import Pool
 from common.models.partials import Partial
 from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalCoins, StatNetspaceSize, StatTimeToWin, \
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \
-        StatPlottingDiskUsed, StatPlottingDiskFree, StatFarmedBlocks, StatWalletBalances
+        StatPlottingDiskUsed, StatPlottingDiskFree, StatFarmedBlocks, StatWalletBalances, StatTotalBalance
 from web import app, db, utils
 from web.actions import chia, worker
 
@@ -414,6 +414,24 @@ def load_wallet_balances(blockchain):
     #app.logger.info(dates)
     #app.logger.info(values)
     return { 'title': blockchain.capitalize() + ' - ' + _('Total Balance'), 'dates': dates, 'vals': values}
+
+def load_total_balances(current_currency_symbol):
+    dates = []
+    values = []
+    result = db.session.query(StatTotalBalance).order_by(StatTotalBalance.created_at.asc()).filter(
+            StatTotalBalance.currency==current_currency_symbol).all()
+    last_value = None
+    for i in range(len(result)):
+        s = result[i]
+        converted_date = converters.convert_date_for_luxon(s.created_at)
+        if (last_value != s.value) or ((i + 12) % 24 == 0) or (i == len(result) - 1):
+            dates.append(converted_date)
+            values.append(s.value)
+            last_value = s.value
+    #app.logger.info(dates)
+    #app.logger.info(values)
+    return { 'title': _('Wallets Total') + ' (' + current_currency_symbol + ')', 'y_axis_title': _('Fiat Currency'),
+         'dates': dates, 'vals': values}
 
 def load_netspace_size(blockchain):
     dates = []

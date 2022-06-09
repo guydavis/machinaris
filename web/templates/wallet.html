@@ -100,6 +100,16 @@
     <span class="fs-4">{{_('Wallet Summary')}}</span>
 </header>
 
+{% if chart_data.dates|length > 0 %}
+<div class="col-md-12" style="margin-top:5px; margin-bottom:25px;">
+  <div class="h-100 p-2 text-white bg-dark rounded-3">
+    <div style="position: relative; height: 300px">
+      <canvas id="total_balance_chart"></canvas>
+    </div>
+  </div>
+</div>
+{% endif %}
+
 {% if wallets.rows|length > 0 %}
 <form method="POST" id="wallet-form" style="padding-bottom: 10px;">
     <table id="data" class="table table-dark">
@@ -232,5 +242,113 @@
           var left = (screen.width - width) / 2;
           window.open("{{ url_for('index_chart') }}?type=" + chart_type + "&blockchain=" + blockchain, blockchain + ' - ' + chart_type, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
         }
+        const COLORS = [
+          '#3aac59',
+          // https://www.chartjs.org/docs/master/samples/utils.html
+          //'#4dc9f6',
+          '#f67019',
+          '#f53794',
+          //'#537bc4',
+          '#acc236',
+          //'#166a8f',
+          //'#00a950',
+          //'#58595b',
+          '#8549ba',
+          // https://colorbrewer2.org/#type=qualitative&scheme=Paired&n=9
+          '#a6cee3',
+          '#1f78b4',
+          '#b2df8a',
+          '#33a02c',
+          '#fb9a99',
+          '#e31a1c',
+          '#fdbf6f',
+          '#ff7f00',
+          '#cab2d6',
+          // https://learnui.design/tools/data-color-picker.html#palette
+          '#003f5c',
+          '#2f4b7c',
+          '#665191',
+          '#a05195',
+          '#d45087',
+          '#f95d6a',
+          '#ff7c43',
+          '#ffa600',
+        ];
+
+        function color(index) {
+          return COLORS[index % COLORS.length];
+        }
+
+        {% if chart_data.dates|length > 0 %}
+        var ctx = document.getElementById('total_balance_chart');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ chart_data.dates | safe }},
+                datasets: [
+                    {
+                      label: "{{ chart_data.title }}",
+                      data: {{ chart_data.vals | safe }},
+                      backgroundColor: color(0),
+                    },
+                ],
+            },
+            borderWidth: 1,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {  
+                legend: {
+                    labels: {
+                    color: "#c7c7c7",  
+                    font: {
+                      size: 18 
+                    }
+                  }
+                }
+              },
+              scales: {
+                  x: {
+                      type: 'time',
+                      time: {
+                          unit: 'day',
+                          tooltipFormat: 'DD T'
+                      },
+                      ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                      },
+                      title: {
+                          display: true,
+                          text: "{{_('Date')}}",
+                          color: "#c7c7c7",  
+                          font: {
+                            size: 18 
+                          }
+                      }
+                  },
+                  y: {
+                      ticks: {
+                          color: "#c7c7c7",  
+                          font: {
+                            size: 16 
+                          }
+                      },
+                      beginAtZero: true,
+                      title: {
+                          display: true,
+                          text: "{{ chart_data.y_axis_title }}",
+                          color: "#c7c7c7",  
+                          font: {
+                            size: 18 
+                          }
+                      }
+                  }
+              }
+            }
+          });
+  {% endif %}
 </script>
 {% endblock %}

@@ -138,3 +138,13 @@ class StatWalletBalances(db.Model):
     blockchain = db.Column(db.String(length=64), nullable=False)
     value = db.Column(db.REAL)
     created_at = db.Column(db.String())
+
+class StatTotalBalance(db.Model):
+    __bind_key__ = 'stat_total_balance'
+    __tablename__ = "stat_total_balance"
+
+    id = db.Column(db.Integer, primary_key=True)
+    hostname = db.Column(db.String())
+    value = db.Column(db.REAL)
+    currency = db.Column(db.String())
+    created_at = db.Column(db.String())
