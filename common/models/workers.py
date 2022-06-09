@@ -78,3 +78,9 @@ class Worker(db.Model):
             return j.loads(self.config)['machinaris_version']
         except:
             return None
+
+    def fullnode_db_version(self):
+        try:
+            return j.loads(self.config)['fullnode_db_version']
+        except:
+            return None

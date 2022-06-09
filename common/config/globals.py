@@ -84,6 +84,9 @@ def load():
     cfg['farmr_version'] = load_farmr_version()
     cfg['is_controller'] = "localhost" == (
         os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost')
+    fullnode_db_version = load_fullnode_db_version()
+    if fullnode_db_version:
+        cfg['fullnode_db_version'] = fullnode_db_version
     return cfg
 
 def load_blockchain_info(blockchain, key):
@@ -393,6 +396,33 @@ def load_machinaris_version():
         logging.info(traceback.format_exc())
     last_machinaris_version_load_time = datetime.datetime.now()
     return last_machinaris_version
+
+fullnode_db_version = None
+fullnode_db_version_load_time = None
+def load_fullnode_db_version():
+    global fullnode_db_version
+    global fullnode_db_version_load_time
+    if fullnode_db_version_load_time and fullnode_db_version_load_time >= \
+            (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
+        return fullnode_db_version
+    fullnode_db_version = None
+    blockchain = enabled_blockchains()[0]
+    v1_db_file = get_blockchain_network_path(blockchain) + '/db/blockchain_v1_mainnet.sqlite'
+    v2_db_file = get_blockchain_network_path(blockchain) + '/db/blockchain_v2_mainnet.sqlite'
+    logging.info(v1_db_file)
+    logging.info(v2_db_file)
+    try:
+        if os.path.exists(v2_db_file):
+            logging.info("Found v2!!!!!")
+            return "v2"
+        elif os.path.exists(v1_db_file):
+            logging.info("Found v1!!!!!")
+            return "v1"
+    except:
+        logging.info(traceback.format_exc())
+    fullnode_db_version_load_time = datetime.datetime.now()
+    logging.info("Found neither!")
+    return fullnode_db_version
 
 def get_disks(disk_type):
     if disk_type == "plots":

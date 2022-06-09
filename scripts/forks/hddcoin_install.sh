@@ -1,6 +1,6 @@
 #!/bin/env bash
 #
-https://github.com/HDDcoin-Network/hddcoin-blockchain
+# Installs HDDCoin as per https://github.com/HDDcoin-Network/hddcoin-blockchain
 #
 
 HDDCOIN_BRANCH=$1

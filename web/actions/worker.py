@@ -116,6 +116,18 @@ def generate_warnings(worker):
             worker.hostname, worker.port, worker.blockchain, worker_version, controller_version))
         warnings.append(WorkerWarning(_("Machinaris version does not match controller."),  
             _("Please use a consistent Machinaris version to avoid issues."), 'warning'))
+    if worker.fullnode_db_version() == "v1":  # None for non-fullnode, else 'v2' for already updated.
+        # Don't warn if the blockchain is really old and supports only v1, so can't upgrade
+        if not worker.blockchain in ['flora','hddcoin','maize','mmx','nchain','silicoin','stor']:
+            wiki_link = "https://github.com/guydavis/machinaris/wiki/Forks#database-upgrade"
+            if worker.blockchain == "chia":
+                wiki_link = "https://github.com/guydavis/machinaris/wiki/Chia#database-upgrade"
+            warnings.append(WorkerWarning( \
+                _("This fullnode is running old v1 format database."),  
+                _("Please %(wiki_link)supgrade%(close_link)s to newer v2 format for less disk usage.",
+                    wiki_link="<a class='text-white' target='_blank' href='{0}'>".format(wiki_link), 
+                    close_link='</a>'), 
+                'warning'))
 
     # TODO - Warning for fullnode without a working key
     # TODO - Warning for farmer too slow on pool partials: "Error in pooling: (2, 'The partial is too late."
