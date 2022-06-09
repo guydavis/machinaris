@@ -23,11 +23,8 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Downloading Chives blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chives/mainnet/db/ && cd /root/.chives/mainnet/db/
-  # Mega links for Chives blockchain DB from: https://node-hk.chivescoin.org/
-  mega-get https://mega.nz/file/GghihBYS#OrSOWVD7-zYbMldUmAnojAGTFGZDd3ktsgYa3DX_QkU
-  unzip chives-database*.zip 
-  mv chives-database*/blockchain_v1_mainnet.sqlite .
-  rm -rf chives-database*
+  echo "Sorry, Chives does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
+  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/chives"
 fi
 
 echo 'Configuring Chives...'
