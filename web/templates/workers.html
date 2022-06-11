@@ -68,7 +68,7 @@
                 <i class="bi-dash-circle text-danger"></i> {{_('Connection Timeout')}}
               {% elif worker.connection_status() == 'Connection Error' %}
                 <i class="bi-dash-circle text-danger"></i> {{_('Connection Error')}}
-              % elif worker.connection_status() == 'offline' %}
+              {% elif worker.connection_status() == 'offline' %}
                 <i class="bi-dash-circle text-danger"></i> {{_('Offline')}}
               {% else %}
                 <i class="bi-exclamation-triangle text-warning" title="{{ worker.connection_status }}"></i>

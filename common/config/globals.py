@@ -409,14 +409,10 @@ def load_fullnode_db_version():
     blockchain = enabled_blockchains()[0]
     v1_db_file = get_blockchain_network_path(blockchain) + '/db/blockchain_v1_mainnet.sqlite'
     v2_db_file = get_blockchain_network_path(blockchain) + '/db/blockchain_v2_mainnet.sqlite'
-    logging.info(v1_db_file)
-    logging.info(v2_db_file)
     try:
         if os.path.exists(v2_db_file):
-            logging.info("Found v2!!!!!")
             return "v2"
         elif os.path.exists(v1_db_file):
-            logging.info("Found v1!!!!!")
             return "v1"
     except:
         logging.info(traceback.format_exc())

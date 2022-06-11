@@ -31,7 +31,7 @@
         {% endwith %}
     </div>
 
-    <form method="POST">
+    <form method="POST" id="settings-form">
         <fieldset>
             <div class="row mb-3">
                 <label for="worker" class="col-sm-1 col-form-label-lg text-end p-1">{{_('Worker')}}</label>
@@ -53,10 +53,11 @@
                 <textarea style="background: #D3D3D3;" class="form-control fs-6" id="config" name="config" rows="18"
                     style="height:100%;"></textarea>
             </div>
-            <button type="submit" class="btn btn-outline-success">{{_('Save')}}</button>
+            <button type="submit" class="btn btn-outline-success"
+            id="btnSave">{{_('Save')}}</button>
             <button type="button" class="btn btn-outline-success"
-                onclick="downloadConfig(); return false">{{_('Download')}}</button>
-        </fieldset>
+            id="btnDownload">{{_('Download')}}</button>
+    </fieldset>
     </form>
 
     {% endblock %}
@@ -110,11 +111,17 @@
                 $el.append(option);
             };
         }
-
-        function downloadConfig() {
+        $("#btnSave").click(function () {
+            $(this).prop("disabled", true);
+            $(this).html(
+                `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Saving...')}}`
+            );
+            $("#settings-form").submit();
+        });
+        $("#btnDownload").click(function () {
             worker = $("#worker").val()
             blockchain = $("#blockchain").val()
-            window.location.href = '/settings/config/' + worker + '_' + blockchain + '_config.yaml?type=farming&worker=' + worker + "&blockchain=" + blockchain
-        }
+            window.location.href = '/settings/config/' + worker + '_' + blockchain + 'dog_config.yaml?type=alerts&worker=' + worker + "&blockchain=" + blockchain
+        });
     </script>
     {% endblock %}

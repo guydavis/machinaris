@@ -26,7 +26,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   mkdir -p /root/.stai/mainnet/db/ && cd /root/.stai/mainnet/db/
   # Latest Blockchain DB download from direct from https://stai.global
   curl -skJLO https://stai.global/database/staiblockchain.rar
-  unrar staiblockchain.rar 
+  unrar e staiblockchain.rar 
   mv staiblockchain/*.sqlite .
   rm -rf staiblockchain/ staiblockchain.rar
 fi

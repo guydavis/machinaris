@@ -34,8 +34,8 @@ if [[ -z "${forktools_skip_build}" ]]; then
 			echo 'Y' | ./forkfixconfig all
   			sleep $[ ( $RANDOM % 300 )  + 1 ]s
 			./forkpatch all -multiproc
-  			sleep $[ ( $RANDOM % 600 )  + 1 ]s
-			./forkpatch all -logwinningplots
+  			#sleep $[ ( $RANDOM % 600 )  + 1 ]s
+			#./forkpatch all -logwinningplots
 		fi
 	fi
 fi
