@@ -24,11 +24,11 @@ msgstr "Gravar definições da moeda local"
 
 #: routes.py:133
 msgid "Blockchain download"
-msgstr "Descarregando o Blockchain"
+msgstr "Descarregar o Blockchain"
 
 #: routes.py:165
 msgid "Unknown plotting form"
-msgstr "Plotting form desconhecido"
+msgstr "Tipo de Plotting desconhecido"
 
 #: routes.py:215
 msgid "Error! Please see logs."
@@ -36,7 +36,7 @@ msgstr "Erro! Por favor consulte os logs."
 
 #: routes.py:241
 msgid "Unknown alerts form"
-msgstr "Alerts form desconhecido"
+msgstr "Tipo de alerta desconhecido"
 
 #: routes.py:261
 msgid "Saved cold wallet addresses."
@@ -107,37 +107,38 @@ msgstr "Tipo de log não suportado"
 msgid ""
 "Relax and grab a coffee. Status is being gathered from active workers.  "
 "Please allow 15 minutes..."
-msgstr ""
+msgstr "Relaxa e vai beber um café. O estado está a ser actualizado com base na informação dos workers activos."
+"Por favor aguarda 15 minutos..."
 
 #: actions/drives.py:33
 #, python-format
 msgid "Oops! No smartctl info found for device %(device)s on %(hostname)s."
-msgstr ""
+msgstr "Oops! A informação do smartctl não foi encontrada para o dispositivo %(device)s no %(hostname)s."
 
 #: actions/drives.py:54
 msgid "Failed to save display settings.  Please check Web Log."
-msgstr ""
+msgstr "Não foi possível gravar as definições. Por favor consulte o Web Log."
 
 #: actions/drives.py:56
 #, fuzzy
 msgid "Saved display settings."
-msgstr "Gravar definições da moeda local"
+msgstr "Definições gravadas."
 
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
-msgstr ""
+msgstr "Inactivo"
 
 #: actions/plotman.py:47 actions/plotman.py:48 models/chia.py:211
 #: models/plotman.py:67 templates/index/index.html:42
 #: templates/index/index.html:52
 #, fuzzy
 msgid "Active"
-msgstr "Gravar"
+msgstr "Activo"
 
 #: actions/plotman.py:49 models/plotman.py:64
 #, fuzzy
 msgid "Suspended"
-msgstr "Suspender os seleccionados"
+msgstr "Suspensos"
 
 #: actions/stats.py:57 actions/stats.py:92 actions/stats.py:109
 #: actions/stats.py:130 actions/stats.py:132
@@ -155,7 +156,7 @@ msgstr "hora"
 #: actions/stats.py:399 templates/index/index.html:97
 #: templates/views/index_script_block.js:51
 msgid "Farmed Coins"
-msgstr ""
+msgstr "Moedas farmed"
 
 #: actions/stats.py:416 templates/index/index.html:89
 #: templates/views/index_script_block.js:56 templates/wallet.html:122
@@ -178,11 +179,11 @@ msgstr "Netspace"
 
 #: actions/stats.py:452 actions/stats.py:510
 msgid "Size"
-msgstr ""
+msgstr "Tamanho"
 
 #: actions/stats.py:490
 msgid "Plot Counts"
-msgstr ""
+msgstr "Número de Plots"
 
 #: actions/stats.py:509 templates/index/index.html:78
 #, fuzzy
@@ -191,7 +192,7 @@ msgstr "Plots: Total de espaço ocupado"
 
 #: actions/warnings.py:56
 msgid "Dismiss Warning"
-msgstr ""
+msgstr "Ocultar aviso"
 
 #: actions/warnings.py:57 templates/keys.html:58
 #, python-format
@@ -236,7 +237,7 @@ msgstr ""
 
 #: actions/worker.py:126
 msgid "This fullnode is running old v1 format database."
-msgstr ""
+msgstr "Este fullnode está a correr no formato antigo da base de dados v1"
 
 #: actions/worker.py:128
 #, python-format
@@ -244,6 +245,8 @@ msgid ""
 "Please %(wiki_link)supgrade%(close_link)s to newer v2 format for less "
 "disk usage."
 msgstr ""
+"Por favor %(wiki_link)supgrade%(close_link)s para o novo formato v2 "
+"para diminuir o espaço ocupado pelo blockchain no disco."
 
 #: models/chia.py:140 models/chia.py:245 models/drives.py:44
 msgid "days"
@@ -255,7 +258,7 @@ msgstr "A sincronizar"
 
 #: models/chia.py:215 templates/index/index.html:54
 msgid "Not available"
-msgstr ""
+msgstr "Indisponível"
 
 #: models/chia.py:217
 #, fuzzy
@@ -319,7 +322,7 @@ msgstr "Em breve"
 
 #: models/chia.py:261
 msgid "and"
-msgstr ""
+msgstr "e"
 
 #: templates/alerts.html:14
 msgid "Alerts: Recent Notifications"
@@ -375,7 +378,7 @@ msgid ""
 "Expect at least a summary notification once daily as long as running "
 "above."
 msgstr ""
-"Espere ter pelo menos uma notificação diariamente desde que esteja a "
+"Espere ter pelo menos uma notificação diária desde que esteja a "
 "correr o Chiadog."
 
 #: templates/alerts.html:120
@@ -515,7 +518,7 @@ msgstr "Estado"
 
 #: templates/blockchains.html:37
 msgid "Peak Height"
-msgstr "Peak Height\""
+msgstr "Peak Height"
 
 #: templates/blockchains.html:38
 msgid "Peak Time"
@@ -538,7 +541,7 @@ msgstr "Blockchain: Detalhes"
 #: templates/blockchains.html:69 templates/summary.html:126
 #, fuzzy
 msgid "View Blockchain Log"
-msgstr "Descarregando o Blockchain"
+msgstr "Ver o log do Blockchain"
 
 #: templates/blockchains.html:104
 msgid "No blockchains found from any farmers. Not added?"
@@ -552,7 +555,7 @@ msgstr "Tente correr \"chia show --state\" nos seus farmers para verificar."
 
 #: templates/blockchains.html:119 templates/summary.html:152
 msgid "Fullnode Log for "
-msgstr ""
+msgstr "Log do Fullnode para "
 
 #: templates/connections.html:34
 msgid "Maxmind Account (Required):"
@@ -588,7 +591,7 @@ msgstr "Mapa de ligações"
 
 #: templates/connections.html:112
 msgid "Map your network peers around the world"
-msgstr ""
+msgstr "Mapa do mundo da rede de peers"
 
 #: templates/connections.html:114
 #, python-format
@@ -602,12 +605,22 @@ msgid ""
 "%(mapbox_link)s%(b_tag_open)sFREE%(b_tag_close)s Mapbox "
 "account%(a_tag_close)s."
 msgstr ""
+"Para usares esta funcionalidade, vais necessitar de uma "
+"%(maxmind_link)sconta %(b_tag_open)sGRÁTIS%(b_tag_close)s Maxmind "
+"%(a_tag_close)s para \n"
+"        permitir ao Machinaris identificar a geolocalização dos endereços IP dos teus peers. "
+"%(i_tag_open)sOpcionalmente%(i_tag_close)s, também podes\n"
+"        obter um mapa com melhor aspecto com uma "
+"%(mapbox_link)sconta %(b_tag_open)sGRÁTIS%(b_tag_close)s "
+"Mapbox%(a_tag_close)s."
 
 #: templates/connections.html:120
 msgid ""
 "To enter your map account details, click the Settings (gear icon) button "
 "on the top-right of this page."
 msgstr ""
+"Para indicares os detalhes da tua conta para os mapas, clica no botão Definições (icon da roda dentada) "
+"no canto superior direito desta página."
 
 #: templates/connections.html:128
 msgid "Connection Details"
@@ -665,7 +678,7 @@ msgstr "Adicionar uma nova ligação"
 msgid "No connections found from any farmers yet. Perhaps just starting?"
 msgstr ""
 "Não foram encontradas ligações para nenhum dos farmers. Talvez o sistema "
-"apenas tenha arrancado há pouco tempo?"
+"tenha arrancado há pouco tempo?"
 
 #: templates/connections.html:242
 msgid ""
@@ -689,16 +702,16 @@ msgstr "Smartctl - Estado"
 
 #: templates/drives.html:30
 msgid "Good"
-msgstr ""
+msgstr "Bom"
 
 #: templates/drives.html:33
 msgid "Warn"
-msgstr ""
+msgstr "Quente"
 
 #: templates/drives.html:37
 #, fuzzy
 msgid "Alert"
-msgstr "Wallet"
+msgstr "Alerta"
 
 #: templates/drives.html:87
 #, fuzzy
@@ -728,11 +741,11 @@ msgstr "Passou"
 
 #: templates/drives.html:166
 msgid "Powered On"
-msgstr ""
+msgstr "Ligado"
 
 #: templates/drives.html:208
 msgid "Drive status updated"
-msgstr ""
+msgstr "O estado do disco foi actualizado"
 
 #: templates/drives.html:217
 msgid "No drives accessible to smartctl inside the Machinaris containers."
@@ -884,8 +897,8 @@ msgid ""
 "To get started with Machinaris as a Chia%(trademark)s fullnode, either "
 "import your existing 24-word mnemonic seed phrase"
 msgstr ""
-"Para começares a usar o Machinaris como um fullnode do Chia%(trademark)s,"
-" podes importar a tua própria mnemônica de 24 palavras"
+"Para começares a usar o Machinaris como um fullnode do Chia%(trademark)s, "
+"podes importar a tua própria mnemônica de 24 palavras"
 
 #: templates/setup.html:90
 msgid "Import Existing Key"
@@ -960,7 +973,7 @@ msgstr "Não sincronizado"
 #: templates/summary.html:123 templates/wallet.html:152
 #, fuzzy
 msgid "Chart Wallet"
-msgstr "Editar wallet"
+msgstr "Gráfico da wallet"
 
 #: templates/summary.html:137
 msgid "No blockchains found from any farmers. Just starting up?"
@@ -1026,7 +1039,7 @@ msgstr ""
 #: templates/index/chart_plots_size.html:84 templates/plotting/jobs.html:288
 #: templates/views/index_script_block.js:90 templates/wallet.html:325
 msgid "Date"
-msgstr ""
+msgstr "Data"
 
 #: templates/worker.html:35
 msgid "Details"
@@ -1141,19 +1154,19 @@ msgstr "Outros"
 #: templates/worker_launch.html:69 templates/worker_launch.html:661
 #, fuzzy
 msgid "Location"
-msgstr "Notifcação"
+msgstr "Localização"
 
 #: templates/worker_launch.html:72 templates/worker_launch.html:664
 msgid "Local"
-msgstr ""
+msgstr "Local"
 
 #: templates/worker_launch.html:73 templates/worker_launch.html:665
 msgid "Remote"
-msgstr ""
+msgstr "Remoto"
 
 #: templates/worker_launch.html:252
 msgid "Unknown blockchain fork of selected:"
-msgstr "Unknown blockchain fork of selected:"
+msgstr "Foi seleccionado um blockchain fork desconhecido:"
 
 #: templates/worker_launch.html:285
 msgid ""
@@ -1169,7 +1182,7 @@ msgid ""
 "this"
 msgstr ""
 "Host path inválido terminado com dois pontos. Tente adicionar o caracter "
-"'/' no final assim"
+"'/' no final"
 
 #: templates/worker_launch.html:308
 msgid "Empty host path provided for volume at "
@@ -1267,7 +1280,7 @@ msgstr "Verdadeiro"
 
 #: templates/worker_launch.html:493
 msgid "False"
-msgstr "False"
+msgstr "Falso"
 
 #: templates/worker_launch.html:501
 msgid "Controller IP Address"
@@ -1287,7 +1300,7 @@ msgstr "Worker: Endereço IP"
 
 #: templates/worker_launch.html:525
 msgid "Blockchains to Farm"
-msgstr "Blockchains to Farm"
+msgstr "Blockchains para Farm"
 
 #: templates/worker_launch.html:638
 msgid "Volume Mounts"
@@ -1421,28 +1434,28 @@ msgstr ""
 #: templates/index/chart_farmed.html:150
 #: templates/views/index_script_block.js:107
 msgid "Coins"
-msgstr ""
+msgstr "Moedas"
 
 #: templates/index/chart_farmed.html:48
 msgid "Farmed Blocks"
-msgstr ""
+msgstr "Blocos Farmed"
 
 #: templates/index/chart_farmed.html:53
 msgid "Plot File"
-msgstr ""
+msgstr "Ficheiro do Plot"
 
 #: templates/index/chart_farmed.html:54
 msgid "Farmed Block"
-msgstr ""
+msgstr "Bloco Farmed"
 
 #: templates/index/chart_farmed.html:55
 #, fuzzy
 msgid "Farmed At"
-msgstr "Farmed"
+msgstr "Farmed em"
 
 #: templates/index/chart_plot_count.html:101 templates/index/index.html:70
 msgid "Plot Count"
-msgstr ""
+msgstr "Número de Plots"
 
 #: templates/index/index.html:30
 msgid "Expected Time to Win"
@@ -1552,15 +1565,15 @@ msgstr "Jobs"
 
 #: templates/plotting/jobs.html:108 templates/plotting/workers.html:110
 msgid "Disabled"
-msgstr ""
+msgstr "Desactivado"
 
 #: templates/plotting/jobs.html:110 templates/plotting/workers.html:112
 msgid "Running"
-msgstr ""
+msgstr "A correr"
 
 #: templates/plotting/jobs.html:112 templates/plotting/workers.html:114
 msgid "Stopped"
-msgstr ""
+msgstr "Parado"
 
 #: templates/plotting/jobs.html:200
 msgid "Suspend Selected"
@@ -1577,7 +1590,7 @@ msgstr "Velocidade de Plotting - k%(k_size)s Plots"
 
 #: templates/plotting/jobs.html:305
 msgid "Time (minutes)"
-msgstr ""
+msgstr "Tempo (minutos)"
 
 #: templates/plotting/jobs.html:355
 msgid "Suspending..."
@@ -1642,11 +1655,11 @@ msgstr "Arquivar: Desactivado. Veja a página Definições | Plotting."
 #: templates/plotting/workers.html:256
 #: templates/views/index_script_block.js:232
 msgid "Time - Last 24 Hours"
-msgstr ""
+msgstr "Tempo - Nas últimas 24 horas"
 
 #: templates/plotting/workers.html:273
 msgid "Plotting Disk Usage (GB)"
-msgstr ""
+msgstr "Plotting: Espaço em disco (GB)"
 
 #: templates/settings/alerts.html:58 templates/settings/farming.html:59
 #: templates/settings/plotting.html:59 templates/settings/tools.html:58
@@ -1740,15 +1753,15 @@ msgstr "PlotNFT Log de "
 
 #: templates/views/index_script_block.js:163
 msgid "Time - Recent"
-msgstr ""
+msgstr "Tempo - Recente"
 
 #: templates/views/index_script_block.js:180
 msgid "Time Taken (seconds)"
-msgstr ""
+msgstr "Tempo que demorou (segundos)"
 
 #: templates/views/index_script_block.js:249
 msgid "Partials Submitted"
-msgstr ""
+msgstr "Partials submetidos"
 
 #~ msgid "Wallet Balances"
 #~ msgstr "Wallet: Saldo"
