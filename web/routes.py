@@ -371,10 +371,15 @@ def settings_farming():
         chia.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary.farmers_harvesters(), selected_worker_hostname, selected_blockchain)
+    hot_addresses = chia.load_hot_wallet_addresses()
+    app.logger.info(hot_addresses)
+    cold_addresses = chia.load_cold_wallet_addresses()
+    app.logger.info(cold_addresses)
     if not selected_blockchain:
         selected_blockchain = selected_worker['blockchain']
     return render_template('settings/farming.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
-        workers=workers_summary.farmers_harvesters, selected_worker=selected_worker['hostname'], global_config=gc)
+        workers=workers_summary.farmers_harvesters, selected_worker=selected_worker['hostname'], 
+        hot_addresses=hot_addresses, cold_addresses=cold_addresses, global_config=gc)
 
 @app.route('/settings/alerts', methods=['GET', 'POST'])
 def settings_alerts():

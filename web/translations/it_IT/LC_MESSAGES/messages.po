@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-06-10 14:31-0600\n"
+"POT-Creation-Date: 2022-06-12 14:28-0600\n"
 "PO-Revision-Date: 2022-02-15 10:14-0700\n"
 "Last-Translator: Fabrizio Cacicia\n"
 "Language: it\n"
@@ -54,7 +54,7 @@ msgstr ""
 msgid "Unknown form action"
 msgstr "Azione sconosciuta."
 
-#: routes.py:444
+#: routes.py:449
 #, python-format
 msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
@@ -63,7 +63,7 @@ msgstr ""
 "Nessun worker in %(worker)s per la blockchain %(blockchain)s. Scegli "
 "un'altra blockchain."
 
-#: routes.py:450
+#: routes.py:455
 #, python-format
 msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
@@ -72,7 +72,7 @@ msgstr ""
 "Per le configurazioni degli Avvisi, non è stato trovato alcun fullnode "
 "per %(blockchain)s. Controlla i tuoi worker."
 
-#: routes.py:455
+#: routes.py:460
 #, python-format
 msgid ""
 "For Farming config, found no responding fullnode found for "
@@ -81,7 +81,7 @@ msgstr ""
 "Per le configurazioni del Farming, non è stato trovato alcun fullnode per"
 " %(blockchain)s. Controlla i tuoi worker."
 
-#: routes.py:462
+#: routes.py:467
 #, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
@@ -90,7 +90,7 @@ msgstr ""
 "Per le configurazioni del Plotting, non è stato trovato alcun fullnode "
 "per %(blockchain)s. Controlla i tuoi worker."
 
-#: routes.py:467
+#: routes.py:472
 #, python-format
 msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
@@ -99,7 +99,7 @@ msgstr ""
 "Non è stato trovato alcun fullnode che risponden per %(blockchain)s. "
 "Controlla i tuoi workers."
 
-#: routes.py:486
+#: routes.py:491
 msgid "Unsupported log type"
 msgstr "Formato log non supportato"
 
@@ -1648,11 +1648,31 @@ msgstr ""
 msgid "Download"
 msgstr "Scarica"
 
-#: templates/settings/alerts.html:114 templates/settings/farming.html:117
+#: templates/settings/alerts.html:114 templates/settings/farming.html:160
 #: templates/settings/plotting.html:125 templates/settings/pools.html:185
 #: templates/settings/tools.html:115
 msgid "Saving..."
 msgstr "Salvataggio in corso..."
+
+#: templates/settings/farming.html:120
+msgid ""
+"Config file contains target_address that is neither in your hot wallet "
+"(keys), nor in your configured cold wallet addresses."
+msgstr ""
+
+#: templates/settings/farming.html:126
+msgid "Your hot wallet key(s):"
+msgstr ""
+
+#: templates/settings/farming.html:127
+msgid "Your cold wallet key(s):"
+msgstr ""
+
+#: templates/settings/farming.html:128
+msgid ""
+"Please check your hot wallet addresses on the Keys page, and your cold "
+"wallet addresses on the Wallets page."
+msgstr ""
 
 #: templates/settings/pools.html:32
 msgid "Confirm Pool Change"

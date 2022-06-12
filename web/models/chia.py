@@ -451,30 +451,34 @@ class Keys:
                 displayname = key.hostname
             parsed_details = key.details
             try:
-                parsed_details = self.link_first_wallet_address(key.blockchain, key.details)
+                [addresses, parsed_details] = self.link_first_wallet_address(key.blockchain, key.details)
             except:
                 traceback.print_exc()
                 parsed_details = key.details
+                addresses = []
             self.rows.append({ 
                 'displayname': displayname, 
                 'hostname': key.hostname,
                 'blockchain': key.blockchain,
                 'status': worker_status,
                 'details': parsed_details,
+                'addresses': addresses,
                 'updated_at': key.updated_at }) 
     
     def link_first_wallet_address(self, blockchain, details):
+        addresses = []
         alltheblocks_blockchain = globals.get_alltheblocks_name(blockchain)
         lines = []
         for line in details.split('\n'):
             if line.startswith('First wallet address'):
                 label = line.split(':')[0]
                 address = line.split(':')[1].strip()
+                addresses.append(address)
                 link = "https://alltheblocks.net/{0}/address/{1}".format(alltheblocks_blockchain, address)
                 lines.append("{0}: <a target='_blank' class='text-white' href='{1}'>{2}</a>".format(label, link, address))
             else:
                 lines.append(line)
-        return '\n'.join(lines)
+        return [addresses, '\n'.join(lines)]
 
 class Blockchains:
 

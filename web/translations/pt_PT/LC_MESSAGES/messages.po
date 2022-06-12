@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-06-10 14:31-0600\n"
+"POT-Creation-Date: 2022-06-12 14:28-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: Antonio Casqueiro\n"
 "Language: pt\n"
@@ -54,7 +54,7 @@ msgstr ""
 msgid "Unknown form action"
 msgstr "Form action desconhecida"
 
-#: routes.py:444
+#: routes.py:449
 #, fuzzy, python-format
 msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
@@ -63,7 +63,7 @@ msgstr ""
 "Não existe worker no %(worker)s para o blockchain %(blockchain)s. Por "
 "favor seleccione outro blockchain."
 
-#: routes.py:450
+#: routes.py:455
 #, fuzzy, python-format
 msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
@@ -72,7 +72,7 @@ msgstr ""
 "Na configuração dos Alertas, foi encontrado um fullnode que não responde "
 "para o %(blockchain)s. Por favor verifica os teus workers."
 
-#: routes.py:455
+#: routes.py:460
 #, fuzzy, python-format
 msgid ""
 "For Farming config, found no responding fullnode found for "
@@ -81,7 +81,7 @@ msgstr ""
 "Na configuração de Farming, foi encontrado um fullnode que não responde "
 "para o %(blockchain)s. Por favor verifica os teus workers."
 
-#: routes.py:462
+#: routes.py:467
 #, fuzzy, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
@@ -90,7 +90,7 @@ msgstr ""
 "Na configuração de Plotting, foi encontrado um fullnode que não responde "
 "para o %(blockchain)s. Por favor verifica os teus workers."
 
-#: routes.py:467
+#: routes.py:472
 #, fuzzy, python-format
 msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
@@ -99,7 +99,7 @@ msgstr ""
 "Foi encontrado um fullnode que não responde para o %(blockchain)s. Por "
 "favor verifica os teus workers."
 
-#: routes.py:486
+#: routes.py:491
 msgid "Unsupported log type"
 msgstr "Tipo de log não suportado"
 
@@ -107,13 +107,16 @@ msgstr "Tipo de log não suportado"
 msgid ""
 "Relax and grab a coffee. Status is being gathered from active workers.  "
 "Please allow 15 minutes..."
-msgstr "Relaxa e vai beber um café. O estado está a ser actualizado com base na informação dos workers activos."
-"Por favor aguarda 15 minutos..."
+msgstr ""
+"Relaxa e vai beber um café. O estado está a ser actualizado com base na "
+"informação dos workers activos.Por favor aguarda 15 minutos..."
 
 #: actions/drives.py:33
 #, python-format
 msgid "Oops! No smartctl info found for device %(device)s on %(hostname)s."
-msgstr "Oops! A informação do smartctl não foi encontrada para o dispositivo %(device)s no %(hostname)s."
+msgstr ""
+"Oops! A informação do smartctl não foi encontrada para o dispositivo "
+"%(device)s no %(hostname)s."
 
 #: actions/drives.py:54
 msgid "Failed to save display settings.  Please check Web Log."
@@ -245,8 +248,8 @@ msgid ""
 "Please %(wiki_link)supgrade%(close_link)s to newer v2 format for less "
 "disk usage."
 msgstr ""
-"Por favor %(wiki_link)supgrade%(close_link)s para o novo formato v2 "
-"para diminuir o espaço ocupado pelo blockchain no disco."
+"Por favor %(wiki_link)supgrade%(close_link)s para o novo formato v2 para "
+"diminuir o espaço ocupado pelo blockchain no disco."
 
 #: models/chia.py:140 models/chia.py:245 models/drives.py:44
 msgid "days"
@@ -378,8 +381,8 @@ msgid ""
 "Expect at least a summary notification once daily as long as running "
 "above."
 msgstr ""
-"Espere ter pelo menos uma notificação diária desde que esteja a "
-"correr o Chiadog."
+"Espere ter pelo menos uma notificação diária desde que esteja a correr o "
+"Chiadog."
 
 #: templates/alerts.html:120
 msgid "Chiadog Log on "
@@ -608,19 +611,19 @@ msgstr ""
 "Para usares esta funcionalidade, vais necessitar de uma "
 "%(maxmind_link)sconta %(b_tag_open)sGRÁTIS%(b_tag_close)s Maxmind "
 "%(a_tag_close)s para \n"
-"        permitir ao Machinaris identificar a geolocalização dos endereços IP dos teus peers. "
-"%(i_tag_open)sOpcionalmente%(i_tag_close)s, também podes\n"
-"        obter um mapa com melhor aspecto com uma "
-"%(mapbox_link)sconta %(b_tag_open)sGRÁTIS%(b_tag_close)s "
-"Mapbox%(a_tag_close)s."
+"        permitir ao Machinaris identificar a geolocalização dos endereços"
+" IP dos teus peers. %(i_tag_open)sOpcionalmente%(i_tag_close)s, também "
+"podes\n"
+"        obter um mapa com melhor aspecto com uma %(mapbox_link)sconta "
+"%(b_tag_open)sGRÁTIS%(b_tag_close)s Mapbox%(a_tag_close)s."
 
 #: templates/connections.html:120
 msgid ""
 "To enter your map account details, click the Settings (gear icon) button "
 "on the top-right of this page."
 msgstr ""
-"Para indicares os detalhes da tua conta para os mapas, clica no botão Definições (icon da roda dentada) "
-"no canto superior direito desta página."
+"Para indicares os detalhes da tua conta para os mapas, clica no botão "
+"Definições (icon da roda dentada) no canto superior direito desta página."
 
 #: templates/connections.html:128
 msgid "Connection Details"
@@ -897,8 +900,8 @@ msgid ""
 "To get started with Machinaris as a Chia%(trademark)s fullnode, either "
 "import your existing 24-word mnemonic seed phrase"
 msgstr ""
-"Para começares a usar o Machinaris como um fullnode do Chia%(trademark)s, "
-"podes importar a tua própria mnemônica de 24 palavras"
+"Para começares a usar o Machinaris como um fullnode do Chia%(trademark)s,"
+" podes importar a tua própria mnemônica de 24 palavras"
 
 #: templates/setup.html:90
 msgid "Import Existing Key"
@@ -1666,11 +1669,31 @@ msgstr "Plotting: Espaço em disco (GB)"
 msgid "Download"
 msgstr "Download"
 
-#: templates/settings/alerts.html:114 templates/settings/farming.html:117
+#: templates/settings/alerts.html:114 templates/settings/farming.html:160
 #: templates/settings/plotting.html:125 templates/settings/pools.html:185
 #: templates/settings/tools.html:115
 msgid "Saving..."
 msgstr "Gravando..."
+
+#: templates/settings/farming.html:120
+msgid ""
+"Config file contains target_address that is neither in your hot wallet "
+"(keys), nor in your configured cold wallet addresses."
+msgstr ""
+
+#: templates/settings/farming.html:126
+msgid "Your hot wallet key(s):"
+msgstr ""
+
+#: templates/settings/farming.html:127
+msgid "Your cold wallet key(s):"
+msgstr ""
+
+#: templates/settings/farming.html:128
+msgid ""
+"Please check your hot wallet addresses on the Keys page, and your cold "
+"wallet addresses on the Wallets page."
+msgstr ""
 
 #: templates/settings/pools.html:32
 msgid "Confirm Pool Change"

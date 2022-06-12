@@ -337,6 +337,12 @@ def remove_connection(node_ids, hostname, blockchain):
     else:
         flash('Connection removed from {0}!'.format(blockchain), 'success')
 
+def load_hot_wallet_addresses():
+    hot_addresses = {}
+    for key in load_keys().rows:
+        hot_addresses[key['blockchain']] = key['addresses']
+    return hot_addresses
+
 def load_cold_wallet_addresses():
     data = {}
     if os.path.exists(COLD_WALLET_ADDRESSES_FILE):
