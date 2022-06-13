@@ -121,7 +121,11 @@ def load_connections_show(blockchain):
 
 def load_keys_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    proc = Popen("{0} keys show -d".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+    # If a legacy blockchain that hasn't kept pace with Chia, there is only non-observer key
+    if blockchain in ['flora', 'hddcoin', 'maize', 'nchain', 'silicoin', 'stor']:
+        proc = Popen("{0} keys show".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+    else: # Get both observer and non-observer keys for newer blockchains
+        proc = Popen("{0} keys show && {0} keys show -d | grep 'non-observer'".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
