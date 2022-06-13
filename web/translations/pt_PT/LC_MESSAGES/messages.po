@@ -173,12 +173,12 @@ msgstr "Detalhes da Wallet"
 
 #: actions/stats.py:433
 msgid "Fiat Currency"
-msgstr ""
+msgstr "Moeda do país"
 
 #: actions/stats.py:451 templates/index/index.html:105
 #, fuzzy
 msgid "Netspace Size"
-msgstr "Netspace"
+msgstr "Tamanho do Netspace"
 
 #: actions/stats.py:452 actions/stats.py:510
 msgid "Size"
@@ -1409,7 +1409,7 @@ msgid ""
 "running. Also please verify settings on the Alerts page."
 msgstr ""
 "Por favor verifique que o container Machinaris para este blockchain está "
-"a correr. Por favor verifique também as definições na página de Alertas."
+"a correr. Por favor verifique também as definições na página \"Alertas\"."
 
 #: templates/farming/workers.html:80 templates/index/index.html:176
 msgid "Previous"
@@ -1431,7 +1431,7 @@ msgstr ""
 "Chia blockchain. Por favor certifique-se que todos os caminhos para os "
 "directórios dos plots foram %(wiki_link_open)s configurados "
 "%(wiki_link_close)s. Verifique ainda que o Chia worker está a reportar "
-"para o Conttrolador na página dos Workers."
+"para o Conttrolador na página \"Workers\"."
 
 #: templates/index/chart_balances.html:102
 #: templates/index/chart_farmed.html:150
@@ -1554,7 +1554,7 @@ msgid ""
 "online."
 msgstr ""
 "Este Worker não está actualmente online e a responder a pings do "
-"Controlador. Por favor verifique a página dos Workers e volte a colocar "
+"Controlador. Por favor verifique a página \"Workers\" e volte a colocar "
 "novamente o sistema online."
 
 #: templates/plotting/jobs.html:70 templates/plotting/workers.html:53
@@ -1645,7 +1645,7 @@ msgstr ""
 "Este  Worker não está actualmente configurado para o Plotman "
 "%(wiki_link_open)sarchiving%(wiki_link_open)s para activar transferencias"
 " locais ou remotas de Plots que tenham terminado para. Por favor veja a "
-"página Definições | Plotting para configurar este Worker."
+"página \"Definições | Plotting\" para configurar este Worker."
 
 #: templates/plotting/workers.html:103
 msgid "Archiving"
@@ -1653,7 +1653,7 @@ msgstr "Arquivar"
 
 #: templates/plotting/workers.html:130
 msgid "Archiving is disabled.  See Settings | Plotting page."
-msgstr "Arquivar: Desactivado. Veja a página Definições | Plotting."
+msgstr "Arquivar: Desactivado. Veja a página \"Definições | Plotting\"."
 
 #: templates/plotting/workers.html:256
 #: templates/views/index_script_block.js:232
@@ -1680,20 +1680,24 @@ msgid ""
 "Config file contains target_address that is neither in your hot wallet "
 "(keys), nor in your configured cold wallet addresses."
 msgstr ""
+"O ficheiro de configuração contem um valor no target_address "
+"que não o endereço da tua hot wallet, nem da tua cool wallet."
 
 #: templates/settings/farming.html:126
 msgid "Your hot wallet key(s):"
-msgstr ""
+msgstr "Endereço da tua hot wallet:"
 
 #: templates/settings/farming.html:127
 msgid "Your cold wallet key(s):"
-msgstr ""
+msgstr "Endereço da tua cold wallet:"
 
 #: templates/settings/farming.html:128
 msgid ""
 "Please check your hot wallet addresses on the Keys page, and your cold "
 "wallet addresses on the Wallets page."
 msgstr ""
+"Por favor verifica o endereço da tua hot wallet na página das página \"Chaves\", "
+"assim como o endereço da cold wallet na página \"Wallets\"."
 
 #: templates/settings/pools.html:32
 msgid "Confirm Pool Change"
