@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-03-13 10:29-0600\n"
-"POT-Creation-Date: 2022-06-13 15:08-0600\n"
+"POT-Creation-Date: 2022-06-13 17:19-0600\n"
 "PO-Revision-Date: 2022-03-13 10:29-0600\n"
 "Last-Translator: Bernie Deprez\n"
 "Language: nl_NL\n"
@@ -1084,21 +1084,20 @@ msgstr ""
 "Een gebruiksvriendelijke interface voor Chia%(trademark)s plotting en "
 "farming"
 
-#: templates/setup.html:61
+#: templates/setup.html:51
+#, python-format
+msgid "Downloaded and unzipped %(size)s so far..."
+msgstr ""
+
+#: templates/setup.html:62
 #, python-format
 msgid ""
 "On very first launch, the Chia compressed blockchain database "
-"%(compressed)s is being downloaded from %(dl_link)s. At about "
-"%(uncompressed)s in uncompressed size (progress shown above), this will "
-"take a while. However minutes of download now, will save you multiple "
-"days of blockchain syncing later. Please be patient!"
+"%(compressed)s is being downloaded from %(dl_link)s, then unzipped. At "
+"about %(uncompressed)s in uncompressed size, this will take a while. "
+"However an hour or two now, will save you multiple days of blockchain "
+"syncing later. Please be patient!"
 msgstr ""
-"Tijdens de allereerste start wordt de gecomprimeerde Chia blockchain "
-"databank %(compressed)s gedownload van %(dl_link)s. Met de huidge grootte"
-" van %(uncompressed)s in ongecomprimeerde vorm (zie vooruitgang "
-"hierboven) kan dit wel even duren. Echter, nu meerdere minuten downloaden"
-" zal meerdere dagen uitsparen in het synchroniseren van de blockchain. "
-"Heb geduld!"
 
 #: templates/setup.html:75
 #, python-format
@@ -1114,7 +1113,7 @@ msgstr ""
 "importeren %(import_link_close)s indien u er een heeft van een eerdere "
 "Chia installatie."
 
-#: templates/setup.html:83
+#: templates/setup.html:84
 #, python-format
 msgid ""
 "To get started with Machinaris as a Chia%(trademark)s fullnode, either "
@@ -1123,15 +1122,15 @@ msgstr ""
 "Om Machinaris te starten als een Chia%(trademark)s fullnode, importeer uw"
 " bestaande mnemonische zin (24 woorden)"
 
-#: templates/setup.html:90
+#: templates/setup.html:91
 msgid "Import Existing Key"
 msgstr "Importeer bestaande sleutel"
 
-#: templates/setup.html:91
+#: templates/setup.html:92
 msgid "OR"
 msgstr "OF"
 
-#: templates/setup.html:93
+#: templates/setup.html:94
 msgid ""
 "You can generate a brand-new mnemonic phrase that will be written to this"
 " in-container path"
@@ -1139,11 +1138,11 @@ msgstr ""
 "U kan een gloednieuwe mnemonische zin genereren dewelke zal worden "
 "opgeslagen in dit container pad"
 
-#: templates/setup.html:96
+#: templates/setup.html:97
 msgid "Generate New Key"
 msgstr "Genereer nieuwe sleutel"
 
-#: templates/setup.html:110
+#: templates/setup.html:111
 #, python-format
 msgid ""
 "NOTE: If you would prefer to instead import your mnenmoic seed phrase "
@@ -1998,5 +1997,38 @@ msgstr ""
 #~ msgstr "Saldo Portefeuille"
 
 #~ msgid "Failed to save display settings.  Please check Web Log."
+#~ msgstr ""
+
+#~ msgid ""
+#~ "On very first launch, the Chia "
+#~ "compressed blockchain database %(compressed)s "
+#~ "is being downloaded from %(dl_link)s. At"
+#~ " about %(uncompressed)s in uncompressed "
+#~ "size (progress shown above), this will"
+#~ " take a while. However minutes of "
+#~ "download now, will save you multiple "
+#~ "days of blockchain syncing later. Please"
+#~ " be patient!"
+#~ msgstr ""
+#~ "Tijdens de allereerste start wordt de"
+#~ " gecomprimeerde Chia blockchain databank "
+#~ "%(compressed)s gedownload van %(dl_link)s. Met"
+#~ " de huidge grootte van %(uncompressed)s "
+#~ "in ongecomprimeerde vorm (zie vooruitgang "
+#~ "hierboven) kan dit wel even duren. "
+#~ "Echter, nu meerdere minuten downloaden "
+#~ "zal meerdere dagen uitsparen in het "
+#~ "synchroniseren van de blockchain. Heb "
+#~ "geduld!"
+
+#~ msgid ""
+#~ "On very first launch, the Chia "
+#~ "compressed blockchain database %(compressed)s "
+#~ "is being downloaded from %(dl_link)s. At"
+#~ " about %(uncompressed)s in uncompressed "
+#~ "size, this will take a while. "
+#~ "However minutes of download now, will"
+#~ " save you multiple days of blockchain"
+#~ " syncing later. Please be patient!"
 #~ msgstr ""
 
