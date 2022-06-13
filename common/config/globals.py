@@ -148,6 +148,7 @@ def is_setup():
     return foundKey
 
 # On very first launch of the main Chia container, blockchain DB 7zip is being downloaded so must wait.
+CHIA_COMPRESSED_DB_SIZE = 30 * 1024 * 1024 * 1024 # 30 compressed GB in mid-2022
 CHIA_BLOCKCHAIN_DB_SIZE = 80 * 1024 * 1024 * 1024 # 80 uncompressed GB in mid-2022
 def blockchain_downloading():
     db_path = '/root/.chia/mainnet/db'
@@ -158,7 +159,7 @@ def blockchain_downloading():
         logging.info("No folder at {0} yet...".format(tmp_path))
         return [0, "0 GB"]
     bytes = sum(f.stat().st_size for f in pathlib.Path(tmp_path).glob('**/*') if f.is_file())
-    return [ round(100*bytes/CHIA_BLOCKCHAIN_DB_SIZE, 2), converters.convert_size(bytes) ]
+    return [ round(100*bytes/(CHIA_COMPRESSED_DB_SIZE + CHIA_BLOCKCHAIN_DB_SIZE), 2), converters.convert_size(bytes) ]
 
 def get_key_paths():
     if "keys" not in os.environ:

@@ -48,7 +48,7 @@
 
                         {% if blockchain_download_size %}
                         <br />
-                        <p style="text-center"><b>Blockchain Download Status: {{ blockchain_download_size }} so far...</b></p>
+                        <p style="text-center"><b>{{_('Downloaded and unzipped %(size)s so far...', size=blockchain_download_size)}}</b></p>
                         <br />
                         <div class="progress">
                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
@@ -60,7 +60,7 @@
 
                         {% autoescape false %}
                         <p>{{_(
-                            'On very first launch, the Chia compressed blockchain database %(compressed)s is being downloaded from %(dl_link)s. At about %(uncompressed)s in uncompressed size (progress shown above), this will take a while. However minutes of download now, will save you multiple days of blockchain syncing later. Please be patient!', 
+                            'On very first launch, the Chia compressed blockchain database %(compressed)s is being downloaded from %(dl_link)s. At about %(uncompressed)s in uncompressed size, this will take a while. However minutes of download now, will save you multiple days of blockchain syncing later. Please be patient!', 
                             compressed="(~30 GB)", uncompressed="80 GB",
                             dl_link='<a target="_blank" href="https://sweetchia.com">https://sweetchia.com</a>'
                         )}}</p>
