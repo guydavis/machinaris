@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-03-13 10:29-0600\n"
-"POT-Creation-Date: 2022-06-12 14:28-0600\n"
+"POT-Creation-Date: 2022-06-13 15:08-0600\n"
 "PO-Revision-Date: 2022-03-13 10:29-0600\n"
 "Last-Translator: Bernie Deprez\n"
 "Language: nl_NL\n"
@@ -54,7 +54,7 @@ msgstr ""
 msgid "Unknown form action"
 msgstr "Ongekende formulier actie"
 
-#: routes.py:449
+#: routes.py:447
 #, python-format
 msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
@@ -63,7 +63,7 @@ msgstr ""
 "Geen werker op %(worker)s voor blockchain %(blockchain)s. Gelieve een "
 "ander blockchain te kiezen."
 
-#: routes.py:455
+#: routes.py:453
 #, python-format
 msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
@@ -72,7 +72,7 @@ msgstr ""
 "Voor Waarschuwingsconfiguratie, geen reagerende fullnode voor "
 "%(blockchain)s gevonden. Gelieve uw werkers te controleren."
 
-#: routes.py:460
+#: routes.py:458
 #, python-format
 msgid ""
 "For Farming config, found no responding fullnode found for "
@@ -81,7 +81,7 @@ msgstr ""
 "Voor Farming configuratie, geen reagerende fullnode voor %(blockchain)s "
 "gevonden. Gelieve uw werkers te controleren."
 
-#: routes.py:467
+#: routes.py:465
 #, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
@@ -90,7 +90,7 @@ msgstr ""
 "Voor Plotting configuratie, geen reagerende fullnode gevonden voor "
 "%(blockchain)s. Gelieve uw werkers te controleren."
 
-#: routes.py:472
+#: routes.py:470
 #, python-format
 msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
@@ -99,17 +99,165 @@ msgstr ""
 "Geen reagerende fullnode gevonden voor %(blockchain)s. Gelieve uw werkers"
 " te controleren."
 
-#: routes.py:491
+#: routes.py:489
 msgid "Unsupported log type"
 msgstr "Log type niet ondersteund"
 
-#: actions/chia.py:44
-msgid ""
-"Relax and grab a coffee. Status is being gathered from active workers.  "
-"Please allow 15 minutes..."
+#: actions/chia.py:165 actions/chiadog.py:36
+msgid "Updated config.yaml failed validation! Fix and save or refresh page."
 msgstr ""
-"Relax en neem een koffie. Status van actieve werkers wordt verzameld. Dit"
-" kan 15 minuten duren..."
+
+#: actions/chia.py:170 actions/chiadog.py:41
+msgid "Failed to save config to farmer.  Please check log files."
+msgstr ""
+
+#: actions/chia.py:173
+msgid ""
+"Nice! Farming config validated and saved successfully. Worker services "
+"now restarting. Please allow 15 minutes to take effect."
+msgstr ""
+
+#: actions/chia.py:179
+msgid "Skipping key generation as file exists and is NOT empty!"
+msgstr ""
+
+#: actions/chia.py:180
+#, fuzzy
+msgid "In-container path:"
+msgstr "Container Pad"
+
+#: actions/chia.py:189 actions/chia.py:203
+msgid "Timed out while generating keys!"
+msgstr ""
+
+#: actions/chia.py:194
+msgid "Unable to generate keys!"
+msgstr ""
+
+#: actions/chia.py:208
+msgid "Unable to save mnemonic to"
+msgstr ""
+
+#: actions/chia.py:215
+msgid "does not contain a 24-word mnemonic!"
+msgstr ""
+
+#: actions/chia.py:218
+msgid "was unreadable or not found."
+msgstr ""
+
+#: actions/chia.py:220
+#, python-format
+msgid ""
+"Welcome! A new key has been generated, see below. Please visit the "
+"%(link_open)sWiki%(link_close)s to get started with Machinaris. Please "
+"allow 15 minutes for Chia to begin syncing with peers."
+msgstr ""
+
+#: actions/chia.py:234 actions/chia.py:284
+msgid "Timed out while starting farmer! Try restarting the Machinaris container."
+msgstr ""
+
+#: actions/chia.py:239 actions/chia.py:289
+msgid "Unable to start farmer. Try restarting the Machinaris container."
+msgstr ""
+
+#: actions/chia.py:246
+msgid "Did not receive a 24-word mnemonic seed phrase!"
+msgstr ""
+
+#: actions/chia.py:250
+msgid "Skipping key import as file exists and is NOT empty!"
+msgstr ""
+
+#: actions/chia.py:251
+#, fuzzy
+msgid "In container path:"
+msgstr "Container Pad"
+
+#: actions/chia.py:263
+msgid "Timed out while adding key!"
+msgstr ""
+
+#: actions/chia.py:268
+msgid "Unable to import provided mnemonic seed phrase!"
+msgstr ""
+
+#: actions/chia.py:293
+#, python-format
+msgid ""
+"Welcome! Your mnemonic key was imported. Please visit the "
+"%(link_open)sWiki%(link_close)s to get started with Machinaris. Please "
+"allow 15 minutes for Chia to begin syncing with peers."
+msgstr ""
+
+#: actions/chia.py:310 actions/chia.py:327
+msgid "Failed to connect to worker to add connection. Please check logs."
+msgstr ""
+
+#: actions/chia.py:314
+#, python-format
+msgid "Invalid connection \"%(connection)s\" provided. Must be HOST:PORT."
+msgstr ""
+
+#: actions/chia.py:317
+#, python-format
+msgid "Connection added to %(blockchain)s and sync engaging!"
+msgstr ""
+
+#: actions/chia.py:331
+msgid ""
+"Unknown error occurred attempting to remove connections. Please check "
+"logs."
+msgstr ""
+
+#: actions/chia.py:334
+#, fuzzy
+msgid "Connection removed from"
+msgstr "Verbinding Error"
+
+#: actions/chia.py:349
+#, python-format
+msgid "Unable to read addresses from %(file)s because %(exception)s"
+msgstr ""
+
+#: actions/chia.py:364
+#, python-format
+msgid ""
+"Successfully stored cold wallet addresses for %(blockchain)s. Please "
+"allow a few minutes for updated values to appear below."
+msgstr ""
+
+#: actions/chia.py:366
+#, python-format
+msgid "Unable to store addresses in %(file)s because %(exception)s"
+msgstr ""
+
+#: actions/chia.py:376
+msgid ""
+"Sorry, no plot check log found. Please wait for scheduled plot check to "
+"run."
+msgstr ""
+
+#: actions/chiadog.py:44
+msgid "Nice! Chiadog's config.yaml validated and saved successfully."
+msgstr ""
+
+#: actions/chiadog.py:66
+msgid "Failed to start Chiadog monitoring! Please see log files."
+msgstr ""
+
+#: actions/chiadog.py:68
+msgid "Chiadog monitoring started.  Notifications will be sent."
+msgstr ""
+
+#: actions/chiadog.py:76
+msgid "Failed to stop Chiadog monitoring! Please see log files."
+msgstr ""
+
+#: actions/chiadog.py:78
+msgid "Chiadog monitoring stopped successfully.  No notifications will be sent!"
+msgstr ""
 
 #: actions/drives.py:33
 #, python-format
@@ -117,13 +265,23 @@ msgid "Oops! No smartctl info found for device %(device)s on %(hostname)s."
 msgstr ""
 
 #: actions/drives.py:54
-msgid "Failed to save display settings.  Please check Web Log."
+msgid "Failed to save display settings. Please check Web Log."
 msgstr ""
 
 #: actions/drives.py:56
 #, fuzzy
 msgid "Saved display settings."
 msgstr "Lokale munt instelling opgeslagen."
+
+#: actions/forktools.py:19
+msgid "Failed to save config to farmer. Please check log files."
+msgstr ""
+
+#: actions/forktools.py:22
+msgid ""
+"Nice! Tools config validated and saved successfully. Worker services now "
+"restarting. Please allow 15 minutes to take effect."
+msgstr ""
 
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
@@ -138,6 +296,84 @@ msgstr "Actief"
 #: actions/plotman.py:49 models/plotman.py:64
 msgid "Suspended"
 msgstr "Opgeschort"
+
+#: actions/plotman.py:65
+msgid "Failed to start Plotman plotting run! Please see log files."
+msgstr ""
+
+#: actions/plotman.py:68
+#, fuzzy
+msgid "Plotman started successfully."
+msgstr "Farming niet succesvol gestart."
+
+#: actions/plotman.py:91
+msgid "Failed to action all plots!"
+msgstr ""
+
+#: actions/plotman.py:94
+#, python-format
+msgid "Plotman was able to %(action)s the selected plots successfully."
+msgstr ""
+
+#: actions/plotman.py:116
+msgid "Failed to stop Plotman plotting run!"
+msgstr ""
+
+#: actions/plotman.py:120
+msgid ""
+"Plotman stopped successfully. No new plots will be started, but existing "
+"ones will continue on."
+msgstr ""
+
+#: actions/plotman.py:130
+msgid "Failed to start Plotman archiver! Please see log files."
+msgstr ""
+
+#: actions/plotman.py:133
+#, fuzzy
+msgid "Archiver started successfully."
+msgstr "Farming niet succesvol gestart."
+
+#: actions/plotman.py:143
+msgid "Failed to stop Plotman archiver. Please see:"
+msgstr ""
+
+#: actions/plotman.py:146
+#, fuzzy
+msgid "Archiver stopped successfully."
+msgstr "Farming niet succesvol gestart."
+
+#: actions/plotman.py:219
+#, python-format
+msgid ""
+"Current configuration will plot %(open_b)sSOLO%(close_b)s plots, not "
+"%(open_b)sPORTABLE%(close_b)s plots for pooling. If this is not your "
+"choice, please see the %(wiki_open)swiki%(wiki_close)s."
+msgstr ""
+
+#: actions/plotman.py:230
+msgid "Updated plotman.yaml failed validation! Fix and save or refresh page."
+msgstr ""
+
+#: actions/plotman.py:235
+msgid "Failed to save config to plotter. Please check log files."
+msgstr ""
+
+#: actions/plotman.py:239
+msgid "Nice! Plotman's plotman.yaml validated and saved successfully."
+msgstr ""
+
+#: actions/plotman.py:249
+msgid ""
+"Sorry, no plotting job log found. Perhaps plot was made outside "
+"Machinaris?"
+msgstr ""
+
+#: actions/pools.py:74
+msgid ""
+"Failed to update Pool settings! Please check the logs from the Workers "
+"page."
+msgstr ""
 
 #: actions/stats.py:57 actions/stats.py:92 actions/stats.py:109
 #: actions/stats.py:130 actions/stats.py:132
@@ -171,20 +407,20 @@ msgstr "Portefeuille Details"
 msgid "Fiat Currency"
 msgstr ""
 
-#: actions/stats.py:451 templates/index/index.html:105
+#: actions/stats.py:455 templates/index/index.html:105
 #, fuzzy
 msgid "Netspace Size"
 msgstr "Netgrootte"
 
-#: actions/stats.py:452 actions/stats.py:510
+#: actions/stats.py:456 actions/stats.py:518
 msgid "Size"
 msgstr ""
 
-#: actions/stats.py:490
+#: actions/stats.py:494
 msgid "Plot Counts"
 msgstr ""
 
-#: actions/stats.py:509 templates/index/index.html:78
+#: actions/stats.py:517 templates/index/index.html:78
 #, fuzzy
 msgid "Plots Size"
 msgstr "Totale Omvang Plots"
@@ -207,35 +443,43 @@ msgstr ""
 "%(wiki_link_open)swiki%(wiki_link_close)s. Voeg \"Koude portefeuille "
 "maken\" toe aan uw takenlijst!"
 
-#: actions/worker.py:107
+#: actions/worker.py:92
+msgid ""
+"Relax and grab a coffee. Status is being gathered from active workers.  "
+"Please allow 15 minutes..."
+msgstr ""
+"Relax en neem een koffie. Status van actieve werkers wordt verzameld. Dit"
+" kan 15 minuten duren..."
+
+#: actions/worker.py:108
 msgid "Worker not responding to pings."
 msgstr "Werker reageert niet op pings"
 
-#: actions/worker.py:108
+#: actions/worker.py:109
 msgid "Please check the worker container and restart if necessary."
 msgstr "Gelieve uw werker container te controleren en indien nodig te herstarten."
 
-#: actions/worker.py:110
+#: actions/worker.py:111
 msgid "Worker time is offset from controller."
 msgstr "Werker klok verschilt van de controller"
 
-#: actions/worker.py:111
+#: actions/worker.py:112
 msgid "Please ensure worker and controller share same timezone."
 msgstr "Zorg dat werker en controller dezelfde tijdzone delen."
 
-#: actions/worker.py:117
+#: actions/worker.py:118
 msgid "Machinaris version does not match controller."
 msgstr "Machinaris versie is niet dezelfde als de controller."
 
-#: actions/worker.py:118
+#: actions/worker.py:119
 msgid "Please use a consistent Machinaris version to avoid issues."
 msgstr "Om problemen te voorkomen gebruik een consistente Machinaris versie."
 
-#: actions/worker.py:126
+#: actions/worker.py:127
 msgid "This fullnode is running old v1 format database."
 msgstr ""
 
-#: actions/worker.py:128
+#: actions/worker.py:129
 #, python-format
 msgid ""
 "Please %(wiki_link)supgrade%(close_link)s to newer v2 format for less "
@@ -1752,4 +1996,7 @@ msgstr ""
 
 #~ msgid "Wallet Balances"
 #~ msgstr "Saldo Portefeuille"
+
+#~ msgid "Failed to save display settings.  Please check Web Log."
+#~ msgstr ""
 

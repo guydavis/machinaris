@@ -372,9 +372,7 @@ def settings_farming():
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary.farmers_harvesters(), selected_worker_hostname, selected_blockchain)
     hot_addresses = chia.load_hot_wallet_addresses()
-    app.logger.info(hot_addresses)
     cold_addresses = chia.load_cold_wallet_addresses()
-    app.logger.info(cold_addresses)
     if not selected_blockchain:
         selected_blockchain = selected_worker['blockchain']
     return render_template('settings/farming.html', blockchains=blockchains, selected_blockchain=selected_blockchain,

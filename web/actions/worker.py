@@ -89,6 +89,7 @@ def prune_workers_status(workers):
                 db.session.commit()
         else:
             app.logger.info("Unable to find worker: {0} - {1}".format(hostname, blockchain))
+    flash(_("Relax and grab a coffee. Status is being gathered from active workers.  Please allow 15 minutes..."), 'info')
 
 # Often users set different timezones for workers, leading to hours of local time difference
 def check_worker_time_near_to_controller(worker):
