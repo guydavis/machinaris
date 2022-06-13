@@ -58,6 +58,7 @@
                         <br />
                         <br />
 
+                        {% autoescape false %}
                         <p>{{_(
                             'On very first launch, the Chia compressed blockchain database %(compressed)s is being downloaded from %(dl_link)s. At about %(uncompressed)s in uncompressed size (progress shown above), this will take a while. However minutes of download now, will save you multiple days of blockchain syncing later. Please be patient!', 
                             compressed="(~26 GB)", uncompressed="65 GB",
@@ -71,12 +72,12 @@
                         <br />
                         <br />
                         <br />
-
                         <p class="small">{{_(
                                 'NOTE: If you would prefer to allow Chia to sync the blockchain over many days, see the %(init_link)s for details. Similarly, you may instead %(import_link_open)s import your own blockchain %(import_link_close)s if you have one from a previous Chia install.',
                                 init_link='<a href="https://github.com/guydavis/machinaris/wiki/Keys#blockchain-initialization" target="_blank">Wiki</a>',
                                 import_link_open='<a href="https://github.com/guydavis/machinaris/wiki/Keys#blockchain-import" target="_blank">', import_link_close='</a>'
                         )}}</p>
+                        {% endautoescape %}
 
                         {% else %}
 
