@@ -444,14 +444,12 @@ def load_netspace_size(blockchain):
         if (i == 0) or (i % 24 == 0) or (i == len(result) - 1):
             dates.append(converted_date)
             values.append(s.value)
-    #app.logger.info(dates)
     if len(values) > 0:
         unit = converters.gib_to_fmt(max(values)).split()[1]
-        converted_values = list(map(lambda x: float(converters.gib_to_fmt(x, target_unit=unit).split()[0]), values))
+        converted_values = list(map(lambda x: converters.gib_to_float(x, unit), values))
     else:
         unit = 'B'
         converted_values = []
-    #app.logger.info(converted_values)
     return { 'title': blockchain.capitalize() + ' - ' + _('Netspace Size'), 'dates': dates, 'vals': converted_values, 
         'y_axis_title': _('Size') + ' (' + unit + ')'}
 
@@ -506,14 +504,12 @@ def load_plots_size(blockchain):
             dates.append(converted_date)
             values.append(s.value)
             last_value = s.value
-    #app.logger.info(dates)
     if len(values) > 0:
         unit = converters.gib_to_fmt(max(values)).split()[1]
-        converted_values = list(map(lambda x: float(converters.gib_to_fmt(x, target_unit=unit).split()[0]), values))
+        converted_values = list(map(lambda x: converters.gib_to_float(x, unit), values))
     else:
         unit = 'B'
         converted_values = []
-    #app.logger.info(converted_values)
     return { 'title': blockchain.capitalize() + ' - ' + _('Plots Size'), 'dates': dates, 'vals': converted_values, 
         'y_axis_title': _('Size') + ' (' + unit + ')'}
 
