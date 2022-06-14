@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-06-13 17:19-0600\n"
+"POT-Creation-Date: 2022-06-14 13:44-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: ApfelBirneKreisLanguage: de\n"
 "Language: de_DE\n"
@@ -551,6 +551,21 @@ msgstr "Bald"
 #: models/chia.py:261
 msgid "and"
 msgstr "und"
+
+#: models/pools.py:158
+#, python-format
+msgid ""
+"%(blockchain)s wallet (%(wallet_id)s) is not fully synced yet.  Please "
+"allow wallet time to complete syncing before changing Pooling settings."
+msgstr ""
+
+#: models/pools.py:162
+#, python-format
+msgid ""
+"%(blockchain)s wallet (%(wallet_id)s) has a zero balance.  Please request"
+" some mojos from a %(link_open)sfaucet%(link_close)s for the first wallet"
+" address on the Keys page, then try again later."
+msgstr ""
 
 #: templates/alerts.html:14
 msgid "Alerts: Recent Notifications"
