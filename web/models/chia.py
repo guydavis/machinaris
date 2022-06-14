@@ -502,6 +502,7 @@ class Blockchains:
                 'status': self.extract_status(blockchain.blockchain, blockchain.details, worker_status),
                 'peak_height': self.extract_height(blockchain.blockchain, blockchain.details),
                 'peak_time': self.extract_time(blockchain.blockchain, blockchain.details),
+                'fiat_price': fiat.to_fiat(blockchain.blockchain, 1.0),
                 'details': blockchain.details,
                 'updated_at': blockchain.updated_at }) 
     

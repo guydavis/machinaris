@@ -311,14 +311,18 @@ def drives():
     return render_template('drives.html', reload_seconds=120, 
         drives=drvs, settings=settings, global_config=gc, lang=get_lang(request))
 
-@app.route('/blockchains')
+@app.route('/blockchains', methods=['GET','POST'])
 def blockchains():
     gc = globals.load()
+    if request.method == 'POST':
+        fiat.save_local_currency(request.form.get('local_currency'))
+        flash(_("Saved local currency setting."), 'success')
     selected_blockchain = worker.default_blockchain()
     blockchains = chia.load_blockchains()
     fullnodes = worker.get_fullnodes_by_blockchain()
     return render_template('blockchains.html', reload_seconds=120, selected_blockchain = selected_blockchain, 
-        blockchains=blockchains, fullnodes=fullnodes, global_config=gc, lang=get_lang(request))
+        blockchains=blockchains, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
+        local_cur_sym=fiat.get_local_currency_symbol(), fullnodes=fullnodes, global_config=gc, lang=get_lang(request))
 
 @app.route('/connections', methods=['GET', 'POST'])
 def connections():

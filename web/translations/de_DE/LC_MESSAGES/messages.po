@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-06-14 13:44-0600\n"
+"POT-Creation-Date: 2022-06-14 17:39-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: ApfelBirneKreisLanguage: de\n"
 "Language: de_DE\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.1\n"
 
-#: routes.py:113 routes.py:256
+#: routes.py:113 routes.py:256 routes.py:319
 msgid "Saved local currency setting."
 msgstr "Lokale Währungseinstellung gespeichert"
 
@@ -42,7 +42,7 @@ msgstr "Unbekannte Alarm Configuration"
 msgid "Saved cold wallet addresses."
 msgstr "Cold Wallet Adressen gespeichert"
 
-#: routes.py:330
+#: routes.py:334
 msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
@@ -50,11 +50,11 @@ msgstr ""
 "Kartendaten gespeichert. Bitte warte bis zu 10 min bis diekartendaten "
 "generiert wurden"
 
-#: routes.py:338
+#: routes.py:342
 msgid "Unknown form action"
 msgstr "Unbekannte Aktions konfiguration"
 
-#: routes.py:447
+#: routes.py:451
 #, python-format
 msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
@@ -63,35 +63,35 @@ msgstr ""
 "Kein passender Worker für %(blockchain)s auf %(worker)s gefundenBitte "
 "andere Blockchain wählen"
 
-#: routes.py:453
+#: routes.py:457
 #, python-format
 msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
 " Please check your workers."
 msgstr "Keine Fullnode für %(blockchain)s Alerts gefundenBitte Worker überprüfen"
 
-#: routes.py:458
+#: routes.py:462
 #, python-format
 msgid ""
 "For Farming config, found no responding fullnode found for "
 "%(blockchain)s. Please check your workers."
 msgstr "Keine Fullnode für %(blockchain)s Farming gefundenBitte Worker überprüfen"
 
-#: routes.py:465
+#: routes.py:469
 #, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
 "%(blockchain)s. Please check your workers."
 msgstr "Keine Fullnode für %(blockchain)s Plotting gefundenBitte Worker überprüfen"
 
-#: routes.py:470
+#: routes.py:474
 #, python-format
 msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
 "workers."
 msgstr "Keine Fullnode für %(blockchain)s gefundenBitte Worker überprüfen"
 
-#: routes.py:489
+#: routes.py:493
 msgid "Unsupported log type"
 msgstr "Nicht unterstützter Log Typ"
 
@@ -399,19 +399,19 @@ msgstr ""
 msgid "Fiat Currency"
 msgstr ""
 
-#: actions/stats.py:455 templates/index/index.html:105
+#: actions/stats.py:453 templates/index/index.html:105
 msgid "Netspace Size"
 msgstr ""
 
-#: actions/stats.py:456 actions/stats.py:518
+#: actions/stats.py:454 actions/stats.py:514
 msgid "Size"
 msgstr ""
 
-#: actions/stats.py:494
+#: actions/stats.py:492
 msgid "Plot Counts"
 msgstr ""
 
-#: actions/stats.py:517 templates/index/index.html:78
+#: actions/stats.py:513 templates/index/index.html:78
 #, fuzzy
 msgid "Plots Size"
 msgstr "Gesamte Plot Größe"
@@ -578,7 +578,7 @@ msgstr "Alerts: Kürzliche Nachrichten"
 msgid "Worker"
 msgstr "Worker"
 
-#: templates/alerts.html:73 templates/blockchains.html:35
+#: templates/alerts.html:73 templates/blockchains.html:83
 #: templates/settings/alerts.html:45 templates/settings/farming.html:46
 #: templates/settings/plotting.html:46 templates/settings/tools.html:45
 #: templates/summary.html:77 templates/wallet.html:118 templates/worker.html:47
@@ -695,7 +695,8 @@ msgstr ""
 msgid "Drives"
 msgstr "Festplatten"
 
-#: templates/base.html:96 templates/connections.html:25
+#: templates/base.html:96 templates/blockchains.html:25
+#: templates/blockchains.html:53 templates/connections.html:25
 #: templates/connections.html:59 templates/drives.html:24
 #: templates/drives.html:53 templates/summary.html:25 templates/summary.html:53
 #: templates/wallet.html:23 templates/wallet.html:46
@@ -746,52 +747,79 @@ msgstr ""
 msgid "Plotman"
 msgstr ""
 
-#: templates/blockchains.html:27
+#: templates/blockchains.html:31 templates/summary.html:31
+#: templates/wallet.html:52
+msgid "Local Currency:"
+msgstr "Lokale Währung"
+
+#: templates/blockchains.html:44 templates/connections.html:50
+#: templates/drives.html:41 templates/plotting/jobs.html:16
+#: templates/plotting/jobs.html:34 templates/plotting/jobs.html:52
+#: templates/plotting/workers.html:16 templates/plotting/workers.html:34
+#: templates/settings/pools.html:39 templates/summary.html:44
+#: templates/wallet.html:65 templates/wallet.html:92
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: templates/blockchains.html:45 templates/connections.html:51
+#: templates/drives.html:42 templates/settings/alerts.html:56
+#: templates/settings/farming.html:57 templates/settings/plotting.html:57
+#: templates/settings/pools.html:41 templates/settings/tools.html:56
+#: templates/summary.html:45 templates/wallet.html:66 templates/wallet.html:93
+msgid "Save"
+msgstr "Speichern"
+
+#: templates/blockchains.html:75
 msgid "Blockchain Summary"
 msgstr "Blockchain Zusammenfassung"
 
-#: templates/blockchains.html:36 templates/drives.html:91
+#: templates/blockchains.html:84 templates/drives.html:91
 #: templates/summary.html:78 templates/wallet.html:119
 msgid "Status"
 msgstr ""
 
-#: templates/blockchains.html:37
+#: templates/blockchains.html:85
+#, fuzzy
+msgid "Price"
+msgstr "Service"
+
+#: templates/blockchains.html:86
 msgid "Peak Height"
 msgstr ""
 
-#: templates/blockchains.html:38
+#: templates/blockchains.html:87
 msgid "Peak Time"
 msgstr ""
 
-#: templates/blockchains.html:39 templates/drives.html:93
+#: templates/blockchains.html:88 templates/drives.html:93
 #: templates/wallet.html:124
 msgid "Updated At"
 msgstr ""
 
-#: templates/blockchains.html:63
+#: templates/blockchains.html:113
 msgid "View Blockchain Details"
 msgstr ""
 
-#: templates/blockchains.html:65 templates/blockchains.html:79
+#: templates/blockchains.html:115 templates/blockchains.html:129
 msgid "Blockchain Details"
 msgstr ""
 
-#: templates/blockchains.html:69 templates/summary.html:126
+#: templates/blockchains.html:119 templates/summary.html:126
 #, fuzzy
 msgid "View Blockchain Log"
 msgstr "Blockchain herunterladen"
 
-#: templates/blockchains.html:104
+#: templates/blockchains.html:154
 msgid "No blockchains found from any farmers. Not added?"
 msgstr ""
 "Es konnten keine Blockchains gefunden werden. Wurden Blockchains "
 "hinzugefügt?"
 
-#: templates/blockchains.html:105
+#: templates/blockchains.html:155
 msgid "Try running \"chia show --state\" on your farmers to verify."
 msgstr "Versuche \"chia show --state\" "
 
-#: templates/blockchains.html:119 templates/summary.html:152
+#: templates/blockchains.html:169 templates/summary.html:152
 msgid "Fullnode Log for "
 msgstr "Fullnode Log für"
 
@@ -806,22 +834,6 @@ msgstr "Maxmind License Key (Benötigt):"
 #: templates/connections.html:44
 msgid "Mapbox Access Token (Optional):"
 msgstr ""
-
-#: templates/connections.html:50 templates/drives.html:41
-#: templates/plotting/jobs.html:16 templates/plotting/jobs.html:34
-#: templates/plotting/jobs.html:52 templates/plotting/workers.html:16
-#: templates/plotting/workers.html:34 templates/settings/pools.html:39
-#: templates/summary.html:44 templates/wallet.html:65 templates/wallet.html:92
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: templates/connections.html:51 templates/drives.html:42
-#: templates/settings/alerts.html:56 templates/settings/farming.html:57
-#: templates/settings/plotting.html:57 templates/settings/pools.html:41
-#: templates/settings/tools.html:56 templates/summary.html:45
-#: templates/wallet.html:66 templates/wallet.html:93
-msgid "Save"
-msgstr "Speichern"
 
 #: templates/connections.html:82
 msgid "Connections Map"
@@ -1141,10 +1153,6 @@ msgid ""
 msgstr ""
 "Achtung: Du kannst deinen 24 Wort schlüssel auch über die "
 "Komandozeileselbst importieren. Mehr dazu findest du hier: %(wiki_link)s"
-
-#: templates/summary.html:31 templates/wallet.html:52
-msgid "Local Currency:"
-msgstr "Lokale Währung"
 
 #: templates/summary.html:79
 msgid "Height"
