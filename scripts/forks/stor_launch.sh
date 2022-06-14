@@ -12,9 +12,6 @@ mkdir -p /root/.chia/stor
 rm -f /root/.stor
 ln -s /root/.chia/stor /root/.stor 
 
-mkdir -p /root/.stor/mainnet/log
-stor init >> /root/.stor/mainnet/log/init.log 2>&1 
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.stor/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
@@ -29,6 +26,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   mv db*/*sqlite .
   rm -rf db*
 fi
+
+mkdir -p /root/.stor/mainnet/log
+stor init >> /root/.stor/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Stor...'
 if [ -f /root/.stor/mainnet/config/config.yaml ]; then

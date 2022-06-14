@@ -12,9 +12,6 @@ if [ ! -d /root/.ext9 ]; then
   ln -s /root/.chia/ /root/.ext9 
 fi
 
-mkdir -p /root/.chia/ext9/log
-chia init >> /root/.chia/ext9/log/init.log 2>&1 
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.chia/ext9/db/blockchain_v1_ext9.sqlite ]] \
@@ -23,6 +20,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Sorry, N-Chain does not offer a recent blockchain DB for download.  Standard sync will happen over a few days..."
   echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/nchain"
 fi
+
+mkdir -p /root/.chia/ext9/log
+chia init >> /root/.chia/ext9/log/init.log 2>&1 
 
 echo 'Configuring NChain...'
 if [ -f /root/.chia/ext9/config/config.yaml ]; then

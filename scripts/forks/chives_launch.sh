@@ -12,9 +12,6 @@ mkdir -p /root/.chia/chives
 rm -f /root/.chives
 ln -s /root/.chia/chives /root/.chives
 
-mkdir -p /root/.chives/mainnet/log
-chives init >> /root/.chives/mainnet/log/init.log 2>&1 
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.chives/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
@@ -26,6 +23,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Sorry, Chives does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
   echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/chives"
 fi
+
+mkdir -p /root/.chives/mainnet/log
+chives init >> /root/.chives/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Chives...'
 if [ -f /root/.chives/mainnet/config/config.yaml ]; then

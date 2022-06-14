@@ -12,9 +12,6 @@ mkdir -p /root/.chia/sit
 rm -f /root/.sit
 ln -s /root/.chia/sit /root/.sit 
 
-mkdir -p /root/.sit/mainnet/log
-sit init >> /root/.sit/mainnet/log/init.log 2>&1 
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.sit/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
@@ -23,6 +20,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Sorry, Silicoin does not offer a recent blockchain DB for download via script.  Standard sync will happen over a few days..."
   echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/sit"
 fi
+
+mkdir -p /root/.sit/mainnet/log
+sit init >> /root/.sit/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Silicoin...'
 if [ -f /root/.sit/mainnet/config/config.yaml ]; then

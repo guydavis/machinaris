@@ -12,9 +12,6 @@ mkdir -p /root/.chia/cryptodoge
 rm -f /root/.cryptodoge
 ln -s /root/.chia/cryptodoge /root/.cryptodoge 
 
-mkdir -p /root/.cryptodoge/mainnet/log
-cryptodoge init >> /root/.cryptodoge/mainnet/log/init.log 2>&1 
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.cryptodoge/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
@@ -23,6 +20,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Sorry, Cryptodoge does not offer a recent blockchain DB for download.  Standard sync will happen over a few days..."
   echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/cryptodoge"
 fi
+
+mkdir -p /root/.cryptodoge/mainnet/log
+cryptodoge init >> /root/.cryptodoge/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Cryptodoge...'
 if [ -f /root/.cryptodoge/mainnet/config/config.yaml ]; then

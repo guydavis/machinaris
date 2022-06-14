@@ -12,9 +12,6 @@ mkdir -p /root/.chia/flax
 rm -f /root/.flax
 ln -s /root/.chia/flax /root/.flax 
 
-mkdir -p /root/.flax/mainnet/log
-flax init >> /root/.flax/mainnet/log/init.log 2>&1 
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.flax/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
@@ -25,6 +22,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   # Latest Blockchain DB download as per the Flax Discord FAQ
   curl -skLJO https://flax.musmo.com/db/blockchain_v2_mainnet.sqlite
 fi
+
+mkdir -p /root/.flax/mainnet/log
+flax init >> /root/.flax/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Flax...'
 if [ -f /root/.flax/mainnet/config/config.yaml ]; then

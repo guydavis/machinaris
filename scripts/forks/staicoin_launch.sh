@@ -14,9 +14,6 @@ ln -s /root/.chia/staicoin /root/.staicoin
 rm -f /root/.stai
 ln -s /root/.chia/staicoin /root/.stai
 
-mkdir -p /root/.stai/mainnet/log
-stai init >> /root/.stai/mainnet/log/init.log 2>&1 
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.stai/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
@@ -30,6 +27,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   mv staiblockchain/*.sqlite .
   rm -rf staiblockchain/ staiblockchain.rar
 fi
+
+mkdir -p /root/.stai/mainnet/log
+stai init >> /root/.stai/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Staicoin...'
 if [ -f /root/.stai/mainnet/config/config.yaml ]; then

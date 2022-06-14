@@ -12,9 +12,6 @@ mkdir -p /root/.chia/hddcoin
 rm -f /root/.hddcoin
 ln -s /root/.chia/hddcoin /root/.hddcoin
 
-mkdir -p /root/.hddcoin/mainnet/log
-hddcoin init >> /root/.hddcoin/mainnet/log/init.log 2>&1
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.hddcoin/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
@@ -25,6 +22,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   # Latest Blockchain DB download from 
   curl -skLJO https://download.hddcoin.org/blockchain_v1_mainnet.sqlite
 fi
+
+mkdir -p /root/.hddcoin/mainnet/log
+hddcoin init >> /root/.hddcoin/mainnet/log/init.log 2>&1
 
 echo 'Configuring HDDCoin...'
 if [ -f /root/.hddcoin/mainnet/config/config.yaml ]; then
