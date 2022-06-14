@@ -47,7 +47,7 @@ msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
 msgstr ""
-"A definições do mapa foram gravadas. Por favor aguarde 10 minutos para "
+"As definições do mapa foram gravadas. Por favor aguarde 10 minutos para "
 "que o mapa seja actualizado com a geolocalização."
 
 #: routes.py:338
@@ -104,48 +104,55 @@ msgid "Unsupported log type"
 msgstr "Tipo de log não suportado"
 
 #: actions/chia.py:165 actions/chiadog.py:36
-msgid "Updated config.yaml failed validation! Fix and save or refresh page."
+msgid "Updated config.yaml failed validation! Fix and save, or refresh page."
 msgstr ""
+"A actualização do config.yaml falhou a validação. Corrija e grave ou "
+"carregue novamente a página."
 
 #: actions/chia.py:170 actions/chiadog.py:41
 #, fuzzy
 msgid "Failed to save config to farmer.  Please check log files."
-msgstr "Não foi possível gravar as definições. Por favor consulte o Web Log."
+msgstr ""
+"Não foi possível gravar as definições do Farmer. Por favor consulte "
+"o Web Log."
 
 #: actions/chia.py:173
 msgid ""
 "Nice! Farming config validated and saved successfully. Worker services "
 "now restarting. Please allow 15 minutes to take effect."
 msgstr ""
+"Porreiro! A configuração do Farmer foi validada e gravada com sucesso. "
+"Os serviços dos Workers estão a reiniciar. Por favor aguarde 15 minutos "
+"para produzir efeito."
 
 #: actions/chia.py:179
 msgid "Skipping key generation as file exists and is NOT empty!"
-msgstr ""
+msgstr "A chave não foi gerada, porque o ficheiro existe e NÃO está vazio!"
 
 #: actions/chia.py:180
 #, fuzzy
 msgid "In-container path:"
-msgstr "Container path"
+msgstr "Caminho para o Container:"
 
 #: actions/chia.py:189 actions/chia.py:203
 msgid "Timed out while generating keys!"
-msgstr ""
+msgstr "Timeout durante a geração das chaves!"
 
 #: actions/chia.py:194
 msgid "Unable to generate keys!"
-msgstr ""
+msgstr "Não foi possível gerar as chaves!"
 
 #: actions/chia.py:208
 msgid "Unable to save mnemonic to"
-msgstr ""
+msgstr "Não foi possível gravar a mnemónica para"
 
 #: actions/chia.py:215
 msgid "does not contain a 24-word mnemonic!"
-msgstr ""
+msgstr "não contém uma mnemónica de 24 palavras!"
 
 #: actions/chia.py:218
 msgid "was unreadable or not found."
-msgstr ""
+msgstr "não foi possível ler, ou não foi encontrado."
 
 #: actions/chia.py:220
 #, python-format
@@ -154,36 +161,39 @@ msgid ""
 "%(link_open)sWiki%(link_close)s to get started with Machinaris. Please "
 "allow 15 minutes for Chia to begin syncing with peers."
 msgstr ""
+"Bemvindo! Foi gerada uma nova chave, veja abaixo. Por favor visite o "
+"%(link_open)sWiki%(link_close)s para começar a usar o Machinaris. Por favor "
+"aguarde 15 minutos para o Chia começar a sinzornicação com os peers."
 
 #: actions/chia.py:234 actions/chia.py:284
 msgid "Timed out while starting farmer! Try restarting the Machinaris container."
-msgstr ""
+msgstr "Timeout a iniciar o Farmer! Tente reiniciar o container do Machinaris."
 
 #: actions/chia.py:239 actions/chia.py:289
 #, fuzzy
 msgid "Unable to start farmer. Try restarting the Machinaris container."
-msgstr "Nenhum disco acessivel pelo smartctl dentro do container do Machinaris"
+msgstr "Não foi possível iniciar o Farmer. Tente reiniciar o container do Machinaris."
 
 #: actions/chia.py:246
 msgid "Did not receive a 24-word mnemonic seed phrase!"
-msgstr ""
+msgstr "Não foi recebido a mnemónica de 24 palavras!"
 
 #: actions/chia.py:250
 msgid "Skipping key import as file exists and is NOT empty!"
-msgstr ""
+msgstr "A chave não foi importada, porque o ficheiro existe e NÃO está vazio!"
 
 #: actions/chia.py:251
 #, fuzzy
 msgid "In container path:"
-msgstr "Container path"
+msgstr "Caminho para o container:"
 
 #: actions/chia.py:263
 msgid "Timed out while adding key!"
-msgstr ""
+msgstr "Timeout a adicionar a chave!"
 
 #: actions/chia.py:268
 msgid "Unable to import provided mnemonic seed phrase!"
-msgstr ""
+msgstr "Não foi possível importar a mnemónica de 24 palavras que foi fornecida!"
 
 #: actions/chia.py:293
 #, python-format
@@ -192,26 +202,33 @@ msgid ""
 "%(link_open)sWiki%(link_close)s to get started with Machinaris. Please "
 "allow 15 minutes for Chia to begin syncing with peers."
 msgstr ""
+"Bemvindo! A tua mnemónica foi importada. Por favor visite o "
+"%(link_open)sWiki%(link_close)s para começar a usar o Machinaris. Por favor "
+"aguarde 15 minutos para o Chia começar a sinzornicação com os peers."
 
 #: actions/chia.py:310 actions/chia.py:327
 msgid "Failed to connect to worker to add connection. Please check logs."
 msgstr ""
+"Não foi possível estabelecer uma ligação com o Worker para adicionar uma "
+"conexão. Por favor consulte os logs."
 
 #: actions/chia.py:314
 #, python-format
 msgid "Invalid connection \"%(connection)s\" provided. Must be HOST:PORT."
-msgstr ""
+msgstr "Conexão \"%(connection)s\" indicada é inválida. Tem de ter o formato HOST:PORT."
 
 #: actions/chia.py:317
 #, python-format
 msgid "Connection added to %(blockchain)s and sync engaging!"
-msgstr ""
+msgstr "A conexão foi adicionada ao %(blockchain)s e a sincronização irá começar!"
 
 #: actions/chia.py:331
 msgid ""
 "Unknown error occurred attempting to remove connections. Please check "
 "logs."
 msgstr ""
+"Ocorreu um erro desconhecido ao tentar remover as conexões. Por favor "
+"consulte os logs."
 
 #: actions/chia.py:334
 #, fuzzy
@@ -221,7 +238,7 @@ msgstr "Erro na conexão"
 #: actions/chia.py:349
 #, python-format
 msgid "Unable to read addresses from %(file)s because %(exception)s"
-msgstr ""
+msgstr "Não foi possível ler os endereços do %(file)s devido a %(exception)s"
 
 #: actions/chia.py:364
 #, python-format
@@ -229,37 +246,45 @@ msgid ""
 "Successfully stored cold wallet addresses for %(blockchain)s. Please "
 "allow a few minutes for updated values to appear below."
 msgstr ""
+"O endereço da cold wallet foi gravado com sucesso para o %(blockchain)s. "
+"Por favor aguarde uns minutis para os valores serem actualizados abaixo."
 
 #: actions/chia.py:366
 #, python-format
 msgid "Unable to store addresses in %(file)s because %(exception)s"
-msgstr ""
+msgstr "Não foi possível guardar os endereços no %(file)s devido a %(exception)s"
 
 #: actions/chia.py:376
 msgid ""
 "Sorry, no plot check log found. Please wait for scheduled plot check to "
 "run."
 msgstr ""
+"Pedimos desculpa, mas não foi encontrado o log de verificação do plots. "
+"Por favor aguarde que a tarefa de validação agendada corra."
 
 #: actions/chiadog.py:44
 msgid "Nice! Chiadog's config.yaml validated and saved successfully."
-msgstr ""
+msgstr "Boa! Chiadog's config.yaml validado e gravado com sucesso."
 
 #: actions/chiadog.py:66
 msgid "Failed to start Chiadog monitoring! Please see log files."
 msgstr ""
+"Não foi possível iniciar a monitorização do Chiadog! "
+"Por favor veja os ficheiros de log."
 
 #: actions/chiadog.py:68
 msgid "Chiadog monitoring started.  Notifications will be sent."
-msgstr ""
+msgstr "A monitorização do Chiadog foi iniciada. Serão enviadas notificações."
 
 #: actions/chiadog.py:76
 msgid "Failed to stop Chiadog monitoring! Please see log files."
 msgstr ""
+"Não foi possível parar a monitorização do Chiadog! "
+"Por favor veja os ficheiros de log."
 
 #: actions/chiadog.py:78
 msgid "Chiadog monitoring stopped successfully.  No notifications will be sent!"
-msgstr ""
+msgstr "A monitorização do Chiadog parou com sucesso. Não serão enviadas notificações!"
 
 #: actions/drives.py:33
 #, python-format
@@ -288,6 +313,9 @@ msgid ""
 "Nice! Tools config validated and saved successfully. Worker services now "
 "restarting. Please allow 15 minutes to take effect."
 msgstr ""
+"Porreiro! A configuração das Ferramentas foi validada e gravada com sucesso. "
+"Os serviços dos Workers estão a reiniciar. Por favor aguarde 15 minutos "
+"para produzir efeito."
 
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
@@ -308,34 +336,40 @@ msgstr "Suspensos"
 #: actions/plotman.py:65
 msgid "Failed to start Plotman plotting run! Please see log files."
 msgstr ""
+"Não foi possível iniciar a criação do plot via Plotman. Por favor veja os "
+"ficheiros de log."
 
 #: actions/plotman.py:68
 #, fuzzy
 msgid "Plotman started successfully."
-msgstr "Farming não foi iniciado com sucesso."
+msgstr "O Plotman foi iniciado com sucesso."
 
 #: actions/plotman.py:91
 msgid "Failed to action all plots!"
-msgstr ""
+msgstr "Não foi possível efectuar a acção em todos os plots!"
 
 #: actions/plotman.py:94
 #, python-format
 msgid "Plotman was able to %(action)s the selected plots successfully."
-msgstr ""
+msgstr "O Plotman conseguiu %(action)s nos plots seleccionados com sucesso."
 
 #: actions/plotman.py:116
 msgid "Failed to stop Plotman plotting run!"
-msgstr ""
+msgstr "Não foi possível parar a criação o plot do Plotman em curso!"
 
 #: actions/plotman.py:120
 msgid ""
 "Plotman stopped successfully. No new plots will be started, but existing "
 "ones will continue on."
 msgstr ""
+"O Plotman foi parado com sucesso. Não será iniciada a criação de novos plots, "
+"mas os actuais irão continuar a ser criados."
 
 #: actions/plotman.py:130
 msgid "Failed to start Plotman archiver! Please see log files."
 msgstr ""
+"Não foi possível iniciar o arquivo do Plotman. Por favor veja os "
+"ficheiros de log."
 
 #: actions/plotman.py:133
 #, fuzzy
@@ -344,7 +378,7 @@ msgstr "Farming não foi iniciado com sucesso."
 
 #: actions/plotman.py:143
 msgid "Failed to stop Plotman archiver. Please see:"
-msgstr ""
+msgstr "Não foi possível parar o arquivo do Plotman. Por favor veja:"
 
 #: actions/plotman.py:146
 #, fuzzy
@@ -358,10 +392,16 @@ msgid ""
 "%(open_b)sPORTABLE%(close_b)s plots for pooling. If this is not your "
 "choice, please see the %(wiki_open)swiki%(wiki_close)s."
 msgstr ""
+"A configuração actual irá criar um plots do tipo %(open_b)sSOLO%(close_b)s"
+, estes plots não são "%(open_b)sPORTABLE%(close_b)s e por isso não podem "
+"ser usados nas Pools. Se não é isto que pretendes, por favor vê o "
+"%(wiki_open)swiki%(wiki_close)s."
 
 #: actions/plotman.py:230
 msgid "Updated plotman.yaml failed validation! Fix and save or refresh page."
 msgstr ""
+"A actualização do plotman.yaml falhou a validação. Corrija e grave, ou "
+"carregue novamente a página."
 
 #: actions/plotman.py:235
 #, fuzzy
@@ -370,13 +410,15 @@ msgstr "Não foi possível gravar as definições. Por favor consulte o Web Log.
 
 #: actions/plotman.py:239
 msgid "Nice! Plotman's plotman.yaml validated and saved successfully."
-msgstr ""
+msgstr "Boa! Plotman's plotman.yaml validado e gravado com sucesso."
 
 #: actions/plotman.py:249
 msgid ""
 "Sorry, no plotting job log found. Perhaps plot was made outside "
 "Machinaris?"
 msgstr ""
+"Pedimos desculpa, mas não foi encontrado o log do job "
+"do plotting. Talvez o plot tenha sido criado fora do Machinaris?"
 
 #: actions/pools.py:74
 #, fuzzy
@@ -1112,12 +1154,12 @@ msgstr "Bemvindo ao Machinaris!"
 #: templates/setup.html:28
 #, python-format
 msgid "An easy-to-use WebUI for Chia%(trademark)s plotting and farming."
-msgstr "Um interface web para o Chia%(trademark)s plotting e farming."
+msgstr "Um interface web fácil de usar para o Chia%(trademark)s plotting e farming."
 
 #: templates/setup.html:51
 #, python-format
 msgid "Downloaded and unzipped %(size)s so far..."
-msgstr ""
+msgstr "Downloaded e unzipped %(size)s até agora..."
 
 #: templates/setup.html:62
 #, python-format
@@ -1128,6 +1170,11 @@ msgid ""
 "However an hour or two now, will save you multiple days of blockchain "
 "syncing later. Please be patient!"
 msgstr ""
+"Na primeira vez que o sistema arranca, é feito download da base "
+"de dados comprimida do blockchain Chia %(compressed)s a partir de "
+"%(dl_link)s. Cerca de %(uncompressed)s descomprimido (o progresso é mostrado "
+"acima), isto irá demorar bastante tempo. No entanto horas/minutos de download "
+"agora, irão poupar vários dias a sincronizar o blockchain. Por favor seja paciente!"
 
 #: templates/setup.html:75
 #, python-format
@@ -2038,40 +2085,3 @@ msgstr "Tempo que demorou (segundos)"
 #: templates/views/index_script_block.js:249
 msgid "Partials Submitted"
 msgstr "Partials submetidos"
-
-#~ msgid "Wallet Balances"
-#~ msgstr "Wallet: Saldo"
-
-#~ msgid ""
-#~ "On very first launch, the Chia "
-#~ "compressed blockchain database %(compressed)s "
-#~ "is being downloaded from %(dl_link)s. At"
-#~ " about %(uncompressed)s in uncompressed "
-#~ "size (progress shown above), this will"
-#~ " take a while. However minutes of "
-#~ "download now, will save you multiple "
-#~ "days of blockchain syncing later. Please"
-#~ " be patient!"
-#~ msgstr ""
-#~ "Na primeira vez que o sistema é"
-#~ " usado, é feito download da base "
-#~ "de dados comprimida do blockchain Chia"
-#~ " %(compressed)s a partir de %(dl_link)s."
-#~ " Cerca de %(uncompressed)s descomprimido (o"
-#~ " progresso é mostrado acima), isto "
-#~ "irá demorar bastante tempo. No entanto"
-#~ " horas/minutos de download agora, irão "
-#~ "poupar vários dias a sincronizar o "
-#~ "blockchain. Por favor seja paciente!"
-
-#~ msgid ""
-#~ "On very first launch, the Chia "
-#~ "compressed blockchain database %(compressed)s "
-#~ "is being downloaded from %(dl_link)s. At"
-#~ " about %(uncompressed)s in uncompressed "
-#~ "size, this will take a while. "
-#~ "However minutes of download now, will"
-#~ " save you multiple days of blockchain"
-#~ " syncing later. Please be patient!"
-#~ msgstr ""
-
