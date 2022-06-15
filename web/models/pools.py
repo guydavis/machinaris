@@ -6,6 +6,7 @@ import traceback
 
 import datetime
 
+from flask_babel import _, lazy_gettext as _l
 from common.models.plotnfts import Plotnft
 from web import app, db
 from web.actions import worker as w
@@ -153,7 +154,11 @@ class PoolConfigs():
         warnings = []
         for wallet in wallets:
             if not wallet.is_synced():
-                warnings.append("{0} wallet ({1}) is not fully synced yet.  Please allow wallet time to complete syncing before changing Pooling settings.".format(blockchain.capitalize(), wallet.wallet_id()))
+                warnings.append(_("%(blockchain)s wallet (%(wallet_id)s) is not fully synced yet.  Please allow wallet time to complete syncing before changing Pooling settings.", 
+                    blockchain=blockchain.capitalize(), wallet_id=wallet.wallet_id()))
             if not wallet.has_few_mojos():
-                warnings.append("{0} wallet ({1}) has a zero balance.  Please request some mojos from a <a href='{2}' target='_blank'>faucet</a>, then try again later.".format(blockchain.capitalize(), wallet.wallet_id(), self.links['get_mojos']))
+                warnings.append(_("%(blockchain)s wallet (%(wallet_id)s) has a zero balance.  Please request some mojos from a %(link_open)sfaucet%(link_close)s for the first wallet address on the Keys page, then try again later.",
+                    blockchain=blockchain.capitalize(), wallet_id=wallet.wallet_id(), 
+                    link_open="<a class='text-white' href='{0}' target='_blank'>".format(self.links['get_mojos']), 
+                    link_close="</a>"))
         return warnings

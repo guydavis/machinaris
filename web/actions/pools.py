@@ -18,6 +18,7 @@ import traceback
 import urllib
 import yaml
 
+from flask_babel import _, lazy_gettext as _l
 from flask import Flask, jsonify, abort, request, flash, url_for
 from flask.helpers import make_response
 from stat import S_ISREG, ST_CTIME, ST_MTIME, ST_MODE, ST_SIZE
@@ -70,7 +71,7 @@ def send_request(fullnode, selected_blockchain, launcher_ids, choices, pool_urls
             debug=True)
     except:
         app.logger.info(traceback.format_exc())
-        flash('Failed to update Pool settings! Please check the logs from the Workers page.', 'danger')
+        flash(_('Failed to update Pool settings! Please check the logs from the Workers page.'), 'danger')
     else:
         if response.status_code == 200:
             flash(response.content.decode('utf-8'), 'message')

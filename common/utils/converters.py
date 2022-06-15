@@ -45,6 +45,14 @@ def gib_to_fmt(gibs, target_unit=None):
     else:
         return sizeof_fmt(gibs * 1024 * 1024 * 1024)
 
+def gib_to_float(gibs, target_unit):
+    num = gibs * 1024 * 1024 * 1024
+    for unit in ['B','KiB','MiB','GiB','TiB','PiB','EiB','ZiB', 'YiB']:
+        if target_unit == unit:
+            return float(num)
+        num /= 1024.0
+    raise Exception("Unsupported unit size of {0} for conversion from GiB.".format(target_unit))
+
 def str_to_gibs(str):
     if str == "Unknown":
         return 0.0

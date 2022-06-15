@@ -12,9 +12,6 @@ mkdir -p /root/.chia/flora
 rm -f /root/.flora
 ln -s /root/.chia/flora /root/.flora 
 
-mkdir -p /root/.flora/mainnet/log
-flora init >> /root/.flora/mainnet/log/init.log 2>&1 
-
 # Check for first launch (missing mainnet folder and download)
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
@@ -23,9 +20,12 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Downloading Flora blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.flora/mainnet/db/ && cd /root/.flora/mainnet/db/
-  # Latest Blockchain DB download as per the Flora Discord #info
-  curl -skLJO https://floracoin.farm/downloads/blockchain_v1_mainnet.sqlite
+  echo "Sorry, Flora does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
+  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/flora"
 fi
+
+mkdir -p /root/.flora/mainnet/log
+flora init >> /root/.flora/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Flora...'
 if [ -f /root/.flora/mainnet/config/config.yaml ]; then

@@ -366,3 +366,8 @@ def downgrade_stat_wallet_balances():
     op.drop_table('stat_wallet_balances')
     # ### end Alembic commands ###
 
+def upgrade_stat_total_balance():
+    pass
+
+def downgrade_stat_total_balance():
+    pass

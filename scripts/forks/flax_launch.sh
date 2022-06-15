@@ -12,9 +12,6 @@ mkdir -p /root/.chia/flax
 rm -f /root/.flax
 ln -s /root/.chia/flax /root/.flax 
 
-mkdir -p /root/.flax/mainnet/log
-flax init >> /root/.flax/mainnet/log/init.log 2>&1 
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.flax/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
@@ -22,9 +19,12 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Downloading Flax blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.flax/mainnet/db/ && cd /root/.flax/mainnet/db/
-  # Latest Blockchain DB download as per the Flax Discord FAQ - 2022-04-06 No v2 download yet...
-  curl -skLJO https://flax.musmo.com/db/blockchain_v1_mainnet.sqlite
+  # Latest Blockchain DB download as per the Flax Discord FAQ
+  curl -skLJO https://flax.musmo.com/db/blockchain_v2_mainnet.sqlite
 fi
+
+mkdir -p /root/.flax/mainnet/log
+flax init >> /root/.flax/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Flax...'
 if [ -f /root/.flax/mainnet/config/config.yaml ]; then

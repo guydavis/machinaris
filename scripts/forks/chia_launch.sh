@@ -17,9 +17,6 @@ cd /chia-blockchain
 
 . ./activate
 
-mkdir -p /root/.chia/mainnet/log
-chia init >> /root/.chia/mainnet/log/init.log 2>&1
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
@@ -43,12 +40,15 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   db_url=$(curl -s https://sweetchia.com | grep -Po "https:.*/blockchain_v2_mainnet-\d{4}-\d{2}-\d{2}-\d{4}.7z" | shuf -n 1)
   echo "Please be patient! Downloading blockchain database from: "
   echo "    ${db_url}"
-  curl -kLJ -O ${db_url}
+  curl -skLJ -O ${db_url}
   p7zip --decompress --force blockchain_v2_mainnet*.7z
   cd /root/.chia/mainnet/db
   mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.sqlite .
   rm -rf /root/.chia/mainnet/db/chia
 fi
+
+mkdir -p /root/.chia/mainnet/log
+chia init >> /root/.chia/mainnet/log/init.log 2>&1
 
 echo 'Configuring Chia...'
 if [ ! -f /root/.chia/mainnet/config/config.yaml ]; then

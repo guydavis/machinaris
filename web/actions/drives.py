@@ -51,7 +51,7 @@ def save_settings(form):
     except Exception as ex:
         msg = "Unable to write drives settings to {0} because {1}".format(DRIVES_SETTINGS, str(ex))
         app.logger.error(msg)
-        flash(_("Failed to save display settings.  Please check Web Log."), 'danger')
+        flash(_("Failed to save display settings. Please check Web Log."), 'danger')
         return {}
     flash(_("Saved display settings."), 'success')
     return settings

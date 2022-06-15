@@ -552,3 +552,9 @@ def upgrade_stat_wallet_balances():
 
 def downgrade_stat_wallet_balances():
     pass
+
+def upgrade_stat_total_balance():
+    pass
+
+def downgrade_stat_total_balance():
+    pass

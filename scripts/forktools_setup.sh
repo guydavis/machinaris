@@ -27,15 +27,18 @@ if [[ -z "${forktools_skip_build}" ]]; then
 
 		# Now multiproc patch fullnodes to limit memory usage, but delay to offset resource crunch on launch
 		if [[ ${mode} == 'fullnode' ]]; then
-			sed -i "s/SETMAXLOGROTATION='99'/SETMAXLOGROTATION='7'/g" /root/.chia/forktools/ftconfigs/config.forkfixconfig*
-			sed -i "s/SETPLOTLOADFREQUENCY='18000'/SETPLOTLOADFREQUENCY='1800'/g" /root/.chia/forktools/ftconfigs/config.forkfixconfig*
-			sed -i "s/SETFNTARGETPEERCOUNT='80'/SETFNTARGETPEERCOUNT='20'/g"  /root/.chia/forktools/ftconfigs/config.forkfixconfig*
-			sed -i "s/\"/'/g" /root/.chia/forktools/ftconfigs/config.forkfixconfig
+			if [ ! -f /root/.chia/forktools/ftconfigs/.configured ]; then
+				sed -i "s/SETMAXLOGROTATION='99'/SETMAXLOGROTATION='7'/g" /root/.chia/forktools/ftconfigs/config.forkfixconfig*
+				sed -i "s/SETPLOTLOADFREQUENCY='18000'/SETPLOTLOADFREQUENCY='1800'/g" /root/.chia/forktools/ftconfigs/config.forkfixconfig*
+				sed -i "s/SETFNTARGETPEERCOUNT='80'/SETFNTARGETPEERCOUNT='20'/g"  /root/.chia/forktools/ftconfigs/config.forkfixconfig*
+				sed -i "s/\"/'/g" /root/.chia/forktools/ftconfigs/config.forkfixconfig
+				touch /root/.chia/forktools/ftconfigs/.configured
+			fi
 			echo 'Y' | ./forkfixconfig all
   			sleep $[ ( $RANDOM % 300 )  + 1 ]s
 			./forkpatch all -multiproc
-  			sleep $[ ( $RANDOM % 600 )  + 1 ]s
-			./forkpatch all -logwinningplots
+  			#sleep $[ ( $RANDOM % 600 )  + 1 ]s
+			#./forkpatch all -logwinningplots
 		fi
 	fi
 fi

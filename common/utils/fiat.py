@@ -33,6 +33,26 @@ def to_fiat(blockchain, coins):
             traceback.print_exc()
     return ''
 
+def to_fiat_float(blockchain, coins):
+    if os.path.exists(BLOCKCHAIN_PRICES_CACHE_FILE):
+        try:
+            with open(BLOCKCHAIN_PRICES_CACHE_FILE) as f:
+                data = json.load(f)
+                if blockchain in data:
+                    if isinstance(coins, str):
+                        coins = float(coins.replace(',',''))
+                    usd_per_coin = float(data[blockchain])
+                    fiat_per_usd = get_fiat_exchange_to_usd()
+                    fiat_cur_sym = get_local_currency_symbol().lower()
+                    if usd_per_coin and fiat_per_usd and coins:
+                        #print("Converting {0} coins of {1} with {2}".format(coins, usd_per_coin, fiat_per_usd))
+                        return usd_per_coin * fiat_per_usd * coins
+                return None
+        except Exception as ex:
+            print("Unable to convert to fiat because {0}".format(str(ex)))
+            traceback.print_exc()
+    return None
+
 def load_exchange_rates_cache():
     data = {}
     if os.path.exists(EXCHANGE_RATES_CACHE_FILE):

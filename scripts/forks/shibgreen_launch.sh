@@ -12,9 +12,6 @@ mkdir -p /root/.chia/shibgreen
 rm -f /root/.shibgreen
 ln -s /root/.chia/shibgreen /root/.shibgreen 
 
-mkdir -p /root/.shibgreen/mainnet/log
-shibgreen init >> /root/.shibgreen/mainnet/log/init.log 2>&1 
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.shibgreen/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
@@ -23,6 +20,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Sorry, SHIBGreen does not offer a recent blockchain DB for download.  Standard sync will happen over a few days..."
   echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/shibgreen"
 fi
+
+mkdir -p /root/.shibgreen/mainnet/log
+shibgreen init >> /root/.shibgreen/mainnet/log/init.log 2>&1 
 
 echo 'Configuring SHIBGreen...'
 if [ -f /root/.shibgreen/mainnet/config/config.yaml ]; then

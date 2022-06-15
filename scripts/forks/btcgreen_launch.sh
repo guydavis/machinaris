@@ -12,9 +12,6 @@ mkdir -p /root/.chia/btcgreen
 rm -f /root/.btcgreen
 ln -s /root/.chia/btcgreen /root/.btcgreen 
 
-mkdir -p /root/.btcgreen/mainnet/log
-btcgreen init >> /root/.btcgreen/mainnet/log/init.log 2>&1 
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.btcgreen/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
@@ -23,6 +20,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Sorry, BTCGreen does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
   echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/btcgreen"
 fi
+
+mkdir -p /root/.btcgreen/mainnet/log
+btcgreen init >> /root/.btcgreen/mainnet/log/init.log 2>&1 
 
 echo 'Configuring BTCGreen...'
 if [ -f /root/.btcgreen/mainnet/config/config.yaml ]; then

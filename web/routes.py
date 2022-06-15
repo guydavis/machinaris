@@ -260,9 +260,10 @@ def wallet():
             chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
             flash(_("Saved cold wallet addresses."), 'success')
     wallets = chia.load_wallets()
+    chart_data = stats.load_total_balances(fiat.get_local_currency_symbol().lower())
     return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, 
         reload_seconds=120, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
-        local_cur_sym=fiat.get_local_currency_symbol(), lang=get_lang(request))
+        chart_data=chart_data, local_cur_sym=fiat.get_local_currency_symbol(), lang=get_lang(request))
 
 @app.route('/keys')
 def keys():
@@ -310,14 +311,18 @@ def drives():
     return render_template('drives.html', reload_seconds=120, 
         drives=drvs, settings=settings, global_config=gc, lang=get_lang(request))
 
-@app.route('/blockchains')
+@app.route('/blockchains', methods=['GET','POST'])
 def blockchains():
     gc = globals.load()
+    if request.method == 'POST':
+        fiat.save_local_currency(request.form.get('local_currency'))
+        flash(_("Saved local currency setting."), 'success')
     selected_blockchain = worker.default_blockchain()
     blockchains = chia.load_blockchains()
     fullnodes = worker.get_fullnodes_by_blockchain()
     return render_template('blockchains.html', reload_seconds=120, selected_blockchain = selected_blockchain, 
-        blockchains=blockchains, fullnodes=fullnodes, global_config=gc, lang=get_lang(request))
+        blockchains=blockchains, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
+        local_cur_sym=fiat.get_local_currency_symbol(), fullnodes=fullnodes, global_config=gc, lang=get_lang(request))
 
 @app.route('/connections', methods=['GET', 'POST'])
 def connections():
@@ -370,10 +375,13 @@ def settings_farming():
         chia.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary.farmers_harvesters(), selected_worker_hostname, selected_blockchain)
+    hot_addresses = chia.load_hot_wallet_addresses()
+    cold_addresses = chia.load_cold_wallet_addresses()
     if not selected_blockchain:
         selected_blockchain = selected_worker['blockchain']
     return render_template('settings/farming.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
-        workers=workers_summary.farmers_harvesters, selected_worker=selected_worker['hostname'], global_config=gc)
+        workers=workers_summary.farmers_harvesters, selected_worker=selected_worker['hostname'], 
+        hot_addresses=hot_addresses, cold_addresses=cold_addresses, global_config=gc)
 
 @app.route('/settings/alerts', methods=['GET', 'POST'])
 def settings_alerts():

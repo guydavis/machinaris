@@ -77,11 +77,11 @@
         {% endfor %}
     </style>
 
-{% if maxmind_license %}
-
 <header class="pb-3">
     <div class="row justify-content-between">
         <div class="col-3 fs-4">{{_('Connections Map')}}</div>
+
+{% if maxmind_license %}
         <div class="col-3 mt-2">
             <div class="btn-group" style="z-index: 2000;">
                 <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
@@ -101,11 +101,32 @@
 
 <div id="map"></div>
 
+{% else %}
+    </div>
+</header>
+
+<div class="p-2 text-white bg-dark rounded-3">
+    <a href="" target="_blank" href="https://github.com/guydavis/machinaris/wiki/Connections">
+        <img style="float:right;" src="https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/geolocation.png" height="200px" />
+    </a>
+    <h4>{{_('Map your network peers around the world')}}...</h4>
+    {% autoescape false %}
+    <p>{{_('To get started, you\'ll need a %(maxmind_link)s%(b_tag_open)sFREE%(b_tag_close)s Maxmind account%(a_tag_close)s to 
+        allow Machinaris to geolocate your network peer IP addresses. %(i_tag_open)sOptionally%(i_tag_close)s, you can also get
+        better looking map tiles with a %(mapbox_link)s%(b_tag_open)sFREE%(b_tag_close)s Mapbox account%(a_tag_close)s.',
+        maxmind_link='<a class="text-white" href="https://www.maxmind.com/en/geolite2/signup" target="_blank">',
+        mapbox_link='<a class="text-white" href="https://account.mapbox.com/auth/signup/" target="_blank">',
+        i_tag_open='<i>', i_tag_close='</i>', b_tag_open='<b>', b_tag_close='</b>', a_tag_close='</a>')}}
+        {{_('To enter your map account details, click the Settings (gear icon) button on the top-right of this page.')}}
+    </p>
+    {% endautoescape %}
+    <br clear="all"/>
+</div>
+{% endif %}
+
 <header class="pb-3 mt-4">
     <span class="fs-4">{{_('Connection Details')}}</span>
 </header>
-
-{% endif %}
 
     {% if connections.rows|length > 0 %}
     <nav class="navbar navbar-expand-lg navbar-dark" style="padding-bottom: 0px; display: block">
