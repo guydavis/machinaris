@@ -308,7 +308,7 @@ def worker_route():
 @app.route('/drives', methods=['GET','POST'])
 def drives():
     if request.args.get('device') and request.args.get('hostname'):
-        return d.load_smartctl_info(request.args.get('hostname'), request.args.get('device'))
+        return make_response(d.load_smartctl_info(request.args.get('hostname'), request.args.get('device')), 200)
     if request.method == 'POST':
         d.save_settings(request.form)
     gc = globals.load()

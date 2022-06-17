@@ -145,7 +145,7 @@
           <div class="h-100 p-2 text-white bg-dark rounded-3">
             <h5 class="text-white">
               <a href="#" title="View Details" data-bs-toggle="modal" data-bs-target="#smartctlModal" style="float:right"
-                onclick='SmartctlDeviceInfo("{{ drive.hostname }}", "{{ drive.device }}", "{{ drive.worker }}", "{{ drive.device_model }}", "{{ drive.model_family }}");return false;'><i class="fs-4 bi-file-text"></i></a>
+                onclick="SmartctlDeviceInfo('{{ drive.hostname }}', '{{ drive.device | escape_single_quotes }}', '{{ drive.worker | escape_single_quotes }}', '{{ drive.device_model | escape_single_quotes }}', '{{ drive.model_family | escape_single_quotes }}');return false;"><i class="fs-4 bi-file-text"></i></a>
                  {{drive.worker}} - {{drive.device}} -
                  {% if drive.model_family %}
                    {{drive.model_family}}

@@ -111,3 +111,8 @@ def alltheblocks_blocklink(block, blockchain):
     return '<a href="https://alltheblocks.net/{0}/block/0x{1}" class="text-white" target="_blank">{1}</a>'.format(alltheblocks_blockchain, block)
 
 app.jinja_env.filters['alltheblocks_blocklink'] = alltheblocks_blocklink
+
+def escape_single_quotes(value):
+    return value.replace("'", "\\'")
+
+app.jinja_env.filters['escape_single_quotes'] = escape_single_quotes
