@@ -571,3 +571,23 @@ def wallet_chart_data(farm_summary):
             j += 1
         #app.logger.info("{0} -> {1}".format(blockchain, chart_data))
         farm_summary.farms[blockchain]['wallets'] = chart_data
+
+def load_time_to_win(blockchain):
+    dates = []
+    values = []
+    result = db.session.query(StatTimeToWin).order_by(StatTimeToWin.created_at.asc()).filter(
+            StatTimeToWin.blockchain == blockchain).all()
+    last_value = None
+    for i in range(len(result)):
+        s = result[i]
+        converted_date = converters.convert_date_for_luxon(s.created_at)
+        if (i == 0) or (i % 24 == 0) or (i == len(result) - 1):
+            dates.append(converted_date)
+            values.append(s.value)
+            last_value = s.value
+    if len(values) > 0:
+        converted_values = list(map(lambda x: round(x/60/24,2), values))  # Minutes to Days
+    else:
+        converted_values = []
+    return { 'title': blockchain.capitalize() + ' - ' + _('ETW'), 'dates': dates, 'vals': converted_values, 
+        'y_axis_title': _('Estimated Time to Win') + ' (' + _('days') + ')'}

@@ -5,7 +5,7 @@ import os
 import re
 import traceback
 
-from flask_babel import _, lazy_gettext as _l
+from flask_babel import _, lazy_gettext as _l, format_decimal
 
 from web import app
 from web.actions import worker as w, mapping
@@ -80,7 +80,7 @@ class Summaries:
                 plots = ''
                 app.logger.error("No plot_count found for farm: {0}".format(farm))
             try:
-                etw = farm['expected_time_to_win']
+                etw = self.etw_to_days(blockchain['blockchain'], farm['expected_time_to_win'])
             except:
                 etw = ''
                 app.logger.error("No expected_time_to_win found for farm: {0}".format(farm))
@@ -128,7 +128,7 @@ class Summaries:
                 'edv': edv, 
                 'edv_fiat': edv_fiat,
                 'effort': effort, 
-                'etw': self.etw_to_days(blockchain['blockchain'], etw),
+                'etw': etw,
             })
 
     def find_farm(self, farms, blockchain):

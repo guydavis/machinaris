@@ -107,7 +107,9 @@ def chart():
     elif chart_type == 'effort':
         chart_data = stats.load_effort(blockchain)
         return render_template('charts/effort.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
-
+    elif chart_type == 'timetowin':
+        chart_data = stats.load_time_to_win(blockchain)
+        return render_template('charts/timetowin.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
 
 @app.route('/summary', methods=['GET', 'POST'])
 def summary():
