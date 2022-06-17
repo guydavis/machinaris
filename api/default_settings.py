@@ -33,6 +33,7 @@ class DefaultConfig:
         'stat_total_coins':         'sqlite:////root/.chia/machinaris/dbs/stat_total_coins.db',
         'stat_netspace_size':       'sqlite:////root/.chia/machinaris/dbs/stat_netspace_size.db',
         'stat_time_to_win':         'sqlite:////root/.chia/machinaris/dbs/stat_time_to_win.db',
+        'stat_effort':              'sqlite:////root/.chia/machinaris/dbs/stat_effort.db',
         'stat_plots_total_used':    'sqlite:////root/.chia/machinaris/dbs/stat_plots_total_used.db',
         'stat_plots_disk_used':     'sqlite:////root/.chia/machinaris/dbs/stat_plots_disk_used.db',
         'stat_plots_disk_free':     'sqlite:////root/.chia/machinaris/dbs/stat_plots_disk_free.db',

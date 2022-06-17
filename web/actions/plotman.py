@@ -51,6 +51,7 @@ def load_plotting_summary_by_blockchains(blockchains):
         for blockchain in blockchains: # All forks sharing Chia plots show as "Active" too
             if not blockchain in PLOTTABLE_BLOCKCHAINS:
                 summary[blockchain] = summary['chia']
+    app.logger.info(summary)
     return summary
 
 def load_plotters():

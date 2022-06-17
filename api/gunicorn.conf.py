@@ -55,6 +55,7 @@ def on_starting(server):
     # Status for fullnodes, all different forks
     if utils.is_fullnode():
         scheduler.add_job(func=stats_farm.collect, name="stats_farm", trigger='cron', minute=0)  # Hourly
+        scheduler.add_job(func=stats_effort.collect, name="stats_effort", trigger='cron', minute=0)  # Hourly
         scheduler.add_job(func=status_wallets.update, name="wallets", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_blockchains.update, name="blockchains", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_connections.update, name="connections", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
@@ -79,8 +80,8 @@ def on_starting(server):
         
     # Testing only
     #scheduler.add_job(func=restart_stuck_farmer.execute, name="restart_farmer_if_stuck", trigger='interval', seconds=10) # Test immediately
-    #scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='interval', seconds=10) # Test immediately
-    #scheduler.add_job(func=stats_effort.calculate, name="stats_effort", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=stats_blocks.collect, name="stats_blocks", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=stats_effort.collect, name="stats_effort", trigger='interval', seconds=10) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()

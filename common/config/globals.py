@@ -443,3 +443,6 @@ def get_alltheblocks_name(blockchain):
     if blockchain == 'staicoin':
         return 'stai' # Special case for staicoin's inconsistent naming convention
     return blockchain
+
+def legacy_blockchain(blockchain):
+    return blockchain in ['flora', 'hddcoin', 'maize', 'nchain', 'silicoin', 'stor']

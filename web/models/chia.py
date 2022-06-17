@@ -5,7 +5,7 @@ import os
 import re
 import traceback
 
-from flask_babel import _, lazy_gettext as _l, format_decimal
+from flask_babel import _, lazy_gettext as _l
 
 from web import app
 from web.actions import worker as w, mapping
@@ -15,7 +15,18 @@ from common.utils import converters, fiat
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
 MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
-PLOT_TABLE_COLUMNS = ['worker', 'blockchain', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', 'c', 'a' ]
+PLOT_TABLE_COLUMNS = [
+    _('worker'), 
+    _('blockchain'), 
+    _('plot_id'),  
+    _('dir'),
+    _('plot'), 
+    _('type'), 
+    _('create_date'), 
+    _('size'), 
+    _('c'), 
+    _('a')
+]
 
 class Summaries:
 
@@ -98,6 +109,11 @@ class Summaries:
             except:
                 edv_fiat = ''
                 app.logger.error("No edv_fiat found for blockchain stats: {0}".format(blockchain_stats))
+            try:
+                effort = blockchain_stats['effort']
+            except:
+                effort = ''
+                app.logger.error("No effort found for blockchain stats: {0}".format(blockchain_stats))
             self.rows.append({
                 'blockchain': blockchain['blockchain'],
                 'status': status,
@@ -110,7 +126,8 @@ class Summaries:
                 'max_resp': max_resp, 
                 'partials_per_hour': partials_per_hour,
                 'edv': edv, 
-                'edv_fiat': edv_fiat, 
+                'edv_fiat': edv_fiat,
+                'effort': effort, 
                 'etw': self.etw_to_days(blockchain['blockchain'], etw),
             })
 
@@ -206,6 +223,7 @@ class FarmSummary:
         #app.logger.info(self.farms.keys())
 
     def status_if_responding(self, displayname, blockchain, connection_status, last_status):
+        app.logger.info("Blockchain {0} status is {1}".format(blockchain, last_status))
         if connection_status == 'Responding':
             if last_status == "Farming":
                 return _("Active")
@@ -216,7 +234,7 @@ class FarmSummary:
             if last_status == "Not synced or not connected to peers":
                 return _("Not synced")
             return last_status
-        #app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
+        app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
         return _("Offline")
 
     def selected_blockchain(self):

@@ -7,6 +7,7 @@ import datetime
 import importlib
 import os
 
+from common.config import globals
 from api import app
 from api import utils
 
@@ -193,16 +194,16 @@ async def load_wallets():
         result = await wallet.get_wallets()
         wallet.close()
         await wallet.await_closed()
-        print(result)
+        wallets.extend(result)
     except Exception as ex:
         app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
     return wallets
 
-def get_transactions(wallet_id):
-    transactions = asyncio.run(load_transactions(wallet_id))
+def get_transactions(wallet_id, reverse=False):
+    transactions = asyncio.run(load_transactions(wallet_id, reverse))
     return transactions
 
-async def load_transactions(wallet_id):
+async def load_transactions(wallet_id, reverse):
     transactions = []
     try:
         config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
@@ -210,10 +211,15 @@ async def load_transactions(wallet_id):
         wallet = await WalletRpcClient.create(
             'localhost', uint16(wallet_rpc_port), DEFAULT_ROOT_PATH, config
         )
-        result = await wallet.get_transactions(wallet_id)
+        if globals.legacy_blockchain(globals.enabled_blockchains()[0]):
+            result = await wallet.get_transactions(wallet_id)  
+            if reverse: # Old blockchains can't take reverse param
+                result.reverse()
+        else: # New blockchain takes the reverse parameter directly
+            result = await wallet.get_transactions(wallet_id, reverse=reverse)
         wallet.close()
         await wallet.await_closed()
-        print(result)
+        transactions.extend(result)
     except Exception as ex:
         app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
     return transactions

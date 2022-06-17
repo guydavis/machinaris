@@ -80,30 +80,34 @@ def index():
     stats.load_daily_diff(farm_summary)
     stats.wallet_chart_data(farm_summary)
     warnings.check_warnings(request.args)
-    return render_template('index/index.html', reload_seconds=120, farms=farm_summary.farms, \
+    return render_template('index.html', reload_seconds=120, farms=farm_summary.farms, \
         plotting=plotting, workers=workers, global_config=gc, selected_blockchain=selected_blockchain)
 
-@app.route('/index_chart')
-def index_chart():
+@app.route('/chart')
+def chart():
     gc = globals.load()
     chart_type = request.args.get('type')
     blockchain = request.args.get('blockchain')
     if chart_type == 'wallet_balances':
         chart_data = stats.load_wallet_balances(blockchain)
-        return render_template('index/chart_balances.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
+        return render_template('charts/balances.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
     elif chart_type == 'farmed_blocks':
         chart_data = stats.load_farmed_coins(blockchain)
         farmed_blocks = stats.load_farmed_blocks(blockchain)
-        return render_template('index/chart_farmed.html', reload_seconds=120, global_config=gc, chart_data=chart_data, farmed_blocks=farmed_blocks, lang=get_lang(request))
+        return render_template('charts/farmed.html', reload_seconds=120, global_config=gc, chart_data=chart_data, farmed_blocks=farmed_blocks, lang=get_lang(request))
     elif chart_type == 'netspace_size':
         chart_data = stats.load_netspace_size(blockchain)
-        return render_template('index/chart_netspace.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request))
+        return render_template('charts/netspace.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request))
     elif chart_type == 'plot_count':
         chart_data = stats.load_plot_count(blockchain)
-        return render_template('index/chart_plot_count.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
+        return render_template('charts/plot_count.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
     elif chart_type == 'plots_size':
         chart_data = stats.load_plots_size(blockchain)
-        return render_template('index/chart_plots_size.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
+        return render_template('charts/plots_size.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
+    elif chart_type == 'effort':
+        chart_data = stats.load_effort(blockchain)
+        return render_template('charts/effort.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
+
 
 @app.route('/summary', methods=['GET', 'POST'])
 def summary():

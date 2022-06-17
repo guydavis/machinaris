@@ -23,7 +23,7 @@ from . import metrics
 
 from .stats import plottingdiskused,plottingdiskfree,plotsdiskused, \
     plotsdiskfree,plotcount,plotssize,totalcoins,netspacesize,timetowin, \
-    farmedblocks
+    farmedblocks,effort
 
 MODULES = (
     actions,
@@ -57,6 +57,7 @@ MODULES = (
     totalcoins,
     netspacesize,
     timetowin,
+    effort,
     metrics,
     farmedblocks,
 )

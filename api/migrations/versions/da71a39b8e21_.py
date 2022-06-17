@@ -558,3 +558,9 @@ def upgrade_stat_total_balance():
 
 def downgrade_stat_total_balance():
     pass
+
+def upgrade_stat_effort():
+    pass
+
+def downgrade_stat_effort():
+    pass

@@ -93,7 +93,7 @@ class Blocks:
                     created_at =  line[line.find(':')+1:].split()[0].replace('T', ' ')
                     farmed_block = re.search('Farmed unfinished_block (\w+)', line, re.IGNORECASE).group(1)
                 elif "--" == line:
-                    if challenge_id and plots_past_filter and proofs_found and time_taken and farmed_block and len(plot_files):
+                    if challenge_id and plots_past_filter and proofs_found and time_taken and farmed_block:
                         self.rows.append({
                             'challenge_id': challenge_id,
                             'plot_files': ','.join(plot_files),
@@ -107,13 +107,13 @@ class Blocks:
                         plots_past_filter = proofs_found = time_taken = farmed_block = None
                         plot_files = []
                     else:
-                        app.logger.debug("challenge_id: {0}".format(challenge_id))
-                        app.logger.debug("plot_files: {0}".format(plot_files))
-                        app.logger.debug("plots_past_filter: {0}".format(plots_past_filter))
-                        app.logger.debug("proofs_found: {0}".format(proofs_found))
-                        app.logger.debug("time_taken: {0}".format(time_taken))
-                        app.logger.debug("created_at: {0}".format(created_at))
-                        app.logger.debug("Missing farmed blocks data for farmed_block {0}".format(farmed_block))
+                        app.logger.info("challenge_id: {0}".format(challenge_id))
+                        app.logger.info("plot_files: {0}".format(plot_files))
+                        app.logger.info("plots_past_filter: {0}".format(plots_past_filter))
+                        app.logger.info("proofs_found: {0}".format(proofs_found))
+                        app.logger.info("time_taken: {0}".format(time_taken))
+                        app.logger.info("created_at: {0}".format(created_at))
+                        app.logger.info("Missing farmed blocks data for farmed_block {0}".format(farmed_block))
             except:
                 app.logger.info("Failed to parse blocks line: {0}".format(line))
                 app.logger.info(traceback.format_exc())

@@ -104,9 +104,9 @@ def recent_farmed_blocks(blockchain):
         app.logger.error(errs.decode('utf-8'))
         abort(500, description=errs.decode('utf-8'))
     cli_stdout = outs.decode('utf-8')
-    app.logger.debug("Blocks grep: {0}".format(cli_stdout))
+    #app.logger.info("Blocks grep: {0}".format(cli_stdout))
     blocks = log.Blocks(cli_stdout.splitlines())
-    app.logger.debug(blocks)
+    #app.logger.info(blocks.rows)
     return blocks
 
 def find_plotting_job_log(plot_id):

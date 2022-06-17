@@ -364,7 +364,6 @@ def downgrade_stat_farmed_blocks():
 def upgrade_stat_wallet_balances():
     pass
 
-
 def downgrade_stat_wallet_balances():
     pass
 
@@ -372,4 +371,10 @@ def upgrade_stat_total_balance():
     pass
 
 def downgrade_stat_total_balance():
+    pass
+
+def upgrade_stat_effort():
+    pass
+
+def downgrade_stat_effort():
     pass
