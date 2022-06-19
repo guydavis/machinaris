@@ -15,19 +15,6 @@ from common.utils import converters, fiat
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
 MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
-PLOT_TABLE_COLUMNS = [
-    _('worker'), 
-    _('blockchain'), 
-    _('plot_id'),  
-    _('dir'),
-    _('plot'), 
-    _('type'), 
-    _('create_date'), 
-    _('size'), 
-    _('c'), 
-    _('a')
-]
-
 class Summaries:
 
     def __init__(self, blockchains, farms, wallets, stats):
@@ -80,7 +67,7 @@ class Summaries:
                 plots = ''
                 app.logger.error("No plot_count found for farm: {0}".format(farm))
             try:
-                etw = self.etw_to_days(blockchain['blockchain'], farm['expected_time_to_win'])
+                etw = self.etw_to_days(blockchain['blockchain'], farm['expected_time_to_win_english'])
             except:
                 etw = ''
                 app.logger.error("No expected_time_to_win found for farm: {0}".format(farm))
@@ -211,6 +198,7 @@ class FarmSummary:
                     "netspace_display_size": netspace_display_size,
                     "netspace_size": farm_rec.netspace_size,
                     "expected_time_to_win": self.i18n_etw(farm_rec.expected_time_to_win),
+                    "expected_time_to_win_english": farm_rec.expected_time_to_win,
                 }
                 if not farm_rec.blockchain in self.farms:
                     self.farms[farm_rec.blockchain] = farm
@@ -223,7 +211,7 @@ class FarmSummary:
         #app.logger.info(self.farms.keys())
 
     def status_if_responding(self, displayname, blockchain, connection_status, last_status):
-        app.logger.info("Blockchain {0} status is {1}".format(blockchain, last_status))
+        app.logger.debug("Blockchain {0} status is {1}".format(blockchain, last_status))
         if connection_status == 'Responding':
             if last_status == "Farming":
                 return _("Active")
@@ -282,7 +270,18 @@ class FarmSummary:
 class FarmPlots:
 
     def __init__(self, plots):
-        self.columns = PLOT_TABLE_COLUMNS
+        self.columns = [ 
+            _('worker'), 
+            _('blockchain'), 
+            _('plot_id'),  
+            _('dir'),
+            _('plot'), 
+            _('type'), 
+            _('create_date'), 
+            _('size'), 
+            _('c'), 
+            _('a')
+        ]
         self.rows = []
         for plot in plots:
             self.rows.append([

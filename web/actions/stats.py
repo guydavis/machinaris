@@ -577,17 +577,17 @@ def load_time_to_win(blockchain):
     values = []
     result = db.session.query(StatTimeToWin).order_by(StatTimeToWin.created_at.asc()).filter(
             StatTimeToWin.blockchain == blockchain).all()
-    last_value = None
     for i in range(len(result)):
         s = result[i]
         converted_date = converters.convert_date_for_luxon(s.created_at)
         if (i == 0) or (i % 24 == 0) or (i == len(result) - 1):
             dates.append(converted_date)
             values.append(s.value)
-            last_value = s.value
+    app.logger.debug("{0} before {1}".format(blockchain, values))
     if len(values) > 0:
         converted_values = list(map(lambda x: round(x/60/24,2), values))  # Minutes to Days
     else:
         converted_values = []
+    app.logger.debug("{0} after {1}".format(blockchain, converted_values))
     return { 'title': blockchain.capitalize() + ' - ' + _('ETW'), 'dates': dates, 'vals': converted_values, 
         'y_axis_title': _('Estimated Time to Win') + ' (' + _('days') + ')'}
