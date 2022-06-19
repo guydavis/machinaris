@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-03-13 10:29-0600\n"
-"POT-Creation-Date: 2022-06-16 19:00-0600\n"
+"POT-Creation-Date: 2022-06-19 13:07-0600\n"
 "PO-Revision-Date: 2022-03-13 10:29-0600\n"
 "Last-Translator: Bernie Deprez\n"
 "Language: nl_NL\n"
@@ -16,33 +16,33 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.10.3\n"
 
-#: routes.py:117 routes.py:260 routes.py:323
+#: routes.py:119 routes.py:262 routes.py:325
 msgid "Saved local currency setting."
 msgstr "Lokale munt instelling opgeslagen."
 
-#: routes.py:137
+#: routes.py:139
 msgid "Blockchain download"
 msgstr "Blockchain download"
 
-#: routes.py:169
+#: routes.py:171
 msgid "Unknown plotting form"
 msgstr "Ongekend plottingformaat"
 
-#: routes.py:219
+#: routes.py:221
 msgid "Error! Please see logs."
 msgstr "Error! Controleer de logs."
 
-#: routes.py:245
+#: routes.py:247
 msgid "Unknown alerts form"
 msgstr "Ongekend waarschuwingsformaat"
 
-#: routes.py:265
+#: routes.py:267
 msgid "Saved cold wallet addresses."
 msgstr "Adres koude portefeuille opgeslagen."
 
-#: routes.py:338
+#: routes.py:340
 msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
@@ -50,11 +50,11 @@ msgstr ""
 "Kaart instellingen opgeslagen. Wacht 10 minuten terwijl lokatie "
 "informatie voor de kaart wordt gegenereerd."
 
-#: routes.py:346
+#: routes.py:348
 msgid "Unknown form action"
 msgstr "Ongekende formulier actie"
 
-#: routes.py:455
+#: routes.py:457
 #, python-format
 msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
@@ -63,7 +63,7 @@ msgstr ""
 "Geen werker op %(worker)s voor blockchain %(blockchain)s. Gelieve een "
 "ander blockchain te kiezen."
 
-#: routes.py:461
+#: routes.py:463
 #, python-format
 msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
@@ -72,7 +72,7 @@ msgstr ""
 "Voor Waarschuwingsconfiguratie, geen reagerende fullnode voor "
 "%(blockchain)s gevonden. Gelieve uw werkers te controleren."
 
-#: routes.py:466
+#: routes.py:468
 #, python-format
 msgid ""
 "For Farming config, found no responding fullnode found for "
@@ -81,7 +81,7 @@ msgstr ""
 "Voor Farming configuratie, geen reagerende fullnode voor %(blockchain)s "
 "gevonden. Gelieve uw werkers te controleren."
 
-#: routes.py:473
+#: routes.py:475
 #, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
@@ -90,7 +90,7 @@ msgstr ""
 "Voor Plotting configuratie, geen reagerende fullnode gevonden voor "
 "%(blockchain)s. Gelieve uw werkers te controleren."
 
-#: routes.py:478
+#: routes.py:480
 #, python-format
 msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
@@ -99,7 +99,7 @@ msgstr ""
 "Geen reagerende fullnode gevonden voor %(blockchain)s. Gelieve uw werkers"
 " te controleren."
 
-#: routes.py:497
+#: routes.py:499
 msgid "Unsupported log type"
 msgstr "Log type niet ondersteund"
 
@@ -418,6 +418,20 @@ msgstr "Totale Omvang Plots"
 msgid "Effort"
 msgstr "Poort"
 
+#: actions/stats.py:592 templates/summary.html:84
+msgid "ETW"
+msgstr "ETW"
+
+#: actions/stats.py:593
+#, fuzzy
+msgid "Estimated Time to Win"
+msgstr "Verwachte Tijd om te Winnen"
+
+#: actions/stats.py:593 models/chia.py:157 models/chia.py:263
+#: models/drives.py:44
+msgid "days"
+msgstr "dagen"
+
 #: actions/warnings.py:56
 msgid "Dismiss Warning"
 msgstr "Verwerp waarschuwing"
@@ -519,10 +533,6 @@ msgstr ""
 #: models/chia.py:28
 msgid "a"
 msgstr ""
-
-#: models/chia.py:157 models/chia.py:263 models/drives.py:44
-msgid "days"
-msgstr "dagen"
 
 #: models/chia.py:231 templates/summary.html:102 templates/wallet.html:139
 msgid "Syncing"
@@ -1266,10 +1276,6 @@ msgstr "Max Resp."
 msgid "Partials"
 msgstr "Partials"
 
-#: templates/summary.html:84
-msgid "ETW"
-msgstr "ETW"
-
 #: templates/summary.html:86
 msgid "Wallet"
 msgstr "Portefeuille"
@@ -1286,8 +1292,16 @@ msgstr "Gesynchroniseerd"
 msgid "Not Synced"
 msgstr "Niet Gesynchroniseerd"
 
-#: templates/summary.html:115 templates/summary.html:116
-#: templates/wallet.html:152
+#: templates/summary.html:114
+#, fuzzy
+msgid "Chart ETW"
+msgstr "Wijzig Portefeuille"
+
+#: templates/summary.html:115
+msgid "Chart Effort"
+msgstr ""
+
+#: templates/summary.html:116 templates/wallet.html:152
 msgid "Chart Wallet"
 msgstr "Wijzig Portefeuille"
 
@@ -1346,8 +1360,8 @@ msgstr ""
 #: templates/charts/balances.html:85 templates/charts/effort.html:85
 #: templates/charts/farmed.html:133 templates/charts/netspace.html:91
 #: templates/charts/plot_count.html:84 templates/charts/plots_size.html:84
-#: templates/plotting/jobs.html:288 templates/views/index_script_block.js:90
-#: templates/wallet.html:325
+#: templates/charts/timetowin.html:85 templates/plotting/jobs.html:288
+#: templates/views/index_script_block.js:90 templates/wallet.html:325
 msgid "Date"
 msgstr ""
 
@@ -1681,6 +1695,11 @@ msgstr ""
 #: templates/charts/farmed.html:55
 msgid "Farmed At"
 msgstr "Farmed"
+
+#: templates/charts/timetowin.html:102
+#, fuzzy
+msgid "Days"
+msgstr "dagen"
 
 #: templates/farming/plots.html:9
 msgid "Plotting Analysis"
@@ -2040,3 +2059,4 @@ msgstr ""
 #: templates/views/index_script_block.js:249
 msgid "Partials Submitted"
 msgstr ""
+

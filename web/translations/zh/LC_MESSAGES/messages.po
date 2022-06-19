@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-06-16 19:00-0600\n"
+"POT-Creation-Date: 2022-06-19 13:07-0600\n"
 "PO-Revision-Date: 2022-02-15 14:29-0700\n"
 "Last-Translator: Guy Davis\n"
 "Language: zh\n"
@@ -17,78 +17,78 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.10.1\n"
+"Generated-By: Babel 2.10.3\n"
 
-#: routes.py:117 routes.py:260 routes.py:323
+#: routes.py:119 routes.py:262 routes.py:325
 msgid "Saved local currency setting."
 msgstr ""
 
-#: routes.py:137
+#: routes.py:139
 msgid "Blockchain download"
 msgstr ""
 
-#: routes.py:169
+#: routes.py:171
 msgid "Unknown plotting form"
 msgstr ""
 
-#: routes.py:219
+#: routes.py:221
 msgid "Error! Please see logs."
 msgstr ""
 
-#: routes.py:245
+#: routes.py:247
 msgid "Unknown alerts form"
 msgstr ""
 
-#: routes.py:265
+#: routes.py:267
 msgid "Saved cold wallet addresses."
 msgstr ""
 
-#: routes.py:338
+#: routes.py:340
 msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
 msgstr ""
 
-#: routes.py:346
+#: routes.py:348
 msgid "Unknown form action"
 msgstr ""
 
-#: routes.py:455
+#: routes.py:457
 #, python-format
 msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
 "another blockchain."
 msgstr ""
 
-#: routes.py:461
+#: routes.py:463
 #, python-format
 msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
 " Please check your workers."
 msgstr ""
 
-#: routes.py:466
+#: routes.py:468
 #, python-format
 msgid ""
 "For Farming config, found no responding fullnode found for "
 "%(blockchain)s. Please check your workers."
 msgstr ""
 
-#: routes.py:473
+#: routes.py:475
 #, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
 "%(blockchain)s. Please check your workers."
 msgstr ""
 
-#: routes.py:478
+#: routes.py:480
 #, python-format
 msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
 "workers."
 msgstr ""
 
-#: routes.py:497
+#: routes.py:499
 msgid "Unsupported log type"
 msgstr ""
 
@@ -407,6 +407,19 @@ msgstr ""
 msgid "Effort"
 msgstr ""
 
+#: actions/stats.py:592 templates/summary.html:84
+msgid "ETW"
+msgstr ""
+
+#: actions/stats.py:593
+msgid "Estimated Time to Win"
+msgstr ""
+
+#: actions/stats.py:593 models/chia.py:157 models/chia.py:263
+#: models/drives.py:44
+msgid "days"
+msgstr ""
+
 #: actions/warnings.py:56
 msgid "Dismiss Warning"
 msgstr ""
@@ -499,10 +512,6 @@ msgstr ""
 
 #: models/chia.py:28
 msgid "a"
-msgstr ""
-
-#: models/chia.py:157 models/chia.py:263 models/drives.py:44
-msgid "days"
 msgstr ""
 
 #: models/chia.py:231 templates/summary.html:102 templates/wallet.html:139
@@ -1222,10 +1231,6 @@ msgstr ""
 msgid "Partials"
 msgstr ""
 
-#: templates/summary.html:84
-msgid "ETW"
-msgstr ""
-
 #: templates/summary.html:86
 msgid "Wallet"
 msgstr ""
@@ -1242,8 +1247,15 @@ msgstr ""
 msgid "Not Synced"
 msgstr ""
 
-#: templates/summary.html:115 templates/summary.html:116
-#: templates/wallet.html:152
+#: templates/summary.html:114
+msgid "Chart ETW"
+msgstr ""
+
+#: templates/summary.html:115
+msgid "Chart Effort"
+msgstr ""
+
+#: templates/summary.html:116 templates/wallet.html:152
 msgid "Chart Wallet"
 msgstr ""
 
@@ -1298,8 +1310,8 @@ msgstr ""
 #: templates/charts/balances.html:85 templates/charts/effort.html:85
 #: templates/charts/farmed.html:133 templates/charts/netspace.html:91
 #: templates/charts/plot_count.html:84 templates/charts/plots_size.html:84
-#: templates/plotting/jobs.html:288 templates/views/index_script_block.js:90
-#: templates/wallet.html:325
+#: templates/charts/timetowin.html:85 templates/plotting/jobs.html:288
+#: templates/views/index_script_block.js:90 templates/wallet.html:325
 msgid "Date"
 msgstr ""
 
@@ -1624,6 +1636,10 @@ msgstr ""
 msgid "Farmed At"
 msgstr ""
 
+#: templates/charts/timetowin.html:102
+msgid "Days"
+msgstr ""
+
 #: templates/farming/plots.html:9
 msgid "Plotting Analysis"
 msgstr ""
@@ -1946,3 +1962,4 @@ msgstr ""
 #: templates/views/index_script_block.js:249
 msgid "Partials Submitted"
 msgstr ""
+
