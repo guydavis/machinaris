@@ -550,43 +550,43 @@ msgstr ""
 
 #: models/chia.py:19
 msgid "worker"
-msgstr ""
+msgstr "worker"
 
 #: models/chia.py:20
 msgid "blockchain"
-msgstr ""
+msgstr "blockchain"
 
 #: models/chia.py:21
 msgid "plot_id"
-msgstr ""
+msgstr "plot_id"
 
 #: models/chia.py:22
 msgid "dir"
-msgstr ""
+msgstr "dir"
 
 #: models/chia.py:23
 msgid "plot"
-msgstr ""
+msgstr "plot"
 
 #: models/chia.py:24
 msgid "type"
-msgstr ""
+msgstr "tipo"
 
 #: models/chia.py:25
 msgid "create_date"
-msgstr ""
+msgstr "data criação"
 
 #: models/chia.py:26
 msgid "size"
-msgstr ""
+msgstr "tamanho"
 
 #: models/chia.py:27
 msgid "c"
-msgstr ""
+msgstr "c"
 
 #: models/chia.py:28
 msgid "a"
-msgstr ""
+msgstr "a"
 
 #: models/chia.py:231 templates/summary.html:102 templates/wallet.html:139
 msgid "Syncing"
@@ -664,6 +664,9 @@ msgid ""
 "%(blockchain)s wallet (%(wallet_id)s) is not fully synced yet.  Please "
 "allow wallet time to complete syncing before changing Pooling settings."
 msgstr ""
+"%(blockchain)s wallet (%(wallet_id)s) ainda não está completamente "
+"sincronizado. Por favor aguarde que algum tempo para que a wallet "
+"fique sincronizada, antes de alterar as definições de Pooling."
 
 #: models/pools.py:162
 #, python-format
@@ -672,6 +675,9 @@ msgid ""
 " some mojos from a %(link_open)sfaucet%(link_close)s for the first wallet"
 " address on the Keys page, then try again later."
 msgstr ""
+"%(blockchain)s wallet (%(wallet_id)s) tem saldo ZERO. Por favor peça "
+"alguns mojos usando a %(link_open)sfaucet%(link_close)s para o endereço "
+"da primeira wallet, na página das Chaves. Depois, tente mais tarde."
 
 #: templates/alerts.html:14
 msgid "Alerts: Recent Notifications"
@@ -1370,11 +1376,11 @@ msgstr "Não sincronizado"
 
 #: templates/summary.html:114
 msgid "Chart ETW"
-msgstr ""
+msgstr "Gráfico - ETW"
 
 #: templates/summary.html:115
 msgid "Chart Effort"
-msgstr ""
+msgstr "Gráfico - Esforço"
 
 #: templates/summary.html:116 templates/wallet.html:152
 msgid "Chart Wallet"
