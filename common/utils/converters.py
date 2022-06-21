@@ -10,8 +10,6 @@ import os
 import re
 import traceback
 
-from common.config import globals
-
 def sizeof_fmt(num, suffix='B'):
     for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
         if abs(num) < 1024.0:
@@ -135,9 +133,6 @@ def round_balance(value):
         return flask_babel.format_decimal(value, format="#,##0.##################")  
     else: # Workaround for inability to test flask-babel without a request
         return babel.numbers.format_decimal(value, format="#,##0.##################")
-
-def mojos_to_coin(blockchain, mojos):
-    return mojos / globals.get_mojos_per_coin(blockchain)
 
 ##################################################################################################
 #

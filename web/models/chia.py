@@ -846,10 +846,13 @@ class Transactions:
                 "type": self.lookup_type(t['type']),
                 "to": bech32m.encode_puzzle_hash(bytes.fromhex(to_puzzle_hash), self.address_prefix),
                 "status": _('Confirmed') if 'confirmed_at_height' in t else '',
-                "amount": converters.round_balance(converters.mojos_to_coin(blockchain, t['amount'])),
+                "amount": converters.round_balance(self.mojos_to_coin(blockchain, t['amount'])),
                 "fee": t['fee_amount'],
                 "created_at": time.strftime('%Y-%m-%d %H:%M', time.localtime(t['created_at_time'])),
             })
+
+    def mojos_to_coin(self, blockchain, mojos):
+        return mojos / globals.get_mojos_per_coin(blockchain)
     
     # https://github.com/Chia-Network/chia-blockchain/blob/main/chia/wallet/util/transaction_type.py
     def lookup_type(self, type_id):
