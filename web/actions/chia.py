@@ -30,7 +30,7 @@ from web import app, db, utils
 from common.models import farms as f, plots as p, challenges as c, wallets as w, \
     blockchains as b, connections as co, keys as k
 from common.config import globals
-from web.models.chia import FarmSummary, FarmPlots, Wallets, \
+from web.models.chia import FarmSummary, FarmPlots, Wallets, Transactions, \
     Blockchains, Connections, Keys, ChallengesChartData, Summaries
 from . import worker as wk
 from . import stats
@@ -374,3 +374,27 @@ def check(plot_id):
         with open(check_file, 'r+') as fp:
             return fp.read()
     return make_response(_("Sorry, no plot check log found. Please wait for scheduled plot check to run."), 200)
+
+def get_transactions(lang, worker, blockchain, wallet_id):
+    try:
+        response = utils.send_get(worker, "/transactions/{0}".format(wallet_id), {}, debug=False, lang=lang)
+        if response.status_code == 200:
+            transactions = json.loads(response.content.decode('utf-8'))
+            return Transactions(blockchain, transactions)
+    except Exception as ex:
+        app.logger.info('Failed to load transactions from {0}:{1} running {2} because {3}'.format(
+                worker.hostname, worker.port, blockchain, str(ex)))
+    return None
+
+def load_wallet_ids(blockchain):
+    if globals.legacy_blockchain(blockchain):
+        return [{'id': '1', 'name': blockchain.capitalize() + ' ' + _('Wallet') }]
+    wallet_ids = []
+    wallet = db.session.query(w.Wallet).filter(w.Wallet.blockchain==blockchain).first()
+    wallet_name = None
+    for line in wallet.details.split('\n'):
+        if line.strip().endswith(':') and not line.strip() == 'Connections:':
+            wallet_name = line.strip()[:-1]
+        elif line.strip().startswith('-Wallet ID:'):
+            wallet_ids.append({'id': line.split(':')[1].strip(), 'name': wallet_name })
+    return wallet_ids

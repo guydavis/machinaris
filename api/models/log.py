@@ -76,6 +76,8 @@ class Blocks:
         self.columns = [ 'challenge_id', 'plot_files', 'proofs_found', 'time_taken', 'farmed_block', 'created_at']
         self.rows = []
         plot_files = []
+        if len(cli_stdout) == 0:
+            return # Nothing to processs as no farmed blocks found in this log file
         challenge_id = plots_past_filter = proofs_found = time_taken = farmed_block = created_at = None
         cli_stdout.append('--') # add a trailing -- to force last parse
         for line in cli_stdout:

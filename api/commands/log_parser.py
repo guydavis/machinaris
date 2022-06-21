@@ -92,7 +92,7 @@ def recent_farmed_blocks(blockchain):
     rotated_log_file = ''
     if os.path.exists(log_file + '.1'):
         rotated_log_file = log_file + '.1'
-    proc = Popen("grep -B 10 'Farmed unfinished_block' {0} {1}".format(rotated_log_file, log_file),
+    proc = Popen("grep -B 15 'Farmed unfinished_block' {0} {1}".format(rotated_log_file, log_file),
                  stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)

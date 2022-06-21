@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-06-19 13:07-0600\n"
+"POT-Creation-Date: 2022-06-21 14:57-0600\n"
 "PO-Revision-Date: 2022-02-15 14:29-0700\n"
 "Last-Translator: Guy Davis\n"
 "Language: zh\n"
@@ -225,6 +225,10 @@ msgid ""
 "run."
 msgstr ""
 
+#: actions/chia.py:391 templates/summary.html:86
+msgid "Wallet"
+msgstr ""
+
 #: actions/chiadog.py:44
 msgid "Nice! Chiadog's config.yaml validated and saved successfully."
 msgstr ""
@@ -272,7 +276,7 @@ msgstr ""
 msgid "Idle"
 msgstr ""
 
-#: actions/plotman.py:47 actions/plotman.py:48 models/chia.py:229
+#: actions/plotman.py:47 actions/plotman.py:48 models/chia.py:221
 #: models/plotman.py:67 templates/index.html:42 templates/index.html:52
 msgid "Active"
 msgstr ""
@@ -365,7 +369,7 @@ msgstr ""
 msgid "secs"
 msgstr ""
 
-#: actions/stats.py:381 models/chia.py:269
+#: actions/stats.py:381 models/chia.py:261
 msgid "hour"
 msgstr ""
 
@@ -415,7 +419,7 @@ msgstr ""
 msgid "Estimated Time to Win"
 msgstr ""
 
-#: actions/stats.py:593 models/chia.py:157 models/chia.py:263
+#: actions/stats.py:593 models/chia.py:148 models/chia.py:255
 #: models/drives.py:44
 msgid "days"
 msgstr ""
@@ -474,114 +478,146 @@ msgid ""
 "disk usage."
 msgstr ""
 
-#: models/chia.py:19
-msgid "worker"
-msgstr ""
-
-#: models/chia.py:20
-msgid "blockchain"
-msgstr ""
-
-#: models/chia.py:21
-msgid "plot_id"
-msgstr ""
-
-#: models/chia.py:22
-msgid "dir"
-msgstr ""
-
-#: models/chia.py:23
-msgid "plot"
-msgstr ""
-
-#: models/chia.py:24
-msgid "type"
-msgstr ""
-
-#: models/chia.py:25
-msgid "create_date"
-msgstr ""
-
-#: models/chia.py:26
-msgid "size"
-msgstr ""
-
-#: models/chia.py:27
-msgid "c"
-msgstr ""
-
-#: models/chia.py:28
-msgid "a"
-msgstr ""
-
-#: models/chia.py:231 templates/summary.html:102 templates/wallet.html:139
+#: models/chia.py:223 templates/summary.html:102 templates/wallet.html:139
 msgid "Syncing"
 msgstr ""
 
-#: models/chia.py:233 templates/index.html:54
+#: models/chia.py:225 templates/index.html:54
 msgid "Not available"
 msgstr ""
 
-#: models/chia.py:235
+#: models/chia.py:227
 msgid "Not synced"
 msgstr ""
 
-#: models/chia.py:238 templates/index.html:54 templates/plotting/jobs.html:114
+#: models/chia.py:230 templates/index.html:54 templates/plotting/jobs.html:114
 #: templates/plotting/workers.html:116 templates/summary.html:98
 #: templates/wallet.html:135 templates/worker.html:78 templates/workers.html:72
 msgid "Offline"
 msgstr ""
 
-#: models/chia.py:251 models/drives.py:49
+#: models/chia.py:243 models/drives.py:49
 msgid "years"
 msgstr ""
 
-#: models/chia.py:253
+#: models/chia.py:245
 msgid "year"
 msgstr ""
 
-#: models/chia.py:255 models/drives.py:48
+#: models/chia.py:247 models/drives.py:48
 msgid "months"
 msgstr ""
 
-#: models/chia.py:257
+#: models/chia.py:249
 msgid "month"
 msgstr ""
 
-#: models/chia.py:259 models/drives.py:46
+#: models/chia.py:251 models/drives.py:46
 msgid "weeks"
 msgstr ""
 
-#: models/chia.py:261
+#: models/chia.py:253
 msgid "week"
 msgstr ""
 
-#: models/chia.py:265
+#: models/chia.py:257
 msgid "day"
 msgstr ""
 
-#: models/chia.py:267 models/drives.py:42
+#: models/chia.py:259 models/drives.py:42
 msgid "hours"
 msgstr ""
 
-#: models/chia.py:271
+#: models/chia.py:263
 msgid "minutes"
 msgstr ""
 
-#: models/chia.py:273
+#: models/chia.py:265
 msgid "minute"
 msgstr ""
 
-#: models/chia.py:275
+#: models/chia.py:267
 msgid "Never (no plots)"
 msgstr ""
 
-#: models/chia.py:277
+#: models/chia.py:269
 msgid "Soon"
 msgstr ""
 
-#: models/chia.py:279
+#: models/chia.py:271
 msgid "and"
+msgstr ""
+
+#: models/chia.py:278
+msgid "worker"
+msgstr ""
+
+#: models/chia.py:279
+msgid "blockchain"
+msgstr ""
+
+#: models/chia.py:280
+msgid "plot_id"
+msgstr ""
+
+#: models/chia.py:281
+msgid "dir"
+msgstr ""
+
+#: models/chia.py:282
+msgid "plot"
+msgstr ""
+
+#: models/chia.py:283
+msgid "type"
+msgstr ""
+
+#: models/chia.py:284
+msgid "create_date"
+msgstr ""
+
+#: models/chia.py:285
+msgid "size"
+msgstr ""
+
+#: models/chia.py:286
+msgid "c"
+msgstr ""
+
+#: models/chia.py:287
+msgid "a"
+msgstr ""
+
+#: models/chia.py:413 models/chia.py:424 templates/wallet.html:132
+msgid "View Transactions"
+msgstr ""
+
+#: models/chia.py:848
+msgid "Confirmed"
+msgstr ""
+
+#: models/chia.py:857
+msgid "INCOMING_TX"
+msgstr ""
+
+#: models/chia.py:859
+msgid "OUTGOING_TX"
+msgstr ""
+
+#: models/chia.py:861
+msgid "COINBASE_REWARD"
+msgstr ""
+
+#: models/chia.py:863
+msgid "FEE_REWARD"
+msgstr ""
+
+#: models/chia.py:865
+msgid "INCOMING_TRADE"
+msgstr ""
+
+#: models/chia.py:867
+msgid "OUTGOING_TRADE"
 msgstr ""
 
 #: models/pools.py:158
@@ -806,7 +842,8 @@ msgid "Blockchain Summary"
 msgstr ""
 
 #: templates/blockchains.html:84 templates/drives.html:91
-#: templates/summary.html:78 templates/wallet.html:119
+#: templates/summary.html:78 templates/transactions.html:63
+#: templates/wallet.html:119
 msgid "Status"
 msgstr ""
 
@@ -894,7 +931,7 @@ msgstr ""
 msgid "Connection Details"
 msgstr ""
 
-#: templates/connections.html:162
+#: templates/connections.html:162 templates/transactions.html:61
 msgid "Type"
 msgstr ""
 
@@ -1231,10 +1268,6 @@ msgstr ""
 msgid "Partials"
 msgstr ""
 
-#: templates/summary.html:86
-msgid "Wallet"
-msgstr ""
-
 #: templates/summary.html:87 templates/summary.html:88
 msgid "EDV"
 msgstr ""
@@ -1265,6 +1298,36 @@ msgstr ""
 
 #: templates/summary.html:132
 msgid "Please allow at least 15 minutes for blockchains to get started."
+msgstr ""
+
+#: templates/transactions.html:11 templates/transactions.html:47
+msgid "Transactions"
+msgstr ""
+
+#: templates/transactions.html:62
+msgid "To"
+msgstr ""
+
+#: templates/transactions.html:64
+msgid "Amount"
+msgstr ""
+
+#: templates/transactions.html:65
+msgid "Created At"
+msgstr ""
+
+#: templates/transactions.html:87
+msgid "No transactions were available for"
+msgstr ""
+
+#: templates/transactions.html:88
+msgid "Perhaps the wallet is not yet synced, or no wallet activity yet."
+msgstr ""
+
+#: templates/transactions.html:89
+msgid ""
+"Please ensure the Machinaris fullnode worker for this blockchain is "
+"running by checking the Workers page."
 msgstr ""
 
 #: templates/wallet.html:76
@@ -1307,11 +1370,19 @@ msgid ""
 "container shell to verify."
 msgstr ""
 
+#: templates/wallet.html:243
+msgid " Transactions"
+msgstr ""
+
+#: templates/wallet.html:243
+msgid "Wallet ID"
+msgstr ""
+
 #: templates/charts/balances.html:85 templates/charts/effort.html:85
 #: templates/charts/farmed.html:133 templates/charts/netspace.html:91
 #: templates/charts/plot_count.html:84 templates/charts/plots_size.html:84
 #: templates/charts/timetowin.html:85 templates/plotting/jobs.html:288
-#: templates/views/index_script_block.js:90 templates/wallet.html:325
+#: templates/views/index_script_block.js:90 templates/wallet.html:333
 msgid "Date"
 msgstr ""
 

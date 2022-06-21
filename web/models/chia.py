@@ -3,7 +3,11 @@ import json
 import locale
 import os
 import re
+import time
 import traceback
+
+# https://github.com/Chia-Network/chia-blockchain/blob/main/chia/util/bech32m.py
+from chia.util import bech32m
 
 from flask_babel import _, lazy_gettext as _l, format_decimal
 
@@ -369,7 +373,7 @@ class Wallets:
                 'hostname': wallet.hostname,
                 'blockchain': wallet.blockchain,
                 'status': self.extract_status(wallet.blockchain, wallet.details, worker_status),
-                'details': wallet.details, 
+                'details': self.link_to_wallet_transactions(wallet.blockchain, wallet.details),
                 'hot_balance': converters.round_balance(hot_balance),
                 'cold_balance': cold_balance,
                 'cold_address': ','.join(cold_wallet_addresses[wallet.blockchain]) if wallet.blockchain in cold_wallet_addresses else '',
@@ -393,6 +397,34 @@ class Wallets:
             else:
                 details.extend(chunk.split('\n'))
         return '\n'.join(details)
+    
+    def extract_wallet_id(self, lines):
+        for line in lines:
+            wallet_match = re.match("^\s+-Wallet ID:\s+(\d)+$", line)
+            if wallet_match:
+                return wallet_match.group(1)
+        return None
+
+    def link_to_wallet_transactions(self, blockchain, details):
+        lines = []
+        if globals.legacy_blockchain(blockchain) or blockchain in ['btcgreen', 'cryptodoge', 'flax', 'shibgreen', 'staicoin']: 
+            for line in details.split('\n'):
+                if 'wallet id' in line.lower():
+                    lines.append("<a href='#' class='text-white' title='" + _('View Transactions') + "' onclick='ViewTransactions(\""+ blockchain + "\", \"1\");return false;'>" + line.strip() + "</a>:")
+                else:
+                    lines.append(line)
+        else: # Chia and updated blockchains, have multiple wallet id #s like 1,3,4 etc.
+            details_lines = details.split('\n')
+            for i in range(len(details_lines)):
+                line = details_lines[i]
+                if line.strip().endswith(':') and not line.strip() == 'Connections:':
+                    wallet_name = line.strip()[:-1]
+                    wallet_id = self.extract_wallet_id(details_lines[i+1:])
+                    if wallet_name and wallet_id:
+                        line = "<a href='#' class='text-white' title='" + _('View Transactions') + "' onclick='ViewTransactions(\""+ blockchain + "\", \"" + str(wallet_id) + "\");return false;'>" + wallet_name + "</a>:"
+                lines.append(line)
+                i += 1
+        return '\n'.join(lines)
 
     def sum_chia_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
         numeric_const_pattern = '-Total\sBalance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
@@ -405,7 +437,6 @@ class Wallets:
                         #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
                         # wallet.hostname, wallet.blockchain))
                         sum += locale.atof(balance)
-                        found_balance = True
                 except Exception as ex:
                     app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
                         wallet.hostname, wallet.blockchain, str(ex)))
@@ -424,7 +455,6 @@ class Wallets:
                     for balance in rx.findall(wallet.details):
                         #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, wallet.hostname, wallet.blockchain))
                         sum += locale.atof(balance)
-                        found_balance = True
                 except Exception as ex:
                     app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
                         wallet.hostname, wallet.blockchain, str(ex)))
@@ -803,3 +833,35 @@ class Connections:
         else:
             app.logger.error("Unknown transmission rate unit character of {0} encountered.".format(unit))
             return rate
+
+class Transactions:
+
+    def __init__(self, blockchain, transactions):
+        self.address_prefix = globals.get_blockchain_symbol(blockchain).lower()
+        self.transactions = transactions
+        self.rows = []
+        for t in transactions:
+            to_puzzle_hash = t['to_puzzle_hash'][2:]  # Strip off leading 0x from hex string
+            self.rows.append({
+                "type": self.lookup_type(t['type']),
+                "to": bech32m.encode_puzzle_hash(bytes.fromhex(to_puzzle_hash), self.address_prefix),
+                "status": _('Confirmed') if 'confirmed_at_height' in t else '',
+                "amount": converters.round_balance(converters.mojos_to_coin(blockchain, t['amount'])),
+                "fee": t['fee_amount'],
+                "created_at": time.strftime('%Y-%m-%d %H:%M', time.localtime(t['created_at_time'])),
+            })
+    
+    # https://github.com/Chia-Network/chia-blockchain/blob/main/chia/wallet/util/transaction_type.py
+    def lookup_type(self, type_id):
+        if type_id == 0:
+            return _('INCOMING_TX')
+        if type_id == 1:
+            return _('OUTGOING_TX')
+        if type_id == 2:
+            return _('COINBASE_REWARD')
+        if type_id == 3:
+            return _('FEE_REWARD')
+        if type_id == 4:
+            return _('INCOMING_TRADE')
+        if type_id == 5:
+            return _('OUTGOING_TRADE')

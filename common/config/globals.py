@@ -66,6 +66,9 @@ def get_blocks_per_day(blockchain):
 def get_block_reward(blockchain):
     return load_blockchain_info(blockchain, 'reward')
 
+def get_mojos_per_coin(blockchain):
+    return load_blockchain_info(blockchain, 'mojos_per_coin')
+
 def load():
     cfg = {}
     cfg['plotting_enabled'] = plotting_enabled()
