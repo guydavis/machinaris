@@ -20,7 +20,7 @@
     
 <div class="position-relative">
     <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -3px;">
-        <a href="#" title="{{_('Settings')}}" data-bs-toggle="modal" data-bs-target="#settingsModal" target="_blank"><i class="fs-4 bi-gear"></i></a>
+        <a href="#" title="{{_('Settings')}}" data-bs-toggle="modal" data-bs-target="#settingsModal" target="_blank"><i class="fs-4 bi-box-arrow-up-right"></i></a>
         &nbsp;
         <a href="https://github.com/guydavis/machinaris/wiki/Wallets" target="_blank"><i class="fs-4 bi-question-circle"></i></a>
     </div>
@@ -129,7 +129,7 @@
         <tbody>
             {% for wallet in wallets.rows %}
             <tr>
-                <td>{{wallet.blockchain}}</td>
+                <td><a href="#" class="text-white" title="{{_('View Transactions')}}" onclick="ViewTransactions('{{wallet.blockchain}}','1');return false;">{{wallet.blockchain}}</a></td>
                 <td>
                     {% if wallet.status == 'Offline' %}
                       <i class="bi-dash-circle text-danger"></i> &nbsp; {{_('Offline')}}
@@ -178,7 +178,7 @@
             {% for wallet in wallets.rows %}
             <div class="tab-pane {% if wallet.blockchain == selected_blockchain %}active{% endif %}" id="{{wallet.blockchain}}" role="tabpanel" aria-labelledby="{{wallet.blockchain}}-tab">
                 <br/>
-                <pre>{{ wallet.details}}</pre>
+                <pre>{{ wallet.details|safe}}</pre>
             </div>
             {% endfor %}
         </div>
@@ -234,13 +234,21 @@
                 modalTitle.textContent = 'Wallet Settings - ' + blockchain
             })
         })
+        function ViewTransactions(blockchain, wallet_id) {
+          var d = new Date();
+          var height = 600;
+          var width = 900;
+          var top = (screen.height - height) / 2;
+          var left = (screen.width - width) / 2;
+          window.open("{{ url_for('transactions') }}?blockchain=" + blockchain + "&selected_wallet_id=" + wallet_id, blockchain + '{{_(' Transactions')}}: {{_('Wallet ID')}}#'+wallet_id, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        }
         function PopupChart(chart_type, blockchain) {
           var d = new Date();
           var height = 600;
           var width = 900;
           var top = (screen.height - height) / 2;
           var left = (screen.width - width) / 2;
-          window.open("{{ url_for('index_chart') }}?type=" + chart_type + "&blockchain=" + blockchain, blockchain + ' - ' + chart_type, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+          window.open("{{ url_for('chart') }}?type=" + chart_type + "&blockchain=" + blockchain, blockchain + ' - ' + chart_type, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
         }
         const COLORS = [
           '#3aac59',

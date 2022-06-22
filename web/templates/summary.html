@@ -82,13 +82,10 @@
                 <th scope="col" class="text-success">{{_('Max Resp.')}}</th>
                 <th scope="col" class="text-success">{{_('Partials')}}</th>
                 <th scope="col" class="text-success">{{_('ETW')}}</th>
-                <!--th scope="col" class="text-success">Farmed</th-->
+                <th scope="col" class="text-success">Effort</th>
                 <th scope="col" class="text-success">{{_('Wallet')}}</th>
                 <th scope="col" class="text-success">{{_('EDV')}}</th>
                 <th scope="col" class="text-success">{{_('EDV')}} {{local_cur_sym|upper}}</th>
-                <!--th scope="col" class="text-success">Drives</th-->
-                <!--th scope="col" class="text-success">Effort</th-->
-                <th scope="col" class="text-success"></th>
                 <th scope="col" class="text-success"></th>
             </tr>
         </thead>
@@ -114,14 +111,11 @@
                 <td>{{summary.harvesters}}</td>
                 <td>{{summary.max_resp}}</td>
                 <td>{{summary.partials_per_hour}}</td>
-                <td>{{summary.etw}}</td>
-                <!--td>{{summary.farmed}}</td-->
-                <td>{{summary.wallet}}</td>
+                <td><a href="#" class='text-white' title="{{_('Chart ETW')}}" onclick='PopupChart("timetowin","{{ summary.blockchain }}");return false;'>{{summary.etw}}</a></td>
+                <td><a href="#" class='text-white' title="{{_('Chart Effort')}}" onclick='PopupChart("effort","{{ summary.blockchain }}");return false;'>{{summary.effort}}</a></td>
+                <td><a href="#" class='text-white' title="{{_('Chart Wallet')}}" onclick='PopupChart("wallet_balances","{{ summary.blockchain }}");return false;'>{{summary.wallet}}</a></td>
                 <td>{{summary.edv}}</td>
                 <td>{{summary.edv_fiat}}</td>
-                <td class='icon_cell'><a 
-                    href="#" title="{{_('Chart Wallet')}}" onclick='PopupChart("wallet_balances","{{ summary.blockchain }}");return false;'>
-                    <i class="fs-4 bi-graph-up-arrow"></i></a></td>
                 <td class='icon_cell'>
                     <a href="#" title="{{_('View Blockchain Log')}}" onclick='ViewLogs("{{ fullnodes[summary.blockchain].hostname }}","{{ summary.blockchain }}");return false;'>
                         <i class="fs-4 bi-file-text"></i></a>
@@ -157,7 +151,7 @@ function PopupChart(chart_type, blockchain) {
     var width = 900;
     var top = (screen.height - height) / 2;
     var left = (screen.width - width) / 2;
-    window.open("{{ url_for('index_chart') }}?type=" + chart_type + "&blockchain=" + blockchain, blockchain + ' - ' + chart_type, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+    window.open("{{ url_for('chart') }}?type=" + chart_type + "&blockchain=" + blockchain, blockchain + ' - ' + chart_type, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
 }
 $(document).ready(function () {
     $("#btnSave").click(function () {

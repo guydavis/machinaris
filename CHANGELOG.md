@@ -3,7 +3,8 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.7.3] - 2022-06-?
- - Charting of each blockchain's farmed coins and wallet balances over the past month.
+ - Charting of each blockchain's netspace, farmed coins, and wallet balances over the past month.
+ - Added a read-only transactions viewer for each blockchain's wallet, available from Wallets page.  
  - Alerts: per-notifier [allow setting](https://github.com/guydavis/machinaris/wiki/ChiaDog#ignore-alerts) to allow only selected alerts, based on criteria.
  - [Chia](https://github.com/Chia-Network/chia-blockchain) - v1.3.6 pre-release for testing
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain) - v1.3.4, matches Chia 1.3.4, please run: `cactus db upgrade`

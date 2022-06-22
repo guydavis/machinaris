@@ -55,6 +55,16 @@ class StatTimeToWin(db.Model):
     value = db.Column(db.REAL)
     created_at = db.Column(db.String())
 
+class StatEffort(db.Model):
+    __bind_key__ = 'stat_effort'
+    __tablename__ = "stat_effort"
+
+    id = db.Column(db.Integer, primary_key=True)
+    hostname = db.Column(db.String())
+    blockchain = db.Column(db.String(length=64), nullable=False)
+    value = db.Column(db.REAL)
+    created_at = db.Column(db.String())
+
 class StatPlotsTotalUsed(db.Model):
     __bind_key__ = 'stat_plots_total_used'
     __tablename__ = "stat_plots_total_used"

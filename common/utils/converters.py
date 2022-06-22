@@ -88,8 +88,7 @@ def convert_date_for_luxon(datestr):
         time = time[:2] + ':' + time[2:]
     return "{0}-{1}-{2}T{3}".format(year, month, day, time)
 
-def round_balance(value):
-    # First round the coin balance
+def round_balance_float(value):
     if abs(value) >= 10000:
         value = round(value, 0)
     elif abs(value) >= 1000:
@@ -126,7 +125,10 @@ def round_balance(value):
         value = round(value, 16)
     else:
         value = round(value, 17)
-    # Then return the locale-specific format as str
+    return value
+
+def round_balance(value):
+    value = round_balance_float(value)
     if flask_babel.get_locale(): # Regular web request
         return flask_babel.format_decimal(value, format="#,##0.##################")  
     else: # Workaround for inability to test flask-babel without a request

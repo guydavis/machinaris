@@ -20,7 +20,7 @@ from common.models.plots import Plot
 from common.models.pools import Pool
 from common.models.partials import Partial
 from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalCoins, StatNetspaceSize, StatTimeToWin, \
-        StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, \
+        StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, StatEffort, \
         StatPlottingDiskUsed, StatPlottingDiskFree, StatFarmedBlocks, StatWalletBalances, StatTotalBalance
 from web import app, db, utils
 from web.actions import chia, worker
@@ -304,6 +304,17 @@ def load_plotting_stats():
     #app.logger.info(summary_by_size.keys())
     return summary_by_size
 
+def get_current_effort(blockchain):
+    effort = ''
+    try:
+        result = db.session.query(StatEffort).filter(StatEffort.blockchain == blockchain).order_by(StatEffort.created_at.desc()).first()
+        if result:
+            effort = "{:.0f}%".format(result.value) # Round to zero as this is a percentage
+    except Exception as ex:
+        app.logger.info("Failed to query effort for {0} because {1}".format(blockchain, str(ex)))
+    #app.logger.info("Effort on {0} is {1}".format(blockchain, effort))
+    return effort
+
 def calc_estimated_daily_value(blockchain):
     edv = None
     edv_fiat = None
@@ -377,7 +388,8 @@ def load_summary_stats(blockchains):
             'max_resp': max_response,
             'partials_per_hour': partials_per_hour,
             'edv': edv,
-            'edv_fiat': edv_fiat
+            'edv_fiat': edv_fiat,
+            'effort':  get_current_effort(blockchain)
         }
     return stats
 
@@ -513,6 +525,21 @@ def load_plots_size(blockchain):
     return { 'title': blockchain.capitalize() + ' - ' + _('Plots Size'), 'dates': dates, 'vals': converted_values, 
         'y_axis_title': _('Size') + ' (' + unit + ')'}
 
+def load_effort(blockchain):
+    dates = []
+    values = []
+    result = db.session.query(StatEffort).order_by(StatEffort.created_at.asc()).filter(StatEffort.blockchain == blockchain).all()
+    last_value = None
+    for i in range(len(result)):
+        s = result[i]
+        converted_date = converters.convert_date_for_luxon(s.created_at)
+        if (last_value != s.value) or (i % 24 == 0) or (i == len(result) - 1):
+            dates.append(converted_date)
+            values.append(s.value/100)
+            last_value = s.value
+    return { 'title': blockchain.capitalize() + ' - ' + _('Effort'), 'dates': dates, 'vals': values, 
+        'y_axis_title': _('Effort')}
+
 def wallet_chart_data(farm_summary):
     for blockchain in farm_summary.farms:
         balances = load_wallet_balances(blockchain)
@@ -528,19 +555,39 @@ def wallet_chart_data(farm_summary):
                 coin_date = '2100-01-01' # far in future
             if balance_date < coin_date:
                 chart_data['dates'].append(balance_date)
-                chart_data['balances'].append(converters.round_balance(balances['vals'][i]))
+                chart_data['balances'].append(converters.round_balance_float(balances['vals'][i]))
                 chart_data['coins'].append('null') # Javascript null
                 i += 1
             else:
                 chart_data['dates'].append(coin_date)
-                chart_data['coins'].append(converters.round_balance(coins['vals'][j]))
+                chart_data['coins'].append(converters.round_balance_float(coins['vals'][j]))
                 chart_data['balances'].append('null') # Javascript null
                 j += 1
         # Then add any remaining farmed coins
         while j < len(coins['dates']):
             chart_data['dates'].append(coins['dates'][j])
-            chart_data['coins'].append(converters.round_balance(coins['vals'][j]))
+            chart_data['coins'].append(converters.round_balance_float(coins['vals'][j]))
             chart_data['balances'].append('null') # Javascript null
             j += 1
         #app.logger.info("{0} -> {1}".format(blockchain, chart_data))
         farm_summary.farms[blockchain]['wallets'] = chart_data
+
+def load_time_to_win(blockchain):
+    dates = []
+    values = []
+    result = db.session.query(StatTimeToWin).order_by(StatTimeToWin.created_at.asc()).filter(
+            StatTimeToWin.blockchain == blockchain).all()
+    for i in range(len(result)):
+        s = result[i]
+        converted_date = converters.convert_date_for_luxon(s.created_at)
+        if (i == 0) or (i % 24 == 0) or (i == len(result) - 1):
+            dates.append(converted_date)
+            values.append(s.value)
+    app.logger.debug("{0} before {1}".format(blockchain, values))
+    if len(values) > 0:
+        converted_values = list(map(lambda x: round(x/60/24,2), values))  # Minutes to Days
+    else:
+        converted_values = []
+    app.logger.debug("{0} after {1}".format(blockchain, converted_values))
+    return { 'title': blockchain.capitalize() + ' - ' + _('ETW'), 'dates': dates, 'vals': converted_values, 
+        'y_axis_title': _('Estimated Time to Win') + ' (' + _('days') + ')'}
