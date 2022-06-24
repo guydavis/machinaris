@@ -4,6 +4,7 @@ def on_starting(server):
     import os
     import time
 
+    from datetime import datetime, timedelta
     from apscheduler.schedulers.background import BackgroundScheduler
 
     from api import app, utils
@@ -71,7 +72,8 @@ def on_starting(server):
 
     # Status for single Machinaris controller only, should be blockchain=chia
     if utils.is_controller():
-        scheduler.add_job(func=plots_check.execute, name="plot_checks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        scheduler.add_job(func=plots_check.execute, name="plot_checks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER, 
+            start_date=(datetime.now() + timedelta(minutes = 30))) # Delay first plots check until well after launch
         scheduler.add_job(func=status_controller.update, name="controller", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=websvcs.get_prices, name="get_prices", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', hours=12)
