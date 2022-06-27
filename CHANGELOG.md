@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file. The format 
  - Tracking farmed blocks sent directly to cold wallet. Set your cold wallet addresses on the Wallets page.
  - Added a read-only transactions viewer for each blockchain's wallet, available from Wallets page.  
  - Alerts: per-notifier [allow setting](https://github.com/guydavis/machinaris/wiki/ChiaDog#ignore-alerts) to allow only selected alerts, based on criteria.
- - [Chia](https://github.com/Chia-Network/chia-blockchain) - v1.3.6 pre-release for testing
+ - [Chia](https://github.com/Chia-Network/chia-blockchain) - v1.4.0 pre-release testing
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain) - v1.3.4, matches Chia 1.3.4, please run: `cactus db upgrade`
  - [Chives](https://github.com/HiveProject2021/chives-blockchain) - v1.3.1, please run: `chives db upgrade`
  - [Cryptodoge](https://github.com/CryptoDoge-Network/cryptodoge) - v1.3.4, matches Chia 1.3.4, please run: `cryptodoge db upgrade`

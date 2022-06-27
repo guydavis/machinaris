@@ -34,7 +34,7 @@ class Farms(MethodView):
         item = db.session.query(Farm).filter(Farm.hostname==new_item['hostname'], \
             Farm.blockchain==new_item['blockchain']).first()
         cold_wallet_farmed_balance = websvcs.cold_wallet_farmed_balance(new_item['blockchain'])
-        if cold_wallet_farmed_balance: # If none, we got an error from ATB, so don't save a farmed total coins
+        if cold_wallet_farmed_balance is not None: # If none, we got an error from ATB, so don't save a farmed total coins
             app.logger.debug("Total Farmed Coins on {0}: {1} (hot wallet) + {2} (cold wallet).".format(
                 new_item['blockchain'], new_item['total_coins'], cold_wallet_farmed_balance))
             new_item['total_coins'] += cold_wallet_farmed_balance

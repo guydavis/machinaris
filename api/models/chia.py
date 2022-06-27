@@ -95,6 +95,7 @@ class Wallets:
                     'hostname': wallet.hostname,
                     'blockchain': wallet.blockchain,
                     'total_balance': total_balance,
+                    'cold_balance': wallet.cold_balance,
                     'fiat_balance': fiat.to_fiat_float(wallet.blockchain, total_balance),
                     'updated_at': wallet.updated_at })
             else:

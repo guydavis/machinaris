@@ -39,7 +39,7 @@ class StatTotalCoinss(MethodView):
         items = []
         for new_item in new_items:
             cold_wallet_farmed_balance = websvcs.cold_wallet_farmed_balance(new_item['blockchain'])
-            if cold_wallet_farmed_balance: # If none, we got an error from ATB, so don't save a farmed total coins
+            if cold_wallet_farmed_balance is not None: # If none, we got an error from ATB, so don't save a farmed total coins
                 if cold_wallet_farmed_balance > 0:
                     app.logger.info("Adding cold farmed balance of {0} for {1}".format(cold_wallet_farmed_balance, new_item['blockchain']))
                 new_item['value'] += cold_wallet_farmed_balance

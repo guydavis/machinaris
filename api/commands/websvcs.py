@@ -112,8 +112,13 @@ def request_cold_wallet_transactions(blockchain, alltheblocks_blockchain, addres
     return farmed_balance
 
 def request_cold_wallet_balance(blockchain, cold_wallet_cache, alltheblocks_blockchain, address, debug=False):
-    total_balance = None
-    farmed_balance = None
+    total_balance = 0.0
+    farmed_balance = 0.0
+    if address in cold_wallet_cache: # First initialize to the last good values received.
+        if 'total_balance' in cold_wallet_cache[address]:
+            total_balance = cold_wallet_cache[address]['total_balance']
+        if 'farmed_balance' in cold_wallet_cache[address]:
+            farmed_balance = cold_wallet_cache[address]['farmed_balance']
     app.logger.info("Requesting {0} wallet balance for {1}".format(alltheblocks_blockchain, address))
     url = f"https://api.alltheblocks.net/{alltheblocks_blockchain}/address/{address}"
     try:
@@ -164,7 +169,7 @@ def cold_wallet_balance(blockchain):
                     cached_cold_balance = float(cold_wallet_cache[address]['total_balance'])
                     total_balance += cached_cold_balance
             return total_balance
-    return '' # No cold wallet addresses to check
+    return 0.0 # No cold wallet addresses to check, so no errors obviously
 
 def load_cold_wallet_transactions(blockchain, address):
     data = {}
@@ -187,7 +192,7 @@ def cold_wallet_farmed_balance(blockchain):
             if address in cold_wallet_cache:
                 farmed_balance += float(cold_wallet_cache[address]['farmed_balance'])
         return farmed_balance
-    return '' # No cold wallet addresses to check
+    return 0.0 # No cold wallet addresses to check
 
 # Only for Chia on the controller for now.
 def cold_wallet_farmed_most_recent_date(blockchain):
