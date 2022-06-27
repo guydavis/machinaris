@@ -19,7 +19,7 @@ from flask import g
 
 from common.config import globals
 from common.utils import converters
-from api.commands import chia_cli
+from api.commands import chia_cli, websvcs
 from api.rpc import chia
 from api import app, utils, db
 
@@ -33,6 +33,7 @@ from api import app, utils, db
 # so "Current Effort" is a huge 1200%. This is an edge case however.  Most farms where total plots size and blockchain 
 # netspace isn't dramatically changing will have a "reasonable" effort value.
 #
+
 oldest_plot_check_time = None
 oldest_plot_file_time = None
 def get_oldest_plot_file_time():
@@ -66,9 +67,15 @@ def collect():
             for transaction in transactions:  # Order is reversed; newest to oldest
                 #app.logger.info("At {0}, {1} type had amount: {2}".format(readable(transaction.created_at_time), transaction.type, transaction.additions[0].amount))
                 if transaction.type == 3: # FEE_REWARD type
-                    app.logger.info("At {0}, fee reward amount was: {1}".format(readable(transaction.created_at_time), transaction.additions[0].amount))
+                    app.logger.info("At {0}, recent hot wallet fee reward was found.".format(readable(transaction.created_at_time)))
                     most_recent_block_reward_time = transaction.created_at_time
                     break
+            # For Chia only (on the controller), check for a more recently farmed block time in cold wallet transactions
+            if blockchain == 'chia':
+                most_recent_block_reward_time_cold_wallet =  websvcs.cold_wallet_farmed_most_recent_date(blockchain) # Order is reversed; newest to oldest
+                if most_recent_block_reward_time < most_recent_block_reward_time_cold_wallet:
+                    app.logger.info("At {0}, a more recent cold wallet fee reward was found.".format(readable(most_recent_block_reward_time_cold_wallet)))
+                    most_recent_block_reward_time = most_recent_block_reward_time_cold_wallet
             etw_minutes = converters.etw_to_minutes(farm_summary.time_to_win)
             if most_recent_block_reward_time:  # Calculate since most recent farmed block
                 effort = (time.time() - most_recent_block_reward_time) / 60 / etw_minutes * 100

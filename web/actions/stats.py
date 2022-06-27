@@ -3,7 +3,10 @@
 #
 
 import datetime
+import os
+import pathlib
 import sqlite3
+import time
 
 from flask import g
 from sqlalchemy import or_
@@ -40,11 +43,28 @@ def load_daily_diff(farm_summary):
         since_str = since_date.strftime("%Y%m%d%H%M%S")
         summary['plot_count'] = plot_count_diff(since_str, blockchain)
         summary['plots_size'] = plots_size_diff(since_str, blockchain)
-        summary['total_coins'] = total_coin_diff(since_str, blockchain)
+        if upgrade_marker_at_least_day_old():  # Guard against spurious notification
+            summary['total_coins'] = total_coin_diff(since_str, blockchain)
         summary['wallet_balance'] = wallet_balance_diff(since_str, blockchain)
         summary['netspace_size'] = netspace_size_diff(since_str, blockchain)
         #app.logger.info("{0} -> {1}".format(blockchain, summary))
         farm_summary.farms[blockchain]['daily_diff'] = summary
+
+# On upgrade to v0.8.0, farming directly to cold_wallet started to be tracked.
+# To avoid a spurious notification immediatly upon upgrading, use marker file that must be at least a day old
+def upgrade_marker_at_least_day_old():
+    if os.path.exists('/root/.chia/machinaris/tmp/total_coins_upgrade.tmp'):
+        day_ago = datetime.datetime.now() - datetime.timedelta(days=1)
+        if os.path.getctime('/root/.chia/machinaris/tmp/total_coins_upgrade.tmp') <= day_ago.timestamp():
+            app.logger.debug("Total coins upgrade indicates past 24 hours since upgrade.")
+            return True
+        else:
+            app.logger.debug("Total coins upgrade indicates less than 24 hours since upgrade.")
+    else:
+        pathlib.Path('/root/.chia/machinaris/tmp/').mkdir(parents=True, exist_ok=True)
+        pathlib.Path('/root/.chia/machinaris/tmp/total_coins_upgrade.tmp').touch()
+        app.logger.debug("Total coins upgrade just occured.  24 hours until a new total coin value diff generated.")
+    return False
 
 def plot_count_diff(since, blockchain):
     result = ''

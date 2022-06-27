@@ -81,9 +81,11 @@ def on_starting(server):
         scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='cron', minute=0)  # Hourly
         
     # Testing only
-    #scheduler.add_job(func=restart_stuck_farmer.execute, name="restart_farmer_if_stuck", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=stats_farm.collect, name="stats_farm", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=stats_blocks.collect, name="stats_blocks", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=stats_effort.collect, name="stats_effort", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=websvcs.cold_wallet_balance, name="web_svcs", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=10) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()

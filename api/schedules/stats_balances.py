@@ -36,6 +36,9 @@ def collect():
             fiat_total = 0.0
             currency_symbol = fiat.get_local_currency_symbol().lower()
             for wallet in wallets.rows:
+                if not wallet['cold_balance']:
+                    app.logger.error("No total balance recorded. Received an erroneous cold wallet balance for {0} wallet. Please correct the address and verify at https://alltheblocks.net")
+                    return # Don't save a data point if part of the sum is missing due to error
                 if wallet['fiat_balance']:
                     fiat_total += float(wallet['fiat_balance'])
                 store_balance_locally(wallet['blockchain'], wallet['total_balance'], current_datetime)
