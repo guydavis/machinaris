@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-03-13 10:29-0600\n"
-"POT-Creation-Date: 2022-06-21 14:57-0600\n"
+"POT-Creation-Date: 2022-06-27 22:01-0600\n"
 "PO-Revision-Date: 2022-03-13 10:29-0600\n"
 "Last-Translator: Bernie Deprez\n"
 "Language: nl_NL\n"
@@ -371,66 +371,66 @@ msgid ""
 "page."
 msgstr ""
 
-#: actions/stats.py:57 actions/stats.py:92 actions/stats.py:109
-#: actions/stats.py:130 actions/stats.py:132
+#: actions/stats.py:77 actions/stats.py:112 actions/stats.py:129
+#: actions/stats.py:150 actions/stats.py:152
 msgid "in last day."
 msgstr "in voorbije dag."
 
-#: actions/stats.py:371
+#: actions/stats.py:392
 msgid "secs"
 msgstr "seconden"
 
-#: actions/stats.py:381 models/chia.py:261
+#: actions/stats.py:402 models/chia.py:261
 msgid "hour"
 msgstr "uur"
 
-#: actions/stats.py:411 templates/index.html:97
+#: actions/stats.py:432 templates/index.html:97
 #: templates/views/index_script_block.js:51
 msgid "Farmed Coins"
 msgstr ""
 
-#: actions/stats.py:428 templates/index.html:89
+#: actions/stats.py:449 templates/index.html:89
 #: templates/views/index_script_block.js:56 templates/wallet.html:122
 msgid "Total Balance"
 msgstr "Totale Saldo"
 
-#: actions/stats.py:445
+#: actions/stats.py:466
 msgid "Wallets Total"
 msgstr "Portefeuille Details"
 
-#: actions/stats.py:445
+#: actions/stats.py:466
 msgid "Fiat Currency"
 msgstr ""
 
-#: actions/stats.py:465 templates/index.html:105
+#: actions/stats.py:486 templates/index.html:105
 msgid "Netspace Size"
 msgstr "Netgrootte"
 
-#: actions/stats.py:466 actions/stats.py:526
+#: actions/stats.py:487 actions/stats.py:547
 msgid "Size"
 msgstr ""
 
-#: actions/stats.py:504
+#: actions/stats.py:525
 msgid "Plot Counts"
 msgstr ""
 
-#: actions/stats.py:525 templates/index.html:78
+#: actions/stats.py:546 templates/index.html:78
 msgid "Plots Size"
 msgstr "Totale Omvang Plots"
 
-#: actions/stats.py:540 actions/stats.py:541
+#: actions/stats.py:561 actions/stats.py:562
 msgid "Effort"
 msgstr "Poort"
 
-#: actions/stats.py:592 templates/summary.html:84
+#: actions/stats.py:613 templates/summary.html:84
 msgid "ETW"
 msgstr "ETW"
 
-#: actions/stats.py:593
+#: actions/stats.py:614
 msgid "Estimated Time to Win"
 msgstr "Verwachte Tijd om te Winnen"
 
-#: actions/stats.py:593 models/chia.py:148 models/chia.py:255
+#: actions/stats.py:614 models/chia.py:148 models/chia.py:255
 #: models/drives.py:44
 msgid "days"
 msgstr "dagen"
@@ -614,27 +614,27 @@ msgstr ""
 msgid "Confirmed"
 msgstr ""
 
-#: models/chia.py:857
+#: models/chia.py:860
 msgid "INCOMING_TX"
 msgstr ""
 
-#: models/chia.py:859
+#: models/chia.py:862
 msgid "OUTGOING_TX"
 msgstr ""
 
-#: models/chia.py:861
+#: models/chia.py:864
 msgid "COINBASE_REWARD"
 msgstr ""
 
-#: models/chia.py:863
+#: models/chia.py:866
 msgid "FEE_REWARD"
 msgstr ""
 
-#: models/chia.py:865
+#: models/chia.py:868
 msgid "INCOMING_TRADE"
 msgstr ""
 
-#: models/chia.py:867
+#: models/chia.py:870
 msgid "OUTGOING_TRADE"
 msgstr ""
 
@@ -1498,19 +1498,24 @@ msgstr "Laatste waarschuwingen"
 msgid "Yay! No issues currently."
 msgstr "Joepie! Momenteel geen problemen."
 
-#: templates/farming/workers.html:116 templates/worker.html:190
+#: templates/farming/workers.html:119 templates/worker.html:191
 msgid "Disk Space Used (TB)"
 msgstr "Gebruikte Schijfruimte (TB)"
 
-#: templates/farming/workers.html:122 templates/worker.html:196
+#: templates/farming/workers.html:125 templates/worker.html:197
+#: templates/worker.html:261
+msgid "full"
+msgstr ""
+
+#: templates/farming/workers.html:132 templates/worker.html:204
 msgid "Disk Space Free (TB)"
 msgstr "Vrije Schijfruimte (TB)"
 
-#: templates/worker.html:246
+#: templates/worker.html:255
 msgid "Disk Space Used (GB)"
 msgstr "Gebruikte Schijfruimte (GB)"
 
-#: templates/worker.html:252
+#: templates/worker.html:268
 msgid "Disk Space Free (GB)"
 msgstr "Vrije Schijfruimte (GB)"
 

@@ -223,6 +223,7 @@ def load_recent_disk_usage(disk_type):
                     else:
                         path_values.append('null')
                 summary_by_worker[hostname][path] = path_values
+        
     app.logger.debug(summary_by_worker.keys())
     return summary_by_worker
 
