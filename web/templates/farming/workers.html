@@ -89,6 +89,11 @@
             <div class="col-8" style="margin-top:5px; margin-bottom:5px;">
                 {% if disk_usage[farmer.hostname] %}
                 <canvas id="disk_{{farmer.hostname}}" width="400"></canvas>
+                {% if disk_usage[farmer.hostname]['paths']|length >= MAX_COLUMNS_ON_CHART %}
+                    <p class="small text-center text-muted" style="padding-top: 15px">
+                        {{_('For legibility, the chart shows only a random selection of paths when a worker has many of them.')}}
+                    </p>
+                {% endif %}
                 {% else %}
                 {% autoescape false %}
                 <p>{{_('No plots disk stats recorded recently for %(hostname)s with Chia blockchain. Please ensure all paths containing plots have been %(wiki_link_open)s configured %(wiki_link_close)s. Also ensure the Chia worker is reporting into the controller on the Workers page.', 

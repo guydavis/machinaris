@@ -227,7 +227,9 @@ def farming_workers():
     daily_summaries = stats.load_daily_farming_summaries()
     disk_usage = stats.load_current_disk_usage('plots')
     return render_template('farming/workers.html', farmers=farmers, 
-        daily_summaries=daily_summaries, disk_usage=disk_usage, global_config=gc)
+        daily_summaries=daily_summaries, disk_usage=disk_usage, 
+        MAX_COLUMNS_ON_CHART=stats.MAX_ALLOWED_PATHS_ON_BAR_CHART,
+        global_config=gc)
 
 @app.route('/alerts', methods=['GET', 'POST'])
 def alerts():
@@ -303,6 +305,7 @@ def worker_route():
     return render_template('worker.html', worker=wkr, 
         plotting=plotting, plots_disk_usage=plots_disk_usage, 
         plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc,
+        MAX_COLUMNS_ON_CHART=stats.MAX_ALLOWED_PATHS_ON_BAR_CHART,
         lang=get_lang(request))
 
 @app.route('/drives', methods=['GET','POST'])

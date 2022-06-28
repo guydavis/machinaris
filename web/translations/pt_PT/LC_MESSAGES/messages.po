@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-06-27 22:01-0600\n"
+"POT-Creation-Date: 2022-06-28 11:19-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: Antonio Casqueiro\n"
 "Language: pt\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: routes.py:119 routes.py:262 routes.py:325
+#: routes.py:119 routes.py:264 routes.py:328
 msgid "Saved local currency setting."
 msgstr "Gravar definições da moeda local"
 
@@ -34,15 +34,15 @@ msgstr "Tipo de Plotting desconhecido"
 msgid "Error! Please see logs."
 msgstr "Erro! Por favor consulte os logs."
 
-#: routes.py:247
+#: routes.py:249
 msgid "Unknown alerts form"
 msgstr "Tipo de alerta desconhecido"
 
-#: routes.py:267
+#: routes.py:269
 msgid "Saved cold wallet addresses."
 msgstr "O endereço da Cold Wallet foi gravado."
 
-#: routes.py:340
+#: routes.py:343
 msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
@@ -50,11 +50,11 @@ msgstr ""
 "As definições do mapa foram gravadas. Por favor aguarde 10 minutos para "
 "que o mapa seja actualizado com a geolocalização."
 
-#: routes.py:348
+#: routes.py:351
 msgid "Unknown form action"
 msgstr "Form action desconhecida"
 
-#: routes.py:457
+#: routes.py:460
 #, python-format
 msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
@@ -63,7 +63,7 @@ msgstr ""
 "Não existe worker no %(worker)s para o blockchain %(blockchain)s. Por "
 "favor seleccione outro blockchain."
 
-#: routes.py:463
+#: routes.py:466
 #, python-format
 msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
@@ -72,7 +72,7 @@ msgstr ""
 "Na configuração dos Alertas, foi encontrado um fullnode que não responde "
 "para o %(blockchain)s. Por favor verifica os teus workers."
 
-#: routes.py:468
+#: routes.py:471
 #, python-format
 msgid ""
 "For Farming config, found no responding fullnode found for "
@@ -81,7 +81,7 @@ msgstr ""
 "Na configuração de Farming, foi encontrado um fullnode que não responde "
 "para o %(blockchain)s. Por favor verifica os teus workers."
 
-#: routes.py:475
+#: routes.py:478
 #, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
@@ -90,7 +90,7 @@ msgstr ""
 "Na configuração de Plotting, foi encontrado um fullnode que não responde "
 "para o %(blockchain)s. Por favor verifica os teus workers."
 
-#: routes.py:480
+#: routes.py:483
 #, python-format
 msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
@@ -99,7 +99,7 @@ msgstr ""
 "Foi encontrado um fullnode que não responde para o %(blockchain)s. Por "
 "favor verifica os teus workers."
 
-#: routes.py:499
+#: routes.py:502
 msgid "Unsupported log type"
 msgstr "Tipo de log não suportado"
 
@@ -422,66 +422,66 @@ msgid ""
 "page."
 msgstr "Não foi possível gravar as definições. Por favor consulte o Web Log."
 
-#: actions/stats.py:77 actions/stats.py:112 actions/stats.py:129
-#: actions/stats.py:150 actions/stats.py:152
+#: actions/stats.py:81 actions/stats.py:116 actions/stats.py:133
+#: actions/stats.py:154 actions/stats.py:156
 msgid "in last day."
 msgstr "no último dia."
 
-#: actions/stats.py:392
+#: actions/stats.py:396
 msgid "secs"
 msgstr "segs"
 
-#: actions/stats.py:402 models/chia.py:261
+#: actions/stats.py:406 models/chia.py:261
 msgid "hour"
 msgstr "hora"
 
-#: actions/stats.py:432 templates/index.html:97
+#: actions/stats.py:436 templates/index.html:97
 #: templates/views/index_script_block.js:51
 msgid "Farmed Coins"
 msgstr "Moedas farmed"
 
-#: actions/stats.py:449 templates/index.html:89
+#: actions/stats.py:453 templates/index.html:89
 #: templates/views/index_script_block.js:56 templates/wallet.html:122
 msgid "Total Balance"
 msgstr "Saldo"
 
-#: actions/stats.py:466
+#: actions/stats.py:470
 msgid "Wallets Total"
 msgstr "Detalhes da Wallet"
 
-#: actions/stats.py:466
+#: actions/stats.py:470
 msgid "Fiat Currency"
 msgstr "Moeda do país"
 
-#: actions/stats.py:486 templates/index.html:105
+#: actions/stats.py:490 templates/index.html:105
 msgid "Netspace Size"
 msgstr "Tamanho do Netspace"
 
-#: actions/stats.py:487 actions/stats.py:547
+#: actions/stats.py:491 actions/stats.py:551
 msgid "Size"
 msgstr "Tamanho"
 
-#: actions/stats.py:525
+#: actions/stats.py:529
 msgid "Plot Counts"
 msgstr "Número de Plots"
 
-#: actions/stats.py:546 templates/index.html:78
+#: actions/stats.py:550 templates/index.html:78
 msgid "Plots Size"
 msgstr "Plots: Total de espaço ocupado"
 
-#: actions/stats.py:561 actions/stats.py:562
+#: actions/stats.py:565 actions/stats.py:566
 msgid "Effort"
 msgstr "Porto"
 
-#: actions/stats.py:613 templates/summary.html:84
+#: actions/stats.py:617 templates/summary.html:84
 msgid "ETW"
 msgstr "ETW"
 
-#: actions/stats.py:614
+#: actions/stats.py:618
 msgid "Estimated Time to Win"
 msgstr "Tempo expectável para ganhar"
 
-#: actions/stats.py:614 models/chia.py:148 models/chia.py:255
+#: actions/stats.py:618 models/chia.py:148 models/chia.py:255
 #: models/drives.py:44
 msgid "days"
 msgstr "dias"
@@ -1583,24 +1583,30 @@ msgstr "Avisos recentes"
 msgid "Yay! No issues currently."
 msgstr "Yay! Sem problemas actualmente."
 
-#: templates/farming/workers.html:119 templates/worker.html:191
+#: templates/farming/workers.html:94 templates/worker.html:134
+msgid ""
+"For legibility, the chart shows only a random selection of paths when a "
+"worker has many of them."
+msgstr ""
+
+#: templates/farming/workers.html:124 templates/worker.html:196
 msgid "Disk Space Used (TB)"
 msgstr "Espaço em disco usado (TB)"
 
-#: templates/farming/workers.html:125 templates/worker.html:197
-#: templates/worker.html:261
+#: templates/farming/workers.html:130 templates/worker.html:202
+#: templates/worker.html:266
 msgid "full"
 msgstr ""
 
-#: templates/farming/workers.html:132 templates/worker.html:204
+#: templates/farming/workers.html:137 templates/worker.html:209
 msgid "Disk Space Free (TB)"
 msgstr "Espaço em disco livre (TB)"
 
-#: templates/worker.html:255
+#: templates/worker.html:260
 msgid "Disk Space Used (GB)"
 msgstr "Espaço em disco usado (GB)"
 
-#: templates/worker.html:268
+#: templates/worker.html:273
 msgid "Disk Space Free (GB)"
 msgstr "Espaço em disco livre (GB)"
 
@@ -1915,7 +1921,7 @@ msgstr ""
 "Por favor verifique que o container Machinaris para este blockchain está "
 "a correr. Por favor verifique também as definições na página \"Alertas\"."
 
-#: templates/farming/workers.html:94
+#: templates/farming/workers.html:99
 #, python-format
 msgid ""
 "No plots disk stats recorded recently for %(hostname)s with Chia "

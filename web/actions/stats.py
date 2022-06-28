@@ -5,6 +5,7 @@
 import datetime
 import os
 import pathlib
+import random
 import sqlite3
 import time
 
@@ -34,6 +35,9 @@ ALL_TABLES_BY_HOSTNAME = [
     StatPlotsDiskFree,
     StatPlottingDiskFree,
 ]
+
+# Don't overload the bar chart with tons of plots paths, randomly sample only this amount
+MAX_ALLOWED_PATHS_ON_BAR_CHART = 20
 
 def load_daily_diff(farm_summary):
     for blockchain in farm_summary.farms:
@@ -223,8 +227,6 @@ def load_recent_disk_usage(disk_type):
                     else:
                         path_values.append('null')
                 summary_by_worker[hostname][path] = path_values
-        
-    app.logger.debug(summary_by_worker.keys())
     return summary_by_worker
 
 def load_current_disk_usage(disk_type, hostname=None):
@@ -275,6 +277,8 @@ def load_current_disk_usage(disk_type, hostname=None):
                             free.append(free_row.value) # Leave at GB
                         continue
             if len(paths):
+                if len(paths) > MAX_ALLOWED_PATHS_ON_BAR_CHART:
+                    paths = sorted(random.sample(paths, MAX_ALLOWED_PATHS_ON_BAR_CHART))
                 summary_by_worker[host.hostname] = { "paths": paths, "used": used, "free": free}
     #app.logger.debug(summary_by_worker.keys())
     return summary_by_worker
