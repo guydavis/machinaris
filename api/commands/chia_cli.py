@@ -186,6 +186,7 @@ def plot_check(blockchain, plot_path):
         app.logger.error("No such plot file to check at: {0}".format(plot_path))
         return None
     chia_binary = globals.get_blockchain_binary(blockchain)
+    app.logger.info("Starting plot check on: {0}".format(plot_path))
     proc = Popen("{0} plots check -g {1}".format(chia_binary, plot_path),
         universal_newlines=True, stdout=PIPE, stderr=STDOUT, shell=True)
     try:
@@ -194,6 +195,7 @@ def plot_check(blockchain, plot_path):
         proc.kill()
         proc.communicate()
         abort(500, description="The timeout is expired attempting to check plots.")
+    app.logger.info("Completed plot check of: {0}".format(plot_path))
     class_escape = re.compile(r'.*: INFO\s+')
     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
     return  class_escape.sub('', ansi_escape.sub('', outs))

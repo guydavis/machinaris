@@ -67,7 +67,7 @@ def send_to_controller(blockchain, blocks):
                     "created_at": block['created_at'],
                 }
             )
-        utils.send_post('/stats/farmedblocks', payload, debug=False)
+        utils.send_post('/stats/farmedblocks/', payload, debug=False)
     except:
         app.logger.info("Failed to send latest stat to {0}.".format('/stats/farmedblocks'))
         app.logger.info(traceback.format_exc())

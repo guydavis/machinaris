@@ -4,6 +4,7 @@ def on_starting(server):
     import os
     import time
 
+    from datetime import datetime, timedelta
     from apscheduler.schedulers.background import BackgroundScheduler
 
     from api import app, utils
@@ -71,7 +72,8 @@ def on_starting(server):
 
     # Status for single Machinaris controller only, should be blockchain=chia
     if utils.is_controller():
-        scheduler.add_job(func=plots_check.execute, name="plot_checks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        scheduler.add_job(func=plots_check.execute, name="plot_checks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER, 
+            start_date=(datetime.now() + timedelta(minutes = 30))) # Delay first plots check until well after launch
         scheduler.add_job(func=status_controller.update, name="controller", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=websvcs.get_prices, name="get_prices", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=nft_recover.execute, name="nft_recover", trigger='interval', hours=12)
@@ -79,9 +81,13 @@ def on_starting(server):
         scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='cron', minute=0)  # Hourly
         
     # Testing only
-    #scheduler.add_job(func=restart_stuck_farmer.execute, name="restart_farmer_if_stuck", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=stats_farm.collect, name="stats_farm", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=status_wallets.update, name="status_wallet", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=stats_blocks.collect, name="stats_blocks", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=stats_effort.collect, name="stats_effort", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=websvcs.cold_wallet_balance, name="web_svcs", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=10) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()
