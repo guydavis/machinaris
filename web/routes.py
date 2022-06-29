@@ -224,8 +224,9 @@ def farming_data():
 def farming_workers():
     gc = globals.load()
     farmers = chia.load_farmers()
-    daily_summaries = stats.load_daily_farming_summaries()
+    daily_summaries = stats.load_daily_farming_summaries(farmers)
     disk_usage = stats.load_current_disk_usage('plots')
+    stats.set_disk_usage_per_farmer(farmers, disk_usage)
     return render_template('farming/workers.html', farmers=farmers, 
         daily_summaries=daily_summaries, disk_usage=disk_usage, 
         MAX_COLUMNS_ON_CHART=stats.MAX_ALLOWED_PATHS_ON_BAR_CHART,

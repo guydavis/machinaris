@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-06-28 11:19-0600\n"
+"POT-Creation-Date: 2022-06-28 22:00-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: Antonio Casqueiro\n"
 "Language: pt\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: routes.py:119 routes.py:264 routes.py:328
+#: routes.py:119 routes.py:265 routes.py:329
 msgid "Saved local currency setting."
 msgstr "Gravar definições da moeda local"
 
@@ -34,15 +34,15 @@ msgstr "Tipo de Plotting desconhecido"
 msgid "Error! Please see logs."
 msgstr "Erro! Por favor consulte os logs."
 
-#: routes.py:249
+#: routes.py:250
 msgid "Unknown alerts form"
 msgstr "Tipo de alerta desconhecido"
 
-#: routes.py:269
+#: routes.py:270
 msgid "Saved cold wallet addresses."
 msgstr "O endereço da Cold Wallet foi gravado."
 
-#: routes.py:343
+#: routes.py:344
 msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
@@ -50,11 +50,11 @@ msgstr ""
 "As definições do mapa foram gravadas. Por favor aguarde 10 minutos para "
 "que o mapa seja actualizado com a geolocalização."
 
-#: routes.py:351
+#: routes.py:352
 msgid "Unknown form action"
 msgstr "Form action desconhecida"
 
-#: routes.py:460
+#: routes.py:461
 #, python-format
 msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
@@ -63,7 +63,7 @@ msgstr ""
 "Não existe worker no %(worker)s para o blockchain %(blockchain)s. Por "
 "favor seleccione outro blockchain."
 
-#: routes.py:466
+#: routes.py:467
 #, python-format
 msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
@@ -72,7 +72,7 @@ msgstr ""
 "Na configuração dos Alertas, foi encontrado um fullnode que não responde "
 "para o %(blockchain)s. Por favor verifica os teus workers."
 
-#: routes.py:471
+#: routes.py:472
 #, python-format
 msgid ""
 "For Farming config, found no responding fullnode found for "
@@ -81,7 +81,7 @@ msgstr ""
 "Na configuração de Farming, foi encontrado um fullnode que não responde "
 "para o %(blockchain)s. Por favor verifica os teus workers."
 
-#: routes.py:478
+#: routes.py:479
 #, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
@@ -90,7 +90,7 @@ msgstr ""
 "Na configuração de Plotting, foi encontrado um fullnode que não responde "
 "para o %(blockchain)s. Por favor verifica os teus workers."
 
-#: routes.py:483
+#: routes.py:484
 #, python-format
 msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
@@ -99,23 +99,23 @@ msgstr ""
 "Foi encontrado um fullnode que não responde para o %(blockchain)s. Por "
 "favor verifica os teus workers."
 
-#: routes.py:502
+#: routes.py:503
 msgid "Unsupported log type"
 msgstr "Tipo de log não suportado"
 
-#: actions/chia.py:165 actions/chiadog.py:36
+#: actions/chia.py:171 actions/chiadog.py:36
 msgid "Updated config.yaml failed validation! Fix and save or refresh page."
 msgstr ""
 "A actualização do config.yaml falhou a validação. Corrija e grave ou "
 "carregue novamente a página."
 
-#: actions/chia.py:170 actions/chiadog.py:41
+#: actions/chia.py:176 actions/chiadog.py:41
 msgid "Failed to save config to farmer.  Please check log files."
 msgstr ""
 "Não foi possível gravar as definições do Farmer. Por favor consulte o Web"
 " Log."
 
-#: actions/chia.py:173
+#: actions/chia.py:179
 msgid ""
 "Nice! Farming config validated and saved successfully. Worker services "
 "now restarting. Please allow 15 minutes to take effect."
@@ -124,35 +124,35 @@ msgstr ""
 " serviços dos Workers estão a reiniciar. Por favor aguarde 15 minutos "
 "para produzir efeito."
 
-#: actions/chia.py:179
+#: actions/chia.py:185
 msgid "Skipping key generation as file exists and is NOT empty!"
 msgstr "A chave não foi gerada, porque o ficheiro existe e NÃO está vazio!"
 
-#: actions/chia.py:180
+#: actions/chia.py:186
 msgid "In-container path:"
 msgstr "Caminho para o Container:"
 
-#: actions/chia.py:189 actions/chia.py:203
+#: actions/chia.py:195 actions/chia.py:209
 msgid "Timed out while generating keys!"
 msgstr "Timeout durante a geração das chaves!"
 
-#: actions/chia.py:194
+#: actions/chia.py:200
 msgid "Unable to generate keys!"
 msgstr "Não foi possível gerar as chaves!"
 
-#: actions/chia.py:208
+#: actions/chia.py:214
 msgid "Unable to save mnemonic to"
 msgstr "Não foi possível gravar a mnemónica para"
 
-#: actions/chia.py:215
+#: actions/chia.py:221
 msgid "does not contain a 24-word mnemonic!"
 msgstr "não contém uma mnemónica de 24 palavras!"
 
-#: actions/chia.py:218
+#: actions/chia.py:224
 msgid "was unreadable or not found."
 msgstr "não foi possível ler, ou não foi encontrado."
 
-#: actions/chia.py:220
+#: actions/chia.py:226
 #, python-format
 msgid ""
 "Welcome! A new key has been generated, see below. Please visit the "
@@ -164,37 +164,37 @@ msgstr ""
 "favor aguarde 15 minutos para o Chia começar a sinzornicação com os "
 "peers."
 
-#: actions/chia.py:234 actions/chia.py:284
+#: actions/chia.py:240 actions/chia.py:290
 msgid "Timed out while starting farmer! Try restarting the Machinaris container."
 msgstr "Timeout a iniciar o Farmer! Tente reiniciar o container do Machinaris."
 
-#: actions/chia.py:239 actions/chia.py:289
+#: actions/chia.py:245 actions/chia.py:295
 msgid "Unable to start farmer. Try restarting the Machinaris container."
 msgstr ""
 "Não foi possível iniciar o Farmer. Tente reiniciar o container do "
 "Machinaris."
 
-#: actions/chia.py:246
+#: actions/chia.py:252
 msgid "Did not receive a 24-word mnemonic seed phrase!"
 msgstr "Não foi recebido a mnemónica de 24 palavras!"
 
-#: actions/chia.py:250
+#: actions/chia.py:256
 msgid "Skipping key import as file exists and is NOT empty!"
 msgstr "A chave não foi importada, porque o ficheiro existe e NÃO está vazio!"
 
-#: actions/chia.py:251
+#: actions/chia.py:257
 msgid "In container path:"
 msgstr "Caminho para o container:"
 
-#: actions/chia.py:263
+#: actions/chia.py:269
 msgid "Timed out while adding key!"
 msgstr "Timeout a adicionar a chave!"
 
-#: actions/chia.py:268
+#: actions/chia.py:274
 msgid "Unable to import provided mnemonic seed phrase!"
 msgstr "Não foi possível importar a mnemónica de 24 palavras que foi fornecida!"
 
-#: actions/chia.py:293
+#: actions/chia.py:299
 #, python-format
 msgid ""
 "Welcome! Your mnemonic key was imported. Please visit the "
@@ -206,25 +206,25 @@ msgstr ""
 "favor aguarde 15 minutos para o Chia começar a sinzornicação com os "
 "peers."
 
-#: actions/chia.py:310 actions/chia.py:327
+#: actions/chia.py:316 actions/chia.py:333
 msgid "Failed to connect to worker to add connection. Please check logs."
 msgstr ""
 "Não foi possível estabelecer uma ligação com o Worker para adicionar uma "
 "conexão. Por favor consulte os logs."
 
-#: actions/chia.py:314
+#: actions/chia.py:320
 #, python-format
 msgid "Invalid connection \"%(connection)s\" provided. Must be HOST:PORT."
 msgstr ""
 "Conexão \"%(connection)s\" indicada é inválida. Tem de ter o formato "
 "HOST:PORT."
 
-#: actions/chia.py:317
+#: actions/chia.py:323
 #, python-format
 msgid "Connection added to %(blockchain)s and sync engaging!"
 msgstr "A conexão foi adicionada ao %(blockchain)s e a sincronização irá começar!"
 
-#: actions/chia.py:331
+#: actions/chia.py:337
 msgid ""
 "Unknown error occurred attempting to remove connections. Please check "
 "logs."
@@ -232,16 +232,16 @@ msgstr ""
 "Ocorreu um erro desconhecido ao tentar remover as conexões. Por favor "
 "consulte os logs."
 
-#: actions/chia.py:334
+#: actions/chia.py:340
 msgid "Connection removed from"
 msgstr "Erro na conexão"
 
-#: actions/chia.py:349
+#: actions/chia.py:355
 #, python-format
 msgid "Unable to read addresses from %(file)s because %(exception)s"
 msgstr "Não foi possível ler os endereços do %(file)s devido a %(exception)s"
 
-#: actions/chia.py:364
+#: actions/chia.py:370
 #, python-format
 msgid ""
 "Successfully stored cold wallet addresses for %(blockchain)s. Please "
@@ -250,12 +250,12 @@ msgstr ""
 "O endereço da cold wallet foi gravado com sucesso para o %(blockchain)s. "
 "Por favor aguarde uns minutis para os valores serem actualizados abaixo."
 
-#: actions/chia.py:366
+#: actions/chia.py:372
 #, python-format
 msgid "Unable to store addresses in %(file)s because %(exception)s"
 msgstr "Não foi possível guardar os endereços no %(file)s devido a %(exception)s"
 
-#: actions/chia.py:376
+#: actions/chia.py:382
 msgid ""
 "Sorry, no plot check log found. Please wait for scheduled plot check to "
 "run."
@@ -263,7 +263,7 @@ msgstr ""
 "Pedimos desculpa, mas não foi encontrado o log de verificação do plots. "
 "Por favor aguarde que a tarefa de validação agendada corra."
 
-#: actions/chia.py:391 templates/summary.html:86
+#: actions/chia.py:397 templates/summary.html:86
 msgid "Wallet"
 msgstr "Wallet"
 
@@ -422,69 +422,78 @@ msgid ""
 "page."
 msgstr "Não foi possível gravar as definições. Por favor consulte o Web Log."
 
-#: actions/stats.py:81 actions/stats.py:116 actions/stats.py:133
-#: actions/stats.py:154 actions/stats.py:156
+#: actions/stats.py:82 actions/stats.py:117 actions/stats.py:134
+#: actions/stats.py:155 actions/stats.py:157
 msgid "in last day."
 msgstr "no último dia."
 
-#: actions/stats.py:396
+#: actions/stats.py:397
 msgid "secs"
 msgstr "segs"
 
-#: actions/stats.py:406 models/chia.py:261
+#: actions/stats.py:407 models/chia.py:261
 msgid "hour"
 msgstr "hora"
 
-#: actions/stats.py:436 templates/index.html:97
+#: actions/stats.py:437 templates/index.html:97
 #: templates/views/index_script_block.js:51
 msgid "Farmed Coins"
 msgstr "Moedas farmed"
 
-#: actions/stats.py:453 templates/index.html:89
+#: actions/stats.py:454 templates/index.html:89
 #: templates/views/index_script_block.js:56 templates/wallet.html:122
 msgid "Total Balance"
 msgstr "Saldo"
 
-#: actions/stats.py:470
+#: actions/stats.py:471
 msgid "Wallets Total"
 msgstr "Detalhes da Wallet"
 
-#: actions/stats.py:470
+#: actions/stats.py:471
 msgid "Fiat Currency"
 msgstr "Moeda do país"
 
-#: actions/stats.py:490 templates/index.html:105
+#: actions/stats.py:491 templates/index.html:105
 msgid "Netspace Size"
 msgstr "Tamanho do Netspace"
 
-#: actions/stats.py:491 actions/stats.py:551
+#: actions/stats.py:492 actions/stats.py:552
 msgid "Size"
 msgstr "Tamanho"
 
-#: actions/stats.py:529
+#: actions/stats.py:530 templates/farming/workers.html:77
 msgid "Plot Counts"
 msgstr "Número de Plots"
 
-#: actions/stats.py:550 templates/index.html:78
+#: actions/stats.py:551 templates/index.html:78
 msgid "Plots Size"
 msgstr "Plots: Total de espaço ocupado"
 
-#: actions/stats.py:565 actions/stats.py:566
+#: actions/stats.py:566 actions/stats.py:567
 msgid "Effort"
 msgstr "Porto"
 
-#: actions/stats.py:617 templates/summary.html:84
+#: actions/stats.py:618 templates/summary.html:84
 msgid "ETW"
 msgstr "ETW"
 
-#: actions/stats.py:618
+#: actions/stats.py:619
 msgid "Estimated Time to Win"
 msgstr "Tempo expectável para ganhar"
 
-#: actions/stats.py:618 models/chia.py:148 models/chia.py:255
+#: actions/stats.py:619 models/chia.py:148 models/chia.py:255
 #: models/drives.py:44
 msgid "days"
 msgstr "dias"
+
+#: actions/stats.py:647 templates/farming/workers.html:170
+#: templates/worker.html:202 templates/worker.html:266
+msgid "full"
+msgstr ""
+
+#: actions/stats.py:651
+msgid "free"
+msgstr ""
 
 #: actions/warnings.py:56
 msgid "Dismiss Warning"
@@ -666,31 +675,31 @@ msgstr "a"
 msgid "View Transactions"
 msgstr ""
 
-#: models/chia.py:848
+#: models/chia.py:847
 msgid "Confirmed"
 msgstr ""
 
-#: models/chia.py:860
+#: models/chia.py:859
 msgid "INCOMING_TX"
 msgstr ""
 
-#: models/chia.py:862
+#: models/chia.py:861
 msgid "OUTGOING_TX"
 msgstr ""
 
-#: models/chia.py:864
+#: models/chia.py:863
 msgid "COINBASE_REWARD"
 msgstr ""
 
-#: models/chia.py:866
+#: models/chia.py:865
 msgid "FEE_REWARD"
 msgstr ""
 
-#: models/chia.py:868
+#: models/chia.py:867
 msgid "INCOMING_TRADE"
 msgstr ""
 
-#: models/chia.py:870
+#: models/chia.py:869
 msgid "OUTGOING_TRADE"
 msgstr ""
 
@@ -1031,7 +1040,8 @@ msgstr "Detalhe da ligação"
 msgid "Type"
 msgstr "Tipo"
 
-#: templates/connections.html:163 templates/worker.html:39
+#: templates/connections.html:163 templates/farming/workers.html:65
+#: templates/worker.html:39
 msgid "IP Address"
 msgstr "Endereço IP"
 
@@ -1196,11 +1206,11 @@ msgstr "Challenges das Harvesters"
 msgid "Partial Proofs for Pools"
 msgstr "Partial Proofs das Pools"
 
-#: templates/farming/workers.html:80 templates/index.html:176
+#: templates/farming/workers.html:118 templates/index.html:176
 msgid "Previous"
 msgstr "Anterior"
 
-#: templates/farming/workers.html:84 templates/index.html:180
+#: templates/farming/workers.html:122 templates/index.html:180
 msgid "Next"
 msgstr "Seguinte"
 
@@ -1519,11 +1529,12 @@ msgstr ""
 msgid "Date"
 msgstr "Data"
 
-#: templates/worker.html:35
+#: templates/farming/workers.html:61 templates/worker.html:35
 msgid "Details"
 msgstr "Detalhes"
 
-#: templates/worker.html:43 templates/workers.html:42
+#: templates/farming/workers.html:69 templates/worker.html:43
+#: templates/workers.html:42
 msgid "Hostname"
 msgstr "Hostname"
 
@@ -1583,22 +1594,17 @@ msgstr "Avisos recentes"
 msgid "Yay! No issues currently."
 msgstr "Yay! Sem problemas actualmente."
 
-#: templates/farming/workers.html:94 templates/worker.html:134
+#: templates/farming/workers.html:134 templates/worker.html:134
 msgid ""
 "For legibility, the chart shows only a random selection of paths when a "
 "worker has many of them."
 msgstr ""
 
-#: templates/farming/workers.html:124 templates/worker.html:196
+#: templates/farming/workers.html:164 templates/worker.html:196
 msgid "Disk Space Used (TB)"
 msgstr "Espaço em disco usado (TB)"
 
-#: templates/farming/workers.html:130 templates/worker.html:202
-#: templates/worker.html:266
-msgid "full"
-msgstr ""
-
-#: templates/farming/workers.html:137 templates/worker.html:209
+#: templates/farming/workers.html:177 templates/worker.html:209
 msgid "Disk Space Free (TB)"
 msgstr "Espaço em disco livre (TB)"
 
@@ -1902,18 +1908,40 @@ msgstr "Plot em bom estado"
 msgid "Bad Plot"
 msgstr "Plot com problemas"
 
-#: templates/farming/workers.html:66
+#: templates/farming/workers.html:73
+#, fuzzy
+msgid "Blockchains Farming"
+msgstr "Blockchains para Farm"
+
+#: templates/farming/workers.html:81
+msgid "Plot Types"
+msgstr ""
+
+#: templates/farming/workers.html:85
+msgid "Drive Count"
+msgstr ""
+
+#: templates/farming/workers.html:86
+#, fuzzy
+msgid "devices"
+msgstr "Disco"
+
+#: templates/farming/workers.html:89
+msgid "Drive Usage"
+msgstr ""
+
+#: templates/farming/workers.html:103
 msgid "Daily Summary"
 msgstr "Sumário diário"
 
-#: templates/farming/workers.html:70
+#: templates/farming/workers.html:107
 #, python-format
 msgid "No daily summary found for %(blockchain)s on %(displayname)s."
 msgstr ""
 "Não foi encontrado o sumário diário para %(blockchain)s no "
 "%(displayname)s."
 
-#: templates/farming/workers.html:72
+#: templates/farming/workers.html:109
 msgid ""
 "Please check that your Machinaris container for this blockchain is "
 "running. Also please verify settings on the Alerts page."
@@ -1921,7 +1949,7 @@ msgstr ""
 "Por favor verifique que o container Machinaris para este blockchain está "
 "a correr. Por favor verifique também as definições na página \"Alertas\"."
 
-#: templates/farming/workers.html:99
+#: templates/farming/workers.html:139
 #, python-format
 msgid ""
 "No plots disk stats recorded recently for %(hostname)s with Chia "

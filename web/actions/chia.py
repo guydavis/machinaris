@@ -152,7 +152,13 @@ def load_keys():
     return Keys(keys)
     
 def load_farmers():
-    return wk.load_worker_summary().farmers_harvesters()
+    farmers = wk.load_worker_summary().farmers_harvesters()
+    for farmer in farmers:
+        app.logger.info("Load farmer statistics for {0}".format(farmer.displayname))
+        farmer.plot_counts = str(stats.count_plots_by_ksize(farmer.hostname))[1:-1].replace("'", "")
+        farmer.plot_types = str(stats.count_plots_by_type(farmer.hostname))[1:-1].replace("'", "")
+        farmer.drive_count = stats.count_drives(farmer.hostname)
+    return farmers
 
 def load_config(farmer, blockchain):
     return utils.send_get(farmer, "/configs/farming/"+ blockchain, debug=False).content

@@ -10,7 +10,7 @@ import sqlite3
 import time
 
 from flask import g
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 from shutil import disk_usage
 from flask_babel import _, lazy_gettext as _l, format_decimal
 
@@ -18,6 +18,7 @@ from common.config import globals
 from common.utils import converters, fiat
 from common.models.alerts import Alert
 from common.models.challenges import Challenge
+from common.models.drives import Drive
 from common.models.farms import Farm
 from common.models.pools import POOLABLE_BLOCKCHAINS
 from common.models.plots import Plot
@@ -159,10 +160,10 @@ def netspace_size_diff(since, blockchain):
     #app.logger.debug("Result is: {0}".format(result))
     return result
 
-def load_daily_farming_summaries():
+def load_daily_farming_summaries(farmers):
     summary_by_workers = {}
     since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
-    for host in chia.load_farmers():
+    for host in farmers:
         summary_by_workers[host.displayname] = {}
         for wk in host.workers:
             summary_by_workers[host.displayname][wk['blockchain']] = daily_summaries(since_date, wk['hostname'], wk['displayname'], wk['blockchain']) 
@@ -616,3 +617,39 @@ def load_time_to_win(blockchain):
     app.logger.debug("{0} after {1}".format(blockchain, converted_values))
     return { 'title': blockchain.capitalize() + ' - ' + _('ETW'), 'dates': dates, 'vals': converted_values, 
         'y_axis_title': _('Estimated Time to Win') + ' (' + _('days') + ')'}
+
+def count_plots_by_type(hostname):
+    plots_by_type = {}
+    result = db.session.query(Plot.type, func.count(Plot.hostname)).filter(Plot.hostname==hostname).group_by(Plot.type).all()
+    for row in result:
+        plots_by_type[row[0]] = row[1]
+    return plots_by_type
+
+def count_plots_by_ksize(hostname):
+    plots_by_ksize = {}
+    for ksize in [ "k29", "k30", "k31", "k32", "k33", "k34" ]:
+        count = db.session.query(Plot.plot_id).filter(Plot.hostname==hostname, Plot.file.contains("-{0}-".format(ksize))).count()
+        if count > 0:
+            plots_by_ksize[ksize] = count
+    return plots_by_ksize
+
+def count_drives(hostname):
+    return db.session.query(Drive.serial_number).filter(Drive.hostname==hostname).count()
+
+def set_disk_usage_per_farmer(farmers, disk_usage):
+    for farmer in farmers:
+        if farmer.hostname in disk_usage:
+            used = sum(disk_usage[farmer.hostname]['used'])
+            free = sum(disk_usage[farmer.hostname]['free'])
+            percent = used / (used + free) * 100
+            farmer.drive_usage = "{0}% {1} ({2} TB of {3} TB). {4} TB {5}.".format(
+                format_decimal(round(percent)),
+                _('full'), 
+                format_decimal(round(used)), 
+                format_decimal(round(used + free)),
+                format_decimal(round(free)),
+                _('free')
+            )
+        else:
+            app.logger.info("No disk usage stats found for {0}".format(farmer.hostname))
+            farmer.drive_usage = "" # Empty string to report
