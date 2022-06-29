@@ -1,5 +1,48 @@
 {% extends "base.html" %}
 
+{% block header %}
+<script>
+  function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+  }
+  function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+  }
+  function eraseCookie(name) {   
+    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  }
+  function getQueryParam(name) {
+    if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
+        return decodeURIComponent(name[1]);
+  }
+  // Save user's choice of view (grid vs table) and redirect if needed
+  var selectedView = getQueryParam('view');
+  var cookieView = getCookie('machinaris_drives_view_mode');
+  if (selectedView) { // Update cookie for selected view arrival
+    //console.log("Landed on selected view for Drives page: " + selectedView);
+    setCookie('machinaris_drives_view_mode', selectedView, 365*10); // Store view choice
+  } else if (cookieView) { // Landed on default page and have previous cookie set, so redirect 
+    //console.log("Redirecting to preferred Drives page view: " + cookieView);
+    window.location.href = window.location.href + '?view=' + cookieView;
+  } else {
+    //console.log("Landed on default Drives page, with no existing cookie. Taking no action.");
+  }
+</script>
+{% endblock %}
+
 {% block content %}
 
 <div class="modal fade" id="smartctlModal" tabindex="-1" aria-labelledby="smartctlModalLabel" aria-hidden="true">
@@ -251,7 +294,7 @@
                 output.textContent = xhr.responseText;
             };
         }
-    $(document).ready(function () {
+    $(document).ready(function () {  
       $("#btnSave").click(function () {
         $("#btnCancel").prop("disabled", true);
         $(this).prop("disabled", true);
@@ -261,6 +304,7 @@
         $("#settings-form").submit();
       });
       $('#data').DataTable({
+          "stateSave": true,
           "pageLength": 25,
           "lengthMenu": [ [25, 50, 100, 200, -1], [25, 50, 100, 200, "All"] ],
           "order": [[1, "asc"]],

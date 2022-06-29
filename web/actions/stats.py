@@ -622,7 +622,7 @@ def count_plots_by_type(hostname):
     plots_by_type = {}
     result = db.session.query(Plot.type, func.count(Plot.hostname)).filter(Plot.hostname==hostname).group_by(Plot.type).all()
     for row in result:
-        plots_by_type[row[0]] = row[1]
+        plots_by_type[row[0]] = str(row[1]) + " " + _('plots')
     return plots_by_type
 
 def count_plots_by_ksize(hostname):
@@ -630,7 +630,7 @@ def count_plots_by_ksize(hostname):
     for ksize in [ "k29", "k30", "k31", "k32", "k33", "k34" ]:
         count = db.session.query(Plot.plot_id).filter(Plot.hostname==hostname, Plot.file.contains("-{0}-".format(ksize))).count()
         if count > 0:
-            plots_by_ksize[ksize] = count
+            plots_by_ksize[ksize] = str(count) + " " + _('plots')
     return plots_by_ksize
 
 def count_drives(hostname):

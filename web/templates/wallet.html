@@ -197,6 +197,7 @@
 <script>
         $(document).ready(function () {
             $('#data').DataTable({
+                "stateSave": true,
                 "pageLength": 25,
                 "columnDefs": [{ "orderable": false, targets: [7,8] }],
                 {% if lang != 'en' %}
