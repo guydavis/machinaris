@@ -3,7 +3,11 @@ import json
 import locale
 import os
 import re
+import time
 import traceback
+
+# https://github.com/Chia-Network/chia-blockchain/blob/main/chia/util/bech32m.py
+from chia.util import bech32m
 
 from flask_babel import _, lazy_gettext as _l, format_decimal
 
@@ -14,8 +18,6 @@ from common.utils import converters, fiat
 
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
 MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
-
-PLOT_TABLE_COLUMNS = ['worker', 'blockchain', 'plot_id',  'dir', 'plot', 'type', 'create_date', 'size', 'c', 'a' ]
 
 class Summaries:
 
@@ -69,7 +71,7 @@ class Summaries:
                 plots = ''
                 app.logger.error("No plot_count found for farm: {0}".format(farm))
             try:
-                etw = farm['expected_time_to_win']
+                etw = self.etw_to_days(blockchain['blockchain'], farm['expected_time_to_win_english'])
             except:
                 etw = ''
                 app.logger.error("No expected_time_to_win found for farm: {0}".format(farm))
@@ -98,6 +100,11 @@ class Summaries:
             except:
                 edv_fiat = ''
                 app.logger.error("No edv_fiat found for blockchain stats: {0}".format(blockchain_stats))
+            try:
+                effort = blockchain_stats['effort']
+            except:
+                effort = ''
+                app.logger.error("No effort found for blockchain stats: {0}".format(blockchain_stats))
             self.rows.append({
                 'blockchain': blockchain['blockchain'],
                 'status': status,
@@ -110,8 +117,9 @@ class Summaries:
                 'max_resp': max_resp, 
                 'partials_per_hour': partials_per_hour,
                 'edv': edv, 
-                'edv_fiat': edv_fiat, 
-                'etw': self.etw_to_days(blockchain['blockchain'], etw),
+                'edv_fiat': edv_fiat,
+                'effort': effort, 
+                'etw': etw,
             })
 
     def find_farm(self, farms, blockchain):
@@ -194,6 +202,7 @@ class FarmSummary:
                     "netspace_display_size": netspace_display_size,
                     "netspace_size": farm_rec.netspace_size,
                     "expected_time_to_win": self.i18n_etw(farm_rec.expected_time_to_win),
+                    "expected_time_to_win_english": farm_rec.expected_time_to_win,
                 }
                 if not farm_rec.blockchain in self.farms:
                     self.farms[farm_rec.blockchain] = farm
@@ -206,6 +215,7 @@ class FarmSummary:
         #app.logger.info(self.farms.keys())
 
     def status_if_responding(self, displayname, blockchain, connection_status, last_status):
+        app.logger.debug("Blockchain {0} status is {1}".format(blockchain, last_status))
         if connection_status == 'Responding':
             if last_status == "Farming":
                 return _("Active")
@@ -216,7 +226,7 @@ class FarmSummary:
             if last_status == "Not synced or not connected to peers":
                 return _("Not synced")
             return last_status
-        #app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
+        app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
         return _("Offline")
 
     def selected_blockchain(self):
@@ -264,7 +274,18 @@ class FarmSummary:
 class FarmPlots:
 
     def __init__(self, plots):
-        self.columns = PLOT_TABLE_COLUMNS
+        self.columns = [ 
+            _('worker'), 
+            _('blockchain'), 
+            _('plot_id'),  
+            _('dir'),
+            _('plot'), 
+            _('type'), 
+            _('create_date'), 
+            _('size'), 
+            _('c'), 
+            _('a')
+        ]
         self.rows = []
         for plot in plots:
             self.rows.append([
@@ -352,7 +373,7 @@ class Wallets:
                 'hostname': wallet.hostname,
                 'blockchain': wallet.blockchain,
                 'status': self.extract_status(wallet.blockchain, wallet.details, worker_status),
-                'details': wallet.details, 
+                'details': self.link_to_wallet_transactions(wallet.blockchain, wallet.details),
                 'hot_balance': converters.round_balance(hot_balance),
                 'cold_balance': cold_balance,
                 'cold_address': ','.join(cold_wallet_addresses[wallet.blockchain]) if wallet.blockchain in cold_wallet_addresses else '',
@@ -363,16 +384,47 @@ class Wallets:
                 'updated_at': wallet.updated_at }) 
 
     def exclude_cat_wallets(self, wallet_details):
-        skip = 0
         details = []
-        for line in wallet_details.split('\n'):
-            if "Token:" in line:  # Example: "Chia Holiday 2021 Token:"
-                skip = 3 # Skip next 3 lines for these useless CAT wallets
-            elif skip > 0:
-                skip = skip -1 
+        chunks = wallet_details.split('\n\n')
+        for chunk in chunks:
+            is_cat_wallet = False
+            lines = chunk.split('\n')
+            for line in lines:
+                if re.match('^\s+-Type:\s+CAT$', line):
+                    is_cat_wallet = True
+            if is_cat_wallet:
+                app.logger.debug("Ignoring balance of CAT type wallet named: {0}".format(lines[0][:-1]))
             else:
-                details.append(line)
+                details.extend(chunk.split('\n'))
         return '\n'.join(details)
+    
+    def extract_wallet_id(self, lines):
+        for line in lines:
+            wallet_match = re.match("^\s+-Wallet ID:\s+(\d)+$", line)
+            if wallet_match:
+                return wallet_match.group(1)
+        return None
+
+    def link_to_wallet_transactions(self, blockchain, details):
+        lines = []
+        if globals.legacy_blockchain(blockchain) or blockchain in ['btcgreen', 'cryptodoge', 'flax', 'shibgreen', 'staicoin']: 
+            for line in details.split('\n'):
+                if 'wallet id' in line.lower():
+                    lines.append("<a href='#' class='text-white' title='" + _('View Transactions') + "' onclick='ViewTransactions(\""+ blockchain + "\", \"1\");return false;'>" + line.strip() + "</a>:")
+                else:
+                    lines.append(line)
+        else: # Chia and updated blockchains, have multiple wallet id #s like 1,3,4 etc.
+            details_lines = details.split('\n')
+            for i in range(len(details_lines)):
+                line = details_lines[i]
+                if line.strip().endswith(':') and not line.strip() == 'Connections:':
+                    wallet_name = line.strip()[:-1]
+                    wallet_id = self.extract_wallet_id(details_lines[i+1:])
+                    if wallet_name and wallet_id:
+                        line = "<a href='#' class='text-white' title='" + _('View Transactions') + "' onclick='ViewTransactions(\""+ blockchain + "\", \"" + str(wallet_id) + "\");return false;'>" + wallet_name + "</a>:"
+                lines.append(line)
+                i += 1
+        return '\n'.join(lines)
 
     def sum_chia_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
         numeric_const_pattern = '-Total\sBalance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
@@ -382,10 +434,8 @@ class Wallets:
             if wallet.hostname == hostname and wallet.blockchain == blockchain:
                 try:
                     for balance in rx.findall(self.exclude_cat_wallets(wallet.details)):
-                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
-                        # wallet.hostname, wallet.blockchain))
+                        #app.logger.info("Found balance of {0} for  {1} - {2}".format(balance, wallet.hostname, wallet.blockchain))
                         sum += locale.atof(balance)
-                        found_balance = True
                 except Exception as ex:
                     app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
                         wallet.hostname, wallet.blockchain, str(ex)))
@@ -394,7 +444,7 @@ class Wallets:
         return sum
 
     def sum_mmx_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
-        numeric_const_pattern = 'Balance:\s+((?: (?: \d*\.\d+ ) | (?: \d+\.? ) )(?: [Ee] [+-]? \d+ )?)'
+        numeric_const_pattern = 'Balance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)\sMMX'
         rx = re.compile(numeric_const_pattern, re.VERBOSE)
         sum = 0
         for wallet in self.wallets:
@@ -402,9 +452,8 @@ class Wallets:
                 try:
                     #app.logger.info(wallet.details)
                     for balance in rx.findall(wallet.details):
-                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, wallet.hostname, wallet.blockchain))
+                        app.logger.info("Found balance of {0} for {1} - {2}".format(balance, wallet.hostname, wallet.blockchain))
                         sum += locale.atof(balance)
-                        found_balance = True
                 except Exception as ex:
                     app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
                         wallet.hostname, wallet.blockchain, str(ex)))
@@ -417,7 +466,7 @@ class Wallets:
             if not details:
                 return None
             if blockchain == 'mmx':
-                pattern = '^Synced: (.*)$'
+                pattern = '^Synced:\s+(.*)$'
             else:
                 pattern = '^Sync status: (.*)$'
             for line in details.split('\n'):
@@ -446,13 +495,36 @@ class Keys:
             except:
                 app.logger.info("Keys.init(): Unable to find a worker with hostname '{0}'".format(key.hostname))
                 displayname = key.hostname
+            parsed_details = key.details
+            try:
+                [addresses, parsed_details] = self.link_first_wallet_address(key.blockchain, key.details)
+            except:
+                traceback.print_exc()
+                parsed_details = key.details
+                addresses = []
             self.rows.append({ 
                 'displayname': displayname, 
                 'hostname': key.hostname,
                 'blockchain': key.blockchain,
                 'status': worker_status,
-                'details': key.details,
+                'details': parsed_details,
+                'addresses': addresses,
                 'updated_at': key.updated_at }) 
+    
+    def link_first_wallet_address(self, blockchain, details):
+        addresses = []
+        alltheblocks_blockchain = globals.get_alltheblocks_name(blockchain)
+        lines = []
+        for line in details.split('\n'):
+            if line.startswith('First wallet address'):
+                label = line.split(':')[0]
+                address = line.split(':')[1].strip()
+                addresses.append(address)
+                link = "https://alltheblocks.net/{0}/address/{1}".format(alltheblocks_blockchain, address)
+                lines.append("{0}: <a target='_blank' class='text-white' href='{1}'>{2}</a>".format(label, link, address))
+            else:
+                lines.append(line)
+        return [addresses, '\n'.join(lines)]
 
 class Blockchains:
 
@@ -476,6 +548,7 @@ class Blockchains:
                 'status': self.extract_status(blockchain.blockchain, blockchain.details, worker_status),
                 'peak_height': self.extract_height(blockchain.blockchain, blockchain.details),
                 'peak_time': self.extract_time(blockchain.blockchain, blockchain.details),
+                'fiat_price': fiat.to_fiat(blockchain.blockchain, 1.0),
                 'details': blockchain.details,
                 'updated_at': blockchain.updated_at }) 
     
@@ -759,3 +832,38 @@ class Connections:
         else:
             app.logger.error("Unknown transmission rate unit character of {0} encountered.".format(unit))
             return rate
+
+class Transactions:
+
+    def __init__(self, blockchain, transactions):
+        self.address_prefix = globals.get_blockchain_symbol(blockchain).lower()
+        self.transactions = transactions
+        self.rows = []
+        for t in transactions:
+            to_puzzle_hash = t['to_puzzle_hash'][2:]  # Strip off leading 0x from hex string
+            self.rows.append({
+                "type": self.lookup_type(t['type']),
+                "to": bech32m.encode_puzzle_hash(bytes.fromhex(to_puzzle_hash), self.address_prefix),
+                "status": _('Confirmed') if 'confirmed_at_height' in t else '',
+                "amount": converters.round_balance(self.mojos_to_coin(blockchain, t['amount'])),
+                "fee": t['fee_amount'],
+                "created_at": time.strftime('%Y-%m-%d %H:%M', time.localtime(t['created_at_time'])),
+            })
+
+    def mojos_to_coin(self, blockchain, mojos):
+        return mojos / globals.get_mojos_per_coin(blockchain)
+    
+    # https://github.com/Chia-Network/chia-blockchain/blob/main/chia/wallet/util/transaction_type.py
+    def lookup_type(self, type_id):
+        if type_id == 0:
+            return _('INCOMING_TX')
+        if type_id == 1:
+            return _('OUTGOING_TX')
+        if type_id == 2:
+            return _('COINBASE_REWARD')
+        if type_id == 3:
+            return _('FEE_REWARD')
+        if type_id == 4:
+            return _('INCOMING_TRADE')
+        if type_id == 5:
+            return _('OUTGOING_TRADE')

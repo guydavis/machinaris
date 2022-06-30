@@ -260,6 +260,7 @@
 
             var blockchains = document.getElementsByName('blockchains');
             var worker_port = 8928;
+            var is_first_loop_pass = true;
             for(var i = 0; i < blockchains.length; ++i) {
                 if (blockchains[i].checked) {
                     var blockchain = blockchains[i].value
@@ -280,7 +281,7 @@
                     if (document.getElementById("worker_hostname").value) {
                         cmd += '        hostname: ' + document.getElementById("worker_hostname").value + line_end;
                     }
-                    else if (i == 0) {
+                    else if (is_first_loop_pass) {
                         errors.push("{{_('Missing worker hostname.  Please provide a short name to identify your worker.')}}");
                     }
                     cmd += '        restart: always' + line_end;
@@ -299,7 +300,7 @@
                         if (os == 'windows' && ($('#volume_location' + index).val() == 'remote')) {
                             remote_windows_shares.push(volume_host_path + ':' + volume_container_path);
                         } else {
-                            if (i == 0) { // Record error on first pass
+                            if (is_first_loop_pass) { // Record error on first pass
                                 if (volume_host_path.endsWith(':')) {
                                     errors.push("{{_('Invalid host path ending with colon. Try adding a slash to the end like this')}} " + volume_host_path + '/');
                                 } 
@@ -351,13 +352,13 @@
                         cmd += '            - mode=' + mode + line_end;
                         cmd += '            - controller_host=' + document.getElementById("controller_host").value + line_end;
                         cmd += '            - controller_api_port=' + document.getElementById("controller_api_port").value + line_end;
-                    } else if (i == 0) { // fullnode
+                    } else if (is_first_loop_pass) { // fullnode
                         errors.push("{{_('Neither Harvester or Plottter mode selected.  Please choose one or both.')}}");
                     }
                     if (document.getElementById("ip_addr").value) {
                         cmd += '            - worker_address=' + document.getElementById("ip_addr").value + line_end;
                     }
-                    else if (i == 0) {
+                    else if (is_first_loop_pass) {
                         errors.push("{{_('Missing worker IP address.  Please provide the IP the controller will connect to for commands.')}}");
                     }
                     var worker_port = lookup_worker_port(blockchain);
@@ -383,6 +384,7 @@
                         cmd += '            - DAC_READ_SEARCH' + line_end;
                     }
                     cmd += line_end;
+                    is_first_loop_pass = false;
                 }
             }
             return cmd;

@@ -68,7 +68,7 @@
                 <i class="bi-dash-circle text-danger"></i> {{_('Connection Timeout')}}
               {% elif worker.connection_status() == 'Connection Error' %}
                 <i class="bi-dash-circle text-danger"></i> {{_('Connection Error')}}
-              % elif worker.connection_status() == 'offline' %}
+              {% elif worker.connection_status() == 'offline' %}
                 <i class="bi-dash-circle text-danger"></i> {{_('Offline')}}
               {% else %}
                 <i class="bi-exclamation-triangle text-warning" title="{{ worker.connection_status }}"></i>
@@ -79,7 +79,7 @@
             <td><a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
                 title="{{worker.versions.components}}">{{worker.versions.machinaris}}</a></td>
             <td style="padding:0px">
-              <a href="#" title="View Server Log" onclick='MachinarisLog("apisrv","{{ worker.hostname }}","{{ worker.blockchain }}");return false;'><i class="fs-4 bi-text-indent-left"></i></a>
+              <a href="#" title="View Server Log" onclick='MachinarisLog("apisrv","{{ worker.hostname }}","{{ worker.blockchain }}");return false;'><i class="fs-4 bi-file-text"></i></a>
               {% if worker.mode == "fullnode" and worker.blockchain == "chia" %}
               <a href="#" title="View Web Log" onclick='MachinarisLog("webui","{{ worker.hostname }}","{{ worker.blockchain }}");return false;'><i class="fs-4 bi-laptop"></i></a>
               {% endif %}
@@ -136,6 +136,7 @@
     }
     $(document).ready(function () {
       $('#data').DataTable({
+          "stateSave": true,
           "pageLength": 25,
           "lengthMenu": [ [25, 50, 100, 200, -1], [25, 50, 100, 200, "All"] ],
           "order": [[1, "asc"]],

@@ -12,9 +12,6 @@ mkdir -p /root/.chia/cactus
 rm -f /root/.cactus
 ln -s /root/.chia/cactus /root/.cactus 
 
-mkdir -p /root/.cactus/mainnet/log
-cactus init >> /root/.cactus/mainnet/log/init.log 2>&1 
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.cactus/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
@@ -28,6 +25,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   mv db-Cactus-Mainnet/*.sqlite .
   rm -rf db-Cactus-Mainnet/ db-Cactus-Mainnet.zip
 fi
+
+mkdir -p /root/.cactus/mainnet/log
+cactus init >> /root/.cactus/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Cactus...'
 if [ -f /root/.cactus/mainnet/config/config.yaml ]; then

@@ -14,9 +14,6 @@ ln -s /root/.chia/staicoin /root/.staicoin
 rm -f /root/.stai
 ln -s /root/.chia/staicoin /root/.stai
 
-mkdir -p /root/.stai/mainnet/log
-stai init >> /root/.stai/mainnet/log/init.log 2>&1 
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.stai/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
@@ -26,10 +23,13 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   mkdir -p /root/.stai/mainnet/db/ && cd /root/.stai/mainnet/db/
   # Latest Blockchain DB download from direct from https://stai.global
   curl -skJLO https://stai.global/database/staiblockchain.rar
-  unrar staiblockchain.rar 
+  unrar e staiblockchain.rar 
   mv staiblockchain/*.sqlite .
   rm -rf staiblockchain/ staiblockchain.rar
 fi
+
+mkdir -p /root/.stai/mainnet/log
+stai init >> /root/.stai/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Staicoin...'
 if [ -f /root/.stai/mainnet/config/config.yaml ]; then

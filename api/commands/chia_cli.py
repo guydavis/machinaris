@@ -77,16 +77,16 @@ def load_wallet_show(blockchain):
     child = pexpect.spawn("{0} wallet show".format(chia_binary))
     wallet_index = 1
     while True:
-        i = child.expect(["Wallet height:.*\r\n", "Choose wallet key:.*\r\n", "No online backup file found.*\r\n"], timeout=120)
+        i = child.expect(["Wallet height:.*\r\n", "Wallet keys:.*\r\n", "Choose wallet key:.*\r\n", "Choose a wallet key:.*\r\n", "No online backup file found.*\r\n"], timeout=120)
         if i == 0:
             app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
             wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
             break
-        elif i == 1:
+        elif i == 1 or i == 2 or i == 3:
             app.logger.debug("wallet show got index prompt so selecting #{0}".format(wallet_index))
             child.sendline("{0}".format(wallet_index))
             wallet_index += 1
-        elif i == 2:
+        elif i == 4:
             child.sendline("S")
         else:
             app.logger.debug("pexpect returned {0}".format(i))
@@ -121,7 +121,11 @@ def load_connections_show(blockchain):
 
 def load_keys_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    proc = Popen("{0} keys show".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+    # If a legacy blockchain that hasn't kept pace with Chia, there is only non-observer key
+    if globals.legacy_blockchain(blockchain):
+        proc = Popen("{0} keys show".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+    else: # Get both observer and non-observer keys for newer blockchains
+        proc = Popen("{0} keys show && {0} keys show -d | grep 'non-observer'".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
@@ -182,6 +186,7 @@ def plot_check(blockchain, plot_path):
         app.logger.error("No such plot file to check at: {0}".format(plot_path))
         return None
     chia_binary = globals.get_blockchain_binary(blockchain)
+    app.logger.info("Starting plot check on: {0}".format(plot_path))
     proc = Popen("{0} plots check -g {1}".format(chia_binary, plot_path),
         universal_newlines=True, stdout=PIPE, stderr=STDOUT, shell=True)
     try:
@@ -190,6 +195,7 @@ def plot_check(blockchain, plot_path):
         proc.kill()
         proc.communicate()
         abort(500, description="The timeout is expired attempting to check plots.")
+    app.logger.info("Completed plot check of: {0}".format(plot_path))
     class_escape = re.compile(r'.*: INFO\s+')
     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
     return  class_escape.sub('', ansi_escape.sub('', outs))

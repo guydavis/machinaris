@@ -78,9 +78,38 @@ def index():
     chia.challenges_chart_data(farm_summary)
     p.partials_chart_data(farm_summary)
     stats.load_daily_diff(farm_summary)
+    stats.wallet_chart_data(farm_summary)
     warnings.check_warnings(request.args)
     return render_template('index.html', reload_seconds=120, farms=farm_summary.farms, \
         plotting=plotting, workers=workers, global_config=gc, selected_blockchain=selected_blockchain)
+
+@app.route('/chart')
+def chart():
+    gc = globals.load()
+    chart_type = request.args.get('type')
+    blockchain = request.args.get('blockchain')
+    if chart_type == 'wallet_balances':
+        chart_data = stats.load_wallet_balances(blockchain)
+        return render_template('charts/balances.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
+    elif chart_type == 'farmed_blocks':
+        chart_data = stats.load_farmed_coins(blockchain)
+        farmed_blocks = stats.load_farmed_blocks(blockchain)
+        return render_template('charts/farmed.html', reload_seconds=120, global_config=gc, chart_data=chart_data, farmed_blocks=farmed_blocks, lang=get_lang(request))
+    elif chart_type == 'netspace_size':
+        chart_data = stats.load_netspace_size(blockchain)
+        return render_template('charts/netspace.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request))
+    elif chart_type == 'plot_count':
+        chart_data = stats.load_plot_count(blockchain)
+        return render_template('charts/plot_count.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
+    elif chart_type == 'plots_size':
+        chart_data = stats.load_plots_size(blockchain)
+        return render_template('charts/plots_size.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
+    elif chart_type == 'effort':
+        chart_data = stats.load_effort(blockchain)
+        return render_template('charts/effort.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
+    elif chart_type == 'timetowin':
+        chart_data = stats.load_time_to_win(blockchain)
+        return render_template('charts/timetowin.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
 
 @app.route('/summary', methods=['GET', 'POST'])
 def summary():
@@ -195,10 +224,13 @@ def farming_data():
 def farming_workers():
     gc = globals.load()
     farmers = chia.load_farmers()
-    daily_summaries = stats.load_daily_farming_summaries()
+    daily_summaries = stats.load_daily_farming_summaries(farmers)
     disk_usage = stats.load_current_disk_usage('plots')
+    stats.set_disk_usage_per_farmer(farmers, disk_usage)
     return render_template('farming/workers.html', farmers=farmers, 
-        daily_summaries=daily_summaries, disk_usage=disk_usage, global_config=gc)
+        daily_summaries=daily_summaries, disk_usage=disk_usage, 
+        MAX_COLUMNS_ON_CHART=stats.MAX_ALLOWED_PATHS_ON_BAR_CHART,
+        global_config=gc)
 
 @app.route('/alerts', methods=['GET', 'POST'])
 def alerts():
@@ -237,9 +269,10 @@ def wallet():
             chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
             flash(_("Saved cold wallet addresses."), 'success')
     wallets = chia.load_wallets()
+    chart_data = stats.load_total_balances(fiat.get_local_currency_symbol().lower())
     return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, 
         reload_seconds=120, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
-        local_cur_sym=fiat.get_local_currency_symbol(), lang=get_lang(request))
+        chart_data=chart_data, local_cur_sym=fiat.get_local_currency_symbol(), lang=get_lang(request))
 
 @app.route('/keys')
 def keys():
@@ -273,12 +306,13 @@ def worker_route():
     return render_template('worker.html', worker=wkr, 
         plotting=plotting, plots_disk_usage=plots_disk_usage, 
         plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc,
+        MAX_COLUMNS_ON_CHART=stats.MAX_ALLOWED_PATHS_ON_BAR_CHART,
         lang=get_lang(request))
 
 @app.route('/drives', methods=['GET','POST'])
 def drives():
     if request.args.get('device') and request.args.get('hostname'):
-        return d.load_smartctl_info(request.args.get('hostname'), request.args.get('device'))
+        return make_response(d.load_smartctl_info(request.args.get('hostname'), request.args.get('device')), 200)
     if request.method == 'POST':
         d.save_settings(request.form)
     gc = globals.load()
@@ -287,14 +321,18 @@ def drives():
     return render_template('drives.html', reload_seconds=120, 
         drives=drvs, settings=settings, global_config=gc, lang=get_lang(request))
 
-@app.route('/blockchains')
+@app.route('/blockchains', methods=['GET','POST'])
 def blockchains():
     gc = globals.load()
+    if request.method == 'POST':
+        fiat.save_local_currency(request.form.get('local_currency'))
+        flash(_("Saved local currency setting."), 'success')
     selected_blockchain = worker.default_blockchain()
     blockchains = chia.load_blockchains()
     fullnodes = worker.get_fullnodes_by_blockchain()
     return render_template('blockchains.html', reload_seconds=120, selected_blockchain = selected_blockchain, 
-        blockchains=blockchains, fullnodes=fullnodes, global_config=gc, lang=get_lang(request))
+        blockchains=blockchains, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
+        local_cur_sym=fiat.get_local_currency_symbol(), fullnodes=fullnodes, global_config=gc, lang=get_lang(request))
 
 @app.route('/connections', methods=['GET', 'POST'])
 def connections():
@@ -347,10 +385,13 @@ def settings_farming():
         chia.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary.farmers_harvesters(), selected_worker_hostname, selected_blockchain)
+    hot_addresses = chia.load_hot_wallet_addresses()
+    cold_addresses = chia.load_cold_wallet_addresses()
     if not selected_blockchain:
         selected_blockchain = selected_worker['blockchain']
     return render_template('settings/farming.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
-        workers=workers_summary.farmers_harvesters, selected_worker=selected_worker['hostname'], global_config=gc)
+        workers=workers_summary.farmers_harvesters, selected_worker=selected_worker['hostname'], 
+        hot_addresses=hot_addresses, cold_addresses=cold_addresses, global_config=gc)
 
 @app.route('/settings/alerts', methods=['GET', 'POST'])
 def settings_alerts():
@@ -474,6 +515,17 @@ def pools():
     gc = globals.load()
     selected_blockchain = worker.default_blockchain()
     return render_template('pools.html', pools= p.load_pools(), global_config=gc, selected_blockchain = selected_blockchain)
+
+@app.route('/transactions')
+def transactions():
+    gc = globals.load()
+    blockchain=request.args.get('blockchain')
+    selected_wallet_id=request.args.get('selected_wallet_id')
+    w = worker.get_fullnode(blockchain=blockchain)
+    trans = chia.get_transactions(get_lang(request), w, blockchain, selected_wallet_id)
+    wallets = chia.load_wallet_ids(blockchain)
+    return render_template('transactions.html', transactions=trans, blockchain=blockchain, wallets=wallets,
+        selected_wallet_id=selected_wallet_id, reload_seconds=120, global_config=gc, lang=get_lang(request)) 
 
 @app.route('/favicon.ico')
 def favicon():

@@ -185,7 +185,7 @@
                             <td style="padding:0px">
                                 <!-- Careful, VS Code likes to wrap next line and break it. -->
                                 <a href="#" title="View Logs" onclick='PlottingLogs("plotting","{{ row['hostname'] }}","{{ row['fork'] }}","{{ row['plot_id'] }}");return false;'>
-                                    <i class="fs-4 bi-text-indent-left"></i>
+                                    <i class="fs-4 bi-file-text"></i>
                                 </a>
                             </td>
                         </tr>
@@ -207,8 +207,8 @@
         </div>
     </form>
 
+    {% for k_size in job_stats %}
     <div class="p-1 mb-4 bg-light border rounded-3">
-        {% for k_size in job_stats %}
         <div class="row">
             <div class="col" style="margin-top:5px; margin-bottom:5px;">
                 <div class="h-100 p-2 text-white">
@@ -218,11 +218,11 @@
         </div>
         <div class="row">
             <div class="col-12" style="margin-top:5px; margin-bottom:5px;">
-                <canvas id="k{{k_size}}_jobs"></canvas>
+                <canvas id="k{{k_size}}_jobs" height="400px" width="100%"></canvas>
             </div>
         </div>
-        {% endfor %}
     </div>
+    {% endfor %}
 
     {% endblock %}
 
@@ -264,6 +264,8 @@
             },
             borderWidth: 1,
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: {  
                     legend: {
                         labels: {
@@ -278,6 +280,7 @@
                     x: {
                         type: 'time',
                         time: {
+                            unit: 'day',
                             tooltipFormat: 'DD T'
                         },
                         title: {
@@ -334,7 +337,8 @@
             $('#modal_spinner').modal('show');
         }
         $(document).ready(function () {
-            $('#data').DataTable({ 
+            $('#data').DataTable({
+                "stateSave": true, 
                 "columnDefs": [
                     { 
                         targets: [0,4,5,6,7,8,9,10,11,12,13,14,15,16,17], "orderable": false

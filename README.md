@@ -12,6 +12,10 @@ Plotting with the [MadMax](https://github.com/madMAx43v3r/chia-plotter), [Bladeb
 
 ![Plotting](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_plotting.png)
 
+Track your plotter machines performance as you fine-tune your plotting, graphed for each k-size you plot.
+
+![Speed](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/plotting_speed_chart.png)
+
 ## Farming View
 
 Machinaris bundles the [latest Chia™ version](https://github.com/Chia-Network/chia-blockchain/wiki/INSTALL#ubuntudebian) inside the Docker image.
@@ -25,6 +29,8 @@ Machinaris also optionally farms your plots to many other blockchain forks inclu
 [Chiadog](https://github.com/martomi/chiadog) provides monitoring of the log files, ensuring you get notified when important events occur across your farm:
 
 ![Alerts](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/ChiaDog-1-Example.png)
+
+Notifications can be sent to e-mail, telegram, discord, slack, etc.
 
 ## Setup
 

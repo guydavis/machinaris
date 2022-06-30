@@ -1,5 +1,48 @@
 {% extends "base.html" %}
 
+{% block header %}
+<script>
+  function setCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+  }
+  function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+  }
+  function eraseCookie(name) {   
+    document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  }
+  function getQueryParam(name) {
+    if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
+        return decodeURIComponent(name[1]);
+  }
+  // Save user's choice of view (grid vs table) and redirect if needed
+  var selectedView = getQueryParam('view');
+  var cookieView = getCookie('machinaris_drives_view_mode');
+  if (selectedView) { // Update cookie for selected view arrival
+    //console.log("Landed on selected view for Drives page: " + selectedView);
+    setCookie('machinaris_drives_view_mode', selectedView, 365*10); // Store view choice
+  } else if (cookieView) { // Landed on default page and have previous cookie set, so redirect 
+    //console.log("Redirecting to preferred Drives page view: " + cookieView);
+    window.location.href = window.location.href + '?view=' + cookieView;
+  } else {
+    //console.log("Landed on default Drives page, with no existing cookie. Taking no action.");
+  }
+</script>
+{% endblock %}
+
 {% block content %}
 
 <div class="modal fade" id="smartctlModal" tabindex="-1" aria-labelledby="smartctlModalLabel" aria-hidden="true">
@@ -52,7 +95,7 @@
       &nbsp;
       <a href="#" title="{{_('Settings')}}" data-bs-toggle="modal" data-bs-target="#settingsModal" target="_blank"><i class="fs-4 bi-gear"></i></a>
       &nbsp;
-      <a href="https://github.com/guydavis/machinaris/wiki/Drives" target="_blank"><i class="fs-4 bi-question-circle"></i></a>
+      <a class="text-white" href="https://github.com/guydavis/machinaris/wiki/Drives" target="_blank"><i class="fs-4 bi-question-circle"></i></a>
   </div>
 </div>
 
@@ -130,7 +173,7 @@
             </td>
             <td>{{drive.updated_at | datetimefilter}}</td>
             <td style="padding:0px">
-              <a href="#" title="View Details" data-bs-toggle="modal" data-bs-target="#smartctlModal" onclick='SmartctlDeviceInfo("{{ drive.hostname }}", "{{ drive.device }}", "{{ drive.worker }}", "{{ drive.device_model }}", "{{ drive.model_family }}");return false;'><i class="fs-4 bi-text-indent-left"></i></a>&nbsp;
+              <a href="#" title="View Details" data-bs-toggle="modal" data-bs-target="#smartctlModal" onclick='SmartctlDeviceInfo("{{ drive.hostname }}", "{{ drive.device }}", "{{ drive.worker }}", "{{ drive.device_model }}", "{{ drive.model_family }}");return false;'><i class="fs-4 bi-file-text"></i></a>&nbsp;
             </td>  
           </tr>
           {% endfor %}
@@ -145,7 +188,7 @@
           <div class="h-100 p-2 text-white bg-dark rounded-3">
             <h5 class="text-white">
               <a href="#" title="View Details" data-bs-toggle="modal" data-bs-target="#smartctlModal" style="float:right"
-                onclick='SmartctlDeviceInfo("{{ drive.hostname }}", "{{ drive.device }}", "{{ drive.worker }}", "{{ drive.device_model }}", "{{ drive.model_family }}");return false;'><i class="fs-4 bi-text-indent-left"></i></a>
+                onclick="SmartctlDeviceInfo('{{ drive.hostname }}', '{{ drive.device | escape_single_quotes }}', '{{ drive.worker | escape_single_quotes }}', '{{ drive.device_model | escape_single_quotes }}', '{{ drive.model_family | escape_single_quotes }}');return false;"><i class="fs-4 bi-file-text"></i></a>
                  {{drive.worker}} - {{drive.device}} -
                  {% if drive.model_family %}
                    {{drive.model_family}}
@@ -251,7 +294,7 @@
                 output.textContent = xhr.responseText;
             };
         }
-    $(document).ready(function () {
+    $(document).ready(function () {  
       $("#btnSave").click(function () {
         $("#btnCancel").prop("disabled", true);
         $(this).prop("disabled", true);
@@ -261,6 +304,7 @@
         $("#settings-form").submit();
       });
       $('#data').DataTable({
+          "stateSave": true,
           "pageLength": 25,
           "lengthMenu": [ [25, 50, 100, 200, -1], [25, 50, 100, 200, "All"] ],
           "order": [[1, "asc"]],

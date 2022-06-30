@@ -10,6 +10,7 @@ from . import drives
 from . import farms
 from . import keys
 from . import logs
+from . import metrics
 from . import partials
 from . import ping
 from . import plotnfts
@@ -17,12 +18,13 @@ from . import plots
 from . import plottings
 from . import pools
 from . import rewards
+from . import transactions
 from . import wallets
 from . import workers
-from . import metrics
 
 from .stats import plottingdiskused,plottingdiskfree,plotsdiskused, \
-    plotsdiskfree,plotcount,plotssize,totalcoins,netspacesize,timetowin
+    plotsdiskfree,plotcount,plotssize,totalcoins,netspacesize,timetowin, \
+    farmedblocks,effort
 
 MODULES = (
     actions,
@@ -44,6 +46,7 @@ MODULES = (
     plottings,
     pools,
     rewards,
+    transactions,
     wallets,
     workers,
 
@@ -56,9 +59,10 @@ MODULES = (
     totalcoins,
     netspacesize,
     timetowin,
+    effort,
     metrics,
+    farmedblocks,
 )
-
 
 def register_blueprints(api):
     for module in MODULES:

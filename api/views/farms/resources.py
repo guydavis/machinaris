@@ -6,9 +6,9 @@ from api import app
 from api.extensions.api import Blueprint, SQLCursorPage
 from common.extensions.database import db
 from common.models import Farm
+from api.commands import websvcs
 
 from .schemas import FarmSchema, FarmQueryArgsSchema
-
 
 blp = Blueprint(
     'Farm',
@@ -16,7 +16,6 @@ blp = Blueprint(
     url_prefix='/farms',
     description="Ops for farms"
 )
-
 
 @blp.route('/')
 class Farms(MethodView):
@@ -32,16 +31,18 @@ class Farms(MethodView):
     @blp.arguments(FarmSchema)
     @blp.response(201, FarmSchema)
     def post(self, new_item):
-        #app.logger.info("Farm incoming: {0}".format(new_item))
         item = db.session.query(Farm).filter(Farm.hostname==new_item['hostname'], \
             Farm.blockchain==new_item['blockchain']).first()
+        cold_wallet_farmed_balance = websvcs.cold_wallet_farmed_balance(new_item['blockchain'])
+        if cold_wallet_farmed_balance is not None: # If none, we got an error from ATB, so don't save a farmed total coins
+            app.logger.debug("Total Farmed Coins on {0}: {1} (hot wallet) + {2} (cold wallet).".format(
+                new_item['blockchain'], new_item['total_coins'], cold_wallet_farmed_balance))
+            new_item['total_coins'] += cold_wallet_farmed_balance
         if item: # upsert
-            #app.logger.info("Upserting an existing farm...")
             new_item['created_at'] = item.created_at
             new_item['updated_at'] = dt.datetime.now()
             FarmSchema().update(item, new_item)
         else: # insert
-            #app.logger.info("Inserting a new farm...")
             item = Farm(**new_item)
         db.session.add(item)
         db.session.commit()

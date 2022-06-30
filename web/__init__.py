@@ -11,6 +11,8 @@ from sqlalchemy import event
 
 from web.default_settings import DefaultConfig
 
+from common.config import globals
+
 app = Flask(__name__)
 app.secret_key = b'$}#P)eu0A.O,s0Mz'
 app.config.from_object(DefaultConfig)
@@ -97,3 +99,20 @@ def launcheridshortener(value):
     return value[:12] + '...'
 
 app.jinja_env.filters['launcheridshortener'] = launcheridshortener
+
+def alltheblocks_blockchainlink(blockchain):
+   alltheblocks_blockchain = globals.get_alltheblocks_name(blockchain)
+   return 'https://alltheblocks.net/{0}'.format(alltheblocks_blockchain)
+
+app.jinja_env.filters['alltheblocks_blockchainlink'] = alltheblocks_blockchainlink
+
+def alltheblocks_blocklink(block, blockchain):
+    alltheblocks_blockchain = globals.get_alltheblocks_name(blockchain)
+    return '<a href="https://alltheblocks.net/{0}/block/0x{1}" class="text-white" target="_blank">{1}</a>'.format(alltheblocks_blockchain, block)
+
+app.jinja_env.filters['alltheblocks_blocklink'] = alltheblocks_blocklink
+
+def escape_single_quotes(value):
+    return value.replace("'", "\\'")
+
+app.jinja_env.filters['escape_single_quotes'] = escape_single_quotes

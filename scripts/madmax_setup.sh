@@ -4,8 +4,8 @@
 # See https://github.com/madMAx43v3r/chia-plotter
 #
 
-# As of 2022-03-20
-HASH=ecec17d25cd547fa4bb64b2eb7455b831c8a2882
+# As of 2022-06-06
+HASH=ced900e9ea72a5d0e5db785f34be37d98bcda6a9
 MADMAX_BRANCH=master
 
 if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia' || ${blockchains} == 'chives' || ${blockchains} == 'mmx') ]]; then

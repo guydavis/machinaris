@@ -89,16 +89,16 @@ def load_plotnft_show(blockchain):
     child = pexpect.spawn("{0} plotnft show".format(chia_binary))
     pool_wallet_id = 1
     while True:
-        i = child.expect(["Wallet height:.*\r\n", "Choose wallet key:.*\r\n", "No online backup file found.*\r\n"], timeout=120)
+        i = child.expect(["Wallet height:.*\r\n", "Wallet keys:.*\r\n", "Choose wallet key:.*\r\n", "Choose a wallet key:.*\r\n", "No online backup file found.*\r\n"], timeout=120)
         if i == 0:
             app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
             wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
             break
-        elif i == 1:
+        elif i == 1 or i == 2 or i == 3:
             app.logger.debug("wallet show got index prompt so selecting #{0}".format(pool_wallet_id))
             child.sendline("{0}".format(pool_wallet_id))
             pool_wallet_id += 1
-        elif i == 2:
+        elif i == 4:
             child.sendline("S")
         else:
             app.logger.debug("pexpect returned {0}".format(i))
@@ -129,7 +129,7 @@ def process_pool_leave(blockchain, pool_wallet_id):
     child = pexpect.spawn(cmd)
     child.logfile = sys.stdout.buffer
     while True:
-        i = child.expect(["Choose wallet key:.*\r\n", pexpect.EOF])
+        i = child.expect(["Wallet keys:.*\r\n", pexpect.EOF])
         if i == 0:
             app.logger.info("plotnft got index prompt so selecting #{0}".format(pool_wallet_id))
             child.sendline("{0}".format(pool_wallet_id))
@@ -173,7 +173,7 @@ def process_pool_join(blockchain, pool_url, pool_wallet_id):
     child = pexpect.spawn(cmd)
     child.logfile = sys.stdout.buffer
     while True:
-        i = child.expect(["Choose wallet key:.*\r\n", pexpect.EOF])
+        i = child.expect(["Wallet keys:.*\r\n", pexpect.EOF])
         if i == 0:
             app.logger.info("plotnft got index prompt so selecting #{0}".format(pool_wallet_id))
             child.sendline("{0}".format(pool_wallet_id))
@@ -202,7 +202,7 @@ def process_self_pool(blockchain, pool_wallet_id):
     child = pexpect.spawn(cmd)
     child.logfile = sys.stdout.buffer
     while True:
-        i = child.expect(["Choose wallet key:.*\r\n", pexpect.EOF])
+        i = child.expect(["Wallet keys:.*\r\n", pexpect.EOF])
         if i == 0:
             app.logger.info("plotnft got index prompt so selecting #{0}".format(pool_wallet_id))
             child.sendline("{0}".format(pool_wallet_id))

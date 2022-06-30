@@ -12,9 +12,6 @@ mkdir -p /root/.chia/maize
 rm -f /root/.maize
 ln -s /root/.chia/maize /root/.maize 
 
-mkdir -p /root/.maize/mainnet/log
-maize init >> /root/.maize/mainnet/log/init.log 2>&1 
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.maize/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
@@ -23,6 +20,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Sorry, Maize does not offer a recent blockchain DB for download via script.  Standard sync will happen over a few days..."
   echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/maize"
 fi
+
+mkdir -p /root/.maize/mainnet/log
+maize init >> /root/.maize/mainnet/log/init.log 2>&1 
 
 echo 'Configuring Maize...'
 if [ -f /root/.maize/mainnet/config/config.yaml ]; then

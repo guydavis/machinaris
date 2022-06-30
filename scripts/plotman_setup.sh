@@ -11,8 +11,6 @@ if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chi
         cd /
         git clone --branch ${PLOTMAN_BRANCH} https://github.com/guydavis/plotman.git
         cd plotman
-        # Chia 1.3 requires packaging==21.0
-        sed -i 's/20.9/21.0/g' setup.cfg
         /chia-blockchain/venv/bin/python setup.py install
         apt update && apt install -y rsync
     fi

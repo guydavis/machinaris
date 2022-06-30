@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{{ url_for('static', filename='3rd_party/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='3rd_party/icons/bootstrap-icons.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='3rd_party/dataTables.bootstrap5.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='3rd_party/leaflet.css') }}" />
+    <title>{{_('Transactions')}}</title>
+    {% if reload_seconds %}
+    <meta http-equiv="refresh" content="{{ reload_seconds }}">
+    {% endif %}
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <style>
+        body {
+            background-color: #15171a;
+            color: #c7c7c7;
+        }
+
+        .rounded-3 {
+            border-radius: .5rem !important;
+            background-color: #212529 !important;
+            -webkit-box-shadow: 0px 1px 0px 0px #000;
+            box-shadow: 0px 1px 0px 0px #000;
+            border: 0 !important;
+            margin: 10px;
+            padding: 10px;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="position-relative">
+        <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: 5px; margin-right: 20px;">
+            <a href="https://github.com/guydavis/machinaris/wiki/Wallets#transactions" target="_blank"><i class="fs-4 bi-question-circle"></i></a>
+        </div>
+    </div>
+
+    <div class="rounded-3 small">
+    {% if transactions.rows|length > 0 %}
+        <div class="row">
+            <div class="col text-end">
+                <h2>{{blockchain|capitalize}} {{_('Transactions')}}</h2>
+            </div>
+            <div class="col text-start">
+                <select class="form-select" style="width:250px" id="selected_wallet_id" name="selected_wallet_id" aria-label="wallet_id">
+                    {% for wallet in wallets %}
+                        <option value="{{wallet.id}}" {% if wallet.id == selected_wallet_id %}selected{%endif%}>{{wallet.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <br clear="all"/>
+        <table id="data" class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col" class="text-success">{{_('Type')}}</th>
+                    <th scope="col" class="text-success">{{_('To')}}</th>
+                    <th scope="col" class="text-success">{{_('Status')}}</th>
+                    <th scope="col" class="text-success">{{_('Amount')}}</th>
+                    <th scope="col" class="text-success">{{_('Created At')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions.rows %}
+                <tr>
+                    <td>{{transaction.type}}</td>
+                    <td>{{transaction.to}}</td>
+                    <td>{{transaction.status}}</td>
+                    <td>{{transaction.amount}}</td>
+                    <td>{{transaction.created_at}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+    {% else %}
+
+    {% autoescape false %}
+    <br/>
+    <div class="text-center" style="padding-top:100 px; padding-bottom: 0px">
+        <h4>{{_('No transactions were available for')}} {{blockchain|capitalize}}.</h4>
+        <h6>{{_('Perhaps the wallet is not yet synced, or no wallet activity yet.')}}</h6>
+        <h6>{{_('Please ensure the Machinaris fullnode worker for this blockchain is running by checking the Workers page.')}}</h6>
+    </div>
+    {% endautoescape %}
+    <br />
+    <br />
+
+    {% endif %}
+    </div>
+
+    <div class="text-center"><small><i>Loaded at: {{ global_config.now }}</small></i></div>
+
+    <script src="{{ url_for('static', filename='3rd_party/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='3rd_party/jquery.min.js') }}"></script>
+    <script type="text/javascript" charset="utf8"
+        src="{{ url_for('static', filename='3rd_party/jquery.dataTables.js') }}"></script>
+    <script type="text/javascript" charset="utf8"
+        src="{{ url_for('static', filename='3rd_party/dataTables.bootstrap5.js') }}"></script>
+    <script src="{{ url_for('static', filename='3rd_party/chart.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='3rd_party/luxon.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='3rd_party/chartjs-adapter-luxon.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='3rd_party/leaflet.js') }}"></script>
+    <script src="{{ url_for('static', filename='3rd_party/leaflet-layervisibility.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#data').DataTable({
+                "stateSave": true,
+                "pageLength": 25,
+                "order": [[4 , "desc"]],
+                "columnDefs": [
+                    {
+                    }
+                ],
+                {% if lang != 'en' %}
+                "language": {
+                    "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+                },
+                {% endif %}
+            });
+            $(function(){
+                $('#selected_wallet_id').on('change', function () {
+                    console.log($(this).val());
+                    var url = window.location.href.substring(0, window.location.href.length-1).concat($(this).val());
+                    window.location = url;
+                    return false;
+                });
+            });
+        })
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>

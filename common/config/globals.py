@@ -31,8 +31,8 @@ MADMAX_BINARY = '/usr/bin/chia_plot'
 BLADEBIT_BINARY = '/usr/bin/bladebit'
 CHIADOG_PATH = '/chiadog'
 
-MMX_NETWORK = 'testnet5'
-MMX_CONFIG = 'testnet5'
+MMX_NETWORK = 'testnet6'
+MMX_CONFIG = 'testnet6'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
 
@@ -66,6 +66,9 @@ def get_blocks_per_day(blockchain):
 def get_block_reward(blockchain):
     return load_blockchain_info(blockchain, 'reward')
 
+def get_mojos_per_coin(blockchain):
+    return load_blockchain_info(blockchain, 'mojos_per_coin')
+
 def load():
     cfg = {}
     cfg['plotting_enabled'] = plotting_enabled()
@@ -84,6 +87,9 @@ def load():
     cfg['farmr_version'] = load_farmr_version()
     cfg['is_controller'] = "localhost" == (
         os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost')
+    fullnode_db_version = load_fullnode_db_version()
+    if fullnode_db_version:
+        cfg['fullnode_db_version'] = fullnode_db_version
     return cfg
 
 def load_blockchain_info(blockchain, key):
@@ -145,7 +151,8 @@ def is_setup():
     return foundKey
 
 # On very first launch of the main Chia container, blockchain DB 7zip is being downloaded so must wait.
-CHIA_BLOCKCHAIN_DB_SIZE = 65 * 1024 * 1024 * 1024 # 65 uncompressed GB in 2022
+CHIA_COMPRESSED_DB_SIZE = 30 * 1024 * 1024 * 1024 # 30 compressed GB in mid-2022
+CHIA_BLOCKCHAIN_DB_SIZE = 80 * 1024 * 1024 * 1024 # 80 uncompressed GB in mid-2022
 def blockchain_downloading():
     db_path = '/root/.chia/mainnet/db'
     if path.exists(f"{db_path}/blockchain_v1_mainnet.sqlite") or path.exists(f"{db_path}/blockchain_v2_mainnet.sqlite"):
@@ -155,7 +162,7 @@ def blockchain_downloading():
         logging.info("No folder at {0} yet...".format(tmp_path))
         return [0, "0 GB"]
     bytes = sum(f.stat().st_size for f in pathlib.Path(tmp_path).glob('**/*') if f.is_file())
-    return [ round(100*bytes/CHIA_BLOCKCHAIN_DB_SIZE, 2), converters.convert_size(bytes) ]
+    return [ round(100*bytes/(CHIA_COMPRESSED_DB_SIZE + CHIA_BLOCKCHAIN_DB_SIZE), 2), converters.convert_size(bytes) ]
 
 def get_key_paths():
     if "keys" not in os.environ:
@@ -394,6 +401,29 @@ def load_machinaris_version():
     last_machinaris_version_load_time = datetime.datetime.now()
     return last_machinaris_version
 
+fullnode_db_version = None
+fullnode_db_version_load_time = None
+def load_fullnode_db_version():
+    global fullnode_db_version
+    global fullnode_db_version_load_time
+    if fullnode_db_version_load_time and fullnode_db_version_load_time >= \
+            (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
+        return fullnode_db_version
+    fullnode_db_version = None
+    blockchain = enabled_blockchains()[0]
+    v1_db_file = get_blockchain_network_path(blockchain) + '/db/blockchain_v1_mainnet.sqlite'
+    v2_db_file = get_blockchain_network_path(blockchain) + '/db/blockchain_v2_mainnet.sqlite'
+    try:
+        if os.path.exists(v2_db_file):
+            return "v2"
+        elif os.path.exists(v1_db_file):
+            return "v1"
+    except:
+        logging.info(traceback.format_exc())
+    fullnode_db_version_load_time = datetime.datetime.now()
+    logging.info("Found neither!")
+    return fullnode_db_version
+
 def get_disks(disk_type):
     if disk_type == "plots":
         try:
@@ -411,3 +441,11 @@ def get_disks(disk_type):
             logging.info("Unable to find any plotting for stats.")
             logging.info(traceback.format_exc())
             return []
+
+def get_alltheblocks_name(blockchain):
+    if blockchain == 'staicoin':
+        return 'stai' # Special case for staicoin's inconsistent naming convention
+    return blockchain
+
+def legacy_blockchain(blockchain):
+    return blockchain in ['flora', 'hddcoin', 'maize', 'nchain', 'silicoin', 'stor']

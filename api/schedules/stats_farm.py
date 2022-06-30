@@ -17,7 +17,7 @@ from api.commands import chia_cli, mmx_cli
 DELETE_OLD_STATS_AFTER_DAYS = 30
 
 TABLES = [ stats.StatPlotCount, stats.StatPlotsSize, stats.StatTotalCoins,
-           stats.StatNetspaceSize, stats.StatTimeToWin ]
+           stats.StatNetspaceSize, stats.StatTimeToWin, stats.StatWalletBalances, ]
 
 def delete_old_stats():
     try:
@@ -44,9 +44,9 @@ def collect():
                 farm_summary = mmx_cli.load_farm_info(blockchain)
             else:
                 farm_summary = chia_cli.load_farm_summary(blockchain)
-            store_locally(blockchain, farm_summary, current_datetime)
             if not gc['is_controller']:
-                send_to_controller(blockchain, farm_summary, current_datetime)
+                store_locally(blockchain, farm_summary, current_datetime)
+            send_to_controller(blockchain, farm_summary, current_datetime)
 
 def store_locally(blockchain, farm_summary, current_datetime):
     hostname = utils.get_hostname()
@@ -74,12 +74,12 @@ def store_locally(blockchain, farm_summary, current_datetime):
     db.session.commit()
 
 def send_to_controller(blockchain, farm_summary, current_datetime):
-       send_stat(blockchain, '/stats/plotcount', farm_summary.plot_count,current_datetime)
-       send_stat(blockchain, '/stats/plotssize', converters.str_to_gibs(farm_summary.plots_size),current_datetime)
+       send_stat(blockchain, '/stats/plotcount/', farm_summary.plot_count,current_datetime)
+       send_stat(blockchain, '/stats/plotssize/', converters.str_to_gibs(farm_summary.plots_size),current_datetime)
        if farm_summary.status == "Farming":  # Only collect if fully synced
-            send_stat(blockchain, '/stats/totalcoins', farm_summary.total_coins, current_datetime)
-            send_stat(blockchain, '/stats/netspacesize', converters.str_to_gibs(farm_summary.netspace_size) ,current_datetime)
-            send_stat(blockchain, '/stats/timetowin', converters.etw_to_minutes(farm_summary.time_to_win), current_datetime)
+            send_stat(blockchain, '/stats/totalcoins/', farm_summary.total_coins, current_datetime)
+            send_stat(blockchain, '/stats/netspacesize/', converters.str_to_gibs(farm_summary.netspace_size) ,current_datetime)
+            send_stat(blockchain, '/stats/timetowin/', converters.etw_to_minutes(farm_summary.time_to_win), current_datetime)
 
 def send_stat(blockchain, endpoint, value, current_datetime):
     try:

@@ -52,7 +52,7 @@ def load_drive_info(device, overrides):
         cmd = "smartctl -a -d {0} {1}".format(overrides[device]['device_type'], device)
     else: # No override, use the default auto mode
         cmd = "smartctl -a {0}".format(device)
-    app.logger.info(cmd)
+    #app.logger.info(cmd)
     proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)

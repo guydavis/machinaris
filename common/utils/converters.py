@@ -20,17 +20,38 @@ def sizeof_fmt(num, suffix='B'):
         return "0"
     return value
 
+def sizeof_fmt_unit(num, target_unit):
+    for unit in ['','KiB','MiB','GiB','TiB','PiB','EiB','ZiB']:
+        if target_unit == unit:
+            return "{0} {1}".format(flask_babel.format_decimal(num), unit)
+        num /= 1024.0
+    value = "{0} {1}".format(flask_babel.format_decimal(num, 'YiB'))
+    if value == "0.000 B":
+        return "0"
+    return value
+
 def convert_size(size_bytes):
    if size_bytes == 0:
-       return "0B"
+       return "0 B"
    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
    i = int(math.floor(math.log(size_bytes, 1024)))
    p = math.pow(1024, i)
    s = round(size_bytes / p, 2)
    return "%s %s" % (s, size_name[i])
 
-def gib_to_fmt(gibs):
-    return sizeof_fmt(gibs * 1024 * 1024 * 1024)
+def gib_to_fmt(gibs, target_unit=None):
+    if target_unit:
+        return sizeof_fmt_unit(gibs * 1024 * 1024 * 1024, target_unit=target_unit)
+    else:
+        return sizeof_fmt(gibs * 1024 * 1024 * 1024)
+
+def gib_to_float(gibs, target_unit):
+    num = gibs * 1024 * 1024 * 1024
+    for unit in ['B','KiB','MiB','GiB','TiB','PiB','EiB','ZiB', 'YiB']:
+        if target_unit == unit:
+            return float(num)
+        num /= 1024.0
+    raise Exception("Unsupported unit size of {0} for conversion from GiB.".format(target_unit))
 
 def str_to_gibs(str):
     if str == "Unknown":
@@ -63,10 +84,11 @@ def convert_date_for_luxon(datestr):
     month = datestr[4:6]
     day = datestr[6:8]
     time = datestr[8:]
+    if not ':' in time:
+        time = time[:2] + ':' + time[2:]
     return "{0}-{1}-{2}T{3}".format(year, month, day, time)
 
-def round_balance(value):
-    # First round the coin balance
+def round_balance_float(value):
     if abs(value) >= 10000:
         value = round(value, 0)
     elif abs(value) >= 1000:
@@ -103,7 +125,10 @@ def round_balance(value):
         value = round(value, 16)
     else:
         value = round(value, 17)
-    # Then return the locale-specific format as str
+    return value
+
+def round_balance(value):
+    value = round_balance_float(value)
     if flask_babel.get_locale(): # Regular web request
         return flask_babel.format_decimal(value, format="#,##0.##################")  
     else: # Workaround for inability to test flask-babel without a request
