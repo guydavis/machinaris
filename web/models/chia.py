@@ -452,7 +452,7 @@ class Wallets:
                 try:
                     #app.logger.info(wallet.details)
                     for balance in rx.findall(wallet.details):
-                        app.logger.info("Found balance of {0} for {1} - {2}".format(balance, wallet.hostname, wallet.blockchain))
+                        #app.logger.info("Found balance of {0} for {1} - {2}".format(balance, wallet.hostname, wallet.blockchain))
                         sum += locale.atof(balance)
                 except Exception as ex:
                     app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(

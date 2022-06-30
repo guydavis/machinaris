@@ -75,7 +75,8 @@ def load_wallet_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     wallet_show = ""
     child = pexpect.spawn("{0} wallet show".format(chia_binary))
-    wallet_index = 1
+    wallet_id_num = app.config['SELECTED_WALLET_NUM']  # Default wallet ID num to respond if prompted is 1
+    app.logger.debug("Default SELECTED_WALLET_NUM is {0}".format(wallet_id_num))
     while True:
         i = child.expect(["Wallet height:.*\r\n", "Wallet keys:.*\r\n", "Choose wallet key:.*\r\n", "Choose a wallet key:.*\r\n", "No online backup file found.*\r\n"], timeout=120)
         if i == 0:
@@ -83,13 +84,12 @@ def load_wallet_show(blockchain):
             wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
             break
         elif i == 1 or i == 2 or i == 3:
-            app.logger.debug("wallet show got index prompt so selecting #{0}".format(wallet_index))
-            child.sendline("{0}".format(wallet_index))
-            wallet_index += 1
+            app.logger.info("Wallet show got num prompt so selecting wallet #{0}".format(wallet_id_num))
+            child.sendline("{0}".format(wallet_id_num))
         elif i == 4:
             child.sendline("S")
         else:
-            app.logger.debug("pexpect returned {0}".format(i))
+            app.logger.info("pexpect returned {0}".format(i))
             wallet_show += "ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
     return chia.Wallet(wallet_show)
 
