@@ -11,7 +11,7 @@ All notable changes to this project will be documented in this file. The format 
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain) - v1.3.4, matches Chia 1.3.4, please run: `cactus db upgrade`
  - [Chives](https://github.com/HiveProject2021/chives-blockchain) - v1.3.1, please run: `chives db upgrade`
  - [Cryptodoge](https://github.com/CryptoDoge-Network/cryptodoge) - v1.3.4, matches Chia 1.3.4, please run: `cryptodoge db upgrade`
- - [Flax](https://github.com/Flax-Network/flax-blockchain) - v0.1.8, matches Chia 1.3.3, please run: `flax db upgrade` if you haven't yet
+ - [Flax](https://github.com/Flax-Network/flax-blockchain) - v0.1.9, matches Chia 1.4.0, please run: `flax db upgrade` if you haven't yet
  - [MMX](https://github.com/madMAx43v3r/mmx-node) - updated version for their `testnet6` network.
 
 ## [0.7.2] - 2022-05-17

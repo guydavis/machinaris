@@ -509,7 +509,7 @@ def load_farmed_blocks(blockchain):
             'farmed_block': row.farmed_block,
             'plot_files': row.plot_files, 
         })
-    app.logger.info(blocks)
+    #app.logger.info(blocks)
     return blocks
 
 def load_plot_count(blockchain):
