@@ -54,7 +54,6 @@ class Host:
                 status = worker['monitoring_status']
         return status
 
-
 class WorkerSummary:
 
     def __init__(self, workers):

@@ -168,6 +168,7 @@
         }
         $(document).ready(function () {
             $('#data').DataTable({
+                "stateSave": true,
                 "pageLength": 25,
                 "serverSide": true,
                 "ajax": "{{ url_for('farming_data') }}",

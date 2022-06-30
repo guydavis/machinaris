@@ -337,7 +337,8 @@
             $('#modal_spinner').modal('show');
         }
         $(document).ready(function () {
-            $('#data').DataTable({ 
+            $('#data').DataTable({
+                "stateSave": true, 
                 "columnDefs": [
                     { 
                         targets: [0,4,5,6,7,8,9,10,11,12,13,14,15,16,17], "orderable": false

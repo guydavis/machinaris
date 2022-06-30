@@ -57,11 +57,48 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-4" style="margin-top:5px; margin-bottom:5px;">
+            <div class="col-5" style="padding-left: 10px">
+                <div class="fs-4">{{_('Details')}}</div>
+                <table id="worker" class="table table-dark">
+                    <tbody>
+                    <tr>
+                        <th scope="col" class="text-success">{{_('IP Address')}}</th>
+                        <td>{{farmer.hostname}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="col" class="text-success">{{_('Hostname')}}</th>
+                        <td><a class='text-white' href="{{ url_for('workers') }}">{{farmer.displayname}}</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="col" class="text-success">{{_('Blockchains Farming')}}</th>
+                        <td>{{daily_summaries[farmer.displayname].keys()|join(', ')}}</td>
+                    </tr>
+                    <tr>
+                        <th scope="col" class="text-success">{{_('Plot Counts')}}</th>
+                        <td>{{ farmer.plot_counts }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="col" class="text-success">{{_('Plot Types')}}</th>
+                        <td>{{ farmer.plot_types }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="col" class="text-success">{{_('Drive Count')}}</th>
+                        <td><a class='text-white' href="{{ url_for('drives') }}">{{farmer.drive_count}} {{_('devices')}}</a></td>
+                    </tr>
+                    <tr>
+                        <th scope="col" class="text-success">{{_('Drive Usage')}}</th>
+                        <td>{{farmer.drive_usage}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-1"></div>
+            <div class="col-6">
                 {% if farmer.displayname in daily_summaries %}
-                <div id="carousel-{{farmer.displayname}}" class="carousel slide" data-bs-ride="carousel">
+                <div id="carousel-{{farmer.displayname}}" class="carousel slide" data-bs-ride="carousel" style="padding-top:10px;padding-right:10px">
                     <div class="carousel-inner">
                         {% for blockchain, summary in daily_summaries[farmer.displayname].items() %}
+                        {% if blockchain != 'mmx' %}
                         <div class="carousel-item {% if blockchain == 'chia' %} active {% endif %}" data-bs-interval="10000">
                             <h4 class="text-center">{{ blockchain|capitalize }} - {{_('Daily Summary')}}</h4>
                             {% if summary %}
@@ -73,6 +110,7 @@
                             </div>
                             {% endif %}
                         </div>
+                        {% endif %}
                         {% endfor %}
                     </div>
                     <button class="carousel-control-prev" style="align-items: initial; justify-content: left; padding-top: 0px; width: 5%; height: 50px;" type="button" data-bs-target="#carousel-{{farmer.displayname}}" data-bs-slide="prev">
@@ -86,9 +124,16 @@
                 </div>
                 {% endif %}
             </div>
-            <div class="col-8" style="margin-top:5px; margin-bottom:5px;">
+        </div>
+        <div class="row">
+            <div class="col-12" style="margin-top:15px; margin-bottom:5px;">
                 {% if disk_usage[farmer.hostname] %}
                 <canvas id="disk_{{farmer.hostname}}" width="400"></canvas>
+                {% if disk_usage[farmer.hostname]['paths']|length >= MAX_COLUMNS_ON_CHART %}
+                    <p class="small text-center text-muted" style="padding-top: 15px">
+                        {{_('For legibility, the chart shows only a random selection of paths when a worker has many of them.')}}
+                    </p>
+                {% endif %}
                 {% else %}
                 {% autoescape false %}
                 <p>{{_('No plots disk stats recorded recently for %(hostname)s with Chia blockchain. Please ensure all paths containing plots have been %(wiki_link_open)s configured %(wiki_link_close)s. Also ensure the Chia worker is reporting into the controller on the Workers page.', 
@@ -104,6 +149,9 @@
     {% endblock %}
 
     {% block scripts %}
+    <script>
+        Chart.register(ChartDataLabels);
+    </script>
     {% for farmer in farmers %}
     {% if disk_usage[farmer.hostname] %}
     <script>
@@ -115,17 +163,26 @@
                 datasets: [{
                     label: "{{_('Disk Space Used (TB)')}}",
                     data: {{ disk_usage[farmer.hostname].used | safe }},
+                    datalabels: { align: 'end', anchor: 'end', 
+                        formatter: function(value, context) {
+                            return Math.round(context.chart.data.datasets[0].data[context.dataIndex] / 
+                                (context.chart.data.datasets[0].data[context.dataIndex] + 
+                                context.chart.data.datasets[1].data[context.dataIndex]) * 100) + "% {{_('full')}}";
+                        }
+                    },
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderColor: 'rgba(255, 99, 132, 1)',
                 },
                 {
                     label: "{{_('Disk Space Free (TB)')}}",
                     data: {{ disk_usage[farmer.hostname].free | safe }},
+                    datalabels: { labels: { title: null } },
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
                 }],
             },
             borderWidth: 1,
+            plugins: [ChartDataLabels],
             options: {
                 plugins: {  
                     legend: {

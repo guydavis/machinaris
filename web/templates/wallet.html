@@ -20,7 +20,7 @@
     
 <div class="position-relative">
     <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -3px;">
-        <a href="#" title="{{_('Settings')}}" data-bs-toggle="modal" data-bs-target="#settingsModal" target="_blank"><i class="fs-4 bi-box-arrow-up-right"></i></a>
+        <a href="#" title="{{_('Settings')}}" data-bs-toggle="modal" data-bs-target="#settingsModal" target="_blank"><i class="fs-4 bi-gear"></i></a>
         &nbsp;
         <a href="https://github.com/guydavis/machinaris/wiki/Wallets" target="_blank"><i class="fs-4 bi-question-circle"></i></a>
     </div>
@@ -197,6 +197,7 @@
 <script>
         $(document).ready(function () {
             $('#data').DataTable({
+                "stateSave": true,
                 "pageLength": 25,
                 "columnDefs": [{ "orderable": false, targets: [7,8] }],
                 {% if lang != 'en' %}

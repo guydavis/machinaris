@@ -434,8 +434,7 @@ class Wallets:
             if wallet.hostname == hostname and wallet.blockchain == blockchain:
                 try:
                     for balance in rx.findall(self.exclude_cat_wallets(wallet.details)):
-                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
-                        # wallet.hostname, wallet.blockchain))
+                        #app.logger.info("Found balance of {0} for  {1} - {2}".format(balance, wallet.hostname, wallet.blockchain))
                         sum += locale.atof(balance)
                 except Exception as ex:
                     app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
@@ -445,7 +444,7 @@ class Wallets:
         return sum
 
     def sum_mmx_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
-        numeric_const_pattern = 'Balance:\s+((?: (?: \d*\.\d+ ) | (?: \d+\.? ) )(?: [Ee] [+-]? \d+ )?)'
+        numeric_const_pattern = 'Balance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)\sMMX'
         rx = re.compile(numeric_const_pattern, re.VERBOSE)
         sum = 0
         for wallet in self.wallets:
@@ -453,7 +452,7 @@ class Wallets:
                 try:
                     #app.logger.info(wallet.details)
                     for balance in rx.findall(wallet.details):
-                        #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, wallet.hostname, wallet.blockchain))
+                        app.logger.info("Found balance of {0} for {1} - {2}".format(balance, wallet.hostname, wallet.blockchain))
                         sum += locale.atof(balance)
                 except Exception as ex:
                     app.logger.info("Failed to find current wallet balance number for {0} - {1}: {2}".format(
@@ -467,7 +466,7 @@ class Wallets:
             if not details:
                 return None
             if blockchain == 'mmx':
-                pattern = '^Synced: (.*)$'
+                pattern = '^Synced:\s+(.*)$'
             else:
                 pattern = '^Sync status: (.*)$'
             for line in details.split('\n'):

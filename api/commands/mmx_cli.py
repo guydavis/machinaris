@@ -83,7 +83,7 @@ def save_config(config, blockchain):
 
 def load_wallet_show(blockchain):
     mmx_binary = globals.get_blockchain_binary(blockchain)
-    proc = Popen("({0} node info | grep 'Synced: No') && {0} wallet show".format(mmx_binary), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("({0} node info | grep Synced) && {0} wallet show".format(mmx_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired:
