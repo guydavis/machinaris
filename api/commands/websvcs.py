@@ -126,16 +126,13 @@ def request_cold_wallet_balance(blockchain, cold_wallet_cache, alltheblocks_bloc
             http.client.HTTPConnection.debuglevel = 1
         response = json.loads(requests.get(url).content)
         total_balance = response['balance'] / MOJO_PER_COIN[blockchain]
-        app.logger.info("Received cold wallet total balance of {0}".format(total_balance))
-        # Only cache a valid response, if service is unreachable don't save anything
-        if total_balance:
-            farmed_balance = request_cold_wallet_transactions(blockchain, alltheblocks_blockchain, address, debug)
-            if farmed_balance:
-                # Store summary results for this cold wallet address
-                cold_wallet_cache[address] = {
-                    'total_balance': total_balance,
-                    'farmed_balance': farmed_balance
-                }
+        farmed_balance = request_cold_wallet_transactions(blockchain, alltheblocks_blockchain, address, debug)
+        app.logger.info("Received cold wallet total balance of {0} and farmed balance of {1}".format(total_balance, farmed_balance))
+        # Store summary results for this cold wallet address
+        cold_wallet_cache[address] = {
+            'total_balance': total_balance,
+            'farmed_balance': farmed_balance
+        }
     except Exception as ex:
         app.logger.error("Failed to request {0} due to {1}".format(url, str(ex)))
         traceback.print_exc()
@@ -165,9 +162,10 @@ def cold_wallet_balance(blockchain):
         else:
             for address in addresses_per_blockchain[blockchain]:
                 if address in cold_wallet_cache:
-                    app.logger.debug(cold_wallet_cache[address])
-                    cached_cold_balance = float(cold_wallet_cache[address]['total_balance'])
-                    total_balance += cached_cold_balance
+                    if 'total_balance' in cold_wallet_cache[address]:
+                        app.logger.debug(cold_wallet_cache[address])
+                        cached_cold_balance = float(cold_wallet_cache[address]['total_balance'])
+                        total_balance += cached_cold_balance
             return total_balance
     return 0.0 # No cold wallet addresses to check, so no errors obviously
 
@@ -190,7 +188,8 @@ def cold_wallet_farmed_balance(blockchain):
     if blockchain in addresses_per_blockchain:
         for address in addresses_per_blockchain[blockchain]:
             if address in cold_wallet_cache:
-                farmed_balance += float(cold_wallet_cache[address]['farmed_balance'])
+                if 'farmed_balance' in cold_wallet_cache[address]:
+                    farmed_balance += float(cold_wallet_cache[address]['farmed_balance'])
         return farmed_balance
     return 0.0 # No cold wallet addresses to check
 

@@ -9,7 +9,7 @@ HASH=ced900e9ea72a5d0e5db785f34be37d98bcda6a9
 MADMAX_BRANCH=master
 
 if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia' || ${blockchains} == 'chives' || ${blockchains} == 'mmx') ]]; then
-    if [ ! -f /usr/bin/chia_plot ] && [[ -z "${madmax_skip_build}" ]]; then
+    if [ ! -f /usr/bin/chia_plot ] && [[ "${madmax_skip_build}" != 'true' ]]; then
         arch_name="$(uname -m)"
         if [[ "${arch_name}" = "x86_64" ]] || [[ "${arch_name}" = "arm64" ]]; then
             apt update && apt install -y libsodium-dev cmake g++ git build-essential
