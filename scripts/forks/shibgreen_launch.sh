@@ -95,8 +95,11 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
+    # This configure command fails, as this blockchain chokes on its own config file!
     shibgreen configure --set-farmer-peer ${farmer_address}:${farmer_port}
     shibgreen configure --enable-upnp false
+    # So, perform the configuration into the config.yaml file directly instead...
+    sed -z -i "s/  farmer_peer:\n    host: 127.0.0.1\n    port: 18974/  farmer_peer:\n    host: ${farmer_address}\n    port: ${farmer_port}/g" config.yaml
     shibgreen start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then
