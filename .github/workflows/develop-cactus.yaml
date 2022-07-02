@@ -41,7 +41,7 @@ jobs:
           push: true
           build-args: |
             "MACHINARIS_STREAM=develop"
-            "CHIADOG_BRANCH=dev"
+            "CHIADOG_BRANCH=main"
             "CACTUS_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-cactus:develop
