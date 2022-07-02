@@ -41,7 +41,7 @@ jobs:
           push: true
           build-args: |
             "MACHINARIS_STREAM=develop"
-            "CHIADOG_BRANCH=main"
+            "CHIADOG_BRANCH=dev"
             "BTCGREEN_BRANCH=main"     
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-btcgreen:develop
