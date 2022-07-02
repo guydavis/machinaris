@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1] - 2022-07-?
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.4.0) - v1.4.0, matches Chia 1.4.0
+
 ## [0.8.0] - 2022-06-30
  - Charting of each blockchain's netspace, farmed coins, and wallet balances over the past month.
  - Tracking farmed blocks sent directly to cold wallet. Set your cold wallet addresses on the Wallets page.
