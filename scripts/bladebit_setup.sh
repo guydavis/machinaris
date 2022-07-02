@@ -10,7 +10,7 @@
 BLADEBIT_BRANCH=master
 
 if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia' || ${blockchains} == 'chives' || ${blockchains} == 'mmx') ]]; then
-    if [ ! -f /usr/bin/bladebit ] && [[ -z "${bladebit_skip_build}" ]]; then
+    if [ ! -f /usr/bin/bladebit ] && [[ "${bladebit_skip_build}" != 'true' ]]; then
         arch_name="$(uname -m)"
         if [[ "${arch_name}" = "x86_64" ]] || [[ "${arch_name}" = "arm64" ]]; then
             apt update && apt install -y build-essential cmake libgmp-dev libnuma-dev
