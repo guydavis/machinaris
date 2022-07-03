@@ -20,13 +20,13 @@ def send_get(worker, path, query_params={}, timeout=30, debug=False, lang=None):
     http.client.HTTPConnection.debuglevel = 0
     return response
 
-def send_post(worker, path, payload, debug=False, lang=None):
+def send_post(worker, path, payload, debug=False, lang=None, timeout=None):
     headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
     if lang:
         headers['Accept-Language'] = lang
     if debug:
         http.client.HTTPConnection.debuglevel = 1
-    response = requests.post(worker.url + path, headers = headers, data = json.dumps(payload))
+    response = requests.post(worker.url + path, headers = headers, data = json.dumps(payload), timeout=timeout)
     http.client.HTTPConnection.debuglevel = 0
     return response
 

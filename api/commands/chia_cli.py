@@ -24,6 +24,7 @@ from os import path
 from common.config import globals
 from api import app
 from api.models import chia
+from api.commands import websvcs
 
 # When reading tail of chia plots check output, limit to this many lines
 MAX_LOG_LINES = 2000
@@ -205,34 +206,41 @@ def dispatch_action(job):
     action = job['action']
     blockchain = job['blockchain']
     if service == 'networking':
-        if action == "add_connection":
-            add_connection(job['connection'], blockchain)
+        if action == "add_connections":
+            conns = job['connections']
+            if len(conns) == 0:
+                conns.extend(websvcs.request_peers(blockchain))
+            if len(conns) > 0:
+                add_connections(conns, blockchain)
+            else:
+                app.logger.error("Received no connections from AllTheBlocks, please add directly at the command-line.")
         elif action == "remove_connection":
             remove_connection(job['node_ids'], blockchain)
 
-def add_connection(connection, blockchain):
+def add_connections(connections, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    try:
-        hostname,port = connection.split(':')
-        if socket.gethostbyname(hostname) == hostname:
-            app.logger.debug('{} is a valid IP address'.format(hostname))
-        elif socket.gethostbyname(hostname) != hostname:
-            app.logger.debug('{} is a valid hostname'.format(hostname))
-        proc = Popen("{0} show --add-connection {1}".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
+    for connection in connections:
         try:
-            outs, errs = proc.communicate(timeout=90)
-        except TimeoutExpired:
-            proc.kill()
-            proc.communicate()
-            abort(500, description="The timeout is expired!")
-        if errs:
-            abort(500, description=errs.decode('utf-8'))
-    except Exception as ex:
-        app.logger.info(traceback.format_exc())
-        app.logger.info('Invalid connection "{0}" provided.  Must be HOST:PORT.'.format(connection))
-    else:
-        app.logger.info("{0}".format(outs.decode('utf-8')))
-        app.logger.info('{0} connection added to {1} and sync engaging!'.format(blockchain.capitalize(), connection))
+            hostname,port = connection.split(':')
+            if socket.gethostbyname(hostname) == hostname:
+                app.logger.debug('{} is a valid IP address'.format(hostname))
+            elif socket.gethostbyname(hostname) != hostname:
+                app.logger.debug('{} is a valid hostname'.format(hostname))
+            app.logger.info("Adding {0} connection to peer: {1}".format(blockchain, connection))
+            proc = Popen("{0} show --add-connection {1}".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
+            try:
+                outs, errs = proc.communicate(timeout=90)
+            except TimeoutExpired:
+                proc.kill()
+                proc.communicate()
+                app.logger.error("The timeout is expired!")
+            if errs:
+                app.logger.error(errs.decode('utf-8'))
+            #app.logger.info("{0}".format(outs.decode('utf-8')))
+        except Exception as ex:
+            app.logger.error(traceback.format_exc())
+            app.logger.error('Invalid connection "{0}" provided.  Must be HOST:PORT.'.format(connection))
+    app.logger.info('{0} connections added to {1} and sync engaging!'.format(blockchain.capitalize(), connection))
 
 def remove_connection(node_ids, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)

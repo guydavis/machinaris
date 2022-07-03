@@ -345,7 +345,10 @@ def connections():
         else:
             selected_blockchain = request.form.get('blockchain')
             if request.form.get('action') == "add":
-                chia.add_connection(request.form.get("connection"), request.form.get('hostname'), request.form.get('blockchain'))
+                conns_to_add = []  # Empty list will use ATB peers list pull
+                if request.form.get("connection"):
+                    conns_to_add.add(request.form.get("connection"))
+                chia.add_connections(conns_to_add, request.form.get('hostname'), request.form.get('blockchain'))
             elif request.form.get('action') == 'remove':
                 chia.remove_connection(request.form.getlist('nodeid'), request.form.get('hostname'), request.form.get('blockchain'))
             else:

@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.8.1] - 2022-07-?
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.4.0) - v1.4.0, matches Chia 1.4.0
+ - [Chiadog](https://github.com/martomi/chiadog/releases/tag/v0.7.1) - v0.7.1 (merged)
 
 ## [0.8.0] - 2022-06-30
  - Charting of each blockchain's netspace, farmed coins, and wallet balances over the past month.
