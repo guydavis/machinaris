@@ -6,6 +6,7 @@ import asyncio
 import datetime
 import importlib
 import os
+import traceback
 
 from common.config import globals
 from api import app
@@ -27,7 +28,7 @@ elif importlib.util.find_spec("cactus"):
     from cactus.util.config import load_config as load_fork_config
 elif importlib.util.find_spec("chia"):
     from chia.rpc.full_node_rpc_client import FullNodeRpcClient
-    from chia.rpc.farmer_rpc_client import FarmerRpcClient
+    from chia.rpc.farmer_rpc_client import FarmerRpcClient, PlotPathRequestData
     from chia.rpc.wallet_rpc_client import WalletRpcClient
     from chia.util.default_root import DEFAULT_ROOT_PATH
     from chia.util.ints import uint16
@@ -224,3 +225,38 @@ async def load_transactions(wallet_id, reverse):
         app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
     return transactions
 
+# Get invalid plots on each harvester
+def harvester_warnings():
+    invalid_plots = asyncio.run(load_harvester_warnings())
+    return invalid_plots
+
+async def load_harvester_warnings(blockchain='chia'):
+    invalid_plots = []
+    try:
+        config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
+        farmer_rpc_port = config["farmer"]["rpc_port"]
+        farmer = await FarmerRpcClient.create(
+            'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
+        )
+        result = await farmer.get_harvesters()
+        farmer.close()
+        await farmer.await_closed()
+
+        for harvester in result["harvesters"]:
+            # app.logger.info(harvester.keys()) Returns: ['connection', 'failed_to_open_filenames', 'no_key_filenames', 'plots']
+            # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
+            host = harvester["connection"]["host"]
+            node_id = harvester["connection"]["node_id"]
+            farmer = await FarmerRpcClient.create(
+                'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
+            )
+            app.logger.info(node_id)
+            plot_paths = await farmer.get_harvester_plots_invalid(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
+            app.logger.info(plot_paths)
+            farmer.close()
+            await farmer.await_closed()
+
+    except Exception as ex:
+        app.logger.info("Error getting {0} harvester warnings: {1}".format(blockchain, str(ex)))
+        traceback.print_exc()
+    return invalid_plots
