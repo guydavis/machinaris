@@ -132,8 +132,6 @@ class Summaries:
                 return wallet
 
     def etw_to_days(self, blockchain, etw):
-        if blockchain == 'mmx':
-            return ''
         #app.logger.info("{0} -> {1}".format(blockchain, etw))
         try:
             minutes = converters.etw_to_minutes(etw)

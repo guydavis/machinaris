@@ -74,8 +74,7 @@ def update_chia_plots(plots_status, since):
             else: # Look up displayname
                 try:
                     hostname = plot['hostname']
-                    # '172.18.0.1' was non-local IP on OlivierLA75's Docker setup, inside his container
-                    if plot['hostname'] in ['127.0.0.1','172.18.0.1']:
+                    if plot['hostname'] in ['127.0.0.1']:
                         hostname = controller_hostname
                     #app.logger.info("Found worker with hostname '{0}'".format(hostname))
                     displayname = db.session.query(w.Worker).filter(w.Worker.hostname==hostname, 
@@ -89,7 +88,7 @@ def update_chia_plots(plots_status, since):
                 payload.append({
                     "plot_id": short_plot_id,
                     "blockchain": 'chia',
-                    "hostname": controller_hostname if plot['hostname'] in ['127.0.0.1','172.18.0.1'] else plot['hostname'],
+                    "hostname": controller_hostname if plot['hostname'] in ['127.0.0.1'] else plot['hostname'],
                     "displayname": displayname,
                     "dir": dir,
                     "file": file,

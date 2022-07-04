@@ -59,13 +59,13 @@ def list_plots():
 
 def load_config(blockchain):
     mainnet = globals.get_blockchain_network_path(blockchain)
-    test = globals.MMX_CONFIG
+    test = globals.get_blockchain_network_name(blockchain)
     return open(f'{mainnet}/config/{test}/Farmer.json','r').read()
 
 def save_config(config, blockchain):
     try:
         mainnet = globals.get_blockchain_network_path(blockchain)
-        test = globals.MMX_CONFIG
+        test = globals.globals.get_blockchain_network_name(blockchain)
         # Validate the json first
         json.load(config)
         # Save a copy of the old config file

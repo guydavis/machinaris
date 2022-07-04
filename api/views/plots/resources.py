@@ -56,8 +56,7 @@ def lookup_worker_displayname(displaynames, hostname):
         displayname = displaynames[hostname]
     else: # Look up displayname
         try:
-            # '172.18.0.1' was non-local IP on OlivierLA75's Docker setup, inside his container
-            if hostname in ['127.0.0.1','172.18.0.1']:
+            if hostname in ['127.0.0.1']:
                 hostname = controller_hostname
             #app.logger.info("Found worker with hostname '{0}'".format(hostname))
             displayname = db.session.query(w.Worker).filter(w.Worker.hostname==hostname, 

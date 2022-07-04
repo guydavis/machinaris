@@ -108,7 +108,7 @@ def request_cold_wallet_transactions(blockchain, alltheblocks_blockchain, addres
         if rec['coinType'] == 'FARMER_REWARD':
             farmed_balance += int(rec['amount']) / MOJO_PER_COIN[blockchain]
     save_cold_wallet_transactions(blockchain, address, records)
-    app.logger.info("Received cold wallet farmed balance of {0}".format(farmed_balance))
+    #app.logger.info("Received cold wallet farmed balance of {0}".format(farmed_balance))
     return farmed_balance
 
 def request_cold_wallet_balance(blockchain, cold_wallet_cache, alltheblocks_blockchain, address, debug=False):
@@ -252,7 +252,7 @@ def request_prices(prices, debug=False):
                     pass
     return prices
 
-def request_peers(blockchain='chia', debug=False):
+def request_peers(blockchain, debug=False):
     peers = []
     alltheblocks_blockchain = globals.get_alltheblocks_name(blockchain)
     cmd_prefix = '{0} show -a '.format(alltheblocks_blockchain)
