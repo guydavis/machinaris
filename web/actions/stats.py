@@ -46,12 +46,12 @@ def load_daily_diff(farm_summary):
         # initialize defaults
         since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
         since_str = since_date.strftime("%Y%m%d%H%M%S")
-        summary['plot_count'] = plot_count_diff(since_str, blockchain)
-        summary['plots_size'] = plots_size_diff(since_str, blockchain)
+        summary['plot_count'] = plot_count_diff(since_str, blockchain).strip()
+        summary['plots_size'] = plots_size_diff(since_str, blockchain).strip()
         if upgrade_marker_at_least_day_old():  # Guard against spurious notification
-            summary['total_coins'] = total_coin_diff(since_str, blockchain)
-        summary['wallet_balance'] = wallet_balance_diff(since_str, blockchain)
-        summary['netspace_size'] = netspace_size_diff(since_str, blockchain)
+            summary['total_coins'] = total_coin_diff(since_str, blockchain).strip()
+        summary['wallet_balance'] = wallet_balance_diff(since_str, blockchain).strip()
+        summary['netspace_size'] = netspace_size_diff(since_str, blockchain).strip()
         #app.logger.info("{0} -> {1}".format(blockchain, summary))
         farm_summary.farms[blockchain]['daily_diff'] = summary
 
@@ -118,7 +118,7 @@ def total_coin_diff(since, blockchain):
             #app.logger.info("Total coins daily diff: {0}".format(result))
     except Exception as ex:
         app.logger.debug("Failed to query for day diff of total_coin because {0}".format(str(ex)))
-    #app.logger.info("Result is: {0}".format(result))
+    app.logger.info("Result is: {0}".format(result))
     return result
 
 def wallet_balance_diff(since, blockchain):

@@ -45,6 +45,7 @@ def open_status_json():
     return status
 
 def update():
+    app.logger.info("Executing status_plots...")
     global last_full_send_time
     with app.app_context():
         since = (datetime.datetime.now() - datetime.timedelta(minutes=FULL_SEND_INTERVAL_MINS)).strftime("%Y-%m-%d %H:%M")
@@ -105,9 +106,8 @@ def update_chia_plots(plots_status, since):
                 item = p.Plot(**new_item)
                 db.session.add(item)
         db.session.commit()
-    except:
-        app.logger.info("Failed to load plots farming and send.")
-        app.logger.info(traceback.format_exc())
+    except Exception as ex:
+            app.logger.info("Failed to load and send plots farming because {0}".format(str(ex)))
 
 # Sent from a separate fullnode container
 def update_chives_plots(since):

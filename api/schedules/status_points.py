@@ -20,6 +20,7 @@ from api import app
 from api import utils
 
 def update():
+    app.logger.info("Executing status_points...")
     with app.app_context():
         try:
             for blockchain in globals.enabled_blockchains():
@@ -33,6 +34,5 @@ def update():
                 for point in points:
                     app.logger.info(point)
                 #utils.send_post('/plotnfts/', payload, debug=False)
-        except:
-            app.logger.info("Failed to load and send recent signage points.")
-            app.logger.info(traceback.format_exc())
+        except Exception as ex:
+            app.logger.info("Failed to load and send signage points because {0}".format(str(ex)))

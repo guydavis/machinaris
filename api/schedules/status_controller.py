@@ -23,14 +23,14 @@ from api import app
 from api import utils
 
 def update():
+    app.logger.info("Executing status_controller...")
     with app.app_context():
         try:
             workers = db.session.query(w.Worker).order_by(w.Worker.hostname).all()
             ping_workers(workers)
             db.session.commit()
-        except:
-            app.logger.info(traceback.format_exc())
-            app.logger.info("Failed to load and send worker status.")
+        except Exception as ex:
+            app.logger.info("Failed to load and send worker's connection status because {0}".format(str(ex)))
 
 def ping_workers(workers):
     for worker in workers:

@@ -20,6 +20,7 @@ from api import app
 from api import utils
 
 def update():
+    app.logger.info("Executing status_worker...")
     with app.app_context():
         try:
             hostname = utils.get_hostname()
@@ -38,9 +39,8 @@ def update():
                 "config": json.dumps(config),
             }
             utils.send_post('/workers/{0}/{1}'.format(hostname, app.config['WORKER_PORT']), payload, debug=False)
-        except:
-            app.logger.info("Failed to load and send worker status.")
-            app.logger.info(traceback.format_exc())
+        except Exception as ex:
+            app.logger.info("Failed to load and send worker status because {0}".format(str(ex)))
 
 def gather_services_status():
     gc = globals.load()

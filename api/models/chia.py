@@ -47,7 +47,7 @@ class FarmSummary:
             else:
                 self.display_netspace_size = self.netspace_size
         except:
-            app.logger.info("Unable to split network size value: {0}".format(netspace_size))
+            app.logger.debug("Unable to split network size value: {0}".format(netspace_size))
             self.display_netspace_size = self.netspace_size
 
 class HarvesterSummary:

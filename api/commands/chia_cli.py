@@ -34,11 +34,11 @@ def load_farm_summary(blockchain):
     if globals.farming_enabled():
         proc = Popen("{0} farm summary".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
         try:
-            outs, errs = proc.communicate(timeout=90)
+            outs, errs = proc.communicate(timeout=30)
         except TimeoutExpired:
             proc.kill()
             proc.communicate()
-            abort(500, description="The timeout is expired!")
+            raise Exception("For farm summary, the process timeout expired!")
         if errs:
             app.logger.debug("Error from {0} farm summary because {1}".format(blockchain, outs.decode('utf-8')))
         return chia.FarmSummary(outs.decode('utf-8').splitlines(), blockchain)
@@ -79,7 +79,8 @@ def load_wallet_show(blockchain):
     wallet_id_num = app.config['SELECTED_WALLET_NUM']  # Default wallet ID num to respond if prompted is 1
     app.logger.debug("Default SELECTED_WALLET_NUM is {0}".format(wallet_id_num))
     while True:
-        i = child.expect(["Wallet height:.*\r\n", "Wallet keys:.*\r\n", "Choose wallet key:.*\r\n", "Choose a wallet key:.*\r\n", "No online backup file found.*\r\n"], timeout=120)
+        i = child.expect(["Wallet height:.*\r\n", "Wallet keys:.*\r\n", "Choose wallet key:.*\r\n", "Choose a wallet key:.*\r\n", 
+            "No online backup file found.*\r\n", "Connection error.*\r\n"], timeout=30)
         if i == 0:
             app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
             wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
@@ -89,35 +90,36 @@ def load_wallet_show(blockchain):
             child.sendline("{0}".format(wallet_id_num))
         elif i == 4:
             child.sendline("S")
+        elif i == 5:
+            raise Exception("Skipping wallet status gathering as it returned 'Connection Error', so possibly still starting up. If this error persists more than 30 minutes after startup, try restarting the Machinaris Docker container.")
         else:
-            app.logger.info("pexpect returned {0}".format(i))
-            wallet_show += "ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
+            raise Exception("ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8"))
     return chia.Wallet(wallet_show)
 
 def load_blockchain_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     proc = Popen("{0} show --state".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=90)
+        outs, errs = proc.communicate(timeout=30)
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
-        abort(500, description="The timeout is expired!")
+        raise Exception("For blockchain show, the process timeout expired!")
     if errs:
-        abort(500, description=errs.decode('utf-8'))
+        raise Exception(errs.decode('utf-8'))
     return chia.Blockchain(outs.decode('utf-8').splitlines())
 
 def load_connections_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     proc = Popen("{0} show --connections".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=90)
+        outs, errs = proc.communicate(timeout=30)
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
-        abort(500, description="The timeout is expired!")
+        raise Exception("For connections show, the process timeout expired!")
     if errs:
-        abort(500, description=errs.decode('utf-8'))
+        raise Exception(errs.decode('utf-8'))
     return chia.Connections(outs.decode('utf-8').splitlines())
 
 def load_keys_show(blockchain):
@@ -128,20 +130,20 @@ def load_keys_show(blockchain):
     else: # Get both observer and non-observer keys for newer blockchains
         proc = Popen("{0} keys show && {0} keys show -d | grep 'non-observer'".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=90)
+        outs, errs = proc.communicate(timeout=30)
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
-        abort(500, description="The timeout is expired!")
+        raise Exception("For keys show, the process timeout expired!")
     if errs:
-        abort(500, description=errs.decode('utf-8'))
+        raise Exception(errs.decode('utf-8'))
     return chia.Keys(outs.decode('utf-8').splitlines())
 
 def start_farmer(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     proc = Popen("{0} start farmer -r".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=90)
+        outs, errs = proc.communicate(timeout=30)
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
@@ -157,11 +159,11 @@ def remove_connection(node_id, ip, blockchain):
     try:
         proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
         try:
-            outs, errs = proc.communicate(timeout=90)
+            outs, errs = proc.communicate(timeout=30)
         except TimeoutExpired:
             proc.kill()
             proc.communicate()
-            app.logger.info("The timeout is expired!")
+            app.logger.info("For remove connection, the process timeout expired!")
             return False
         if errs:
             app.logger.info(errs.decode('utf-8'))
@@ -191,11 +193,11 @@ def plot_check(blockchain, plot_path):
     proc = Popen("{0} plots check -g {1}".format(chia_binary, plot_path),
         universal_newlines=True, stdout=PIPE, stderr=STDOUT, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=90)
+        outs, errs = proc.communicate(timeout=30)
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
-        abort(500, description="The timeout is expired attempting to check plots.")
+        raise Exception("The timeout is expired attempting to check plots.")
     app.logger.info("Completed plot check of: {0}".format(plot_path))
     class_escape = re.compile(r'.*: INFO\s+')
     ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
@@ -229,11 +231,11 @@ def add_connections(connections, blockchain):
             app.logger.info("Adding {0} connection to peer: {1}".format(blockchain, connection))
             proc = Popen("{0} show --add-connection {1}".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
             try:
-                outs, errs = proc.communicate(timeout=90)
+                outs, errs = proc.communicate(timeout=30)
             except TimeoutExpired:
                 proc.kill()
                 proc.communicate()
-                app.logger.error("The timeout is expired!")
+                app.logger.error("For add conneciton, the process timeout expired!")
             if errs:
                 app.logger.error(errs.decode('utf-8'))
             #app.logger.info("{0}".format(outs.decode('utf-8')))
