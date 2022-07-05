@@ -33,7 +33,7 @@ def update():
                     "blockchain": blockchain,
                     "details": public_wallet.text.replace('\r', ''),
                 }
-                app.logger.info(payload)
+                #app.logger.info(payload)
                 utils.send_post('/wallets/', payload, debug=True)
         except:
             app.logger.info("Failed to load and send public wallet status.")

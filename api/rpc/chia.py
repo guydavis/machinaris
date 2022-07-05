@@ -21,7 +21,7 @@ if importlib.util.find_spec("btcgreen"):
     from btcgreen.util.config import load_config as load_fork_config
 elif importlib.util.find_spec("cactus"):
     from cactus.rpc.full_node_rpc_client import FullNodeRpcClient
-    from cactus.rpc.farmer_rpc_client import FarmerRpcClient
+    from cactus.rpc.farmer_rpc_client import FarmerRpcClient, PlotPathRequestData
     from cactus.rpc.wallet_rpc_client import WalletRpcClient
     from cactus.util.default_root import DEFAULT_ROOT_PATH
     from cactus.util.ints import uint16
@@ -49,7 +49,7 @@ elif importlib.util.find_spec("cryptodoge"):
     from cryptodoge.util.config import load_config as load_fork_config
 elif importlib.util.find_spec("flax"):
     from flax.rpc.full_node_rpc_client import FullNodeRpcClient
-    from flax.rpc.farmer_rpc_client import FarmerRpcClient
+    from flax.rpc.farmer_rpc_client import FarmerRpcClient, PlotPathRequestData
     from flax.rpc.wallet_rpc_client import WalletRpcClient
     from flax.util.default_root import DEFAULT_ROOT_PATH
     from flax.util.ints import uint16
