@@ -12,90 +12,101 @@ from common.config import globals
 from api import app
 from api import utils
 
-if importlib.util.find_spec("btcgreen"):
+blockchain = globals.enabled_blockchains()[0]
+
+if blockchain == "btcgreen":
     from btcgreen.rpc.full_node_rpc_client import FullNodeRpcClient
     from btcgreen.rpc.farmer_rpc_client import FarmerRpcClient
     from btcgreen.rpc.wallet_rpc_client import WalletRpcClient
     from btcgreen.util.default_root import DEFAULT_ROOT_PATH
     from btcgreen.util.ints import uint16
     from btcgreen.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("cactus"):
+elif blockchain == "cactus":
     from cactus.rpc.full_node_rpc_client import FullNodeRpcClient
     from cactus.rpc.farmer_rpc_client import FarmerRpcClient, PlotPathRequestData
     from cactus.rpc.wallet_rpc_client import WalletRpcClient
     from cactus.util.default_root import DEFAULT_ROOT_PATH
     from cactus.util.ints import uint16
     from cactus.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("chives"):
-    from chives.rpc.full_node_rpc_client import FullNodeRpcClient
-    from chives.rpc.farmer_rpc_client import FarmerRpcClient
-    from chives.rpc.wallet_rpc_client import WalletRpcClient
-    from chives.util.default_root import DEFAULT_ROOT_PATH
-    from chives.util.ints import uint16
-    from chives.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("cryptodoge"):
-    from cryptodoge.rpc.full_node_rpc_client import FullNodeRpcClient
-    from cryptodoge.rpc.farmer_rpc_client import FarmerRpcClient
-    from cryptodoge.rpc.wallet_rpc_client import WalletRpcClient
-    from cryptodoge.util.default_root import DEFAULT_ROOT_PATH
-    from cryptodoge.util.ints import uint16
-    from cryptodoge.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("flax"):
-    from flax.rpc.full_node_rpc_client import FullNodeRpcClient
-    from flax.rpc.farmer_rpc_client import FarmerRpcClient, PlotPathRequestData
-    from flax.rpc.wallet_rpc_client import WalletRpcClient
-    from flax.util.default_root import DEFAULT_ROOT_PATH
-    from flax.util.ints import uint16
-    from flax.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("flora"):
-    from flora.rpc.full_node_rpc_client import FullNodeRpcClient
-    from flora.rpc.farmer_rpc_client import FarmerRpcClient
-    from flora.rpc.wallet_rpc_client import WalletRpcClient
-    from flora.util.default_root import DEFAULT_ROOT_PATH
-    from flora.util.ints import uint16
-    from flora.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("hddcoin"):
-    from hddcoin.rpc.full_node_rpc_client import FullNodeRpcClient
-    from hddcoin.rpc.farmer_rpc_client import FarmerRpcClient
-    from hddcoin.rpc.wallet_rpc_client import WalletRpcClient
-    from hddcoin.util.default_root import DEFAULT_ROOT_PATH
-    from hddcoin.util.ints import uint16
-    from hddcoin.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("maize"):
-    from maize.rpc.full_node_rpc_client import FullNodeRpcClient
-    from maize.rpc.farmer_rpc_client import FarmerRpcClient
-    from maize.rpc.wallet_rpc_client import WalletRpcClient
-    from maize.util.default_root import DEFAULT_ROOT_PATH
-    from maize.util.ints import uint16
-    from maize.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("shibgreen"):
-    from shibgreen.rpc.full_node_rpc_client import FullNodeRpcClient
-    from shibgreen.rpc.farmer_rpc_client import FarmerRpcClient
-    from shibgreen.rpc.wallet_rpc_client import WalletRpcClient
-    from shibgreen.util.default_root import DEFAULT_ROOT_PATH
-    from shibgreen.util.ints import uint16
-    from shibgreen.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("stai"):
-    from stai.rpc.full_node_rpc_client import FullNodeRpcClient
-    from stai.rpc.farmer_rpc_client import FarmerRpcClient
-    from stai.rpc.wallet_rpc_client import WalletRpcClient
-    from stai.util.default_root import DEFAULT_ROOT_PATH
-    from stai.util.ints import uint16
-    from stai.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("stor"):
-    from stor.rpc.full_node_rpc_client import FullNodeRpcClient
-    from stor.rpc.farmer_rpc_client import FarmerRpcClient
-    from stor.rpc.wallet_rpc_client import WalletRpcClient
-    from stor.util.default_root import DEFAULT_ROOT_PATH
-    from stor.util.ints import uint16
-    from stor.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("chia"):  # Flora seems to import this for some reason, so put at end of elif
+elif blockchain == "chia": 
     from chia.rpc.full_node_rpc_client import FullNodeRpcClient
     from chia.rpc.farmer_rpc_client import FarmerRpcClient, PlotPathRequestData
     from chia.rpc.wallet_rpc_client import WalletRpcClient
     from chia.util.default_root import DEFAULT_ROOT_PATH
     from chia.util.ints import uint16
     from chia.util.config import load_config as load_fork_config
+elif blockchain == "chives":
+    from chives.rpc.full_node_rpc_client import FullNodeRpcClient
+    from chives.rpc.farmer_rpc_client import FarmerRpcClient
+    from chives.rpc.wallet_rpc_client import WalletRpcClient
+    from chives.util.default_root import DEFAULT_ROOT_PATH
+    from chives.util.ints import uint16
+    from chives.util.config import load_config as load_fork_config
+elif blockchain == "cryptodoge":
+    from cryptodoge.rpc.full_node_rpc_client import FullNodeRpcClient
+    from cryptodoge.rpc.farmer_rpc_client import FarmerRpcClient
+    from cryptodoge.rpc.wallet_rpc_client import WalletRpcClient
+    from cryptodoge.util.default_root import DEFAULT_ROOT_PATH
+    from cryptodoge.util.ints import uint16
+    from cryptodoge.util.config import load_config as load_fork_config
+elif blockchain == "flax":
+    from flax.rpc.full_node_rpc_client import FullNodeRpcClient
+    from flax.rpc.farmer_rpc_client import FarmerRpcClient, PlotPathRequestData
+    from flax.rpc.wallet_rpc_client import WalletRpcClient
+    from flax.util.default_root import DEFAULT_ROOT_PATH
+    from flax.util.ints import uint16
+    from flax.util.config import load_config as load_fork_config
+elif blockchain == "flora":
+    from flora.rpc.full_node_rpc_client import FullNodeRpcClient
+    from flora.rpc.farmer_rpc_client import FarmerRpcClient
+    from flora.rpc.wallet_rpc_client import WalletRpcClient
+    from flora.util.default_root import DEFAULT_ROOT_PATH
+    from flora.util.ints import uint16
+    from flora.util.config import load_config as load_fork_config
+elif blockchain == "hddcoin":
+    from hddcoin.rpc.full_node_rpc_client import FullNodeRpcClient
+    from hddcoin.rpc.farmer_rpc_client import FarmerRpcClient
+    from hddcoin.rpc.wallet_rpc_client import WalletRpcClient
+    from hddcoin.util.default_root import DEFAULT_ROOT_PATH
+    from hddcoin.util.ints import uint16
+    from hddcoin.util.config import load_config as load_fork_config
+elif blockchain == "maize":
+    from maize.rpc.full_node_rpc_client import FullNodeRpcClient
+    from maize.rpc.farmer_rpc_client import FarmerRpcClient
+    from maize.rpc.wallet_rpc_client import WalletRpcClient
+    from maize.util.default_root import DEFAULT_ROOT_PATH
+    from maize.util.ints import uint16
+    from maize.util.config import load_config as load_fork_config
+elif blockchain == "mmx":
+    pass
+elif blockchain == "nchain": 
+    from chia.rpc.full_node_rpc_client import FullNodeRpcClient
+    from chia.rpc.farmer_rpc_client import FarmerRpcClient
+    from chia.rpc.wallet_rpc_client import WalletRpcClient
+    from chia.util.default_root import DEFAULT_ROOT_PATH
+    from chia.util.ints import uint16
+    from chia.util.config import load_config as load_fork_config
+elif blockchain == "shibgreen":
+    from shibgreen.rpc.full_node_rpc_client import FullNodeRpcClient
+    from shibgreen.rpc.farmer_rpc_client import FarmerRpcClient
+    from shibgreen.rpc.wallet_rpc_client import WalletRpcClient
+    from shibgreen.util.default_root import DEFAULT_ROOT_PATH
+    from shibgreen.util.ints import uint16
+    from shibgreen.util.config import load_config as load_fork_config
+elif blockchain == "stai":
+    from stai.rpc.full_node_rpc_client import FullNodeRpcClient
+    from stai.rpc.farmer_rpc_client import FarmerRpcClient
+    from stai.rpc.wallet_rpc_client import WalletRpcClient
+    from stai.util.default_root import DEFAULT_ROOT_PATH
+    from stai.util.ints import uint16
+    from stai.util.config import load_config as load_fork_config
+elif blockchain == "stor":
+    from stor.rpc.full_node_rpc_client import FullNodeRpcClient
+    from stor.rpc.farmer_rpc_client import FarmerRpcClient
+    from stor.rpc.wallet_rpc_client import WalletRpcClient
+    from stor.util.default_root import DEFAULT_ROOT_PATH
+    from stor.util.ints import uint16
+    from stor.util.config import load_config as load_fork_config
 else:
     app.logger.info("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ['blockchains']))
 
