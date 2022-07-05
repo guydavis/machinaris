@@ -26,13 +26,6 @@ elif importlib.util.find_spec("cactus"):
     from cactus.util.default_root import DEFAULT_ROOT_PATH
     from cactus.util.ints import uint16
     from cactus.util.config import load_config as load_fork_config
-elif importlib.util.find_spec("chia"):
-    from chia.rpc.full_node_rpc_client import FullNodeRpcClient
-    from chia.rpc.farmer_rpc_client import FarmerRpcClient, PlotPathRequestData
-    from chia.rpc.wallet_rpc_client import WalletRpcClient
-    from chia.util.default_root import DEFAULT_ROOT_PATH
-    from chia.util.ints import uint16
-    from chia.util.config import load_config as load_fork_config
 elif importlib.util.find_spec("chives"):
     from chives.rpc.full_node_rpc_client import FullNodeRpcClient
     from chives.rpc.farmer_rpc_client import FarmerRpcClient
@@ -96,6 +89,13 @@ elif importlib.util.find_spec("stor"):
     from stor.util.default_root import DEFAULT_ROOT_PATH
     from stor.util.ints import uint16
     from stor.util.config import load_config as load_fork_config
+elif importlib.util.find_spec("chia"):  # Flora seems to import this for some reason, so put at end of elif
+    from chia.rpc.full_node_rpc_client import FullNodeRpcClient
+    from chia.rpc.farmer_rpc_client import FarmerRpcClient, PlotPathRequestData
+    from chia.rpc.wallet_rpc_client import WalletRpcClient
+    from chia.util.default_root import DEFAULT_ROOT_PATH
+    from chia.util.ints import uint16
+    from chia.util.config import load_config as load_fork_config
 else:
     app.logger.info("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ['blockchains']))
 
