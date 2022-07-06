@@ -1,6 +1,6 @@
 #!/bin/env bash
 #
-# Installs Profit as per https://github.com/profit-network/profit-blockchain
+# Installs Profit as per https://github.com/ProfitCrypto/profit-blockchain
 #
 
 PROFIT_BRANCH=$1
@@ -11,7 +11,7 @@ if [ -z ${PROFIT_BRANCH} ]; then
 	echo 'Skipping Profit install as not requested.'
 else
 	rm -rf /root/.cache
-	git clone --branch ${PROFIT_BRANCH} --single-branch https://github.com/profit-network/profit-blockchain /profit-blockchain
+	git clone --branch ${PROFIT_BRANCH} --single-branch https://github.com/ProfitCrypto/profit-blockchain /profit-blockchain
 	cd /profit-blockchain 
 	git submodule update --init mozilla-ca 
 	git checkout $HASH

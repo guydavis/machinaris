@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file. The format 
 ## [0.8.1] - 2022-07-?
  - Connections - add node peers directly from list offered by AllTheBlocks per blockchain.
  - MMX - Compute "Estimated Time to Win" from plots size, netspace size, and blocks per day.
- - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.4.0) - v1.4.0, matches Chia 1.4.0
- - [Chiadog](https://github.com/martomi/chiadog/releases/tag/v0.7.1) - v0.7.1 (merged)
+ - New blockchains: [Ecostake](https://github.com/Ecostake-Network/ecostake-blockchain), [Petroleum](https://github.com/Petroleum-Network/petroleum-blockchain), and [Profit](https://github.com/ProfitCrypto/profit-blockchain)
+ - Updated: [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.4.0), [Chiadog](https://github.com/martomi/chiadog/releases/tag/v0.7.1)
 
 ## [0.8.0] - 2022-06-30
  - Charting of each blockchain's netspace, farmed coins, and wallet balances over the past month.

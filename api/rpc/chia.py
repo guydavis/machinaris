@@ -257,13 +257,35 @@ async def load_harvester_warnings(blockchain='chia'):
             # app.logger.info(harvester.keys()) Returns: ['connection', 'failed_to_open_filenames', 'no_key_filenames', 'plots']
             # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
             host = harvester["connection"]["host"]
-            node_id = harvester["connection"]["node_id"]
+            node_id = harvester["connection"]["node_id"] # TODO Track link between worker and node_id?
+            
+            # Plots Invalid
             farmer = await FarmerRpcClient.create(
                 'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
             )
             app.logger.info(node_id)
             plot_paths = await farmer.get_harvester_plots_invalid(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-            app.logger.info(plot_paths)
+            app.logger.info(plot_paths)  # TODO Return plots
+            farmer.close()
+            await farmer.await_closed()
+
+            # Plots Missing Keys
+            farmer = await FarmerRpcClient.create(
+                'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
+            )
+            app.logger.info(node_id)
+            plot_paths = await farmer.get_harvester_keys_missing(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
+            app.logger.info(plot_paths) # TODO Return plots
+            farmer.close()
+            await farmer.await_closed()
+
+            # Plots Duplicated
+            farmer = await FarmerRpcClient.create(
+                'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
+            )
+            app.logger.info(node_id)
+            plot_paths = await farmer.get_harvester_plots_duplicates(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
+            app.logger.info(plot_paths) # TODO Return plots
             farmer.close()
             await farmer.await_closed()
 
