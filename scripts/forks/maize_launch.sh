@@ -82,7 +82,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.maize/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${farmer_address}:8933/certificates/?type=maize.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${farmer_address}:8933/certificates/?type=maize.  Is the fork's fullnode container running?"
       fi
       rm -f /tmp/certs.zip 
     fi

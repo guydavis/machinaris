@@ -82,7 +82,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.cryptodoge/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${farmer_address}:8937/certificates/?type=cryptodoge.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${farmer_address}:8937/certificates/?type=cryptodoge.  Is the fork's fullnode container running?"
       fi
       rm -f /tmp/certs.zip 
     fi
