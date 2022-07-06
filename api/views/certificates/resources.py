@@ -27,58 +27,19 @@ class Certificates(MethodView):
 
     def get(self):
         type = request.args.get('type')
-        if type == "btcgreen":
-            blockchain = "btcgreen"
-            dir = "/root/.btcgreen/mainnet/config/ssl/ca"
-        elif type == "cactus":
-            blockchain = "cactus"
-            dir = "/root/.cactus/mainnet/config/ssl/ca"
-        elif type == "chia":
-            blockchain = "chia"
-            dir = "/root/.chia/mainnet/config/ssl/ca"
-        elif type == "chives":
-            blockchain = "chives"
-            dir = "/root/.chives/mainnet/config/ssl/ca"
-        elif type == "cryptodoge":
-            blockchain = "cryptodoge"
-            dir = "/root/.cryptodoge/mainnet/config/ssl/ca"
-        elif type == "flax":
-            blockchain = "flax"
-            dir = "/root/.flax/mainnet/config/ssl/ca"
-        elif type == "flora":
-            blockchain = "flora"
-            dir = "/root/.flora/mainnet/config/ssl/ca"
-        elif type == "nchain":
-            blockchain = "nchain"
-            dir = "/root/.chia/ext9/config/ssl/ca"
-        elif type == "hddcoin":
-            blockchain = "hddcoin"
-            dir = "/root/.hddcoin/mainnet/config/ssl/ca"
-        elif type == "maize":
-            blockchain = "maize"
-            dir = "/root/.maize/mainnet/config/ssl/ca"
-        elif type == "shibgreen":
-            blockchain = "shibgreen"
-            dir = "/root/.shibgreen/mainnet/config/ssl/ca"
-        elif type == "silicoin":
-            blockchain = "silicoin"
-            dir = "/root/.sit/mainnet/config/ssl/ca"
-        elif type == "stai":
+        if type == "stai":  # Due to renaming of blockchain
             blockchain = "staicoin"
-            dir = "/root/.stai/mainnet/config/ssl/ca"
-        elif type == "stor":
-            blockchain = "stor"
-            dir = "/root/.stor/mainnet/config/ssl/ca"
-        else:
-            abort(400) # Bad blockchain type passed
+        else:  # Use directly
+            blockchain = type
         if blockchain == 'chia' and not self.allow_download():
             abort(401) # Reject as not authorized
-        zip = "/tmp/certs".format(blockchain)
+        zip = "/tmp/certs"
         zipname = "{0}.zip".format(zip)
         try:
             os.remove(zipname)
         except:
             pass
+        dir = globals.get_network_path(blockchain) + '/config/ssl/ca'
         shutil.make_archive(zip, 'zip', dir)
         with open(zipname, 'rb') as f:
             data = f.readlines()

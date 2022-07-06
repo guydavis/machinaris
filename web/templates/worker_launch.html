@@ -170,6 +170,9 @@
             if (blockchain == 'cryptodoge') {
                 return 8937;
             }
+            if (blockchain == 'ecostake') {
+                return 8942;
+            }
             if (blockchain == 'flora') {
                 return 8932;
             }
@@ -187,6 +190,12 @@
             }
             if (blockchain == 'mmx') {
                 return 8940;
+            }
+            if (blockchain == 'petroleum') {
+                return 8943;
+            }
+            if (blockchain == 'profit') {
+                return 8944;
             }
             if (blockchain == 'shibgreen') {
                 return 8939;
@@ -219,6 +228,9 @@
             if (blockchain == 'cryptodoge') {
                 return 16895;
             }
+            if (blockchain == 'ecostake') {
+                return 38448;
+            }
             if (blockchain == 'flax') {
                 return 6885;
             }
@@ -236,6 +248,12 @@
             }
             if (blockchain == 'mmx') {
                 return 11330;
+            }
+            if (blockchain == 'petroleum') {
+                return 33347;
+            }
+            if (blockchain == 'profit') {
+                return 48447;
             }
             if (blockchain == 'shibgreen') {
                 return 18974;
@@ -561,6 +579,13 @@
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
+                                id="blockchain-ecostake" onclick="updateDocker()" value="ecostake">
+                            <label class="form-check-label" for="blockchain-ecostake">
+                                Ecostake
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-flax" onclick="updateDocker()" value="flax">
                             <label class="form-check-label" for="blockchain-flax">
                                 Flax
@@ -605,16 +630,23 @@
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
-                                id="blockchain-shibgreen" onclick="updateDocker()" value="shibgreen">
-                            <label class="form-check-label" for="blockchain-shibgreen">
-                                SHIBGreen
+                                id="blockchain-petroleum" onclick="updateDocker()" value="petroleum">
+                            <label class="form-check-label" for="blockchain-petroleum">
+                                Petroleum
                             </label>
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
-                                id="blockchain-silicoin" onclick="updateDocker()" value="silicoin">
-                            <label class="form-check-label" for="blockchain-silicoin">
-                                Silicoin
+                                id="blockchain-profit" onclick="updateDocker()" value="profit">
+                            <label class="form-check-label" for="blockchain-profit">
+                                Profit
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" name="blockchains"
+                                id="blockchain-shibgreen" onclick="updateDocker()" value="shibgreen">
+                            <label class="form-check-label" for="blockchain-shibgreen">
+                                SHIBGreen
                             </label>
                         </div>
                         <div class="col">

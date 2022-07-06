@@ -54,6 +54,9 @@ def get_blockchain_network_name(blockchain):
 def get_blockchain_symbol(blockchain):
     return load_blockchain_info(blockchain, 'symbol')
 
+def get_blockchain_network_port(blockchain):
+    return load_blockchain_info(blockchain, 'network_port')
+
 def get_full_node_rpc_port(blockchain):
     return load_blockchain_info(blockchain, 'fullnode_rpc_port')
 
@@ -447,8 +450,7 @@ def get_alltheblocks_name(blockchain):
     return blockchain
 
 def legacy_blockchain(blockchain):
-    return blockchain in ['flora', 'hddcoin', 'maize', 'nchain', 'silicoin', 'stor']
-
+    return blockchain in ['ecostake', 'flora', 'hddcoin', 'maize', 'nchain', 'petroleum', 'profit', 'silicoin', 'stor']
 
 last_mmx_reward = None
 last_mmx_reward_load_time = None

@@ -625,9 +625,8 @@ class Connections:
                 'hostname': connection.hostname,
                 'blockchain': connection.blockchain,
                 'status': worker_status,
-                'farmer_port': self.blockchain_port(connection.blockchain),
-                'details': connection.details,
-                'add_exmample': self.get_add_connection_example(connection.blockchain)
+                'farmer_port': globals.get_network_port(connection.blockchain),
+                'details': connection.details
             })
             if connection.blockchain == 'mmx':
                 self.blockchains[connection.blockchain] = self.parse_mmx(connection, connection.blockchain, geoip_cache, lang)
@@ -635,71 +634,6 @@ class Connections:
                 self.blockchains[connection.blockchain] = self.parse_chia(connection, connection.blockchain, geoip_cache, lang)
         self.rows.sort(key=lambda conn: conn['blockchain'])
     
-    def get_add_connection_example(self, blockchain):
-        if blockchain == 'btcgreen':
-            return "155.133.91.176:9282"
-        if blockchain == 'cactus':
-            return "101.127.109.238:11444"
-        if blockchain == 'chia':
-            return "node.chia.net:8444"
-        if blockchain == 'chives':
-            return "106.225.229.73:9699"
-        if blockchain == 'cryptodoge':
-            return "46.75.50.16:15994"
-        if blockchain == 'flax':
-            return "143.198.76.157:6888"
-        if blockchain == 'flora':
-            return "186.123.88.33:18644"
-        if blockchain == 'hddcoin':
-            return "145.1.235.18:28444"
-        if blockchain == 'maize':
-            return "212.159.183.209:8644"
-        if blockchain == 'nchain':
-            return "218.88.205.216:58445"     
-        if blockchain == 'shibgreen':
-            return "218.89.239.144:7442"
-        if blockchain == 'silicoin':
-            return "67.172.84.54:22222"
-        if blockchain == 'staicoin':
-            return "173.54.12.193:1999"
-        if blockchain == 'stor':
-            return "118.33.225.159:8668"
-        
-    def blockchain_port(self,blockchain):
-        if blockchain == 'btcgreen':
-            return 9282
-        if blockchain == 'cactus':
-            return 11444
-        if blockchain == 'chia':
-            return 8444
-        if blockchain == 'chives':
-            return 9699
-        if blockchain == 'cryptodoge':
-            return 15994
-        if blockchain == 'flax':
-            return 6888
-        if blockchain == 'flora':
-            return 18644
-        if blockchain == 'hddcoin':
-            return 28444
-        if blockchain == 'nchain':
-            return 58445
-        if blockchain == 'mmx':
-            return 12335
-        if blockchain == 'maize':
-            return 8644
-        if blockchain == 'silicoin':
-            return 22447
-        if blockchain == 'shibgreen':
-            return 7442
-        if blockchain == 'silicoin':
-            return 22222
-        if blockchain == 'staicoin':
-            return 1999
-        if blockchain == 'stor':
-            return 8668
-        raise("Unknown blockchain fork of selected: " + blockchain)
-
     def get_geoname_for_lang(self, ip, location, lang):
         lang_codes = [ lang, ]
         if '_' in lang: 

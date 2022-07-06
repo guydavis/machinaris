@@ -118,7 +118,7 @@ def total_coin_diff(since, blockchain):
             #app.logger.info("Total coins daily diff: {0}".format(result))
     except Exception as ex:
         app.logger.debug("Failed to query for day diff of total_coin because {0}".format(str(ex)))
-    app.logger.info("Result is: {0}".format(result))
+    #app.logger.info("Result is: {0}".format(result))
     return result
 
 def wallet_balance_diff(since, blockchain):
@@ -135,8 +135,7 @@ def wallet_balance_diff(since, blockchain):
             #app.logger.info("Total coins daily diff: {0}".format(result))
     except Exception as ex:
         app.logger.info("Failed to query for day diff of wallet_balances because {0}".format(str(ex)))
-    #if blockchain == 'cactus':
-    #    app.logger.info("Result is: {0}".format(result))
+    #app.logger.info("Result is: {0}".format(result))
     return result
 
 def netspace_size_diff(since, blockchain):
@@ -157,7 +156,7 @@ def netspace_size_diff(since, blockchain):
                 result = ("{0} ".format(fmtted)) + _('in last day.')
     except Exception as ex:
         app.logger.debug("Failed to query for day diff of netspace_size because {0}".format(str(ex)))
-    #app.logger.debug("Result is: {0}".format(result))
+    #app.logger.info("Result is: {0}".format(result))
     return result
 
 def load_daily_farming_summaries(farmers):
