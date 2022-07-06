@@ -625,7 +625,7 @@ class Connections:
                 'hostname': connection.hostname,
                 'blockchain': connection.blockchain,
                 'status': worker_status,
-                'farmer_port': globals.get_network_port(connection.blockchain),
+                'farmer_port': globals.get_blockchain_network_port(connection.blockchain),
                 'details': connection.details
             })
             if connection.blockchain == 'mmx':
