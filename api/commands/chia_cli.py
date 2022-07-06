@@ -143,7 +143,7 @@ def start_farmer(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     proc = Popen("{0} start farmer -r".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=30)
+        outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
@@ -231,7 +231,7 @@ def add_connections(connections, blockchain):
             app.logger.info("Adding {0} connection to peer: {1}".format(blockchain, connection))
             proc = Popen("{0} show --add-connection {1}".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
             try:
-                outs, errs = proc.communicate(timeout=30)
+                outs, errs = proc.communicate(timeout=60)
             except TimeoutExpired:
                 proc.kill()
                 proc.communicate()

@@ -1,6 +1,5 @@
 #
-# Calculates effort per blockchain - by definition this is an estimate
-# Requires that 
+# Calculates effort per blockchain - by definition this is an estimate!
 #
 
 

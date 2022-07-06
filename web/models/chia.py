@@ -6,8 +6,11 @@ import re
 import time
 import traceback
 
-# https://github.com/Chia-Network/chia-blockchain/blob/main/chia/util/bech32m.py
-from chia.util import bech32m
+from common.config import globals
+
+if "chia" == globals.enabled_blockchains()[0]:
+    # https://github.com/Chia-Network/chia-blockchain/blob/main/chia/util/bech32m.py
+    from chia.util import bech32m
 
 from flask_babel import _, lazy_gettext as _l, format_decimal
 
@@ -224,7 +227,7 @@ class FarmSummary:
             if last_status == "Not synced or not connected to peers":
                 return _("Not synced")
             return last_status
-        app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
+        #app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
         return _("Offline")
 
     def selected_blockchain(self):
