@@ -93,7 +93,7 @@ elif blockchain == "shibgreen":
     from shibgreen.util.default_root import DEFAULT_ROOT_PATH
     from shibgreen.util.ints import uint16
     from shibgreen.util.config import load_config as load_fork_config
-elif blockchain == "stai":
+elif blockchain == "staicoin":
     from stai.rpc.full_node_rpc_client import FullNodeRpcClient
     from stai.rpc.farmer_rpc_client import FarmerRpcClient
     from stai.rpc.wallet_rpc_client import WalletRpcClient
