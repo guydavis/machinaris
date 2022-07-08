@@ -49,6 +49,13 @@ elif blockchain == "cryptodoge":
     from cryptodoge.util.default_root import DEFAULT_ROOT_PATH
     from cryptodoge.util.ints import uint16
     from cryptodoge.util.config import load_config as load_fork_config
+elif blockchain == "ecostake":
+    from ecostake.rpc.full_node_rpc_client import FullNodeRpcClient
+    from ecostake.rpc.farmer_rpc_client import FarmerRpcClient
+    from ecostake.rpc.wallet_rpc_client import WalletRpcClient
+    from ecostake.util.default_root import DEFAULT_ROOT_PATH
+    from ecostake.util.ints import uint16
+    from ecostake.util.config import load_config as load_fork_config
 elif blockchain == "flax":
     from flax.rpc.full_node_rpc_client import FullNodeRpcClient
     from flax.rpc.farmer_rpc_client import FarmerRpcClient, PlotPathRequestData
@@ -86,6 +93,20 @@ elif blockchain == "nchain":
     from chia.util.default_root import DEFAULT_ROOT_PATH
     from chia.util.ints import uint16
     from chia.util.config import load_config as load_fork_config
+elif blockchain == "petroleum":
+    from petroleum.rpc.full_node_rpc_client import FullNodeRpcClient
+    from petroleum.rpc.farmer_rpc_client import FarmerRpcClient
+    from petroleum.rpc.wallet_rpc_client import WalletRpcClient
+    from petroleum.util.default_root import DEFAULT_ROOT_PATH
+    from petroleum.util.ints import uint16
+    from petroleum.util.config import load_config as load_fork_config
+elif blockchain == "profit":
+    from profit.rpc.full_node_rpc_client import FullNodeRpcClient
+    from profit.rpc.farmer_rpc_client import FarmerRpcClient
+    from profit.rpc.wallet_rpc_client import WalletRpcClient
+    from profit.util.default_root import DEFAULT_ROOT_PATH
+    from profit.util.ints import uint16
+    from profit.util.config import load_config as load_fork_config
 elif blockchain == "shibgreen":
     from shibgreen.rpc.full_node_rpc_client import FullNodeRpcClient
     from shibgreen.rpc.farmer_rpc_client import FarmerRpcClient

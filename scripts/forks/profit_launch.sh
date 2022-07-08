@@ -16,9 +16,12 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.profit/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
   && [[ ! -f /root/.profit/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
+  echo "Downloading Profit blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.profit/mainnet/db/ && cd /root/.profit/mainnet/db/
-  echo "Sorry, Profit does not offer a recent blockchain DB for download via script.  Standard sync will happen over a few days..."
-  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/profit"
+   # Download link from their Discord on 2022-07-07
+  gdown 1cH-ub3d--hbYYqrsa3jlNY8vmNWYUavf
+  p7zip --decompress --force blockchain_v1_mainnet*.7z
 fi
 
 mkdir -p /root/.profit/mainnet/log

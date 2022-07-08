@@ -18,7 +18,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.shibgreen/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   mkdir -p /root/.shibgreen/mainnet/db/ && cd /root/.shibgreen/mainnet/db/
   echo "Sorry, SHIBGreen does not offer a recent blockchain DB for download.  Standard sync will happen over a few days..."
-  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/shibgreen"
+  echo "It is recommended to add some peer node connections on the Connections page of Machinaris."
 fi
 
 mkdir -p /root/.shibgreen/mainnet/log

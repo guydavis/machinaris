@@ -18,7 +18,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.chia/ext9/db/blockchain_v2_ext9.sqlite ]]; then
   mkdir -p /root/.chia/ext9/db/ && cd /root/.chia/ext9/db/
   echo "Sorry, N-Chain does not offer a recent blockchain DB for download.  Standard sync will happen over a few days..."
-  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/nchain"
+  echo "It is recommended to add some peer node connections on the Connections page of Machinaris."
 fi
 
 mkdir -p /root/.chia/ext9/log

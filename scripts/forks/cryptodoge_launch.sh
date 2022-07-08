@@ -17,8 +17,11 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.cryptodoge/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
   && [[ ! -f /root/.cryptodoge/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   mkdir -p /root/.cryptodoge/mainnet/db/ && cd /root/.cryptodoge/mainnet/db/
-  echo "Sorry, Cryptodoge does not offer a recent blockchain DB for download.  Standard sync will happen over a few days..."
-  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/cryptodoge"
+  echo "Downloading Cryptodoge blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
+  mkdir -p /root/.cryptodoge/mainnet/db/ && cd /root/.cryptodoge/mainnet/db/
+  # Latest Blockchain DB download from https://gamefi.cryptodoge.cc
+  curl -skLJO https://gamefi.cryptodoge.cc/blockchain_v2_mainnet.sqlite
 fi
 
 mkdir -p /root/.cryptodoge/mainnet/log

@@ -20,10 +20,10 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.cactus/mainnet/db/ && cd /root/.cactus/mainnet/db/
   # Latest Blockchain DB download from direct from https://www.cactus-network.net/
-  curl -skJLO https://www.cactus-network.net/wp-content/uploads/db-Cactus-Mainnet.zip
-  unzip db-Cactus-Mainnet.zip 
-  mv db-Cactus-Mainnet/*.sqlite .
-  rm -rf db-Cactus-Mainnet/ db-Cactus-Mainnet.zip
+  curl -skJLO https://www.cactus-network.net/wp-content/uploads/blockchain_v2_mainnet.zip
+  unzip blockchain_v2_mainnet.zip 
+  mv blockchain_v2_mainnet/blockchain_v2_main*.sqlite ./blockchain_v2_mainnet.sqlite
+  rm -rf blockchain_v2_mainnet/ blockchain_v2_mainnet.zip
 fi
 
 mkdir -p /root/.cactus/mainnet/log

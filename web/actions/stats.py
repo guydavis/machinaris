@@ -356,14 +356,14 @@ def calc_estimated_daily_value(blockchain):
             edv = blocks_per_day * block_reward * farm.plots_size / farm.netspace_size
     except Exception as ex:
         app.logger.info("Failed to calculate EDV for {0} because {1}".format(blockchain, str(ex)))
-    if edv:
+    if edv and farm.status == 'Farming': # Don't calculate EDV if not fully synced
         if edv >= 1000:
             result.append("{0} {1}".format(format_decimal(round(edv, 0)), symbol))
         else:
             result.append("{0} {1}".format(format_decimal(round(edv, 3)), symbol))
     else:
         result.append('')
-    if edv:
+    if edv and farm.status == 'Farming': # Don't calculate EDV if not fully synced:
         try:
             edv_fiat = fiat.to_fiat(blockchain, edv)
         except Exception as ex:
