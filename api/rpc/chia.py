@@ -94,12 +94,12 @@ elif blockchain == "nchain":
     from chia.util.ints import uint16
     from chia.util.config import load_config as load_fork_config
 elif blockchain == "petroleum":
-    from petroleum.rpc.full_node_rpc_client import FullNodeRpcClient
-    from petroleum.rpc.farmer_rpc_client import FarmerRpcClient
-    from petroleum.rpc.wallet_rpc_client import WalletRpcClient
-    from petroleum.util.default_root import DEFAULT_ROOT_PATH
-    from petroleum.util.ints import uint16
-    from petroleum.util.config import load_config as load_fork_config
+    from chia.rpc.full_node_rpc_client import FullNodeRpcClient
+    from chia.rpc.farmer_rpc_client import FarmerRpcClient
+    from chia.rpc.wallet_rpc_client import WalletRpcClient
+    from chia.util.default_root import DEFAULT_ROOT_PATH
+    from chia.util.ints import uint16
+    from chia.util.config import load_config as load_fork_config
 elif blockchain == "profit":
     from profit.rpc.full_node_rpc_client import FullNodeRpcClient
     from profit.rpc.farmer_rpc_client import FarmerRpcClient
@@ -108,6 +108,13 @@ elif blockchain == "profit":
     from profit.util.ints import uint16
     from profit.util.config import load_config as load_fork_config
 elif blockchain == "shibgreen":
+    from shibgreen.rpc.full_node_rpc_client import FullNodeRpcClient
+    from shibgreen.rpc.farmer_rpc_client import FarmerRpcClient
+    from shibgreen.rpc.wallet_rpc_client import WalletRpcClient
+    from shibgreen.util.default_root import DEFAULT_ROOT_PATH
+    from shibgreen.util.ints import uint16
+    from shibgreen.util.config import load_config as load_fork_config
+elif blockchain == "silicoin":
     from shibgreen.rpc.full_node_rpc_client import FullNodeRpcClient
     from shibgreen.rpc.farmer_rpc_client import FarmerRpcClient
     from shibgreen.rpc.wallet_rpc_client import WalletRpcClient

@@ -85,6 +85,8 @@ if [[ "${farmr_skip_launch}" == 'false' &&  (${mode} == 'fullnode' || ${mode} =~
 	elif [[ ${blockchains} == 'stor' ]]; then
 		cp -n blockchain/stor.json.template blockchain/stor.json
 		echo "/stor-blockchain/venv/bin/stor" > override-stor-binary.txt
+	else
+		echo "Oops! Looks like farmr does not support ${blockchains}. Please look in /root/.chia/farmr/blockchains..."
 	fi
 
 	tee /etc/logrotate.d/farmr >/dev/null <<EOF

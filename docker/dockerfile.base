@@ -18,6 +18,7 @@ RUN apt-get update \
 		iproute2 \
 		iputils-ping \
 		jq \
+		libsqlite3-dev \
 		locales \
 		locales-all \
 		logrotate \
