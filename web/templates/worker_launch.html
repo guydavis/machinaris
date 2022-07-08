@@ -155,6 +155,9 @@
         }
 
         function lookup_worker_port(blockchain) {
+            if (blockchain == 'bpx') {
+                return 8945;
+            }
             if (blockchain == 'btcgreen') {
                 return 8938;
             }
@@ -213,6 +216,9 @@
         }
 
         function lookup_farmer_port(blockchain) {
+            if (blockchain == 'bpx') {
+                return 27914;
+            }
             if (blockchain == 'btcgreen') {
                 return 18655;
             }

@@ -5,6 +5,7 @@ FROM ghcr.io/guydavis/machinaris-base:${MACHINARIS_STREAM}
 ARG DEBIAN_FRONTEND=noninteractive
 ARG CHIADOG_BRANCH=main
 
+ARG BPX_BRANCH
 ARG BTCGREEN_BRANCH
 ARG CACTUS_BRANCH
 ARG CHIA_BRANCH
@@ -32,7 +33,8 @@ WORKDIR /chia-blockchain
 
 # Install specific blockchain fork (based on branch enabled) + tools that depend on the fork
 RUN \
-	/usr/bin/bash /machinaris/scripts/forks/btcgreen_install.sh ${BTCGREEN_BRANCH} \
+	/usr/bin/bash /machinaris/scripts/forks/bpx_install.sh ${BPX_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/btcgreen_install.sh ${BTCGREEN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/cactus_install.sh ${CACTUS_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chia_install.sh ${CHIA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chives_install.sh ${CHIVES_BRANCH} \

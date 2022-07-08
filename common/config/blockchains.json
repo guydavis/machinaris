@@ -1,4 +1,21 @@
 {
+    "bpx": {
+        "name": "BPX",
+        "symbol": "BPX",
+        "binary":  "/bpx-blockchain/venv/bin/bpx",
+        "network_path": "/root/.bpx/mainnet",
+        "network_name": "mainnet",
+        "network_port": 27911,
+        "farmer_port": 27914,
+        "fullnode_rpc_port": 27925,
+        "worker_port": 8945,
+        "reward": 200.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/bpx-network/bpx-blockchain",
+        "discord_url": "https://discord.gg/aKdG6UvTnG",
+        "website_url": "https://bpxcoin.cc/"
+    },
     "btcgreen": {
         "name": "BTCgreen",
         "symbol": "XBTC",

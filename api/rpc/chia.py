@@ -14,7 +14,14 @@ from api import utils
 
 blockchain = globals.enabled_blockchains()[0]
 
-if blockchain == "btcgreen":
+if blockchain == "bpx":
+    from chia.rpc.full_node_rpc_client import FullNodeRpcClient
+    from chia.rpc.farmer_rpc_client import FarmerRpcClient
+    from chia.rpc.wallet_rpc_client import WalletRpcClient
+    from chia.util.default_root import DEFAULT_ROOT_PATH
+    from chia.util.ints import uint16
+    from chia.util.config import load_config as load_fork_config
+elif blockchain == "btcgreen":
     from btcgreen.rpc.full_node_rpc_client import FullNodeRpcClient
     from btcgreen.rpc.farmer_rpc_client import FarmerRpcClient
     from btcgreen.rpc.wallet_rpc_client import WalletRpcClient
