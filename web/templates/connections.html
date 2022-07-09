@@ -207,11 +207,14 @@
                                         id="btnRemove_{{connection.displayname}}_{{connection.blockchain}}">{{_('Disconnect Selected')}}</button>
                                     {% endif %}
                                 </div>
-                                <div class="col-sm"><a class="btn btn-outline-success" role="button"
+                                <div class="col-sm">
+                                    {% if connection.farmer_port %}
+                                    <a class="btn btn-outline-success" role="button"
                                         href="https://www.yougetsignal.com/tools/open-ports/?port={{connection.farmer_port}}"
                                         target="_blank" class="text-white">
                                         {{_('Check Port Forwarding')}}
                                     </a>
+                                    {% end if %}
                                 </div>
                                 <div class="col-sm">
                                     {% if connection.blockchain != 'mmx' %}

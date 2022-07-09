@@ -191,6 +191,10 @@ class FarmSummary:
                     netspace_display_size = converters.gib_to_fmt(farm_rec.netspace_size)
                 except:
                     netspace_display_size = '?'
+                try:
+                    blockchain_symbol = globals.get_blockchain_symbol(farm_rec.blockchain).lower()
+                except:
+                    blockchain_symbol = None
                 farm = {
                     "plot_count": int(farm_rec.plot_count),
                     "plots_size": farm_rec.plots_size,
@@ -199,7 +203,7 @@ class FarmSummary:
                     "display_status": self.status_if_responding(displayname, farm_rec.blockchain, connection_status, farm_rec.status),
                     "total_coins": total_coins,
                     "wallet_balance": converters.round_balance(wallet_balance),
-                    "currency_symbol": globals.get_blockchain_symbol(farm_rec.blockchain),
+                    "currency_symbol": blockchain_symbol,
                     "netspace_display_size": netspace_display_size,
                     "netspace_size": farm_rec.netspace_size,
                     "expected_time_to_win": self.i18n_etw(farm_rec.expected_time_to_win),
@@ -369,6 +373,10 @@ class Wallets:
                 total_balance = float(hot_balance) + float(cold_balance)
             except:
                 total_balance = hot_balance
+            try:
+                blockchain_symbol = globals.get_blockchain_symbol(wallet.blockchain).lower()
+            except:
+                blockchain_symbol = None
             self.rows.append({ 
                 'displayname': displayname, 
                 'hostname': wallet.hostname,
@@ -380,7 +388,7 @@ class Wallets:
                 'cold_address': ','.join(cold_wallet_addresses[wallet.blockchain]) if wallet.blockchain in cold_wallet_addresses else '',
                 'total_balance_float': total_balance,
                 'total_balance': converters.round_balance(total_balance),
-                'blockchain_symbol': globals.get_blockchain_symbol(wallet.blockchain).lower(),
+                'blockchain_symbol': blockchain_symbol,
                 'fiat_balance': fiat.to_fiat(wallet.blockchain, total_balance),
                 'updated_at': wallet.updated_at }) 
 
@@ -623,12 +631,16 @@ class Connections:
             except:
                 app.logger.info("Connections.init(): Unable to find a worker with hostname '{0}'".format(connection.hostname))
                 displayname = connection.hostname
+            try:
+                farmer_port = globals.get_blockchain_network_port(connection.blockchain)
+            except:
+                farmer_port = None
             self.rows.append({
                 'displayname': displayname, 
                 'hostname': connection.hostname,
                 'blockchain': connection.blockchain,
                 'status': worker_status,
-                'farmer_port': globals.get_blockchain_network_port(connection.blockchain),
+                'farmer_port': farmer_port,
                 'details': connection.details
             })
             if connection.blockchain == 'mmx':
@@ -771,7 +783,10 @@ class Connections:
 class Transactions:
 
     def __init__(self, blockchain, transactions):
-        self.address_prefix = globals.get_blockchain_symbol(blockchain).lower()
+        try:
+            self.address_prefix = globals.get_blockchain_symbol(blockchain).lower()
+        except:
+            self.address_prefix = None
         self.transactions = transactions
         self.rows = []
         for t in transactions:
