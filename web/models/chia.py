@@ -192,7 +192,7 @@ class FarmSummary:
                 except:
                     netspace_display_size = '?'
                 try:
-                    blockchain_symbol = globals.get_blockchain_symbol(farm_rec.blockchain).lower()
+                    blockchain_symbol = globals.get_blockchain_symbol(farm_rec.blockchain)
                 except:
                     blockchain_symbol = None
                 farm = {

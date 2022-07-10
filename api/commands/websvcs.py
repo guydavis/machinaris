@@ -239,7 +239,6 @@ def request_prices(prices, debug=False):
 def request_peers(blockchain, debug=False):
     peers = []
     alltheblocks_blockchain = globals.get_alltheblocks_name(blockchain)
-    cmd_prefix = '{0} show -a '.format(alltheblocks_blockchain)
     url = "https://alltheblocks.net/{0}/peers".format(alltheblocks_blockchain)
     app.logger.info("Requesting node peers for {0} from {1}".format(blockchain, url))
     if debug:
@@ -251,8 +250,8 @@ def request_peers(blockchain, debug=False):
     for row in div.find_all('div'):
         if len(row.contents) == 1:
             add_cmd = row.contents[0].string.strip()
-            if add_cmd.startswith(cmd_prefix):
-                peer = add_cmd[len(cmd_prefix):].strip()
+            if 'show -a' in add_cmd:
+                peer = add_cmd[(add_cmd.index('show -a ') + len('show -a ')):].strip()
                 peers.append(peer)
             else:
                 app.logger.error("Unparseable peer connection: {0}".format(row.contents[0].string))
