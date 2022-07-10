@@ -33,6 +33,7 @@ def extract_launcher_id(plotnft):
     return None
 
 def update():
+    app.logger.info("Executing status_plotnfts...")
     with app.app_context():
         try:
             for blockchain in globals.enabled_blockchains():
@@ -59,6 +60,5 @@ def update():
                     utils.send_post('/plotnfts/', payload, debug=False)
                 else:
                     utils.send_delete('/plotnfts/{0}/{1}'.format(hostname, blockchain), debug=False)
-        except:
-            app.logger.info("Failed to load and send plotnft status.")
-            app.logger.info(traceback.format_exc())
+        except Exception as ex:
+            app.logger.info("Failed to load and send plotnft status because {0}".format(str(ex)))

@@ -1,4 +1,7 @@
 # Warn if non-standard worker_api_port is being used, likely default value they did not override properly
+if [[ "${blockchains}"  == "bpx" && "${worker_api_port}" != '8945' ]]; then
+  echo "BPX worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8945?"
+fi
 if [[ "${blockchains}"  == "btcgreen" && "${worker_api_port}" != '8938' ]]; then
   echo "BTCGreen worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8938?"
 fi
@@ -13,6 +16,9 @@ if [[ "${blockchains}"  == "chives" && "${worker_api_port}" != '8931' ]]; then
 fi
 if [[ "${blockchains}"  == "cryptodoge" && "${worker_api_port}" != '8937' ]]; then
   echo "Cryptodoge worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8937?"
+fi
+if [[ "${blockchains}"  == "ecostake" && "${worker_api_port}" != '8942' ]]; then
+  echo "Ecostake worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8942?"
 fi
 if [[ "${blockchains}"  == "flax" && "${worker_api_port}" != '8928' ]]; then
   echo "Flax worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8928?"
@@ -31,6 +37,12 @@ if [[ "${blockchains}"  == "mmx" && "${worker_api_port}" != '8940' ]]; then
 fi
 if [[ "${blockchains}"  == "nchain" && "${worker_api_port}" != '8929' ]]; then
   echo "N-Chain worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8936?"
+fi 
+if [[ "${blockchains}"  == "petroleum" && "${worker_api_port}" != '8943' ]]; then
+  echo "Petroleum worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8943?"
+fi
+if [[ "${blockchains}"  == "profit" && "${worker_api_port}" != '8944' ]]; then
+  echo "Profit worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8944?"
 fi  
 if [[ "${blockchains}"  == "shibgreen" && "${worker_api_port}" != '8939' ]]; then
   echo "Shibgreen worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8939?"

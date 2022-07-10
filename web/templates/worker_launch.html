@@ -155,6 +155,9 @@
         }
 
         function lookup_worker_port(blockchain) {
+            if (blockchain == 'bpx') {
+                return 8945;
+            }
             if (blockchain == 'btcgreen') {
                 return 8938;
             }
@@ -169,6 +172,9 @@
             }
             if (blockchain == 'cryptodoge') {
                 return 8937;
+            }
+            if (blockchain == 'ecostake') {
+                return 8942;
             }
             if (blockchain == 'flora') {
                 return 8932;
@@ -188,6 +194,12 @@
             if (blockchain == 'mmx') {
                 return 8940;
             }
+            if (blockchain == 'petroleum') {
+                return 8943;
+            }
+            if (blockchain == 'profit') {
+                return 8944;
+            }
             if (blockchain == 'shibgreen') {
                 return 8939;
             }
@@ -204,6 +216,9 @@
         }
 
         function lookup_farmer_port(blockchain) {
+            if (blockchain == 'bpx') {
+                return 27914;
+            }
             if (blockchain == 'btcgreen') {
                 return 18655;
             }
@@ -218,6 +233,9 @@
             }
             if (blockchain == 'cryptodoge') {
                 return 16895;
+            }
+            if (blockchain == 'ecostake') {
+                return 38448;
             }
             if (blockchain == 'flax') {
                 return 6885;
@@ -236,6 +254,12 @@
             }
             if (blockchain == 'mmx') {
                 return 11330;
+            }
+            if (blockchain == 'petroleum') {
+                return 33347;
+            }
+            if (blockchain == 'profit') {
+                return 48447;
             }
             if (blockchain == 'shibgreen') {
                 return 18974;
@@ -526,6 +550,13 @@
                     <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
+                                id="blockchain-bpx" onclick="updateDocker()" value="bpx">
+                            <label class="form-check-label" for="blockchain-bpx" onclick="updateDocker()">
+                                BPX
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-btcgreen" onclick="updateDocker()" value="btcgreen">
                             <label class="form-check-label" for="blockchain-btcgreen" onclick="updateDocker()">
                                 BTCGreen
@@ -559,6 +590,15 @@
                                 Cryptodoge
                             </label>
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" name="blockchains"
+                                id="blockchain-ecostake" onclick="updateDocker()" value="ecostake">
+                            <label class="form-check-label" for="blockchain-ecostake">
+                                Ecostake
+                            </label>
+                        </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-flax" onclick="updateDocker()" value="flax">
@@ -580,8 +620,6 @@
                                 HDDCoin
                             </label>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-maize" onclick="updateDocker()" value="maize">
@@ -596,6 +634,8 @@
                                 MMX
                             </label>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-nchain" onclick="updateDocker()" value="nchain">
@@ -605,16 +645,23 @@
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
-                                id="blockchain-shibgreen" onclick="updateDocker()" value="shibgreen">
-                            <label class="form-check-label" for="blockchain-shibgreen">
-                                SHIBGreen
+                                id="blockchain-petroleum" onclick="updateDocker()" value="petroleum">
+                            <label class="form-check-label" for="blockchain-petroleum">
+                                Petroleum
                             </label>
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
-                                id="blockchain-silicoin" onclick="updateDocker()" value="silicoin">
-                            <label class="form-check-label" for="blockchain-silicoin">
-                                Silicoin
+                                id="blockchain-profit" onclick="updateDocker()" value="profit">
+                            <label class="form-check-label" for="blockchain-profit">
+                                Profit
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" name="blockchains"
+                                id="blockchain-shibgreen" onclick="updateDocker()" value="shibgreen">
+                            <label class="form-check-label" for="blockchain-shibgreen">
+                                SHIBGreen
                             </label>
                         </div>
                         <div class="col">
@@ -631,7 +678,7 @@
                                 Stor
                             </label>
                         </div>
-                        <div class="col">&nbsp;</div>
+                        <!--div class="col">&nbsp;</div-->
                     </div>
                 </div>
             </div>

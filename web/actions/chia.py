@@ -300,17 +300,15 @@ def import_key(key_path, mnemonic, blockchain):
             link_open='<a href="https://github.com/guydavis/machinaris/wiki#basic-configuration" target="_blank">', link_close='</a>'), 'success')
     return True
 
-def add_connection(connection, hostname, blockchain):
+def add_connections(connections, hostname, blockchain):
+    farmer = wk.get_worker(hostname, blockchain)
     try:
-        host,port = connection.split(':')
-        if socket.gethostbyname(host) == host:
-            app.logger.info('{} is a valid IP address'.format(host))
-        elif socket.gethostbyname(host) != host:
-            app.logger.info('{} is a valid host'.format(hostname))
-        farmer = wk.get_worker(hostname, blockchain)
-        utils.send_post(farmer, "/actions/", \
-            { 'service': 'networking', 'action': 'add_connection', 'blockchain': blockchain, 'connection': connection}, \
-            debug=False).content
+        for connection in connections:
+            host,port = connection.split(':')
+            if socket.gethostbyname(host) == host:
+                app.logger.info('{} is a valid IP address'.format(host))
+            elif socket.gethostbyname(host) != host:
+                app.logger.info('{} is a valid host'.format(hostname))
     except requests.exceptions.RequestException as e:
         app.logger.info(traceback.format_exc())
         flash(_('Failed to connect to worker to add connection. Please check logs.'), 'danger')
@@ -319,8 +317,16 @@ def add_connection(connection, hostname, blockchain):
         app.logger.info(traceback.format_exc())
         flash(_('Invalid connection "%(connection)s" provided. Must be HOST:PORT.', connection=connection), 'danger')
         flash(str(ex), 'warning')
+    try: # Send request, but timeout in only a second while API works in background
+        utils.send_post(farmer, "/actions/", \
+            { 'service': 'networking', 'action': 'add_connections', 'blockchain': blockchain, \
+            'connections': connections}, debug=False, timeout=1) 
+    except requests.exceptions.ReadTimeout: 
+        pass
+    if len(connections) == 1:
+        flash(_('Connection added to %(blockchain)s and sync engaging! Please wait a few minutes...', blockchain=blockchain.capitalize()), 'success')
     else:
-        flash(_('Connection added to %(blockchain)s and sync engaging!', blockchain=blockchain), 'success')
+        flash(_('Node peers from AllTheBlocks added to %(blockchain)s and sync engaging! Please wait a few minutes...', blockchain=blockchain.capitalize()), 'success')
 
 def remove_connection(node_ids, hostname, blockchain):
     try:

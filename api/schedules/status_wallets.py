@@ -20,6 +20,7 @@ from api import app
 from api import utils
 
 def update():
+    app.logger.info("Executing status_wallets...")
     with app.app_context():
         try:
             for blockchain in globals.enabled_blockchains():
@@ -35,6 +36,5 @@ def update():
                 }
                 #app.logger.info(payload)
                 utils.send_post('/wallets/', payload, debug=False)
-        except:
-            app.logger.info("Failed to load and send public wallet status.")
-            app.logger.info(traceback.format_exc())
+        except Exception as ex:
+            app.logger.info("Failed to load and send public wallet status because {0}".format(str(ex)))

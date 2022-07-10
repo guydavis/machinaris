@@ -20,8 +20,10 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Downloading Chives blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chives/mainnet/db/ && cd /root/.chives/mainnet/db/
-  echo "Sorry, Chives does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
-  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/chives"
+  # Download link from https://node-hk.chivescoin.org/
+  gdown 1wFCPaI4rRr-j8XsmmsqaURlLIuTklrZz
+  unzip blockchain_v2_mainnet*.zip
+  rm -f blockchain_v2_mainnet*.zip
 fi
 
 mkdir -p /root/.chives/mainnet/log
@@ -81,7 +83,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.chives/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${farmer_address}:8931/certificates/?type=chives.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${farmer_address}:8931/certificates/?type=chives.  Is the fork's fullnode container running?"
       fi
       rm -f /tmp/certs.zip 
     fi

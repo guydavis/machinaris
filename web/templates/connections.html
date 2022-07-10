@@ -207,26 +207,21 @@
                                         id="btnRemove_{{connection.displayname}}_{{connection.blockchain}}">{{_('Disconnect Selected')}}</button>
                                     {% endif %}
                                 </div>
-                                <div class="col-sm"><a class="btn btn-outline-success" role="button"
+                                <div class="col-sm">
+                                    {% if connection.farmer_port %}
+                                    <a class="btn btn-outline-success" role="button"
                                         href="https://www.yougetsignal.com/tools/open-ports/?port={{connection.farmer_port}}"
                                         target="_blank" class="text-white">
                                         {{_('Check Port Forwarding')}}
                                     </a>
-                                </div>
-                                <div class="col-sm-3">
-                                    {% if connection.blockchain != 'mmx' %}
-                                    <input class="form-control me-2"
-                                        id="connection_{{connection.displayname}}_{{connection.blockchain}}"
-                                        name="connection" type="text" placeholder="{{connection.add_exmample}}"
-                                        aria-label="Add">
                                     {% endif %}
                                 </div>
-                                <div class="col-sm-2">
+                                <div class="col-sm">
                                     {% if connection.blockchain != 'mmx' %}
                                     <button class="btn btn-outline-success text-nowrap text-right" type="submit"
                                         name="action" value="add"
                                         id="btnAdd_{{connection.displayname}}_{{connection.blockchain}}"
-                                        form="main-form">{{_('Add New Connection')}}</button>
+                                        form="main-form">{{_('Add Node Peers')}}</button>
                                     {% endif %}
                                 </div>
                         </fieldset>

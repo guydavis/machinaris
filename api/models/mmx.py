@@ -30,10 +30,8 @@ class FarmSummary:
                         self.calc_status('Syncing')
                     else:
                         self.calc_status(line.strip())
-            if self.plots_size == "Total space: 0 TiB":
-                self.time_to_win = "Never"
-            else:
-                self.time_to_win = "Soon"
+            self.time_to_win = self.calc_mmx_etw(self.netspace_size, self.plots_size)
+            #app.logger.info("MMX ETW_STR: {0}".format(self.time_to_win))
 
     def calc_status(self, status):
         self.status = status
@@ -53,6 +51,17 @@ class FarmSummary:
         except:
             app.logger.info("Unable to split network size value: {0}".format(netspace_size))
             self.display_netspace_size = self.netspace_size
+    
+    def calc_mmx_etw(self, netspace_size, plots_size):
+        MMX_BLOCKS_PER_MIN = globals.get_blocks_per_day('mmx') / (24 * 60)
+        #app.logger.info("MMX_BLOCKS_PER_MIN: {0}".format(MMX_BLOCKS_PER_MIN))
+        plots_size_gib = converters.str_to_gibs(plots_size)
+        #app.logger.info("MMX PLOTS_SIZE: {0}".format(plots_size_gib))
+        netspace_size_gib = converters.str_to_gibs(netspace_size)
+        #app.logger.info("MMX NETSPACE_SIZE: {0}".format(netspace_size_gib))
+        etw_mins = round(netspace_size_gib / plots_size_gib /  MMX_BLOCKS_PER_MIN)
+        #app.logger.info("MMX ETW_MINS: {0}".format(etw_mins))
+        return converters.format_minutes(etw_mins)
 
 class HarvesterSummary:
 

@@ -3,7 +3,10 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.8.1] - 2022-07-?
- - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.4.0) - v1.4.0, matches Chia 1.4.0
+ - Connections - add node peers directly from list offered by AllTheBlocks per blockchain.
+ - MMX - Compute "Estimated Time to Win" from plots size, netspace size, and blocks per day.
+ - New blockchains: [BPX](https://github.com/bpx-network/bpx-blockchain), [Ecostake](https://github.com/Ecostake-Network/ecostake-blockchain), [Petroleum](https://github.com/Petroleum-Network/petroleum-blockchain), and [Profit](https://github.com/ProfitCrypto/profit-blockchain)
+ - Updated: [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.4.0), [Chiadog](https://github.com/martomi/chiadog/releases/tag/v0.7.2)
 
 ## [0.8.0] - 2022-06-30
  - Charting of each blockchain's netspace, farmed coins, and wallet balances over the past month.

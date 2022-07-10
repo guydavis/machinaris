@@ -4,6 +4,7 @@
 
 import asyncio
 import datetime
+import json
 import os
 import psutil
 import re
@@ -76,6 +77,18 @@ def default_blockchain():
         if worker.blockchain == 'chives':  # Second choice
             return worker.blockchain
     return first_blockchain # Last choice, just use whatever is first alphabetically
+
+def mmx_block_reward():
+    try:
+        mmx_worker = db.session.query(workers.Worker).filter(workers.Worker.mode=='fullnode', workers.Worker.blockchain=='mmx').first()
+        if mmx_worker:
+            mmx_config = json.loads(mmx_worker.config)
+            if 'mmx_reward' in mmx_config:
+                #app.logger.info(mmx_config['mmx_reward'])
+                return float(mmx_config['mmx_reward'])
+    except Exception as ex:
+        app.logger.error("Failed to get MMX block reward from worker config because: {0}".format(str(ex)))
+    return None
 
 def prune_workers_status(workers):
     for id in workers:

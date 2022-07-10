@@ -26,6 +26,7 @@ def update():
     if globals.load()['is_controller']:
         #app.logger.info("Skipping alerts polling on fullnode are already placed in database directly via chiadog_notifier.sh script.")
         return
+    app.logger.info("Executing status_alerts...")
     with app.app_context():
         try:
             from api import db
@@ -50,6 +51,5 @@ def update():
                 })
             if len(payload) > 0:
                 utils.send_post('/alerts/', payload, debug=False)
-        except:
-            app.logger.info("Failed to load and send alerts status.")
-            app.logger.info(traceback.format_exc())
+        except Exception as ex:
+            app.logger.info("Failed to load and send alerts status because {0}".format(str(ex)))

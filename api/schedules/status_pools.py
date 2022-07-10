@@ -22,6 +22,7 @@ from api import app
 from api import utils
 
 def update():
+    app.logger.info("Executing status_pools...")
     with app.app_context():
         try:
             for blockchain in globals.enabled_blockchains():
@@ -47,6 +48,5 @@ def update():
                 #app.logger.info(payload)
                 response = utils.send_post('/pools/', payload, debug=False)
                 #app.logger.info(response.content)
-        except:
-            app.logger.info("Failed to load and send pools state.")
-            app.logger.info(traceback.format_exc())
+        except Exception as ex:
+            app.logger.info("Failed to load and send pools status because {0}".format(str(ex)))

@@ -6,8 +6,11 @@ import re
 import time
 import traceback
 
-# https://github.com/Chia-Network/chia-blockchain/blob/main/chia/util/bech32m.py
-from chia.util import bech32m
+from common.config import globals
+
+if "chia" == globals.enabled_blockchains()[0]:
+    # https://github.com/Chia-Network/chia-blockchain/blob/main/chia/util/bech32m.py
+    from chia.util import bech32m
 
 from flask_babel import _, lazy_gettext as _l, format_decimal
 
@@ -132,8 +135,6 @@ class Summaries:
                 return wallet
 
     def etw_to_days(self, blockchain, etw):
-        if blockchain == 'mmx':
-            return ''
         #app.logger.info("{0} -> {1}".format(blockchain, etw))
         try:
             minutes = converters.etw_to_minutes(etw)
@@ -190,6 +191,10 @@ class FarmSummary:
                     netspace_display_size = converters.gib_to_fmt(farm_rec.netspace_size)
                 except:
                     netspace_display_size = '?'
+                try:
+                    blockchain_symbol = globals.get_blockchain_symbol(farm_rec.blockchain)
+                except:
+                    blockchain_symbol = None
                 farm = {
                     "plot_count": int(farm_rec.plot_count),
                     "plots_size": farm_rec.plots_size,
@@ -198,7 +203,7 @@ class FarmSummary:
                     "display_status": self.status_if_responding(displayname, farm_rec.blockchain, connection_status, farm_rec.status),
                     "total_coins": total_coins,
                     "wallet_balance": converters.round_balance(wallet_balance),
-                    "currency_symbol": globals.get_blockchain_symbol(farm_rec.blockchain),
+                    "currency_symbol": blockchain_symbol,
                     "netspace_display_size": netspace_display_size,
                     "netspace_size": farm_rec.netspace_size,
                     "expected_time_to_win": self.i18n_etw(farm_rec.expected_time_to_win),
@@ -226,7 +231,7 @@ class FarmSummary:
             if last_status == "Not synced or not connected to peers":
                 return _("Not synced")
             return last_status
-        app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
+        #app.logger.info("Oops! {0} ({1}) had connection_success: {2}".format(displayname, blockchain, connection_status))
         return _("Offline")
 
     def selected_blockchain(self):
@@ -368,6 +373,10 @@ class Wallets:
                 total_balance = float(hot_balance) + float(cold_balance)
             except:
                 total_balance = hot_balance
+            try:
+                blockchain_symbol = globals.get_blockchain_symbol(wallet.blockchain).lower()
+            except:
+                blockchain_symbol = None
             self.rows.append({ 
                 'displayname': displayname, 
                 'hostname': wallet.hostname,
@@ -379,7 +388,7 @@ class Wallets:
                 'cold_address': ','.join(cold_wallet_addresses[wallet.blockchain]) if wallet.blockchain in cold_wallet_addresses else '',
                 'total_balance_float': total_balance,
                 'total_balance': converters.round_balance(total_balance),
-                'blockchain_symbol': globals.get_blockchain_symbol(wallet.blockchain).lower(),
+                'blockchain_symbol': blockchain_symbol,
                 'fiat_balance': fiat.to_fiat(wallet.blockchain, total_balance),
                 'updated_at': wallet.updated_at }) 
 
@@ -622,14 +631,17 @@ class Connections:
             except:
                 app.logger.info("Connections.init(): Unable to find a worker with hostname '{0}'".format(connection.hostname))
                 displayname = connection.hostname
+            try:
+                farmer_port = globals.get_blockchain_network_port(connection.blockchain)
+            except:
+                farmer_port = None
             self.rows.append({
                 'displayname': displayname, 
                 'hostname': connection.hostname,
                 'blockchain': connection.blockchain,
                 'status': worker_status,
-                'farmer_port': self.blockchain_port(connection.blockchain),
-                'details': connection.details,
-                'add_exmample': self.get_add_connection_example(connection.blockchain)
+                'farmer_port': farmer_port,
+                'details': connection.details
             })
             if connection.blockchain == 'mmx':
                 self.blockchains[connection.blockchain] = self.parse_mmx(connection, connection.blockchain, geoip_cache, lang)
@@ -637,71 +649,6 @@ class Connections:
                 self.blockchains[connection.blockchain] = self.parse_chia(connection, connection.blockchain, geoip_cache, lang)
         self.rows.sort(key=lambda conn: conn['blockchain'])
     
-    def get_add_connection_example(self, blockchain):
-        if blockchain == 'btcgreen':
-            return "155.133.91.176:9282"
-        if blockchain == 'cactus':
-            return "101.127.109.238:11444"
-        if blockchain == 'chia':
-            return "node.chia.net:8444"
-        if blockchain == 'chives':
-            return "106.225.229.73:9699"
-        if blockchain == 'cryptodoge':
-            return "46.75.50.16:15994"
-        if blockchain == 'flax':
-            return "143.198.76.157:6888"
-        if blockchain == 'flora':
-            return "186.123.88.33:18644"
-        if blockchain == 'hddcoin':
-            return "145.1.235.18:28444"
-        if blockchain == 'maize':
-            return "212.159.183.209:8644"
-        if blockchain == 'nchain':
-            return "218.88.205.216:58445"     
-        if blockchain == 'shibgreen':
-            return "218.89.239.144:7442"
-        if blockchain == 'silicoin':
-            return "67.172.84.54:22222"
-        if blockchain == 'staicoin':
-            return "173.54.12.193:1999"
-        if blockchain == 'stor':
-            return "118.33.225.159:8668"
-        
-    def blockchain_port(self,blockchain):
-        if blockchain == 'btcgreen':
-            return 9282
-        if blockchain == 'cactus':
-            return 11444
-        if blockchain == 'chia':
-            return 8444
-        if blockchain == 'chives':
-            return 9699
-        if blockchain == 'cryptodoge':
-            return 15994
-        if blockchain == 'flax':
-            return 6888
-        if blockchain == 'flora':
-            return 18644
-        if blockchain == 'hddcoin':
-            return 28444
-        if blockchain == 'nchain':
-            return 58445
-        if blockchain == 'mmx':
-            return 12335
-        if blockchain == 'maize':
-            return 8644
-        if blockchain == 'silicoin':
-            return 22447
-        if blockchain == 'shibgreen':
-            return 7442
-        if blockchain == 'silicoin':
-            return 22222
-        if blockchain == 'staicoin':
-            return 1999
-        if blockchain == 'stor':
-            return 8668
-        raise("Unknown blockchain fork of selected: " + blockchain)
-
     def get_geoname_for_lang(self, ip, location, lang):
         lang_codes = [ lang, ]
         if '_' in lang: 
@@ -836,7 +783,10 @@ class Connections:
 class Transactions:
 
     def __init__(self, blockchain, transactions):
-        self.address_prefix = globals.get_blockchain_symbol(blockchain).lower()
+        try:
+            self.address_prefix = globals.get_blockchain_symbol(blockchain).lower()
+        except:
+            self.address_prefix = None
         self.transactions = transactions
         self.rows = []
         for t in transactions:

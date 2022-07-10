@@ -17,8 +17,6 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.flora/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
   && [[ ! -f /root/.flora/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
-  echo "Downloading Flora blockchain DB (many GBs in size) on first launch..."
-  echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.flora/mainnet/db/ && cd /root/.flora/mainnet/db/
   echo "Sorry, Flora does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
   echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/flora"
@@ -85,7 +83,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.flora/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${farmer_address}:8932/certificates/?type=flora.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${farmer_address}:8932/certificates/?type=flora.  Is the fork's fullnode container running?"
       fi
       rm -f /tmp/certs.zip 
     fi
