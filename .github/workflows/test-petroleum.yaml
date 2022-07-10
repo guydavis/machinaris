@@ -41,7 +41,7 @@ jobs:
           push: true
           build-args: |
             "MACHINARIS_STREAM=test"
-            "CHIADOG_BRANCH=main"
+            "CHIADOG_BRANCH=dev"
             "PETROLEUM_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-petroleum:test

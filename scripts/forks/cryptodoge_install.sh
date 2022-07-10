@@ -4,8 +4,8 @@
 #
 
 CRYPTODOGE_BRANCH=$1
-# On 2022-05-18
-HASH=4ec389b615b9054afcf43d14f7d18434b6b4d2de
+# On 2022-07-10
+HASH=02ce973fe88d62c0c0ee106d988e172ee3f5aecf
 
 if [ -z ${CRYPTODOGE_BRANCH} ]; then
 	echo 'Skipping Cryptodoge install as not requested.'

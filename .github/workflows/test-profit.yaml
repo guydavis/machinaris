@@ -41,7 +41,7 @@ jobs:
           push: true
           build-args: |
             "MACHINARIS_STREAM=test"
-            "CHIADOG_BRANCH=main"
+            "CHIADOG_BRANCH=dev"
             "PROFIT_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-profit:test
