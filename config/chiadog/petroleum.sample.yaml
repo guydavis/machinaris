@@ -1,9 +1,9 @@
 # This is useful to differentiate multiple
 # instances monitoring multiple harvesters
-notification_title_prefix: '$HOSTNAME-ecostake'
+notification_title_prefix: '$HOSTNAME-petroleum'
 log_level: INFO
-coin_name: 'ecostake'
-coin_symbol: 'eco'
+coin_name: 'petroleum'
+coin_symbol: 'xpt'
 
 # Only one consumer can be enabled at a time, you can
 # delete the section for the consumer which you aren't using
@@ -12,7 +12,7 @@ chia_logs:
   file_log_consumer:
     enable: true
     prefix: 'chia'
-    file_path: '~/.chia/ecostake/mainnet/log/debug.log'
+    file_path: '~/.chia/petroleum/mainnet/log/debug.log'
 
 # Enable this and chiadog will ping a remote server every 5 minutes
 # That way you can know that the monitoring is running as expected
@@ -52,7 +52,7 @@ notifier:
     daily_stats: true
     wallet_events: true
     credentials:
-      sender: 'ecostake@example.com'
+      sender: 'petroleum@example.com'
       sender_name: 'Machinaris'
       recipient: 'you@example.com'
       username_smtp: 'username'
@@ -81,7 +81,7 @@ notifier:
     enable: false
     daily_stats: true
     wallet_events: true
-    topic: ecostake/ecostakedog/alert
+    topic: petroleum/petroleumdog/alert
     qos: 1
     retain: false
     credentials:

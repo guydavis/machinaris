@@ -11,7 +11,7 @@ coin_symbol: 'bpx'
 chia_logs:
   file_log_consumer:
     enable: true
-    prefix: 'bpx'
+    prefix: 'chia'
     file_path: '~/.chia/bpx/mainnet/log/debug.log'
 
 # Enable this and chiadog will ping a remote server every 5 minutes
