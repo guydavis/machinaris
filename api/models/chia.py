@@ -24,7 +24,7 @@ class FarmSummary:
                     self.calc_status(line.split(':')[1].strip())
                 elif re.match("Total.*farmed:.*$", line):
                     self.total_coins = line.split(':')[1].strip()
-                elif "Estimated network space" in line:
+                elif "network space" in line:
                     self.calc_netspace_size(line.split(':')[1].strip())
                 elif "Expected time to win" in line:
                     self.time_to_win = line.split(':')[1].strip()
