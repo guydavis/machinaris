@@ -40,12 +40,24 @@ def load_drives_status():
             app.logger.info("Error from smartctl scan because {0}".format(outs.decode('utf-8')))
         overrides = load_smartctl_overrides()
         devices = []
+        # First collect devices from the scan run
         for line in outs.decode('utf-8').splitlines():
             pieces = line.split()
-            device = pieces[0]
+            devices.append(pieces[0])
+        # Since the scan sometimes misses devices, so allow overrides to add more
+        for device in overrides.keys():
+            if not device in devices:
+                app.logger.info("Adding override device, not present in scan results: {0}".format(device))
+                devices.append(device)
+        drive_results = []
+        for device in devices:
             info = load_drive_info(device, overrides)
-            devices.append(drives.DriveStatus(line, info))
-        return devices
+            if not "No such device" in info:
+                app.logger.info("Smartctl info parsed and device added: {0}".format(device))
+                drive_results.append(drives.DriveStatus(line, info))
+            else:
+                app.logger.info("Smartctl reports no such device for {0}".format(device))
+        return drive_results
 
 def load_drive_info(device, overrides):
     if device in overrides and 'device_type' in overrides[device]:

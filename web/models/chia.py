@@ -392,17 +392,17 @@ class Wallets:
                 'fiat_balance': fiat.to_fiat(wallet.blockchain, total_balance),
                 'updated_at': wallet.updated_at }) 
 
-    def exclude_cat_wallets(self, wallet_details):
+    def exclude_wallets_from_sum(self, wallet_details):
         details = []
         chunks = wallet_details.split('\n\n')
         for chunk in chunks:
-            is_cat_wallet = False
+            exclude_wallet = False
             lines = chunk.split('\n')
             for line in lines:
-                if re.match('^\s+-Type:\s+CAT$', line):
-                    is_cat_wallet = True
-            if is_cat_wallet:
-                app.logger.debug("Ignoring balance of CAT type wallet named: {0}".format(lines[0][:-1]))
+                if re.match('^\s+-Type:\s+CAT$', line) or re.match('^\s+-Type:\s+DISTRIBUTED_ID$', line) or re.match('^\s+-Type:\s+NFT$', line):
+                    exclude_wallet = True
+            if exclude_wallet:
+                app.logger.debug("Ignoring balance of wallet named: {0}".format(lines[0][:-1]))
             else:
                 details.extend(chunk.split('\n'))
         return '\n'.join(details)
@@ -442,7 +442,7 @@ class Wallets:
         for wallet in self.wallets:
             if wallet.hostname == hostname and wallet.blockchain == blockchain:
                 try:
-                    for balance in rx.findall(self.exclude_cat_wallets(wallet.details)):
+                    for balance in rx.findall(self.exclude_wallets_from_sum(wallet.details)):
                         #app.logger.info("Found balance of {0} for  {1} - {2}".format(balance, wallet.hostname, wallet.blockchain))
                         sum += locale.atof(balance)
                 except Exception as ex:
