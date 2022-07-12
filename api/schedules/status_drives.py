@@ -46,3 +46,4 @@ def update():
             utils.send_post('/drives/', payload, debug=False)
         except Exception as ex:
             app.logger.info("Failed to load and send drives status because {0}".format(str(ex)))
+            traceback.print_exc()

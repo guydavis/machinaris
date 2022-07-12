@@ -9,14 +9,10 @@ from common.config import globals
 
 class DriveStatus:
 
-    def __init__(self, device_line, info):
-        # First parse the single device line from smartctl --scan
-        # Example "/dev/sda -d sat # /dev/sda [SAT], ATA device"
-        values = device_line.split('#')
-        self.comment = values[1].strip()
-        values = values[0].split('-d')
-        self.device = values[0].strip()
-        self.type = values[1].strip()
+    def __init__(self, device, device_type, device_comment, info):
+        self.device = device
+        self.type = device_type
+        self.comment = device_comment
         self.smart_info = info  # From smartctl -a
         self.set_info_attributes(info.splitlines())
 
@@ -30,10 +26,10 @@ class DriveStatus:
         self.power_on_hours = None
         self.temperature = None
         for line in data:
-            if line.strip().startswith('Model Family'):
+            if line.strip().startswith('Model Family'):  # Sometimes present
                 # Example: "Model Family:     Seagate BarraCuda 3.5"
                 self.model_family = line.split(':')[1].strip()
-            elif line.strip().startswith('Device Model'):
+            elif line.strip().startswith('Device Model'): # Sometimes present
                 # Example: "Device Model:     ST8000DM004-2CX188"
                 self.device_model = line.split(':')[1].strip()
             elif line.strip().startswith('Serial Number'):
@@ -47,9 +43,18 @@ class DriveStatus:
             elif line.strip().startswith('SMART overall-health self-assessment test result:'):
                 # Example: "SMART overall-health self-assessment test result: PASSED"
                 self.status = line.split(':')[1].strip()
+            elif line.strip().startswith('SMART Health Status:'): # Seen if '-d scsi' passed incorrectly
+                # Example: "SMART Health Status: OK"
+                self.status = line.split(':')[1].strip().replace('OK', 'PASSED')
             elif 'Power_On_Hours' in line:
                 # Example: "  9 Power_On_Hours          0x0032   092   092   000    Old_age   Always       -       7185 (119 239 0)"
                 self.power_on_hours = line.split()[9].strip()
             elif 'Temperature_Celsius' in line:
                 # Example: "194 Temperature_Celsius     0x0022   038   049   000    Old_age   Always       -       38 (0 21 0 0 0)"
                 self.temperature = line.split()[9].strip()
+            elif 'Current Drive Temperature:' in line:
+                # Example: "Current Drive Temperature:     34 C"
+                self.temperature = line.split(':')[1][:-1].strip()
+        # Now print warning if missing fields
+        if not self.model_family and not self.device_model:
+            app.logger.info("Drive device {0} was missing Model information.  Have you set 'device_type: scsi' in drives_overrides.json when you don't need to?  Remove that and allow Machinaris to just: smartcl -a {0}".format(self.device))

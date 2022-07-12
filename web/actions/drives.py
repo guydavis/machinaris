@@ -24,7 +24,7 @@ from web.models import drives
 DRIVES_SETTINGS = '/root/.chia/machinaris/config/drives_settings.json'
 
 def load_drive_summary():
-    drvs = db.session.query(d.Drive).order_by(d.Drive.hostname).all()
+    drvs = db.session.query(d.Drive).order_by(d.Drive.hostname, d.Drive.device).all()
     return drives.Drives(drvs)
 
 def load_smartctl_info(hostname, device):
