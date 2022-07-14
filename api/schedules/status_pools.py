@@ -16,21 +16,21 @@ from flask import g
 
 from common.config import globals
 from common.models import pools as p
-from api.commands import pools_cli
-from api.rpc import chia
+from api.commands import pools_cli, rpc
 from api import app
 from api import utils
 
 def update():
     app.logger.info("Executing status_pools...")
     with app.app_context():
+        blockchain_rpc = rpc.RPC()
         try:
             for blockchain in globals.enabled_blockchains():
                 if not blockchain in p.POOLABLE_BLOCKCHAINS:
                     continue
                 payload = []
                 hostname = utils.get_hostname()
-                pools =  asyncio.run(chia.get_pool_state(blockchain))
+                pools =  blockchain_rpc.get_pool_states(blockchain)
                 for pool in pools:
                     launcher_id = pool['pool_config']['launcher_id']
                     login_link = pools_cli.get_pool_login_link(launcher_id)

@@ -1,5 +1,5 @@
 #
-# RPC interactions with Chia/Fork
+# RPC interactions with Chia and fork blockchains
 #
 
 import asyncio
@@ -145,186 +145,179 @@ elif blockchain == "stor":
 else:
     app.logger.info("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ['blockchains']))
 
-# Unused as I am getting signage points from debug.log as this API returns no dates
-async def get_signage_points(blockchain):
-    config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
-    farmer_rpc_port = config["farmer"]["rpc_port"]
-    farmer = await FarmerRpcClient.create(
-        'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
-    )
-    points = await farmer.get_signage_points()
-    farmer.close()
-    await farmer.await_closed()
-    config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
-    full_node_rpc_port = config["full_node"]["rpc_port"]
-    fullnode = await FullNodeRpcClient.create(
-        'localhost', uint16(full_node_rpc_port), DEFAULT_ROOT_PATH, config
-    )
-    for point in points:
-        sp = point['signage_point']
-        signage_point = await fullnode.get_recent_signage_point_or_eos(
-            sp_hash=sp['challenge_chain_sp'],
-            challenge_hash=sp['challenge_hash'])
-        app.logger.info(signage_point)
-    fullnode.close()
-    await fullnode.await_closed()
-    return points
+class RPC:
+    def __init__(self):
+        # Workaround, see: https://stackoverflow.com/a/46750562/3072265
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
 
-# Used on Pools page to display each pool's state
-async def get_pool_state(blockchain):
-    pools = []
-    try:
-        config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
-        farmer_rpc_port = config["farmer"]["rpc_port"]
-        farmer = await FarmerRpcClient.create(
-            'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
-        )
-        result = await farmer.get_pool_state()
-        farmer.close()
-        await farmer.await_closed()
-        if 'pool_state' in result:
-            for pool in result["pool_state"]:
-                pools.append(pool)
-    except Exception as ex:
-        app.logger.info("Error getting {0} blockchain pool states: {1}".format(blockchain, str(ex)))
-    return pools
+    # Used to load all plots on all harvesters
+    def get_all_plots(self):
+        plots_via_rpc = asyncio.run(self._load_all_plots())
+        return plots_via_rpc
 
-# Used to load plot type (solo or portable) via RPC
-def get_all_plots():
-    plots_via_rpc = asyncio.run(load_all_plots())
-    return plots_via_rpc
+    # Get all wallet info
+    def get_wallets(self):
+        wallets = asyncio.run(self._load_wallets())
+        return wallets
 
-async def load_all_plots():
-    all_plots = []
-    try:
-        config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
-        farmer_rpc_port = config["farmer"]["rpc_port"]
-        farmer = await FarmerRpcClient.create(
-            'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
-        )
-        result = await farmer.get_harvesters()
-        farmer.close()
-        await farmer.await_closed()
-        for harvester in result["harvesters"]:
-            # app.logger.info(harvester.keys()) Returns: ['connection', 'failed_to_open_filenames', 'no_key_filenames', 'plots']
-            # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
-            host = harvester["connection"]["host"]
-            plots = harvester["plots"]
-            app.logger.info("Listing plots found {0} plots on {1}.".format(len(plots), host))
-            for plot in plots:
-                all_plots.append({
-                    "hostname": host,
-                    "type": "solo" if (plot["pool_contract_puzzle_hash"] is None) else "portable",
-                    "plot_id": plot['plot_id'],
-                    "file_size": plot['file_size'], # bytes
-                    "filename": plot['filename'], # full path and name
-                    "plot_public_key": plot['plot_public_key'],
-                    "pool_contract_puzzle_hash": plot['pool_contract_puzzle_hash'],
-                    "pool_public_key": plot['pool_public_key'],
-                })
-    except Exception as ex:
-        app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
-    return all_plots
+    # Get transactions for a particular wallet
+    def get_transactions(self, wallet_id, reverse=False):
+        transactions = asyncio.run(self._load_transactions(wallet_id, reverse))
+        return transactions
 
-def get_wallets():
-    wallets = asyncio.run(load_wallets())
-    return wallets
+    # Get invalid plots on each harvester
+    def get_harvester_warnings(self):
+        invalid_plots = asyncio.run(self._load_harvester_warnings())
+        return invalid_plots
 
-async def load_wallets():
-    wallets = []
-    try:
-        config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
-        wallet_rpc_port = config["wallet"]["rpc_port"]
-        wallet = await WalletRpcClient.create(
-            'localhost', uint16(wallet_rpc_port), DEFAULT_ROOT_PATH, config
-        )
-        result = await wallet.get_wallets()
-        wallet.close()
-        await wallet.await_closed()
-        wallets.extend(result)
-    except Exception as ex:
-        app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
-    return wallets
+    # Get status of all pools (aka plotnfts)
+    def get_pool_states(self, blockchain):
+        pool_states = asyncio.run(self._get_pool_states(blockchain))
+        return pool_states
 
-def get_transactions(wallet_id, reverse=False):
-    transactions = asyncio.run(load_transactions(wallet_id, reverse))
-    return transactions
 
-async def load_transactions(wallet_id, reverse):
-    transactions = []
-    try:
-        config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
-        wallet_rpc_port = config["wallet"]["rpc_port"]
-        wallet = await WalletRpcClient.create(
-            'localhost', uint16(wallet_rpc_port), DEFAULT_ROOT_PATH, config
-        )
-        if globals.legacy_blockchain(globals.enabled_blockchains()[0]):
-            result = await wallet.get_transactions(wallet_id)  
-            if reverse: # Old blockchains can't take reverse param
-                result.reverse()
-        else: # New blockchain takes the reverse parameter directly
-            result = await wallet.get_transactions(wallet_id, reverse=reverse)
-        wallet.close()
-        await wallet.await_closed()
-        transactions.extend(result)
-    except Exception as ex:
-        app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
-    return transactions
-
-# Get invalid plots on each harvester
-def harvester_warnings():
-    invalid_plots = asyncio.run(load_harvester_warnings())
-    return invalid_plots
-
-async def load_harvester_warnings(blockchain='chia'):
-    invalid_plots = []
-    try:
-        config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
-        farmer_rpc_port = config["farmer"]["rpc_port"]
-        farmer = await FarmerRpcClient.create(
-            'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
-        )
-        result = await farmer.get_harvesters()
-        farmer.close()
-        await farmer.await_closed()
-
-        for harvester in result["harvesters"]:
-            # app.logger.info(harvester.keys()) Returns: ['connection', 'failed_to_open_filenames', 'no_key_filenames', 'plots']
-            # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
-            host = harvester["connection"]["host"]
-            node_id = harvester["connection"]["node_id"] # TODO Track link between worker and node_id?
-            
-            # Plots Invalid
+    # Used on Pools page to display each pool's state
+    async def _get_pool_states(self, blockchain):
+        pools = []
+        try:
+            config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
+            farmer_rpc_port = config["farmer"]["rpc_port"]
             farmer = await FarmerRpcClient.create(
                 'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
             )
-            app.logger.info(node_id)
-            plot_paths = await farmer.get_harvester_plots_invalid(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-            app.logger.info(plot_paths)  # TODO Return plots
+            result = await farmer.get_pool_state()
             farmer.close()
             await farmer.await_closed()
+            if 'pool_state' in result:
+                for pool in result["pool_state"]:
+                    pools.append(pool)
+        except Exception as ex:
+            app.logger.info("Error getting {0} blockchain pool states: {1}".format(blockchain, str(ex)))
+        return pools
 
-            # Plots Missing Keys
+    # Load all plots from all harvesters
+    async def _load_all_plots(self):
+        all_plots = []
+        try:
+            config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
+            farmer_rpc_port = config["farmer"]["rpc_port"]
             farmer = await FarmerRpcClient.create(
                 'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
             )
-            app.logger.info(node_id)
-            plot_paths = await farmer.get_harvester_keys_missing(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-            app.logger.info(plot_paths) # TODO Return plots
+            result = await farmer.get_harvesters()
             farmer.close()
             await farmer.await_closed()
+            for harvester in result["harvesters"]:
+                # app.logger.info(harvester.keys()) Returns: ['connection', 'failed_to_open_filenames', 'no_key_filenames', 'plots']
+                # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
+                host = harvester["connection"]["host"]
+                plots = harvester["plots"]
+                app.logger.info("Listing plots found {0} plots on {1}.".format(len(plots), host))
+                for plot in plots:
+                    all_plots.append({
+                        "hostname": host,
+                        "type": "solo" if (plot["pool_contract_puzzle_hash"] is None) else "portable",
+                        "plot_id": plot['plot_id'],
+                        "file_size": plot['file_size'], # bytes
+                        "filename": plot['filename'], # full path and name
+                        "plot_public_key": plot['plot_public_key'],
+                        "pool_contract_puzzle_hash": plot['pool_contract_puzzle_hash'],
+                        "pool_public_key": plot['pool_public_key'],
+                    })
+        except Exception as ex:
+            app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
+        return all_plots
 
-            # Plots Duplicated
+    # Load all the wallet info
+    async def _load_wallets(self):
+        wallets = []
+        try:
+            config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
+            wallet_rpc_port = config["wallet"]["rpc_port"]
+            wallet = await WalletRpcClient.create(
+                'localhost', uint16(wallet_rpc_port), DEFAULT_ROOT_PATH, config
+            )
+            result = await wallet.get_wallets()
+            wallet.close()
+            await wallet.await_closed()
+            wallets.extend(result)
+        except Exception as ex:
+            app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
+        return wallets
+
+    # Load all transactions for a wallet id number
+    async def _load_transactions(self, wallet_id, reverse):
+        transactions = []
+        try:
+            config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
+            wallet_rpc_port = config["wallet"]["rpc_port"]
+            wallet = await WalletRpcClient.create(
+                'localhost', uint16(wallet_rpc_port), DEFAULT_ROOT_PATH, config
+            )
+            if globals.legacy_blockchain(globals.enabled_blockchains()[0]):
+                result = await wallet.get_transactions(wallet_id)  
+                if reverse: # Old blockchains can't take reverse param
+                    result.reverse()
+            else: # New blockchain takes the reverse parameter directly
+                result = await wallet.get_transactions(wallet_id, reverse=reverse)
+            wallet.close()
+            await wallet.await_closed()
+            transactions.extend(result)
+        except Exception as ex:
+            app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
+        return transactions
+
+    # Get warnings about problem plots
+    async def _load_harvester_warnings(self, blockchain):
+        invalid_plots = []
+        try:
+            config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
+            farmer_rpc_port = config["farmer"]["rpc_port"]
             farmer = await FarmerRpcClient.create(
                 'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
             )
-            app.logger.info(node_id)
-            plot_paths = await farmer.get_harvester_plots_duplicates(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-            app.logger.info(plot_paths) # TODO Return plots
+            result = await farmer.get_harvesters()
             farmer.close()
             await farmer.await_closed()
 
-    except Exception as ex:
-        app.logger.info("Error getting {0} harvester warnings: {1}".format(blockchain, str(ex)))
-        traceback.print_exc()
-    return invalid_plots
+            for harvester in result["harvesters"]:
+                # app.logger.info(harvester.keys()) Returns: ['connection', 'failed_to_open_filenames', 'no_key_filenames', 'plots']
+                # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
+                host = harvester["connection"]["host"]
+                node_id = harvester["connection"]["node_id"] # TODO Track link between worker and node_id?
+                
+                # Plots Invalid
+                farmer = await FarmerRpcClient.create(
+                    'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
+                )
+                app.logger.info(node_id)
+                plot_paths = await farmer.get_harvester_plots_invalid(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
+                app.logger.info(plot_paths)  # TODO Return plots
+                farmer.close()
+                await farmer.await_closed()
+
+                # Plots Missing Keys
+                farmer = await FarmerRpcClient.create(
+                    'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
+                )
+                app.logger.info(node_id)
+                plot_paths = await farmer.get_harvester_keys_missing(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
+                app.logger.info(plot_paths) # TODO Return plots
+                farmer.close()
+                await farmer.await_closed()
+
+                # Plots Duplicated
+                farmer = await FarmerRpcClient.create(
+                    'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
+                )
+                app.logger.info(node_id)
+                plot_paths = await farmer.get_harvester_plots_duplicates(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
+                app.logger.info(plot_paths) # TODO Return plots
+                farmer.close()
+                await farmer.await_closed()
+
+        except Exception as ex:
+            app.logger.info("Error getting {0} harvester warnings: {1}".format(blockchain, str(ex)))
+            traceback.print_exc()
+        return invalid_plots

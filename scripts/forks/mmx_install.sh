@@ -4,8 +4,8 @@
 #
 
 MMX_BRANCH=$1
-# On 2022-07-10
-HASH=10d4aa05500793d08a50e5b31b0c7c6dc4ab3949
+# On 2022-07-13
+HASH=151cc07b7ac0704461e9422392f33cbfde52cce4
 
 if [ -z ${MMX_BRANCH} ]; then
 	echo 'Skipping MMX install as not requested.'
