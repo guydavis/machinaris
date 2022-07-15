@@ -163,7 +163,10 @@ class RPC:
 
     # Get transactions for a particular wallet
     def get_transactions(self, wallet_id, reverse=False):
-        transactions = asyncio.run(self._load_transactions(wallet_id, reverse))
+        if globals.legacy_blockchain(globals.enabled_blockchains()[0]):
+            transactions = asyncio.run(self._load_transactions_legacy_blockchains(wallet_id, reverse))
+        else:
+            transactions = asyncio.run(self._load_transactions(wallet_id, reverse))
         return transactions
 
     # Get invalid plots on each harvester
@@ -247,25 +250,48 @@ class RPC:
         return wallets
 
     # Load all transactions for a wallet id number
+    async def _load_transactions_legacy_blockchains(self, wallet_id, reverse):
+        transactions = []
+        config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
+        wallet_rpc_port = config["wallet"]["rpc_port"]
+        try:
+            # Now load the transactions
+            wallet = await WalletRpcClient.create(
+                'localhost', uint16(wallet_rpc_port), DEFAULT_ROOT_PATH, config
+            )
+            result = await wallet.get_transactions(wallet_id)  
+            if reverse: # Old blockchains can't take reverse param
+                result.reverse()
+            wallet.close()
+            await wallet.await_closed()
+            transactions.extend(result)
+        except Exception as ex:
+            app.logger.info("Error getting transactions via RPC: {0}".format(str(ex)))
+        return transactions
+
+    # Load all transactions for a wallet id number, get total count first
     async def _load_transactions(self, wallet_id, reverse):
         transactions = []
         try:
             config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
             wallet_rpc_port = config["wallet"]["rpc_port"]
+            # First load the total count, but this method only works on newish blockchains
             wallet = await WalletRpcClient.create(
                 'localhost', uint16(wallet_rpc_port), DEFAULT_ROOT_PATH, config
             )
-            if globals.legacy_blockchain(globals.enabled_blockchains()[0]):
-                result = await wallet.get_transactions(wallet_id)  
-                if reverse: # Old blockchains can't take reverse param
-                    result.reverse()
-            else: # New blockchain takes the reverse parameter directly
-                result = await wallet.get_transactions(wallet_id, reverse=reverse)
+            count = await wallet.get_transaction_count(wallet_id)
+            wallet.close()
+            await wallet.await_closed()
+            # Now load the transactions
+            wallet = await WalletRpcClient.create(
+                'localhost', uint16(wallet_rpc_port), DEFAULT_ROOT_PATH, config
+            )
+            result = await wallet.get_transactions(wallet_id, 0, count, reverse=reverse)
             wallet.close()
             await wallet.await_closed()
             transactions.extend(result)
         except Exception as ex:
-            app.logger.info("Error getting plots via RPC: {0}".format(str(ex)))
+            app.logger.info("Error getting transactions via RPC: {0}".format(str(ex)))
         return transactions
 
     # Get warnings about problem plots
