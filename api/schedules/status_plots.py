@@ -14,8 +14,7 @@ from common.config import globals
 from common.models import plots as p
 from common.models import workers as w
 from api import app, db
-from api.rpc import chia
-from api.commands import mmx_cli
+from api.commands import mmx_cli, rpc
 from api import utils
 
 # Due to database load, only send full plots list every X minutes
@@ -65,8 +64,9 @@ def update():
 
 def update_chia_plots(plots_status, since):
     try:
+        blockchain_rpc = rpc.RPC()
         controller_hostname = utils.get_hostname()
-        plots_farming = chia.get_all_plots()
+        plots_farming = blockchain_rpc.get_all_plots()
         payload = []
         displaynames = {}
         for plot in plots_farming:
@@ -113,8 +113,9 @@ def update_chia_plots(plots_status, since):
 def update_chives_plots(since):
     try:
         blockchain = 'chives'
+        blockchain_rpc = rpc.RPC()
         hostname = utils.get_hostname()
-        plots_farming = chia.get_all_plots()
+        plots_farming = blockchain_rpc.get_all_plots()
         payload = []
         for plot in plots_farming:
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])

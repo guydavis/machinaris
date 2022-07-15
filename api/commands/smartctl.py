@@ -25,6 +25,14 @@ def load_smartctl_overrides():
             msg = "Unable to read smartctl overrides from {0} because {1}".format(SMARTCTL_OVERRIDES_CONFIG, str(ex))
             app.logger.error(msg)
             return data
+    if len(data.keys()) > 0:
+        app.logger.info("{0} contains: ".format(SMARTCTL_OVERRIDES_CONFIG))
+        app.logger.info(data)
+    for drive in data.keys():
+        if 'device_type' in data[drive]:
+            data[drive]['type_overridden'] = True
+        if not 'comment' in data[drive]:
+            data[drive]['comment'] = None
     return data
 
 def load_drives_status():
@@ -38,21 +46,39 @@ def load_drives_status():
             abort(500, description="The timeout is expired!")
         if errs:
             app.logger.info("Error from smartctl scan because {0}".format(outs.decode('utf-8')))
-        overrides = load_smartctl_overrides()
-        devices = []
+        devices = load_smartctl_overrides()
+        # Now add devices from the scan only if 
         for line in outs.decode('utf-8').splitlines():
-            pieces = line.split()
-            device = pieces[0]
-            info = load_drive_info(device, overrides)
-            devices.append(drives.DriveStatus(line, info))
-        return devices
+            # First parse the single device line from smartctl --scan
+            # Example "/dev/sda -d sat # /dev/sda [SAT], ATA device"
+            values = line.split('#')
+            comment = values[1].strip()
+            values = values[0].split('-d')
+            device = values[0].strip()
+            device_type = values[1].strip()
+            if not device in devices:  # Add any devices from the scan, not in overrides
+                devices[device] = {}
+            if not 'device_type' in  devices[device]: # User added override device to list, but accepts default type
+                devices[device]['device_type'] = device_type
+            devices[device]['comment'] = comment
+        drive_results = []
+        for device in devices.keys():
+            info = load_drive_info(device, devices[device])
+            if not "No such device" in info:
+                #app.logger.info("Smartctl info parsed and device added: {0}".format(device))
+                drive_results.append(drives.DriveStatus(device, devices[device]['device_type'],
+                    devices[device]['comment'], info))
+            else:
+                app.logger.info("Smartctl reports no such device for {0}".format(device))
+        return drive_results
 
-def load_drive_info(device, overrides):
-    if device in overrides and 'device_type' in overrides[device]:
-        cmd = "smartctl -a -d {0} {1}".format(overrides[device]['device_type'], device)
+def load_drive_info(device_name, device_settings):
+    #app.logger.info("{0} -> {1}".format(device_name, device_settings))
+    if 'type_overridden' in device_settings:
+        cmd = "smartctl -a -d {0} {1}".format(device_settings['device_type'], device_name)
     else: # No override, use the default auto mode
-        cmd = "smartctl -a {0}".format(device)
-    #app.logger.info(cmd)
+        cmd = "smartctl -a {0}".format(device_name)
+    app.logger.info("Executing: {0}".format(cmd))
     proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)

@@ -24,7 +24,7 @@ class FarmSummary:
                     self.calc_status(line.split(':')[1].strip())
                 elif re.match("Total.*farmed:.*$", line):
                     self.total_coins = line.split(':')[1].strip()
-                elif "Estimated network space" in line:
+                elif "network space" in line:
                     self.calc_netspace_size(line.split(':')[1].strip())
                 elif "Expected time to win" in line:
                     self.time_to_win = line.split(':')[1].strip()
@@ -101,17 +101,17 @@ class Wallets:
             else:
                 app.logger.debug("api.models.Wallets.init(): Skipping blockchain {0}".format(wallet.blockchain))
 
-    def exclude_cat_wallets(self, wallet_details):
+    def exclude_wallets_from_sum(self, wallet_details):
         details = []
         chunks = wallet_details.split('\n\n')
         for chunk in chunks:
-            is_cat_wallet = False
+            exclude_wallet = False
             lines = chunk.split('\n')
             for line in lines:
-                if re.match('^\s+-Type:\s+CAT$', line):
-                    is_cat_wallet = True
-            if is_cat_wallet:
-                app.logger.debug("Ignoring balance of CAT type wallet named: {0}".format(lines[0][:-1]))
+                if re.match('^\s+-Type:\s+CAT$', line) or re.match('^\s+-Type:\s+DISTRIBUTED_ID$', line) or re.match('^\s+-Type:\s+NFT$', line):
+                    exclude_wallet = True
+            if exclude_wallet:
+                app.logger.debug("Ignoring balance of wallet named: {0}".format(lines[0][:-1]))
             else:
                 details.extend(chunk.split('\n'))
         return '\n'.join(details)
@@ -123,7 +123,7 @@ class Wallets:
         for wallet in self.wallets:
             if wallet.hostname == hostname and wallet.blockchain == blockchain and wallet.is_synced():
                 try:
-                    for balance in rx.findall(self.exclude_cat_wallets(wallet.details)):
+                    for balance in rx.findall(self.exclude_wallets_from_sum(wallet.details)):
                         #app.logger.info("Found balance of {0} for for {1} - {2}".format(balance, 
                         # wallet.hostname, wallet.blockchain))
                         sum += locale.atof(balance)
