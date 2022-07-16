@@ -67,3 +67,17 @@ def load_settings():
     #app.logger.info("good_below_temperature: {0}".format(settings["good_below_temperature"]))
     #app.logger.info("warn_below_temperature: {0}".format(settings["warn_below_temperature"]))
     return settings
+
+def remove_selected_drives(unique_ids):
+    for unique_id in unique_ids:
+        hostname,device = unique_id.split('|')
+        app.logger.info("Removing {0} device from {1}".format(device, hostname))
+        db.session.query(d.Drive).filter(d.Drive.hostname==hostname,d.Drive.device==device).delete()
+    db.session.commit()
+    flash(_("Removed selected drive status.  Please allow 15 minutes for active devices to be listed below again."), 'success')
+
+def remove_all_drives():
+    app.logger.info("Removing all drives!")
+    db.session.query(d.Drive).delete()
+    db.session.commit()
+    flash(_("Removed all drive status.  Please allow 15 minutes for active devices to be listed below again."), 'success')

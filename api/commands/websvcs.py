@@ -39,6 +39,12 @@ def load_cold_wallet_cache():
         try:
             with open(COLD_WALLET_CACHE_FILE) as f:
                 data = json.load(f)
+                # Now verify that cache file is in correct format, else discard
+                for address in data:
+                    if data[address] is float:  # Old format had a single float for an address, now a dict per address
+                        app.logger.info("Deleting old cold wallet cache file with legacy format: {0}".format(COLD_WALLET_CACHE_FILE))
+                        os.remove(COLD_WALLET_CACHE_FILE)
+                        return {}
         except Exception as ex:
             msg = "Unable to read cold wallet cache from {0} because {1}".format(COLD_WALLET_CACHE_FILE, str(ex))
             app.logger.error(msg)
