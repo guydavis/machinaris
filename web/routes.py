@@ -314,7 +314,12 @@ def drives():
     if request.args.get('device') and request.args.get('hostname'):
         return make_response(d.load_smartctl_info(request.args.get('hostname'), request.args.get('device')), 200)
     if request.method == 'POST':
-        d.save_settings(request.form)
+        if request.form.get('action') == 'remove':
+            d.remove_selected_drives(request.form.getlist('unique_id'))
+        elif request.form.get('action') == 'purge':
+            d.remove_all_drives()
+        else:
+            d.save_settings(request.form)
     gc = globals.load()
     drvs = d.load_drive_summary()
     settings = d.load_settings()
