@@ -105,10 +105,14 @@ def request_cold_wallet_balance(blockchain, cold_wallet_cache, alltheblocks_bloc
     total_balance = 0.0
     farmed_balance = 0.0
     if address in cold_wallet_cache: # First initialize to the last good values received.
-        if 'total_balance' in cold_wallet_cache[address]:
-            total_balance = cold_wallet_cache[address]['total_balance']
-        if 'farmed_balance' in cold_wallet_cache[address]:
-            farmed_balance = cold_wallet_cache[address]['farmed_balance']
+        if cold_wallet_cache[address] is float:
+            app.logger.info("During request, deleting old cold wallet cache file with legacy format: {0}".format(COLD_WALLET_CACHE_FILE))
+            os.remove(COLD_WALLET_CACHE_FILE)
+        else:
+            if 'total_balance' in cold_wallet_cache[address]:
+                total_balance = cold_wallet_cache[address]['total_balance']
+            if 'farmed_balance' in cold_wallet_cache[address]:
+                farmed_balance = cold_wallet_cache[address]['farmed_balance']
     app.logger.info("Requesting {0} wallet balance for {1}".format(alltheblocks_blockchain, address))
     url = f"https://api.alltheblocks.net/{alltheblocks_blockchain}/address/{address}"
     try:
@@ -178,7 +182,10 @@ def cold_wallet_farmed_balance(blockchain):
     if blockchain in addresses_per_blockchain:
         for address in addresses_per_blockchain[blockchain]:
             if address in cold_wallet_cache:
-                if 'farmed_balance' in cold_wallet_cache[address]:
+                if cold_wallet_cache[address] is float: # Legacy cache file format
+                    app.logger.info("During get, deleting old cold wallet cache file with legacy format: {0}".format(COLD_WALLET_CACHE_FILE))
+                    os.remove(COLD_WALLET_CACHE_FILE)
+                elif 'farmed_balance' in cold_wallet_cache[address]:
                     farmed_balance += float(cold_wallet_cache[address]['farmed_balance'])
         return farmed_balance
     return 0.0 # No cold wallet addresses to check
