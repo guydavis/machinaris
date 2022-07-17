@@ -41,8 +41,10 @@ def load_cold_wallet_cache():
                 data = json.load(f)
                 # Now verify that cache file is in correct format, else discard
                 for address in data:
-                    if data[address] is float:  # Old format had a single float for an address, now a dict per address
-                        app.logger.info("Deleting old cold wallet cache file with legacy format: {0}".format(COLD_WALLET_CACHE_FILE))
+                    try:
+                        data[address]['total_balance']  # Test that format is correct
+                    except Exception as ex:
+                        app.logger.info("Deleting old cold wallet cache file with legacy format. {0}".format(str(ex)))
                         os.remove(COLD_WALLET_CACHE_FILE)
                         return {}
         except Exception as ex:
@@ -105,14 +107,14 @@ def request_cold_wallet_balance(blockchain, cold_wallet_cache, alltheblocks_bloc
     total_balance = 0.0
     farmed_balance = 0.0
     if address in cold_wallet_cache: # First initialize to the last good values received.
-        if cold_wallet_cache[address] is float:
-            app.logger.info("During request, deleting old cold wallet cache file with legacy format: {0}".format(COLD_WALLET_CACHE_FILE))
-            os.remove(COLD_WALLET_CACHE_FILE)
-        else:
+        try:
             if 'total_balance' in cold_wallet_cache[address]:
                 total_balance = cold_wallet_cache[address]['total_balance']
             if 'farmed_balance' in cold_wallet_cache[address]:
                 farmed_balance = cold_wallet_cache[address]['farmed_balance']
+        except Exception as ex:
+            app.logger.info("During request, deleting old cold wallet cache file with legacy format. {0}".format(str(ex)))
+            os.remove(COLD_WALLET_CACHE_FILE)
     app.logger.info("Requesting {0} wallet balance for {1}".format(alltheblocks_blockchain, address))
     url = f"https://api.alltheblocks.net/{alltheblocks_blockchain}/address/{address}"
     try:
@@ -156,10 +158,14 @@ def cold_wallet_balance(blockchain):
         else:
             for address in addresses_per_blockchain[blockchain]:
                 if address in cold_wallet_cache:
-                    if 'total_balance' in cold_wallet_cache[address]:
-                        app.logger.debug(cold_wallet_cache[address])
-                        cached_cold_balance = float(cold_wallet_cache[address]['total_balance'])
-                        total_balance += cached_cold_balance
+                    try:
+                        if 'total_balance' in cold_wallet_cache[address]:
+                            app.logger.debug(cold_wallet_cache[address])
+                            cached_cold_balance = float(cold_wallet_cache[address]['total_balance'])
+                            total_balance += cached_cold_balance
+                    except Exception as ex:
+                        app.logger.info("During cold balance lookup, deleting old cold wallet cache file with legacy format. {0}".format(str(ex)))
+                        os.remove(COLD_WALLET_CACHE_FILE)
             return total_balance
     return 0.0 # No cold wallet addresses to check, so no errors obviously
 
@@ -182,11 +188,12 @@ def cold_wallet_farmed_balance(blockchain):
     if blockchain in addresses_per_blockchain:
         for address in addresses_per_blockchain[blockchain]:
             if address in cold_wallet_cache:
-                if cold_wallet_cache[address] is float: # Legacy cache file format
-                    app.logger.info("During get, deleting old cold wallet cache file with legacy format: {0}".format(COLD_WALLET_CACHE_FILE))
+                try:
+                    if 'farmed_balance' in cold_wallet_cache[address]:
+                        farmed_balance += float(cold_wallet_cache[address]['farmed_balance'])
+                except Exception as ex:
+                    app.logger.info("During get, deleting old cold wallet cache file with legacy format. {0}".format(str(ex)))
                     os.remove(COLD_WALLET_CACHE_FILE)
-                elif 'farmed_balance' in cold_wallet_cache[address]:
-                    farmed_balance += float(cold_wallet_cache[address]['farmed_balance'])
         return farmed_balance
     return 0.0 # No cold wallet addresses to check
 
