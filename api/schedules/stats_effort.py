@@ -1,6 +1,5 @@
 #
-# Calculates effort per blockchain - by definition this is an estimate
-# Requires that 
+# Calculates effort per blockchain - by definition this is an estimate!
 #
 
 
@@ -19,9 +18,8 @@ from flask import g
 
 from common.config import globals
 from common.utils import converters
-from api.commands import chia_cli, websvcs
-from api.rpc import chia
-from api import app, utils, db
+from api.commands import chia_cli, websvcs, rpc
+from api import app, utils
 
 # 
 # Calculates current effort on this blockchain which is time since last farmed block (or oldest plot if no blocks farmed)
@@ -54,6 +52,7 @@ def get_oldest_plot_file_time():
 
 def collect():
     with app.app_context():
+        blockchain_rpc = rpc.RPC()
         current_datetime = datetime.datetime.now().strftime("%Y%m%d%H%M")
         blockchain = globals.enabled_blockchains()[0]
         try:
@@ -61,8 +60,8 @@ def collect():
                 app.logger.debug("Unable to calculate effort for MMX blockchain.  Only Chia and forks supported.")
                 return
             farm_summary = chia_cli.load_farm_summary(blockchain)
-            wallets = chia.get_wallets()
-            transactions = chia.get_transactions(wallets[0]['id'], reverse=True) # Search primary wallet only
+            wallets = blockchain_rpc.get_wallets()
+            transactions = blockchain_rpc.get_transactions(wallets[0]['id'], reverse=True) # Search primary wallet only
             most_recent_block_reward_time = None
             for transaction in transactions:  # Order is reversed; newest to oldest
                 #app.logger.info("At {0}, {1} type had amount: {2}".format(readable(transaction.created_at_time), transaction.type, transaction.additions[0].amount))

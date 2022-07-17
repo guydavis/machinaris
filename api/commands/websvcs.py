@@ -21,22 +21,6 @@ COLD_WALLET_CACHE_DIR = '/root/.chia/machinaris/cache/cold_wallets'
 BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/cache/blockchain_prices_cache.json'
 EXCHANGE_RATES_CACHE_FILE = '/root/.chia/machinaris/cache/exchange_rates_cache.json'
 
-MOJO_PER_COIN = {
-    'btcgreen': 1000000000000,
-    'cactus': 1000000000000,
-    'chia': 1000000000000, 
-    'chives': 100000000,
-    'cryptodoge': 1000000,
-    'flax': 1000000000000,
-    'flora': 1000000000000,
-    'hddcoin': 1000000000000,
-    'nchain': 1000000000000,
-    'silicoin': 1000000000000, 
-    'shibgreen': 1000,
-    'staicoin': 1000000000,
-    'stor': 1000000000000,
-}
-
 def load_cold_wallet_addresses():
     data = {}
     if os.path.exists(COLD_WALLET_ADDRESSES_FILE):
@@ -55,6 +39,12 @@ def load_cold_wallet_cache():
         try:
             with open(COLD_WALLET_CACHE_FILE) as f:
                 data = json.load(f)
+                # Now verify that cache file is in correct format, else discard
+                for address in data:
+                    if data[address] is float:  # Old format had a single float for an address, now a dict per address
+                        app.logger.info("Deleting old cold wallet cache file with legacy format: {0}".format(COLD_WALLET_CACHE_FILE))
+                        os.remove(COLD_WALLET_CACHE_FILE)
+                        return {}
         except Exception as ex:
             msg = "Unable to read cold wallet cache from {0} because {1}".format(COLD_WALLET_CACHE_FILE, str(ex))
             app.logger.error(msg)
@@ -106,26 +96,30 @@ def request_cold_wallet_transactions(blockchain, alltheblocks_blockchain, addres
     app.logger.info("Found {0} transactions for {1}: {2}.".format(len(records), blockchain, address))
     for rec in records:
         if rec['coinType'] == 'FARMER_REWARD':
-            farmed_balance += int(rec['amount']) / MOJO_PER_COIN[blockchain]
+            farmed_balance += int(rec['amount']) / globals.get_mojos_per_coin(blockchain)
     save_cold_wallet_transactions(blockchain, address, records)
-    app.logger.info("Received cold wallet farmed balance of {0}".format(farmed_balance))
+    #app.logger.info("Received cold wallet farmed balance of {0}".format(farmed_balance))
     return farmed_balance
 
 def request_cold_wallet_balance(blockchain, cold_wallet_cache, alltheblocks_blockchain, address, debug=False):
     total_balance = 0.0
     farmed_balance = 0.0
     if address in cold_wallet_cache: # First initialize to the last good values received.
-        if 'total_balance' in cold_wallet_cache[address]:
-            total_balance = cold_wallet_cache[address]['total_balance']
-        if 'farmed_balance' in cold_wallet_cache[address]:
-            farmed_balance = cold_wallet_cache[address]['farmed_balance']
+        if cold_wallet_cache[address] is float:
+            app.logger.info("During request, deleting old cold wallet cache file with legacy format: {0}".format(COLD_WALLET_CACHE_FILE))
+            os.remove(COLD_WALLET_CACHE_FILE)
+        else:
+            if 'total_balance' in cold_wallet_cache[address]:
+                total_balance = cold_wallet_cache[address]['total_balance']
+            if 'farmed_balance' in cold_wallet_cache[address]:
+                farmed_balance = cold_wallet_cache[address]['farmed_balance']
     app.logger.info("Requesting {0} wallet balance for {1}".format(alltheblocks_blockchain, address))
     url = f"https://api.alltheblocks.net/{alltheblocks_blockchain}/address/{address}"
     try:
         if debug:
             http.client.HTTPConnection.debuglevel = 1
         response = json.loads(requests.get(url).content)
-        total_balance = response['balance'] / MOJO_PER_COIN[blockchain]
+        total_balance = response['balance'] / globals.get_mojos_per_coin(blockchain)
         farmed_balance = request_cold_wallet_transactions(blockchain, alltheblocks_blockchain, address, debug)
         app.logger.info("Received cold wallet total balance of {0} and farmed balance of {1}".format(total_balance, farmed_balance))
         # Store summary results for this cold wallet address
@@ -152,7 +146,7 @@ def cold_wallet_balance(blockchain):
                 (datetime.datetime.now() - datetime.timedelta(minutes=ALLTHEBLOCKS_REQUEST_INTERVAL_MINS)):
             for address in addresses_per_blockchain[blockchain]:
                 address_balance = request_cold_wallet_balance(blockchain, cold_wallet_cache, alltheblocks_blockchain, address)
-                if address_balance:
+                if address_balance is not None:
                     total_balance += address_balance
                 else:
                     app.logger.error("No cold wallet details found for {0} {1}.".format(blockchain, address))
@@ -188,7 +182,10 @@ def cold_wallet_farmed_balance(blockchain):
     if blockchain in addresses_per_blockchain:
         for address in addresses_per_blockchain[blockchain]:
             if address in cold_wallet_cache:
-                if 'farmed_balance' in cold_wallet_cache[address]:
+                if cold_wallet_cache[address] is float: # Legacy cache file format
+                    app.logger.info("During get, deleting old cold wallet cache file with legacy format: {0}".format(COLD_WALLET_CACHE_FILE))
+                    os.remove(COLD_WALLET_CACHE_FILE)
+                elif 'farmed_balance' in cold_wallet_cache[address]:
                     farmed_balance += float(cold_wallet_cache[address]['farmed_balance'])
         return farmed_balance
     return 0.0 # No cold wallet addresses to check
@@ -252,6 +249,27 @@ def request_prices(prices, debug=False):
                     pass
     return prices
 
+def request_peers(blockchain, debug=False):
+    peers = []
+    alltheblocks_blockchain = globals.get_alltheblocks_name(blockchain)
+    url = "https://alltheblocks.net/{0}/peers".format(alltheblocks_blockchain)
+    app.logger.info("Requesting node peers for {0} from {1}".format(blockchain, url))
+    if debug:
+        http.client.HTTPConnection.debuglevel = 1
+    data = requests.get(url).text
+    http.client.HTTPConnection.debuglevel = 0
+    soup = bs4.BeautifulSoup(data, 'html.parser')
+    div = soup.find('div', class_="p-2 text-monospace")
+    for row in div.find_all('div'):
+        if len(row.contents) == 1:
+            add_cmd = row.contents[0].string.strip()
+            if 'show -a' in add_cmd:
+                peer = add_cmd[(add_cmd.index('show -a ') + len('show -a ')):].strip()
+                peers.append(peer)
+            else:
+                app.logger.error("Unparseable peer connection: {0}".format(row.contents[0].string))
+    return peers
+
 # NOT USED: ATB api does not provide prices as of 2022-03-12, every price shows as "-1.0"
 def request_prices_api(prices, debug=False):
     url = "https://api.alltheblocks.net/atb/blockchain/settings-and-stats"
@@ -273,18 +291,17 @@ last_price_request_time = None
 def get_prices():
     global last_price_request_time
     prices = load_prices_cache()
-    if not last_price_request_time or last_price_request_time <= \
-            (datetime.datetime.now() - datetime.timedelta(minutes=ALLTHEBLOCKS_REQUEST_INTERVAL_MINS)):
-            try:
-                request_prices(prices)
-            except:
-                traceback.print_exc()
+    if not last_price_request_time or last_price_request_time <= (datetime.datetime.now() - datetime.timedelta(minutes=ALLTHEBLOCKS_REQUEST_INTERVAL_MINS)):
+        try:
+            request_prices(prices)
+            save_prices_cache(prices)
             last_price_request_time = datetime.datetime.now()
-    save_prices_cache(prices)
-    try:
-        save_exchange_rates()
-    except: 
-        traceback.print_exc()
+        except Exception as ex:
+            app.logger.info("Failed to save current blockchain prices because {0}".format(str(ex)))
+        try:
+            save_exchange_rates()
+        except Exception as ex:
+            app.logger.info("Failed to save current exchange rates because {0}".format(str(ex)))
     return prices
 
 def save_exchange_rates(debug=False):

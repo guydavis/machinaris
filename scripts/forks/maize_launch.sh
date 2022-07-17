@@ -18,7 +18,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.maize/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   mkdir -p /root/.maize/mainnet/db/ && cd /root/.maize/mainnet/db/
   echo "Sorry, Maize does not offer a recent blockchain DB for download via script.  Standard sync will happen over a few days..."
-  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/maize"
+  echo "It is recommended to add some peer node connections on the Connections page of Machinaris."
 fi
 
 mkdir -p /root/.maize/mainnet/log
@@ -82,7 +82,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.maize/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${farmer_address}:8933/certificates/?type=maize.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${farmer_address}:8933/certificates/?type=maize.  Is the fork's fullnode container running?"
       fi
       rm -f /tmp/certs.zip 
     fi

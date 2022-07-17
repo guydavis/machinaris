@@ -18,7 +18,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.sit/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   mkdir -p /root/.sit/mainnet/db/ && cd /root/.sit/mainnet/db/
   echo "Sorry, Silicoin does not offer a recent blockchain DB for download via script.  Standard sync will happen over a few days..."
-  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/sit"
+  echo "It is recommended to add some peer node connections on the Connections page of Machinaris."
 fi
 
 mkdir -p /root/.sit/mainnet/log
@@ -100,7 +100,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.sit/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${farmer_address}:8941/certificates/?type=silicoin.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${farmer_address}:8941/certificates/?type=silicoin.  Is the fork's fullnode container running?"
       fi
       rm -f /tmp/certs.zip 
     fi

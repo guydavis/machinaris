@@ -14,8 +14,7 @@ from common.config import globals
 from common.models import plots as p
 from common.models import workers as w
 from api import app, db
-from api.rpc import chia
-from api.commands import mmx_cli
+from api.commands import mmx_cli, rpc
 from api import utils
 
 # Due to database load, only send full plots list every X minutes
@@ -45,6 +44,7 @@ def open_status_json():
     return status
 
 def update():
+    app.logger.info("Executing status_plots...")
     global last_full_send_time
     with app.app_context():
         since = (datetime.datetime.now() - datetime.timedelta(minutes=FULL_SEND_INTERVAL_MINS)).strftime("%Y-%m-%d %H:%M")
@@ -64,8 +64,9 @@ def update():
 
 def update_chia_plots(plots_status, since):
     try:
+        blockchain_rpc = rpc.RPC()
         controller_hostname = utils.get_hostname()
-        plots_farming = chia.get_all_plots()
+        plots_farming = blockchain_rpc.get_all_plots()
         payload = []
         displaynames = {}
         for plot in plots_farming:
@@ -74,8 +75,7 @@ def update_chia_plots(plots_status, since):
             else: # Look up displayname
                 try:
                     hostname = plot['hostname']
-                    # '172.18.0.1' was non-local IP on OlivierLA75's Docker setup, inside his container
-                    if plot['hostname'] in ['127.0.0.1','172.18.0.1']:
+                    if plot['hostname'] in ['127.0.0.1']:
                         hostname = controller_hostname
                     #app.logger.info("Found worker with hostname '{0}'".format(hostname))
                     displayname = db.session.query(w.Worker).filter(w.Worker.hostname==hostname, 
@@ -89,7 +89,7 @@ def update_chia_plots(plots_status, since):
                 payload.append({
                     "plot_id": short_plot_id,
                     "blockchain": 'chia',
-                    "hostname": controller_hostname if plot['hostname'] in ['127.0.0.1','172.18.0.1'] else plot['hostname'],
+                    "hostname": controller_hostname if plot['hostname'] in ['127.0.0.1'] else plot['hostname'],
                     "displayname": displayname,
                     "dir": dir,
                     "file": file,
@@ -106,16 +106,16 @@ def update_chia_plots(plots_status, since):
                 item = p.Plot(**new_item)
                 db.session.add(item)
         db.session.commit()
-    except:
-        app.logger.info("Failed to load plots farming and send.")
-        app.logger.info(traceback.format_exc())
+    except Exception as ex:
+            app.logger.info("Failed to load and send plots farming because {0}".format(str(ex)))
 
 # Sent from a separate fullnode container
 def update_chives_plots(since):
     try:
         blockchain = 'chives'
+        blockchain_rpc = rpc.RPC()
         hostname = utils.get_hostname()
-        plots_farming = chia.get_all_plots()
+        plots_farming = blockchain_rpc.get_all_plots()
         payload = []
         for plot in plots_farming:
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])

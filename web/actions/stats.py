@@ -46,12 +46,12 @@ def load_daily_diff(farm_summary):
         # initialize defaults
         since_date = datetime.datetime.now() - datetime.timedelta(hours=24)
         since_str = since_date.strftime("%Y%m%d%H%M%S")
-        summary['plot_count'] = plot_count_diff(since_str, blockchain)
-        summary['plots_size'] = plots_size_diff(since_str, blockchain)
+        summary['plot_count'] = plot_count_diff(since_str, blockchain).strip()
+        summary['plots_size'] = plots_size_diff(since_str, blockchain).strip()
         if upgrade_marker_at_least_day_old():  # Guard against spurious notification
-            summary['total_coins'] = total_coin_diff(since_str, blockchain)
-        summary['wallet_balance'] = wallet_balance_diff(since_str, blockchain)
-        summary['netspace_size'] = netspace_size_diff(since_str, blockchain)
+            summary['total_coins'] = total_coin_diff(since_str, blockchain).strip()
+        summary['wallet_balance'] = wallet_balance_diff(since_str, blockchain).strip()
+        summary['netspace_size'] = netspace_size_diff(since_str, blockchain).strip()
         #app.logger.info("{0} -> {1}".format(blockchain, summary))
         farm_summary.farms[blockchain]['daily_diff'] = summary
 
@@ -135,8 +135,7 @@ def wallet_balance_diff(since, blockchain):
             #app.logger.info("Total coins daily diff: {0}".format(result))
     except Exception as ex:
         app.logger.info("Failed to query for day diff of wallet_balances because {0}".format(str(ex)))
-    #if blockchain == 'cactus':
-    #    app.logger.info("Result is: {0}".format(result))
+    #app.logger.info("Result is: {0}".format(result))
     return result
 
 def netspace_size_diff(since, blockchain):
@@ -157,7 +156,7 @@ def netspace_size_diff(since, blockchain):
                 result = ("{0} ".format(fmtted)) + _('in last day.')
     except Exception as ex:
         app.logger.debug("Failed to query for day diff of netspace_size because {0}".format(str(ex)))
-    #app.logger.debug("Result is: {0}".format(result))
+    #app.logger.info("Result is: {0}".format(result))
     return result
 
 def load_daily_farming_summaries(farmers):
@@ -348,23 +347,27 @@ def calc_estimated_daily_value(blockchain):
     try:
         farm = db.session.query(Farm).filter(Farm.blockchain == blockchain).first()
         blocks_per_day = globals.get_blocks_per_day(blockchain)
-        block_reward = globals.get_block_reward(blockchain)
+        if blockchain == 'mmx': # Uses a dynamic reward
+            block_reward = worker.mmx_block_reward()
+        else: # All Chia blockchains use a regular reward
+            block_reward = globals.get_block_reward(blockchain)
         symbol = globals.get_blockchain_symbol(blockchain).lower()
-        edv = blocks_per_day * block_reward * farm.plots_size / farm.netspace_size
+        if block_reward and farm.netspace_size > 0:
+            edv = blocks_per_day * block_reward * farm.plots_size / farm.netspace_size
     except Exception as ex:
         app.logger.info("Failed to calculate EDV for {0} because {1}".format(blockchain, str(ex)))
-    if edv:
+    if edv and farm.status == 'Farming': # Don't calculate EDV if not fully synced
         if edv >= 1000:
             result.append("{0} {1}".format(format_decimal(round(edv, 0)), symbol))
         else:
             result.append("{0} {1}".format(format_decimal(round(edv, 3)), symbol))
     else:
         result.append('')
-    try:
-        edv_fiat = fiat.to_fiat(blockchain, edv)
-    except Exception as ex:
-        app.logger.info("Failed to calculate edv_fiat for {0} because {1}".format(blockchain, str(ex)))
-    if edv:
+    if edv and farm.status == 'Farming': # Don't calculate EDV if not fully synced:
+        try:
+            edv_fiat = fiat.to_fiat(blockchain, edv)
+        except Exception as ex:
+            app.logger.info("Failed to calculate edv_fiat for {0} because {1}".format(blockchain, str(ex)))
         result.append(edv_fiat)
     else:
         result.append('')

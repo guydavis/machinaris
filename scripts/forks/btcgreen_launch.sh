@@ -18,7 +18,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.btcgreen/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   mkdir -p /root/.btcgreen/mainnet/db/ && cd /root/.btcgreen/mainnet/db/
   echo "Sorry, BTCGreen does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
-  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/btcgreen"
+  echo "It is recommended to add some peer node connections on the Connections page of Machinaris."
 fi
 
 mkdir -p /root/.btcgreen/mainnet/log
@@ -82,7 +82,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.btcgreen/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${farmer_address}:8938/certificates/?type=btcgreen.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${farmer_address}:8938/certificates/?type=btcgreen.  Is the fork's fullnode container running?"
       fi
       rm -f /tmp/certs.zip 
     fi

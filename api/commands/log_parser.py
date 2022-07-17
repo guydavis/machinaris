@@ -92,7 +92,8 @@ def recent_farmed_blocks(blockchain):
     rotated_log_file = ''
     if os.path.exists(log_file + '.1'):
         rotated_log_file = log_file + '.1'
-    proc = Popen("grep -B 15 'Farmed unfinished_block' {0} {1}".format(rotated_log_file, log_file),
+    # Chia 1.4+ sprays lots of useless "Cumulative cost" log lines right in middle of important lines, so ignore them
+    proc = Popen("grep -v 'Cumulative cost' {0} {1} | grep -v 'CompressorArg' | grep -B 15 'Farmed unfinished_block'".format(rotated_log_file, log_file),
                  stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -130,7 +131,7 @@ def find_plotting_job_log(plot_id):
 
 def get_farming_log_file(blockchain):
     if blockchain == 'mmx':
-         return "/root/.mmx/{0}/logs/mmx_node_{1}.txt".format(globals.MMX_NETWORK, datetime.datetime.now().strftime("%Y_%m_%d"))
+         return "/root/.mmx/{0}/logs/mmx_node_{1}.txt".format(globals.get_blockchain_network_name(blockchain), datetime.datetime.now().strftime("%Y_%m_%d"))
     mainnet_folder = globals.get_blockchain_network_path(blockchain)
     return mainnet_folder + '/log/debug.log'
 

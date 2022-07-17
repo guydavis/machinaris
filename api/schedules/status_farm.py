@@ -29,6 +29,7 @@ def safely_gather_plots_size_gibs(plots_size):
     return plots_size_gibs
 
 def update():
+    app.logger.info("Executing status_farms...")
     with app.app_context():
         hostname = utils.get_hostname()
         blockchain = globals.enabled_blockchains()[0]
@@ -49,6 +50,5 @@ def update():
                 "expected_time_to_win": "" if not hasattr(farm_summary, 'time_to_win') else farm_summary.time_to_win,
             }
             utils.send_post('/farms/', payload, debug=False)
-        except:
-            app.logger.info("Failed to load Chia farm summary and send.")
-            app.logger.info(traceback.format_exc())
+        except Exception as ex:
+            app.logger.info("Failed to load and send farm summary because {0}".format(str(ex)))

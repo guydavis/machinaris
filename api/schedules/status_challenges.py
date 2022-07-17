@@ -27,6 +27,7 @@ def delete_old_challenges(db):
         app.logger.info(traceback.format_exc())
 
 def update():
+    app.logger.info("Executing status_challenges...")
     with app.app_context():
         from api import db
         if globals.load()['is_controller']:
@@ -50,6 +51,5 @@ def update():
                         "created_at": challenge['created_at'],
                     })
             utils.send_post('/challenges/', payload, debug=False)
-        except:
-            app.logger.info("Failed to load recent challenges and send.")
-            app.logger.info(traceback.format_exc())
+        except Exception as ex:
+            app.logger.info("Failed to load and send recent challenges because {0}".format(str(ex)))

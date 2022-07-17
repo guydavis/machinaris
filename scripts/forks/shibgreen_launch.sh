@@ -18,7 +18,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.shibgreen/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   mkdir -p /root/.shibgreen/mainnet/db/ && cd /root/.shibgreen/mainnet/db/
   echo "Sorry, SHIBGreen does not offer a recent blockchain DB for download.  Standard sync will happen over a few days..."
-  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/shibgreen"
+  echo "It is recommended to add some peer node connections on the Connections page of Machinaris."
 fi
 
 mkdir -p /root/.shibgreen/mainnet/log
@@ -82,7 +82,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.shibgreen/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${farmer_address}:8939/certificates/?type=shibgreen.  Try clicking 'New Worker' button on 'Workers' page first."
+        echo "Certificates response of ${response} from http://${farmer_address}:8939/certificates/?type=shibgreen.  Is the fork's fullnode container running?"
       fi
       rm -f /tmp/certs.zip 
     fi

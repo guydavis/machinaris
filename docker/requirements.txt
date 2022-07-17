@@ -22,3 +22,4 @@ pytest
 flask-babel
 beautifulsoup4
 geoip2
+gdown

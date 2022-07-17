@@ -31,9 +31,6 @@ MADMAX_BINARY = '/usr/bin/chia_plot'
 BLADEBIT_BINARY = '/usr/bin/bladebit'
 CHIADOG_PATH = '/chiadog'
 
-MMX_NETWORK = 'testnet6'
-MMX_CONFIG = 'testnet6'
-
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
 
 INFO_FILE = '/machinaris/common/config/blockchains.json'
@@ -56,6 +53,9 @@ def get_blockchain_network_name(blockchain):
 
 def get_blockchain_symbol(blockchain):
     return load_blockchain_info(blockchain, 'symbol')
+
+def get_blockchain_network_port(blockchain):
+    return load_blockchain_info(blockchain, 'network_port')
 
 def get_full_node_rpc_port(blockchain):
     return load_blockchain_info(blockchain, 'fullnode_rpc_port')
@@ -80,7 +80,7 @@ def load():
     cfg['machinaris_version'] = load_machinaris_version()
     cfg['machinaris_mode'] = os.environ['mode']
     cfg['plotman_version'] = load_plotman_version()
-    cfg['blockchain_version'] = load_blockchain_version(enabled_blockchains()[0])
+    cfg['blockchain_version'] = load_blockchain_version(cfg['enabled_blockchains'][0])
     cfg['chiadog_version'] = load_chiadog_version()
     cfg['madmax_version'] = load_madmax_version()
     cfg['bladebit_version'] = load_bladebit_version()
@@ -90,6 +90,8 @@ def load():
     fullnode_db_version = load_fullnode_db_version()
     if fullnode_db_version:
         cfg['fullnode_db_version'] = fullnode_db_version
+    if cfg['enabled_blockchains'][0] == 'mmx':
+        cfg['mmx_reward'] = gather_mmx_reward()
     return cfg
 
 def load_blockchain_info(blockchain, key):
@@ -448,4 +450,30 @@ def get_alltheblocks_name(blockchain):
     return blockchain
 
 def legacy_blockchain(blockchain):
-    return blockchain in ['flora', 'hddcoin', 'maize', 'nchain', 'silicoin', 'stor']
+    return blockchain in ['bpx', 'ecostake', 'flora', 'hddcoin', 'maize', 'nchain', 'petroleum', 'profit', 'silicoin', 'stor']
+
+last_mmx_reward = None
+last_mmx_reward_load_time = None
+def gather_mmx_reward():
+    mmx_binary = get_blockchain_binary('mmx')
+    global last_mmx_reward
+    global last_mmx_reward_load_time
+    if last_mmx_reward_load_time and last_mmx_reward_load_time >= \
+            (datetime.datetime.now() - datetime.timedelta(minutes=15)):
+        return last_mmx_reward
+    last_mmx_reward = ""
+    try:
+        proc = Popen("{0} node info | grep -i reward".format(mmx_binary),
+                stdout=PIPE, stderr=PIPE, shell=True)
+        outs, errs = proc.communicate(timeout=90)
+        reward_line = outs.decode('utf-8').strip()
+        if reward_line.startswith("Reward:"):
+            # Example -> "Reward:   0.439271 MMX"
+            last_mmx_reward = reward_line.split(':')[1][:-3].strip()
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+    except:
+        logging.info(traceback.format_exc())
+    last_mmx_reward_load_time = datetime.datetime.now()
+    return last_mmx_reward

@@ -20,6 +20,7 @@ from api import app
 from api import utils
 
 def update():
+    app.logger.info("Executing status_blockchains...")
     with app.app_context():
         try:
             blockchains = globals.enabled_blockchains()
@@ -35,6 +36,5 @@ def update():
                     "details": bc.text.replace('\r', ''),
                 }
                 utils.send_post('/blockchains', payload, debug=False)
-        except:
-            app.logger.info("Failed to load and send blockchains status.")
-            app.logger.info(traceback.format_exc())
+        except Exception as ex:
+            app.logger.info("Failed to load and send blockchain status because {0}".format(str(ex)))

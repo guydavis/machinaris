@@ -14,6 +14,7 @@ from api.commands import plotman_cli
 from api import utils
 
 def update():
+    app.logger.info("Executing status_plotting...")
     with app.app_context():
         try:
             hostname = utils.get_hostname()
@@ -45,6 +46,5 @@ def update():
                 utils.send_post('/plottings/{0}/{1}'.format(hostname, blockchain), payload, debug=False)
             else:
                 utils.send_delete('/plottings/{0}/{1}'.format(hostname, blockchain), debug=False)
-        except:
-            app.logger.info("Failed to load plotting summary and send.")
-            app.logger.info(traceback.format_exc())
+        except Exception as ex:
+            app.logger.info("Failed to load and send plotting jobs because {0}".format(str(ex)))
