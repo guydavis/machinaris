@@ -177,7 +177,7 @@
         "network_name": "mainnet",
         "network_port": 8644,
         "farmer_port": 8647,
-        "fullnode_rpc_port": 8755,
+        "fullnode_rpc_port": 8655,
         "worker_port": 8933,
         "reward": 2.0,
         "mojos_per_coin": 1000000000000,
