@@ -19,8 +19,8 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Downloading Ecostake blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.ecostake/mainnet/db/ && cd /root/.ecostake/mainnet/db/
-  # Download link from their Discord on 2022-07-07
-  gdown 1KwD8SJPBXSJrUFNcsVJFUADw8UekUALU
+  # Download link from their Discord on 2022-07-17
+  gdown 1RYg6Oz11ZCl4I3JjgxYqH6qupllDcdCL
   p7zip --decompress --force blockchain_v1_mainnet*.7z
 fi
 
