@@ -27,7 +27,7 @@ from api.models import mmx
 def load_farm_info(blockchain):
     mmx_binary = globals.get_blockchain_binary(blockchain)
     if globals.farming_enabled():
-        proc = Popen("{0} farm info && {0} wallet show && {0} node info".format(mmx_binary), stdout=PIPE, stderr=PIPE, shell=True)
+        proc = Popen("{0} farm info && {0} wallet show balance && {0} node info".format(mmx_binary), stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=90)
         except TimeoutExpired:
@@ -60,7 +60,7 @@ def list_plots():
 def load_config(blockchain):
     mainnet = globals.get_blockchain_network_path(blockchain)
     test = globals.get_blockchain_network_name(blockchain)
-    return open(f'{mainnet}/config/{test}/Farmer.json','r').read()
+    return open(f'{mainnet}/../config/{test}/Farmer.json','r').read()
 
 def save_config(config, blockchain):
     try:
@@ -69,8 +69,8 @@ def save_config(config, blockchain):
         # Validate the json first
         json.load(config)
         # Save a copy of the old config file
-        src=f'{mainnet}/config/{test}/Farmer.json'
-        dst=f'{mainnet}/config/{test}/Farmer.json' + time.strftime("%Y%m%d-%H%M%S")+".yaml"
+        src=f'{mainnet}/../config/{test}/Farmer.json'
+        dst=f'{mainnet}/../config/{test}/Farmer.json' + time.strftime("%Y%m%d-%H%M%S")+".yaml"
         shutil.copy(src,dst)
         # Now save the new contents to main config file
         with open(src, 'w') as writer:
