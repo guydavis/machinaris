@@ -1,4 +1,5 @@
-ARG MACHINARIS_STREAM
+ARG UBUNTU_VER=jammy
+ARG MACHINARIS_STREAM=main
 
 FROM ghcr.io/guydavis/machinaris-base-${UBUNTU_VER}:${MACHINARIS_STREAM}
 

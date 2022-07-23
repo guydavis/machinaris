@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.8.2] - 2022-08-?
  - MMX - Record created blocks from blockchain logs, for display in Machinaris.
+ - Ubuntu - updated blockchains run on Jammy Jellyfish (Python 3.10), outdated blockchains run on Focal Fossa (Python 3.9)
 
 
 ## [0.8.1] - 2022-07-17
