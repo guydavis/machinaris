@@ -3,8 +3,9 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.8.2] - 2022-07-24
- - MMX - Record created blocks from blockchain logs, for display in Machinaris.
- - Ubuntu - updated blockchains run on Jammy Jellyfish (Python 3.10), outdated blockchains run on Focal Fossa (Python 3.9)
+ - MMX - Record created blocks from blockchain logs, for display in Machinaris, off index page.
+ - Ubuntu - latest blockchains run on Jammy Jellyfish (Python 3.10), outdated blockchains run on Focal Fossa (Python 3.9).
+ - Cactus - [fix for expired SSL certificate](https://github.com/Cactus-Network/cactus-blockchain/commit/50c18a15f0a63b4b90ad9efe2376c27c6c971dd4) amongst network peers.
 
 ## [0.8.1] - 2022-07-17
  - Connections - add node peers directly from list offered by AllTheBlocks per blockchain.
