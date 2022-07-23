@@ -90,10 +90,14 @@ def recent_farmed_blocks(blockchain):
             "Skipping farmed blocks parsing as no such log file: {0}".format(log_file))
         return []
     rotated_log_file = ''
-    if os.path.exists(log_file + '.1'):
+    if os.path.exists(log_file + '.1'):  # Only for Chia + fork blockchains
         rotated_log_file = log_file + '.1'
-    # Chia 1.4+ sprays lots of useless "Cumulative cost" log lines right in middle of important lines, so ignore them
-    proc = Popen("grep -v 'Cumulative cost' {0} {1} | grep -v 'CompressorArg' | grep -B 15 'Farmed unfinished_block'".format(rotated_log_file, log_file),
+    if blockchain == 'mmx':
+        #app.logger.info("MMX executing: grep 'Created block' {0}".format(log_file))
+        proc = Popen("grep 'Created block' {0}".format(log_file), stdout=PIPE, stderr=PIPE, shell=True)
+    else:
+        # Chia 1.4+ sprays lots of useless "Cumulative cost" log lines right in middle of important lines, so ignore them
+        proc = Popen("grep -v 'Cumulative cost' {0} {1} | grep -v 'CompressorArg' | grep -B 15 'Farmed unfinished_block'".format(rotated_log_file, log_file),
                  stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -106,7 +110,7 @@ def recent_farmed_blocks(blockchain):
         abort(500, description=errs.decode('utf-8'))
     cli_stdout = outs.decode('utf-8')
     #app.logger.info("Blocks grep: {0}".format(cli_stdout))
-    blocks = log.Blocks(cli_stdout.splitlines())
+    blocks = log.Blocks(blockchain, cli_stdout.splitlines())
     #app.logger.info(blocks.rows)
     return blocks
 
@@ -130,9 +134,9 @@ def find_plotting_job_log(plot_id):
     return None
 
 def get_farming_log_file(blockchain):
-    if blockchain == 'mmx':
-         return "/root/.mmx/{0}/logs/mmx_node_{1}.txt".format(globals.get_blockchain_network_name(blockchain), datetime.datetime.now().strftime("%Y_%m_%d"))
     mainnet_folder = globals.get_blockchain_network_path(blockchain)
+    if blockchain == 'mmx':
+        return mainnet_folder + "/logs/mmx_node_{0}.txt".format(datetime.datetime.now().strftime("%Y_%m_%d"))
     return mainnet_folder + '/log/debug.log'
 
 def get_log_lines(log_type, log_id=None, blockchain=None):

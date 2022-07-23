@@ -40,9 +40,10 @@ jobs:
           platforms: linux/amd64
           push: true
           build-args: |
+            "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=develop"
             "CHIADOG_BRANCH=dev"
-            "CHIA_BRANCH=latest"
+            "CHIA_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:develop
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:develop

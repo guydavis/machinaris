@@ -190,7 +190,7 @@
         "name": "MMX",
         "symbol": "MMX" ,
         "binary":  "/mmx-node/build/mmx",
-        "network_path": "/root/.chia/mmx",
+        "network_path": "/root/.mmx/testnet6",
         "network_name": "testnet6",
         "network_port": 12334,
         "farmer_port": 11330,

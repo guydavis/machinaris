@@ -121,14 +121,17 @@ def request_cold_wallet_balance(blockchain, cold_wallet_cache, alltheblocks_bloc
         if debug:
             http.client.HTTPConnection.debuglevel = 1
         response = json.loads(requests.get(url).content)
-        total_balance = response['balance'] / globals.get_mojos_per_coin(blockchain)
-        farmed_balance = request_cold_wallet_transactions(blockchain, alltheblocks_blockchain, address, debug)
-        app.logger.info("Received cold wallet total balance of {0} and farmed balance of {1}".format(total_balance, farmed_balance))
-        # Store summary results for this cold wallet address
-        cold_wallet_cache[address] = {
-            'total_balance': total_balance,
-            'farmed_balance': farmed_balance
-        }
+        if 'balance' in response:
+            total_balance = response['balance'] / globals.get_mojos_per_coin(blockchain)
+            farmed_balance = request_cold_wallet_transactions(blockchain, alltheblocks_blockchain, address, debug)
+            app.logger.info("Received cold wallet total balance of {0} and farmed balance of {1}".format(total_balance, farmed_balance))
+            # Store summary results for this cold wallet address
+            cold_wallet_cache[address] = {
+                'total_balance': total_balance,
+                'farmed_balance': farmed_balance
+            }
+        else:
+            app.logger.error("Received malformed response from ATB: {0}".format(response))
     except Exception as ex:
         app.logger.error("Failed to request {0} due to {1}".format(url, str(ex)))
         traceback.print_exc()
