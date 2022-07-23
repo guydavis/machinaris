@@ -41,6 +41,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
+            "UBUNTU_VER=focal"
             "MACHINARIS_STREAM=latest"
             "NCHAIN_BRANCH=net9.dev"
           tags: |
