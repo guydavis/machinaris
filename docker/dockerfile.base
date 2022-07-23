@@ -1,4 +1,4 @@
-ARG UBUNTU_VER="hirsute"
+ARG UBUNTU_VER="impish"
 
 FROM ubuntu:${UBUNTU_VER} as package_stage
 
