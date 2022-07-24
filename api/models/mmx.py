@@ -17,9 +17,10 @@ class FarmSummary:
                 m = re.match('^K(\d+): (\d+) plots$', line)
                 if m:
                     self.plot_count += int(m.group(2))
-                elif line.startswith('Total space'):
+                elif line.startswith('Total size'):
                     self.plots_size = line.strip().split(':')[1].strip()
-                elif line.startswith('Balance'):
+                # For now, treating the wallet balance as 100% farmed until better approach is found
+                elif line.startswith('Balance'):  
                     self.total_coins = line.split(':')[1].strip().split(' ')[0].strip()
                 elif line.startswith('Netspace'):
                     self.calc_netspace_size(line.split(':')[1].strip())

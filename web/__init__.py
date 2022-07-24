@@ -107,6 +107,8 @@ def alltheblocks_blockchainlink(blockchain):
 app.jinja_env.filters['alltheblocks_blockchainlink'] = alltheblocks_blockchainlink
 
 def alltheblocks_blocklink(block, blockchain):
+    if blockchain == 'mmx':
+        return block # No support at ATB for MMX, so don't link it
     alltheblocks_blockchain = globals.get_alltheblocks_name(blockchain)
     return '<a href="https://alltheblocks.net/{0}/block/0x{1}" class="text-white" target="_blank">{1}</a>'.format(alltheblocks_blockchain, block)
 

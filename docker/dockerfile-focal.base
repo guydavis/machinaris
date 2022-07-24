@@ -1,4 +1,4 @@
-ARG UBUNTU_VER="hirsute"
+ARG UBUNTU_VER="focal"
 
 FROM ubuntu:${UBUNTU_VER} as package_stage
 
@@ -14,7 +14,6 @@ RUN apt-get update \
 		cifs-utils \
 		curl \
 		git \
-		hddtemp \
 		iproute2 \
 		iputils-ping \
 		jq \

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.2] - 2022-07-24
+ - MMX - Record created blocks from blockchain logs, for display in Machinaris, off index page.
+ - Ubuntu - latest blockchains run on Jammy Jellyfish (Python 3.10), outdated blockchains run on Focal Fossa (Python 3.9).
+ - Updated: [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.4.1) to fix SSL certificate expiry, may require entire deletion of `mainnet` directory and full re-sync.  Check [their Discord](https://discord.gg/2Q8RcVacWP) for latest support of this blockchain.
+
 ## [0.8.1] - 2022-07-17
  - Connections - add node peers directly from list offered by AllTheBlocks per blockchain.
  - MMX - Compute "Estimated Time to Win" from plots size, netspace size, and blocks per day.

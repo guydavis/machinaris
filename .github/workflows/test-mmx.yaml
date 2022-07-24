@@ -40,6 +40,7 @@ jobs:
           platforms: linux/amd64
           push: true
           build-args: |
+            "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=test"
             "MMX_BRANCH=master"
             "CHIA_BRANCH=latest"

@@ -49,6 +49,8 @@ class DriveStatus:
             elif 'Power_On_Hours' in line:
                 # Example: "  9 Power_On_Hours          0x0032   092   092   000    Old_age   Always       -       7185 (119 239 0)"
                 self.power_on_hours = line.split()[9].strip()
+                if 'h' in self.power_on_hours:  # Sometimes value is '11479h+00m+00.000s', so strip off trailing, hours is fine
+                    self.power_on_hours = self.power_on_hours.split('h')[0]
             elif 'Temperature_Celsius' in line:
                 # Example: "194 Temperature_Celsius     0x0022   038   049   000    Old_age   Always       -       38 (0 21 0 0 0)"
                 self.temperature = line.split()[9].strip()

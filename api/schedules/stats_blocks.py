@@ -25,8 +25,6 @@ def collect():
             return
         #app.logger.info("Collecting stats about won blocks.")
         blockchain = globals.enabled_blockchains()[0]
-        if blockchain == 'mmx':
-            return
         blocks = log_parser.recent_farmed_blocks(blockchain)
         store_locally(blockchain, blocks)
         if not gc['is_controller']:
@@ -36,7 +34,7 @@ def store_locally(blockchain, blocks):
     hostname = utils.get_hostname()
     for block in blocks.rows:
         try:
-            if not db.session.query(stats.StatFarmedBlocks).filter(stats.StatFarmedBlocks.farmed_block==block['farmed_block']).first():
+            if not db.session.query(stats.StatFarmedBlocks).filter(stats.StatFarmedBlocks.blockchain==blockchain,stats.StatFarmedBlocks.farmed_block==block['farmed_block']).first():
                 db.session.add(stats.StatFarmedBlocks(hostname=hostname, 
                     blockchain=blockchain, 
                     challenge_id=block['challenge_id'], 

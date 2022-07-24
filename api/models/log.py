@@ -71,13 +71,19 @@ class Partials:
 
 class Blocks:
 
-    # Parse the provided most recent lines for farmed blocks.  Grep grabs 4 lines per unfinished block farmed.
-    def __init__(self, cli_stdout):
+    # Parse the provided most recent lines for farmed blocks.
+    def __init__(self, blockchain, cli_stdout):
         self.columns = [ 'challenge_id', 'plot_files', 'proofs_found', 'time_taken', 'farmed_block', 'created_at']
         self.rows = []
-        plot_files = []
         if len(cli_stdout) == 0:
             return # Nothing to processs as no farmed blocks found in this log file
+        if blockchain == 'mmx':
+            self.parse_mmx(cli_stdout) 
+        else:
+            self.parse_chia(cli_stdout) 
+
+    def parse_chia(self, cli_stdout):
+        plot_files = []
         challenge_id = plots_past_filter = proofs_found = time_taken = farmed_block = created_at = None
         cli_stdout.append('--') # add a trailing -- to force last parse
         for line in cli_stdout:
@@ -120,3 +126,25 @@ class Blocks:
                 app.logger.info("Failed to parse blocks line: {0}".format(line))
                 app.logger.info(traceback.format_exc())
         self.rows.reverse()
+
+    def parse_mmx(self, cli_stdout):
+        # Single Line - Example: 2022-07-18 03:01:58 [Node] INFO: Created block at height 503229 with: ntx = 2, score = 10998, reward = 0.505957 MMX, nominal = 0.501956 MMX, fees = 0.008 MMX, took 0.037 sec
+        for line in cli_stdout:
+            try:
+                #app.logger.info(line)
+                time_taken = str(re.search('took (\d+\.?\d*) sec', line, re.IGNORECASE).group(1)) + ' secs'
+                created_at =  "{0}.000".format(line[:19])
+                farmed_block = re.search('Created block at height (\d+)', line, re.IGNORECASE).group(1)
+                self.rows.append({
+                    'challenge_id': '',
+                    'plot_files': '',
+                    'plots_past_filter': '',
+                    'proofs_found': 1,
+                    'time_taken': time_taken,
+                    'farmed_block': farmed_block,
+                    'created_at': created_at
+                })
+                #app.logger.info(self.rows)
+            except:
+                app.logger.info("Failed to parse MMX blocks line: {0}".format(line))
+                app.logger.info(traceback.format_exc())
