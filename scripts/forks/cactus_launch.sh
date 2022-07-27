@@ -54,8 +54,6 @@ for p in ${plots_dir//:/ }; do
   cactus plots add -d ${p}
 done
 
-if 
-
 chmod 755 -R /root/.cactus/mainnet/config/ssl/ &> /dev/null
 cactus init --fix-ssl-permissions > /dev/null 
 
