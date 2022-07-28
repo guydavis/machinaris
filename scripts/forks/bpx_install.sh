@@ -4,8 +4,8 @@
 #
 
 BPX_BRANCH=$1
-# On 2022-07-08
-HASH=9eb0d1b9421192b8c1afae9695e2c87944310719
+# On 2022-07-28
+HASH=e513f7ef138717da378f33a0e8d0e4c14997a8e7
 
 if [ -z ${BPX_BRANCH} ]; then
 	echo 'Skipping BPX install as not requested.'
