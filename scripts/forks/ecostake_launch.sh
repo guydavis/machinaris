@@ -32,9 +32,6 @@ if [ -f /root/.ecostake/mainnet/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.ecostake/mainnet/config/config.yaml
   sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.ecostake/mainnet/config/config.yaml
   sed -i 's/localhost/127.0.0.1/g' /root/.ecostake/mainnet/config/config.yaml
-  # Fix port conflicts with other blockchains
-  sed -i 's/38447/38448/g' /root/.ecostake/mainnet/config/config.yaml
-  sed -i 's/38555/38556/g' /root/.ecostake/mainnet/config/config.yaml
 fi
 
 # Loop over provided list of key paths
