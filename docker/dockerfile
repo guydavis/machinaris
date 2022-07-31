@@ -16,6 +16,7 @@ ARG ECOSTAKE_BRANCH
 ARG FLAX_BRANCH
 ARG FLORA_BRANCH
 ARG HDDCOIN_BRANCH
+ARG LITTLELAMBOCOIN_BRANCH
 ARG MAIZE_BRANCH
 ARG MMX_BRANCH
 ARG NCHAIN_BRANCH
@@ -44,6 +45,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/flax_install.sh ${FLAX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/flora_install.sh ${FLORA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/littlelambocoin_install.sh ${LITTLELAMBOCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/maize_install.sh ${MAIZE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/mmx_install.sh ${MMX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \

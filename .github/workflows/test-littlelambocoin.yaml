@@ -1,4 +1,4 @@
-name: test-ecostake
+name: test-littlelambocoin
 
 on:
   push:
@@ -44,7 +44,7 @@ jobs:
             "UBUNTU_VER=focal"
             "MACHINARIS_STREAM=test"
             "CHIADOG_BRANCH=dev"
-            "ECOSTAKE_BRANCH=main"
+            "LITTLELAMBOCOIN_BRANCH=main"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-ecostake:test
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-ecostake:test
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-littlelambocoin:test
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-littlelambocoin:test

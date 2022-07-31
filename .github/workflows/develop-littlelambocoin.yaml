@@ -1,10 +1,9 @@
-name: test-ecostake
+name: develop-littlelambocoin
 
 on:
   push:
     branches:
-      - 'integration'
-
+      - 'develop'
 jobs:
   docker:
     runs-on: ubuntu-latest
@@ -17,7 +16,6 @@ jobs:
         uses: docker/setup-qemu-action@v2
       -
         name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
         uses: docker/setup-buildx-action@v2
       - 
         name: Login to DockerHub
@@ -38,13 +36,13 @@ jobs:
         with:
           file: docker/dockerfile
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           push: true
           build-args: |
             "UBUNTU_VER=focal"
-            "MACHINARIS_STREAM=test"
+            "MACHINARIS_STREAM=develop"
             "CHIADOG_BRANCH=dev"
-            "ECOSTAKE_BRANCH=main"
+            "LITTLELAMBOCOIN_BRANCH=main"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-ecostake:test
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-ecostake:test
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-littlelambocoin:develop
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-littlelambocoin:develop

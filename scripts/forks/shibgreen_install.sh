@@ -1,18 +1,18 @@
 #!/bin/env bash
 #
-# Installs SHIBGreen as per https://github.com/BTCgreen-Network/shibgreen-blockchain
+# Installs LittleLamboCoin as per https://github.com/BTCgreen-Network/littlelambocoin-blockchain
 #
 
-SHIBGREEN_BRANCH=$1
-# On 2022-03-20
-HASH=b1e41e82ad849775543aa36fefc0c0d03e13f6e8
+LITTLELAMBOCOIN_BRANCH=$1
+# On 2022-07-28
+HASH=60e010097e66fb9a56926f14e890d4d47f6ac465
 
-if [ -z ${SHIBGREEN_BRANCH} ]; then
-	echo 'Skipping SHIBGreen install as not requested.'
+if [ -z ${LITTLELAMBOCOIN_BRANCH} ]; then
+	echo 'Skipping LittleLamboCoin install as not requested.'
 else
 	rm -rf /root/.cache
-	git clone --branch ${SHIBGREEN_BRANCH} --single-branch https://github.com/BTCgreen-Network/shibgreen-blockchain /shibgreen-blockchain
-	cd /shibgreen-blockchain 
+	git clone --branch ${LITTLELAMBOCOIN_BRANCH} --single-branch https://github.com/BTCgreen-Network/littlelambocoin-blockchain /littlelambocoin-blockchain
+	cd /littlelambocoin-blockchain 
 	git submodule update --init mozilla-ca 
 	git checkout $HASH
 	chmod +x install.sh
@@ -25,7 +25,7 @@ else
 	if [ ! -d /chia-blockchain/venv ]; then
 		cd /
 		rmdir /chia-blockchain
-		ln -s /shibgreen-blockchain /chia-blockchain
-		ln -s /shibgreen-blockchain/venv/bin/shibgreen /chia-blockchain/venv/bin/chia
+		ln -s /littlelambocoin-blockchain /chia-blockchain
+		ln -s /littlelambocoin-blockchain/venv/bin/littlelambocoin /chia-blockchain/venv/bin/chia
 	fi
 fi

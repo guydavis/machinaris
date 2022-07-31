@@ -169,6 +169,23 @@
         "discord_url": "https://discord.gg/ZTtQ9922zp",
         "website_url": "https://hddcoin.org/"
     },
+    "littlelambocoin": {
+        "name": "LittleLamboCoin",
+        "symbol": "llc" ,
+        "binary":  "/littlelambocoin-blockchain/venv/bin/littlelambocoin",
+        "network_path": "/root/.littlelambocoin/mainnet",
+        "network_name": "mainnet",
+        "network_port": 4575,
+        "farmer_port": 18981,
+        "fullnode_rpc_port": 18714,
+        "worker_port": 8946,
+        "reward": 8.0,
+        "mojos_per_coin": 1000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/BTCgreen-Network/littlelambocoin-blockchain",
+        "discord_url": "https://discord.gg/ZtKSFFm2V7",
+        "website_url": "https://littlelambocoin.com/"
+    },
     "maize": {
         "name": "Maize",
         "symbol": "XMZ" ,

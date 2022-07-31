@@ -84,6 +84,13 @@ elif blockchain == "hddcoin":
     from hddcoin.util.default_root import DEFAULT_ROOT_PATH
     from hddcoin.util.ints import uint16
     from hddcoin.util.config import load_config as load_fork_config
+elif blockchain == "littlelambocoin":
+    from littlelambocoin.rpc.full_node_rpc_client import FullNodeRpcClient
+    from littlelambocoin.rpc.farmer_rpc_client import FarmerRpcClient
+    from littlelambocoin.rpc.wallet_rpc_client import WalletRpcClient
+    from littlelambocoin.util.default_root import DEFAULT_ROOT_PATH
+    from littlelambocoin.util.ints import uint16
+    from littlelambocoin.util.config import load_config as load_fork_config
 elif blockchain == "maize":
     from maize.rpc.full_node_rpc_client import FullNodeRpcClient
     from maize.rpc.farmer_rpc_client import FarmerRpcClient

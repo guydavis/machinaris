@@ -1,9 +1,10 @@
-name: test-ecostake
+name: release-littlelambocoin
 
-on:
-  push:
-    branches:
-      - 'integration'
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release Version' 
 
 jobs:
   docker:
@@ -17,7 +18,6 @@ jobs:
         uses: docker/setup-qemu-action@v2
       -
         name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
         uses: docker/setup-buildx-action@v2
       - 
         name: Login to DockerHub
@@ -42,9 +42,10 @@ jobs:
           push: true
           build-args: |
             "UBUNTU_VER=focal"
-            "MACHINARIS_STREAM=test"
-            "CHIADOG_BRANCH=dev"
-            "ECOSTAKE_BRANCH=main"
+            "MACHINARIS_STREAM=latest"
+            "LITTLELAMBOCOIN_BRANCH=main"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-ecostake:test
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-ecostake:test
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-littlelambocoin:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-littlelambocoin:v${{ github.event.inputs.version }}
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-littlelambocoin:latest
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-littlelambocoin:v${{ github.event.inputs.version }}
