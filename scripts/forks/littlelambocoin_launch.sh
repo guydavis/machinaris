@@ -18,11 +18,11 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.littlelambocoin/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   echo "Downloading LittleLamboCoin blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
-  mkdir -p /root/.littlelambocoin/mainnet/db/ && cd /root/.littlelambocoin/mainnet/db/
   /usr/bin/bash /machinaris/scripts/megacmd_setup.sh > /tmp/megacmd_setup.log 2>&1
-  # Mega links for Chives blockchain DB from: https://chiaforksblockchain.com/
+  mkdir -p /root/.littlelambocoin/mainnet/db/ && cd /root/.littlelambocoin/mainnet/db/
+  # Mega links for LLC blockchain DB from their discord July 2022
   mega-get https://mega.nz/folder/M5kwVS4Z#Y6OKS4LkI22pT4ZpOy30rQ
-  mv llc_v2/*.sqlite . && rm -rf llc_v2
+  mv llc_v2/* . && rm -rf llc_v2
 fi
 
 mkdir -p /root/.littlelambocoin/mainnet/log
