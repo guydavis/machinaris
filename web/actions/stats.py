@@ -397,7 +397,7 @@ def load_summary_stats(blockchains):
         try:
             max_record = db.session.query(Challenge).filter(Challenge.blockchain==blockchain).order_by(Challenge.time_taken.desc()).first()
             if max_record:  # Strip of 'secs' unit before rounding
-                max_response = "{0} / {1}".format(format_decimal(round(float(max_record.time_taken.split()[0]),2)), _('secs'))
+                max_response = "{0} {1}".format(format_decimal(round(float(max_record.time_taken.split()[0]),2)), _('secs'))
         except Exception as ex:
             app.logger.error(ex)
             app.logger.info("No recent challenge response times found for {0}".format(blockchain))

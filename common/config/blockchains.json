@@ -171,7 +171,7 @@
     },
     "littlelambocoin": {
         "name": "LittleLamboCoin",
-        "symbol": "llc" ,
+        "symbol": "LLC" ,
         "binary":  "/littlelambocoin-blockchain/venv/bin/littlelambocoin",
         "network_path": "/root/.littlelambocoin/mainnet",
         "network_name": "mainnet",
