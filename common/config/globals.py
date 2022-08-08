@@ -450,7 +450,7 @@ def get_alltheblocks_name(blockchain):
     return blockchain
 
 def legacy_blockchain(blockchain):
-    return blockchain in ['bpx', 'ecostake', 'flora', 'hddcoin', 'maize', 'nchain', 'petroleum', 'profit', 'silicoin', 'stor']
+    return blockchain in ['bpx', 'ecostake', 'flora', 'gold', 'hddcoin', 'maize', 'mint', 'nchain', 'petroleum', 'profit', 'silicoin', 'stor']
 
 last_mmx_reward = None
 last_mmx_reward_load_time = None

@@ -6,6 +6,7 @@ FROM ghcr.io/guydavis/machinaris-base-${UBUNTU_VER}:${MACHINARIS_STREAM}
 ARG DEBIAN_FRONTEND=noninteractive
 ARG CHIADOG_BRANCH=main
 
+ARG APPLE_BRANCH
 ARG BPX_BRANCH
 ARG BTCGREEN_BRANCH
 ARG CACTUS_BRANCH
@@ -15,9 +16,11 @@ ARG CRYPTODOGE_BRANCH
 ARG ECOSTAKE_BRANCH
 ARG FLAX_BRANCH
 ARG FLORA_BRANCH
+ARG GOLD_BRANCH
 ARG HDDCOIN_BRANCH
 ARG LITTLELAMBOCOIN_BRANCH
 ARG MAIZE_BRANCH
+ARG MINT_BRANCH
 ARG MMX_BRANCH
 ARG NCHAIN_BRANCH
 ARG PETROLEUM_BRANCH
@@ -26,6 +29,8 @@ ARG SHIBGREEN_BRANCH
 ARG SILICOIN_BRANCH
 ARG STAICOIN_BRANCH
 ARG STOR_BRANCH
+ARG TAD_BRANCH
+ARG WHEAT_BRANCH
 
 # copy local files
 COPY . /machinaris/
@@ -35,15 +40,18 @@ WORKDIR /chia-blockchain
 
 # Install specific blockchain fork (based on branch enabled) + tools that depend on the fork
 RUN \
-	/usr/bin/bash /machinaris/scripts/forks/bpx_install.sh ${BPX_BRANCH} \
+	/usr/bin/bash /machinaris/scripts/forks/apple_install.sh ${APPLE_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/bpx_install.sh ${BPX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/btcgreen_install.sh ${BTCGREEN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/cactus_install.sh ${CACTUS_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chia_install.sh ${CHIA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chives_install.sh ${CHIVES_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/chinilla_install.sh ${CHINILLA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/cryptodoge_install.sh ${CRYPTODOGE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/ecostake_install.sh ${ECOSTAKE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/flax_install.sh ${FLAX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/flora_install.sh ${FLORA_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/gold_install.sh ${GOLD_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/littlelambocoin_install.sh ${LITTLELAMBOCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/maize_install.sh ${MAIZE_BRANCH} \
@@ -55,6 +63,8 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/silicoin_install.sh ${SILICOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/staicoin_install.sh ${STAICOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/stor_install.sh ${STOR_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/tad_install.sh ${TAD_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/wheat_install.sh ${WHEAT_BRANCH} \
     && /usr/bin/bash /machinaris/scripts/pull_3rd_party_libs.sh \
 	&& /usr/bin/bash /machinaris/scripts/machinaris_install.sh \
 	&& /usr/bin/bash /machinaris/scripts/i18n/compile.sh \

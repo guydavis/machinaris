@@ -14,7 +14,14 @@ from api import utils
 
 blockchain = globals.enabled_blockchains()[0]
 
-if blockchain == "bpx":
+if blockchain == "apple":
+    from apple.rpc.full_node_rpc_client import FullNodeRpcClient
+    from apple.rpc.farmer_rpc_client import FarmerRpcClient
+    from apple.rpc.wallet_rpc_client import WalletRpcClient
+    from apple.util.default_root import DEFAULT_ROOT_PATH
+    from apple.util.ints import uint16
+    from apple.util.config import load_config as load_fork_config
+elif blockchain == "bpx":
     from chia.rpc.full_node_rpc_client import FullNodeRpcClient
     from chia.rpc.farmer_rpc_client import FarmerRpcClient
     from chia.rpc.wallet_rpc_client import WalletRpcClient
@@ -42,6 +49,13 @@ elif blockchain == "chia":
     from chia.util.default_root import DEFAULT_ROOT_PATH
     from chia.util.ints import uint16
     from chia.util.config import load_config as load_fork_config
+elif blockchain == "chinilla":
+    from chinilla.rpc.full_node_rpc_client import FullNodeRpcClient
+    from chinilla.rpc.farmer_rpc_client import FarmerRpcClient
+    from chinilla.rpc.wallet_rpc_client import WalletRpcClient
+    from chinilla.util.default_root import DEFAULT_ROOT_PATH
+    from chinilla.util.ints import uint16
+    from chinilla.util.config import load_config as load_fork_config
 elif blockchain == "chives":
     from chives.rpc.full_node_rpc_client import FullNodeRpcClient
     from chives.rpc.farmer_rpc_client import FarmerRpcClient
@@ -77,6 +91,13 @@ elif blockchain == "flora":
     from chia.util.default_root import DEFAULT_ROOT_PATH
     from chia.util.ints import uint16
     from chia.util.config import load_config as load_fork_config
+elif blockchain == "gold":
+    from chia.rpc.full_node_rpc_client import FullNodeRpcClient
+    from chia.rpc.farmer_rpc_client import FarmerRpcClient
+    from chia.rpc.wallet_rpc_client import WalletRpcClient
+    from chia.util.default_root import DEFAULT_ROOT_PATH
+    from chia.util.ints import uint16
+    from chia.util.config import load_config as load_fork_config
 elif blockchain == "hddcoin":
     from hddcoin.rpc.full_node_rpc_client import FullNodeRpcClient
     from hddcoin.rpc.farmer_rpc_client import FarmerRpcClient
@@ -98,6 +119,13 @@ elif blockchain == "maize":
     from maize.util.default_root import DEFAULT_ROOT_PATH
     from maize.util.ints import uint16
     from maize.util.config import load_config as load_fork_config
+elif blockchain == "mint":
+    from mint.rpc.full_node_rpc_client import FullNodeRpcClient
+    from mint.rpc.farmer_rpc_client import FarmerRpcClient
+    from mint.rpc.wallet_rpc_client import WalletRpcClient
+    from mint.util.default_root import DEFAULT_ROOT_PATH
+    from mint.util.ints import uint16
+    from mint.util.config import load_config as load_fork_config
 elif blockchain == "mmx":
     pass
 elif blockchain == "nchain": 
@@ -149,6 +177,20 @@ elif blockchain == "stor":
     from stor.util.default_root import DEFAULT_ROOT_PATH
     from stor.util.ints import uint16
     from stor.util.config import load_config as load_fork_config
+elif blockchain == "tad":
+    from tad.rpc.full_node_rpc_client import FullNodeRpcClient
+    from tad.rpc.farmer_rpc_client import FarmerRpcClient
+    from tad.rpc.wallet_rpc_client import WalletRpcClient
+    from tad.util.default_root import DEFAULT_ROOT_PATH
+    from tad.util.ints import uint16
+    from tad.util.config import load_config as load_fork_config
+elif blockchain == "wheat":
+    from wheat.rpc.full_node_rpc_client import FullNodeRpcClient
+    from wheat.rpc.farmer_rpc_client import FarmerRpcClient
+    from wheat.rpc.wallet_rpc_client import WalletRpcClient
+    from wheat.util.default_root import DEFAULT_ROOT_PATH
+    from wheat.util.ints import uint16
+    from wheat.util.config import load_config as load_fork_config
 else:
     app.logger.info("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ['blockchains']))
 
