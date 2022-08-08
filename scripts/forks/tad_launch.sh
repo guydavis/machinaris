@@ -20,9 +20,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   /usr/bin/bash /machinaris/scripts/megacmd_setup.sh > /tmp/megacmd_setup.log 2>&1
   mkdir -p /root/.tad/mainnet/db/ && cd /root/.tad/mainnet/db/
-  # Mega links for Tad blockchain DB from their discord August 2022
-  mega-get https://mega.nz/folder/AtEQTRqR#fsC_J9-D13U9cvyS02QSwg
-  mv tad_v2/* . && rm -rf tad_v2
+  # Mega links for Tad V1 blockchain DB from their discord August 2022
+  mega-get https://mega.nz/folder/Npt0wQxB#Y7v9F4HUwzXXME1HqlGbmw
+  mv tad_V1/db/* . && rm -rf tad_V1
 fi
 
 mkdir -p /root/.tad/mainnet/log
