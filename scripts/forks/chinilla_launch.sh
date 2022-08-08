@@ -16,13 +16,8 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.chinilla/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
   && [[ ! -f /root/.chinilla/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
-  echo "Downloading Chinilla blockchain DB (many GBs in size) on first launch..."
-  echo "Please be patient as takes minutes now, but saves days of syncing time later."
-  /usr/bin/bash /machinaris/scripts/megacmd_setup.sh > /tmp/megacmd_setup.log 2>&1
-  mkdir -p /root/.chinilla/mainnet/db/ && cd /root/.chinilla/mainnet/db/
-  # Mega links for chinilla blockchain DB from their discord August 2022
-  mega-get https://mega.nz/folder/AtEQTRqR#fsC_J9-D13U9cvyS02QSwg
-  mv tad_v2/* . && rm -rf tad_v2
+  echo "Sorry, Chinilla does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
+  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/chinilla"
 fi
 
 mkdir -p /root/.chinilla/mainnet/log
