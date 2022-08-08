@@ -11,7 +11,7 @@ if [ -z ${MINT_BRANCH} ]; then
 	echo 'Skipping Mint install as not requested.'
 else
 	rm -rf /root/.cache
-	git clone --branch ${MINT_BRANCH} --single-branch https://github.com/mintcoin-gl/mint-blockchain.git /mint-blockchain
+	git clone --branch ${MINT_BRANCH} --single-branch https://github.com/MintNetwork/mint-blockchain.git /mint-blockchain
 	cd /mint-blockchain 
 	git submodule update --init mozilla-ca 
 	git checkout $HASH

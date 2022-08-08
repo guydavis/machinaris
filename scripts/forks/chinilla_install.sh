@@ -1,6 +1,6 @@
 #!/bin/env bash
 #
-# Installs Chinilla as per https://github.com/chinilla/chinilla-blockchain
+# Installs Chinilla as per https://github.com/Chinilla/chinilla-blockchain
 #
 
 CHINILLA_BRANCH=$1
@@ -11,7 +11,7 @@ if [ -z ${CHINILLA_BRANCH} ]; then
 	echo 'Skipping Chinilla install as not requested.'
 else
 	rm -rf /root/.cache
-	git clone --branch ${CHINILLA_BRANCH} --single-branch https://github.com/chinilla/chinilla-blockchain.git /chinilla-blockchain
+	git clone --branch ${CHINILLA_BRANCH} --single-branch https://github.com/Chinilla/chinilla-blockchain.git /chinilla-blockchain
 	cd /chinilla-blockchain 
 	git submodule update --init mozilla-ca 
 	git checkout $HASH
