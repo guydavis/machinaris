@@ -69,7 +69,7 @@ def load_drives_status():
                 drive_results.append(drives.DriveStatus(device, devices[device]['device_type'],
                     devices[device]['comment'], info))
             else:
-                app.logger.info("Smartctl reports no such device for {0}".format(device))
+                app.logger.info("Smartctl reports no useful info for {0}".format(device))
         return drive_results
 
 def load_drive_info(device_name, device_settings):
