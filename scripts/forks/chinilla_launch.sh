@@ -14,20 +14,20 @@ ln -s /root/.chia/chinilla /root/.chinilla
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
-  && [[ ! -f /root/.chinilla/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
-  && [[ ! -f /root/.chinilla/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
+  && [[ ! -f /root/.chinilla/vanillanet/db/blockchain_v1_vanillanet.sqlite ]] \
+  && [[ ! -f /root/.chinilla/vanillanet/db/blockchain_v2_vanillanet.sqlite ]]; then
   echo "Sorry, Chinilla does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
   echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/chinilla"
 fi
 
-mkdir -p /root/.chinilla/mainnet/log
-chinilla init >> /root/.chinilla/mainnet/log/init.log 2>&1 
+mkdir -p /root/.chinilla/vanillanet/log
+chinilla init >> /root/.chinilla/vanillanet/log/init.log 2>&1 
 
 echo 'Configuring Chinilla...'
-if [ -f /root/.chinilla/mainnet/config/config.yaml ]; then
-  sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chinilla/mainnet/config/config.yaml
-  sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chinilla/mainnet/config/config.yaml
-  sed -i 's/localhost/127.0.0.1/g' /root/.chinilla/mainnet/config/config.yaml
+if [ -f /root/.chinilla/vanillanet/config/config.yaml ]; then
+  sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chinilla/vanillanet/config/config.yaml
+  sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chinilla/vanillanet/config/config.yaml
+  sed -i 's/localhost/127.0.0.1/g' /root/.chinilla/vanillanet/config/config.yaml
 fi
 
 # Loop over provided list of key paths
@@ -48,7 +48,7 @@ for p in ${plots_dir//:/ }; do
     chinilla plots add -d ${p}
 done
 
-chmod 755 -R /root/.chinilla/mainnet/config/ssl/ &> /dev/null
+chmod 755 -R /root/.chinilla/vanillanet/config/ssl/ &> /dev/null
 chinilla init --fix-ssl-permissions > /dev/null 
 
 # Start services based on mode selected. Default is 'fullnode'
@@ -65,7 +65,7 @@ if [[ ${mode} == 'fullnode' ]]; then
   done
   chinilla start farmer
 elif [[ ${mode} =~ ^farmer.* ]]; then
-  if [ ! -f ~/.chinilla/mainnet/config/ssl/wallet/public_wallet.key ]; then
+  if [ ! -f ~/.chinilla/vanillanet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
   else
     chinilla start farmer-only
@@ -86,8 +86,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       rm -f /tmp/certs.zip 
     fi
     if [[ -f /root/.chinilla/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
-      chinilla init -c /root/.chinilla/farmer_ca 2>&1 > /root/.chinilla/mainnet/log/init.log
-      chmod 755 -R /root/.chinilla/mainnet/config/ssl/ &> /dev/null
+      chinilla init -c /root/.chinilla/farmer_ca 2>&1 > /root/.chinilla/vanillanet/log/init.log
+      chmod 755 -R /root/.chinilla/vanillanet/config/ssl/ &> /dev/null
       chinilla init --fix-ssl-permissions > /dev/null 
     else
       echo "Did not find your farmer's certificates within /root/.chinilla/farmer_ca."
