@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. The format 
 ## [0.8.3] - 2022-08-?
  - New blockchains: [Gold](https://github.com/goldcoin-gl/gold-blockchain), [LittleLamboCoin](https://github.com/BTCgreen-Network/littlelambocoin-blockchain), [Mint](https://github.com/MintNetwork/mint-blockchain), [Tad](https://github.com/Tad-Network/tad-blockchain), [Wheat](https://github.com/wheatnetwork/wheat-blockchain)
  - Update: [BPX](https://github.com/bpx-network/bpx-blockchain) to v2.0.0, [BTCGreen](https://github.com/BTCgreen-Network/btcgreen-blockchain) to v1.5.0, [Shibgreen](https://github.com/BTCgreen-Network/shibgreen-blockchain) to v1.5.0
+ - Update: [Bladebit](https://github.com/Chia-Network/bladebit/tree/2.0.0-alpha-2) to v2.0.0 (alpha-2) with diskplot mode.
 
 ## [0.8.2] - 2022-07-24
  - MMX - Record created blocks from blockchain logs, for display in Machinaris, off index page.
