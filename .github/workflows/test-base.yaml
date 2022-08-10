@@ -4,7 +4,7 @@ on: workflow_dispatch
 
 jobs:
   docker-jammy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout
@@ -41,7 +41,7 @@ jobs:
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-base-jammy:test
 
   docker-focal:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       -
         name: Checkout
