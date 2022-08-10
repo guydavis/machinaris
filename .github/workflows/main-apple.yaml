@@ -1,12 +1,14 @@
-name: develop-tad
+name: release-apple
 
-on:
-  push:
-    branches:
-      - 'develop'
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release Version' 
+
 jobs:
   docker:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     steps:
       -
         name: Checkout
@@ -36,13 +38,14 @@ jobs:
         with:
           file: docker/dockerfile
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
-            "UBUNTU_VER=jammy"
-            "MACHINARIS_STREAM=develop"
-            "CHIADOG_BRANCH=dev"
-            "TAD_BRANCH=main"
+            "UBUNTU_VER=focal"
+            "MACHINARIS_STREAM=latest"
+            "APPLE_BRANCH=main"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-tad:develop
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-tad:develop
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-apple:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-apple:v${{ github.event.inputs.version }}
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-apple:latest
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-apple:v${{ github.event.inputs.version }}
