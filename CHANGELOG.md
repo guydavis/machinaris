@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.8.3] - 2022-08-?
- - New blockchains: [Gold](https://github.com/goldcoin-gl/gold-blockchain), [LittleLamboCoin](https://github.com/BTCgreen-Network/littlelambocoin-blockchain), [Mint](https://github.com/MintNetwork/mint-blockchain), [Tad](https://github.com/BTCgreen-Network/tad-blockchain), [Wheat](https://github.com/wheatnetwork/wheat-blockchain)
+ - New blockchains: [Apple](https://github.com/Apple-Network/apple-blockchain), [Chinilla](https://github.com/chinilla/chinilla-blockchain), [Gold](https://github.com/goldcoin-gl/gold-blockchain), [LittleLamboCoin](https://github.com/BTCgreen-Network/littlelambocoin-blockchain), [Mint](https://github.com/MintNetwork/mint-blockchain), [Tad](https://github.com/BTCgreen-Network/tad-blockchain), [Wheat](https://github.com/wheatnetwork/wheat-blockchain)
  - Update: [BPX](https://github.com/bpx-network/bpx-blockchain) to v2.0.0, [BTCGreen](https://github.com/BTCgreen-Network/btcgreen-blockchain) to v1.5.0, [Shibgreen](https://github.com/BTCgreen-Network/shibgreen-blockchain) to v1.5.0
  - Update: [Bladebit](https://github.com/Chia-Network/bladebit/tree/2.0.0-alpha-2) to v2.0.0 (alpha-2) with diskplot mode.
  - Fixes: Avoid timeout/slowness encountered by those with many drives, also many cold wallet transactions

@@ -122,6 +122,8 @@ plotting:
                 network_port: 9699    # Default is 8444, but use 9699 for Chives
 
         bladebit:
-                # BladeBit plotter: https://github.com/harold-b/bladebit
+                # BladeBit plotter: https://github.com/Chia-Network/bladebit/
                 threads: 2            # Threads per job
                 no_numa: false        # Whether to disable NUMA memory support or not
+                diskplot: True        # Whether to plot to tmp1 (and tmp2) disks or only RAM (false)
+                diskplot_cache:   4GB # If diskplot, amount of RAM to allocate to caching disk writes
