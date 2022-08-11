@@ -98,7 +98,7 @@
                   <a class="text-white" href="{{ url_for('worker_route') }}?hostname={{ fullnodes[blockchain.blockchain].hostname }}&blockchain={{ blockchain.blockchain }}">{{blockchain.blockchain}}</a>
                   {% else %}
                   {{blockchain.blockchain}}
-                  {%endif%}
+                  {% endif %}
                 </td>
                 <td>
                     {% if blockchain.status == 'Offline' %}
