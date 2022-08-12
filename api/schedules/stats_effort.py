@@ -79,11 +79,12 @@ def collect():
             if most_recent_block_reward_time:  # Calculate since most recent farmed block
                 effort = (time.time() - most_recent_block_reward_time) / 60 / etw_minutes * 100
                 app.logger.info("Effort based on most recently farmed block ({0}) is {1}%.".format(readable(most_recent_block_reward_time), round(effort, 0)))
-            else:  # No blocks farmed, so calculate since oldest plot file creation (aka farm duration)
+                send_stat(blockchain, effort, current_datetime)
+            elif etw_minutes > 0:  # No blocks farmed, so calculate since oldest plot file creation (aka farm duration)
                 oldest_plot_time = get_oldest_plot_file_time()
-                effort = (time.time() - oldest_plot_time)/60 / etw_minutes * 100
+                effort = (time.time() - oldest_plot_time) / 60 / etw_minutes * 100
                 app.logger.info("Effort based on oldest plot file ({0}) is {1}%".format(readable(oldest_plot_time)), round(effort, 0))
-            send_stat(blockchain, effort, current_datetime)
+                send_stat(blockchain, effort, current_datetime)
         except:
             app.logger.info("Failed to calculate blockchain effort.")
             app.logger.info(traceback.format_exc())

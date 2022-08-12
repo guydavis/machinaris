@@ -37,7 +37,7 @@ def on_starting(server):
     # Collect disk stats from all modes where blockchain is chia, avoiding duplicate disks from multiple forks on same host
     if 'chia' in globals.enabled_blockchains():
         scheduler.add_job(func=stats_disk.collect, name="stats_disk", trigger='cron', minute="*/10") # Every 10 minutes
-        scheduler.add_job(func=status_drives.update, name="status_drives", trigger='cron', minute="*/5") # Every 5 minutes
+        scheduler.add_job(func=status_drives.update, name="status_drives", trigger='cron', minute="*/15") # Every 15 minutes
         
     # MMX needs to report plots from harvesters directly as they are not listed via the fullnode like Chia does
     if not utils.is_fullnode() and globals.harvesting_enabled() and 'mmx' in globals.enabled_blockchains():

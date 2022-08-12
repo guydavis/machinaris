@@ -7,9 +7,9 @@
 # during container launch, otherwise get all sorts of errors.
 #
 
-BLADEBIT_BRANCH=master
+BLADEBIT_BRANCH=2.0.0-alpha-2
 
-if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia' || ${blockchains} == 'chives' || ${blockchains} == 'mmx') ]]; then
+if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia') ]]; then
     if [ ! -f /usr/bin/bladebit ] && [[ "${bladebit_skip_build}" != 'true' ]]; then
         arch_name="$(uname -m)"
         if [[ "${arch_name}" = "x86_64" ]] || [[ "${arch_name}" = "arm64" ]]; then

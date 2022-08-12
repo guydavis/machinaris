@@ -3,7 +3,7 @@
 notification_title_prefix: '$HOSTNAME-ecostake'
 log_level: INFO
 coin_name: 'ecostake'
-coin_symbol: 'eco'
+coin_symbol: 'llc'
 
 # Only one consumer can be enabled at a time, you can
 # delete the section for the consumer which you aren't using

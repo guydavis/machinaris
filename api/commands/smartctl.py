@@ -64,12 +64,12 @@ def load_drives_status():
         drive_results = []
         for device in devices.keys():
             info = load_drive_info(device, devices[device])
-            if not "No such device" in info:
+            if info and not "No such device" in info:
                 #app.logger.info("Smartctl info parsed and device added: {0}".format(device))
                 drive_results.append(drives.DriveStatus(device, devices[device]['device_type'],
                     devices[device]['comment'], info))
             else:
-                app.logger.info("Smartctl reports no such device for {0}".format(device))
+                app.logger.info("Smartctl reports no useful info for {0}".format(device))
         return drive_results
 
 def load_drive_info(device_name, device_settings):

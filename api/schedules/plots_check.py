@@ -172,10 +172,10 @@ def request_check(plot, workers):
                 if response.status_code == 200:
                     return [harvester.hostname, harvester.displayname, response.content.decode('utf-8')]
                 elif response.status_code == 404:
-                    app.logger.debug("Plotter on {0}:{1} did not have plot check for {2}".format(
+                    app.logger.debug("Harvester on {0}:{1} did not have plot check for {2}".format(
                         harvester.hostname, harvester.port, plot.file))
                 else:
-                    app.logger.info("Plotter on {0}:{1} returned an unexpected error: {2}".format(
+                    app.logger.info("Harvester on {0}:{1} returned an unexpected error: {2}".format(
                         harvester.hostname, harvester.port, response.status_code))
             except Exception as ex:
                 app.logger.info(str(ex))

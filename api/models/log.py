@@ -98,7 +98,7 @@ class Blocks:
                     proofs_found = int(re.search('Found (\d+) proofs', line, re.IGNORECASE).group(1))
                     time_taken = str(re.search('Time: (\d+\.?\d*) s.', line, re.IGNORECASE).group(1)) + ' secs'
                 elif "Farmed unfinished_block" in line:
-                    created_at =  line[line.find(':')+1:].split()[0].replace('T', ' ')
+                    created_at =  line[:line.rfind(':')].split()[0].replace('T', ' ')
                     farmed_block = re.search('Farmed unfinished_block (\w+)', line, re.IGNORECASE).group(1)
                 elif "--" == line:
                     if challenge_id and plots_past_filter and proofs_found and time_taken and farmed_block:

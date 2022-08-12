@@ -93,7 +93,13 @@
         <tbody>
             {% for blockchain in blockchains.rows %}
             <tr>
-                <td><a class="text-white" href="{{ url_for('worker_route') }}?hostname={{ fullnodes[blockchain.blockchain].hostname }}&blockchain={{ blockchain.blockchain }}">{{blockchain.blockchain}}</a></td>
+                <td>
+                  {% if blockchain.blockchain in fullnodes %}
+                  <a class="text-white" href="{{ url_for('worker_route') }}?hostname={{ fullnodes[blockchain.blockchain].hostname }}&blockchain={{ blockchain.blockchain }}">{{blockchain.blockchain}}</a>
+                  {% else %}
+                  {{blockchain.blockchain}}
+                  {% endif %}
+                </td>
                 <td>
                     {% if blockchain.status == 'Offline' %}
                       <i class="bi-dash-circle text-danger"></i>

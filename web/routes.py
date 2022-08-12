@@ -267,7 +267,6 @@ def wallet():
             app.logger.info("Saving {0} cold wallet address of: {1}".format(request.form.get('blockchain'), request.form.get('cold_wallet_address')))
             selected_blockchain = request.form.get('blockchain')
             chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
-            flash(_("Saved cold wallet addresses."), 'success')
     wallets = chia.load_wallets()
     chart_data = stats.load_total_balances(fiat.get_local_currency_symbol().lower())
     return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, 
