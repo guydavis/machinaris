@@ -1,13 +1,13 @@
 #!/bin/env bash
 #
-# Installs bladebit - A fast RAM-only, k32-only, Chia plotter.
-# 416 GiB of RAM are needed. See https://github.com/harold-b/bladebit
+# Installs bladebit - A fast RAM-only (or disk cached), k32-only, Chia plotter.
+# 416 GiB of RAM are needed. See https://github.com/Chia-Network/bladebit
 #
 # Can't acutally build on Github servers, must build on each target system 
 # during container launch, otherwise get all sorts of errors.
 #
 
-BLADEBIT_BRANCH=2.0.0-alpha-2
+BLADEBIT_BRANCH=$1
 
 if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia') ]]; then
     if [ ! -f /usr/bin/bladebit ] && [[ "${bladebit_skip_build}" != 'true' ]]; then
