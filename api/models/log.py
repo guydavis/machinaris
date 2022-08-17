@@ -115,7 +115,7 @@ class Blocks:
                             'farmed_block': farmed_block,
                             'created_at': created_at
                         })
-                        app.logger.info(self.rows)
+                        app.logger.debug(self.rows)
                         plots_past_filter = proofs_found = time_taken = farmed_block = None
                         plot_files = []
                     else:

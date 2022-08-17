@@ -15,6 +15,7 @@ if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chi
         if [[ "${arch_name}" = "x86_64" ]] || [[ "${arch_name}" = "arm64" ]]; then
             apt update && apt install -y build-essential cmake libgmp-dev libnuma-dev
             cd /
+            echo "Cloning bladebit from https://github.com/Chia-Network/bladebit.git on branch:${BLADEBIT_BRANCH}"
             git clone --recursive --branch ${BLADEBIT_BRANCH} https://github.com/Chia-Network/bladebit.git
             cd /bladebit && echo "Building bladebit on ${arch_name}..."
             mkdir -p build && cd build

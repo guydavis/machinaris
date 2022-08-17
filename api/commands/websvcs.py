@@ -2,11 +2,13 @@
 # Access to public web APIs
 #
 
+import trace
 import bs4
 import datetime
 import http
 import json
 import os
+import re
 import requests
 import time
 import traceback
@@ -21,6 +23,7 @@ COLD_WALLET_CACHE_FILE = '/root/.chia/machinaris/cache/cold_wallet_cache.json'
 COLD_WALLET_CACHE_DIR = '/root/.chia/machinaris/cache/cold_wallets'
 BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/cache/blockchain_prices_cache.json'
 EXCHANGE_RATES_CACHE_FILE = '/root/.chia/machinaris/cache/exchange_rates_cache.json'
+BLOCKCHAIN_STATUSES_CACHE_FILE = '/root/.chia/machinaris/cache/blockchain_statuses_cache.json'
 
 def load_cold_wallet_addresses():
     data = {}
@@ -348,3 +351,90 @@ def save_exchange_rates(debug=False):
             app.logger.error("Received {0} from {1}".format(resp.status_code, url))
     except Exception as ex:
             app.logger.error("Failed to store exchange cache in {0} because {1}".format(EXCHANGE_RATES_CACHE_FILE, str(ex)))
+
+last_chain_request_time = None
+def get_chain_statuses():
+    global last_chain_request_time
+    statuses = load_chain_statuses()
+    if not last_chain_request_time or last_chain_request_time <= (datetime.datetime.now() - datetime.timedelta(minutes=ALLTHEBLOCKS_REQUEST_INTERVAL_MINS)):
+        try:
+            request_chain_statuses(statuses)
+            save_chain_statuses(statuses)
+            last_chain_request_time = datetime.datetime.now()
+        except Exception as ex:
+            app.logger.info("Failed to save current blockchain statuses from ATB because {0}".format(str(ex)))
+    return statuses
+
+def load_chain_statuses():
+    data = {}
+    if os.path.exists(BLOCKCHAIN_STATUSES_CACHE_FILE):
+        try:
+            with open(BLOCKCHAIN_STATUSES_CACHE_FILE) as f:
+                data = json.load(f)
+        except Exception as ex:
+            msg = "Unable to read blockchain status cache from {0} because {1}".format(BLOCKCHAIN_STATUSES_CACHE_FILE, str(ex))
+            app.logger.error(msg)
+    return data
+
+def request_chain_statuses(statuses, debug=False):
+    # First get the health status from ATB per blockchain
+    url = "https://api.alltheblocks.net/atb/health"
+    app.logger.info("Requesting blockchain health from {0}".format(url))
+    try:
+        if debug:
+            http.client.HTTPConnection.debuglevel = 1
+        resp = requests.get(url, timeout=30)
+        http.client.HTTPConnection.debuglevel = 0
+        if resp.status_code == 200:
+            result = json.loads(resp.text)
+            for fork in result['forks']:
+                fork_name = fork['pathName'].replace('stai', 'staicoin')
+                peak_time = datetime.datetime.fromtimestamp(int(fork['peakTimestamp'])).strftime("%Y-%m-%d %H:%M:%S")
+                statuses[fork_name] = { 'peak_height': fork['peakHeight'], 'peak_time': peak_time, }
+        else:
+            app.logger.error("Received {0} from {1}".format(resp.status_code, url))
+    except Exception as ex:
+            app.logger.error("Failed to read blockchain health because {0}".format(str(ex)))
+
+    # Then get the sync status 
+    url = "https://alltheblocks.net/tools/status"
+    app.logger.info("Requesting blockchain sync state from {0}".format(url))
+    if debug:
+        http.client.HTTPConnection.debuglevel = 1
+    data = requests.get(url, timeout=30).text
+    http.client.HTTPConnection.debuglevel = 0
+    soup = bs4.BeautifulSoup(data, 'html.parser')
+    table = soup.find('table')
+    for row in table.find_all('tr'):
+        try:
+            blockchain = None
+            chain_status = 'IN SYNC' # Default
+            for cell in row.find_all('td'):
+                if not cell.contents[0].string:
+                    continue
+                try:
+                    blockchain = cell.a.contents[0].string.strip().lower().replace('stai', 'staicoin')
+                except:
+                    pass
+                try:
+                    for tag in cell.descendants:
+                        if 'NO SYNC' in tag.contents[0].string.strip():
+                            chain_status = tag.contents[0].string.strip()
+                except:
+                    pass
+            if blockchain in statuses:
+                details = statuses[blockchain]
+                details['sync_state'] = chain_status
+            else:
+                app.logger.info("Missing blockchain from health. {0} found sync state of {1}.".format(blockchain, chain_status))
+        except Exception as ex:
+            traceback.print_exc()
+    #app.logger.info(statuses)
+    return statuses
+
+def save_chain_statuses(data):
+    try:
+        with open(BLOCKCHAIN_STATUSES_CACHE_FILE, 'w') as f:
+            json.dump(data, f)
+    except Exception as ex:
+        app.logger.error("Failed to store blockchain status cache in {0} because {1}".format(BLOCKCHAIN_STATUSES_CACHE_FILE, str(ex)))

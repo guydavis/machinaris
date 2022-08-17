@@ -22,6 +22,8 @@ from common.utils import converters, fiat
 # Treat *.plot files smaller than this as in-transit (copying) so don't count them
 MINIMUM_K32_PLOT_SIZE_BYTES = 100 * 1024 * 1024
 
+BLOCKCHAIN_STATUSES_CACHE_FILE = '/root/.chia/machinaris/cache/blockchain_statuses_cache.json'
+
 class Summaries:
 
     def __init__(self, blockchains, farms, wallets, stats):
@@ -540,6 +542,7 @@ class Blockchains:
     def __init__(self, blockchains):
         self.columns = ['hostname', 'blockchain', 'details', 'updated_at']
         self.rows = []
+        atb_statuses = self.load_atb_blockchain_statuses()
         for blockchain in blockchains:
             worker_status = None
             try:
@@ -550,7 +553,7 @@ class Blockchains:
             except:
                 app.logger.info("Blockchains.init(): Unable to find a worker with hostname '{0}'".format(blockchain.hostname))
                 displayname = blockchain.hostname
-            self.rows.append({ 
+            row = { 
                 'displayname': displayname, 
                 'hostname': blockchain.hostname,
                 'blockchain': blockchain.blockchain, 
@@ -559,7 +562,24 @@ class Blockchains:
                 'peak_time': self.extract_time(blockchain.blockchain, blockchain.details),
                 'fiat_price': fiat.to_fiat(blockchain.blockchain, 1.0),
                 'details': blockchain.details,
-                'updated_at': blockchain.updated_at }) 
+                'updated_at': blockchain.updated_at 
+            }
+            if blockchain.blockchain in atb_statuses:
+                row['atb_sync_status'] = atb_statuses[blockchain.blockchain]['sync_state']
+                row['atb_peak_height'] = atb_statuses[blockchain.blockchain]['peak_height']
+                row['atb_peak_time'] = atb_statuses[blockchain.blockchain]['peak_time']
+            self.rows.append(row) 
+    
+    def load_atb_blockchain_statuses(self):
+        data = {}
+        if os.path.exists(BLOCKCHAIN_STATUSES_CACHE_FILE):
+            try:
+                with open(BLOCKCHAIN_STATUSES_CACHE_FILE) as f:
+                    data = json.load(f)
+            except Exception as ex:
+                msg = "Unable to read ATB blockchain status cache from {0} because {1}".format(BLOCKCHAIN_STATUSES_CACHE_FILE, str(ex))
+                print(msg)
+        return data
     
     def extract_status(self, blockchain, details, worker_status):
         if worker_status == 'Responding':
