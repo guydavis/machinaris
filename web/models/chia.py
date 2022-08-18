@@ -564,10 +564,18 @@ class Blockchains:
                 'details': blockchain.details,
                 'updated_at': blockchain.updated_at 
             }
-            if blockchain.blockchain in atb_statuses:
-                row['atb_sync_status'] = atb_statuses[blockchain.blockchain]['sync_state']
-                row['atb_peak_height'] = atb_statuses[blockchain.blockchain]['peak_height']
-                row['atb_peak_time'] = atb_statuses[blockchain.blockchain]['peak_time']
+            try:
+                if blockchain.blockchain in atb_statuses:
+                    if 'sync_state' in atb_statuses[blockchain.blockchain]:
+                        row['atb_sync_status'] = atb_statuses[blockchain.blockchain]['sync_state']
+                    if 'peak_height' in atb_statuses[blockchain.blockchain]:
+                        row['atb_peak_height'] = atb_statuses[blockchain.blockchain]['peak_height']
+                    if 'peak_time' in atb_statuses[blockchain.blockchain]:
+                        row['atb_peak_time'] = atb_statuses[blockchain.blockchain]['peak_time']
+                else:
+                    app.logger.info("No ATB blockchain status found for: {0}".format(blockchain.blockchain))
+            except Exception as ex:
+                app.logger.info("Failed to include ATB blockchain status because {0}".format(str(ex)))
             self.rows.append(row) 
     
     def load_atb_blockchain_statuses(self):
