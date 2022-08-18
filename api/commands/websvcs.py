@@ -413,7 +413,7 @@ def request_chain_statuses(statuses, debug=False):
                 if not cell.contents[0].string:
                     continue
                 try:
-                    blockchain = cell.a.contents[0].string.strip().lower().replace('stai', 'staicoin')
+                    blockchain = cell.a.contents[0].string.strip().lower().replace('stai', 'staicoin').replace('n-chain', 'nchain')
                 except:
                     pass
                 try:
