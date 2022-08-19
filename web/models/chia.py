@@ -561,6 +561,7 @@ class Blockchains:
                 'peak_height': self.extract_height(blockchain.blockchain, blockchain.details),
                 'peak_time': self.extract_time(blockchain.blockchain, blockchain.details),
                 'fiat_price': fiat.to_fiat(blockchain.blockchain, 1.0),
+                'fiat_price_tooltip': fiat.tooltip(blockchain.blockchain),
                 'details': blockchain.details,
                 'updated_at': blockchain.updated_at 
             }

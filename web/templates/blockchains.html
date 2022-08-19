@@ -110,7 +110,8 @@
                     {% endif %} &nbsp;
                     {{blockchain.status}}
                 </td>
-                <td>{{blockchain.fiat_price}}</td>
+                <td><a data-toggle="tooltip" data-bs-placement="right" data-bs-html="true" 
+                  title="{{blockchain.fiat_price_tooltip}}">{{blockchain.fiat_price}}</a></td>
                 <td>{{blockchain.peak_height}}</td>
                 <td>{{blockchain.peak_time}}</td>
                 <td>{{blockchain.updated_at | datetimefilter}}</td>
@@ -203,6 +204,7 @@ $(document).ready(function () {
         },
         {% endif %}
     });
+    $('[data-toggle="tooltip"]').tooltip();
 })
 </script>
 {% endblock %}
