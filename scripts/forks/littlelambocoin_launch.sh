@@ -20,9 +20,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   /usr/bin/bash /machinaris/scripts/megacmd_setup.sh > /tmp/megacmd_setup.log 2>&1
   mkdir -p /root/.littlelambocoin/mainnet/db/ && cd /root/.littlelambocoin/mainnet/db/
-  # Mega links for LLC blockchain DB from their discord July 2022
-  mega-get https://mega.nz/folder/M5kwVS4Z#Y6OKS4LkI22pT4ZpOy30rQ
-  mv llc_v2/* . && rm -rf llc_v2
+  # Mega links for LLC blockchain DB from their Discord 2022-08-20
+  mega-get https://mega.nz/file/zogiGLqa#Ui6ONP7prArhrTDAOIYPrTejZ2gM5Mk8kb7rocniwKQ
+  #mv llc_v2/* . && rm -rf llc_v2
 fi
 
 mkdir -p /root/.littlelambocoin/mainnet/log

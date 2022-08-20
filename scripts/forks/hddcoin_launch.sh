@@ -19,7 +19,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Downloading HDDCoin blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.hddcoin/mainnet/db/ && cd /root/.hddcoin/mainnet/db/
-  # Latest Blockchain DB download from 
+  # Latest Blockchain DB download from https://hddcoin.org/
   curl -skLJO https://download.hddcoin.org/blockchain_v1_mainnet.sqlite
 fi
 
