@@ -12,6 +12,14 @@ BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/cache/blockchain_prices_c
 EXCHANGE_RATES_CACHE_FILE = '/root/.chia/machinaris/cache/exchange_rates_cache.json'
 LOCALE_SETTINGS = '/root/.chia/machinaris/config/locale_settings.json'
 
+def _calc_average_price(blockchain_pricing):
+    value = 0 
+    sources = 0
+    for source in blockchain_pricing:
+        value += blockchain_pricing[source]['value_usd']
+        sources += 1
+    return value / sources
+
 def to_fiat(blockchain, coins):
     if os.path.exists(BLOCKCHAIN_PRICES_CACHE_FILE):
         try:
@@ -20,7 +28,7 @@ def to_fiat(blockchain, coins):
                 if blockchain in data:
                     if isinstance(coins, str):
                         coins = float(coins.replace(',',''))
-                    usd_per_coin = float(data[blockchain])
+                    usd_per_coin = float(_calc_average_price(data[blockchain]))
                     fiat_per_usd = get_fiat_exchange_to_usd()
                     fiat_cur_sym = get_local_currency_symbol().lower()
                     if usd_per_coin and fiat_per_usd and coins:
@@ -41,7 +49,7 @@ def to_fiat_float(blockchain, coins):
                 if blockchain in data:
                     if isinstance(coins, str):
                         coins = float(coins.replace(',',''))
-                    usd_per_coin = float(data[blockchain])
+                    usd_per_coin = float(_calc_average_price(data[blockchain]))
                     fiat_per_usd = get_fiat_exchange_to_usd()
                     fiat_cur_sym = get_local_currency_symbol().lower()
                     if usd_per_coin and fiat_per_usd and coins:
@@ -52,6 +60,21 @@ def to_fiat_float(blockchain, coins):
             print("Unable to convert to fiat because {0}".format(str(ex)))
             traceback.print_exc()
     return None
+
+def tooltip(blockchain):
+    tips = []
+    if os.path.exists(BLOCKCHAIN_PRICES_CACHE_FILE):
+        try:
+            with open(BLOCKCHAIN_PRICES_CACHE_FILE) as f:
+                data = json.load(f)
+                if blockchain in data:
+                    for source in data[blockchain]:
+                        tips.append(source + ': ' + format_decimal(data[blockchain][source]['value_usd']) + ' usd$')
+        except Exception as ex:
+            print("Unable generate fiat tooltip for {0} because {1}".format(blockchain, str(ex)))
+            traceback.print_exc()
+    tooltip = '<br/>'.join(tips)
+    return tooltip
 
 def load_exchange_rates_cache():
     data = {}

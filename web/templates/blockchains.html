@@ -110,7 +110,8 @@
                     {% endif %} &nbsp;
                     {{blockchain.status}}
                 </td>
-                <td>{{blockchain.fiat_price}}</td>
+                <td><a data-toggle="tooltip" data-bs-placement="right" data-bs-html="true" 
+                  title="{{blockchain.fiat_price_tooltip}}">{{blockchain.fiat_price}}</a></td>
                 <td>{{blockchain.peak_height}}</td>
                 <td>{{blockchain.peak_time}}</td>
                 <td>{{blockchain.updated_at | datetimefilter}}</td>
@@ -118,7 +119,13 @@
                     if blockchain.blockchain == 'mmx' 
                     %}<a href="https://github.com/madMAx43v3r/mmx-node#mmx-node" target="_blank" title="{{_('View Blockchain Details')}}" ><i class="fs-4 bi-box-arrow-up-right"></i></a>{% 
                      else 
-                     %}<a href="{{ blockchain.blockchain|alltheblocks_blockchainlink}}" target="_blank" title="{{_('Blockchain Details')}}" ><i class="fs-4 bi-box-arrow-up-right"></i></a>{% 
+                     %}<a href="{{ blockchain.blockchain|alltheblocks_blockchainlink }}" target="_blank" 
+                        title="{{_('AllTheBlocks Status')}}" ><i class="fs-4 bi-globe {% 
+                          if blockchain.atb_sync_status == 'IN SYNC' %}
+                          text-success
+                        {% elif blockchain.atb_sync_status == 'NO SYNC' %}
+                          text-warning
+                        {% endif %}"></i></a>{% 
                     endif 
                     %}</td>
                 <td class='icon_cell'>
@@ -197,6 +204,7 @@ $(document).ready(function () {
         },
         {% endif %}
     });
+    $('[data-toggle="tooltip"]').tooltip();
 })
 </script>
 {% endblock %}

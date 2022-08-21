@@ -4,7 +4,7 @@
 #
 
 TAD_BRANCH=$1
-# On 2022-08-010
+# On 2022-08-10
 HASH=80ccd218e21f71450420c88c4158bf3a43571caa
 
 if [ -z ${TAD_BRANCH} ]; then

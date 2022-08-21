@@ -2,11 +2,13 @@
 # Access to public web APIs
 #
 
+import trace
 import bs4
 import datetime
 import http
 import json
 import os
+import re
 import requests
 import time
 import traceback
@@ -21,6 +23,8 @@ COLD_WALLET_CACHE_FILE = '/root/.chia/machinaris/cache/cold_wallet_cache.json'
 COLD_WALLET_CACHE_DIR = '/root/.chia/machinaris/cache/cold_wallets'
 BLOCKCHAIN_PRICES_CACHE_FILE = '/root/.chia/machinaris/cache/blockchain_prices_cache.json'
 EXCHANGE_RATES_CACHE_FILE = '/root/.chia/machinaris/cache/exchange_rates_cache.json'
+BLOCKCHAIN_STATUSES_CACHE_FILE = '/root/.chia/machinaris/cache/blockchain_statuses_cache.json'
+SUPPORTED_BLOCKCHAINS = globals.get_supported_blockchains()
 
 def load_cold_wallet_addresses():
     data = {}
@@ -251,7 +255,8 @@ def save_prices_cache(data):
     except Exception as ex:
         app.logger.error("Failed to store prices cache in {0} because {1}".format(BLOCKCHAIN_PRICES_CACHE_FILE, str(ex)))
 
-def request_prices(prices, debug=False):
+def request_atb_prices(debug=False):
+    prices = {}
     url = "https://alltheblocks.net"
     app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
     if debug:
@@ -263,11 +268,13 @@ def request_prices(prices, debug=False):
     for row in table.tbody.find_all('tr'):
         if 'data-pk' in row.attrs:
             blockchain = row['data-pk'].replace('stai', 'staicoin')
+            if not blockchain in SUPPORTED_BLOCKCHAINS:
+                continue
             price_column = row.find('td', class_='text-right')
             if len(price_column.contents) == 1:
                 price_value = price_column.contents[0].string.strip()
                 if price_value.startswith('$'):
-                    #app.logger.info("{0} @ {1}".format(blockchain, price_value[1:].strip()))
+                    #app.logger.info("ATB: {0} @ {1}".format(blockchain, price_value[1:].strip()))
                     try:
                         prices[blockchain] = float(price_value[1:].strip())
                     except Exception as ex:
@@ -275,6 +282,52 @@ def request_prices(prices, debug=False):
                 else:
                     app.logger.info("No price found for blockchain: {0}".format(blockchain))
                     pass
+    return prices
+
+def request_posat_prices(debug=False):
+    prices = {}
+    url = "https://mrkt.posat.io/api/prices/v2"
+    app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
+    if debug:
+        http.client.HTTPConnection.debuglevel = 1
+    data = json.loads(requests.get(url, timeout=30).content)
+    http.client.HTTPConnection.debuglevel = 0
+    for blockchain in data.keys():
+        machinaris_blockchain = blockchain.replace('stai', 'staicoin').lower()
+        if not machinaris_blockchain in SUPPORTED_BLOCKCHAINS:
+            continue
+        #app.logger.info("POSAT: {0} @ {1}".format(blockchain, data[blockchain]['price']['usd']))
+        try:
+            prices[machinaris_blockchain] = float(data[blockchain]['price']['usd'])
+        except Exception as ex:
+            traceback.print_exc()
+    return prices
+
+def request_vayamos_prices(debug=False):
+    app.logger.info(SUPPORTED_BLOCKCHAINS)
+    prices = {}
+    url = "https://api.vayamos.cc/spot/markets"
+    app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
+    if debug:
+        http.client.HTTPConnection.debuglevel = 1
+    payload = { "offset": 0 }
+    data = json.loads(requests.post(url, data = json.dumps(payload), timeout=30).content)
+    http.client.HTTPConnection.debuglevel = 0
+    if 'success' in data:
+        markets = data['markets']
+        for market in markets:
+            if not market['pair'].endswith('USDT'):
+                continue # Skip other market pairs than USDT
+            for blockchain in SUPPORTED_BLOCKCHAINS:
+                posat_symbol = globals.get_blockchain_symbol(blockchain).upper()
+                if market['base'] == posat_symbol:
+                    #app.logger.info("VAYAMOS: {0} @ {1}".format(blockchain, market['price']))
+                    try:
+                        prices[blockchain] = float(market['price'])
+                    except Exception as ex:
+                        traceback.print_exc()
+    else:
+        app.logger.info("vayamos response was not success=True.")
     return prices
 
 def request_peers(blockchain, debug=False):
@@ -298,32 +351,17 @@ def request_peers(blockchain, debug=False):
                 app.logger.error("Unparseable peer connection: {0}".format(row.contents[0].string))
     return peers
 
-# NOT USED: ATB api does not provide prices as of 2022-03-12, every price shows as "-1.0"
-def request_prices_api(prices, debug=False):
-    url = "https://api.alltheblocks.net/atb/blockchain/settings-and-stats"
-    app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
-    if debug:
-        http.client.HTTPConnection.debuglevel = 1
-    data = json.loads(requests.get(url, timeout=30).content)
-    http.client.HTTPConnection.debuglevel = 0
-    for coin in data:
-        app.logger.info("{0} @ {1}".format(coin['displayName'].lower(),coin['stats']['priceUsd']))
-        try:
-            if coin['stats']['priceUsd'] > 0:  # -1 means no exchange value found
-                prices[coin['displayName'].lower()] = coin['stats']['priceUsd']
-        except Exception as ex:
-            traceback.print_exc()
-    return prices
-
 last_price_request_time = None
 def get_prices():
     global last_price_request_time
     prices = load_prices_cache()
     if not last_price_request_time or last_price_request_time <= (datetime.datetime.now() - datetime.timedelta(minutes=ALLTHEBLOCKS_REQUEST_INTERVAL_MINS)):
         try:
-            request_prices(prices)
-            save_prices_cache(prices)
             last_price_request_time = datetime.datetime.now()
+            store_exchange_prices(prices, 'alltheblocks', request_atb_prices(), last_price_request_time)
+            store_exchange_prices(prices, 'posat', request_posat_prices(), last_price_request_time)
+            store_exchange_prices(prices, 'vayamos', request_vayamos_prices(), last_price_request_time)
+            save_prices_cache(prices)
         except Exception as ex:
             app.logger.info("Failed to save current blockchain prices because {0}".format(str(ex)))
         try:
@@ -331,6 +369,21 @@ def get_prices():
         except Exception as ex:
             app.logger.info("Failed to save current exchange rates because {0}".format(str(ex)))
     return prices
+
+def store_exchange_prices(prices, exchange, exchange_prices, requested_time):
+    for blockchain in exchange_prices.keys():
+        if blockchain in prices:
+            blockchan_details = prices[blockchain]
+        else:
+            blockchan_details = {}
+            prices[blockchain] = blockchan_details
+        if exchange in blockchan_details:
+            exchange_pricing = blockchan_details[exchange]
+        else:
+            exchange_pricing = {}
+            blockchan_details[exchange] = exchange_pricing
+        exchange_pricing['value_usd'] = exchange_prices[blockchain] 
+        exchange_pricing['quoted_at'] = requested_time.strftime('%Y-%m-%d %H:%M:%S')
 
 def save_exchange_rates(debug=False):
     url = "https://api.coingecko.com/api/v3/exchange_rates"
@@ -348,3 +401,90 @@ def save_exchange_rates(debug=False):
             app.logger.error("Received {0} from {1}".format(resp.status_code, url))
     except Exception as ex:
             app.logger.error("Failed to store exchange cache in {0} because {1}".format(EXCHANGE_RATES_CACHE_FILE, str(ex)))
+
+last_chain_request_time = None
+def get_chain_statuses():
+    global last_chain_request_time
+    statuses = load_chain_statuses()
+    if not last_chain_request_time or last_chain_request_time <= (datetime.datetime.now() - datetime.timedelta(minutes=ALLTHEBLOCKS_REQUEST_INTERVAL_MINS)):
+        try:
+            request_chain_statuses(statuses)
+            save_chain_statuses(statuses)
+            last_chain_request_time = datetime.datetime.now()
+        except Exception as ex:
+            app.logger.info("Failed to save current blockchain statuses from ATB because {0}".format(str(ex)))
+    return statuses
+
+def load_chain_statuses():
+    data = {}
+    if os.path.exists(BLOCKCHAIN_STATUSES_CACHE_FILE):
+        try:
+            with open(BLOCKCHAIN_STATUSES_CACHE_FILE) as f:
+                data = json.load(f)
+        except Exception as ex:
+            msg = "Unable to read blockchain status cache from {0} because {1}".format(BLOCKCHAIN_STATUSES_CACHE_FILE, str(ex))
+            app.logger.error(msg)
+    return data
+
+def request_chain_statuses(statuses, debug=False):
+    # First get the health status from ATB per blockchain
+    url = "https://api.alltheblocks.net/atb/health"
+    app.logger.info("Requesting blockchain health from {0}".format(url))
+    try:
+        if debug:
+            http.client.HTTPConnection.debuglevel = 1
+        resp = requests.get(url, timeout=30)
+        http.client.HTTPConnection.debuglevel = 0
+        if resp.status_code == 200:
+            result = json.loads(resp.text)
+            for fork in result['forks']:
+                fork_name = fork['pathName'].replace('stai', 'staicoin')
+                peak_time = datetime.datetime.fromtimestamp(int(fork['peakTimestamp'])).strftime("%Y-%m-%d %H:%M:%S")
+                statuses[fork_name] = { 'peak_height': fork['peakHeight'], 'peak_time': peak_time, }
+        else:
+            app.logger.error("Received {0} from {1}".format(resp.status_code, url))
+    except Exception as ex:
+            app.logger.error("Failed to read blockchain health because {0}".format(str(ex)))
+
+    # Then get the sync status 
+    url = "https://alltheblocks.net/tools/status"
+    app.logger.info("Requesting blockchain sync state from {0}".format(url))
+    if debug:
+        http.client.HTTPConnection.debuglevel = 1
+    data = requests.get(url, timeout=30).text
+    http.client.HTTPConnection.debuglevel = 0
+    soup = bs4.BeautifulSoup(data, 'html.parser')
+    table = soup.find('table')
+    for row in table.find_all('tr'):
+        try:
+            blockchain = None
+            chain_status = 'IN SYNC' # Default
+            for cell in row.find_all('td'):
+                if not cell.contents[0].string:
+                    continue
+                try:
+                    blockchain = cell.a.contents[0].string.strip().lower().replace('stai', 'staicoin').replace('n-chain', 'nchain')
+                except:
+                    pass
+                try:
+                    for tag in cell.descendants:
+                        if 'NO SYNC' in tag.contents[0].string.strip():
+                            chain_status = tag.contents[0].string.strip()
+                except:
+                    pass
+            if blockchain in statuses:
+                details = statuses[blockchain]
+                details['sync_state'] = chain_status
+            else:
+                app.logger.info("Missing blockchain from health. {0} found sync state of {1}.".format(blockchain, chain_status))
+        except Exception as ex:
+            traceback.print_exc()
+    #app.logger.info(statuses)
+    return statuses
+
+def save_chain_statuses(data):
+    try:
+        with open(BLOCKCHAIN_STATUSES_CACHE_FILE, 'w') as f:
+            json.dump(data, f)
+    except Exception as ex:
+        app.logger.error("Failed to store blockchain status cache in {0} because {1}".format(BLOCKCHAIN_STATUSES_CACHE_FILE, str(ex)))

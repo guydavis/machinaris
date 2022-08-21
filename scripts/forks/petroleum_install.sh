@@ -4,8 +4,8 @@
 #
 
 PETROLEUM_BRANCH=$1
-# On 2022-07-05
-HASH=670b48860d679712027afc2d477ab1db9c270755
+# On 2022-08-20
+HASH=8fae07695353b4e7fb7d861ab747b04aebab176c
 
 if [ -z ${PETROLEUM_BRANCH} ]; then
 	echo 'Skipping Petroleum install as not requested.'

@@ -424,7 +424,7 @@
     },
     "wheat": {
         "name": "Wheat",
-        "symbol": "wheat",
+        "symbol": "WHEAT",
         "binary":  "/wheat-blockchain/venv/bin/wheat",
         "network_path": "/root/.wheat/mainnet",
         "network_name": "mainnet",

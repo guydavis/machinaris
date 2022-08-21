@@ -4,8 +4,8 @@
 #
 
 MAIZE_BRANCH=$1
-# On 2021-12-16
-HASH=d6375e840084c269faadf6c511c9321180d17d13
+# On 2022-08-18
+HASH=2fcb4deeb2944e0ff96158ec8986b23580d875d5
 
 if [ -z ${MAIZE_BRANCH} ]; then
 	echo 'Skipping Maize install as not requested.'
@@ -18,10 +18,10 @@ else
 	git checkout $HASH
 	pwd
 	chmod +x install.sh
-	# 2022-01-30: pip broke due to https://github.com/pypa/pip/issues/10825
-	sed -i 's/upgrade\ pip$/upgrade\ "pip<22.0"/' install.sh
 	# 2022-07-20: Python needs 'packaging==21.3'
 	sed -i 's/packaging==21.0/packaging==21.3/g' setup.py
+	# Log "Added Coins" at info, not debug level.  See: https://github.com/Chia-Network/chia-blockchain/issues/11955
+    sed -e 's/^        self.log.debug($/        self.log.info(/g' maize/wallet/wallet_state_manager.py
 	/usr/bin/sh ./install.sh
 
 	if [ ! -d /chia-blockchain/venv ]; then

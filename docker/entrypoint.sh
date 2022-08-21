@@ -36,6 +36,15 @@ if [[ ! -d /root/.chia/machinaris/cache ]] && [[ -f /root/.chia/machinaris/dbs/c
   mv /root/.chia/machinaris/dbs/*cache.json /root/.chia/machinaris/cache/
 fi
 
+# v0.8.3 upgrade step - new format blockchain prices cache
+if [[ -d /root/.chia/machinaris/cache ]] && [[ -f /root/.chia/machinaris/cache/blockchain_prices_cache.json ]] ; then
+  grep -q alltheblocks /root/.chia/machinaris/cache/blockchain_prices_cache.json
+  if [[ $? != 0 ]] ; then
+    echo "Removing old blockchain prices cache as part of upgrade to latest version..."
+    rm -f /root/.chia/machinaris/cache/blockchain_prices_cache.json
+  fi
+fi
+
 # Refuse to run if Portainer launched containers out of order and created a directory for mnemonic.txt
 if [[ "${mode}" == 'fullnode' ]] && [[ -d /root/.chia/mnemonic.txt ]]; then
   echo "Portainer (or similar) launched a fork container before the main Machinaris container on first run."
@@ -75,7 +84,7 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   /usr/bin/bash /machinaris/scripts/fd-cli_setup.sh > /tmp/fd-cli_setup.log 2>&1
 
   # Conditionally build bladebit on plotters and fullnodes, sleep a bit first
-  /usr/bin/bash /machinaris/scripts/bladebit_setup.sh > /tmp/bladebit_setup.log 2>&1
+  /usr/bin/bash /machinaris/scripts/bladebit_setup.sh ${BLADEBIT_BRANCH} > /tmp/bladebit_setup.log 2>&1
 
   # Conditionally madmax on plotters and fullnodes, sleep a bit first
   /usr/bin/bash /machinaris/scripts/madmax_setup.sh > /tmp/madmax_setup.log 2>&1

@@ -20,7 +20,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chives/mainnet/db/ && cd /root/.chives/mainnet/db/
   # Download link from https://node-hk.chivescoin.org/
-  gdown 1wFCPaI4rRr-j8XsmmsqaURlLIuTklrZz
+  gdown 1meeY39NbcNcI40OG-WZWo4Rnwi6BHLEw
   unzip blockchain_v2_mainnet*.zip
   rm -f blockchain_v2_mainnet*.zip
 fi

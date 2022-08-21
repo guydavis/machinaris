@@ -19,9 +19,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Downloading Profit blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.profit/mainnet/db/ && cd /root/.profit/mainnet/db/
-   # Download link from their Discord on 2022-07-17
-  gdown 1ppR8RdcuUoTWQtG11jHygqMSAZs7Do-G
-  p7zip --decompress --force blockchain_v1_mainnet*.7z
+   # Download link from their Discord on 2022-08-20, not compressed 7 tb
+  gdown 1wE-opD-lwF5rmXL3D2kw1slBZvxXS-BE
+  #p7zip --decompress --force blockchain_v1_mainnet*.7z
 fi
 
 mkdir -p /root/.profit/mainnet/log
