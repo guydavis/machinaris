@@ -60,7 +60,7 @@ fi
 echo 'Starting Machinaris API server...'
 . /machinaris/scripts/config_api_server.sh
 /chia-blockchain/venv/bin/gunicorn ${RELOAD} \
-    --bind 0.0.0.0:${worker_api_port:-8927} --timeout 180 \
+    --bind 0.0.0.0:${worker_api_port:-8927} --timeout 90 \
     --log-level=${LOG_LEVEL} \
     --workers=1 \
     --threads=12 \
