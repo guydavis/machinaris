@@ -88,6 +88,8 @@ def on_starting(server):
     #scheduler.add_job(func=websvcs.get_prices, name="get_prices", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=status_warnings.collect, name="farms", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=10) # Test immediately
+
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()
