@@ -22,7 +22,7 @@ Machinaris bundles the [latest Chia™ version](https://github.com/Chia-Network/
 
 ![Farming](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_farming.png)
 
-Machinaris also optionally farms your plots to many other blockchains including [BPX](https://github.com/guydavis/machinaris/wiki/BPX), [Chives](https://github.com/guydavis/machinaris/wiki/Chives), [Ecostake](https://github.com/guydavis/machinaris/wiki/Ecostake), [Flax](https://github.com/guydavis/machinaris/wiki/Flax), [HDDCoin](https://github.com/guydavis/machinaris/wiki/HDDCoin), [MMX](https://github.com/guydavis/machinaris/wiki/MMX), and [many others](https://github.com/guydavis/machinaris/wiki/Forks).
+Machinaris also optionally farms your plots to other blockchains including [BPX](https://github.com/guydavis/machinaris/wiki/BPX), [Chives](https://github.com/guydavis/machinaris/wiki/Chives), [Ecostake](https://github.com/guydavis/machinaris/wiki/Ecostake), [Flax](https://github.com/guydavis/machinaris/wiki/Flax), [HDDCoin](https://github.com/guydavis/machinaris/wiki/HDDCoin), [MMX](https://github.com/guydavis/machinaris/wiki/MMX), and [many others](https://github.com/guydavis/machinaris/wiki/Forks).
 
 ## Alerts
 

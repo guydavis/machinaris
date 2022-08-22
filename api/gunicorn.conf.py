@@ -13,7 +13,7 @@ def on_starting(server):
         status_connections, status_keys, status_alerts, status_controller, \
         status_plotnfts, status_pools, status_partials, status_drives, \
         stats_blocks, stats_balances, stats_disk, stats_farm, nft_recover, plots_check, \
-        log_rotate, db_backup, restart_stuck_farmer, geolocate_peers, stats_effort
+        log_rotate, restart_stuck_farmer, geolocate_peers, stats_effort, status_warnings
     from common.config import globals
 
     from api.commands import websvcs
@@ -65,7 +65,6 @@ def on_starting(server):
         scheduler.add_job(func=status_plots.update, name="plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_plotnfts.update, name="plotnfts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
-        #scheduler.add_job(func=db_backup.execute, name="db_backup", trigger='cron', hour=0, jitter=(JOB_JITTER*3600))  # Daily
         scheduler.add_job(func=restart_stuck_farmer.execute, name="restart_farmer_if_stuck", trigger='interval', minutes=5, jitter=0) 
         scheduler.add_job(func=status_partials.update, name="partials", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=stats_blocks.collect, name="blocks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
@@ -88,6 +87,7 @@ def on_starting(server):
     #scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=websvcs.get_prices, name="get_prices", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=status_warnings.collect, name="farms", trigger='interval', seconds=10) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()

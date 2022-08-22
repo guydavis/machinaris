@@ -228,7 +228,6 @@ class RPC:
         pool_states = asyncio.run(self._get_pool_states(blockchain))
         return pool_states
 
-
     # Used on Pools page to display each pool's state
     async def _get_pool_states(self, blockchain):
         pools = []
@@ -344,8 +343,8 @@ class RPC:
         return transactions
 
     # Get warnings about problem plots
-    async def _load_harvester_warnings(self, blockchain):
-        invalid_plots = []
+    async def _load_harvester_warnings(self):
+        harvesters = {}
         try:
             config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
             farmer_rpc_port = config["farmer"]["rpc_port"]
@@ -357,18 +356,21 @@ class RPC:
             await farmer.await_closed()
 
             for harvester in result["harvesters"]:
+                
                 # app.logger.info(harvester.keys()) Returns: ['connection', 'failed_to_open_filenames', 'no_key_filenames', 'plots']
                 # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
                 host = harvester["connection"]["host"]
                 node_id = harvester["connection"]["node_id"] # TODO Track link between worker and node_id?
-                
+                #app.logger.info(node_id)
+
                 # Plots Invalid
                 farmer = await FarmerRpcClient.create(
                     'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
                 )
-                app.logger.info(node_id)
-                plot_paths = await farmer.get_harvester_plots_invalid(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                app.logger.info(plot_paths)  # TODO Return plots
+
+                invalid_plots = []
+                results = await farmer.get_harvester_plots_invalid(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
+                invalid_plots.extend[results['plots']]
                 farmer.close()
                 await farmer.await_closed()
 
@@ -376,9 +378,9 @@ class RPC:
                 farmer = await FarmerRpcClient.create(
                     'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
                 )
-                app.logger.info(node_id)
-                plot_paths = await farmer.get_harvester_keys_missing(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                app.logger.info(plot_paths) # TODO Return plots
+                missing_keys = []
+                results = await farmer.get_harvester_keys_missing(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
+                missing_keys.extend[results['plots']]
                 farmer.close()
                 await farmer.await_closed()
 
@@ -386,13 +388,15 @@ class RPC:
                 farmer = await FarmerRpcClient.create(
                     'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
                 )
-                app.logger.info(node_id)
-                plot_paths = await farmer.get_harvester_plots_duplicates(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                app.logger.info(plot_paths) # TODO Return plots
+                duplicate_plots = []
+                results = await farmer.get_harvester_plots_duplicates(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
+                duplicate_plots.extend[results['plots']]
                 farmer.close()
                 await farmer.await_closed()
 
+                harvesters.append({'host': host, 'node': node_id, 'invalid_plots': invalid_plots, 'missing_keys': missing_keys, 'duplicate_plots': duplicate_plots})
+
         except Exception as ex:
-            app.logger.info("Error getting {0} harvester warnings: {1}".format(blockchain, str(ex)))
+            app.logger.info("Error getting harvester warnings: {1}".format(str(ex)))
             traceback.print_exc()
-        return invalid_plots
+        return harvesters
