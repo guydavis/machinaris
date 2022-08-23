@@ -33,7 +33,7 @@ def load_farm_info(blockchain):
         except TimeoutExpired:
             proc.kill()
             proc.communicate()
-            abort(500, description="The timeout is expired!")
+            raise Exception("The timeout is expired!")
         if errs:
             app.logger.debug("Error from {0} farm summary because {1}".format(blockchain, outs.decode('utf-8')))
         return mmx.FarmSummary(outs.decode('utf-8').splitlines(), blockchain)
@@ -89,7 +89,7 @@ def load_wallet_show(blockchain):
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
-        abort(500, description="The timeout is expired!")
+        raise Exception("The timeout is expired!")
     if errs:
         abort(500, description=errs.decode('utf-8'))
     return mmx.Wallet(outs.decode('utf-8'))
@@ -102,7 +102,7 @@ def load_blockchain_show(blockchain):
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
-        abort(500, description="The timeout is expired!")
+        raise Exception("The timeout is expired!")
     if errs:
         abort(500, description=errs.decode('utf-8'))
     return mmx.Blockchain(outs.decode('utf-8').splitlines())
@@ -115,7 +115,7 @@ def load_connections_show(blockchain):
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
-        abort(500, description="The timeout is expired!")
+        raise Exception("The timeout is expired!")
     if errs:
         abort(500, description=errs.decode('utf-8'))
     return mmx.Connections(outs.decode('utf-8').splitlines())
@@ -128,7 +128,7 @@ def load_keys_show(blockchain):
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
-        abort(500, description="The timeout is expired!")
+        raise Exception("The timeout is expired!")
     if errs:
         abort(500, description=errs.decode('utf-8'))
     return mmx.Keys(outs.decode('utf-8').splitlines())

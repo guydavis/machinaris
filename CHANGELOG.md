@@ -2,11 +2,11 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.8.3] - 2022-08-?
+## [0.8.3] - 2022-08-23
  - Additional blockchain pricing from Vayamos and Posat exchanges on the Blockchains, Wallets, and Summary pages.
  - New blockchains: [Apple](https://github.com/Apple-Network/apple-blockchain), [Chinilla](https://github.com/chinilla/chinilla-blockchain), [Gold](https://github.com/goldcoin-gl/gold-blockchain), [LittleLamboCoin](https://github.com/BTCgreen-Network/littlelambocoin-blockchain), [Mint](https://github.com/MintNetwork/mint-blockchain), [Tad](https://github.com/BTCgreen-Network/tad-blockchain), [Wheat](https://github.com/wheatnetwork/wheat-blockchain)
  - Update: [Apple](https://github.com/Apple-Network/apple-blockchain) to v1.5.0, [BPX](https://github.com/bpx-network/bpx-blockchain) to v2.0.0, [BTCGreen](https://github.com/BTCgreen-Network/btcgreen-blockchain) to v1.5.0, [Maize](https://github.com/Maize-Network/maize-blockchain) to v1.5.0, [Petroleum](https://github.com/petroleum-network/petroleum-blockchain) to v1.0.16, [Shibgreen](https://github.com/BTCgreen-Network/shibgreen-blockchain) to v1.5.0
- - Update: [Bladebit](https://github.com/Chia-Network/bladebit/tree/2.0.0-beta1) to v2.0.0 (beta-1) with diskplot mode.  Only in `:develop` and `:test` images.
+ - Update:  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.5.1) - v1.5.1, [Bladebit](https://github.com/Chia-Network/bladebit/tree/2.0.0-beta1) to v2.0.0 (beta-1) with diskplot mode (beta only in `:develop` and `:test` images)
  - Fixes: Avoid timeout/slowness encountered by those with many drives, also many cold wallet transactions
 
 ## [0.8.2] - 2022-07-24

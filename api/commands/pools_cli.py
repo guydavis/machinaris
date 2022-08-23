@@ -80,7 +80,7 @@ def get_pool_login_link(launcher_id):
         stream = os.popen("chia plotnft get_login_link -l {0}".format(launcher_id))
         return stream.read()
     except Exception as ex:
-        app.logger.debug("Failed to get_login_link: {0}".format(str(ex)))
+        app.logger.info("Failed to get_login_link: {0}".format(str(ex)))
     return ""
 
 def load_plotnft_show(blockchain):

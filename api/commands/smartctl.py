@@ -39,11 +39,11 @@ def load_drives_status():
     with app.app_context():
         proc = Popen("smartctl --scan", stdout=PIPE, stderr=PIPE, shell=True)
         try:
-            outs, errs = proc.communicate(timeout=90)
+            outs, errs = proc.communicate(timeout=30)
         except TimeoutExpired:
             proc.kill()
             proc.communicate()
-            abort(500, description="The timeout is expired!")
+            raise Exception("The timeout for smartctl scan expired!")
         if errs:
             app.logger.info("Error from smartctl scan because {0}".format(outs.decode('utf-8')))
         devices = load_smartctl_overrides()
@@ -81,7 +81,7 @@ def load_drive_info(device_name, device_settings):
     app.logger.info("Executing: {0}".format(cmd))
     proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=90)
+        outs, errs = proc.communicate(timeout=10)
     except TimeoutExpired:
         proc.kill()
         proc.communicate()

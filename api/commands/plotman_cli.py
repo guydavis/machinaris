@@ -263,10 +263,10 @@ def analyze(plot_file):
         except TimeoutExpired:
             proc.kill()
             proc.communicate()
-            abort(500, description="The timeout is expired attempting to start plot analyze.")
+            raise Exception("The timeout is expired attempting to start plot analyze.")
         if errs:
             app.logger.error(errs.decode('utf-8'))
-            abort(500, description="Failed to analyze plot.")
+            raise Exception("Failed to analyze plot.")
         return outs.decode('utf-8')
     return None
 
