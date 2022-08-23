@@ -80,7 +80,7 @@ def get_pool_login_link(launcher_id):
         stream = os.popen("chia plotnft get_login_link -l {0}".format(launcher_id))
         return stream.read()
     except Exception as ex:
-        app.logger.debug("Failed to get_login_link: {0}".format(str(ex)))
+        app.logger.info("Failed to get_login_link: {0}".format(str(ex)))
     return ""
 
 def load_plotnft_show(blockchain):
@@ -89,7 +89,7 @@ def load_plotnft_show(blockchain):
     child = pexpect.spawn("{0} plotnft show".format(chia_binary))
     pool_wallet_id = 1
     while True:
-        i = child.expect(["Wallet height:.*\r\n", "Wallet keys:.*\r\n", "Choose wallet key:.*\r\n", "Choose a wallet key:.*\r\n", "No online backup file found.*\r\n"], timeout=120)
+        i = child.expect(["Wallet height:.*\r\n", "Wallet keys:.*\r\n", "Choose wallet key:.*\r\n", "Choose a wallet key:.*\r\n", "No online backup file found.*\r\n"], timeout=30)
         if i == 0:
             app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
             wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")

@@ -16,12 +16,11 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.chives/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
   && [[ ! -f /root/.chives/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
-  /usr/bin/bash /machinaris/scripts/megacmd_setup.sh > /tmp/megacmd_setup.log 2>&1
   echo "Downloading Chives blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chives/mainnet/db/ && cd /root/.chives/mainnet/db/
   # Download link from https://node-hk.chivescoin.org/
-  gdown 1wFCPaI4rRr-j8XsmmsqaURlLIuTklrZz
+  gdown 1meeY39NbcNcI40OG-WZWo4Rnwi6BHLEw
   unzip blockchain_v2_mainnet*.zip
   rm -f blockchain_v2_mainnet*.zip
 fi

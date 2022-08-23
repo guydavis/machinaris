@@ -39,11 +39,11 @@ def load_drives_status():
     with app.app_context():
         proc = Popen("smartctl --scan", stdout=PIPE, stderr=PIPE, shell=True)
         try:
-            outs, errs = proc.communicate(timeout=90)
+            outs, errs = proc.communicate(timeout=30)
         except TimeoutExpired:
             proc.kill()
             proc.communicate()
-            abort(500, description="The timeout is expired!")
+            raise Exception("The timeout for smartctl scan expired!")
         if errs:
             app.logger.info("Error from smartctl scan because {0}".format(outs.decode('utf-8')))
         devices = load_smartctl_overrides()
@@ -64,31 +64,35 @@ def load_drives_status():
         drive_results = []
         for device in devices.keys():
             info = load_drive_info(device, devices[device])
-            if not "No such device" in info:
+            if info and not "No such device" in info:
                 #app.logger.info("Smartctl info parsed and device added: {0}".format(device))
                 drive_results.append(drives.DriveStatus(device, devices[device]['device_type'],
                     devices[device]['comment'], info))
             else:
-                app.logger.info("Smartctl reports no such device for {0}".format(device))
+                app.logger.info("Smartctl reports no useful info for {0}".format(device))
         return drive_results
 
 def load_drive_info(device_name, device_settings):
     #app.logger.info("{0} -> {1}".format(device_name, device_settings))
     if 'type_overridden' in device_settings:
-        cmd = "smartctl -a -d {0} {1}".format(device_settings['device_type'], device_name)
+        cmd = "smartctl -a -n standby -d {0} {1}".format(device_settings['device_type'], device_name)
     else: # No override, use the default auto mode
-        cmd = "smartctl -a {0}".format(device_name)
+        cmd = "smartctl -a -n standby {0}".format(device_name)
     app.logger.info("Executing: {0}".format(cmd))
     proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=90)
+        outs, errs = proc.communicate(timeout=10)
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         app.logger.info("Error from {0} because timeout expired".format(cmd))
         return None
+    if proc.returncode != 0:
+        app.logger.info("Non-zero exit code from {0} was {1}".format(cmd, proc.returncode))
+        return None
     if errs:
-        app.logger.debug("Error from {0} because {1}".format(cmd, outs.decode('utf-8')))
+        app.logger.info("Error from {0} because {1}".format(cmd, outs.decode('utf-8')))
+        return None
     return outs.decode('utf-8')
 
 # If enhanced Chiadog is running within container, then its listening on http://localhost:8925

@@ -1,4 +1,21 @@
 {
+    "apple": {
+        "name": "Apple",
+        "symbol": "APPLE",
+        "binary":  "/apple-blockchain/venv/bin/apple",
+        "network_path": "/root/.apple/mainnet",
+        "network_name": "mainnet",
+        "network_port": 26666,
+        "farmer_port": 26667,
+        "fullnode_rpc_port": 26665,
+        "worker_port": 8947,
+        "reward": 2.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/Apple-Network/apple-blockchain",
+        "discord_url": null,
+        "website_url": "https://applecoin.in/"
+    },
     "bpx": {
         "name": "BPX",
         "symbol": "BPX",
@@ -66,6 +83,23 @@
         "git_url": "https://github.com/Chia-Network/chia-blockchain",
         "discord_url": "https://discord.gg/mX4AtMTt87",
         "website_url": "https://www.chia.net/"
+    },
+    "chinilla": {
+        "name": "Chinilla",
+        "symbol": "HCX",
+        "binary":  "/chinilla-blockchain/venv/bin/chinilla",
+        "network_path": "/root/.chinilla/vanillanet",
+        "network_name": "vanillanet",
+        "network_port": 43444,
+        "farmer_port": 43447,
+        "fullnode_rpc_port": 43555,
+        "worker_port": 8948,
+        "reward": 2.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/chinilla/chinilla-blockchain",
+        "discord_url": "https://discord.gg/5E5XsKrch5",
+        "website_url": "https://chinilla.com/"
     },
     "chives": {
         "name": "Chives",
@@ -152,6 +186,23 @@
         "discord_url": "https://discord.gg/GvwQhW4Yk3",
         "website_url": "http://floracoin.farm/"
     },
+    "gold": {
+        "name": "Gold",
+        "symbol": "GL",
+        "binary":  "/gold-blockchain/venv/bin/gold",
+        "network_path": "/root/.gold/mainnet",
+        "network_name": "mainnet",
+        "network_port": 14444,
+        "farmer_port": 14447,
+        "fullnode_rpc_port": 14555,
+        "worker_port": 8949,
+        "reward": 1.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/goldcoin-gl/gold-blockchain",
+        "discord_url": "https://discord.gg/aztfwHdvjN",
+        "website_url": "https://www.gold.cab/"
+    },
     "hddcoin": {
         "name": "HDDcoin",
         "symbol": "HDD" ,
@@ -169,6 +220,23 @@
         "discord_url": "https://discord.gg/ZTtQ9922zp",
         "website_url": "https://hddcoin.org/"
     },
+    "littlelambocoin": {
+        "name": "LittleLamboCoin",
+        "symbol": "LLC" ,
+        "binary":  "/littlelambocoin-blockchain/venv/bin/littlelambocoin",
+        "network_path": "/root/.littlelambocoin/mainnet",
+        "network_name": "mainnet",
+        "network_port": 4575,
+        "farmer_port": 18981,
+        "fullnode_rpc_port": 18714,
+        "worker_port": 8946,
+        "reward": 8.0,
+        "mojos_per_coin": 1000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/BTCgreen-Network/littlelambocoin-blockchain",
+        "discord_url": "https://discord.gg/ZtKSFFm2V7",
+        "website_url": "https://littlelambocoin.com/"
+    },
     "maize": {
         "name": "Maize",
         "symbol": "XMZ" ,
@@ -185,6 +253,23 @@
         "git_url": "https://github.com/Maize-Network/maize-blockchain",
         "discord_url": "https://discord.gg/9GWRKHjTec",
         "website_url": "https://maize.farm/"
+    },
+    "mint": {
+        "name": "Mint",
+        "symbol": "XKM",
+        "binary":  "/mint-blockchain/venv/bin/mint",
+        "network_path": "/root/.mint/mainnet",
+        "network_name": "mainnet",
+        "network_port": 29222,
+        "farmer_port": 29227,
+        "fullnode_rpc_port": 29333,
+        "worker_port": 8950,
+        "reward": 4.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/MintNetwork/mint-blockchain",
+        "discord_url": "https://discord.gg/mR5DZ4yCRZ",
+        "website_url": "https://mintnet.work/"
     },
     "mmx": {
         "name": "MMX",
@@ -319,5 +404,39 @@
         "git_url": "https://github.com/Stor-Network/stor-blockchain",
         "discord_url": "https://discord.gg/eXMCYDA3Xe",
         "website_url": "https://stor.network/"
+    },
+    "tad": {
+        "name": "Tad",
+        "symbol": "TAD",
+        "binary":  "/tad-blockchain/venv/bin/tad",
+        "network_path": "/root/.tad/mainnet",
+        "network_name": "mainnet",
+        "network_port": 4044,
+        "farmer_port": 4447,
+        "fullnode_rpc_port": 4555,
+        "worker_port": 8951,
+        "reward": 2.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/Tad-Network/tad-blockchain",
+        "discord_url": "https://discord.gg/vnxnXDZwTN",
+        "website_url": "https://tadcoin.xyz/"
+    },
+    "wheat": {
+        "name": "Wheat",
+        "symbol": "WHEAT",
+        "binary":  "/wheat-blockchain/venv/bin/wheat",
+        "network_path": "/root/.wheat/mainnet",
+        "network_name": "mainnet",
+        "network_port": 21333,
+        "farmer_port": 21447,
+        "fullnode_rpc_port": 21555,
+        "worker_port": 8952,
+        "reward": 2.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/wheatnetwork/wheat-blockchain",
+        "discord_url": null,
+        "website_url": "http://wheat.top/"
     }
 }

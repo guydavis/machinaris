@@ -98,7 +98,11 @@ class Blocks:
                     proofs_found = int(re.search('Found (\d+) proofs', line, re.IGNORECASE).group(1))
                     time_taken = str(re.search('Time: (\d+\.?\d*) s.', line, re.IGNORECASE).group(1)) + ' secs'
                 elif "Farmed unfinished_block" in line:
-                    created_at =  line[line.find(':')+1:].split()[0].replace('T', ' ')
+                    created_at =  line[:line.rfind(':')].split()[0].replace('T', ' ')
+                    if "debug.log:" in created_at:
+                        created_at = created_at[(created_at.index('debug.log:') + len('debug.log:')):]
+                    elif "debug.log.1:" in created_at:
+                        created_at = created_at[(created_at.index('debug.log.1:') + len('debug.log.1:')):]
                     farmed_block = re.search('Farmed unfinished_block (\w+)', line, re.IGNORECASE).group(1)
                 elif "--" == line:
                     if challenge_id and plots_past_filter and proofs_found and time_taken and farmed_block:
@@ -111,7 +115,7 @@ class Blocks:
                             'farmed_block': farmed_block,
                             'created_at': created_at
                         })
-                        #app.logger.info(self.rows)
+                        app.logger.debug(self.rows)
                         plots_past_filter = proofs_found = time_taken = farmed_block = None
                         plot_files = []
                     else:

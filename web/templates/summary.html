@@ -92,7 +92,12 @@
         <tbody>
             {% for summary in summaries.rows %}
             <tr>
-                <td><a class="text-white" href="{{ url_for('worker_route') }}?hostname={{ fullnodes[summary.blockchain].hostname }}&blockchain={{ summary.blockchain }}">{{summary.blockchain}}</a></td>
+                <td>
+                {% if summary.blockchain in fullnodes %} 
+                <a class="text-white" href="{{ url_for('worker_route') }}?hostname={{ fullnodes[summary.blockchain].hostname }}&blockchain={{ summary.blockchain }}">{{summary.blockchain}}</a></td>
+                {% else %} 
+                {{summary.blockchain}}
+                {% endif %}
                 <td>
                     {% if summary.status == 'Offline' %}
                       <i class="bi-dash-circle text-danger"></i> {{_('Offline')}}
@@ -116,10 +121,14 @@
                 <td><a href="#" class='text-white' title="{{_('Chart Wallet')}}" onclick='PopupChart("wallet_balances","{{ summary.blockchain }}");return false;'>{{summary.wallet}}</a></td>
                 <td>{{summary.edv}}</td>
                 <td>{{summary.edv_fiat}}</td>
+                {% if summary.blockchain in fullnodes %} 
                 <td class='icon_cell'>
                     <a href="#" title="{{_('View Blockchain Log')}}" onclick='ViewLogs("{{ fullnodes[summary.blockchain].hostname }}","{{ summary.blockchain }}");return false;'>
                         <i class="fs-4 bi-file-text"></i></a>
                 </td>
+                {% else %} 
+                <td>&nbsp;</td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

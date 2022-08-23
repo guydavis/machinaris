@@ -8,7 +8,7 @@ on:
 
 jobs:
   docker:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout
@@ -41,7 +41,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
-            "UBUNTU_VER=focal"
+            "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=latest"
             "BTCGREEN_BRANCH=main"
           tags: |

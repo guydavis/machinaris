@@ -19,9 +19,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Downloading Ecostake blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.ecostake/mainnet/db/ && cd /root/.ecostake/mainnet/db/
-  # Download link from their Discord on 2022-07-17
-  gdown 1RYg6Oz11ZCl4I3JjgxYqH6qupllDcdCL
-  p7zip --decompress --force blockchain_v1_mainnet*.7z
+  # Download link from their Discord on 2022-08-20, not compressed, 6 GB
+  gdown 1MmbxJRvWXdN317Ikv7JQe370yx8m0SDB
+  #p7zip --decompress --force blockchain_v1_mainnet*.7z
 fi
 
 mkdir -p /root/.ecostake/mainnet/log
@@ -32,9 +32,6 @@ if [ -f /root/.ecostake/mainnet/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.ecostake/mainnet/config/config.yaml
   sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.ecostake/mainnet/config/config.yaml
   sed -i 's/localhost/127.0.0.1/g' /root/.ecostake/mainnet/config/config.yaml
-  # Fix port conflicts with other blockchains
-  sed -i 's/38447/38448/g' /root/.ecostake/mainnet/config/config.yaml
-  sed -i 's/38555/38556/g' /root/.ecostake/mainnet/config/config.yaml
 fi
 
 # Loop over provided list of key paths

@@ -33,7 +33,9 @@ def update():
                 pools =  blockchain_rpc.get_pool_states(blockchain)
                 for pool in pools:
                     launcher_id = pool['pool_config']['launcher_id']
-                    login_link = pools_cli.get_pool_login_link(launcher_id)
+                    login_link = ""  # Only request login link if a pool_url is found (not self-farming)
+                    if 'pool_url' in pool['pool_config'] and pool['pool_config']['pool_url']:
+                        login_link = pools_cli.get_pool_login_link(launcher_id)
                     if launcher_id.startswith('0x'):
                         launcher_id = launcher_id[2:]
                     payload.append({

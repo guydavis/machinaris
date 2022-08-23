@@ -14,7 +14,14 @@ from api import utils
 
 blockchain = globals.enabled_blockchains()[0]
 
-if blockchain == "bpx":
+if blockchain == "apple":
+    from apple.rpc.full_node_rpc_client import FullNodeRpcClient
+    from apple.rpc.farmer_rpc_client import FarmerRpcClient
+    from apple.rpc.wallet_rpc_client import WalletRpcClient
+    from apple.util.default_root import DEFAULT_ROOT_PATH
+    from apple.util.ints import uint16
+    from apple.util.config import load_config as load_fork_config
+elif blockchain == "bpx":
     from chia.rpc.full_node_rpc_client import FullNodeRpcClient
     from chia.rpc.farmer_rpc_client import FarmerRpcClient
     from chia.rpc.wallet_rpc_client import WalletRpcClient
@@ -42,6 +49,13 @@ elif blockchain == "chia":
     from chia.util.default_root import DEFAULT_ROOT_PATH
     from chia.util.ints import uint16
     from chia.util.config import load_config as load_fork_config
+elif blockchain == "chinilla":
+    from chinilla.rpc.full_node_rpc_client import FullNodeRpcClient
+    from chinilla.rpc.farmer_rpc_client import FarmerRpcClient
+    from chinilla.rpc.wallet_rpc_client import WalletRpcClient
+    from chinilla.util.default_root import DEFAULT_ROOT_PATH
+    from chinilla.util.ints import uint16
+    from chinilla.util.config import load_config as load_fork_config
 elif blockchain == "chives":
     from chives.rpc.full_node_rpc_client import FullNodeRpcClient
     from chives.rpc.farmer_rpc_client import FarmerRpcClient
@@ -77,6 +91,13 @@ elif blockchain == "flora":
     from chia.util.default_root import DEFAULT_ROOT_PATH
     from chia.util.ints import uint16
     from chia.util.config import load_config as load_fork_config
+elif blockchain == "gold":
+    from chia.rpc.full_node_rpc_client import FullNodeRpcClient
+    from chia.rpc.farmer_rpc_client import FarmerRpcClient
+    from chia.rpc.wallet_rpc_client import WalletRpcClient
+    from chia.util.default_root import DEFAULT_ROOT_PATH
+    from chia.util.ints import uint16
+    from chia.util.config import load_config as load_fork_config
 elif blockchain == "hddcoin":
     from hddcoin.rpc.full_node_rpc_client import FullNodeRpcClient
     from hddcoin.rpc.farmer_rpc_client import FarmerRpcClient
@@ -84,6 +105,13 @@ elif blockchain == "hddcoin":
     from hddcoin.util.default_root import DEFAULT_ROOT_PATH
     from hddcoin.util.ints import uint16
     from hddcoin.util.config import load_config as load_fork_config
+elif blockchain == "littlelambocoin":
+    from littlelambocoin.rpc.full_node_rpc_client import FullNodeRpcClient
+    from littlelambocoin.rpc.farmer_rpc_client import FarmerRpcClient
+    from littlelambocoin.rpc.wallet_rpc_client import WalletRpcClient
+    from littlelambocoin.util.default_root import DEFAULT_ROOT_PATH
+    from littlelambocoin.util.ints import uint16
+    from littlelambocoin.util.config import load_config as load_fork_config
 elif blockchain == "maize":
     from maize.rpc.full_node_rpc_client import FullNodeRpcClient
     from maize.rpc.farmer_rpc_client import FarmerRpcClient
@@ -91,6 +119,13 @@ elif blockchain == "maize":
     from maize.util.default_root import DEFAULT_ROOT_PATH
     from maize.util.ints import uint16
     from maize.util.config import load_config as load_fork_config
+elif blockchain == "mint":
+    from mint.rpc.full_node_rpc_client import FullNodeRpcClient
+    from mint.rpc.farmer_rpc_client import FarmerRpcClient
+    from mint.rpc.wallet_rpc_client import WalletRpcClient
+    from mint.util.default_root import DEFAULT_ROOT_PATH
+    from mint.util.ints import uint16
+    from mint.util.config import load_config as load_fork_config
 elif blockchain == "mmx":
     pass
 elif blockchain == "nchain": 
@@ -142,6 +177,20 @@ elif blockchain == "stor":
     from stor.util.default_root import DEFAULT_ROOT_PATH
     from stor.util.ints import uint16
     from stor.util.config import load_config as load_fork_config
+elif blockchain == "tad":
+    from tad.rpc.full_node_rpc_client import FullNodeRpcClient
+    from tad.rpc.farmer_rpc_client import FarmerRpcClient
+    from tad.rpc.wallet_rpc_client import WalletRpcClient
+    from tad.util.default_root import DEFAULT_ROOT_PATH
+    from tad.util.ints import uint16
+    from tad.util.config import load_config as load_fork_config
+elif blockchain == "wheat":
+    from wheat.rpc.full_node_rpc_client import FullNodeRpcClient
+    from wheat.rpc.farmer_rpc_client import FarmerRpcClient
+    from wheat.rpc.wallet_rpc_client import WalletRpcClient
+    from wheat.util.default_root import DEFAULT_ROOT_PATH
+    from wheat.util.ints import uint16
+    from wheat.util.config import load_config as load_fork_config
 else:
     app.logger.info("No RPC modules found on pythonpath for blockchain: {0}".format(os.environ['blockchains']))
 
@@ -178,7 +227,6 @@ class RPC:
     def get_pool_states(self, blockchain):
         pool_states = asyncio.run(self._get_pool_states(blockchain))
         return pool_states
-
 
     # Used on Pools page to display each pool's state
     async def _get_pool_states(self, blockchain):
@@ -295,8 +343,8 @@ class RPC:
         return transactions
 
     # Get warnings about problem plots
-    async def _load_harvester_warnings(self, blockchain):
-        invalid_plots = []
+    async def _load_harvester_warnings(self):
+        harvesters = {}
         try:
             config = load_fork_config(DEFAULT_ROOT_PATH, 'config.yaml')
             farmer_rpc_port = config["farmer"]["rpc_port"]
@@ -308,18 +356,21 @@ class RPC:
             await farmer.await_closed()
 
             for harvester in result["harvesters"]:
+                
                 # app.logger.info(harvester.keys()) Returns: ['connection', 'failed_to_open_filenames', 'no_key_filenames', 'plots']
                 # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
                 host = harvester["connection"]["host"]
                 node_id = harvester["connection"]["node_id"] # TODO Track link between worker and node_id?
-                
+                #app.logger.info(node_id)
+
                 # Plots Invalid
                 farmer = await FarmerRpcClient.create(
                     'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
                 )
-                app.logger.info(node_id)
-                plot_paths = await farmer.get_harvester_plots_invalid(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                app.logger.info(plot_paths)  # TODO Return plots
+
+                invalid_plots = []
+                results = await farmer.get_harvester_plots_invalid(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
+                invalid_plots.extend[results['plots']]
                 farmer.close()
                 await farmer.await_closed()
 
@@ -327,9 +378,9 @@ class RPC:
                 farmer = await FarmerRpcClient.create(
                     'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
                 )
-                app.logger.info(node_id)
-                plot_paths = await farmer.get_harvester_keys_missing(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                app.logger.info(plot_paths) # TODO Return plots
+                missing_keys = []
+                results = await farmer.get_harvester_keys_missing(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
+                missing_keys.extend[results['plots']]
                 farmer.close()
                 await farmer.await_closed()
 
@@ -337,13 +388,15 @@ class RPC:
                 farmer = await FarmerRpcClient.create(
                     'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
                 )
-                app.logger.info(node_id)
-                plot_paths = await farmer.get_harvester_plots_duplicates(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                app.logger.info(plot_paths) # TODO Return plots
+                duplicate_plots = []
+                results = await farmer.get_harvester_plots_duplicates(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
+                duplicate_plots.extend[results['plots']]
                 farmer.close()
                 await farmer.await_closed()
 
+                harvesters.append({'host': host, 'node': node_id, 'invalid_plots': invalid_plots, 'missing_keys': missing_keys, 'duplicate_plots': duplicate_plots})
+
         except Exception as ex:
-            app.logger.info("Error getting {0} harvester warnings: {1}".format(blockchain, str(ex)))
+            app.logger.info("Error getting harvester warnings: {1}".format(str(ex)))
             traceback.print_exc()
-        return invalid_plots
+        return harvesters

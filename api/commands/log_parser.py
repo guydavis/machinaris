@@ -47,7 +47,7 @@ def recent_challenges(blockchain):
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
-        abort(500, description="The timeout is expired!")
+        raise Exception("The timeout is expired!")
     if errs:
         app.logger.error(errs.decode('utf-8'))
         abort(500, description=errs.decode('utf-8'))
@@ -73,7 +73,7 @@ def recent_partials(blockchain):
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
-        abort(500, description="The timeout is expired!")
+        raise Exception("The timeout is expired!")
     if errs:
         app.logger.error(errs.decode('utf-8'))
         abort(500, description=errs.decode('utf-8'))
@@ -104,7 +104,7 @@ def recent_farmed_blocks(blockchain):
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
-        abort(500, description="The timeout is expired!")
+        raise Exception("The timeout is expired!")
     if errs:
         app.logger.error(errs.decode('utf-8'))
         abort(500, description=errs.decode('utf-8'))
