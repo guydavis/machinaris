@@ -105,7 +105,7 @@ class Blocks:
                         created_at = created_at[(created_at.index('debug.log.1:') + len('debug.log.1:')):]
                     farmed_block = re.search('Farmed unfinished_block (\w+)', line, re.IGNORECASE).group(1)
                 elif "--" == line:
-                    if challenge_id and plots_past_filter and proofs_found and time_taken and farmed_block:
+                    if challenge_id and plots_past_filter and time_taken and farmed_block:
                         self.rows.append({
                             'challenge_id': challenge_id,
                             'plot_files': ','.join(plot_files),

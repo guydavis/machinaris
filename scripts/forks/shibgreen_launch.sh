@@ -17,8 +17,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.shibgreen/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
   && [[ ! -f /root/.shibgreen/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   mkdir -p /root/.shibgreen/mainnet/db/ && cd /root/.shibgreen/mainnet/db/
-  echo "Sorry, SHIBGreen does not offer a recent blockchain DB for download.  Standard sync will happen over a few days..."
-  echo "It is recommended to add some peer node connections on the Connections page of Machinaris."
+  # Mega links for SHIBGreen blockchain DB from their Discord 2022-08-23
+  mega-get https://mega.nz/folder/QpU3UbgQ#J76hG6GE5cYioiLyCweV1w
+  mv shibgreen_8_21_22/* . && rm -rf shibgreen_8_21_22
 fi
 
 mkdir -p /root/.shibgreen/mainnet/log
