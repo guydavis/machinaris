@@ -460,16 +460,13 @@ def request_chain_statuses(statuses, debug=False):
             blockchain = None
             chain_status = 'IN SYNC' # Default
             for cell in row.find_all('td'):
-                if not cell.contents[0].string:
-                    continue
                 try:
                     blockchain = cell.a.contents[0].string.strip().lower().replace('stai', 'staicoin').replace('n-chain', 'nchain')
                 except:
                     pass
                 try:
-                    for tag in cell.descendants:
-                        if 'NO SYNC' in tag.contents[0].string.strip():
-                            chain_status = tag.contents[0].string.strip()
+                    if 'NO SYNC' in str(cell):
+                        chain_status = 'NO SYNC'
                 except:
                     pass
             if blockchain in statuses:
@@ -479,7 +476,7 @@ def request_chain_statuses(statuses, debug=False):
                 app.logger.info("Missing blockchain from health. {0} found sync state of {1}.".format(blockchain, chain_status))
         except Exception as ex:
             traceback.print_exc()
-    #app.logger.info(statuses)
+    app.logger.info(statuses['mint'])
     return statuses
 
 def save_chain_statuses(data):

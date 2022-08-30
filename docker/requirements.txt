@@ -24,3 +24,4 @@ beautifulsoup4
 geoip2
 gdown
 pendulum
+py-spy
