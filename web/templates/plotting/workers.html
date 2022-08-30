@@ -46,8 +46,10 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-dark">
+                {% autoescape false %}
                 {{_('This worker is not currently configured for Plotman %(wiki_link_open)sarchiving%(wiki_link_open)s to enable local or remote transfer of completed plots.  Please visit the Settings | Plotting page to configure this worker.', 
                 wiki_link_open='<a target="_blank" href="https://github.com/guydavis/machinaris/wiki/Plotman#archiving">', wiki_like_close='</a>')}}
+                {% endautoescape %}
             </div>
             <div class="modal-footer bg-dark">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnOk">{{_('OK')}}</button>
