@@ -13,7 +13,8 @@ def on_starting(server):
         status_connections, status_keys, status_alerts, status_controller, \
         status_plotnfts, status_pools, status_partials, status_drives, \
         stats_blocks, stats_balances, stats_disk, stats_farm, nft_recover, plots_check, \
-        log_rotate, restart_stuck_farmer, geolocate_peers, stats_effort, status_warnings
+        log_rotate, restart_stuck_farmer, restart_legacy_blockchains, geolocate_peers, \
+        stats_effort, status_warnings
     from common.config import globals
 
     from api.commands import websvcs
@@ -66,6 +67,7 @@ def on_starting(server):
         scheduler.add_job(func=status_plotnfts.update, name="plotnfts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=restart_stuck_farmer.execute, name="restart_farmer_if_stuck", trigger='interval', minutes=5, jitter=0) 
+        scheduler.add_job(func=restart_legacy_blockchains.execute, name="restart_legacy_blockchains", trigger='interval', hours=12, jitter=0) 
         scheduler.add_job(func=status_partials.update, name="partials", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=stats_blocks.collect, name="blocks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
 
