@@ -268,10 +268,13 @@ def wallet():
             selected_blockchain = request.form.get('blockchain')
             chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
     wallets = chia.load_wallets()
+    sync_wallet_frequencies = ['Always', 'Once an Hour', 'Every 3 Hours', 'Every 6 Hours', 'Every 12 Hours', 'Once a Day', 'Never']
+    sync_wallet_frequency = 'Always'
     chart_data = stats.load_total_balances(fiat.get_local_currency_symbol().lower())
     return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, 
         reload_seconds=120, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
-        chart_data=chart_data, local_cur_sym=fiat.get_local_currency_symbol(), lang=get_lang(request))
+        chart_data=chart_data, local_cur_sym=fiat.get_local_currency_symbol(), sync_wallet_frequencies=sync_wallet_frequencies, 
+        sync_wallet_frequency = sync_wallet_frequency,lang=get_lang(request))
 
 @app.route('/keys')
 def keys():

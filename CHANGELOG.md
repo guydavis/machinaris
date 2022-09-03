@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [0.8.4] - 2022-09-?
 - Update: [Flax](https://github.com/Flax-Network/flax-blockchain) to v0.1.10
-- Fixes: Better handling of farmed block logging for certain blockchains like Apple & BPX
+- Fixes: Better handling of farmed block logging for certain blockchains like Apple & BPX, Alerts from Chia 1.5.1 for added coins missing due to blockchain logging changes
 
 ## [0.8.3] - 2022-08-23
  - Additional blockchain pricing from Vayamos and Posat exchanges on the Blockchains, Wallets, and Summary pages.

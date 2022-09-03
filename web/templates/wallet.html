@@ -58,6 +58,15 @@
                     {% endif %}
                 {% endfor %}
               </select>
+              <div class="mb-3">
+                <label for="sync_wallet_frequency" class="col-form-label">{{_('Sync Wallet:')}}</label>
+                <select type="text" class="form-control" id="sync_wallet_frequency_field" name="sync_wallet_frequency">
+                  {% for frequency in sync_wallet_frequencies %}
+                      <option {% if frequency == selected_sync_wallet_frequency %} selected {% endif %}
+                          value="{{frequency}}">{{_(frequency)}}</option>
+                  {% endfor %}
+                </select>
+              </div>
             </div>
           </form>
         </div>
