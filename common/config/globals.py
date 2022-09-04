@@ -219,9 +219,14 @@ def load_blockchain_version(blockchain):
         proc = Popen("{0} version".format(chia_binary),
                 stdout=PIPE, stderr=PIPE, shell=True)
         outs, errs = proc.communicate(timeout=90)
-        # Chia version with .dev is actually one # to high
-        # See: https://github.com/Chia-Network/chia-blockchain/issues/5655
-        last_blockchain_version = outs.decode('utf-8').strip()
+        for line in outs.decode('utf-8').strip().splitlines():
+            if "data_layer" in line:
+                # Ignore useless error at CLI about "data_layer", this is still NOT fixed!
+                # https://github.com/Chia-Network/chia-blockchain/issues/13257
+                pass
+            else:
+                last_blockchain_version = outs.decode('utf-8').strip()
+                break
         if "@@@@" in last_blockchain_version:  # SSL warning 
             try:
                 os.system("chia init --fix-ssl-permissions")
@@ -229,6 +234,8 @@ def load_blockchain_version(blockchain):
                 pass
             last_blockchain_version = ""
         if last_blockchain_version.endswith('dev0'):
+            # Chia version with .dev is actually one # to high, never fixed by Chia team...
+            # See: https://github.com/Chia-Network/chia-blockchain/issues/5655
             sem_ver = last_blockchain_version.split('.')
             last_blockchain_version = sem_ver[0] + '.' + \
                 sem_ver[1] + '.' + str(int(sem_ver[2])-1)
