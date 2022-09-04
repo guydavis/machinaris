@@ -383,7 +383,7 @@ class Wallets:
                 'displayname': displayname, 
                 'hostname': wallet.hostname,
                 'blockchain': wallet.blockchain,
-                'status': self.extract_status(wallet.blockchain, wallet.details, worker_status),
+                'status': self.extract_status(wallet.blockchain, wallet.details, wallet.updated_at, worker_status),
                 'details': self.link_to_wallet_transactions(wallet.blockchain, wallet.details),
                 'hot_balance': converters.round_balance(hot_balance),
                 'cold_balance': cold_balance,
@@ -472,10 +472,12 @@ class Wallets:
                     sum += locale.atof(wallet.cold_balance)
         return sum
 
-    def extract_status(self, blockchain, details, worker_status):
+    def extract_status(self, blockchain, details, updated_at, worker_status):
         if worker_status == 'Responding':
             if not details:
                 return None
+            if updated_at <= (datetime.datetime.now() - datetime.timedelta(minutes=5)):
+                return "Stopped"
             if blockchain == 'mmx':
                 pattern = '^Synced:\s+(.*)$'
             else:

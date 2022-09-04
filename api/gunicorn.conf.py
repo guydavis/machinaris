@@ -86,7 +86,7 @@ def on_starting(server):
         scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='cron', minute=0)  # Hourly
         
     # Testing only
-    #scheduler.add_job(func=status_wallets.update, name="status_wallets", trigger='interval', seconds=60) # Test immediately
+    #scheduler.add_job(func=status_plotnfts.update, name="status_plotnfts", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=stats_blocks.collect, name="stats_blocks", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=stats_effort.collect, name="stats_effort", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='interval', seconds=10) # Test immediately

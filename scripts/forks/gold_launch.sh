@@ -16,8 +16,13 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.gold/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
   && [[ ! -f /root/.gold/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
-  echo "Sorry, Gold does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
-  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/gold"
+  echo "Downloading Gold blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
+  mkdir -p /root/.gold/mainnet/db/ && cd /root/.gold/mainnet/db/
+  # Latest Blockchain DB download as per the Gold Discord
+  curl -skJLO http://58.7.212.211/C%3A/http/Gold/951456/Gold.blockchain_v1_mainnet.height.951456.db.rar
+  unrar e *.rar 
+  rm -f *.rar
 fi
 
 mkdir -p /root/.gold/mainnet/log
