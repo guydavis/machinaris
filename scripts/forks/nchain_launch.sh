@@ -69,7 +69,7 @@ if [[ ${mode} == 'fullnode' ]]; then
       fi
     done
   done
-  chia start farmer
+  chia start farmer-no-wallet
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.chia/ext9/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."

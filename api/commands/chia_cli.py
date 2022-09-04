@@ -41,7 +41,7 @@ def load_farm_summary(blockchain):
             raise Exception("For farm summary, the process timeout expired!")
         if errs:
             app.logger.debug("Error from {0} farm summary because {1}".format(blockchain, outs.decode('utf-8')))
-        return chia.FarmSummary(outs.decode('utf-8').splitlines(), blockchain)
+        return chia.FarmSummary(globals.strip_data_layer_msg(outs.decode('utf-8').splitlines()), blockchain)
     elif globals.harvesting_enabled():
         return chia.HarvesterSummary()
     else:
@@ -79,21 +79,18 @@ def load_wallet_show(blockchain):
     wallet_id_num = app.config['SELECTED_WALLET_NUM']  # Default wallet ID num to respond if prompted is 1
     app.logger.debug("Default SELECTED_WALLET_NUM is {0}".format(wallet_id_num))
     while True:
-        i = child.expect(["Wallet height:.*\r\n", "Wallet keys:.*\r\n", "Choose wallet key:.*\r\n", "Choose a wallet key:.*\r\n", 
-            "No online backup file found.*\r\n", "Connection error.*\r\n"], timeout=30)
+        i = child.expect(["Choose a wallet key:.*\r\n", "No online backup file found.*\r\n", "Connection error.*\r\n"], timeout=30)
         if i == 0:
+            app.logger.info("Wallet show got num prompt so selecting wallet #{0}".format(wallet_id_num))
+            child.sendline("{0}".format(wallet_id_num))
+        elif i == 1:
+            child.sendline("S")
+        elif i == 2:
+            raise Exception("Skipping wallet status gathering as it returned 'Connection Error', so possibly still starting up. If this error persists more than 30 minutes after startup, try restarting the Machinaris Docker container.")
+        else:
             app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
             wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
             break
-        elif i == 1 or i == 2 or i == 3:
-            app.logger.info("Wallet show got num prompt so selecting wallet #{0}".format(wallet_id_num))
-            child.sendline("{0}".format(wallet_id_num))
-        elif i == 4:
-            child.sendline("S")
-        elif i == 5:
-            raise Exception("Skipping wallet status gathering as it returned 'Connection Error', so possibly still starting up. If this error persists more than 30 minutes after startup, try restarting the Machinaris Docker container.")
-        else:
-            raise Exception("ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8"))
     return chia.Wallet(wallet_show)
 
 def load_blockchain_show(blockchain):
@@ -107,7 +104,7 @@ def load_blockchain_show(blockchain):
         raise Exception("For blockchain show, the process timeout expired!")
     if errs:
         raise Exception(errs.decode('utf-8'))
-    return chia.Blockchain(outs.decode('utf-8').splitlines())
+    return chia.Blockchain(globals.strip_data_layer_msg(outs.decode('utf-8').splitlines()))
 
 def load_connections_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
@@ -120,7 +117,7 @@ def load_connections_show(blockchain):
         raise Exception("For connections show, the process timeout expired!")
     if errs:
         raise Exception(errs.decode('utf-8'))
-    return chia.Connections(outs.decode('utf-8').splitlines())
+    return chia.Connections(globals.strip_data_layer_msg(outs.decode('utf-8').splitlines()))
 
 def load_keys_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
@@ -137,7 +134,7 @@ def load_keys_show(blockchain):
         raise Exception("For keys show, the process timeout expired!")
     if errs:
         raise Exception(errs.decode('utf-8'))
-    return chia.Keys(outs.decode('utf-8').splitlines())
+    return chia.Keys(globals.strip_data_layer_msg(outs.decode('utf-8').splitlines()))
 
 def start_farmer(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)

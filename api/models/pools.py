@@ -10,7 +10,8 @@ class Plotnfts:
             if "No online" in line or \
                 "skip restore from backup" in line or \
                 "own backup file" in line or \
-                "SIGWINCH" in line:
+                "SIGWINCH" in line or \
+                "data_layer.crt" in line:
                 continue
             elif line.startswith("Wallet height:") or line.startswith("Sync status:"):
                 self.header += line + '\n'

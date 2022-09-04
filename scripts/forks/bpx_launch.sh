@@ -66,7 +66,7 @@ if [[ ${mode} == 'fullnode' ]]; then
       fi
     done
   done
-  bpx start farmer
+  bpx start farmer-no-wallet
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.bpx/mainnet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."

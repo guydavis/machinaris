@@ -63,7 +63,7 @@ if [[ ${mode} == 'fullnode' ]]; then
       fi
     done
   done
-  wheat start farmer
+  wheat start farmer-no-wallet
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.wheat/mainnet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."

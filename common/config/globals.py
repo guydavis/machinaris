@@ -205,6 +205,17 @@ def archiving_enabled():
         logging.info("Failed to read plotman.yaml so archiving_enabled=False.")
         logging.info(traceback.format_exc())
 
+# Ignore error at CLI about "data_layer.crt" that is still NOT fixed, despite being "closed".
+# https://github.com/Chia-Network/chia-blockchain/issues/13257
+def strip_data_layer_msg(lines):
+    useful_lines = []
+    for line in lines:
+        if "data_layer.crt" in line:
+            pass
+        else:
+            useful_lines.append(line)
+    return useful_lines
+
 last_blockchain_version = None
 last_blockchain_version_load_time = None
 def load_blockchain_version(blockchain):
@@ -219,14 +230,7 @@ def load_blockchain_version(blockchain):
         proc = Popen("{0} version".format(chia_binary),
                 stdout=PIPE, stderr=PIPE, shell=True)
         outs, errs = proc.communicate(timeout=90)
-        for line in outs.decode('utf-8').strip().splitlines():
-            if "data_layer" in line:
-                # Ignore useless error at CLI about "data_layer", this is still NOT fixed!
-                # https://github.com/Chia-Network/chia-blockchain/issues/13257
-                pass
-            else:
-                last_blockchain_version = outs.decode('utf-8').strip()
-                break
+        last_blockchain_version = strip_data_layer_msg(outs.decode('utf-8').strip().splitlines())[0]
         if "@@@@" in last_blockchain_version:  # SSL warning 
             try:
                 os.system("chia init --fix-ssl-permissions")
