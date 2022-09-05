@@ -142,8 +142,8 @@
                 <td>
                     {% if wallet.status == 'Offline' %}
                       <i class="bi-dash-circle text-danger"></i> &nbsp; {{_('Offline')}}
-                    {% elif wallet.status == 'Stopped' %}
-                      <i class="bi-check-circle text-success"></i> &nbsp; {{_('Stopped')}}
+                    {% elif wallet.status == 'Paused' %}
+                      <i class="bi-pause-circle"></i> &nbsp; {{_('Paused')}}
                     {% elif wallet.status.lower().startswith('synced') %}
                       <i class="bi-check-circle text-success"></i> &nbsp; {{_('Synced')}}
                     {% elif wallet.status.lower().startswith('syncing') %}

@@ -477,7 +477,7 @@ class Wallets:
             if not details:
                 return None
             if updated_at <= (datetime.datetime.now() - datetime.timedelta(minutes=5)):
-                return "Stopped"
+                return "Paused"
             if blockchain == 'mmx':
                 pattern = '^Synced:\s+(.*)$'
             else:

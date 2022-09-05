@@ -63,7 +63,11 @@ if [[ ${mode} == 'fullnode' ]]; then
       fi
     done
   done
-  apple start farmer-no-wallet
+  if [ -f /root/.chia/machinaris/config/wallet_settings.json ]; then
+    apple start farmer-no-wallet
+  else
+    apple start farmer
+  fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.apple/mainnet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
