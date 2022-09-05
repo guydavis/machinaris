@@ -263,6 +263,12 @@ def wallet():
             app.logger.info("Saving local currency setting of: {0}".format(request.form.get('local_currency')))
             fiat.save_local_currency(request.form.get('local_currency'))
             flash(_("Saved local currency setting."), 'success')
+        elif request.form.get('blockchain'):
+            action = request.form.get('action')
+            if action == "start":
+                flash(_("Starting wallet sync.  Please allow at least 15 minutes..."), 'success')
+            elif action == "pause":
+                flash(_("Pausing wallet sync.  Please allow a few minutes..."), 'success')
         else:
             app.logger.info("Saving {0} cold wallet address of: {1}".format(request.form.get('blockchain'), request.form.get('cold_wallet_address')))
             selected_blockchain = request.form.get('blockchain')
@@ -332,8 +338,11 @@ def drives():
 def blockchains():
     gc = globals.load()
     if request.method == 'POST':
-        fiat.save_local_currency(request.form.get('local_currency'))
-        flash(_("Saved local currency setting."), 'success')
+        if request.form.get('local_currency'):
+            fiat.save_local_currency(request.form.get('local_currency'))
+            flash(_("Saved local currency setting."), 'success')
+        elif request.form.get('blockchain'):
+            flash(_("Restarting blockchain.  Please allow at least 15 minutes..."), 'success')
     selected_blockchain = worker.default_blockchain()
     blockchains = chia.load_blockchains()
     fullnodes = worker.get_fullnodes_by_blockchain()

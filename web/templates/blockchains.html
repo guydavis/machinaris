@@ -48,6 +48,27 @@
     </div>
   </div>
 
+  <div class="modal fade" id="restartModal" tabindex="-1" aria-labelledby="restartModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3 modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="restartModalLabel">{{_('Restart Blockchain')}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form method="POST" id="restart-form">
+                <input type="hidden" id="blockchain_field" name="blockchain" value="" />
+                <p>{{_('This will restart ALL the fullnode services for this blockchain, including the farming, harvesting, and wallet (if running).  Please allow at least 15 minutes after a restart for all blockchain services to reconnect before attempting another restart.  Your patience is appreciated! Continue with Restart?')}}</p>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">{{_('Cancel')}}</button>
+              <button type="button" class="btn btn-outline-success" id="btnRestart">{{_('Restart')}}</button>
+            </div>
+        </div>
+    </div>
+  </div>
+
 <div class="position-relative">
     <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -8px;">
       <a href="#" title="{{_('Settings')}}" data-bs-toggle="modal" data-bs-target="#settingsModal" target="_blank"><i class="fs-4 bi-gear"></i></a>
@@ -108,7 +129,7 @@
                     {% else %}
                       <i class="bi-exclamation-triangle text-warning"></i>
                     {% endif %} &nbsp;
-                    {{blockchain.status}}
+                    <a class="text-white" title="{{_('Restart Blockchain')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-blockchain="{{blockchain.blockchain}}">{{blockchain.status}}</a>
                 </td>
                 <td><a data-toggle="tooltip" data-bs-placement="right" data-bs-html="true" 
                   title="{{blockchain.fiat_price_tooltip}}">{{blockchain.fiat_price}}</a></td>
@@ -190,6 +211,14 @@ $(document).ready(function () {
         );
         $("#settings-form").submit();
     });
+    $("#btnRestart").click(function () {
+        $("#btnCancel").prop("disabled", true);
+        $(this).prop("disabled", true);
+        $(this).html(
+            `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Restarting...`
+        );
+        $("#restart-form").submit();
+    });
     $('#data').DataTable({
         "stateSave": true,
         "pageLength": 25,
@@ -205,6 +234,15 @@ $(document).ready(function () {
         {% endif %}
     });
     $('[data-toggle="tooltip"]').tooltip();
+    var restartModal = document.getElementById('restartModal')
+    restartModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+        var blockchain = button.getAttribute('data-bs-blockchain')
+        var blockchainField = document.getElementById('blockchain_field')
+        blockchainField.value = blockchain
+        var modalTitle = restartModal.querySelector('.modal-title')
+        modalTitle.textContent = 'Restart Blockchain - ' + blockchain
+    })
 })
 </script>
 {% endblock %}
