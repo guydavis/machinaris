@@ -266,8 +266,10 @@ def wallet():
         elif request.form.get('blockchain'):
             action = request.form.get('action')
             if action == "start":
+                chia.start_or_pause_wallet(request.form.get('hostname'), request.form.get('blockchain'), action)
                 flash(_("Starting wallet sync.  Please allow at least 15 minutes..."), 'success')
             elif action == "pause":
+                chia.start_or_pause_wallet(request.form.get('hostname'), request.form.get('blockchain'), action)
                 flash(_("Pausing wallet sync.  Please allow a few minutes..."), 'success')
         else:
             app.logger.info("Saving {0} cold wallet address of: {1}".format(request.form.get('blockchain'), request.form.get('cold_wallet_address')))
@@ -342,6 +344,7 @@ def blockchains():
             fiat.save_local_currency(request.form.get('local_currency'))
             flash(_("Saved local currency setting."), 'success')
         elif request.form.get('blockchain'):
+            chia.restart_farmer(request.form.get('hostname'), request.form.get('blockchain'))
             flash(_("Restarting blockchain.  Please allow at least 15 minutes..."), 'success')
     selected_blockchain = worker.default_blockchain()
     blockchains = chia.load_blockchains()

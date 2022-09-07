@@ -57,6 +57,7 @@
             </div>
             <div class="modal-body">
               <form method="POST" id="restart-form">
+                <input type="hidden" id="hostname_field" name="hostname" value="" />
                 <input type="hidden" id="blockchain_field" name="blockchain" value="" />
                 <p>{{_('This will restart ALL the fullnode services for this blockchain, including the farming, harvesting, and wallet (if running).  Please allow at least 15 minutes after a restart for all blockchain services to reconnect before attempting another restart.  Your patience is appreciated! Continue with Restart?')}}</p>
               </form>
@@ -123,13 +124,14 @@
                 </td>
                 <td>
                     {% if blockchain.status == 'Offline' %}
-                      <i class="bi-dash-circle text-danger"></i>
+                      <i class="bi-dash-circle text-danger"></i> &nbsp; {{blockchain.status}}
                     {% elif blockchain.status.lower().startswith('synced') %}
-                        <i class="bi-check-circle text-success"></i>
+                      <i class="bi-check-circle text-success"></i>
+                      &nbsp; <a class="text-white" title="{{_('Restart Blockchain')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{ fullnodes[blockchain.blockchain].hostname }}" data-bs-blockchain="{{blockchain.blockchain}}">{{blockchain.status}}</a>
                     {% else %}
                       <i class="bi-exclamation-triangle text-warning"></i>
-                    {% endif %} &nbsp;
-                    <a class="text-white" title="{{_('Restart Blockchain')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-blockchain="{{blockchain.blockchain}}">{{blockchain.status}}</a>
+                      &nbsp; <a class="text-white" title="{{_('Restart Blockchain')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{ fullnodes[blockchain.blockchain].hostname }}" data-bs-blockchain="{{blockchain.blockchain}}">{{blockchain.status}}</a>
+                    {% endif %} 
                 </td>
                 <td><a data-toggle="tooltip" data-bs-placement="right" data-bs-html="true" 
                   title="{{blockchain.fiat_price_tooltip}}">{{blockchain.fiat_price}}</a></td>
@@ -237,6 +239,9 @@ $(document).ready(function () {
     var restartModal = document.getElementById('restartModal')
     restartModal.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget
+        var hostname = button.getAttribute('data-bs-hostname')
+        var hostnameField = document.getElementById('hostname_field')
+        hostnameField.value = hostname
         var blockchain = button.getAttribute('data-bs-blockchain')
         var blockchainField = document.getElementById('blockchain_field')
         blockchainField.value = blockchain

@@ -139,9 +139,45 @@ def load_keys_show(blockchain):
         raise Exception(errs.decode('utf-8'))
     return chia.Keys(globals.strip_data_layer_msg(outs.decode('utf-8').splitlines()))
 
-def start_farmer(blockchain):
+def restart_farmer(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    proc = Popen("{0} start farmer -r".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+    cmd = "{0} start farmer -r".format(chia_binary)
+    app.logger.error("Executing farmer restart: {0}".format(cmd))
+    proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired as ex:
+        proc.kill()
+        proc.communicate()
+        app.logger.error(traceback.format_exc())
+        return False
+    if errs:
+        app.logger.error("{0}".format(errs.decode('utf-8')))
+        return False
+    return True
+
+def start_wallet(blockchain):
+    chia_binary = globals.get_blockchain_binary(blockchain)
+    cmd = "{0} start wallet -r".format(chia_binary)
+    app.logger.info("Executing wallet start: {0}".format(cmd))
+    proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired as ex:
+        proc.kill()
+        proc.communicate()
+        app.logger.info(traceback.format_exc())
+        return False
+    if errs:
+        app.logger.info("{0}".format(errs.decode('utf-8')))
+        return False
+    return True
+
+def pause_wallet(blockchain):
+    chia_binary = globals.get_blockchain_binary(blockchain)
+    cmd = "{0} stop wallet".format(chia_binary)
+    app.logger.error("Executing wallet pause: {0}".format(cmd))
+    proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
     except TimeoutExpired as ex:
@@ -207,6 +243,7 @@ def dispatch_action(job):
     service = job['service']
     action = job['action']
     blockchain = job['blockchain']
+    app.logger.error("For blockchain:{0} Service: {1} Received action: {2}".format(blockchain, service, action))
     if service == 'networking':
         if action == "add_connections":
             conns = job['connections']
@@ -218,6 +255,14 @@ def dispatch_action(job):
                 app.logger.error("Received no connections from AllTheBlocks, please add directly at the command-line.")
         elif action == "remove_connection":
             remove_connection(job['node_ids'], blockchain)
+    elif service == 'farming':
+        if action == 'restart':
+            restart_farmer(blockchain)
+    elif service == 'wallet':
+        if action == 'start':
+            start_wallet(blockchain)
+        elif action == 'pause':
+            pause_wallet(blockchain)
 
 def add_connections(connections, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)

@@ -114,6 +114,7 @@
             </div>
             <div class="modal-body">
               <form method="POST" id="restart-form">
+                <input type="hidden" id="hostname_field" name="hostname" value="" />
                 <input type="hidden" id="wallet_blockchain_field" name="blockchain" value="" />
                 <input type="hidden" id="action_field" name="action" value="" />
                 <p id="restartModalMessage"></p>
@@ -164,18 +165,18 @@
                 <td>
                     {% if wallet.status == 'Offline' %}
                       <i class="bi-dash-circle text-danger"></i> &nbsp; {{_('Offline')}}
-                    {% elif wallet.status == 'Paused' %}
+                    {% elif wallet.status == 'Paused' or wallet.service == 'paused' %}
                       <i class="bi-pause-circle"></i> &nbsp; 
-                      <a class="text-white" title="{{_('Start Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="start">{{_('Paused')}}</a>
+                      <a class="text-white" title="{{_('Start Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{wallet.hostname}}" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="start">{{_('Paused')}}</a>
                     {% elif wallet.status.lower().startswith('synced') %}
                       <i class="bi-check-circle text-success"></i> &nbsp;
-                      <a class="text-white" title="{{_('Pause Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="pause">{{_('Synced')}}</a>
+                      <a class="text-white" title="{{_('Pause Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{wallet.hostname}}" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="pause">{{_('Synced')}}</a>
                     {% elif wallet.status.lower().startswith('syncing') %}
                       <i class="bi-check-circle text-warning"></i> &nbsp; {{_('Syncing')}}
-                      <a class="text-white" title="{{_('Pause Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="pause">{{_('Syncing')}}</a>
+                      <a class="text-white" title="{{_('Pause Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{wallet.hostname}}" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="pause">{{_('Syncing')}}</a>
                     {% elif wallet.status.lower().startswith('not synced') %}
                       <i class="bi-check-circle text-danger"></i> &nbsp; 
-                      <a class="text-white" title="{{_('Pause Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="pause">{{_('Not Synced')}}</a>
+                      <a class="text-white" title="{{_('Pause Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{wallet.hostname}}" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="pause">{{_('Not Synced')}}</a>
                     {% else %}
                       <i class="bi-exclamation-triangle text-warning"></i> 
                       &nbsp; 
@@ -284,6 +285,9 @@
             var restartModal = document.getElementById('restartModal')
               restartModal.addEventListener('show.bs.modal', function (event) {
                   var button = event.relatedTarget
+                  var hostname = button.getAttribute('data-bs-hostname')
+                  var hostnameField = document.getElementById('hostname_field')
+                  hostnameField.value = hostname
                   var blockchain = button.getAttribute('data-bs-blockchain')
                   var walletBlockchainField = document.getElementById('wallet_blockchain_field')
                   walletBlockchainField.value = blockchain

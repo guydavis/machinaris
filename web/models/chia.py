@@ -355,11 +355,17 @@ class Wallets:
         for wallet in wallets:
             app.logger.debug("Wallets.init(): Parsing wallet for blockchain: {0}".format(wallet.blockchain))
             worker_status = None
+            service_status = None
             try:
                 app.logger.debug("Wallets.init(): Found worker with hostname '{0}'".format(wallet.hostname))
                 worker = w.get_worker(wallet.hostname, wallet.blockchain)
                 worker_status = worker.connection_status()
                 displayname = worker.displayname
+                try:
+                    service_status = json.loads(worker.config)['wallet_status']
+                    app.logger.info("For {0} found wallet service status: {1}".format(wallet.blockchain, service_status))
+                except:
+                    pass
             except:
                 app.logger.info("Wallets.init(): Unable to find a worker with hostname '{0}'".format(wallet.hostname))
                 displayname = wallet.hostname
@@ -384,6 +390,7 @@ class Wallets:
                 'hostname': wallet.hostname,
                 'blockchain': wallet.blockchain,
                 'status': self.extract_status(wallet.blockchain, wallet.details, wallet.updated_at, worker_status),
+                'service': service_status,
                 'details': self.link_to_wallet_transactions(wallet.blockchain, wallet.details),
                 'hot_balance': converters.round_balance(hot_balance),
                 'cold_balance': cold_balance,

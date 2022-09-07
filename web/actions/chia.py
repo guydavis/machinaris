@@ -410,3 +410,19 @@ def load_wallet_ids(blockchain):
         elif line.strip().startswith('-Wallet ID:'):
             wallet_ids.append({'id': line.split(':')[1].strip(), 'name': wallet_name })
     return wallet_ids
+
+def restart_farmer(hostname, blockchain):
+    farmer = wk.get_worker(hostname, blockchain)
+    try: # Send request, but timeout in only a second while API works in background
+        utils.send_post(farmer, "/actions/", \
+            { 'service': 'farming', 'action': 'restart', 'blockchain': blockchain, }, debug=True, timeout=1) 
+    except requests.exceptions.ReadTimeout: 
+        pass
+
+def start_or_pause_wallet(hostname, blockchain, action):
+    farmer = wk.get_worker(hostname, blockchain)
+    try: # Send request, but timeout in only a second while API works in background
+        utils.send_post(farmer, "/actions/", \
+            { 'service': 'wallet', 'action': action, 'blockchain': blockchain, }, debug=False, timeout=1) 
+    except requests.exceptions.ReadTimeout: 
+        pass

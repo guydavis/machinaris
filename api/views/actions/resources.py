@@ -24,6 +24,7 @@ blp = Blueprint(
 class Actions(MethodView):
 
     def post(self):
+        app.logger.error("Received /actions request with {0}".format(request.data))
         try:
             body = json.loads(request.data)
             service = body['service']
@@ -33,7 +34,7 @@ class Actions(MethodView):
             if service in ["plotting", "archiving"]:
                 plotman_cli.dispatch_action(body)
                 msg = "Plotman action completed."
-            elif service in [ "farming", "networking" ]:
+            elif service in [ "farming", "networking", "wallet" ]:
                 chia_cli.dispatch_action(body)
                 msg = "Blockchain action completed."
             elif service == "monitoring":
@@ -60,5 +61,5 @@ class Actions(MethodView):
             time.sleep(3) # Time for status update to reach database
             return make_response(msg, 200)
         except Exception as ex:
-            app.logger.info(traceback.format_exc())
+            app.logger.error(traceback.format_exc())
             return str(ex), 400
