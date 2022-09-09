@@ -30,23 +30,23 @@ def send_post(worker, path, payload, debug=False, lang=None, timeout=None):
     http.client.HTTPConnection.debuglevel = 0
     return response
 
-def send_put(worker, path, payload, debug=False, lang=None):
+def send_put(worker, path, payload, debug=False, lang=None, timeout=None):
     headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
     if lang:
         headers['Accept-Language'] = lang
     if debug:
         http.client.HTTPConnection.debuglevel = 1
-    response = requests.put(worker.url + path, headers = headers, data = json.dumps(payload))
+    response = requests.put(worker.url + path, headers = headers, data = json.dumps(payload), timeout=timeout)
     http.client.HTTPConnection.debuglevel = 0
     return response
 
-def send_delete(worker, path, debug=False, lang=None):
+def send_delete(worker, path, debug=False, lang=None, timeout=None):
     headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
     if lang:
         headers['Accept-Language'] = lang
     if debug:
         http.client.HTTPConnection.debuglevel = 1
-    response = requests.delete(worker.url + path, headers = headers)
+    response = requests.delete(worker.url + path, headers = headers, timeout=timeout)
     http.client.HTTPConnection.debuglevel = 0
     return response
 

@@ -262,7 +262,9 @@ def wallet():
         if request.form.get('local_currency'):
             app.logger.info("Saving local currency setting of: {0}".format(request.form.get('local_currency')))
             fiat.save_local_currency(request.form.get('local_currency'))
-            flash(_("Saved local currency setting."), 'success')
+            app.logger.info("Saving local currency setting of: {0}".format(request.form.get('local_currency')))
+            chia.save_current_wallet_sync_frequency(request.form.get('sync_wallet_frequency'))
+            flash(_("Saved local currency and wallet sync settings."), 'success')
         elif request.form.get('blockchain'):
             action = request.form.get('action')
             if action == "start":
@@ -276,8 +278,8 @@ def wallet():
             selected_blockchain = request.form.get('blockchain')
             chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
     wallets = chia.load_wallets()
-    sync_wallet_frequencies = ['Always', 'Once an Hour', 'Every 3 Hours', 'Every 6 Hours', 'Every 12 Hours', 'Once a Day', 'Never']
-    sync_wallet_frequency = 'Always'
+    sync_wallet_frequencies = chia.load_wallet_sync_frequencies()
+    sync_wallet_frequency = chia.load_current_wallet_sync_frequency()
     chart_data = stats.load_total_balances(fiat.get_local_currency_symbol().lower())
     return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, 
         reload_seconds=120, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 

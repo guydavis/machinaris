@@ -69,7 +69,7 @@ class ConfigByType(MethodView):
             elif type == "tools":
                 forktools_cli.save_config(self.clean_config(request.data), blockchain)
             elif type == "wallet":
-                chia_cli.save_wallet_settings(request.data, blockchain)
+                chia_cli.save_wallet_settings(json.loads(request.data.decode('utf-8')), blockchain)
             else:
                 abort(400, "Unknown config type provided: {0}".format(type))
             response = make_response("Successfully saved config.", 200)

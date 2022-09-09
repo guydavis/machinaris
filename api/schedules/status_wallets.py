@@ -29,11 +29,14 @@ def update():
                     public_wallet = mmx_cli.load_wallet_show(blockchain)
                 else:
                     public_wallet = chia_cli.load_wallet_show(blockchain)
-                payload = {
-                    "hostname": hostname,
-                    "blockchain": blockchain,
-                    "details": public_wallet.text.replace('\r', ''),
-                }
+                if public_wallet:
+                    payload = {
+                        "hostname": hostname,
+                        "blockchain": blockchain,
+                        "details": public_wallet.text.replace('\r', ''),
+                    }
+                else:
+                    app.logger.info("Not sending public wallet status as wallet is not running.")
                 #app.logger.info(payload)
                 utils.send_post('/wallets/', payload, debug=False)
         except Exception as ex:

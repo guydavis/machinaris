@@ -36,6 +36,7 @@ from . import worker as wk
 from . import stats
 
 COLD_WALLET_ADDRESSES_FILE = '/root/.chia/machinaris/config/cold_wallet_addresses.json'
+WALLET_SETTINGS_FILE = '/root/.chia/machinaris/config/wallet_settings.json'
 
 def load_farm_summary():
     farms = db.session.query(f.Farm).order_by(f.Farm.hostname).all()
@@ -426,3 +427,40 @@ def start_or_pause_wallet(hostname, blockchain, action):
             { 'service': 'wallet', 'action': action, 'blockchain': blockchain, }, debug=False, timeout=1) 
     except requests.exceptions.ReadTimeout: 
         pass
+
+def load_wallet_sync_frequencies():
+    return [
+        [-1, _('Always')], 
+        [1, _('Once an Hour')], 
+        [3, _('Every 3 Hours')],
+        [6, _('Every 6 Hours')],
+        [12, _('Every 12 Hours')],
+        [24, _('Once a Day')],
+        [0, _('Never')]
+    ]
+
+def load_current_wallet_sync_frequency():
+    wallet_sync_frequency = -1  # Always
+    if os.path.exists(WALLET_SETTINGS_FILE):
+        try:
+            with open(WALLET_SETTINGS_FILE) as f:
+                data = json.load(f)
+                if 'wallet_sync_frequency' in data:
+                    wallet_sync_frequency = data['wallet_sync_frequency']
+        except Exception as ex:
+            msg = "Unable to read wallet settings from {0} because {1}".format(WALLET_SETTINGS_FILE, str(ex))
+            app.logger.error(msg)
+    return wallet_sync_frequency
+
+def save_current_wallet_sync_frequency(freq):
+    settings = {} # An "always" (-1) frequency is an empty settings dict to fullnodes
+    if int(freq) > 0:
+        settings = {'wallet_sync_frequency': freq}
+    fullnodes = wk.get_fullnodes_by_blockchain()
+    for blockchain in fullnodes.keys():
+        fullnode = fullnodes[blockchain]
+        app.logger.debug("For {0}, attempting to save wallet sync setting to {1}".format(blockchain, fullnode.url))
+        try:
+            utils.send_put(fullnode, '/configs/wallet/{0}'.format(blockchain), payload=settings, debug=False, timeout=5)
+        except Exception as ex:
+            app.logger.debug("Failed to send updated wallet sync frequency for {0} due to {1}.".format(blockchain, str(ex)))

@@ -113,11 +113,14 @@ def update_chia_plots(plots_status, since):
                 })
         if not since:  # If no filter, delete all for this blockchain before sending again
             db.session.query(p.Plot).filter(p.Plot.blockchain=='chia').delete()
+            db.session.commit()
         if len(payload) > 0:
-            for new_item in payload:
-                item = p.Plot(**new_item)
-                db.session.add(item)
-        db.session.commit()
+            chunk_size = 100
+            for i in range(0, len(payload), chunk_size):
+                for new_item in payload[i:i+chunk_size]:
+                    item = p.Plot(**new_item)
+                    db.session.add(item)
+            db.session.commit() # Commit every chunk size
     except Exception as ex:
         app.logger.error("Failed to load and store Chia plots farming because {0}".format(str(ex)))
 

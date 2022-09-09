@@ -15,22 +15,20 @@ from random import randrange
 from api import app
 from common.config import globals
 from api.commands import chia_cli
-from web.routes import wallet
 
 # When this file present, we are leaving wallet paused normally, syncing every day or so
 WALLET_SETTINGS_FILE = '/root/.chia/machinaris/config/wallet_settings.json'
 
+first_invoke_time = datetime.datetime.now()
 initial_offset_delay = randrange(24)
 last_wallet_start_at = None
+
 def execute():
-    global initial_offset_delay
-    global last_wallet_start_at
+    global initial_offset_delay, last_wallet_start_at, first_invoke_time
 
     # On initial launch, use a random hour offset in the next 24 hours to avoid all 
     # blockchain wallets syncing at the same time, minimize concurrent memory usage.
-    if initial_offset_delay > 0:
-        app.logger.error("initial_offset_delay is {0}".format(initial_offset_delay))
-        initial_offset_delay = initial_offset_delay - 1  # Invoked once an hour
+    if first_invoke_time < datetime.datetime.now() - datetime.timedelta(hours=initial_offset_delay):
         return
 
     blockchain = globals.enabled_blockchains()[0]

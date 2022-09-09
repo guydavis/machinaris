@@ -473,10 +473,9 @@ def request_chain_statuses(statuses, debug=False):
                 details = statuses[blockchain]
                 details['sync_state'] = chain_status
             else:
-                app.logger.info("Missing blockchain from health. {0} found sync state of {1}.".format(blockchain, chain_status))
+                app.logger.debug("Missing blockchain from health. {0} found sync state of {1}.".format(blockchain, chain_status))
         except Exception as ex:
             traceback.print_exc()
-    app.logger.info(statuses['mint'])
     return statuses
 
 def save_chain_statuses(data):
