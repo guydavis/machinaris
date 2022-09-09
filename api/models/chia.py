@@ -69,6 +69,12 @@ class Wallet:
                 "data_layer.crt" in line:
                 continue
             self.text += line + '\n'
+    
+    def is_synced(self):
+        for line in self.text.split('\n'):
+            if line.strip().startswith("Sync status: Synced"):
+                return True
+        return False
 
 class Wallets:
 

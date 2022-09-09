@@ -4,6 +4,7 @@
 
 import asyncio
 import datetime
+import json
 import os
 import pexpect
 import psutil
@@ -28,6 +29,9 @@ from api.commands import websvcs
 
 # When reading tail of chia plots check output, limit to this many lines
 MAX_LOG_LINES = 2000
+
+# When this file present, we are leaving wallet paused normally, syncing every day or so
+WALLET_SETTINGS_FILE = '/root/.chia/machinaris/config/wallet_settings.json'
 
 def load_farm_summary(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
@@ -68,7 +72,7 @@ def save_config(config, blockchain):
         raise Exception(_('Updated config.yaml failed validation!') + '\n' + str(ex))
     else:
         try:
-            start_farmer(blockchain)
+            restart_farmer(blockchain)
         except Exception as ex:
             app.logger.info("Failed to restart farmer because {0}.".format(str(ex)))
 
@@ -141,7 +145,10 @@ def load_keys_show(blockchain):
 
 def restart_farmer(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    cmd = "{0} start farmer -r".format(chia_binary)
+    if os.path(WALLET_SETTINGS_FILE).exists():
+        cmd = "{0} start farmer-no-wallet -r".format(chia_binary)
+    else:
+        cmd = "{0} start farmer -r".format(chia_binary)
     app.logger.error("Executing farmer restart: {0}".format(cmd))
     proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
     try:
@@ -309,3 +316,14 @@ def remove_connection(node_ids, blockchain):
         except Exception as ex:
             app.logger.info(traceback.format_exc())
     app.logger.info("Successfully removed selected connections.")
+
+def save_wallet_settings(settings, blockchain):
+    try:
+        if not settings: # User reverting to defaults, no custom settings
+            os.path(WALLET_SETTINGS_FILE).delete()
+        else:
+            with open(WALLET_SETTINGS_FILE, 'w') as outfile:
+                json.dump(settings, outfile)
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+        raise Exception('Failed to store {0} wallet settings to {1}.'.format(blockchain, WALLET_SETTINGS_FILE) + '\n' + str(ex))

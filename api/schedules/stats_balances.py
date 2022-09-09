@@ -22,12 +22,27 @@ from api.commands import chia_cli, websvcs
 from api.models import chia
 from api import app, utils, db
 
+DELETE_OLD_STATS_AFTER_DAYS = 90
+
+TABLES = [ stats.StatWalletBalances, stats.StatTotalBalance ]
+
+def delete_old_stats():
+    try:
+        cutoff = datetime.datetime.now() - datetime.timedelta(days=DELETE_OLD_STATS_AFTER_DAYS)
+        for table in TABLES:
+            db.session.query(table).filter(table.created_at <= cutoff.strftime("%Y%m%d%H%M")).delete()
+        db.session.commit()
+    except:
+        app.logger.info("Failed to delete old statistics.")
+        app.logger.info(traceback.format_exc())
+
 def collect():
     with app.app_context():
         gc = globals.load()
         if not gc['is_controller']:
             app.logger.info("Only collect wallet balances on controller.")
             return
+        delete_old_stats()
         current_datetime = datetime.datetime.now().strftime("%Y%m%d%H%M")
         try:
             wallets = db.session.query(w.Wallet).order_by(w.Wallet.blockchain).all()

@@ -70,7 +70,7 @@ def on_starting(server):
         scheduler.add_job(func=status_plotnfts.update, name="plotnfts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=restart_stuck_farmer.execute, name="restart_farmer_if_stuck", trigger='interval', minutes=5, jitter=0) 
-        #scheduler.add_job(func=periodically_sync_wallet.execute, name="periodically_sync_wallet", trigger='cron', minute=30)  # Check hourly
+        scheduler.add_job(func=periodically_sync_wallet.execute, name="periodically_sync_wallet", trigger='interval', hours=1) 
         scheduler.add_job(func=status_partials.update, name="partials", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=stats_blocks.collect, name="blocks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
 
@@ -93,7 +93,7 @@ def on_starting(server):
     #scheduler.add_job(func=websvcs.get_chain_statuses, name="get_chain_statuses", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=status_warnings.collect, name="farms", trigger='interval', seconds=10) # Test immediately
-    #scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=periodically_sync_wallet.execute, name="periodically_sync_wallet", trigger='interval', seconds=60) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()
