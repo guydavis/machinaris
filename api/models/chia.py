@@ -1,4 +1,5 @@
 import locale
+import json
 import os
 import re
 import traceback
@@ -10,11 +11,14 @@ from common.config import globals
 from common.utils import converters, fiat
 from common.models import wallets as w
 
+TOTAL_COINS_CACHE_FILE = '/root/.chia/machinaris/cache/wallet_total_coins.json'
+
 class FarmSummary:
 
     def __init__(self, cli_stdout, blockchain):
             self.plot_count = 0
             self.plots_size = 0
+            self.total_coins = None
             for line in cli_stdout:
                 if "Plot count for all" in line: 
                     self.plot_count = line.strip().split(':')[1].strip()
@@ -30,6 +34,26 @@ class FarmSummary:
                     self.time_to_win = line.split(':')[1].strip()
                 elif "User transaction fees" in line:
                     self.transaction_fees = line.split(':')[1].strip()
+            if self.total_coins: # Wallet running, we got a value
+                self.save_cached_farmed_coins(self.total_coins)
+            else: # Wallet not running, use the cached value
+                self.total_coins = self.load_cached_farmed_coins()
+    
+    def save_cached_farmed_coins(self, total_coins):
+        with open(TOTAL_COINS_CACHE_FILE, 'w') as writer:
+            writer.write(json.dumps({'total_coins_cached': total_coins }))
+
+    def load_cached_farmed_coins(self):
+        total_coins = 0
+        if os.path.exists(TOTAL_COINS_CACHE_FILE):
+            try:
+                with open(TOTAL_COINS_CACHE_FILE) as f:
+                    data = json.load(f)
+                    total_coins = data['total_coins_cached']
+            except Exception as ex:
+                msg = "Unable to read cache file from {0} because {1}".format(TOTAL_COINS_CACHE_FILE, str(ex))
+                app.logger.error(msg)
+        return total_coins
 
     def calc_status(self, status):
         self.status = status

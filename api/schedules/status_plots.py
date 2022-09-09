@@ -68,6 +68,7 @@ def update_chia_plots(plots_status, since):
         controller_hostname = utils.get_hostname()
         plots_farming = blockchain_rpc.get_all_plots()
         payload = []
+        plots_by_id = {}
         displaynames = {}
         for plot in plots_farming:
             if plot['hostname'] in displaynames:
@@ -85,7 +86,18 @@ def update_chia_plots(plots_status, since):
                     displayname = plot['hostname']
                 displaynames[plot['hostname']] = displayname
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
-            if not since or created_at > since:
+            duplicated_on_same_host = False
+            # Check for duplicated plots on same host 
+            if short_plot_id in plots_by_id:
+                if plot['hostname'] == plots_by_id[short_plot_id]['hostname']:
+                    app.logger.error("DUPLICATE PLOT FOUND ON SAME WORKER {0} AT BOTH {1}/{2} AND {3}/{4}".format(
+                        displayname, plots_by_id[short_plot_id]['dir'], plots_by_id[short_plot_id]['file'], dir, file))
+                    duplicated_on_same_host = True
+                else:
+                    app.logger.error("DUPLICATE PLOT FOUND ON DIFFERENT WORKERS AT {0}@{1}/{2} AND {3}@{4}/{5}".format(
+                        plots_by_id[short_plot_id]['worker'], plots_by_id[short_plot_id]['dir'], plots_by_id[short_plot_id]['file'], displayname, dir, file))
+            plots_by_id[short_plot_id] = { 'hostname': plot['hostname'], 'worker': displayname, 'path': dir, 'file': file }
+            if not duplicated_on_same_host and (not since or created_at > since):
                 payload.append({
                     "plot_id": short_plot_id,
                     "blockchain": 'chia',
@@ -107,7 +119,7 @@ def update_chia_plots(plots_status, since):
                 db.session.add(item)
         db.session.commit()
     except Exception as ex:
-            app.logger.info("Failed to load and send plots farming because {0}".format(str(ex)))
+        app.logger.error("Failed to load and store Chia plots farming because {0}".format(str(ex)))
 
 # Sent from a separate fullnode container
 def update_chives_plots(since):
@@ -137,9 +149,8 @@ def update_chives_plots(since):
             utils.send_delete('/plots/{0}/{1}'.format(hostname, blockchain), debug=False)
         if len(payload) > 0:
             utils.send_post('/plots/', payload, debug=False)
-    except:
-        app.logger.info("Failed to load Chives plots farming and send.")
-        app.logger.info(traceback.format_exc())
+    except Exception as ex:
+        app.logger.error("Failed to load and send Chives plots farming because {0}".format(str(ex)))
 
 # Sent from a separate fullnode container
 def update_mmx_plots(since):
@@ -168,9 +179,8 @@ def update_mmx_plots(since):
             utils.send_delete('/plots/{0}/{1}'.format(hostname, blockchain), debug=False)
         if len(payload) > 0:
             utils.send_post('/plots/', payload, debug=False)
-    except:
-        app.logger.info("Failed to load Chives plots farming and send.")
-        app.logger.info(traceback.format_exc())
+    except Exception as ex:
+        app.logger.error("Failed to load and send MMX plots farming because {0}".format(str(ex)))
 
 def analyze_status(plots_status, short_plot_id):
     if short_plot_id in plots_status:

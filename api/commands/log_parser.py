@@ -40,7 +40,7 @@ def recent_challenges(blockchain):
         app.logger.debug(
             "Skipping challenges parsing as no such log file: {0}".format(log_file))
         return None
-    proc = Popen("grep --text -i eligible {0} | tail -n {1}".format(log_file, CHALLENGES_TO_LOAD),
+    proc = Popen("grep --text -i eligible {0} | grep -v ': DEBUG' | tail -n {1}".format(log_file, CHALLENGES_TO_LOAD),
                  stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
