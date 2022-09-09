@@ -77,7 +77,7 @@ def save_config(config, blockchain):
             app.logger.info("Failed to restart farmer because {0}.".format(str(ex)))
 
 def load_wallet_show(blockchain):
-    if not globals.wallet_running(blockchain):
+    if not globals.wallet_running():
         return None
     chia_binary = globals.get_blockchain_binary(blockchain)
     wallet_show = ""

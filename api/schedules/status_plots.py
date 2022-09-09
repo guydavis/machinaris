@@ -68,7 +68,7 @@ def update_chia_plots(plots_status, since):
         controller_hostname = utils.get_hostname()
         plots_farming = blockchain_rpc.get_all_plots()
         payload = []
-        plots_by_id = {}
+        #plots_by_id = {}
         displaynames = {}
         for plot in plots_farming:
             if plot['hostname'] in displaynames:
@@ -88,15 +88,15 @@ def update_chia_plots(plots_status, since):
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
             duplicated_on_same_host = False
             # Check for duplicated plots on same host 
-            if short_plot_id in plots_by_id:
-                if plot['hostname'] == plots_by_id[short_plot_id]['hostname']:
-                    app.logger.error("DUPLICATE PLOT FOUND ON SAME WORKER {0} AT BOTH {1}/{2} AND {3}/{4}".format(
-                        displayname, plots_by_id[short_plot_id]['dir'], plots_by_id[short_plot_id]['file'], dir, file))
-                    duplicated_on_same_host = True
-                else:
-                    app.logger.error("DUPLICATE PLOT FOUND ON DIFFERENT WORKERS AT {0}@{1}/{2} AND {3}@{4}/{5}".format(
-                        plots_by_id[short_plot_id]['worker'], plots_by_id[short_plot_id]['dir'], plots_by_id[short_plot_id]['file'], displayname, dir, file))
-            plots_by_id[short_plot_id] = { 'hostname': plot['hostname'], 'worker': displayname, 'path': dir, 'file': file }
+            #if short_plot_id in plots_by_id:
+            #    if plot['hostname'] == plots_by_id[short_plot_id]['hostname']:
+            #        app.logger.error("DUPLICATE PLOT FOUND ON SAME WORKER {0} AT BOTH {1}/{2} AND {3}/{4}".format(
+            #            displayname, plots_by_id[short_plot_id]['dir'], plots_by_id[short_plot_id]['file'], dir, file))
+            #        duplicated_on_same_host = True
+            #    else:
+            #        app.logger.error("DUPLICATE PLOT FOUND ON DIFFERENT WORKERS AT {0}@{1}/{2} AND {3}@{4}/{5}".format(
+            #            plots_by_id[short_plot_id]['worker'], plots_by_id[short_plot_id]['dir'], plots_by_id[short_plot_id]['file'], displayname, dir, file))
+            #plots_by_id[short_plot_id] = { 'hostname': plot['hostname'], 'worker': displayname, 'path': dir, 'file': file }
             if not duplicated_on_same_host and (not since or created_at > since):
                 payload.append({
                     "plot_id": short_plot_id,
@@ -115,14 +115,17 @@ def update_chia_plots(plots_status, since):
             db.session.query(p.Plot).filter(p.Plot.blockchain=='chia').delete()
             db.session.commit()
         if len(payload) > 0:
-            chunk_size = 100
+            chunk_size = 10000 # Commit 10k at a time.
             for i in range(0, len(payload), chunk_size):
-                for new_item in payload[i:i+chunk_size]:
-                    item = p.Plot(**new_item)
-                    db.session.add(item)
-            db.session.commit() # Commit every chunk size
+                try:
+                    for new_item in payload[i:i+chunk_size]:
+                        item = p.Plot(**new_item)
+                        db.session.add(item)
+                    db.session.commit() # Commit every chunk size
+                except Exception as ex:
+                    app.logger.error("Failed to store Chia plots being farmed [{0}:{1}] because {2}".format(i, i+chunk_size, str(ex)))
     except Exception as ex:
-        app.logger.error("Failed to load and store Chia plots farming because {0}".format(str(ex)))
+        app.logger.error("Failed to load Chia plots being farmed because {0}".format(str(ex)))
 
 # Sent from a separate fullnode container
 def update_chives_plots(since):
