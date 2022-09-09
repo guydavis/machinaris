@@ -64,6 +64,6 @@ def save_config(config, blockchain):
     app.logger.info("Executing forkfixconfig against updated configuration.")
     if exec_fixconfig():
         app.logger.info("Executing blockchain restart for {0}...".format(blockchain))
-        chia_cli.start_farmer(blockchain)
+        chia_cli.restart_farmer(blockchain)
     else:
         app.logger.info("Failed to execute forkfixconfig using updated configuration.")
