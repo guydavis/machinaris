@@ -93,7 +93,7 @@ def load():
     if cfg['enabled_blockchains'][0] == 'mmx':
         cfg['mmx_reward'] = gather_mmx_reward()
     if cfg['machinaris_mode'] == 'fullnode':
-        cfg['wallet_status'] = wallet_running()
+        cfg['wallet_status'] = "running" if wallet_running() else "paused"
     return cfg
 
 def load_blockchain_info(blockchain, key):
@@ -494,7 +494,7 @@ def gather_mmx_reward():
 def wallet_running():
     blockchain = enabled_blockchains()[0]
     if blockchain == 'mmx':
-        return "unknown" # TODO check for MMX wallet
+        return True # Always running for MMX
     chia_binary_short = get_blockchain_binary(blockchain).split('/')[-1]
     try:
         cmd = "pidof {0}_wallet".format(chia_binary_short)
@@ -503,11 +503,12 @@ def wallet_running():
         pid = outs.decode('utf-8').strip()
         #print("{0} --> {1}".format(cmd, pid))
         if pid:
-            return "running"
+            return True
         else:
-            return "paused"
+            return False
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
     except:
         logging.info(traceback.format_exc())
+    return False

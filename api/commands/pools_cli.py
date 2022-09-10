@@ -84,6 +84,8 @@ def get_pool_login_link(launcher_id):
     return ""
 
 def load_plotnft_show(blockchain):
+    if not globals.wallet_running():
+        return None
     chia_binary = globals.get_blockchain_binary(blockchain)
     wallet_show = ""
     child = pexpect.spawn("{0} plotnft show".format(chia_binary))
