@@ -284,7 +284,7 @@ def wallet():
     return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, 
         reload_seconds=120, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
         chart_data=chart_data, local_cur_sym=fiat.get_local_currency_symbol(), sync_wallet_frequencies=sync_wallet_frequencies, 
-        sync_wallet_frequency = sync_wallet_frequency,lang=get_lang(request))
+        sync_wallet_frequency = str(sync_wallet_frequency), lang=get_lang(request))
 
 @app.route('/keys')
 def keys():

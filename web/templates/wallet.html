@@ -62,7 +62,7 @@
                 <label for="sync_wallet_frequency" class="col-form-label">{{_('Sync Wallets:')}}</label>
                 <select type="text" class="form-control" id="sync_wallet_frequency_field" name="sync_wallet_frequency">
                   {% for frequency in sync_wallet_frequencies %}
-                      <option {% if frequency[0] == selected_sync_wallet_frequency %} selected {% endif %}
+                      <option {% if frequency[0]|string() == sync_wallet_frequency|string() %} selected {% endif %}
                           value="{{frequency[0]}}">{{frequency[1]}}</option>
                   {% endfor %}
                 </select>

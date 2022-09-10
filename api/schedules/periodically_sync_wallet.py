@@ -25,15 +25,14 @@ last_wallet_start_at = None
 
 def execute():
     global initial_offset_delay, last_wallet_start_at, first_invoke_time
-
     # On initial launch, use a random hour offset in the next 24 hours to avoid all 
     # blockchain wallets syncing at the same time, minimize concurrent memory usage.
-    if first_invoke_time < datetime.datetime.now() - datetime.timedelta(hours=initial_offset_delay):
+    if first_invoke_time > datetime.datetime.now() - datetime.timedelta(hours=initial_offset_delay):
         return
-
     blockchain = globals.enabled_blockchains()[0]
     if blockchain in ['mmx']:
         return  # Take no action for MMX at this point, only Chia-based blockchains
+    app.logger.error("Executing periodically_sync_wallet...")
     with app.app_context():
         wallet_settings = load_wallet_settings()
         if not 'wallet_sync_frequency' in wallet_settings:
@@ -47,7 +46,7 @@ def execute():
             chia_cli.pause_wallet(blockchain)  # Wallet running, user wants it to never sync
             return
         elif not wallet_running and wallet_sync_frequency == 0:
-            app.logger.error("SYNC: Wallet not running as user requested no sync ever.")
+            app.logger.error("SYNC: Wallet not running as user requested to never sync it.")
             return # Nothing to do as wallet is paused and user wants it to never sync
         wallet = chia_cli.load_wallet_show(blockchain)
         if wallet_running:

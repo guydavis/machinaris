@@ -147,7 +147,7 @@ def load_keys_show(blockchain):
 
 def restart_farmer(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    if os.path(WALLET_SETTINGS_FILE).exists():
+    if os.path.exists(WALLET_SETTINGS_FILE):
         cmd = "{0} start farmer-no-wallet -r".format(chia_binary)
     else:
         cmd = "{0} start farmer -r".format(chia_binary)

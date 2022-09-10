@@ -483,7 +483,7 @@ class Wallets:
         if worker_status == 'Responding':
             if not details:
                 return None
-            if updated_at <= (datetime.datetime.now() - datetime.timedelta(minutes=5)):
+            if updated_at and updated_at <= (datetime.datetime.now() - datetime.timedelta(minutes=5)):
                 return "Paused"
             if blockchain == 'mmx':
                 pattern = '^Synced:\s+(.*)$'

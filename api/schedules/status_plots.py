@@ -68,7 +68,7 @@ def update_chia_plots(plots_status, since):
         controller_hostname = utils.get_hostname()
         plots_farming = blockchain_rpc.get_all_plots()
         payload = []
-        #plots_by_id = {}
+        plots_by_id = {}
         displaynames = {}
         for plot in plots_farming:
             if plot['hostname'] in displaynames:
@@ -87,16 +87,16 @@ def update_chia_plots(plots_status, since):
                 displaynames[plot['hostname']] = displayname
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
             duplicated_on_same_host = False
-            # Check for duplicated plots on same host 
-            #if short_plot_id in plots_by_id:
-            #    if plot['hostname'] == plots_by_id[short_plot_id]['hostname']:
-            #        app.logger.error("DUPLICATE PLOT FOUND ON SAME WORKER {0} AT BOTH {1}/{2} AND {3}/{4}".format(
-            #            displayname, plots_by_id[short_plot_id]['dir'], plots_by_id[short_plot_id]['file'], dir, file))
-            #        duplicated_on_same_host = True
-            #    else:
-            #        app.logger.error("DUPLICATE PLOT FOUND ON DIFFERENT WORKERS AT {0}@{1}/{2} AND {3}@{4}/{5}".format(
-            #            plots_by_id[short_plot_id]['worker'], plots_by_id[short_plot_id]['dir'], plots_by_id[short_plot_id]['file'], displayname, dir, file))
-            #plots_by_id[short_plot_id] = { 'hostname': plot['hostname'], 'worker': displayname, 'path': dir, 'file': file }
+            if len(plots_farming) < 10000: # Check for duplicated plots on same host, only if we have less 10k plots, avoid memory limits 
+                if short_plot_id in plots_by_id:
+                    if plot['hostname'] == plots_by_id[short_plot_id]['hostname']:
+                        app.logger.error("DUPLICATE PLOT FOUND ON SAME WORKER {0} AT BOTH {1}/{2} AND {3}/{4}".format(
+                            displayname, plots_by_id[short_plot_id]['dir'], plots_by_id[short_plot_id]['file'], dir, file))
+                        duplicated_on_same_host = True
+                    else:
+                        app.logger.error("DUPLICATE PLOT FOUND ON DIFFERENT WORKERS AT {0}@{1}/{2} AND {3}@{4}/{5}".format(
+                            plots_by_id[short_plot_id]['worker'], plots_by_id[short_plot_id]['dir'], plots_by_id[short_plot_id]['file'], displayname, dir, file))
+                plots_by_id[short_plot_id] = { 'hostname': plot['hostname'], 'worker': displayname, 'path': dir, 'file': file }
             if not duplicated_on_same_host and (not since or created_at > since):
                 payload.append({
                     "plot_id": short_plot_id,
