@@ -30,12 +30,12 @@ def load_farm_info(blockchain):
         proc = Popen("{0} farm info && {0} wallet show balance && {0} node info".format(mmx_binary), stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=90)
+            if errs:
+                app.logger.debug("Error from {0} farm summary because {1}".format(blockchain, outs.decode('utf-8')))
         except TimeoutExpired:
             proc.kill()
             proc.communicate()
             raise Exception("The timeout is expired!")
-        if errs:
-            app.logger.debug("Error from {0} farm summary because {1}".format(blockchain, outs.decode('utf-8')))
         return mmx.FarmSummary(outs.decode('utf-8').splitlines(), blockchain)
     elif globals.harvesting_enabled():
         return mmx.HarvesterSummary()
@@ -86,12 +86,12 @@ def load_wallet_show(blockchain):
     proc = Popen("({0} node info | grep Synced) && {0} wallet show".format(mmx_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            raise Exception(errs.decode('utf-8'))
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         raise Exception("The timeout is expired!")
-    if errs:
-        abort(500, description=errs.decode('utf-8'))
     return mmx.Wallet(outs.decode('utf-8'))
 
 def load_blockchain_show(blockchain):
@@ -99,12 +99,12 @@ def load_blockchain_show(blockchain):
     proc = Popen("{0} node info".format(mmx_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            raise Exception(errs.decode('utf-8'))
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         raise Exception("The timeout is expired!")
-    if errs:
-        abort(500, description=errs.decode('utf-8'))
     return mmx.Blockchain(outs.decode('utf-8').splitlines())
 
 def load_connections_show(blockchain):
@@ -112,12 +112,12 @@ def load_connections_show(blockchain):
     proc = Popen("{0} node peers".format(mmx_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            raise Exception(errs.decode('utf-8'))
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         raise Exception("The timeout is expired!")
-    if errs:
-        abort(500, description=errs.decode('utf-8'))
     return mmx.Connections(outs.decode('utf-8').splitlines())
 
 def load_keys_show(blockchain):
@@ -125,10 +125,10 @@ def load_keys_show(blockchain):
     proc = Popen("{0} wallet keys".format(mmx_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            raise Exception(errs.decode('utf-8'))
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         raise Exception("The timeout is expired!")
-    if errs:
-        abort(500, description=errs.decode('utf-8'))
     return mmx.Keys(outs.decode('utf-8').splitlines())

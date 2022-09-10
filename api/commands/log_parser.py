@@ -44,13 +44,13 @@ def recent_challenges(blockchain):
                  stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error(errs.decode('utf-8'))
+            return []
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         raise Exception("The timeout is expired!")
-    if errs:
-        app.logger.error(errs.decode('utf-8'))
-        abort(500, description=errs.decode('utf-8'))
     cli_stdout = outs.decode('utf-8')
     #app.logger.debug("Challenges grep: {0}".format(cli_stdout))
     challenges = log.Challenges(cli_stdout.splitlines(), blockchain)
@@ -70,13 +70,13 @@ def recent_partials(blockchain):
                  stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error(errs.decode('utf-8'))
+            return []
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         raise Exception("The timeout is expired!")
-    if errs:
-        app.logger.error(errs.decode('utf-8'))
-        abort(500, description=errs.decode('utf-8'))
     cli_stdout = outs.decode('utf-8')
     #app.logger.debug("Partials grep: {0}".format(cli_stdout))
     partials = log.Partials(cli_stdout.splitlines())
@@ -101,13 +101,13 @@ def recent_farmed_blocks(blockchain):
                  stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error(errs.decode('utf-8'))
+            return []
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         raise Exception("The timeout is expired!")
-    if errs:
-        app.logger.error(errs.decode('utf-8'))
-        abort(500, description=errs.decode('utf-8'))
     cli_stdout = outs.decode('utf-8')
     #app.logger.info("Blocks grep: {0}".format(cli_stdout))
     blocks = log.Blocks(blockchain, cli_stdout.splitlines())

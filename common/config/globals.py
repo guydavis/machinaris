@@ -289,7 +289,7 @@ def load_plotman_version():
         proc.kill()
         proc.communicate()
     except:
-        logging.info(traceback.format_exc())
+        logging.error(traceback.format_exc())
     last_plotman_version_load_time = datetime.datetime.now()
     return last_plotman_version
 
@@ -317,7 +317,7 @@ def load_chiadog_version():
         proc.kill()
         proc.communicate()
     except:
-        logging.info(traceback.format_exc())
+        logging.error(traceback.format_exc())
     last_chiadog_version_load_time = datetime.datetime.now()
     return last_chiadog_version
 
@@ -345,7 +345,7 @@ def load_madmax_version():
         proc.kill()
         proc.communicate()
     except:
-        logging.info(traceback.format_exc())
+        logging.error(traceback.format_exc())
     last_madmax_version_load_time = datetime.datetime.now()
     return last_madmax_version
 
@@ -487,7 +487,7 @@ def gather_mmx_reward():
         proc.kill()
         proc.communicate()
     except:
-        logging.info(traceback.format_exc())
+        logging.error(traceback.format_exc())
     last_mmx_reward_load_time = datetime.datetime.now()
     return last_mmx_reward
 
@@ -510,5 +510,5 @@ def wallet_running():
         proc.kill()
         proc.communicate()
     except:
-        logging.info(traceback.format_exc())
+        logging.error(traceback.format_exc())
     return False

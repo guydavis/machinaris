@@ -189,30 +189,30 @@ def generate_key(key_path, blockchain):
     proc = Popen("{0} keys generate".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error("{0}".format(errs.decode('utf-8')))
+            flash(_('Unable to generate keys!'), 'danger')
+            return False
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
         flash(_('Timed out while generating keys!'), 'danger')
         flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash(_('Unable to generate keys!'), 'danger')
         return False
     proc = Popen("{0} keys show --show-mnemonic-seed | tail -n 1 > {1}".format(chia_binary, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error("{0}".format(errs.decode('utf-8')))
+            flash(_('Unable to save mnemonic to') + ' {0}'.format(key_path), 'danger')
+            return False
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
         flash(_('Timed out while generating keys!'), 'danger')
         flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash(_('Unable to save mnemonic to') + ' {0}'.format(key_path), 'danger')
         return False
     else:
         app.logger.info("Store mnemonic output: {0}".format(outs.decode('utf-8')))
@@ -234,16 +234,16 @@ def generate_key(key_path, blockchain):
     proc = Popen("{0} start {1}".format(chia_binary, cmd), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error("{0}".format(errs.decode('utf-8')))
+            flash(_('Unable to start farmer. Try restarting the Machinaris container.'), 'danger')
+            return False
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
         flash(_('Timed out while starting farmer! Try restarting the Machinaris container.'), 'danger')
         flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash(_('Unable to start farmer. Try restarting the Machinaris container.'), 'danger')
         return False
     return True
 
@@ -263,17 +263,17 @@ def import_key(key_path, mnemonic, blockchain):
     proc = Popen("{0} keys add -f {1}".format(chia_binary, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error("{0}".format(errs.decode('utf-8')))
+            flash(_('Unable to import provided mnemonic seed phrase!'), 'danger')
+            flash(errs.decode('utf-8'), 'warning')
+            return False
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
         flash(_('Timed out while adding key!'), 'danger')
         flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash(_('Unable to import provided mnemonic seed phrase!'), 'danger')
-        flash(errs.decode('utf-8'), 'warning')
         return False
     if outs:
         app.logger.debug(outs.decode('utf-8'))
@@ -284,16 +284,16 @@ def import_key(key_path, mnemonic, blockchain):
     proc = Popen("{0} start {1} -r".format(chia_binary, cmd), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error("{0}".format(errs.decode('utf-8')))
+            flash(_('Unable to start farmer. Try restarting the Machinaris container.'), 'danger')
+            return False
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
         flash(_('Timed out while starting farmer! Try restarting the Machinaris container.'), 'danger')
         flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash(_('Unable to start farmer. Try restarting the Machinaris container.'), 'danger')
         return False
     if outs:
         app.logger.debug(outs.decode('utf-8'))

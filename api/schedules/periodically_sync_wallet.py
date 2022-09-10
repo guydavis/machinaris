@@ -61,7 +61,7 @@ def execute():
                 chia_cli.start_wallet(blockchain)  # Wallet running, user wants it to never sync
                 last_wallet_start_at = datetime.datetime.now()
             else:
-                app.logger.info("SYNC: NOT starting wallet sync yet as less than {0} hours since last start {0}.".format(last_wallet_start_at.strftime('%Y-%m-%d %H:%M:%S')))
+                app.logger.info("SYNC: NOT starting wallet sync yet as less than {0} hours since last start {1}.".format(wallet_sync_frequency, last_wallet_start_at.strftime('%Y-%m-%d %H:%M:%S')))
 
 def load_wallet_settings():
     data = {}

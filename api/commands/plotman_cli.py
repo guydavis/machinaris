@@ -59,12 +59,12 @@ def load_plotting_summary():
                  'status'), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            raise Exception("Errors during plotman status:\n {0}".format(errs.decode('utf-8')))
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         raise Exception("The timeout expired during plotman status.")
-    if errs:
-        raise Exception("Errors during plotman status:\n {0}".format(errs.decode('utf-8')))
     cli_stdout = outs.decode('utf-8')
     return plotman.PlottingSummary(cli_stdout.splitlines(), get_plotman_pid())
 
@@ -260,13 +260,13 @@ def analyze(plot_file):
             PLOTMAN_SCRIPT,'analyze', plot_log_file), stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=90)
+            if errs:
+                app.logger.error(errs.decode('utf-8'))
+                raise Exception("Failed to analyze plot.")
         except TimeoutExpired:
             proc.kill()
             proc.communicate()
             raise Exception("The timeout is expired attempting to start plot analyze.")
-        if errs:
-            app.logger.error(errs.decode('utf-8'))
-            raise Exception("Failed to analyze plot.")
         return outs.decode('utf-8')
     return None
 
@@ -276,11 +276,11 @@ def get_prometheus_metrics():
                  'prometheus'), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            raise Exception("Errors during plotman call:\n {0}".format(errs.decode('utf-8')))
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         raise Exception("The timeout expired during plotman call.")
-    if errs:
-        raise Exception("Errors during plotman call:\n {0}".format(errs.decode('utf-8')))
     cli_stdout = outs.decode('utf-8')
     return cli_stdout

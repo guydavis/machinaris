@@ -40,15 +40,15 @@ def exec_fixconfig():
     proc = Popen("echo 'Y' | ./forkfixconfig all", cwd='/forktools', stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if outs:
+            app.logger.info("{0}".format(outs.decode('utf-8')))
+        if errs:
+            app.logger.info("{0}".format(errs.decode('utf-8')))
+            return False
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
-        return False
-    if outs:
-        app.logger.info("{0}".format(outs.decode('utf-8')))
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
         return False
     return True
 

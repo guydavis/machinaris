@@ -40,12 +40,12 @@ def load_drives_status():
         proc = Popen("smartctl --scan", stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=30)
+            if errs:
+                app.logger.info("Error from smartctl scan because {0}".format(outs.decode('utf-8')))
         except TimeoutExpired:
             proc.kill()
             proc.communicate()
             raise Exception("The timeout for smartctl scan expired!")
-        if errs:
-            app.logger.info("Error from smartctl scan because {0}".format(outs.decode('utf-8')))
         devices = load_smartctl_overrides()
         # Now add devices from the scan only if 
         for line in outs.decode('utf-8').splitlines():
@@ -82,6 +82,9 @@ def load_drive_info(device_name, device_settings):
     proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=10)
+        if errs:
+            app.logger.error("Error from {0} because {1}".format(cmd, outs.decode('utf-8')))
+            return None
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
@@ -89,9 +92,6 @@ def load_drive_info(device_name, device_settings):
         return None
     if proc.returncode != 0:
         app.logger.info("Non-zero exit code from {0} was {1}".format(cmd, proc.returncode))
-        return None
-    if errs:
-        app.logger.info("Error from {0} because {1}".format(cmd, outs.decode('utf-8')))
         return None
     return outs.decode('utf-8')
 
