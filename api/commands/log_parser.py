@@ -66,7 +66,7 @@ def recent_partials(blockchain):
     rotated_log_file = ''
     if os.path.exists(log_file + '.1'):
         rotated_log_file = log_file + '.1'
-    proc = Popen("grep -h --text -C1 -i partial {0} {1} | tail -n {2}".format(rotated_log_file, log_file, PARTIALS_TO_LOAD),
+    proc = Popen("grep -h --text -i 'submitting partial' {0} {1} | tail -n {2}".format(rotated_log_file, log_file, PARTIALS_TO_LOAD),
                  stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
