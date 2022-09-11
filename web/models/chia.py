@@ -363,7 +363,7 @@ class Wallets:
                 displayname = worker.displayname
                 try:
                     service_status = json.loads(worker.config)['wallet_status']
-                    app.logger.info("For {0} found wallet service status: {1}".format(wallet.blockchain, service_status))
+                    app.logger.debug("For {0} found wallet service status: {1}".format(wallet.blockchain, service_status))
                 except:
                     pass
             except:
@@ -375,11 +375,14 @@ class Wallets:
                 hot_balance = self.sum_chia_wallet_balance(wallet.hostname, wallet.blockchain, False)
             try:
                 cold_balance = converters.round_balance(float(wallet.cold_balance))
-            except:
+            except Exception as ex:
+                app.logger.error("Failed to convert wallet.cold_balance {0} of type {1}".format(wallet.cold_balance, type(wallet.cold_balance), str(ex)))
                 cold_balance = ''
             try:
-                total_balance = float(hot_balance) + float(cold_balance)
-            except:
+                total_balance = float(hot_balance) + float(wallet.cold_balance)
+            except Exception as ex:
+                app.logger.error("Either failed to convert hot_balance  {0} of type {1}".format(hot_balance, type(hot_balance), str(ex)))
+                app.logger.error("OR failed     to convert wallet.cold_balance {0} of type {1}".format(wallet.cold_balance, type(wallet.cold_balance), str(ex)))
                 total_balance = hot_balance
             try:
                 blockchain_symbol = globals.get_blockchain_symbol(wallet.blockchain).lower()
