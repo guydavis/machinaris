@@ -60,7 +60,7 @@ msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
 "another blockchain."
 msgstr ""
-"Kein passender Worker für %(blockchain)s auf %(worker)s gefundenBitte "
+"Kein passender Worker für %(blockchain)s auf %(worker)s gefunden. Bitte "
 "andere Blockchain wählen"
 
 #: routes.py:475
@@ -119,23 +119,23 @@ msgstr "Container Pfad"
 
 #: actions/chia.py:195 actions/chia.py:209
 msgid "Timed out while generating keys!"
-msgstr ""
+msgstr "Keys konnten nicht rechtzeitig generiert werden"
 
 #: actions/chia.py:200
 msgid "Unable to generate keys!"
-msgstr ""
+msgstr "Keys konnten nicht generiert werden"
 
 #: actions/chia.py:214
 msgid "Unable to save mnemonic to"
-msgstr ""
+msgstr "Mnemonic konnte nicht gespeichert werden. Pfad: "
 
 #: actions/chia.py:221
 msgid "does not contain a 24-word mnemonic!"
-msgstr ""
+msgstr "enthält keine 24 Wort Mnemonic Seed Phrase!"
 
 #: actions/chia.py:224
 msgid "was unreadable or not found."
-msgstr ""
+msgstr "wurde nicht gefunden oder konnte nicht gelesen werden"
 
 #: actions/chia.py:226
 #, python-format
@@ -147,7 +147,7 @@ msgstr ""
 
 #: actions/chia.py:240 actions/chia.py:290
 msgid "Timed out while starting farmer! Try restarting the Machinaris container."
-msgstr ""
+msgstr "Zeitüberschreitung während der Farmer gestartet wurde! Bitte den Container neu starten"
 
 #: actions/chia.py:245 actions/chia.py:295
 msgid "Unable to start farmer. Try restarting the Machinaris container."
@@ -155,11 +155,11 @@ msgstr "Es sind keine Geräte von Machinaris erreichbar"
 
 #: actions/chia.py:252
 msgid "Did not receive a 24-word mnemonic seed phrase!"
-msgstr ""
+msgstr "Keine 24 Wort Mnemonic Seed Phrase empfangen"
 
 #: actions/chia.py:256
 msgid "Skipping key import as file exists and is NOT empty!"
-msgstr ""
+msgstr "Key importierung übersprungen. Die Datei existiert bereits und ist NICHT leer!"
 
 #: actions/chia.py:257
 msgid "In container path:"
@@ -167,11 +167,11 @@ msgstr "Container Pfad"
 
 #: actions/chia.py:269
 msgid "Timed out while adding key!"
-msgstr ""
+msgstr "Zeitüberschreitung während dem hinzufügen des Keys!"
 
 #: actions/chia.py:274
 msgid "Unable to import provided mnemonic seed phrase!"
-msgstr ""
+msgstr "Importierung der Mnemonic Seed Phrase nicht möglich!"
 
 #: actions/chia.py:299
 #, python-format
@@ -179,96 +179,101 @@ msgid ""
 "Welcome! Your mnemonic key was imported. Please visit the "
 "%(link_open)sWiki%(link_close)s to get started with Machinaris. Please "
 "allow 15 minutes for Chia to begin syncing with peers."
-msgstr ""
+msgstr "Willkommen! Deine Mnemonic Seed Phrase wurde importiert! Bitte folge"
+"%(link_open)sWiki%(link_close)s um Machinaris zu erkunden. Bitte "
+"warte mindestens 15 min damit sich Machinaris mit Peers syncronisieren kann."
 
 #: actions/chia.py:314 actions/chia.py:339
 msgid "Failed to connect to worker to add connection. Please check logs."
-msgstr ""
+msgstr "Fehler beim Verbinden. Bitte prüfe die Logs"
 
 #: actions/chia.py:318
 #, python-format
 msgid "Invalid connection \"%(connection)s\" provided. Must be HOST:PORT."
-msgstr ""
+msgstr "Formatierung von \"%(connection)s\" fehlerhaft! Richtige Formatierung: HOST:PORT"
 
 #: actions/chia.py:327
 #, python-format
 msgid ""
 "Connection added to %(blockchain)s and sync engaging! Please wait a few "
 "minutes..."
-msgstr ""
+msgstr "Verbindung zu %(blockchain)s hinzugefügt und die syncronisierung gestartet! "
+"Bitte warte ein paar minuten"
 
 #: actions/chia.py:329
 #, python-format
 msgid ""
 "Node peers from AllTheBlocks added to %(blockchain)s and sync engaging! "
 "Please wait a few minutes..."
-msgstr ""
+msgstr "Verbindung von AllTheBlocks zu %(blockchain)s hinzugefügt und die syncronisierung gestartet! "
+"Bitte warte ein paar minuten"
 
 #: actions/chia.py:343
 msgid ""
 "Unknown error occurred attempting to remove connections. Please check "
 "logs."
-msgstr ""
+msgstr "Ein unbekannter fehler beim Trennen der Verbindung ist aufgetreten. Bitte Prüfe die Logs"
 
 #: actions/chia.py:346
 msgid "Connection removed from"
-msgstr "Verbindungsfehler"
+msgstr "Verbindungsfehler: Verbindung getrennt von"
 
 #: actions/chia.py:361
 #, python-format
 msgid "Unable to read addresses from %(file)s because %(exception)s"
-msgstr ""
+msgstr "Das Lesen der Adressen von %(file)s ist fehlgeschlagen! Grund: %(exception)s"
 
 #: actions/chia.py:376
 #, python-format
 msgid ""
 "Successfully stored cold wallet addresses for %(blockchain)s. Please "
 "allow a few minutes for updated values to appear below."
-msgstr ""
+msgstr "Die Cold-Wallet Adresse für %(blockchain)s wurde gespeichert"
+"Warte ein paar minuten bis sie unten erscheint"
 
 #: actions/chia.py:378
 #, python-format
 msgid "Unable to store addresses in %(file)s because %(exception)s"
-msgstr ""
+msgstr "Adressen konnten nicht in %(file)s gespeichert werden. Grund: %(exception)s"
 
 #: actions/chia.py:388
 msgid ""
 "Sorry, no plot check log found. Please wait for scheduled plot check to "
 "run."
-msgstr ""
+msgstr "Plot Check log konnte nicht gefunden werden. Warte bis ein geplanter Plot Check automatisch anläuft"
 
 #: actions/chia.py:403 templates/summary.html:86
 msgid "Wallet"
-msgstr ""
+msgstr "Wallet"
 
 #: actions/chiadog.py:44
 msgid "Nice! Chiadog's config.yaml validated and saved successfully."
-msgstr ""
+msgstr "Nice! Chiadog's config.yml wurde validiert und erfolgreich gespeichert"
 
 #: actions/chiadog.py:66
 msgid "Failed to start Chiadog monitoring! Please see log files."
-msgstr ""
+msgstr "Chiadog Monitoring konnte nicht gestartet werden. Bitte prüfe die Logs"
 
 #: actions/chiadog.py:68
 msgid "Chiadog monitoring started.  Notifications will be sent."
-msgstr ""
+msgstr "Chiadog Monitoring gestartet. Benachrichtigungen werden gesendet"
 
 #: actions/chiadog.py:76
 msgid "Failed to stop Chiadog monitoring! Please see log files."
-msgstr ""
+msgstr "Chiadog Monitoring konnte nicht gestoppt werden! Bitte prüfe die Logs"
 
 #: actions/chiadog.py:78
 msgid "Chiadog monitoring stopped successfully.  No notifications will be sent!"
-msgstr ""
+msgstr "Chiadog Monitoring wurde erfolgreich beendet. Es werden keine Benachrichtigungen mehr gesendet"
 
 #: actions/drives.py:33
 #, python-format
 msgid "Oops! No smartctl info found for device %(device)s on %(hostname)s."
-msgstr ""
+msgstr "Keine smartctl Infos für %(device)s unter %(hostname)s."
 
 #: actions/drives.py:54
 msgid "Failed to save display settings. Please check Web Log."
-msgstr ""
+msgstr "Erscheinungseinstellungen konnten nicht gespeichert werden. Bitte prüfe die Logs"
 
 #: actions/drives.py:56
 msgid "Saved display settings."
@@ -278,23 +283,26 @@ msgstr "Lokale Währungseinstellung gespeichert"
 msgid ""
 "Removed selected drive status.  Please allow 15 minutes for active "
 "devices to be listed below again."
-msgstr ""
+msgstr "Festplattenstatus entfernt. Bitte warte 15 min bis alle Geräte "
+"erneut erscheinen."
 
 #: actions/drives.py:83
 msgid ""
 "Removed all drive status.  Please allow 15 minutes for active devices to "
 "be listed below again."
-msgstr ""
+msgstr "Festplattenstatus entfernt. Bitte warte 15 min bis alle Geräte "
+"erneut erscheinen."
 
 #: actions/forktools.py:19
 msgid "Failed to save config to farmer. Please check log files."
-msgstr ""
+msgstr "Konfiguration konnte nicht gespeichert werden. Bitte prüfe die Logs"
 
 #: actions/forktools.py:22
 msgid ""
 "Nice! Tools config validated and saved successfully. Worker services now "
 "restarting. Please allow 15 minutes to take effect."
-msgstr ""
+msgstr "Tools konfiguration gespeichert. Die Worker werden nun neu gestartet."
+"Dies kann bis zu 15 min dauern.
 
 #: actions/plotman.py:44 models/plotman.py:70
 msgid "Idle"
@@ -311,34 +319,35 @@ msgstr "Beendet"
 
 #: actions/plotman.py:66
 msgid "Failed to start Plotman plotting run! Please see log files."
-msgstr ""
+msgstr "Plotman Plotting konnte nicht gestartet werden! Bitte prüfe die Logs"
 
 #: actions/plotman.py:69
 msgid "Plotman started successfully."
 msgstr "Farming wurde nicht erfolgreich gestartet"
 
 #: actions/plotman.py:92
-msgid "Failed to action all plots!"
-msgstr ""
+msgid "Failed to %(action)s all plots!"
+msgstr "Alle Plots konnten nicht %(action)s werden!"
 
 #: actions/plotman.py:95
 #, python-format
 msgid "Plotman was able to %(action)s the selected plots successfully."
-msgstr ""
+msgstr "Plotman konnte die ausgewählten Plots erfolgreich %(action)s."
 
 #: actions/plotman.py:117
 msgid "Failed to stop Plotman plotting run!"
-msgstr ""
+msgstr "Plotman konnte nicht gestoppt werden!"
 
 #: actions/plotman.py:121
 msgid ""
 "Plotman stopped successfully. No new plots will be started, but existing "
 "ones will continue on."
-msgstr ""
+msgstr "Plotman erfolgreich gestoppt. Es werden keine neuen Plots gestartet!"
+"Laufende Plots werden aber weiter plotten.
 
 #: actions/plotman.py:131
 msgid "Failed to start Plotman archiver! Please see log files."
-msgstr ""
+msgstr "Plotman archivierung konnte nicht gestartet werden! Prüfe die Logs"
 
 #: actions/plotman.py:134
 msgid "Archiver started successfully."
@@ -346,7 +355,7 @@ msgstr "Farming wurde nicht erfolgreich gestartet"
 
 #: actions/plotman.py:144
 msgid "Failed to stop Plotman archiver. Please see:"
-msgstr ""
+msgstr "Plotman archivierer konnte nicht gestoppt werden!Prüfe die Logs"
 
 #: actions/plotman.py:147
 msgid "Archiver stopped successfully."
@@ -358,36 +367,38 @@ msgid ""
 "Current configuration will plot %(open_b)sSOLO%(close_b)s plots, not "
 "%(open_b)sPORTABLE%(close_b)s plots for pooling. If this is not your "
 "choice, please see the %(wiki_open)swiki%(wiki_close)s."
-msgstr ""
+msgstr "Die jetzige Konfiguration wird %(open_b)sSOLO%(close_b)s Plots erstellen, keine"
+"%(open_b)sPORTABLE%(close_b)s plots geeignet für Pools! Willst du das nicht "
+"folge bitte dem link zum Wiki: %(wiki_open)swiki%(wiki_close)s"
 
 #: actions/plotman.py:231
 msgid "Updated plotman.yaml failed validation! Fix and save or refresh page."
-msgstr ""
+msgstr "plotman.yaml konnte nicht validiert werden. Korrigiere den Fehler und speichere oder aktualisier die Seite"
 
 #: actions/plotman.py:236
 msgid "Failed to save config to plotter. Please check log files."
-msgstr ""
+msgstr "Konfiguration konnte nicht für den Plotter gespeichert werden. Bitte Prüfe den Log!"
 
 #: actions/plotman.py:240
 msgid "Nice! Plotman's plotman.yaml validated and saved successfully."
-msgstr ""
+msgstr "Plotmans plotman.yaml erfolgreich gespeichert"
 
 #: actions/plotman.py:250
 msgid ""
 "Sorry, no plotting job log found. Perhaps plot was made outside "
 "Machinaris?"
-msgstr ""
+msgstr "Keinen Plotting Job Log gefunden. Wurde der Plot nicht mit Machinaris erstellt?"
 
 #: actions/pools.py:74
 msgid ""
 "Failed to update Pool settings! Please check the logs from the Workers "
 "page."
-msgstr ""
+msgstr "Pool einstellungen konnten nicht gespeichert werden. Überprüfe die Logs!"
 
 #: actions/stats.py:82 actions/stats.py:117 actions/stats.py:134
 #: actions/stats.py:154 actions/stats.py:156
 msgid "in last day."
-msgstr "währen des letzten tags"
+msgstr "während des letzten tags"
 
 #: actions/stats.py:400
 msgid "secs"
@@ -400,7 +411,7 @@ msgstr "Stunde"
 #: actions/stats.py:440 templates/index.html:97
 #: templates/views/index_script_block.js:51
 msgid "Farmed Coins"
-msgstr ""
+msgstr "Erfarmte Coins"
 
 #: actions/stats.py:457 templates/index.html:89
 #: templates/views/index_script_block.js:56 templates/wallet.html:122
@@ -409,23 +420,23 @@ msgstr "Totale Bilanz"
 
 #: actions/stats.py:474
 msgid "Wallets Total"
-msgstr ""
+msgstr "Wallets Bilanz"
 
 #: actions/stats.py:474
 msgid "Fiat Currency"
-msgstr ""
+msgstr "Fiat Währung"
 
 #: actions/stats.py:494 templates/index.html:105
 msgid "Netspace Size"
-msgstr ""
+msgstr "Netspace Größe"
 
 #: actions/stats.py:495 actions/stats.py:555
 msgid "Size"
-msgstr ""
+msgstr "Größe"
 
 #: actions/stats.py:533 templates/farming/workers.html:77
 msgid "Plot Counts"
-msgstr ""
+msgstr "Anzahl der Plots"
 
 #: actions/stats.py:554 templates/index.html:78
 msgid "Plots Size"
@@ -433,15 +444,15 @@ msgstr "Gesamte Plot Größe"
 
 #: actions/stats.py:569 actions/stats.py:570
 msgid "Effort"
-msgstr ""
+msgstr "Aufwand"
 
 #: actions/stats.py:621 templates/summary.html:84
 msgid "ETW"
-msgstr ""
+msgstr "ETW"
 
 #: actions/stats.py:622
 msgid "Estimated Time to Win"
-msgstr ""
+msgstr "Zeit bis zum nächsten Block win"
 
 #: actions/stats.py:622 models/chia.py:149 models/chia.py:260
 #: models/drives.py:44
@@ -450,7 +461,7 @@ msgstr "Tage"
 
 #: actions/stats.py:628 actions/stats.py:636
 msgid "plots"
-msgstr ""
+msgstr "Plots"
 
 #: actions/stats.py:650 templates/farming/workers.html:170
 #: templates/worker.html:206 templates/worker.html:270
