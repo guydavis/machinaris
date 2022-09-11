@@ -24,7 +24,7 @@ blp = Blueprint(
 class Actions(MethodView):
 
     def post(self):
-        app.logger.error("Received /actions request with {0}".format(request.data))
+        app.logger.info("Received /actions request with {0}".format(request.data))
         try:
             body = json.loads(request.data)
             service = body['service']
