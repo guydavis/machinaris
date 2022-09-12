@@ -94,6 +94,8 @@ def on_starting(server):
     #scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=status_warnings.collect, name="farms", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=periodically_sync_wallet.execute, name="periodically_sync_wallet", trigger='interval', seconds=60) # Test immediately
+    #scheduler.add_job(func=status_warnings.collect, name="status_warnings", trigger='interval', seconds=60) # Test immediately
+    
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()

@@ -370,7 +370,7 @@ class RPC:
 
                 invalid_plots = []
                 results = await farmer.get_harvester_plots_invalid(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                invalid_plots.extend[results['plots']]
+                invalid_plots.extend(results['plots'])
                 farmer.close()
                 await farmer.await_closed()
 
@@ -379,24 +379,29 @@ class RPC:
                     'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
                 )
                 missing_keys = []
-                results = await farmer.get_harvester_keys_missing(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                missing_keys.extend[results['plots']]
+                results = await farmer.get_harvester_plots_keys_missing(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
+                missing_keys.extend(results['plots'])
                 farmer.close()
                 await farmer.await_closed()
 
-                # Plots Duplicated
+                # Plots Duplicated, only on a single worker, not across entire farm
                 farmer = await FarmerRpcClient.create(
                     'localhost', uint16(farmer_rpc_port), DEFAULT_ROOT_PATH, config
                 )
                 duplicate_plots = []
                 results = await farmer.get_harvester_plots_duplicates(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                duplicate_plots.extend[results['plots']]
+                duplicate_plots.extend(results['plots'])
                 farmer.close()
                 await farmer.await_closed()
 
-                harvesters.append({'host': host, 'node': node_id, 'invalid_plots': invalid_plots, 'missing_keys': missing_keys, 'duplicate_plots': duplicate_plots})
-
+                harvesters[host] = \
+                    {
+                        'node': node_id, 
+                        'invalid_plots': invalid_plots, 
+                        'missing_keys': missing_keys, 
+                        'duplicate_plots': duplicate_plots
+                    }
         except Exception as ex:
-            app.logger.info("Error getting harvester warnings: {1}".format(str(ex)))
+            app.logger.info("Error getting harvester warnings: {0}".format(str(ex)))
             traceback.print_exc()
         return harvesters

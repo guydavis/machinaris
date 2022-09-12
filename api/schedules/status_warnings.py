@@ -20,6 +20,8 @@ def collect():
         try:
             if blockchain == 'chia':
                 warnings = rpc.RPC().get_harvester_warnings()
+                app.logger.info("HARVESTER WARNINGS....................")
+                app.logger.info(warnings)
             #payload = {
             #    "hostname": hostname,
             #    "blockchain": blockchain,
@@ -27,3 +29,4 @@ def collect():
             #utils.send_post('/warnings/', payload, debug=False)
         except Exception as ex:
             app.logger.info("Failed to load and send warnings because {0}".format(str(ex)))
+            traceback.print_exc()
