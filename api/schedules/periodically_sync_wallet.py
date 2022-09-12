@@ -25,11 +25,12 @@ last_wallet_start_at = None
 
 def execute():
     global initial_offset_delay, last_wallet_start_at, first_invoke_time
+    blockchain = globals.enabled_blockchains()[0]
     # On initial launch, use a random hour offset in the next 24 hours to avoid all 
     # blockchain wallets syncing at the same time, minimize concurrent memory usage.
     if first_invoke_time > datetime.datetime.now() - datetime.timedelta(hours=initial_offset_delay):
+        app.logger.info("Still in initial offset delay of {0} hours for blockchain {1}. Taking no action.".format(initial_offset_delay, blockchain))
         return
-    blockchain = globals.enabled_blockchains()[0]
     if blockchain in ['mmx']:
         return  # Take no action for MMX at this point, only Chia-based blockchains
     with app.app_context():
@@ -39,8 +40,6 @@ def execute():
         wallet_sync_frequency = wallet_settings['wallet_sync_frequency']
         wallet_running = globals.wallet_running()
         app.logger.info("Executing periodically_sync_wallet with wallet_sync_frequency={0} and wallet_running={1}...".format(wallet_sync_frequency, wallet_running))
-        if not last_wallet_start_at: # Start tracking now if not launched by this schedule
-            last_wallet_start_at = datetime.datetime.now()
         if wallet_running and wallet_sync_frequency == 0:
             app.logger.info("SYNC: Pausing running wallet when user requested to never sync it.")
             chia_cli.pause_wallet(blockchain)  # Wallet running, user wants it to never sync
@@ -56,7 +55,7 @@ def execute():
                 app.logger.info("SYNC: Wallet running and is now synced.  Pausing wallet now, after earlier sync start at {0}".format(last_wallet_start_at.strftime('%Y-%m-%d %H:%M:%S')))
                 chia_cli.pause_wallet(blockchain)  # Wallet running, currently synced, so stop it until next sync time
         else: # Wallet not running, so check to see if a sync is due
-            if last_wallet_start_at < datetime.datetime.now() - datetime.timedelta(hours=int(wallet_sync_frequency)):
+            if not last_wallet_start_at or (last_wallet_start_at < datetime.datetime.now() - datetime.timedelta(hours=int(wallet_sync_frequency))):
                 app.logger.info("SYNC: Starting wallet sync as has not been running for {0} hours now.".format(wallet_sync_frequency))
                 chia_cli.start_wallet(blockchain)  # Wallet running, user wants it to never sync
                 last_wallet_start_at = datetime.datetime.now()

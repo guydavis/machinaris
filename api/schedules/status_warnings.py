@@ -14,7 +14,6 @@ from api.commands import rpc
 from api import utils
 
 def collect():
-    app.logger.info("Executing status_warnings...")
     with app.app_context():
         hostname = utils.get_hostname()
         blockchain = globals.enabled_blockchains()[0]

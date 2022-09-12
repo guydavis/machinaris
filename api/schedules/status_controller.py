@@ -23,7 +23,6 @@ from api import app
 from api import utils
 
 def update():
-    app.logger.info("Executing status_controller...")
     with app.app_context():
         try:
             workers = db.session.query(w.Worker).order_by(w.Worker.hostname).all()

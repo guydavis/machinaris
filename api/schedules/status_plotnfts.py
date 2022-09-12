@@ -33,7 +33,6 @@ def extract_launcher_id(plotnft):
     return None
 
 def update():
-    app.logger.info("Executing status_plotnfts...")
     with app.app_context():
         try:
             for blockchain in globals.enabled_blockchains():

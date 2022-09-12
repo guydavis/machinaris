@@ -44,7 +44,6 @@ def open_status_json():
     return status
 
 def update():
-    app.logger.info("Executing status_plots...")
     global last_full_send_time
     with app.app_context():
         since = (datetime.datetime.now() - datetime.timedelta(minutes=FULL_SEND_INTERVAL_MINS)).strftime("%Y-%m-%d %H:%M")

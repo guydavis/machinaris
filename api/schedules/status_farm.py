@@ -29,7 +29,6 @@ def safely_gather_plots_size_gibs(plots_size):
     return plots_size_gibs
 
 def update():
-    app.logger.info("Executing status_farms...")
     with app.app_context():
         hostname = utils.get_hostname()
         blockchain = globals.enabled_blockchains()[0]
