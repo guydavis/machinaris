@@ -472,7 +472,7 @@ def load_total_balances(current_currency_symbol):
     #app.logger.info(dates)
     #app.logger.info(values)
     return { 'title': _('Wallets Total') + ' (' + current_currency_symbol + ')', 'y_axis_title': _('Fiat Currency'),
-         'dates': dates, 'vals': values}
+         'dates': dates, 'vals': values, 'last_value': " - {0} {1}".format(last_value, current_currency_symbol) }
 
 def load_netspace_size(blockchain):
     dates = []

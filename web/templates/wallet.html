@@ -129,7 +129,7 @@
   </div>
 
 <header class="pb-3 mb-4 border-bottom">
-    <span class="fs-4">{{_('Wallet Summary')}}</span>
+    <span class="fs-4">{{_('Wallet Summary')}} {{ chart_data.last_value }} </span>
 </header>
 
 {% if chart_data.dates|length > 0 %}
