@@ -17,8 +17,8 @@ from api import app, db
 from api.commands import mmx_cli, rpc
 from api import utils
 
-# Due to database load, only send full plots list every X minutes
-FULL_SEND_INTERVAL_MINS = 15
+# Due to database load, only store full plots list every X minutes
+FULL_SEND_INTERVAL_MINS = 60
 
 # Holds the cached status of Plotman analyze and Chia plots check
 STATUS_FILE = '/root/.chia/plotman/status.json'
@@ -44,7 +44,6 @@ def open_status_json():
     return status
 
 def update():
-    app.logger.info("Executing status_plots...")
     global last_full_send_time
     with app.app_context():
         since = (datetime.datetime.now() - datetime.timedelta(minutes=FULL_SEND_INTERVAL_MINS)).strftime("%Y-%m-%d %H:%M")
@@ -64,50 +63,70 @@ def update():
 
 def update_chia_plots(plots_status, since):
     try:
+        if not since:  # If no filter, delete all for this blockchain before storing again
+            db.session.query(p.Plot).filter(p.Plot.blockchain=='chia').delete()
+            db.session.commit()
         blockchain_rpc = rpc.RPC()
         controller_hostname = utils.get_hostname()
         plots_farming = blockchain_rpc.get_all_plots()
-        payload = []
+        plots_by_id = {}
         displaynames = {}
-        for plot in plots_farming:
-            if plot['hostname'] in displaynames:
-                displayname = displaynames[plot['hostname']]
-            else: # Look up displayname
+        app.logger.info("Chia farmer RPC reports {0} total plots in this farm.".format(len(plots_farming)))
+        chunk_size = 100 # Process only 10k plots at a time.
+        for i in range(0, len(plots_farming), chunk_size):  # batch-size loop
+            payload = []
+            for plot in plots_farming[i:i+chunk_size]: # per-plot loop
+                if plot['hostname'] in displaynames:
+                    displayname = displaynames[plot['hostname']]
+                else: # Look up displayname
+                    try:
+                        hostname = plot['hostname']
+                        if plot['hostname'] in ['127.0.0.1']:
+                            hostname = controller_hostname
+                        #app.logger.info("Found worker with hostname '{0}'".format(hostname))
+                        displayname = db.session.query(w.Worker).filter(w.Worker.hostname==hostname, 
+                            w.Worker.blockchain=='chia').first().displayname
+                    except:
+                        app.logger.info("status_plots: Unable to find a worker with hostname '{0}'".format(plot['hostname']))
+                        displayname = plot['hostname']
+                    displaynames[plot['hostname']] = displayname
+                short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
+                duplicated_on_same_host = False
+                if len(plots_farming) < 10000: # Check for duplicated plots on same host, only if we have less 10k total plots to avoid memory limits 
+                    if short_plot_id in plots_by_id:
+                        if plot['hostname'] == plots_by_id[short_plot_id]['hostname']:
+                            app.logger.error("DUPLICATE PLOT FOUND ON SAME WORKER {0} AT BOTH {1}/{2} AND {3}/{4}".format(
+                                displayname, plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], dir, file))
+                            duplicated_on_same_host = True
+                        else:
+                            app.logger.error("DUPLICATE PLOT FOUND ON DIFFERENT WORKERS AT {0}@{1}/{2} AND {3}@{4}/{5}".format(
+                                plots_by_id[short_plot_id]['worker'], plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], displayname, dir, file))
+                    plots_by_id[short_plot_id] = { 'hostname': plot['hostname'], 'worker': displayname, 'path': dir, 'file': file }
+                if not duplicated_on_same_host and (not since or created_at > since):
+                    payload.append({
+                        "plot_id": short_plot_id,
+                        "blockchain": 'chia',
+                        "hostname": controller_hostname if plot['hostname'] in ['127.0.0.1'] else plot['hostname'],
+                        "displayname": displayname,
+                        "dir": dir,
+                        "file": file,
+                        "type": plot['type'],
+                        "created_at": created_at,
+                        "plot_analyze": analyze_status(plots_status, short_plot_id),
+                        "plot_check": check_status(plots_status, short_plot_id),
+                        "size": plot['file_size']
+                    })
+            if len(payload) > 0:
                 try:
-                    hostname = plot['hostname']
-                    if plot['hostname'] in ['127.0.0.1']:
-                        hostname = controller_hostname
-                    #app.logger.info("Found worker with hostname '{0}'".format(hostname))
-                    displayname = db.session.query(w.Worker).filter(w.Worker.hostname==hostname, 
-                        w.Worker.blockchain=='chia').first().displayname
-                except:
-                    app.logger.info("status_plots: Unable to find a worker with hostname '{0}'".format(plot['hostname']))
-                    displayname = plot['hostname']
-                displaynames[plot['hostname']] = displayname
-            short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
-            if not since or created_at > since:
-                payload.append({
-                    "plot_id": short_plot_id,
-                    "blockchain": 'chia',
-                    "hostname": controller_hostname if plot['hostname'] in ['127.0.0.1'] else plot['hostname'],
-                    "displayname": displayname,
-                    "dir": dir,
-                    "file": file,
-                    "type": plot['type'],
-                    "created_at": created_at,
-                    "plot_analyze": analyze_status(plots_status, short_plot_id),
-                    "plot_check": check_status(plots_status, short_plot_id),
-                    "size": plot['file_size']
-                })
-        if not since:  # If no filter, delete all for this blockchain before sending again
-            db.session.query(p.Plot).filter(p.Plot.blockchain=='chia').delete()
-        if len(payload) > 0:
-            for new_item in payload:
-                item = p.Plot(**new_item)
-                db.session.add(item)
-        db.session.commit()
+                    for new_item in payload: # Maximum of chunk_size plots inserted at a time.
+                        item = p.Plot(**new_item)
+                        db.session.add(item)
+                    db.session.commit() # Commit every chunk size
+                except Exception as ex:
+                    app.logger.error("Failed to store batch of Chia plots being farmed [{0}:{1}] because {2}".format(i, i+chunk_size, str(ex)))
     except Exception as ex:
-            app.logger.info("Failed to load and send plots farming because {0}".format(str(ex)))
+        app.logger.error("Failed to load Chia plots being farmed because {0}".format(str(ex)))
+        traceback.print_exc()
 
 # Sent from a separate fullnode container
 def update_chives_plots(since):
@@ -137,9 +156,8 @@ def update_chives_plots(since):
             utils.send_delete('/plots/{0}/{1}'.format(hostname, blockchain), debug=False)
         if len(payload) > 0:
             utils.send_post('/plots/', payload, debug=False)
-    except:
-        app.logger.info("Failed to load Chives plots farming and send.")
-        app.logger.info(traceback.format_exc())
+    except Exception as ex:
+        app.logger.error("Failed to load and send Chives plots farming because {0}".format(str(ex)))
 
 # Sent from a separate fullnode container
 def update_mmx_plots(since):
@@ -168,9 +186,8 @@ def update_mmx_plots(since):
             utils.send_delete('/plots/{0}/{1}'.format(hostname, blockchain), debug=False)
         if len(payload) > 0:
             utils.send_post('/plots/', payload, debug=False)
-    except:
-        app.logger.info("Failed to load Chives plots farming and send.")
-        app.logger.info(traceback.format_exc())
+    except Exception as ex:
+        app.logger.error("Failed to load and send MMX plots farming because {0}".format(str(ex)))
 
 def analyze_status(plots_status, short_plot_id):
     if short_plot_id in plots_status:

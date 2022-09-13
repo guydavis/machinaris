@@ -20,7 +20,6 @@ from api import app
 from api import utils
 
 def update():
-    app.logger.info("Executing status_blockchains...")
     with app.app_context():
         try:
             blockchains = globals.enabled_blockchains()

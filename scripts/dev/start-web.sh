@@ -28,6 +28,5 @@ fi
     --log-level=$LOG_LEVEL \
     --workers=1 \
     --threads=12 \
-    --access-logfile - \
-    --error-logfile - \
+    --log-config scripts/dev/web_log.conf \
     web:app

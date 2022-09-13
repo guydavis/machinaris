@@ -36,6 +36,7 @@ from . import worker as wk
 from . import stats
 
 COLD_WALLET_ADDRESSES_FILE = '/root/.chia/machinaris/config/cold_wallet_addresses.json'
+WALLET_SETTINGS_FILE = '/root/.chia/machinaris/config/wallet_settings.json'
 
 def load_farm_summary():
     farms = db.session.query(f.Farm).order_by(f.Farm.hostname).all()
@@ -188,30 +189,30 @@ def generate_key(key_path, blockchain):
     proc = Popen("{0} keys generate".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error("{0}".format(errs.decode('utf-8')))
+            flash(_('Unable to generate keys!'), 'danger')
+            return False
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
         flash(_('Timed out while generating keys!'), 'danger')
         flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash(_('Unable to generate keys!'), 'danger')
         return False
     proc = Popen("{0} keys show --show-mnemonic-seed | tail -n 1 > {1}".format(chia_binary, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error("{0}".format(errs.decode('utf-8')))
+            flash(_('Unable to save mnemonic to') + ' {0}'.format(key_path), 'danger')
+            return False
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
         flash(_('Timed out while generating keys!'), 'danger')
         flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash(_('Unable to save mnemonic to') + ' {0}'.format(key_path), 'danger')
         return False
     else:
         app.logger.info("Store mnemonic output: {0}".format(outs.decode('utf-8')))
@@ -233,16 +234,16 @@ def generate_key(key_path, blockchain):
     proc = Popen("{0} start {1}".format(chia_binary, cmd), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error("{0}".format(errs.decode('utf-8')))
+            flash(_('Unable to start farmer. Try restarting the Machinaris container.'), 'danger')
+            return False
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
         flash(_('Timed out while starting farmer! Try restarting the Machinaris container.'), 'danger')
         flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash(_('Unable to start farmer. Try restarting the Machinaris container.'), 'danger')
         return False
     return True
 
@@ -262,17 +263,17 @@ def import_key(key_path, mnemonic, blockchain):
     proc = Popen("{0} keys add -f {1}".format(chia_binary, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error("{0}".format(errs.decode('utf-8')))
+            flash(_('Unable to import provided mnemonic seed phrase!'), 'danger')
+            flash(errs.decode('utf-8'), 'warning')
+            return False
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
         flash(_('Timed out while adding key!'), 'danger')
         flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash(_('Unable to import provided mnemonic seed phrase!'), 'danger')
-        flash(errs.decode('utf-8'), 'warning')
         return False
     if outs:
         app.logger.debug(outs.decode('utf-8'))
@@ -283,16 +284,16 @@ def import_key(key_path, mnemonic, blockchain):
     proc = Popen("{0} start {1} -r".format(chia_binary, cmd), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error("{0}".format(errs.decode('utf-8')))
+            flash(_('Unable to start farmer. Try restarting the Machinaris container.'), 'danger')
+            return False
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
         flash(_('Timed out while starting farmer! Try restarting the Machinaris container.'), 'danger')
         flash(str(ex), 'warning')
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
-        flash(_('Unable to start farmer. Try restarting the Machinaris container.'), 'danger')
         return False
     if outs:
         app.logger.debug(outs.decode('utf-8'))
@@ -410,3 +411,56 @@ def load_wallet_ids(blockchain):
         elif line.strip().startswith('-Wallet ID:'):
             wallet_ids.append({'id': line.split(':')[1].strip(), 'name': wallet_name })
     return wallet_ids
+
+def restart_farmer(hostname, blockchain):
+    farmer = wk.get_worker(hostname, blockchain)
+    try: # Send request, but timeout in only a second while API works in background
+        utils.send_post(farmer, "/actions/", \
+            { 'service': 'farming', 'action': 'restart', 'blockchain': blockchain, }, debug=True, timeout=1) 
+    except requests.exceptions.ReadTimeout: 
+        pass
+
+def start_or_pause_wallet(hostname, blockchain, action):
+    farmer = wk.get_worker(hostname, blockchain)
+    try: # Send request, but timeout in only a second while API works in background
+        utils.send_post(farmer, "/actions/", \
+            { 'service': 'wallet', 'action': action, 'blockchain': blockchain, }, debug=False, timeout=1) 
+    except requests.exceptions.ReadTimeout: 
+        pass
+
+def load_wallet_sync_frequencies():
+    return [
+        [-1, _('Always')], 
+        [1, _('Once an Hour')], 
+        [3, _('Every 3 Hours')],
+        [6, _('Every 6 Hours')],
+        [12, _('Every 12 Hours')],
+        [24, _('Once a Day')],
+        [0, _('Never')]
+    ]
+
+def load_current_wallet_sync_frequency():
+    wallet_sync_frequency = -1  # Always
+    if os.path.exists(WALLET_SETTINGS_FILE):
+        try:
+            with open(WALLET_SETTINGS_FILE) as f:
+                data = json.load(f)
+                if 'wallet_sync_frequency' in data:
+                    wallet_sync_frequency = data['wallet_sync_frequency']
+        except Exception as ex:
+            msg = "Unable to read wallet settings from {0} because {1}".format(WALLET_SETTINGS_FILE, str(ex))
+            app.logger.error(msg)
+    return wallet_sync_frequency
+
+def save_current_wallet_sync_frequency(freq):
+    settings = {} # An "always" (-1) frequency is an empty settings dict to fullnodes
+    if int(freq) > 0:
+        settings = {'wallet_sync_frequency': freq}
+    fullnodes = wk.get_fullnodes_by_blockchain()
+    for blockchain in fullnodes.keys():
+        fullnode = fullnodes[blockchain]
+        app.logger.debug("For {0}, attempting to save wallet sync setting to {1}".format(blockchain, fullnode.url))
+        try:
+            utils.send_put(fullnode, '/configs/wallet/{0}'.format(blockchain), payload=settings, debug=False, timeout=5)
+        except Exception as ex:
+            app.logger.debug("Failed to send updated wallet sync frequency for {0} due to {1}.".format(blockchain, str(ex)))

@@ -28,6 +28,5 @@ fi
     --workers=1 \
     --threads=12 \
     --config api/gunicorn.conf.py \
-    --error-logfile - \
-    --access-logfile - \
+    --log-config scripts/dev/api_log.conf \
     api:app

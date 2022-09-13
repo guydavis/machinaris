@@ -86,7 +86,11 @@ chia init --fix-ssl-permissions > /dev/null
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} == 'fullnode' ]]; then
-  chia start farmer
+  if [ -f /root/.chia/machinaris/config/wallet_settings.json ]; then
+    chia start farmer-no-wallet
+  else
+    chia start farmer
+  fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   chia start farmer-only
 elif [[ ${mode} =~ ^harvester.* ]]; then

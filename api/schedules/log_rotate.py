@@ -16,7 +16,6 @@ LOG_ROTATE_CONFIGS = [
 ]
 
 def execute():
-    app.logger.info("Executing log rotation...")
     for config in LOG_ROTATE_CONFIGS:
         if os.path.exists(LOG_ROTATE_CONFIG_DIR + config):
             app.logger.info("Rotating config: " + LOG_ROTATE_CONFIG_DIR + config)

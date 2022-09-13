@@ -258,76 +258,84 @@ def save_prices_cache(data):
 def request_atb_prices(debug=False):
     prices = {}
     url = "https://alltheblocks.net"
-    app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
-    if debug:
-        http.client.HTTPConnection.debuglevel = 1
-    data = requests.get(url, timeout=30).text
-    http.client.HTTPConnection.debuglevel = 0
-    soup = bs4.BeautifulSoup(data, 'html.parser')
-    table = soup.find('table', class_="table b-table table-sm")
-    for row in table.tbody.find_all('tr'):
-        if 'data-pk' in row.attrs:
-            blockchain = row['data-pk'].replace('stai', 'staicoin')
-            if not blockchain in SUPPORTED_BLOCKCHAINS:
-                continue
-            price_column = row.find('td', class_='text-right')
-            if len(price_column.contents) == 1:
-                price_value = price_column.contents[0].string.strip()
-                if price_value.startswith('$'):
-                    #app.logger.info("ATB: {0} @ {1}".format(blockchain, price_value[1:].strip()))
-                    try:
-                        prices[blockchain] = float(price_value[1:].strip())
-                    except Exception as ex:
-                        app.logger.error("Failed to parse a decimal number from {0}".format(price_value[1:].strip()))
-                else:
-                    app.logger.info("No price found for blockchain: {0}".format(blockchain))
-                    pass
+    try:
+        app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
+        if debug:
+            http.client.HTTPConnection.debuglevel = 1
+        data = requests.get(url, timeout=30).text
+        http.client.HTTPConnection.debuglevel = 0
+        soup = bs4.BeautifulSoup(data, 'html.parser')
+        table = soup.find('table', class_="table b-table table-sm")
+        for row in table.tbody.find_all('tr'):
+            if 'data-pk' in row.attrs:
+                blockchain = row['data-pk'].replace('stai', 'staicoin')
+                if not blockchain in SUPPORTED_BLOCKCHAINS:
+                    continue
+                price_column = row.find('td', class_='text-right')
+                if len(price_column.contents) == 1:
+                    price_value = price_column.contents[0].string.strip()
+                    if price_value.startswith('$'):
+                        #app.logger.info("ATB: {0} @ {1}".format(blockchain, price_value[1:].strip()))
+                        try:
+                            prices[blockchain] = float(price_value[1:].strip())
+                        except Exception as ex:
+                            app.logger.error("Failed to parse a decimal number from {0}".format(price_value[1:].strip()))
+                    else:
+                        app.logger.info("No price found for blockchain: {0}".format(blockchain))
+                        pass
+    except Exception as ex:
+        app.logger.error("Failed to request recent blockchain pricing from {0} due to {1}".format(url, str(ex)))
     return prices
 
 def request_posat_prices(debug=False):
     prices = {}
     url = "https://mrkt.posat.io/api/prices/v2"
-    app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
-    if debug:
-        http.client.HTTPConnection.debuglevel = 1
-    data = json.loads(requests.get(url, timeout=30).content)
-    http.client.HTTPConnection.debuglevel = 0
-    for blockchain in data.keys():
-        machinaris_blockchain = blockchain.replace('stai', 'staicoin').lower()
-        if not machinaris_blockchain in SUPPORTED_BLOCKCHAINS:
-            continue
-        #app.logger.info("POSAT: {0} @ {1}".format(blockchain, data[blockchain]['price']['usd']))
-        try:
-            prices[machinaris_blockchain] = float(data[blockchain]['price']['usd'])
-        except Exception as ex:
-            traceback.print_exc()
+    try:
+        app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
+        if debug:
+            http.client.HTTPConnection.debuglevel = 1
+        data = json.loads(requests.get(url, timeout=30).content)
+        http.client.HTTPConnection.debuglevel = 0
+        for blockchain in data.keys():
+            machinaris_blockchain = blockchain.replace('stai', 'staicoin').lower()
+            if not machinaris_blockchain in SUPPORTED_BLOCKCHAINS:
+                continue
+            #app.logger.info("POSAT: {0} @ {1}".format(blockchain, data[blockchain]['price']['usd']))
+            try:
+                prices[machinaris_blockchain] = float(data[blockchain]['price']['usd'])
+            except Exception as ex:
+                traceback.print_exc()
+    except Exception as ex:
+        app.logger.error("Failed to request recent blockchain pricing from {0} due to {1}".format(url, str(ex)))
     return prices
 
 def request_vayamos_prices(debug=False):
-    app.logger.info(SUPPORTED_BLOCKCHAINS)
     prices = {}
     url = "https://api.vayamos.cc/spot/markets"
-    app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
-    if debug:
-        http.client.HTTPConnection.debuglevel = 1
-    payload = { "offset": 0 }
-    data = json.loads(requests.post(url, data = json.dumps(payload), timeout=30).content)
-    http.client.HTTPConnection.debuglevel = 0
-    if 'success' in data:
-        markets = data['markets']
-        for market in markets:
-            if not market['pair'].endswith('USDT'):
-                continue # Skip other market pairs than USDT
-            for blockchain in SUPPORTED_BLOCKCHAINS:
-                posat_symbol = globals.get_blockchain_symbol(blockchain).upper()
-                if market['base'] == posat_symbol:
-                    #app.logger.info("VAYAMOS: {0} @ {1}".format(blockchain, market['price']))
-                    try:
-                        prices[blockchain] = float(market['price'])
-                    except Exception as ex:
-                        traceback.print_exc()
-    else:
-        app.logger.info("vayamos response was not success=True.")
+    try:
+        app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
+        if debug:
+            http.client.HTTPConnection.debuglevel = 1
+        payload = { "offset": 0 }
+        data = json.loads(requests.post(url, data = json.dumps(payload), timeout=30).content)
+        http.client.HTTPConnection.debuglevel = 0
+        if 'success' in data:
+            markets = data['markets']
+            for market in markets:
+                if not market['pair'].endswith('USDT'):
+                    continue # Skip other market pairs than USDT
+                for blockchain in SUPPORTED_BLOCKCHAINS:
+                    posat_symbol = globals.get_blockchain_symbol(blockchain).upper()
+                    if market['base'] == posat_symbol:
+                        #app.logger.info("VAYAMOS: {0} @ {1}".format(blockchain, market['price']))
+                        try:
+                            prices[blockchain] = float(market['price'])
+                        except Exception as ex:
+                            traceback.print_exc()
+        else:
+            app.logger.info("vayamos response was not success=True.")
+    except Exception as ex:
+        app.logger.error("Failed to request recent blockchain pricing from {0} due to {1}".format(url, str(ex)))
     return prices
 
 def request_peers(blockchain, debug=False):
@@ -473,10 +481,9 @@ def request_chain_statuses(statuses, debug=False):
                 details = statuses[blockchain]
                 details['sync_state'] = chain_status
             else:
-                app.logger.info("Missing blockchain from health. {0} found sync state of {1}.".format(blockchain, chain_status))
+                app.logger.debug("Missing blockchain from health. {0} found sync state of {1}.".format(blockchain, chain_status))
         except Exception as ex:
             traceback.print_exc()
-    app.logger.info(statuses['mint'])
     return statuses
 
 def save_chain_statuses(data):

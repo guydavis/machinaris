@@ -22,12 +22,27 @@ from api.commands import chia_cli, websvcs
 from api.models import chia
 from api import app, utils, db
 
+DELETE_OLD_STATS_AFTER_DAYS = 90
+
+TABLES = [ stats.StatWalletBalances, stats.StatTotalBalance ]
+
+def delete_old_stats():
+    try:
+        cutoff = datetime.datetime.now() - datetime.timedelta(days=DELETE_OLD_STATS_AFTER_DAYS)
+        for table in TABLES:
+            db.session.query(table).filter(table.created_at <= cutoff.strftime("%Y%m%d%H%M")).delete()
+        db.session.commit()
+    except:
+        app.logger.info("Failed to delete old statistics.")
+        app.logger.info(traceback.format_exc())
+
 def collect():
     with app.app_context():
         gc = globals.load()
         if not gc['is_controller']:
             app.logger.info("Only collect wallet balances on controller.")
             return
+        delete_old_stats()
         current_datetime = datetime.datetime.now().strftime("%Y%m%d%H%M")
         try:
             wallets = db.session.query(w.Wallet).order_by(w.Wallet.blockchain).all()
@@ -45,7 +60,7 @@ def collect():
                     cold_wallet_balance_error = True  # Skip recording a balance data point for this blockchain
                     app.logger.error("No wallet balance recorded. Received an erroneous cold wallet balance for {0} wallet. Please correct the address and verify at https://alltheblocks.net".format(wallet['blockchain']))
                     continue # Don't save a data point if part of the sum is missing due to error
-            app.logger.info("Fiat total is {0} {1}".format(round(fiat_total, 2), currency_symbol))
+            app.logger.debug("Fiat total is {0} {1}".format(round(fiat_total, 2), currency_symbol))
             if not cold_wallet_balance_error: # Don't record a total across all wallets if one is temporarily erroring out
                 store_total_locally(round(fiat_total, 2), currency_symbol, current_datetime)
         except:

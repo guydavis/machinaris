@@ -21,7 +21,6 @@ from api import app
 from api import utils
 
 def update():
-    app.logger.info("Executing status_pools...")
     with app.app_context():
         blockchain_rpc = rpc.RPC()
         try:

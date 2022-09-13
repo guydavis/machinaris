@@ -104,7 +104,8 @@ class Pools:
         return None
 
 class PartialsChartData:
-
+    
+    # select count(*), substr(created_at, 0,14) as hr from partials where blockchain = 'chia' group by hr order by hr;
     def __init__(self, partials):
         self.labels = []
         label_index_by_hour = {}

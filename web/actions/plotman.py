@@ -89,7 +89,7 @@ def action_plots(action, plot_ids):
             error = True
             app.logger.info(traceback.format_exc())
     if error:
-        flash(_('Failed to action all plots!'), 'danger')
+        flash(_('Failed to %(action)s all plots!', action=action), 'danger')
         flash('<pre>{0}</pre>'.format(error_message), 'warning')
     else:
         flash(_('Plotman was able to %(action)s the selected plots successfully.', action=action), 'success')

@@ -27,7 +27,6 @@ def delete_old_challenges(db):
         app.logger.info(traceback.format_exc())
 
 def update():
-    app.logger.info("Executing status_challenges...")
     with app.app_context():
         from api import db
         if globals.load()['is_controller']:

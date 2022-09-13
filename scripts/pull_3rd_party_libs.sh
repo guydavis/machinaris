@@ -5,7 +5,7 @@
 
 # Bootstrap Icons
 BSI_VERSION=1.8.2
-BOOTSTRAP_VERSION=5.2.0
+BOOTSTRAP_VERSION=5.2.1
 BASEPATH=${JS_LIBS_BASEPATH:-/machinaris/web/static/3rd_party}
 
 # List of other css/js links

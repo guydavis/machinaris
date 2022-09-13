@@ -4,6 +4,7 @@
 
 import asyncio
 import datetime
+import json
 import os
 import pexpect
 import psutil
@@ -29,19 +30,22 @@ from api.commands import websvcs
 # When reading tail of chia plots check output, limit to this many lines
 MAX_LOG_LINES = 2000
 
+# When this file present, we are leaving wallet paused normally, syncing every day or so
+WALLET_SETTINGS_FILE = '/root/.chia/machinaris/config/wallet_settings.json'
+
 def load_farm_summary(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     if globals.farming_enabled():
         proc = Popen("{0} farm summary".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=30)
+            if errs:
+                app.logger.error("Error from {0} farm summary because {1}".format(blockchain, outs.decode('utf-8')))
         except TimeoutExpired:
             proc.kill()
             proc.communicate()
             raise Exception("For farm summary, the process timeout expired!")
-        if errs:
-            app.logger.debug("Error from {0} farm summary because {1}".format(blockchain, outs.decode('utf-8')))
-        return chia.FarmSummary(outs.decode('utf-8').splitlines(), blockchain)
+        return chia.FarmSummary(globals.strip_data_layer_msg(outs.decode('utf-8').splitlines()), blockchain)
     elif globals.harvesting_enabled():
         return chia.HarvesterSummary()
     else:
@@ -68,19 +72,21 @@ def save_config(config, blockchain):
         raise Exception(_('Updated config.yaml failed validation!') + '\n' + str(ex))
     else:
         try:
-            start_farmer(blockchain)
+            restart_farmer(blockchain)
         except Exception as ex:
             app.logger.info("Failed to restart farmer because {0}.".format(str(ex)))
 
 def load_wallet_show(blockchain):
+    if not globals.wallet_running():
+        return None
     chia_binary = globals.get_blockchain_binary(blockchain)
     wallet_show = ""
     child = pexpect.spawn("{0} wallet show".format(chia_binary))
     wallet_id_num = app.config['SELECTED_WALLET_NUM']  # Default wallet ID num to respond if prompted is 1
     app.logger.debug("Default SELECTED_WALLET_NUM is {0}".format(wallet_id_num))
     while True:
-        i = child.expect(["Wallet height:.*\r\n", "Wallet keys:.*\r\n", "Choose wallet key:.*\r\n", "Choose a wallet key:.*\r\n", 
-            "No online backup file found.*\r\n", "Connection error.*\r\n"], timeout=30)
+        i = child.expect(["Wallet height:.*\r\n", "Wallet keys:.*\r\n", "Choose wallet key:.*\r\n", 
+            "Choose a wallet key:.*\r\n", "No online backup file found.*\r\n", "Connection error.*\r\n"], timeout=90)
         if i == 0:
             app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
             wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
@@ -101,26 +107,26 @@ def load_blockchain_show(blockchain):
     proc = Popen("{0} show --state".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=30)
+        if errs:
+            raise Exception(errs.decode('utf-8'))
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         raise Exception("For blockchain show, the process timeout expired!")
-    if errs:
-        raise Exception(errs.decode('utf-8'))
-    return chia.Blockchain(outs.decode('utf-8').splitlines())
+    return chia.Blockchain(globals.strip_data_layer_msg(outs.decode('utf-8').splitlines()))
 
 def load_connections_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     proc = Popen("{0} show --connections".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=30)
+        if errs:
+            raise Exception(errs.decode('utf-8'))
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         raise Exception("For connections show, the process timeout expired!")
-    if errs:
-        raise Exception(errs.decode('utf-8'))
-    return chia.Connections(outs.decode('utf-8').splitlines())
+    return chia.Connections(globals.strip_data_layer_msg(outs.decode('utf-8').splitlines()))
 
 def load_keys_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
@@ -131,26 +137,68 @@ def load_keys_show(blockchain):
         proc = Popen("{0} keys show && {0} keys show -d | grep 'non-observer'".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=30)
+        if errs:
+            raise Exception(errs.decode('utf-8'))
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         raise Exception("For keys show, the process timeout expired!")
-    if errs:
-        raise Exception(errs.decode('utf-8'))
-    return chia.Keys(outs.decode('utf-8').splitlines())
+    return chia.Keys(globals.strip_data_layer_msg(outs.decode('utf-8').splitlines()))
 
-def start_farmer(blockchain):
+def restart_farmer(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    proc = Popen("{0} start farmer -r".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+    if os.path.exists(WALLET_SETTINGS_FILE):
+        cmd = "{0} stop farmer && {0} start farmer-no-wallet".format(chia_binary)
+    else:
+        cmd = "{0} start farmer && {0} start farmer -r".format(chia_binary)
+    app.logger.info("Executing farmer restart: {0}".format(cmd))
+    proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error("{0}".format(errs.decode('utf-8')))
+            return False
+    except TimeoutExpired as ex:
+        proc.kill()
+        proc.communicate()
+        app.logger.error(traceback.format_exc())
+        return False
+    return True
+
+def start_wallet(blockchain):
+    chia_binary = globals.get_blockchain_binary(blockchain)
+    cmd = "{0} start wallet -r".format(chia_binary)
+    app.logger.info("Executing wallet start: {0}".format(cmd))
+    proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error("{0}".format(errs.decode('utf-8')))
+            return False
+    except TimeoutExpired as ex:
+        proc.kill()
+        proc.communicate()
+        app.logger.error(traceback.format_exc())
+        return False
+    return True
+
+def pause_wallet(blockchain):
+    chia_binary = globals.get_blockchain_binary(blockchain)
+    if globals.legacy_blockchain(blockchain):  # Old chains will stop fullnode(!) if ask to stop just the wallet...
+        cmd = "{0} stop farmer && {0} start farmer-no-wallet".format(chia_binary)
+    else:  # Updated blockchains can simply stop the wallet
+        cmd = "{0} stop wallet".format(chia_binary)
+    app.logger.info("Executing wallet pause: {0}".format(cmd))
+    proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+        if errs:
+            app.logger.error("{0}".format(errs.decode('utf-8')))
+            return False
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
-        return False
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
         return False
     return True
 
@@ -160,18 +208,18 @@ def remove_connection(node_id, ip, blockchain):
         proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=30)
+            if errs:
+                app.logger.error(errs.decode('utf-8'))
+                return False
+            if outs:
+                app.logger.info(outs.decode('utf-8'))
         except TimeoutExpired:
             proc.kill()
             proc.communicate()
-            app.logger.info("For remove connection, the process timeout expired!")
+            app.logger.error("For remove connection, the process timeout expired!")
             return False
-        if errs:
-            app.logger.info(errs.decode('utf-8'))
-            return False
-        if outs:
-            app.logger.info(outs.decode('utf-8'))
     except Exception as ex:
-        app.logger.info(traceback.format_exc())
+        app.logger.error(traceback.format_exc())
     app.logger.info("Successfully removed connection to {0}".format(ip))
     return True
 
@@ -207,6 +255,7 @@ def dispatch_action(job):
     service = job['service']
     action = job['action']
     blockchain = job['blockchain']
+    app.logger.info("For blockchain:{0} Service: {1} Received action: {2}".format(blockchain, service, action))
     if service == 'networking':
         if action == "add_connections":
             conns = job['connections']
@@ -218,6 +267,14 @@ def dispatch_action(job):
                 app.logger.error("Received no connections from AllTheBlocks, please add directly at the command-line.")
         elif action == "remove_connection":
             remove_connection(job['node_ids'], blockchain)
+    elif service == 'farming':
+        if action == 'restart':
+            restart_farmer(blockchain)
+    elif service == 'wallet':
+        if action == 'start':
+            start_wallet(blockchain)
+        elif action == 'pause':
+            pause_wallet(blockchain)
 
 def add_connections(connections, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
@@ -232,13 +289,13 @@ def add_connections(connections, blockchain):
             proc = Popen("{0} show --add-connection {1}".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
             try:
                 outs, errs = proc.communicate(timeout=60)
+                if errs:
+                    app.logger.error(errs.decode('utf-8'))
+                #app.logger.info("{0}".format(outs.decode('utf-8')))
             except TimeoutExpired:
                 proc.kill()
                 proc.communicate()
                 app.logger.error("For add conneciton, the process timeout expired!")
-            if errs:
-                app.logger.error(errs.decode('utf-8'))
-            #app.logger.info("{0}".format(outs.decode('utf-8')))
         except Exception as ex:
             app.logger.error(traceback.format_exc())
             app.logger.error('Invalid connection "{0}" provided.  Must be HOST:PORT.'.format(connection))
@@ -252,15 +309,26 @@ def remove_connection(node_ids, blockchain):
             proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
             try:
                 outs, errs = proc.communicate(timeout=5)
+                if errs:
+                    app.logger.error(errs.decode('utf-8'))
+                    app.logger.info("Error attempting to remove selected fullnode connections. See server log.")
+                if outs:
+                    app.logger.info(outs.decode('utf-8'))
             except TimeoutExpired:
                 proc.kill()
                 proc.communicate()
                 app.logger.info("Timeout attempting to remove selected fullnode connections. See server log.")
-            if errs:
-                app.logger.error(errs.decode('utf-8'))
-                app.logger.info("Error attempting to remove selected fullnode connections. See server log.")
-            if outs:
-                app.logger.debug(outs.decode('utf-8'))
         except Exception as ex:
             app.logger.info(traceback.format_exc())
     app.logger.info("Successfully removed selected connections.")
+
+def save_wallet_settings(settings, blockchain):
+    try:
+        if not settings: # User reverting to defaults, no custom settings
+            os.path(WALLET_SETTINGS_FILE).delete()
+        else:
+            with open(WALLET_SETTINGS_FILE, 'w') as outfile:
+                json.dump(settings, outfile)
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+        raise Exception('Failed to store {0} wallet settings to {1}.'.format(blockchain, WALLET_SETTINGS_FILE) + '\n' + str(ex))

@@ -20,7 +20,6 @@ from api import app
 from api import utils
 
 def update():
-    app.logger.info("Executing status_worker...")
     with app.app_context():
         try:
             hostname = utils.get_hostname()
@@ -62,17 +61,20 @@ def gather_services_status():
     }
     farming_status = "disabled"
     monitoring_status = "disabled"
+    wallet_status = "disabled"
     # Assumes a single blockchain is enabled in this container
-    for blockchain in globals.enabled_blockchains():
-        if gc['farming_enabled'] or gc['harvesting_enabled']:
-            if blockchain == 'mmx':
-                farming_status = mmx_cli.load_farm_info(blockchain).status
-            else:
-                farming_status = chia_cli.load_farm_summary(blockchain).status
-            if chiadog_cli.get_chiadog_pid(blockchain):
-                monitoring_status = "running"
-            else:
-                monitoring_status = "stopped"
+    blockchain = globals.enabled_blockchains()[0]
+    if gc['farming_enabled'] or gc['harvesting_enabled']:
+        if blockchain == 'mmx':
+            farming_status = mmx_cli.load_farm_info(blockchain).status
+        else:
+            farming_status = chia_cli.load_farm_summary(blockchain).status
+        if chiadog_cli.get_chiadog_pid(blockchain):
+            monitoring_status = "running"
+        else:
+            monitoring_status = "stopped"
     response['monitoring_status'] = monitoring_status
     response['farming_status'] = farming_status
+    if gc['machinaris_mode'] == 'fullnode':
+        response['wallet_status'] = wallet_status
     return json.dumps(response)

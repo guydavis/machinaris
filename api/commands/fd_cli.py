@@ -37,12 +37,14 @@ def reward_recovery(wallet_id, launcher_id, pool_contract_address):
     proc = Popen(cmd,cwd="/fd-cli", env=fd_env, shell=True, universal_newlines=True, stdout=log_fo, stderr=log_fo)
     try:
         outs, errs = proc.communicate(timeout=1800)
+        if errs:
+            app.logger.error(errs.decode('utf-8'))
+        elif outs:
+            app.logger.info(outs.decode('utf-8'))
+        else:
+            app.logger.error("Nothing returned from fd-cli call.")
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
-    if errs:
-        app.logger.error(errs.decode('utf-8'))
-    elif outs:
-        app.logger.info(outs.decode('utf-8'))
-    else:
-        app.logger.error("Nothing returned from fd-cli call.")
+        app.logger.error("Timeout expired for fd-cli call.")
+

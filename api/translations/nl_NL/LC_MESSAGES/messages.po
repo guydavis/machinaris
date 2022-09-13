@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-03-13 10:30-0600\n"
-"POT-Creation-Date: 2022-07-16 14:17-0600\n"
+"POT-Creation-Date: 2022-09-11 09:34-0600\n"
 "PO-Revision-Date: 2022-03-13 10:29-0600\n"
 "Last-Translator: Bernie Deprez\n"
 "Language: nl_NL\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.10.3\n"
 
-#: commands/chia_cli.py:68
+#: commands/chia_cli.py:72
 msgid "Updated config.yaml failed validation!"
 msgstr "Gewijzigde config.yaml kon niet gevalideerd worden!"
 
@@ -26,7 +26,7 @@ msgstr "Gewijzigde config.yaml kon niet gevalideerd worden!"
 msgid "No requested pool modifications were sent. Current settings are unchanged."
 msgstr "Geen pool wijzigingen verstuurd. Huidige configuratie is ongewijzigd."
 
-#: commands/pools_cli.py:151
+#: commands/pools_cli.py:154
 msgid ""
 "Successfully left pool, switching to self-pooling. Please wait a few "
 "minutes or more to complete. DO NOT immediately re-submit your request. "
@@ -36,7 +36,7 @@ msgstr ""
 " minuten (of meer) te wachten. Stuur NIET ONMIDDELLIJK een nieuwe "
 "aanvraag maar controleer de logs voor meer details."
 
-#: commands/pools_cli.py:195
+#: commands/pools_cli.py:198
 #, python-format
 msgid ""
 "Successfully joined %(pool_url)s pool by creating Chia NFT.  Please wait "
@@ -48,7 +48,7 @@ msgstr ""
 " een nieuwe aanvraag. Wees geduldig! Controleer de logs voor meer "
 "details."
 
-#: commands/pools_cli.py:224
+#: commands/pools_cli.py:227
 msgid ""
 "Successfully created a NFT for self-pooling.  Please wait a few minutes "
 "or more to complete. DO NOT immediately re-submit your request. Be "

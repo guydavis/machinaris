@@ -29,10 +29,13 @@ class DriveStatus:
             if line.strip().startswith('Model Family'):  # Sometimes present
                 # Example: "Model Family:     Seagate BarraCuda 3.5"
                 self.model_family = line.split(':')[1].strip()
+            elif not self.model_family and line.strip().startswith('Product'):  # Fallback for SAS without Model Family
+                # Example: "Product:              HUH721010AL4200"
+                self.model_family = line.split(':')[1].strip()
             elif line.strip().startswith('Device Model'): # Sometimes present
                 # Example: "Device Model:     ST8000DM004-2CX188"
                 self.device_model = line.split(':')[1].strip()
-            elif line.strip().startswith('Serial Number'):
+            elif line.strip().lower().startswith('serial number'):
                 # Example: "Serial Number:    ZR106HWB"
                 self.serial_number = line.split(':')[1].strip()
             elif line.strip().startswith('User Capacity'):
@@ -51,12 +54,15 @@ class DriveStatus:
                 self.power_on_hours = line.split()[9].strip()
                 if 'h' in self.power_on_hours:  # Sometimes value is '11479h+00m+00.000s', so strip off trailing, hours is fine
                     self.power_on_hours = self.power_on_hours.split('h')[0]
+            elif not self.power_on_hours and line.strip().startswith('Accumulated power on time, hours:minutes'):
+                # Example: "Accumulated power on time, hours:minutes 38374:16"
+                self.power_on_hours = line.strip()[len('Accumulated power on time, hours:minutes '):].split(':')[0]
             elif 'Temperature_Celsius' in line:
                 # Example: "194 Temperature_Celsius     0x0022   038   049   000    Old_age   Always       -       38 (0 21 0 0 0)"
                 self.temperature = line.split()[9].strip()
-            elif 'Current Drive Temperature:' in line:
+            elif not self.temperature and 'Current Drive Temperature:' in line:
                 # Example: "Current Drive Temperature:     34 C"
                 self.temperature = line.split(':')[1][:-1].strip()
         # Now print warning if missing fields
         if not self.model_family and not self.device_model:
-            app.logger.info("Drive device {0} was missing Model information.  Have you set 'device_type: scsi' in drives_overrides.json when you don't need to?  Remove that and allow Machinaris to just: smartcl -a {0}".format(self.device))
+            app.logger.info("Drive device {0} was missing Model information.  Have you set 'device_type: scsi' in drives_overrides.json when you don't need to?  Remove that and allow Machinaris to just: smartctl -a {0}".format(self.device))
