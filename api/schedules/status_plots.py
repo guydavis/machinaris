@@ -23,6 +23,9 @@ FULL_SEND_INTERVAL_MINS = 60
 # Holds the cached status of Plotman analyze and Chia plots check
 STATUS_FILE = '/root/.chia/plotman/status.json'
 
+# Holds a cache of problematic plots
+DUPLICATE_PLOTS_FILE = '/root/.chia/machinaris/cache/plots_duplicate_across_workers_chia.json'
+
 last_full_send_time = None
 
 def get_plot_attrs(plot_id, filename):
@@ -61,6 +64,36 @@ def update():
         else:
             app.logger.debug("Skipping plots update from blockchains other than chia and chives as they all farm same as chia.")
 
+def add_duplicate_plots(duplicated_plots, file, host1, path1, host2, path2):
+    if file in duplicated_plots:
+        duplications = duplicated_plots[file]
+    else:
+        duplications = [] 
+        duplicated_plots[file] = duplications
+    add_first = True
+    for duplication in duplications:
+        if host1 == duplication['host'] and path1 == duplication['path']:
+            add_first = False
+    if add_first:
+        duplications.append({'host': host1, 'path': path1 })
+    add_second = True
+    for duplication in duplications:
+        if host2 == duplication['host'] and path2 == duplication['path']:
+            add_second = False
+    if add_second:
+        duplications.append({'host': host2, 'path': path2 })
+
+def save_duplicate_plots(duplicated_plots):
+    try:
+        if not duplicated_plots: # User reverting to defaults, no custom settings
+            os.path(DUPLICATE_PLOTS_FILE).delete()
+        else:
+            with open(DUPLICATE_PLOTS_FILE, 'w') as outfile:
+                json.dump(duplicated_plots, outfile)
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+        raise Exception('Failed to store duplicated plots to {0}.'.format(DUPLICATE_PLOTS_FILE) + '\n' + str(ex))
+
 def update_chia_plots(plots_status, since):
     try:
         if not since:  # If no filter, delete all for this blockchain before storing again
@@ -70,6 +103,7 @@ def update_chia_plots(plots_status, since):
         controller_hostname = utils.get_hostname()
         plots_farming = blockchain_rpc.get_all_plots()
         plots_by_id = {}
+        duplicate_plots = {}
         displaynames = {}
         app.logger.info("Chia farmer RPC reports {0} total plots in this farm.".format(len(plots_farming)))
         chunk_size = 100 # Process only 10k plots at a time.
@@ -92,17 +126,17 @@ def update_chia_plots(plots_status, since):
                     displaynames[plot['hostname']] = displayname
                 short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
                 duplicated_on_same_host = False
-                if len(plots_farming) < 10000: # Check for duplicated plots on same host, only if we have less 10k total plots to avoid memory limits 
-                    if short_plot_id in plots_by_id:
-                        if plot['hostname'] == plots_by_id[short_plot_id]['hostname']:
-                            app.logger.error("DUPLICATE PLOT FOUND ON SAME WORKER {0} AT BOTH {1}/{2} AND {3}/{4}".format(
-                                displayname, plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], dir, file))
-                            duplicated_on_same_host = True
-                        else:
-                            app.logger.error("DUPLICATE PLOT FOUND ON DIFFERENT WORKERS AT {0}@{1}/{2} AND {3}@{4}/{5}".format(
-                                plots_by_id[short_plot_id]['worker'], plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], displayname, dir, file))
-                    plots_by_id[short_plot_id] = { 'hostname': plot['hostname'], 'worker': displayname, 'path': dir, 'file': file }
-                if not duplicated_on_same_host and (not since or created_at > since):
+                if not since and short_plot_id in plots_by_id:  # Only check for duplicates on full load
+                    if plot['hostname'] == plots_by_id[short_plot_id]['hostname']:
+                        app.logger.error("DUPLICATE CHIA PLOT FOUND ON SAME WORKER {0} AT BOTH {1}/{2} AND {3}/{4}".format(
+                            displayname, plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], dir, file))
+                        duplicated_on_same_host = True
+                    else:
+                        app.logger.error("DUPLICATE CHIA PLOT FOUND ON DIFFERENT WORKERS AT {0}@{1}/{2} AND {3}@{4}/{5}".format(
+                            plots_by_id[short_plot_id]['worker'], plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], displayname, dir, file))
+                    add_duplicate_plots(duplicate_plots, file, plot['hostname'], dir, plots_by_id[short_plot_id]['hostname'], plots_by_id[short_plot_id]['path'])
+                plots_by_id[short_plot_id] = { 'hostname': plot['hostname'], 'worker': displayname, 'path': dir, 'file': file }
+            if not duplicated_on_same_host and (not since or created_at > since):
                     payload.append({
                         "plot_id": short_plot_id,
                         "blockchain": 'chia',
@@ -124,6 +158,8 @@ def update_chia_plots(plots_status, since):
                     db.session.commit() # Commit every chunk size
                 except Exception as ex:
                     app.logger.error("Failed to store batch of Chia plots being farmed [{0}:{1}] because {2}".format(i, i+chunk_size, str(ex)))
+            if not since: # Save current duplicate plots
+                save_duplicate_plots(duplicate_plots)
     except Exception as ex:
         app.logger.error("Failed to load Chia plots being farmed because {0}".format(str(ex)))
         traceback.print_exc()
@@ -136,9 +172,20 @@ def update_chives_plots(since):
         hostname = utils.get_hostname()
         plots_farming = blockchain_rpc.get_all_plots()
         payload = []
+        plots_by_id = {}
         for plot in plots_farming:
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
-            if not since or created_at > since:
+            duplicated_on_same_host = False
+            if not since and short_plot_id in plots_by_id:  # Only check for duplicates on full load
+                if plot['hostname'] == plots_by_id[short_plot_id]['hostname']:
+                    app.logger.error("DUPLICATE CHIVES PLOT FOUND ON SAME WORKER {0} AT BOTH {1}/{2} AND {3}/{4}".format(
+                        plot['hostname'], plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], dir, file))
+                    duplicated_on_same_host = True
+                else:
+                    app.logger.error("DUPLICATE CHIVES PLOT FOUND ON DIFFERENT WORKERS AT {0}@{1}/{2} AND {3}@{4}/{5}".format(
+                        plots_by_id[short_plot_id]['worker'], plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], plot['hostname'], dir, file))
+            plots_by_id[short_plot_id] = { 'hostname': plot['hostname'], 'worker': plot['hostname'], 'path': dir, 'file': file }
+            if not duplicated_on_same_host and not since or created_at > since:
                 payload.append({
                     "plot_id": short_plot_id,
                     "blockchain": blockchain,
@@ -166,9 +213,20 @@ def update_mmx_plots(since):
         hostname = utils.get_hostname()
         plots_farming = mmx_cli.list_plots()
         payload = []
+        plots_by_id = {}
         for plot in plots_farming.rows:
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
-            if not since or created_at > since:
+            duplicated_on_same_host = False
+            if not since and short_plot_id in plots_by_id:  # Only check for duplicates on full load
+                if plot['hostname'] == plots_by_id[short_plot_id]['hostname']:
+                    app.logger.error("DUPLICATE MMX PLOT FOUND ON SAME WORKER {0} AT BOTH {1}/{2} AND {3}/{4}".format(
+                        plot['hostname'], plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], dir, file))
+                    duplicated_on_same_host = True
+                else:
+                    app.logger.error("DUPLICATE MMX PLOT FOUND ON DIFFERENT WORKERS AT {0}@{1}/{2} AND {3}@{4}/{5}".format(
+                        plots_by_id[short_plot_id]['worker'], plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], plot['hostname'], dir, file))
+            plots_by_id[short_plot_id] = { 'hostname': plot['hostname'], 'worker': plot['hostname'], 'path': dir, 'file': file }
+            if not duplicated_on_same_host and not since or created_at > since:
                 payload.append({
                     "plot_id": short_plot_id,
                     "blockchain": blockchain,
