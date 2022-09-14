@@ -85,14 +85,13 @@ def add_duplicate_plots(duplicated_plots, file, host1, path1, host2, path2):
 
 def save_duplicate_plots(duplicated_plots):
     try:
-        if not duplicated_plots: # User reverting to defaults, no custom settings
+        if not duplicated_plots:
             os.path(DUPLICATE_PLOTS_FILE).delete()
         else:
             with open(DUPLICATE_PLOTS_FILE, 'w') as outfile:
                 json.dump(duplicated_plots, outfile)
     except Exception as ex:
-        app.logger.info(traceback.format_exc())
-        raise Exception('Failed to store duplicated plots to {0}.'.format(DUPLICATE_PLOTS_FILE) + '\n' + str(ex))
+        app.logger.error('Failed to store duplicated plots to {0}.'.format(DUPLICATE_PLOTS_FILE) + '\n' + str(ex))
 
 def update_chia_plots(plots_status, since):
     try:
