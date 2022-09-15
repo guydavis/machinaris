@@ -23,9 +23,6 @@ FULL_SEND_INTERVAL_MINS = 60
 # Holds the cached status of Plotman analyze and Chia plots check
 STATUS_FILE = '/root/.chia/plotman/status.json'
 
-# Holds a cache of problematic plots
-DUPLICATE_PLOTS_FILE = '/root/.chia/machinaris/cache/plots_duplicate_across_workers_chia.json'
-
 last_full_send_time = None
 
 def get_plot_attrs(plot_id, filename):
@@ -84,14 +81,24 @@ def add_duplicate_plots(duplicated_plots, file, host1, path1, host2, path2):
         duplications.append({'host': host2, 'path': path2 })
 
 def save_duplicate_plots(duplicated_plots):
+    hostname = utils.get_hostname()
+    blockchain = 'chia'
     try:
         if not duplicated_plots:
-            os.path(DUPLICATE_PLOTS_FILE).delete()
+            utils.send_delete('/warnings/{0}/{1}/{2}'.format(hostname, blockchain, "duplicated_plots_across_workers"), debug=False)
         else:
-            with open(DUPLICATE_PLOTS_FILE, 'w') as outfile:
-                json.dump(duplicated_plots, outfile)
+            payload = []
+            payload.append({
+                "hostname": hostname,
+                "blockchain": blockchain,
+                "type": "duplicated_plots_across_workers",
+                "service": "harvester",
+                "title": "Plots duplicated across workers.",
+                "content": json.dumps(duplicated_plots),
+            })
+            utils.send_post('/warnings/{0}/{1}/{2}'.format(hostname, blockchain, type), payload, debug=False)
     except Exception as ex:
-        app.logger.error('Failed to store duplicated plots to {0}.'.format(DUPLICATE_PLOTS_FILE) + '\n' + str(ex))
+        app.logger.error('Failed to send duplicated plots warnings due to '+ str(ex))
 
 def update_chia_plots(plots_status, since):
     try:
@@ -99,13 +106,12 @@ def update_chia_plots(plots_status, since):
             db.session.query(p.Plot).filter(p.Plot.blockchain=='chia').delete()
             db.session.commit()
         blockchain_rpc = rpc.RPC()
-        controller_hostname = utils.get_hostname()
         plots_farming = blockchain_rpc.get_all_plots()
         plots_by_id = {}
         duplicate_plots = {}
         displaynames = {}
         app.logger.info("Chia farmer RPC reports {0} total plots in this farm.".format(len(plots_farming)))
-        chunk_size = 100 # Process only 10k plots at a time.
+        chunk_size = 10000 # Process only 10k plots at a time.
         for i in range(0, len(plots_farming), chunk_size):  # batch-size loop
             payload = []
             for plot in plots_farming[i:i+chunk_size]: # per-plot loop
@@ -113,9 +119,7 @@ def update_chia_plots(plots_status, since):
                     displayname = displaynames[plot['hostname']]
                 else: # Look up displayname
                     try:
-                        hostname = plot['hostname']
-                        if plot['hostname'] in ['127.0.0.1']:
-                            hostname = controller_hostname
+                        hostname = utils.convert_chia_ip_address(plot['hostname'])
                         #app.logger.info("Found worker with hostname '{0}'".format(hostname))
                         displayname = db.session.query(w.Worker).filter(w.Worker.hostname==hostname, 
                             w.Worker.blockchain=='chia').first().displayname

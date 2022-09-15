@@ -72,3 +72,8 @@ def is_controller():
 
 def is_fullnode():
     return os.environ['mode'] == "fullnode"
+
+def convert_chia_ip_address(chia_ip_address):
+    if chia_ip_address in ['127.0.0.1']:
+        return get_hostname()
+    return chia_ip_address  # TODO Map duplicated IPs from docker internals...
