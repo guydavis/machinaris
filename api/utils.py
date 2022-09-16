@@ -5,6 +5,7 @@
 import http
 import json
 import os
+import psutil
 import requests
 import socket
 
@@ -77,3 +78,7 @@ def convert_chia_ip_address(chia_ip_address):
     if chia_ip_address in ['127.0.0.1']:
         return get_hostname()
     return chia_ip_address  # TODO Map duplicated IPs from docker internals...
+
+def current_memory_megabytes():
+    process = psutil.Process(os.getpid())
+    return round(process.memory_info().rss / 1024 ** 2, 2)

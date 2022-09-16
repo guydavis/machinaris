@@ -71,3 +71,8 @@ def get_hostname():
 
 def is_controller():
     return app.config['CONTROLLER_HOST'] == "localhost"
+
+def convert_chia_ip_address(chia_ip_address):
+    if chia_ip_address in ['127.0.0.1']:
+        return get_hostname()
+    return chia_ip_address  # TODO Map duplicated IPs from docker internals...

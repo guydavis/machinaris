@@ -262,7 +262,7 @@ class RPC:
             for harvester in result["harvesters"]:
                 # app.logger.info(harvester.keys()) Returns: ['connection', 'failed_to_open_filenames', 'no_key_filenames', 'plots']
                 # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
-                host = harvester["connection"]["host"]
+                host = utils.convert_chia_ip_address(harvester["connection"]["host"])
                 plots = harvester["plots"]
                 app.logger.info("Listing plots found {0} plots on {1}.".format(len(plots), host))
                 for plot in plots:
@@ -359,7 +359,7 @@ class RPC:
                 
                 # app.logger.info(harvester.keys()) Returns: ['connection', 'failed_to_open_filenames', 'no_key_filenames', 'plots']
                 # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
-                host = harvester["connection"]["host"]
+                host = utils.convert_chia_ip_address(harvester["connection"]["host"])
                 node_id = harvester["connection"]["node_id"] # TODO Track link between worker and node_id?
                 #app.logger.info(node_id)
 

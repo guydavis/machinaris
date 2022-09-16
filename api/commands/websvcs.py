@@ -59,7 +59,7 @@ def load_cold_wallet_cache():
     return data
 
 def save_cold_wallet_cache(cold_wallet_cache):
-    app.logger.info("SAVING COLD WALLET CACHE: {0}".format(cold_wallet_cache))
+    app.logger.debug("Saving cold wallet cache: {0}".format(cold_wallet_cache))
     try:
         with open(COLD_WALLET_CACHE_FILE, 'w') as f:
             json.dump(cold_wallet_cache, f)
