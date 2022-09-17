@@ -6,7 +6,8 @@ All notable changes to this project will be documented in this file. The format 
 - Scaling-Down: Optional mode where wallets are synced daily, not run 24/7.  Saves ~35% memory so smaller farmers can farm more blockchains concurrently on the same machine. See Wallets page, top-right Settings.
 - Scaling-Up: Improved plot tracking efficiency for multi-PB sized farms.
 - Warnings for duplicated, invalid, or key-less plots.  See Farming page.
-- Update: [Flax](https://github.com/Flax-Network/flax-blockchain) to v0.1.10
+- Update: [Flax](https://github.com/Flax-Network/flax-blockchain) to v0.1.10, [Cactus](https://github.com/Cactus-Network/cactus-blockchain) to v1.5.2
+- Security: Disable Setup page's mnemonic import field autocomplete from caching value in your local browser. Thanks @Baatezu!
 - Fixes: Better handling of farmed block logging for certain blockchains like Apple & BPX, Alerts from Chia 1.5.1 for added coins missing due to blockchain logging changes.  Improved Smartctl response processing.
 
 ## [0.8.3] - 2022-08-23
