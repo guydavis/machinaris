@@ -103,14 +103,15 @@ def save_duplicate_plots(duplicated_plots):
         app.logger.error('Failed to send duplicated plots warnings due to '+ str(ex))
 
 def update_chia_plots(plots_status, since):
-    items = []
     time_start = time.time()
     memory_start = utils.current_memory_megabytes()
+    memory_prestore = None
     try:
         if not since:  # If no filter, delete all for this blockchain before storing again
             db.session.query(p.Plot).filter(p.Plot.blockchain=='chia').delete()
             db.session.commit()
         blockchain_rpc = rpc.RPC()
+        items = []
         plots_farming = blockchain_rpc.get_all_plots()
         plots_by_id = {}
         duplicate_plots = {}
@@ -153,7 +154,7 @@ def update_chia_plots(plots_status, since):
                     "plot_check": check_status(plots_status, short_plot_id),
                     "size": plot['file_size']
                 }))
-        if len(items) > 0:
+        if items:
             memory_prestore = utils.current_memory_megabytes()
             app.logger.info("PLOT STATUS: About to store {0} Chia plots.".format(len(items)))
             try:
@@ -170,10 +171,14 @@ def update_chia_plots(plots_status, since):
     del plots_by_id
     if items:
         del items
-        gc.collect()
-        memory_afterward = utils.current_memory_megabytes()
+    gc.collect()
+    memory_afterward = utils.current_memory_megabytes()
+    if memory_prestore:  # Full re-sync
         app.logger.info("PLOT STATUS: In {3} seconds, memory went from {0} MB to {2} MB, {1} MB at prestore.".format(
             memory_start, memory_prestore, memory_afterward, (round(time.time()-time_start, 2))))
+    else: # Only new plots added, if any
+        app.logger.info("PLOT STATUS: In {2} seconds, memory went from {0} MB to {1} MB.".format(
+            memory_start, memory_afterward, (round(time.time()-time_start, 2))))
     
 # Sent from a separate fullnode container
 def update_chives_plots(since):
