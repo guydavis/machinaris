@@ -342,7 +342,7 @@ class RPC:
             app.logger.info("Error getting transactions via RPC: {0}".format(str(ex)))
         return transactions
 
-    # Get warnings about problem plots
+    # Get warnings about problem plots, only first 100 warnings each to avoid overwhelming the user
     async def _load_harvester_warnings(self):
         harvesters = {}
         try:
@@ -370,7 +370,7 @@ class RPC:
 
                 invalid_plots = []
                 results = await farmer.get_harvester_plots_invalid(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                invalid_plots.extend(results['plots'])
+                invalid_plots.extend(results['plots'][:100])
                 farmer.close()
                 await farmer.await_closed()
 
@@ -380,7 +380,7 @@ class RPC:
                 )
                 missing_keys = []
                 results = await farmer.get_harvester_plots_keys_missing(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                missing_keys.extend(results['plots'])
+                missing_keys.extend(results['plots'][:100])
                 farmer.close()
                 await farmer.await_closed()
 
@@ -390,7 +390,7 @@ class RPC:
                 )
                 duplicate_plots = []
                 results = await farmer.get_harvester_plots_duplicates(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                duplicate_plots.extend(results['plots'])
+                duplicate_plots.extend(results['plots'][:100])
                 farmer.close()
                 await farmer.await_closed()
 

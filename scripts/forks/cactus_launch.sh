@@ -37,7 +37,7 @@ if [ -f /root/.cactus/mainnet/config/config.yaml ]; then
 fi
 
 # Loop over provided list of key paths
-label_num = 0
+label_num=0
 for k in ${keys//:/ }; do
   if [[ "${k}" == "persistent" ]]; then
     echo "Not touching key directories."
