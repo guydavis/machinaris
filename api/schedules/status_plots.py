@@ -166,11 +166,12 @@ def update_chia_plots(plots_status, since):
     except Exception as ex:
         app.logger.error("PLOT STATUS: Failed to load Chia plots being farmed because {0}".format(str(ex)))
         traceback.print_exc()
-    memory_afterward = utils.current_memory_megabytes()
     del plots_farming
+    del plots_by_id
     if items:
         del items
         gc.collect()
+        memory_afterward = utils.current_memory_megabytes()
         app.logger.info("PLOT STATUS: In {3} seconds, memory went from {0} MB to {2} MB, {1} MB at prestore.".format(
             memory_start, memory_prestore, memory_afterward, (round(time.time()-time_start, 2))))
     
