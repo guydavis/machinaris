@@ -103,7 +103,7 @@ def save_duplicate_plots(duplicated_plots):
         app.logger.error('Failed to send duplicated plots warnings due to '+ str(ex))
 
 def update_chia_plots(plots_status, since):
-    payload = []
+    items = []
     time_start = time.time()
     memory_start = utils.current_memory_megabytes()
     try:
@@ -140,7 +140,7 @@ def update_chia_plots(plots_status, since):
                 add_duplicate_plots(duplicate_plots, file, plot['hostname'], dir, plots_by_id[short_plot_id]['hostname'], plots_by_id[short_plot_id]['path'])
             plots_by_id[short_plot_id] = { 'hostname': plot['hostname'], 'worker': displayname, 'path': dir, 'file': file }
             if not duplicated_on_same_host and (not since or created_at > since):
-                payload.append({
+                items.append(p.Plot(**{
                     "plot_id": short_plot_id,
                     "blockchain": 'chia',
                     "hostname": plot['hostname'] if plot['hostname'] in ['127.0.0.1'] else plot['hostname'],
@@ -152,15 +152,13 @@ def update_chia_plots(plots_status, since):
                     "plot_analyze": analyze_status(plots_status, short_plot_id),
                     "plot_check": check_status(plots_status, short_plot_id),
                     "size": plot['file_size']
-                })
-        if len(payload) > 0:
+                }))
+        if len(items) > 0:
             memory_prestore = utils.current_memory_megabytes()
-            app.logger.info("PLOT STATUS: About to store {0} Chia plots.".format(len(payload)))
+            app.logger.info("PLOT STATUS: About to store {0} Chia plots.".format(len(items)))
             try:
-                for new_item in payload: # Maximum of chunk_size plots inserted at a time.
-                    item = p.Plot(**new_item)
-                    db.session.add(item)
-                db.session.commit() # Commit every chunk size
+                db.session.bulk_save_objects(items)
+                db.session.commit() 
             except Exception as ex:
                 app.logger.error("PLOT STATUS: Failed to store batch of Chia plots being farmed [{0}:{1}] because {2}".format(i, i+chunk_size, str(ex)))
         if not since: # Save current duplicate plots
@@ -170,8 +168,8 @@ def update_chia_plots(plots_status, since):
         traceback.print_exc()
     memory_afterward = utils.current_memory_megabytes()
     del plots_farming
-    if payload:
-        del payload
+    if items:
+        del items
         gc.collect()
         app.logger.info("PLOT STATUS: In {3} seconds, memory went from {0} MB to {2} MB, {1} MB at prestore.".format(
             memory_start, memory_prestore, memory_afterward, (round(time.time()-time_start, 2))))
