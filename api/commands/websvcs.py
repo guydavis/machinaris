@@ -59,7 +59,7 @@ def load_cold_wallet_cache():
     return data
 
 def save_cold_wallet_cache(cold_wallet_cache):
-    app.logger.info("SAVING COLD WALLET CACHE: {0}".format(cold_wallet_cache))
+    app.logger.debug("Saving cold wallet cache: {0}".format(cold_wallet_cache))
     try:
         with open(COLD_WALLET_CACHE_FILE, 'w') as f:
             json.dump(cold_wallet_cache, f)
@@ -325,8 +325,8 @@ def request_vayamos_prices(debug=False):
                 if not market['pair'].endswith('USDT'):
                     continue # Skip other market pairs than USDT
                 for blockchain in SUPPORTED_BLOCKCHAINS:
-                    posat_symbol = globals.get_blockchain_symbol(blockchain).upper()
-                    if market['base'] == posat_symbol:
+                    vayamos_symbol = globals.get_blockchain_symbol(blockchain).upper()
+                    if market['base'] == vayamos_symbol:
                         #app.logger.info("VAYAMOS: {0} @ {1}".format(blockchain, market['price']))
                         try:
                             prices[blockchain] = float(market['price'])
@@ -367,7 +367,7 @@ def get_prices():
         try:
             last_price_request_time = datetime.datetime.now()
             store_exchange_prices(prices, 'alltheblocks', request_atb_prices(), last_price_request_time)
-            store_exchange_prices(prices, 'posat', request_posat_prices(), last_price_request_time)
+            #store_exchange_prices(prices, 'posat', request_posat_prices(), last_price_request_time) # Dead as of Sept 2022
             store_exchange_prices(prices, 'vayamos', request_vayamos_prices(), last_price_request_time)
             save_prices_cache(prices)
         except Exception as ex:

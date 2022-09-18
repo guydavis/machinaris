@@ -393,3 +393,8 @@ def downgrade_stat_total_balance():
     pass
     # ### end Alembic commands ###
 
+def upgrade_warnings():
+    pass
+
+def downgrade_warnings():
+    pass

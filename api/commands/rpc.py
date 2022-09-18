@@ -262,7 +262,7 @@ class RPC:
             for harvester in result["harvesters"]:
                 # app.logger.info(harvester.keys()) Returns: ['connection', 'failed_to_open_filenames', 'no_key_filenames', 'plots']
                 # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
-                host = harvester["connection"]["host"]
+                host = utils.convert_chia_ip_address(harvester["connection"]["host"])
                 plots = harvester["plots"]
                 app.logger.info("Listing plots found {0} plots on {1}.".format(len(plots), host))
                 for plot in plots:
@@ -342,7 +342,7 @@ class RPC:
             app.logger.info("Error getting transactions via RPC: {0}".format(str(ex)))
         return transactions
 
-    # Get warnings about problem plots
+    # Get warnings about problem plots, only first 100 warnings each to avoid overwhelming the user
     async def _load_harvester_warnings(self):
         harvesters = {}
         try:
@@ -359,7 +359,7 @@ class RPC:
                 
                 # app.logger.info(harvester.keys()) Returns: ['connection', 'failed_to_open_filenames', 'no_key_filenames', 'plots']
                 # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
-                host = harvester["connection"]["host"]
+                host = utils.convert_chia_ip_address(harvester["connection"]["host"])
                 node_id = harvester["connection"]["node_id"] # TODO Track link between worker and node_id?
                 #app.logger.info(node_id)
 
@@ -370,7 +370,7 @@ class RPC:
 
                 invalid_plots = []
                 results = await farmer.get_harvester_plots_invalid(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                invalid_plots.extend(results['plots'])
+                invalid_plots.extend(results['plots'][:100])
                 farmer.close()
                 await farmer.await_closed()
 
@@ -380,7 +380,7 @@ class RPC:
                 )
                 missing_keys = []
                 results = await farmer.get_harvester_plots_keys_missing(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                missing_keys.extend(results['plots'])
+                missing_keys.extend(results['plots'][:100])
                 farmer.close()
                 await farmer.await_closed()
 
@@ -390,7 +390,7 @@ class RPC:
                 )
                 duplicate_plots = []
                 results = await farmer.get_harvester_plots_duplicates(PlotPathRequestData(bytes.fromhex(node_id[2:]), 0, 1000))
-                duplicate_plots.extend(results['plots'])
+                duplicate_plots.extend(results['plots'][:100])
                 farmer.close()
                 await farmer.await_closed()
 

@@ -18,6 +18,7 @@ class DefaultConfig:
         'plots':            'sqlite:////root/.chia/machinaris/dbs/plots.db',
         'pools':            'sqlite:////root/.chia/machinaris/dbs/pools.db',
         'wallets':          'sqlite:////root/.chia/machinaris/dbs/wallets.db',
+        'warnings':         'sqlite:////root/.chia/machinaris/dbs/warnings.db',
         'workers':          'sqlite:////root/.chia/machinaris/dbs/workers.db',
 
         'stat_plot_count':          'sqlite:////root/.chia/machinaris/dbs/stat_plot_count.db',

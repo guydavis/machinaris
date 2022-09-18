@@ -232,6 +232,14 @@ def farming_workers():
         MAX_COLUMNS_ON_CHART=stats.MAX_ALLOWED_PATHS_ON_BAR_CHART,
         global_config=gc)
 
+@app.route('/farming/warnings')
+def farming_warnings():
+    gc = globals.load()
+    farmers = chia.load_farmers()
+    plot_warnings = warnings.load_plot_warnings()
+    return render_template('farming/warnings.html', farmers=farmers, 
+        plot_warnings=plot_warnings, global_config=gc, lang=get_lang(request))
+
 @app.route('/alerts', methods=['GET', 'POST'])
 def alerts():
     gc = globals.load()

@@ -52,6 +52,7 @@ def on_starting(server):
         scheduler.add_job(func=status_challenges.update, name="status_challenges", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_alerts.update, name="status_alerts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=log_rotate.execute, name="log_rotate", trigger='cron', minute=0)  # Hourly
+        scheduler.add_job(func=status_warnings.collect, name="status_warnings", trigger='cron', minute="*/20") # Every 20 minutes
 
     # Status for plotters
     if globals.plotting_enabled():

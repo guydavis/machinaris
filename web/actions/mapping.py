@@ -15,7 +15,7 @@ import traceback
 
 from common.models import connections as co
 from common.config import globals
-from api import app
+from web import app
 
 MAXMIND_LICENSE_FILE = '/root/.chia/machinaris/config/maxmind_license.json'
 MAPBOX_LICENSE_FILE = '/root/.chia/machinaris/config/mapbox_license.json'
