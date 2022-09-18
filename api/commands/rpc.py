@@ -7,6 +7,7 @@ import datetime
 import importlib
 import os
 import traceback
+import uuid
 
 from common.config import globals
 from api import app
@@ -201,17 +202,34 @@ class RPC:
         asyncio.set_event_loop(loop)
 
     # Used to load all plots on all harvesters
+    def get_all_plots_test_harness(self):
+        testing_plots = []
+        for i in range(240): # 240 x 500 is 120000 plots
+            for plot in asyncio.run(self._load_all_plots())[:500]:
+                #old_plot_name = plot['filename']
+                plot['plot_id'] = str(uuid.uuid4())[:16] # Generate a unique plot
+                idx = plot['filename'].rindex('-')
+                plot['filename'] = plot['filename'][:idx+1] + plot['plot_id'] + plot['filename'][idx+17:]
+                #app.logger.info("{0} -> {1}".format(old_plot_name, plot['filename']))
+                testing_plots.append(plot)
+        return testing_plots
+
+    # Used to load all plots on all harvesters
     def get_all_plots(self):
         plots_via_rpc = asyncio.run(self._load_all_plots())
         return plots_via_rpc
 
     # Get all wallet info
     def get_wallets(self):
+        if not globals.wallet_running():
+            return []
         wallets = asyncio.run(self._load_wallets())
         return wallets
 
     # Get transactions for a particular wallet
     def get_transactions(self, wallet_id, reverse=False):
+        if not globals.wallet_running():
+            return []
         if globals.legacy_blockchain(globals.enabled_blockchains()[0]):
             transactions = asyncio.run(self._load_transactions_legacy_blockchains(wallet_id, reverse))
         else:
@@ -264,7 +282,7 @@ class RPC:
                 # app.logger.info(harvester['connection']) Returns: {'host': '192.168.1.100', 'node_id': '602eb9...90378', 'port': 62599}
                 host = utils.convert_chia_ip_address(harvester["connection"]["host"])
                 plots = harvester["plots"]
-                app.logger.info("Listing plots found {0} plots on {1}.".format(len(plots), host))
+                #app.logger.info("Listing plots found {0} plots on {1}.".format(len(plots), host))
                 for plot in plots:
                     all_plots.append({
                         "hostname": host,
