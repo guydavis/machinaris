@@ -124,10 +124,16 @@
                 </td>
                 <td>
                     {% if blockchain.status == 'Offline' %}
-                      <i class="bi-dash-circle text-danger"></i> &nbsp; {{blockchain.status}}
+                      <i class="bi-dash-circle text-danger"></i> &nbsp; {{_('Offline')}}
                     {% elif blockchain.status.lower().startswith('synced') %}
                       <i class="bi-check-circle text-success"></i>
-                      &nbsp; <a class="text-white" title="{{_('Restart Blockchain')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{ fullnodes[blockchain.blockchain].hostname }}" data-bs-blockchain="{{blockchain.blockchain}}">{{blockchain.status}}</a>
+                      &nbsp; <a class="text-white" title="{{_('Restart Blockchain')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{ fullnodes[blockchain.blockchain].hostname }}" data-bs-blockchain="{{blockchain.blockchain}}">{{_('Synced')}}</a>
+                    {% elif blockchain.status.lower().startswith('not synced') or blockchain.status.lower().startswith('syncing')  %}
+                      <i class="bi-exclamation-triangle text-warning"></i>
+                      &nbsp; <a class="text-white" title="{{_('Restart Blockchain')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{ fullnodes[blockchain.blockchain].hostname }}" data-bs-blockchain="{{blockchain.blockchain}}">{{_('Syncing')}}</a>
+                    {% elif blockchain.status.lower().startswith('error') %}
+                      <i class="bi-exclamation-triangle text-danger"></i>
+                      &nbsp; <a class="text-white" title="{{_('Restart Blockchain')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{ fullnodes[blockchain.blockchain].hostname }}" data-bs-blockchain="{{blockchain.blockchain}}">{{_('Error')}}</a>
                     {% else %}
                       <i class="bi-exclamation-triangle text-warning"></i>
                       &nbsp; <a class="text-white" title="{{_('Restart Blockchain')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{ fullnodes[blockchain.blockchain].hostname }}" data-bs-blockchain="{{blockchain.blockchain}}">{{blockchain.status}}</a>

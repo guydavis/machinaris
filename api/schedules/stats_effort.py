@@ -61,6 +61,8 @@ def collect():
                 return
             farm_summary = chia_cli.load_farm_summary(blockchain)
             wallets = blockchain_rpc.get_wallets()
+            if len(wallets) < 1:  # If no wallet status returned, then no effort stat to record.
+                return
             transactions = blockchain_rpc.get_transactions(wallets[0]['id'], reverse=True) # Search primary wallet only
             most_recent_block_reward_time = None
             for transaction in transactions:  # Order is reversed; newest to oldest

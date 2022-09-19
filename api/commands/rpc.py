@@ -201,7 +201,7 @@ class RPC:
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
 
-    # Used to load all plots on all harvesters
+    # Used to load all plots on all harvesters when testing performance of 100,000+ inserts
     def get_all_plots_test_harness(self):
         testing_plots = []
         for i in range(240): # 240 x 500 is 120000 plots

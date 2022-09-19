@@ -625,6 +625,7 @@ class Blockchains:
                     if 'No' == status: # MMX
                         return "Syncing" 
                     return status
+            return "Error"
         return "Offline"
 
     def extract_height(self, blockchain, details):
