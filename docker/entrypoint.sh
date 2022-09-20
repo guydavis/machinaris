@@ -81,7 +81,7 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   /usr/bin/bash /machinaris/scripts/farmr_setup.sh > /tmp/farmr_setup.log 2>&1
 
   # Conditionally install fd-cli on fullnodes, excluding Chia and Chives
-  /usr/bin/bash /machinaris/scripts/fd-cli_setup.sh > /tmp/fd-cli_setup.log 2>&1
+  /usr/bin/bash /machinaris/scripts/fd-cli_setup.sh ${FDCLI_BRANCH} > /tmp/fd-cli_setup.log 2>&1
 
   # Conditionally build bladebit on plotters and fullnodes, sleep a bit first
   /usr/bin/bash /machinaris/scripts/bladebit_setup.sh ${BLADEBIT_BRANCH} > /tmp/bladebit_setup.log 2>&1

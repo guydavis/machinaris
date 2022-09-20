@@ -6,13 +6,15 @@
 #
 
 # On 2021-11-08
-HASH=e99cf3c9d39d0a6c71ee0f92f11034f0b5516df7
+HASH=c9f562728acde289d3406d5cdc5a1139fd4267c8
+
+FDCLI_BRANCH=$1
 
 if [[ ${mode} == 'fullnode' ]]; then
     if [[ "${blockchains}" != 'chia' ]] && [[ "${blockchains}" != 'chives' ]] && [[ "${blockchains}" != 'mmx' ]]; then
         cd /
-        git clone https://github.com/Flora-Network/fd-cli.git
-        cd fd-cli
+        git clone --branch ${FDCLI_BRANCH} https://github.com/guydavis/flora-dev-cli.git
+        cd flora-dev-cli
         git checkout $HASH
         pip install -e . --extra-index-url https://pypi.chia.net/simple/
     fi
