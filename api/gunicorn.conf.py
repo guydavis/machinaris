@@ -97,7 +97,6 @@ def on_starting(server):
     #scheduler.add_job(func=periodically_sync_wallet.execute, name="periodically_sync_wallet", trigger='interval', seconds=60) # Test immediately
     #scheduler.add_job(func=status_warnings.collect, name="status_warnings", trigger='interval', seconds=60) # Test immediately
     #scheduler.add_job(func=nft_recover.execute, name="status_nft_recover", trigger='interval', seconds=60)
-        
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()
