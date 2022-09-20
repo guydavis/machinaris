@@ -59,7 +59,7 @@ def load_cold_wallet_cache():
     return data
 
 def save_cold_wallet_cache(cold_wallet_cache):
-    app.logger.debug("Saving cold wallet cache: {0}".format(cold_wallet_cache))
+    app.logger.info("Saving cold wallet cache: {0}".format(cold_wallet_cache))
     try:
         with open(COLD_WALLET_CACHE_FILE, 'w') as f:
             json.dump(cold_wallet_cache, f)
@@ -180,6 +180,7 @@ def cold_wallet_balance(blockchain):
                 app.logger.error("Failed to request cold wallet balance for {0} due to {1}".format(cold_blockchain, str(ex)))
         save_cold_wallet_cache(cold_wallet_cache)
     # Now for that specific blockchain, check for a cold wallet balance in the cache
+    total_balance = 0.0
     if blockchain in addresses_per_blockchain:
         for address in addresses_per_blockchain[blockchain]:
             if address in cold_wallet_cache:
@@ -191,6 +192,7 @@ def cold_wallet_balance(blockchain):
                 except Exception as ex:
                     app.logger.info("During cold balance lookup, deleting old cold wallet cache file with legacy format. {0}".format(str(ex)))
                     os.remove(COLD_WALLET_CACHE_FILE)
+        app.logger.info("Returning {0} cold wallet balance of {1}".format(blockchain, total_balance))
         return total_balance
     return 0.0 # No cold wallet addresses to check, so no errors obviously
 

@@ -12,6 +12,7 @@ RUN apt-get update \
 		bc \
 		ca-certificates \
 		cifs-utils \
+		cmake \
 		curl \
 		git \
 		iproute2 \

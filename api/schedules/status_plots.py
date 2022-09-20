@@ -106,6 +106,7 @@ def update_chia_plots(plots_status, since):
     time_start = time.time()
     memory_start = utils.current_memory_megabytes()
     memory_prestore = None
+    plots_farming = None
     try:
         if not since:  # If no filter, delete all for this blockchain before storing again
             db.session.query(p.Plot).filter(p.Plot.blockchain=='chia').delete()
@@ -129,6 +130,7 @@ def update_chia_plots(plots_status, since):
                     displayname = plot['hostname']
                 displaynames[plot['hostname']] = displayname
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
+            #app.logger.info("{0} -> {1}".format(short_plot_id, file))
             duplicated_on_same_host = False
             if not since and short_plot_id in plots_by_id:  # Only check for duplicates on full load
                 if plot['hostname'] == plots_by_id[short_plot_id]['hostname']:
@@ -161,24 +163,25 @@ def update_chia_plots(plots_status, since):
                 db.session.bulk_save_objects(items)
                 db.session.commit() 
             except Exception as ex:
-                app.logger.error("PLOT STATUS: Failed to store batch of Chia plots being farmed [{0}:{1}] because {2}".format(i, i+chunk_size, str(ex)))
+                app.logger.error("PLOT STATUS: Failed to store Chia plots being farmed because {0}".format(str(ex)))
         if not since: # Save current duplicate plots
             save_duplicate_plots(duplicate_plots)
     except Exception as ex:
         app.logger.error("PLOT STATUS: Failed to load Chia plots being farmed because {0}".format(str(ex)))
         traceback.print_exc()
-    del plots_farming
-    del plots_by_id
-    if items:
-        del items
-    gc.collect()
-    memory_afterward = utils.current_memory_megabytes()
-    if memory_prestore:  # Full re-sync
-        app.logger.info("PLOT STATUS: In {3} seconds, memory went from {0} MB to {2} MB, {1} MB at prestore.".format(
-            memory_start, memory_prestore, memory_afterward, (round(time.time()-time_start, 2))))
-    else: # Only new plots added, if any
-        app.logger.info("PLOT STATUS: In {2} seconds, memory went from {0} MB to {1} MB.".format(
-            memory_start, memory_afterward, (round(time.time()-time_start, 2))))
+    finally:
+        del plots_farming
+        del plots_by_id
+        if items:
+            del items
+        gc.collect()
+        memory_afterward = utils.current_memory_megabytes()
+        if memory_prestore:  # Full re-sync
+            app.logger.info("PLOT STATUS: In {3} seconds, memory went from {0} MB to {2} MB, {1} MB at prestore.".format(
+                memory_start, memory_prestore, memory_afterward, (round(time.time()-time_start, 2))))
+        else: # Only new plots added, if any
+            app.logger.info("PLOT STATUS: In {2} seconds, memory went from {0} MB to {1} MB.".format(
+                memory_start, memory_afterward, (round(time.time()-time_start, 2))))
     
 # Sent from a separate fullnode container
 def update_chives_plots(since):
