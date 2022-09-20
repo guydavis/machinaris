@@ -58,6 +58,15 @@
                     {% endif %}
                 {% endfor %}
               </select>
+              <div class="mb-3">
+                <label for="sync_wallet_frequency" class="col-form-label">{{_('Sync Wallets:')}}</label>
+                <select type="text" class="form-control" id="sync_wallet_frequency_field" name="sync_wallet_frequency">
+                  {% for frequency in sync_wallet_frequencies %}
+                      <option {% if frequency[0]|string() == sync_wallet_frequency|string() %} selected {% endif %}
+                          value="{{frequency[0]}}">{{frequency[1]}}</option>
+                  {% endfor %}
+                </select>
+              </div>
             </div>
           </form>
         </div>
@@ -96,8 +105,31 @@
     </div>
   </div>
 
+  <div class="modal fade" id="restartModal" tabindex="-1" aria-labelledby="restartModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3 modal-lg">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="restartModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form method="POST" id="restart-form">
+                <input type="hidden" id="hostname_field" name="hostname" value="" />
+                <input type="hidden" id="wallet_blockchain_field" name="blockchain" value="" />
+                <input type="hidden" id="action_field" name="action" value="" />
+                <p id="restartModalMessage"></p>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">{{_('Cancel')}}</button>
+              <button type="button" class="btn btn-outline-success" id="btnRestart"></button>
+            </div>
+        </div>
+    </div>
+  </div>
+
 <header class="pb-3 mb-4 border-bottom">
-    <span class="fs-4">{{_('Wallet Summary')}}</span>
+    <span class="fs-4">{{_('Wallet Summary')}} {{ chart_data.last_value }} </span>
 </header>
 
 {% if chart_data.dates|length > 0 %}
@@ -133,14 +165,22 @@
                 <td>
                     {% if wallet.status == 'Offline' %}
                       <i class="bi-dash-circle text-danger"></i> &nbsp; {{_('Offline')}}
+                    {% elif wallet.status == 'Paused' or wallet.service == 'paused' %}
+                      <i class="bi-pause-circle"></i> &nbsp; 
+                      <a class="text-white" title="{{_('Start Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{wallet.hostname}}" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="start">{{_('Paused')}}</a>
                     {% elif wallet.status.lower().startswith('synced') %}
-                      <i class="bi-check-circle text-success"></i> &nbsp; {{_('Synced')}}
+                      <i class="bi-check-circle text-success"></i> &nbsp;
+                      <a class="text-white" title="{{_('Pause Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{wallet.hostname}}" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="pause">{{_('Synced')}}</a>
                     {% elif wallet.status.lower().startswith('syncing') %}
-                      <i class="bi-check-circle text-warning"></i> &nbsp; {{_('Syncing')}}
-                      {% elif wallet.status.lower().startswith('not synced') %}
-                      <i class="bi-check-circle text-danger"></i> &nbsp; {{_('Not Synced')}}
+                      <i class="bi-check-circle text-warning"></i> &nbsp;
+                      <a class="text-white" title="{{_('Pause Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{wallet.hostname}}" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="pause">{{_('Syncing')}}</a>
+                    {% elif wallet.status.lower().startswith('not synced') %}
+                      <i class="bi-check-circle text-danger"></i> &nbsp; 
+                      <a class="text-white" title="{{_('Pause Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{wallet.hostname}}" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="pause">{{_('Not Synced')}}</a>
                     {% else %}
-                      <i class="bi-exclamation-triangle text-warning"></i> &nbsp; {{wallet.status}}
+                      <i class="bi-exclamation-triangle text-warning"></i> 
+                      &nbsp; 
+                      {{wallet.status}}
                     {% endif %} 
                 </td>
                 <td>{{wallet.hot_balance}}</td>
@@ -222,6 +262,14 @@
                 );
                 $("#wallet-form").submit();
             });
+            $("#btnRestart").click(function () {
+                $("#btnCancel").prop("disabled", true);
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...`
+                );
+                $("#restart-form").submit();
+            });
             var walletModal = document.getElementById('walletModal')
             walletModal.addEventListener('show.bs.modal', function (event) {
                 var button = event.relatedTarget
@@ -234,7 +282,35 @@
                 var modalTitle = walletModal.querySelector('.modal-title')
                 modalTitle.textContent = 'Wallet Settings - ' + blockchain
             })
-        })
+            var restartModal = document.getElementById('restartModal')
+              restartModal.addEventListener('show.bs.modal', function (event) {
+                  var button = event.relatedTarget
+                  var hostname = button.getAttribute('data-bs-hostname')
+                  var hostnameField = document.getElementById('hostname_field')
+                  hostnameField.value = hostname
+                  var blockchain = button.getAttribute('data-bs-blockchain')
+                  var walletBlockchainField = document.getElementById('wallet_blockchain_field')
+                  walletBlockchainField.value = blockchain
+                  var action = button.getAttribute('data-bs-action')
+                  var actionField = document.getElementById('action_field')
+                  actionField.value = action
+                  var restartModalLabel = document.getElementById('restartModalLabel')
+                  var restartModalMessage = document.getElementById('restartModalMessage')
+                  var modalTitle = restartModal.querySelector('.modal-title')
+                  var btnRestart = document.getElementById('btnRestart')
+                  if (action == 'start') {
+                    restartModalLabel.value = "{{_('Start Wallet')}}"
+                    modalTitle.textContent = "{{_('Start Wallet')}} - " + blockchain
+                    btnRestart.textContent = "{{_('Start')}}"
+                    restartModalMessage.textContent = "{{_('This will start the blockchain\'s wallet.  Please allow at least 15 minutes afterwards for services to reconnect before attempting another action.  Your patience is appreciated! Continue anyway?')}}"
+                  } else {
+                    restartModalLabel.value = "{{_('Pause Wallet')}}"
+                    modalTitle.textContent = "{{_('Pause Wallet')}} - " + blockchain
+                    btnRestart.textContent = "{{_('Pause')}}"
+                    restartModalMessage.textContent = "{{_('This will pause the blockchain\'s wallet.  Please allow a few minutes for this to be reflected on this page.  Your patience is appreciated! Continue anyway?')}}"
+                  }
+              })
+            })
         function ViewTransactions(blockchain, wallet_id) {
           var d = new Date();
           var height = 600;

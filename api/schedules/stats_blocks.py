@@ -14,8 +14,6 @@ from common.utils import converters
 from api import app, utils, db
 from api.commands import log_parser
 
-TABLES = [ stats.StatFarmedBlocks ]
-
 def collect():
     with app.app_context():
         gc = globals.load()

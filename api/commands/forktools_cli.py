@@ -40,15 +40,15 @@ def exec_fixconfig():
     proc = Popen("echo 'Y' | ./forkfixconfig all", cwd='/forktools', stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
+        if outs:
+            app.logger.info("{0}".format(outs.decode('utf-8')))
+        if errs:
+            app.logger.info("{0}".format(errs.decode('utf-8')))
+            return False
     except TimeoutExpired as ex:
         proc.kill()
         proc.communicate()
         app.logger.info(traceback.format_exc())
-        return False
-    if outs:
-        app.logger.info("{0}".format(outs.decode('utf-8')))
-    if errs:
-        app.logger.info("{0}".format(errs.decode('utf-8')))
         return False
     return True
 
@@ -64,6 +64,6 @@ def save_config(config, blockchain):
     app.logger.info("Executing forkfixconfig against updated configuration.")
     if exec_fixconfig():
         app.logger.info("Executing blockchain restart for {0}...".format(blockchain))
-        chia_cli.start_farmer(blockchain)
+        chia_cli.restart_farmer(blockchain)
     else:
         app.logger.info("Failed to execute forkfixconfig using updated configuration.")

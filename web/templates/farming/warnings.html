@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="position-relative">
+    <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -8px;">
+      <a href="https://github.com/guydavis/machinaris/wiki/Chia" target="_blank">
+        <i class="fs-4 bi-question-circle"></i>
+      </a>
+    </div>
+  </div>
+
+<style>
+    a.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+    button.active.nav-link {
+        background-color: #3d3f42 !important
+    }
+</style>
+<nav class="navbar navbar-dark" style="padding-bottom: 0px;">
+    <div class="container-fluid">
+        <ul class="nav nav-tabs bg-dark">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('farming_plots') }}">{{_('Plots')}}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('farming_workers') }}">{{_('Workers')}}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{{ url_for('farming_warnings') }}">{{_('Warnings')}}</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    {% if category == 'message' %}
+    <div class="alert alert-warning" role="alert">
+        {% else %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {% endif %}
+            {{ message|safe }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="p-3 mb-4 bg-light border rounded-3">
+        <br/>
+        <h3 class="text-center" >{{_('Duplicate Plots')}}</h3>
+        {% if plot_warnings.duplicates|length > 0 %}
+        <form method="POST" id="dupelicates-form">
+            <div class="table-responsive">
+                <table id="duplicates_data" class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-success">{{_('Plot ID')}}</th>
+                            <th scope="col" class="text-success">{{_('Worker')}}</th>
+                            <th scope="col" class="text-success">{{_('Blockchain')}}</th>
+                            <th scope="col" class="text-success">{{_('Path')}}</th>
+                            <th scope="col" class="text-success">{{_('File')}}</th>
+                            <th scope="col" class="text-success">{{_('Reported At')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in plot_warnings.duplicates %}
+                        <tr>
+                            <td>{{row.plot_id}}</td>
+                            <td>{{row.worker}}</td>
+                            <td>{{row.blockchain}}</td>
+                            <td>{{row.path}}</td>
+                            <td>{{row.file}}</td>
+                            <td>{{row.reported_at}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        {% else %}
+        <div class="text-center" style="padding-top:150 px; padding-bottom: 150px">
+            <h6>{{_('Great! No duplicate plots reported amongst the workers on your farm.')}}</h6>
+        </div>
+        {% endif %}
+
+        <br/>
+        <h3 class="text-center" >{{_('Invalid Plots')}}</h3>
+        {% if plot_warnings.invalids|length > 0 %}
+        <form method="POST" id="invalids-form">
+            <div class="table-responsive">
+                <table id="invalids_data" class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-success">{{_('Plot ID')}}</th>
+                            <th scope="col" class="text-success">{{_('Worker')}}</th>
+                            <th scope="col" class="text-success">{{_('Blockchain')}}</th>
+                            <th scope="col" class="text-success">{{_('Path')}}</th>
+                            <th scope="col" class="text-success">{{_('File')}}</th>
+                            <th scope="col" class="text-success">{{_('Reported At')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in plot_warnings.invalids %}
+                        <tr>
+                            <td>{{row.plot_id}}</td>
+                            <td>{{row.worker}}</td>
+                            <td>{{row.blockchain}}</td>
+                            <td>{{row.path}}</td>
+                            <td>{{row.file}}</td>
+                            <td>{{row.reported_at}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        {% else %}
+        <div class="text-center" style="padding-top:150 px; padding-bottom: 150px">
+            <h6>{{_('Great! No invalid plots reported amongst the workers on your farm.')}}</h6>
+        </div>
+        {% endif %}
+
+        <br/>
+        <h3 class="text-center" >{{_('Missing Keys')}}</h3>
+        {% if plot_warnings.missingkeys|length > 0 %}
+        <form method="POST" id="missingkeys-form">
+            <div class="table-responsive">
+                <table id="missingkeys_data" class="table table-dark">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-success">{{_('Plot ID')}}</th>
+                            <th scope="col" class="text-success">{{_('Worker')}}</th>
+                            <th scope="col" class="text-success">{{_('Blockchain')}}</th>
+                            <th scope="col" class="text-success">{{_('Path')}}</th>
+                            <th scope="col" class="text-success">{{_('File')}}</th>
+                            <th scope="col" class="text-success">{{_('Reported At')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in plot_warnings.missingkeys %}
+                        <tr>
+                            <td>{{row.plot_id}}</td>
+                            <td>{{row.worker}}</td>
+                            <td>{{row.blockchain}}</td>
+                            <td>{{row.path}}</td>
+                            <td>{{row.file}}</td>
+                            <td>{{row.reported_at}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        {% else %}
+        <div class="text-center" style="padding-top:150 px; padding-bottom: 150px">
+            <h6>{{_('Great! No plots with missing keys were reported amongst the workers on your farm.')}}</h6>
+        </div>
+        {% endif %}
+    
+    </div>
+
+    {% endblock %}
+
+    {% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $('#duplicates_data').DataTable({
+                "stateSave": true,
+                "pageLength": 25,
+                {% if lang != 'en' %}
+                "language": {
+                    "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+                },
+                {% endif %}
+            });
+            $('#invalids_data').DataTable({
+                "stateSave": true,
+                "pageLength": 25,
+                {% if lang != 'en' %}
+                "language": {
+                    "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+                },
+                {% endif %}
+            });
+            $('#missingkeys_data').DataTable({
+                "stateSave": true,
+                "pageLength": 25,
+                {% if lang != 'en' %}
+                "language": {
+                    "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+                },
+                {% endif %}
+            });
+        })
+        </script>
+    {% endblock %}

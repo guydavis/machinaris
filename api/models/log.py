@@ -53,12 +53,10 @@ class Partials:
                     created_at = line.split()[0].replace('T', ' ')
                     launcher_id = re.search('partial for (\w+) to', line, re.IGNORECASE).group(1)
                     pool_url = re.search('to (.*)$', line, re.IGNORECASE).group(1)
-                elif "Pool response" in line and launcher_id:
-                    pool_response = line[line.index('{'):]
                     self.rows.append({
                         'launcher_id': launcher_id,
                         'pool_url': pool_url.strip(),
-                        'pool_response': pool_response,
+                        'pool_response': "n/a", # Ignore pool response on random next line(s), often out of order
                         'created_at': created_at
                     })
                     created_at = None

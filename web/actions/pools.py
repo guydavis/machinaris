@@ -88,5 +88,9 @@ def get_pool_configs():
 
 def partials_chart_data(farm_summary):
     for blockchain in farm_summary.farms:
-        partials = db.session.query(pr.Partial).filter(pr.Partial.blockchain==blockchain).order_by(pr.Partial.created_at.desc()).all()
+        # Only pull partials found up to the start of the hour, exactly 23 hours before current hour
+        # This excludes counting partials in same hour exactly 24 hours ago in current hour
+        start_time = (datetime.datetime.now().replace(microsecond=0, second=0, minute=0) - datetime.timedelta(hours=23)).strftime("%Y-%m-%d %H:%M:%S")
+        app.logger.debug("Counting partials starting at {0} and later...".format(start_time))
+        partials = db.session.query(pr.Partial).filter(pr.Partial.blockchain==blockchain,pr.Partial.created_at>=start_time).order_by(pr.Partial.created_at.desc()).all()
         farm_summary.farms[blockchain]['partials'] =  PartialsChartData(partials)

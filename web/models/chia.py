@@ -355,11 +355,17 @@ class Wallets:
         for wallet in wallets:
             app.logger.debug("Wallets.init(): Parsing wallet for blockchain: {0}".format(wallet.blockchain))
             worker_status = None
+            service_status = None
             try:
                 app.logger.debug("Wallets.init(): Found worker with hostname '{0}'".format(wallet.hostname))
                 worker = w.get_worker(wallet.hostname, wallet.blockchain)
                 worker_status = worker.connection_status()
                 displayname = worker.displayname
+                try:
+                    service_status = json.loads(worker.config)['wallet_status']
+                    app.logger.debug("For {0} found wallet service status: {1}".format(wallet.blockchain, service_status))
+                except:
+                    pass
             except:
                 app.logger.info("Wallets.init(): Unable to find a worker with hostname '{0}'".format(wallet.hostname))
                 displayname = wallet.hostname
@@ -369,11 +375,14 @@ class Wallets:
                 hot_balance = self.sum_chia_wallet_balance(wallet.hostname, wallet.blockchain, False)
             try:
                 cold_balance = converters.round_balance(float(wallet.cold_balance))
-            except:
+            except Exception as ex:
+                app.logger.error("Failed to convert wallet.cold_balance {0} of type {1}".format(wallet.cold_balance, type(wallet.cold_balance), str(ex)))
                 cold_balance = ''
             try:
-                total_balance = float(hot_balance) + float(cold_balance)
-            except:
+                total_balance = float(hot_balance) + float(wallet.cold_balance)
+            except Exception as ex:
+                app.logger.error("Either failed to convert hot_balance  {0} of type {1}".format(hot_balance, type(hot_balance), str(ex)))
+                app.logger.error("OR failed     to convert wallet.cold_balance {0} of type {1}".format(wallet.cold_balance, type(wallet.cold_balance), str(ex)))
                 total_balance = hot_balance
             try:
                 blockchain_symbol = globals.get_blockchain_symbol(wallet.blockchain).lower()
@@ -383,7 +392,8 @@ class Wallets:
                 'displayname': displayname, 
                 'hostname': wallet.hostname,
                 'blockchain': wallet.blockchain,
-                'status': self.extract_status(wallet.blockchain, wallet.details, worker_status),
+                'status': self.extract_status(wallet.blockchain, wallet.details, wallet.updated_at, worker_status),
+                'service': service_status,
                 'details': self.link_to_wallet_transactions(wallet.blockchain, wallet.details),
                 'hot_balance': converters.round_balance(hot_balance),
                 'cold_balance': cold_balance,
@@ -472,10 +482,12 @@ class Wallets:
                     sum += locale.atof(wallet.cold_balance)
         return sum
 
-    def extract_status(self, blockchain, details, worker_status):
+    def extract_status(self, blockchain, details, updated_at, worker_status):
         if worker_status == 'Responding':
             if not details:
                 return None
+            if updated_at and updated_at <= (datetime.datetime.now() - datetime.timedelta(minutes=5)):
+                return "Paused"
             if blockchain == 'mmx':
                 pattern = '^Synced:\s+(.*)$'
             else:
@@ -613,6 +625,7 @@ class Blockchains:
                     if 'No' == status: # MMX
                         return "Syncing" 
                     return status
+            return "Error"
         return "Offline"
 
     def extract_height(self, blockchain, details):

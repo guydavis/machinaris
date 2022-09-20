@@ -20,6 +20,7 @@ from . import pools
 from . import rewards
 from . import transactions
 from . import wallets
+from . import warnings
 from . import workers
 
 from .stats import plottingdiskused,plottingdiskfree,plotsdiskused, \
@@ -48,6 +49,7 @@ MODULES = (
     rewards,
     transactions,
     wallets,
+    warnings,
     workers,
 
     plottingdiskused,

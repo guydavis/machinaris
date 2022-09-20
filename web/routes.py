@@ -232,6 +232,14 @@ def farming_workers():
         MAX_COLUMNS_ON_CHART=stats.MAX_ALLOWED_PATHS_ON_BAR_CHART,
         global_config=gc)
 
+@app.route('/farming/warnings')
+def farming_warnings():
+    gc = globals.load()
+    farmers = chia.load_farmers()
+    plot_warnings = warnings.load_plot_warnings()
+    return render_template('farming/warnings.html', farmers=farmers, 
+        plot_warnings=plot_warnings, global_config=gc, lang=get_lang(request))
+
 @app.route('/alerts', methods=['GET', 'POST'])
 def alerts():
     gc = globals.load()
@@ -262,16 +270,29 @@ def wallet():
         if request.form.get('local_currency'):
             app.logger.info("Saving local currency setting of: {0}".format(request.form.get('local_currency')))
             fiat.save_local_currency(request.form.get('local_currency'))
-            flash(_("Saved local currency setting."), 'success')
+            app.logger.info("Saving local currency setting of: {0}".format(request.form.get('local_currency')))
+            chia.save_current_wallet_sync_frequency(request.form.get('sync_wallet_frequency'))
+            flash(_("Saved local currency and wallet sync settings."), 'success')
+        elif request.form.get('blockchain'):
+            action = request.form.get('action')
+            if action == "start":
+                chia.start_or_pause_wallet(request.form.get('hostname'), request.form.get('blockchain'), action)
+                flash(_("Starting wallet sync.  Please allow at least 15 minutes..."), 'success')
+            elif action == "pause":
+                chia.start_or_pause_wallet(request.form.get('hostname'), request.form.get('blockchain'), action)
+                flash(_("Pausing wallet sync.  Please allow a few minutes..."), 'success')
         else:
             app.logger.info("Saving {0} cold wallet address of: {1}".format(request.form.get('blockchain'), request.form.get('cold_wallet_address')))
             selected_blockchain = request.form.get('blockchain')
             chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
     wallets = chia.load_wallets()
+    sync_wallet_frequencies = chia.load_wallet_sync_frequencies()
+    sync_wallet_frequency = chia.load_current_wallet_sync_frequency()
     chart_data = stats.load_total_balances(fiat.get_local_currency_symbol().lower())
     return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, 
         reload_seconds=120, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
-        chart_data=chart_data, local_cur_sym=fiat.get_local_currency_symbol(), lang=get_lang(request))
+        chart_data=chart_data, local_cur_sym=fiat.get_local_currency_symbol(), sync_wallet_frequencies=sync_wallet_frequencies, 
+        sync_wallet_frequency = str(sync_wallet_frequency), lang=get_lang(request))
 
 @app.route('/keys')
 def keys():
@@ -329,8 +350,12 @@ def drives():
 def blockchains():
     gc = globals.load()
     if request.method == 'POST':
-        fiat.save_local_currency(request.form.get('local_currency'))
-        flash(_("Saved local currency setting."), 'success')
+        if request.form.get('local_currency'):
+            fiat.save_local_currency(request.form.get('local_currency'))
+            flash(_("Saved local currency setting."), 'success')
+        elif request.form.get('blockchain'):
+            chia.restart_farmer(request.form.get('hostname'), request.form.get('blockchain'))
+            flash(_("Restarting blockchain.  Please allow at least 15 minutes..."), 'success')
     selected_blockchain = worker.default_blockchain()
     blockchains = chia.load_blockchains()
     fullnodes = worker.get_fullnodes_by_blockchain()

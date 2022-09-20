@@ -396,3 +396,9 @@ def upgrade_stat_effort():
 
 def downgrade_stat_effort():
     pass
+
+def upgrade_warnings():
+    pass
+
+def downgrade_warnings():
+    pass

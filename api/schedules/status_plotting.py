@@ -14,7 +14,6 @@ from api.commands import plotman_cli
 from api import utils
 
 def update():
-    app.logger.info("Executing status_plotting...")
     with app.app_context():
         try:
             hostname = utils.get_hostname()

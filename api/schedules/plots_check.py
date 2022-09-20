@@ -190,7 +190,6 @@ def execute():
         gc = globals.load()
         if not gc['is_controller']:
             return # Only controller should initiate check/analyze against other fullnodes/harvesters
-        #app.logger.info("Executing plots_check...")
         try:
             os.makedirs(ANALYZE_LOGS)
             os.makedirs(CHECK_LOGS)

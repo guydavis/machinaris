@@ -26,7 +26,6 @@ def update():
     if globals.load()['is_controller']:
         #app.logger.info("Skipping alerts polling on fullnode are already placed in database directly via chiadog_notifier.sh script.")
         return
-    app.logger.info("Executing status_alerts...")
     with app.app_context():
         try:
             from api import db

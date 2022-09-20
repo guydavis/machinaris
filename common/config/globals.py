@@ -92,6 +92,8 @@ def load():
         cfg['fullnode_db_version'] = fullnode_db_version
     if cfg['enabled_blockchains'][0] == 'mmx':
         cfg['mmx_reward'] = gather_mmx_reward()
+    if cfg['machinaris_mode'] == 'fullnode':
+        cfg['wallet_status'] = "running" if wallet_running() else "paused"
     return cfg
 
 def load_blockchain_info(blockchain, key):
@@ -153,8 +155,8 @@ def is_setup():
     return foundKey
 
 # On very first launch of the main Chia container, blockchain DB 7zip is being downloaded so must wait.
-CHIA_COMPRESSED_DB_SIZE = 30 * 1024 * 1024 * 1024 # 30 compressed GB in mid-2022
-CHIA_BLOCKCHAIN_DB_SIZE = 80 * 1024 * 1024 * 1024 # 80 uncompressed GB in mid-2022
+CHIA_COMPRESSED_DB_SIZE = 40 * 1024 * 1024 * 1024 # 40 compressed GB in Septemer 2022
+CHIA_BLOCKCHAIN_DB_SIZE = 90 * 1024 * 1024 * 1024 # 90 uncompressed GB in September 2022
 def blockchain_downloading():
     db_path = '/root/.chia/mainnet/db'
     if path.exists(f"{db_path}/blockchain_v1_mainnet.sqlite") or path.exists(f"{db_path}/blockchain_v2_mainnet.sqlite"):
@@ -205,6 +207,17 @@ def archiving_enabled():
         logging.info("Failed to read plotman.yaml so archiving_enabled=False.")
         logging.info(traceback.format_exc())
 
+# Ignore error at CLI about "data_layer.crt" that is still NOT fixed, despite being "closed".
+# https://github.com/Chia-Network/chia-blockchain/issues/13257
+def strip_data_layer_msg(lines):
+    useful_lines = []
+    for line in lines:
+        if "data_layer.crt" in line:
+            pass
+        else:
+            useful_lines.append(line)
+    return useful_lines
+
 last_blockchain_version = None
 last_blockchain_version_load_time = None
 def load_blockchain_version(blockchain):
@@ -219,9 +232,7 @@ def load_blockchain_version(blockchain):
         proc = Popen("{0} version".format(chia_binary),
                 stdout=PIPE, stderr=PIPE, shell=True)
         outs, errs = proc.communicate(timeout=90)
-        # Chia version with .dev is actually one # to high
-        # See: https://github.com/Chia-Network/chia-blockchain/issues/5655
-        last_blockchain_version = outs.decode('utf-8').strip()
+        last_blockchain_version = strip_data_layer_msg(outs.decode('utf-8').strip().splitlines())[0]
         if "@@@@" in last_blockchain_version:  # SSL warning 
             try:
                 os.system("chia init --fix-ssl-permissions")
@@ -229,6 +240,8 @@ def load_blockchain_version(blockchain):
                 pass
             last_blockchain_version = ""
         if last_blockchain_version.endswith('dev0'):
+            # Chia version with .dev is actually one # to high, never fixed by Chia team...
+            # See: https://github.com/Chia-Network/chia-blockchain/issues/5655
             sem_ver = last_blockchain_version.split('.')
             last_blockchain_version = sem_ver[0] + '.' + \
                 sem_ver[1] + '.' + str(int(sem_ver[2])-1)
@@ -276,7 +289,7 @@ def load_plotman_version():
         proc.kill()
         proc.communicate()
     except:
-        logging.info(traceback.format_exc())
+        logging.error(traceback.format_exc())
     last_plotman_version_load_time = datetime.datetime.now()
     return last_plotman_version
 
@@ -304,7 +317,7 @@ def load_chiadog_version():
         proc.kill()
         proc.communicate()
     except:
-        logging.info(traceback.format_exc())
+        logging.error(traceback.format_exc())
     last_chiadog_version_load_time = datetime.datetime.now()
     return last_chiadog_version
 
@@ -332,7 +345,7 @@ def load_madmax_version():
         proc.kill()
         proc.communicate()
     except:
-        logging.info(traceback.format_exc())
+        logging.error(traceback.format_exc())
     last_madmax_version_load_time = datetime.datetime.now()
     return last_madmax_version
 
@@ -450,7 +463,7 @@ def get_alltheblocks_name(blockchain):
     return blockchain
 
 def legacy_blockchain(blockchain):
-    return blockchain in ['apple', 'bpx', 'ecostake', 'flora', 'gold', 'hddcoin', 'mint', 'nchain', 'petroleum', 'profit', 'silicoin', 'stor']
+    return blockchain in ['bpx', 'ecostake', 'flora', 'gold', 'hddcoin', 'mint', 'nchain', 'petroleum', 'profit', 'silicoin', 'stor']
 
 last_mmx_reward = None
 last_mmx_reward_load_time = None
@@ -474,6 +487,28 @@ def gather_mmx_reward():
         proc.kill()
         proc.communicate()
     except:
-        logging.info(traceback.format_exc())
+        logging.error(traceback.format_exc())
     last_mmx_reward_load_time = datetime.datetime.now()
     return last_mmx_reward
+
+def wallet_running():
+    blockchain = enabled_blockchains()[0]
+    if blockchain == 'mmx':
+        return True # Always running for MMX
+    chia_binary_short = get_blockchain_binary(blockchain).split('/')[-1]
+    try:
+        cmd = "pidof {0}_wallet".format(chia_binary_short)
+        proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
+        outs, errs = proc.communicate(timeout=90)
+        pid = outs.decode('utf-8').strip()
+        #print("{0} --> {1}".format(cmd, pid))
+        if pid:
+            return True
+        else:
+            return False
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+    except:
+        logging.error(traceback.format_exc())
+    return False

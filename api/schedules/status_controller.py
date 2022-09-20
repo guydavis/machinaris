@@ -23,7 +23,6 @@ from api import app
 from api import utils
 
 def update():
-    app.logger.info("Executing status_controller...")
     with app.app_context():
         try:
             workers = db.session.query(w.Worker).order_by(w.Worker.hostname).all()
@@ -41,11 +40,11 @@ def ping_workers(workers):
             worker.updated_at = datetime.datetime.now()
             worker.ping_success_at = datetime.datetime.now()
         except requests.exceptions.ConnectTimeout as ex:
-            app.logger.info(str(ex))
+            app.logger.info('Received connection timeout from {0}'.format(worker.url + '/ping'))
             worker.latest_ping_result = "Connection Timeout"
         except requests.exceptions.ConnectionError as ex:
-            app.logger.info(str(ex))
+            app.logger.info('Received connection refused from {0}'.format(worker.url + '/ping'))
             worker.latest_ping_result = "Connection Refused"
         except Exception as ex:
-            app.logger.info(str(ex))
+            app.logger.info('Received general error from {0}'.format(worker.url + '/ping'))
             worker.latest_ping_result = "Connection Error"

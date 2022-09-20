@@ -20,7 +20,6 @@ from api import app
 from api import utils
 
 def update():
-    app.logger.info("Executing status_wallets...")
     with app.app_context():
         try:
             for blockchain in globals.enabled_blockchains():
@@ -29,12 +28,15 @@ def update():
                     public_wallet = mmx_cli.load_wallet_show(blockchain)
                 else:
                     public_wallet = chia_cli.load_wallet_show(blockchain)
-                payload = {
-                    "hostname": hostname,
-                    "blockchain": blockchain,
-                    "details": public_wallet.text.replace('\r', ''),
-                }
-                #app.logger.info(payload)
-                utils.send_post('/wallets/', payload, debug=False)
+                if public_wallet:
+                    payload = {
+                        "hostname": hostname,
+                        "blockchain": blockchain,
+                        "details": public_wallet.text.replace('\r', ''),
+                    }
+                    #app.logger.info(payload)
+                    utils.send_post('/wallets/', payload, debug=False)
+                else:
+                    app.logger.info("Not sending public wallet status as wallet is not running.")
         except Exception as ex:
             app.logger.info("Failed to load and send public wallet status because {0}".format(str(ex)))

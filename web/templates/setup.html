@@ -61,7 +61,7 @@
                         {% autoescape false %}
                         <p>{{_(
                             'On very first launch, the Chia compressed blockchain database %(compressed)s is being downloaded from %(dl_link)s, then unzipped. At about %(uncompressed)s in uncompressed size, this will take a while. However an hour or two now, will save you multiple days of blockchain syncing later. Please be patient!', 
-                            compressed="(~30 GB)", uncompressed="80 GB",
+                            compressed="(~40 GB)", uncompressed="90 GB",
                             dl_link='<a target="_blank" href="https://sweetchia.com">https://sweetchia.com</a>'
                         )}}</p>
                         <br />
@@ -82,9 +82,9 @@
                         {% else %}
 
                         <p>{{_('To get started with Machinaris as a Chia%(trademark)s fullnode, either import your existing 24-word mnemonic seed phrase', trademark='™')}}: </p>
-                        <!-- Sample mnemonic to hint with, key long since thrown-away -->
+                        <!-- "placeholder" is an example mnemonic to hint required format with, key long since thrown-away -->
                         <form id="main-form" method="POST">
-                            <input class="form-control me-2" id="mnemonic" name="mnemonic" type="text"
+                            <input class="form-control me-2" id="mnemonic" name="mnemonic" type="text" autocomplete="off"
                                 placeholder="north divorce holiday whisper inquiry toy rare minute father ostrich surprise runway ill episode dance rather unaware concert sunset maid gather grain gift wire"
                                 aria-label="Import Key">
                             <br />

@@ -84,9 +84,10 @@
     {% autoescape false %}
     <br/>
     <div class="text-center" style="padding-top:100 px; padding-bottom: 0px">
-        <h4>{{_('No transactions were available for')}} {{blockchain|capitalize}}.</h4>
-        <h6>{{_('Perhaps the wallet is not yet synced, or no wallet activity yet.')}}</h6>
-        <h6>{{_('Please ensure the Machinaris fullnode worker for this blockchain is running by checking the Workers page.')}}</h6>
+        <h4>{{_('No transactions were currently available for')}} {{blockchain|capitalize}}.</h4>
+        <h6>{{_('Perhaps the wallet is paused, or not yet synced, or no transactions exist yet.')}}</h6>
+        <h6>{{_('Please ensure the Machinaris wallet for this blockchain is Synced below.')}}</h6>  
+        <h6>{{_('Also ensure the blockchain fullnode is not Offline, by checking the Workers page.')}}</h6>
     </div>
     {% endautoescape %}
     <br />

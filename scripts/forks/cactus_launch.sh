@@ -37,12 +37,14 @@ if [ -f /root/.cactus/mainnet/config/config.yaml ]; then
 fi
 
 # Loop over provided list of key paths
+label_num=0
 for k in ${keys//:/ }; do
   if [[ "${k}" == "persistent" ]]; then
     echo "Not touching key directories."
   elif [ -s ${k} ]; then
-    echo "Adding key at path: ${k}"
-    cactus keys add -f ${k} > /dev/null
+    echo "Adding key #${label_num} at path: ${k}"
+    cactus keys add -l "key_${label_num}" -f ${k} > /dev/null
+    ((label_num=label_num+1))
   fi
 done
 
@@ -69,7 +71,11 @@ if [[ ${mode} == 'fullnode' ]]; then
       fi
     done
   done
-  cactus start farmer
+  if [ -f /root/.chia/machinaris/config/wallet_settings.json ]; then
+    cactus start farmer-no-wallet
+  else
+    cactus start farmer
+  fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.cactus/mainnet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."

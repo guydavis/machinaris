@@ -27,7 +27,6 @@ def delete_old_partials(db):
         app.logger.info(traceback.format_exc())
 
 def update():
-    app.logger.info("Executing status_partials...")
     with app.app_context():
         try:
             from api import db

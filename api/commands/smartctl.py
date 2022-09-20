@@ -40,12 +40,12 @@ def load_drives_status():
         proc = Popen("smartctl --scan", stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=30)
+            if errs:
+                app.logger.info("Error from smartctl scan because {0}".format(outs.decode('utf-8')))
         except TimeoutExpired:
             proc.kill()
             proc.communicate()
             raise Exception("The timeout for smartctl scan expired!")
-        if errs:
-            app.logger.info("Error from smartctl scan because {0}".format(outs.decode('utf-8')))
         devices = load_smartctl_overrides()
         # Now add devices from the scan only if 
         for line in outs.decode('utf-8').splitlines():
@@ -82,17 +82,34 @@ def load_drive_info(device_name, device_settings):
     proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=10)
+        if errs:
+            app.logger.error("Error from {0} because {1}".format(cmd, outs.decode('utf-8')))
+            return None
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
         app.logger.info("Error from {0} because timeout expired".format(cmd))
         return None
-    if proc.returncode != 0:
-        app.logger.info("Non-zero exit code from {0} was {1}".format(cmd, proc.returncode))
+    # Handle Smartctl response code bits.  See 'Return Values' at https://linux.die.net/man/8/smartctl
+    if (proc.returncode & (1<<0)):
+        app.logger.info("Failed commandline parse of {0}".format(cmd))
         return None
-    if errs:
-        app.logger.info("Error from {0} because {1}".format(cmd, outs.decode('utf-8')))
+    if (proc.returncode & (1<<1)):
+        app.logger.info("Device open failed, device did not return an IDENTIFY DEVICE structure, or device is in a low-power mode. {0}".format(cmd))
         return None
+    if (proc.returncode & (1<<2)):
+        app.logger.info("Some SMART or other ATA command to the disk failed, or there was a checksum error in a SMART data structure. {0}".format(cmd))
+        return None
+    if (proc.returncode & (1<<3)):
+        app.logger.info("SMART status check returned DISK FAILING")
+    if (proc.returncode & (1<<4)):
+        app.logger.info("Smartctl found prefail Attributes <= threshold.")
+    if (proc.returncode & (1<<5)):
+        app.logger.debug("SMART status check returned DISK OK but we found that some (usage or prefail) Attributes have been <= threshold at some time in the past.")
+    if (proc.returncode & (1<<6)):
+        app.logger.debug("The device error log contains records of errors.")
+    if (proc.returncode & (1<<7)):
+        app.logger.debug("The device self-test log contains records of errors. [ATA only] Failed self-tests outdated by a newer successful extended self-test are ignored.")
     return outs.decode('utf-8')
 
 # If enhanced Chiadog is running within container, then its listening on http://localhost:8925

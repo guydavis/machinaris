@@ -3,13 +3,17 @@
 #
 
 import datetime
+import json
 import os
+import re
 
 from flask_babel import _, lazy_gettext as _l
 from flask import flash, url_for
 from configparser import ConfigParser
 
-from web import app
+from common.models import warnings as w
+from web import app, db, utils
+from web.actions import worker
 
 DISMISSED_SECTION = 'dismissed'
 WARNINGS_PATH = '/root/.chia/machinaris/config/warnings.ini'
@@ -77,3 +81,57 @@ def check_warnings(args):
     if updated:
         with open(WARNINGS_PATH, 'w') as f:
             config.write(f)
+
+def get_plot_attrs(filename):
+    dir,file = os.path.split(filename)
+    match = re.match("plot(?:-mmx)?-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", file)
+    if match:
+        short_plot_id = match.group(7)[:8]
+        created_at = "{0}-{1}-{2} {3}:{4}".format( match.group(2),match.group(3),match.group(4),match.group(5),match.group(6))
+    else:
+        raise Exception("Malformed plot path/filename: {0}".format(filename))
+    return [short_plot_id, dir, file, created_at]
+
+def add_chia_plot_warning(result, hostname, blockchain, plot, created_at, updated_at):
+    try:
+        [short_plot_id, dir, file, plot_date] = get_plot_attrs(plot)
+        warning_date = created_at
+        if updated_at:
+            warning_date = updated_at.strftime("%Y-%m-%d %H:%M:%S")
+        result.append({
+            'plot_id': short_plot_id,
+            'hostname': hostname, 
+            'worker': worker.get_worker(hostname).displayname,
+            'blockchain': blockchain,
+            'path': dir,
+            'file': file,
+            'reported_at': warning_date
+        })
+    except Exception as ex:
+        app.logger.info(str(ex))
+
+def load_plot_warnings():
+    invalids = []
+    missingkeys = []
+    duplicates = []
+    result = {}
+    warnings = db.session.query(w.Warning).order_by(w.Warning.blockchain).all()
+    for warning in warnings:
+        if warning.type == 'missing_keys':
+            for plot in json.loads(warning.content):
+                add_chia_plot_warning(missingkeys, warning.hostname, warning.blockchain, plot, warning.created_at, warning.updated_at)
+        elif warning.type == 'invalid_plots':
+            for plot in json.loads(warning.content):
+                add_chia_plot_warning(invalids, warning.hostname, warning.blockchain, plot, warning.created_at, warning.updated_at)
+        elif warning.type == 'duplicate_plots':
+            for plot in json.loads(warning.content):
+                add_chia_plot_warning(duplicates, warning.hostname, warning.blockchain, plot, warning.created_at, warning.updated_at)
+        elif warning.type == 'duplicated_plots_across_workers':
+            dupes = json.loads(warning.content)
+            for plot in dupes.keys():
+                for dupe in dupes[plot]:
+                    add_chia_plot_warning(duplicates, utils.convert_chia_ip_address(dupe['host']), warning.blockchain, dupe['path'] + '/' + plot, warning.created_at, warning.updated_at)
+    result['duplicates'] = sorted(duplicates, key = lambda x: (x['plot_id'], x['worker'], x['path']))
+    result['invalids'] = sorted(invalids, key = lambda x: (x['plot_id'], x['worker'], x['path']))
+    result['missingkeys'] = sorted(missingkeys, key = lambda x: (x['plot_id'], x['worker'], x['path']))
+    return result

@@ -14,10 +14,9 @@ from common.utils import converters
 from api import app, utils, db
 from api.commands import chia_cli, mmx_cli
 
-DELETE_OLD_STATS_AFTER_DAYS = 30
+DELETE_OLD_STATS_AFTER_DAYS = 90
 
-TABLES = [ stats.StatPlotCount, stats.StatPlotsSize, stats.StatTotalCoins,
-           stats.StatNetspaceSize, stats.StatTimeToWin, stats.StatWalletBalances, ]
+TABLES = [ stats.StatPlotCount, stats.StatPlotsSize, stats.StatNetspaceSize, stats.StatTimeToWin, stats.StatTotalCoins, ]
 
 def delete_old_stats():
     try:

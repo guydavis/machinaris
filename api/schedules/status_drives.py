@@ -20,7 +20,6 @@ from api import app
 from api import utils
 
 def update():
-    app.logger.info("Executing status_drives...")
     with app.app_context():
         try:
             hostname = utils.get_hostname()
