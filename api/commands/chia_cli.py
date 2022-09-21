@@ -117,7 +117,10 @@ def load_blockchain_show(blockchain):
 
 def load_connections_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    proc = Popen("{0} show --connections".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+    if blockchain == 'cactus':  # Cactus now supports only 'peer' command
+        proc = Popen("{0} peer -c full_node".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+    else:
+        proc = Popen("{0} show --connections".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=30)
         if errs:
@@ -205,7 +208,10 @@ def pause_wallet(blockchain):
 def remove_connection(node_id, ip, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     try:
-        proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
+        if blockchain == 'cactus':  # Cactus now supports only 'peer' command
+            proc = Popen("{0} peer --remove-connection {1} full_node".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
+        else:
+            proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=30)
             if errs:
@@ -286,7 +292,10 @@ def add_connections(connections, blockchain):
             elif socket.gethostbyname(hostname) != hostname:
                 app.logger.debug('{} is a valid hostname'.format(hostname))
             app.logger.info("Adding {0} connection to peer: {1}".format(blockchain, connection))
-            proc = Popen("{0} show --add-connection {1}".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
+            if blockchain == 'cactus':  # Cactus now supports only 'peer' command
+                proc = Popen("{0} peer --add-connection {1} full_node".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
+            else:
+                proc = Popen("{0} show --add-connection {1}".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
             try:
                 outs, errs = proc.communicate(timeout=60)
                 if errs:
