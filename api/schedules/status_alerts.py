@@ -19,16 +19,29 @@ from common.config import globals
 from api.commands import chiadog_cli
 from api import app, utils
 
+DELETE_OLD_STATS_AFTER_DAYS = 3  # Keep at most 3 days of old alerts
+
 first_run = True
+
+def delete_old_alerts(db):
+    try:
+        cutoff = datetime.datetime.now() - datetime.timedelta(days=DELETE_OLD_STATS_AFTER_DAYS)
+        db.session.query(a.Alert).filter(a.Alert.created_at <= cutoff).delete()
+        db.session.commit()
+        app.logger.debug("Deleted old alerts before {0}".format(cutoff.strftime("%Y-%m-%d %H:%M")))
+    except:
+        app.logger.info("Failed to delete old alerts.")
+        app.logger.info(traceback.format_exc())
 
 def update():
     global first_run
-    if globals.load()['is_controller']:
-        #app.logger.info("Skipping alerts polling on fullnode are already placed in database directly via chiadog_notifier.sh script.")
-        return
     with app.app_context():
         try:
             from api import db
+            delete_old_alerts(db)
+            if globals.load()['is_controller']:
+                #app.logger.info("Skipping alerts polling on fullnode are already placed in database directly via chiadog_notifier.sh script.")
+                return
             hostname = utils.get_hostname()
             if first_run:  # On first launch, load last hour of notifications
                 since = (datetime.datetime.now() - datetime.timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S")
