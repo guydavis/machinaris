@@ -333,11 +333,14 @@ def remove_connection(node_ids, blockchain):
 
 def save_wallet_settings(settings, blockchain):
     try:
+        app.logger.info("Setting wallet frequency: {0}".format(settings))
         if not settings: # User reverting to defaults, no custom settings
-            os.path(WALLET_SETTINGS_FILE).delete()
+            app.logger.info("Deleting settings at {0}".format(WALLET_SETTINGS_FILE))
+            os.remove(WALLET_SETTINGS_FILE)
         else:
+            app.logger.info("Updating settings at {0}".format(WALLET_SETTINGS_FILE))
             with open(WALLET_SETTINGS_FILE, 'w') as outfile:
                 json.dump(settings, outfile)
     except Exception as ex:
-        app.logger.info(traceback.format_exc())
+        app.logger.debug(traceback.format_exc())
         raise Exception('Failed to store {0} wallet settings to {1}.'.format(blockchain, WALLET_SETTINGS_FILE) + '\n' + str(ex))
