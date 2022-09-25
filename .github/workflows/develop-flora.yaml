@@ -43,6 +43,7 @@ jobs:
             "UBUNTU_VER=focal"
             "MACHINARIS_STREAM=develop"
             "CHIADOG_BRANCH=dev"
+            "FDCLI_BRANCH=dev"
             "FLORA_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-flora:develop
