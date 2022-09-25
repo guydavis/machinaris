@@ -336,7 +336,10 @@ def save_wallet_settings(settings, blockchain):
         app.logger.info("Setting wallet frequency: {0}".format(settings))
         if not settings: # User reverting to defaults, no custom settings
             app.logger.info("Deleting settings at {0}".format(WALLET_SETTINGS_FILE))
-            os.remove(WALLET_SETTINGS_FILE)
+            try:
+                os.remove(WALLET_SETTINGS_FILE)
+            except OSError:
+                pass
         else:
             app.logger.info("Updating settings at {0}".format(WALLET_SETTINGS_FILE))
             with open(WALLET_SETTINGS_FILE, 'w') as outfile:

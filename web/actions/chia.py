@@ -454,7 +454,7 @@ def load_current_wallet_sync_frequency():
 
 def save_current_wallet_sync_frequency(freq):
     settings = {} # An "always" (-1) frequency is an empty settings dict to fullnodes
-    if int(freq) > 0:
+    if int(freq) >= 0:  # 0 is Never, other is hours of frequency
         settings = {'wallet_sync_frequency': freq}
     fullnodes = wk.get_fullnodes_by_blockchain()
     for blockchain in fullnodes.keys():
