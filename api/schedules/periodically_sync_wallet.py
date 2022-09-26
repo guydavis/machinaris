@@ -15,6 +15,7 @@ from random import randrange
 from api import app
 from common.config import globals
 from api.commands import chia_cli
+from api.schedules import stats_effort, status_wallets, status_farm, status_pools
 
 # When this file present, we are leaving wallet paused normally, syncing every day or so
 WALLET_SETTINGS_FILE = '/root/.chia/machinaris/config/wallet_settings.json'
@@ -51,7 +52,12 @@ def execute():
             wallet = chia_cli.load_wallet_show(blockchain)
             if not wallet.is_synced():
                 app.logger.info("SYNC: Wallet running but still not synced. Leaving it running since {0}".format(last_wallet_start_at.strftime('%Y-%m-%d %H:%M:%S')))
-            else:
+            else:  # Collect stats needing a synced wallet, then pause wallet to save memory
+                app.logger.info("SYNC: Collecting farm, wallet, pool, and effort status before pausing wallet...")
+                stats_effort.collect()
+                status_wallets.update()
+                status_farm.update()
+                status_pools.update()
                 app.logger.info("SYNC: Wallet running and is now synced.  Pausing wallet now, after earlier sync start at {0}".format(last_wallet_start_at.strftime('%Y-%m-%d %H:%M:%S')))
                 chia_cli.pause_wallet(blockchain)  # Wallet running, currently synced, so stop it until next sync time
         else: # Wallet not running, so check to see if a sync is due
