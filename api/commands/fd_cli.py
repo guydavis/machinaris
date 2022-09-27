@@ -47,7 +47,7 @@ def reward_recovery(wallet_id, launcher_id, pool_contract_address):
             app.logger.error("Reward Recovery found neither v1 or v2 blockchain database at: {0}/db".format(network_path))
     fd_env = os.environ.copy()
     fd_env.update(vars)
-    cmd = f"fd-cli nft-recover -l {launcher_id} -p {pool_contract_address} -nh 127.0.0.1 -np {rpc_port} -ct {network_path}/config/ssl/full_node/private_full_node.crt -ck {network_path}/config/ssl/full_node/private_full_node.key"
+    cmd = f"/usr/local/bin/fd-cli nft-recover -l {launcher_id} -p {pool_contract_address} -nh 127.0.0.1 -np {rpc_port} -ct {network_path}/config/ssl/full_node/private_full_node.crt -ck {network_path}/config/ssl/full_node/private_full_node.key"
     app.logger.info(f"Executing NFT 7/8 win recovery for {blockchain}: {cmd}")
     log_fo.write("\n\nExecuted at: {0}\nFD_CLI_BC_DB_PATH={1} FD_CLI_WT_DB_PATH={2} {3}\n".format(
         time.strftime("%Y-%m-%d-%H:%M:%S"), vars['FD_CLI_BC_DB_PATH'], vars['FD_CLI_WT_DB_PATH'], cmd))
