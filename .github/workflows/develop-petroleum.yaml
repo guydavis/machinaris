@@ -42,7 +42,6 @@ jobs:
             "UBUNTU_VER=focal"
             "MACHINARIS_STREAM=develop"
             "CHIADOG_BRANCH=dev"
-            "FDCLI_BRANCH=dev"
             "PETROLEUM_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-petroleum:develop
