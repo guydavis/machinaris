@@ -254,7 +254,7 @@ def plot_check(blockchain, plot_path):
         raise Exception("The timeout is expired attempting to check plots.")
     app.logger.info("Completed plot check of: {0}".format(plot_path))
     class_escape = re.compile(r'.*: INFO\s+')
-    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+    ansi_escape = re.compile(r'\x1B(?:[@A-Z\\-_]|\[[0-9:;<=>?]*[ -/]*[@-~])')
     return  class_escape.sub('', ansi_escape.sub('', outs))
 
 def dispatch_action(job):
