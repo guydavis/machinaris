@@ -42,6 +42,7 @@
             <th scope="col" class="text-success">{{_('Hostname')}}</th>
             <th scope="col" class="text-success">{{_('Blockchain')}}</th>
             <th scope="col" class="text-success">{{_('Mode')}}</th>
+            <th scope="col" class="text-success">{{_('Memory')}}</th>
             <th scope="col" class="text-success">{{_('Last Status Received')}}</th>
             <th scope="col" class="text-success">{{_('Last Ping')}}</th>
             <th scope="col" class="text-success">{{_('Last Successful Ping')}}</th>
@@ -57,6 +58,7 @@
                 title="{{worker.hostname}}:{{worker.port}}">{{worker.displayname}}</a></td>
             <td>{{worker.blockchain}}</td>
             <td>{{worker.mode}}</td>
+            <td>{{worker.container_memory_usage_gb()}}</td>
             <td data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
               title="Time on Worker:<br/> {{worker.time_on_worker}}">{{worker.updated_at | datetimefilter}}</td>
             <td>

@@ -77,4 +77,7 @@ def gather_services_status():
     response['farming_status'] = farming_status
     if gc['machinaris_mode'] == 'fullnode':
         response['wallet_status'] = wallet_status
+    memory_usage = globals.get_container_memory_usage_bytes()
+    if memory_usage:
+        response['container_memory_usage_bytes'] = memory_usage
     return json.dumps(response)

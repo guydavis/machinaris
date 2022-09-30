@@ -416,7 +416,7 @@ def restart_farmer(hostname, blockchain):
     farmer = wk.get_worker(hostname, blockchain)
     try: # Send request, but timeout in only a second while API works in background
         utils.send_post(farmer, "/actions/", \
-            { 'service': 'farming', 'action': 'restart', 'blockchain': blockchain, }, debug=True, timeout=1) 
+            { 'service': 'farming', 'action': 'restart', 'blockchain': blockchain, }, debug=False, timeout=1) 
     except requests.exceptions.ReadTimeout: 
         pass
 

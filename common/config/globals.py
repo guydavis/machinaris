@@ -512,3 +512,11 @@ def wallet_running():
     except:
         logging.error(traceback.format_exc())
     return False
+
+def get_container_memory_usage_bytes():
+    try:
+        with open("/sys/fs/cgroup/memory/memory.usage_in_bytes", "r") as f:
+            return int(f.readline())
+    except Exception as ex:
+        logging.error("Failed to read current container memory usage in bytes due to: {0}".format(str(ex)))
+    return None
