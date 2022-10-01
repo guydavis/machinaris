@@ -5,11 +5,6 @@
 import os
 import sqlite3
 
-# TODO Handle other blockchains
-if "chia" == globals.enabled_blockchains()[0]:
-    # https://github.com/Chia-Network/chia-blockchain/blob/main/chia/util/bech32m.py
-    from chia.util.bech32m import decode_puzzle_hash
-
 from common.config import globals
 from api import app
 
@@ -28,8 +23,7 @@ def _get_blockchain_db_path():
             return blockchain_db_path
     raise Exception("Found neither v1 or v2 blockchain database at: {0}/db".format(network_path))
 
-def get_unspent_coins(pool_contract_address):
-    puzzle_hash = decode_puzzle_hash(pool_contract_address)
+def get_unspent_coins(puzzle_hash):
     db_path = _get_blockchain_db_path()
     spent_column_name = 'spent' # v1
     if '_v2_' in db_path:
