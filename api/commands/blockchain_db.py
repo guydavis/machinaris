@@ -5,7 +5,10 @@
 import os
 import sqlite3
 
-from chia.util.bech32m import decode_puzzle_hash
+# TODO Handle other blockchains
+if "chia" == globals.enabled_blockchains()[0]:
+    # https://github.com/Chia-Network/chia-blockchain/blob/main/chia/util/bech32m.py
+    from chia.util.bech32m import decode_puzzle_hash
 
 from common.config import globals
 from api import app
