@@ -514,11 +514,16 @@ def wallet_running():
     return False
 
 def get_container_memory_usage_bytes():
-    try:
+    try: # Check cgroups v1
         with open("/sys/fs/cgroup/memory/memory.usage_in_bytes", "r") as f:
             return int(f.readline())
     except Exception as ex:
-        logging.error("Failed to read current container memory usage in bytes due to: {0}".format(str(ex)))
+        pass
+    try: # Check cgroups v2
+        with open("/sys/fs/cgroup/memory.current", "r") as f:
+            return int(f.readline())
+    except Exception as ex:
+        pass
     return None
 
 def get_host_memory_usage_percent():
