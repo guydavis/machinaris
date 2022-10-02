@@ -364,7 +364,7 @@
           return COLORS[index % COLORS.length];
         }
 
-        {% if chart_data.dates|length > 0 %}
+    {% if chart_data.dates|length > 0 %}
         var ctx = document.getElementById('total_balance_chart');
         var myChart = new Chart(ctx, {
             type: 'line',
@@ -434,6 +434,6 @@
               }
             }
           });
-  {% endif %}
+    {% endif %}
 </script>
 {% endblock %}

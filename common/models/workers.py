@@ -65,9 +65,9 @@ class Worker(db.Model):
             except:
                 return "unknown"
     
-    def container_memory_usage_gb(self):
+    def container_memory_usage_gib(self):
         try:
-            return "{:.2f} GB".format(int(j.loads(self.services)['container_memory_usage_bytes']) / 1024 / 1024 / 1024)
+            return "{:.2f} GiB".format(int(j.loads(self.services)['container_memory_usage_bytes']) / 1024 / 1024 / 1024)
         except Exception as ex:
             return ''
     

@@ -11,7 +11,7 @@
 </div>
 
 <header class="pb-3 mb-4 border-bottom">
-  <span class="fs-4">{{_('Worker')}} - {{ worker.displayname }}</span>
+  <span class="fs-4">{{_('Worker')}} - {{ worker.displayname }} - {{ worker.blockchain }} - {{ worker.mode}} </span>
 </header>
 
 <div>
@@ -126,6 +126,13 @@
     </div>
   </div>
 
+  {% if mem_usage[worker.hostname] %}
+  <div class="p-3 mb-4 bg-light border rounded-3">
+    <div class="fs-4">Memory Usage</div>
+    <canvas id="mem_chart" width="400" style="padding-bottom:10px"></canvas>
+  </div>
+  {% endif %}
+
   {% if plots_disk_usage[worker.hostname] %}
   <div class="p-3 mb-4 bg-light border rounded-3">
     <div class="fs-4">Plots</div>
@@ -167,6 +174,21 @@
 
   {% block scripts %}
   <script>
+    const COLORS = [
+        '#3aac59',
+        '#4dc9f6',
+        '#f67019',
+        '#f53794',
+        '#537bc4',
+        '#acc236',
+        '#166a8f',
+        '#00a950',
+        '#58595b',
+        '#8549ba'
+    ];
+    function color(index) {
+        return COLORS[index % COLORS.length];
+    }
     $(document).ready(function () {
       $('#plots').DataTable({
         "stateSave": true,
@@ -189,10 +211,80 @@
       });
       $('[data-toggle="tooltip"]').tooltip();
     })
-    Chart.register(ChartDataLabels);
+    {% if mem_usage[worker.hostname] %}
+        var ctx = document.getElementById('mem_chart');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ mem_usage[worker.hostname].dates | safe }},
+                datasets: [
+                {% for blockchain in mem_usage[worker.hostname].blockchains|sort %}
+                    {
+                        label: "{{blockchain}}",
+                        data: {{ mem_usage[worker.hostname][blockchain] | safe }},
+                        backgroundColor: color({{ loop.index - 1 }}),
+                    },
+                {% endfor %}
+                ],
+            },
+            borderWidth: 1,
+            options: {
+                plugins: {  
+                    legend: {
+                        labels: {
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            tooltipFormat: 'DD T'
+                        },
+                        title: {
+                            display: true,
+                            text: "{{_('Time - Last 24 Hours')}}",
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        },
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "{{_('Container Memory Usage')}} (GiB)",
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        },
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
+                    }
+                }
+            }
+        });
+    {% endif %}
     {% if plots_disk_usage[worker.hostname] %}
     var ctx = document.getElementById('plots_disk');
     var myChart = new Chart(ctx, {
+      plugins: [ChartDataLabels],
       type: 'bar',
       data: {
         labels: {{ plots_disk_usage[worker.hostname].paths | safe }},
@@ -257,6 +349,7 @@
     {% if plotting_disk_usage[worker.hostname] %}
     var ctx = document.getElementById('plotting_disk');
     var myChart = new Chart(ctx, {
+      plugins: [ChartDataLabels],
       type: 'bar',
       data: {
         labels: {{ plotting_disk_usage[worker.hostname].paths | safe }},
