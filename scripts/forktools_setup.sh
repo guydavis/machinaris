@@ -3,12 +3,12 @@
 # Installs forktools - https://github.com/Qwinn1/forktools
 #
 
-# On 2021-12-01
-HASH=5df93f705f650cbd1379eee21efaeef8f6dc262a
+FORKTOOLS_BRANCH=testing
+
 if [[ "${forktools_skip_build}" != 'true' ]]; then
 	if [[ (${mode} == 'fullnode' || ${mode} =~ "harvester") && ${blockchains} != 'mmx' ]]; then
 		cd /
-		git clone https://github.com/Qwinn1/forktools
+		git clone --branch ${FORKTOOLS_BRANCH} git@github.com:guydavis/forktools.git
 		cd forktools
 		bash installft.sh
 		git checkout $HASH > /dev/null

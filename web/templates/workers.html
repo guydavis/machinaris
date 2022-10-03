@@ -87,8 +87,7 @@
               {% endif %}
             </td>
             <td>{{worker.ping_success_at | datetimefilter}}</td>
-            <td><a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
-                title="{{worker.versions.components}}">{{worker.versions.machinaris}}</a></td>
+            <td>{{worker.versions.machinaris}}|{{worker.versions.components}}</td>
             <td style="padding:0px">
               <a href="#" title="View Server Log" onclick='MachinarisLog("apisrv","{{ worker.hostname }}","{{ worker.blockchain }}");return false;'><i class="fs-4 bi-file-text"></i></a>
               {% if worker.mode == "fullnode" and worker.blockchain == "chia" %}
@@ -163,7 +162,6 @@
             { 
                 targets: [0], "orderable": false, 
                 "render": function ( data, type, row, meta ) {
-                    console.log(row);
                     arr = data.split('|');
                     hostname = arr[0];
                     blockchain = arr[1];
@@ -174,7 +172,6 @@
             { 
                 targets: [2], "orderable": true, 
                 "render": function ( data, type, row, meta ) {
-                    console.log(row);
                     var url = "{{ url_for('worker_route') }}";
                     arr = row[0].split('|');
                     hostname = arr[0];
@@ -183,7 +180,16 @@
                     return '<a class="text-white" href="' + url + '?hostname='+hostname+'&blockchain='+blockchain+'" data-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="'+hostname+':'+port+'">' + data +'</a>';
                 }
             },
-            { "orderable": false, targets: [8] },
+            { 
+                targets: [8], "orderable": true, 
+                "render": function ( data, type, row, meta ) {
+                    arr = data.split('|');
+                    machinaris_version = arr[0];
+                    component_versions = arr[1];
+                    return '<a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" title="'+component_versions+'">'+machinaris_version+'</a>';
+                }
+            },
+            { "orderable": false, targets: [9] },
           ],
           {% if lang != 'en' %}
           "language": {
