@@ -8,7 +8,7 @@ FORKTOOLS_BRANCH=testing
 if [[ "${forktools_skip_build}" != 'true' ]]; then
 	if [[ (${mode} == 'fullnode' || ${mode} =~ "harvester") && ${blockchains} != 'mmx' ]]; then
 		cd /
-		git clone --branch ${FORKTOOLS_BRANCH} git@github.com:guydavis/forktools.git
+		git clone --branch ${FORKTOOLS_BRANCH} https://github.com/guydavis/forktools.git
 		cd forktools
 		bash installft.sh
 		git checkout $HASH > /dev/null
