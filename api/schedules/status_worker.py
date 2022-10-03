@@ -84,5 +84,5 @@ def gather_services_status():
         host_memory_usage_percent = globals.get_host_memory_usage_percent()
         if host_memory_usage_percent:
             response['host_memory_usage_percent'] = host_memory_usage_percent
-    app.logger.info(response)
+    #app.logger.info(response)
     return json.dumps(response)
