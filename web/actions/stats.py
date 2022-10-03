@@ -723,7 +723,7 @@ def set_disk_usage_per_farmer(farmers, disk_usage):
             app.logger.info("No disk usage stats found for {0}".format(farmer.hostname))
             farmer.drive_usage = "" # Empty string to report
 
-def load_recent_mem_usage(worker_type, only_hostname=None):
+def load_recent_mem_usage(worker_type, only_hostname=None, only_blockchain=None):
     summary_by_worker = {}
     for host in worker.load_workers():
         hostname = host.hostname
@@ -731,9 +731,14 @@ def load_recent_mem_usage(worker_type, only_hostname=None):
             continue
         dates = []
         data_by_blockchain = {}
-        mem_result = db.session.query(StatContainerMemoryUsageGib).filter( 
-            StatContainerMemoryUsageGib.hostname == host.hostname). \
-            order_by(StatContainerMemoryUsageGib.created_at, StatContainerMemoryUsageGib.blockchain).all()
+        if only_blockchain:
+            mem_result = db.session.query(StatContainerMemoryUsageGib).filter( 
+                StatContainerMemoryUsageGib.hostname == host.hostname, StatContainerMemoryUsageGib.blockchain == only_blockchain). \
+                order_by(StatContainerMemoryUsageGib.created_at, StatContainerMemoryUsageGib.blockchain).all()
+        else: # all blockchains on that hostname
+            mem_result = db.session.query(StatContainerMemoryUsageGib).filter( 
+                StatContainerMemoryUsageGib.hostname == host.hostname). \
+                order_by(StatContainerMemoryUsageGib.created_at, StatContainerMemoryUsageGib.blockchain).all()
         for row in mem_result:
             if worker_type == 'plotting' and host.mode != 'plotter' and (host.mode == 'fullnode' and not row.blockchain in ['chia', 'chives', 'mmx']):
                 continue  # Not a plotting container
@@ -757,5 +762,6 @@ def load_recent_mem_usage(worker_type, only_hostname=None):
                             blockchain_values.append('null')
                     else:
                         blockchain_values.append('null')
+                # TODO Decimate the memory usage datapoints as too many being returned...
                 summary_by_worker[hostname][blockchain] = blockchain_values
     return summary_by_worker

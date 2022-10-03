@@ -328,7 +328,7 @@ def worker_route():
     plotting = plotman.load_plotting_summary(hostname=hostname)
     plots_disk_usage = stats.load_current_disk_usage('plots',hostname=hostname)
     plotting_disk_usage = stats.load_current_disk_usage('plotting',hostname=hostname)
-    mem_usage = stats.load_recent_mem_usage('all', only_hostname=hostname)
+    mem_usage = stats.load_recent_mem_usage('all', only_hostname=hostname, only_blockchain=blockchain)
     warnings = worker.generate_warnings(wkr)
     return render_template('worker.html', worker=wkr, 
         plotting=plotting, mem_usage=mem_usage, plots_disk_usage=plots_disk_usage, 

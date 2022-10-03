@@ -63,10 +63,9 @@
         <tbody>
           {% for worker in workers.workers %}
           <tr>
-            <td class="text-center"><input type="checkbox" name="worker" value="{{ worker.hostname }}|{{ worker.blockchain }}" />
+            <td class="text-center">{{ worker.hostname }}|{{ worker.blockchain }}|{{ worker.port }}</td>
             <td>{{worker.displayname}}</td>
-            <td><a class="text-white" href="{{ url_for('worker_route') }}?hostname={{worker.hostname}}&blockchain={{ worker.blockchain }}" data-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
-                title="{{worker.hostname}}:{{worker.port}}">{{worker.blockchain}}</a></td>
+            <td>{{worker.blockchain}}</td>
             <td>{{worker.mode}}</td>
             <td><a href="#" class='text-white' title="{{_('Chart Memory')}}" onclick='PopupChart("container_memory","{{worker.hostname}}", "{{ worker.blockchain }}");return false;'>{{worker.container_memory_usage_gib()}}</a></td>
             <td data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
@@ -160,7 +159,32 @@
           "pageLength": 25,
           "lengthMenu": [ [25, 50, 100, 200, -1], [25, 50, 100, 200, "All"] ],
           "order": [[1, "asc"]],
-          "columnDefs": [{ "orderable": false, targets: [0,8] }],
+          "columnDefs": [
+            { 
+                targets: [0], "orderable": false, 
+                "render": function ( data, type, row, meta ) {
+                    console.log(row);
+                    arr = data.split('|');
+                    hostname = arr[0];
+                    blockchain = arr[1];
+                    port = arr[2];
+                    return '<input type="checkbox" name="worker" value="' + hostname +'|'+ blockchain +'" />';
+                }
+            },
+            { 
+                targets: [2], "orderable": true, 
+                "render": function ( data, type, row, meta ) {
+                    console.log(row);
+                    var url = "{{ url_for('worker_route') }}";
+                    arr = row[0].split('|');
+                    hostname = arr[0];
+                    blockchain = arr[1];
+                    port = arr[2];
+                    return '<a class="text-white" href="' + url + '?hostname='+hostname+'&blockchain='+blockchain+'" data-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="'+hostname+':'+port+'">' + data +'</a>';
+                }
+            },
+            { "orderable": false, targets: [8] },
+          ],
           {% if lang != 'en' %}
           "language": {
               "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"

@@ -17,5 +17,14 @@ if [[ ${mode} == 'fullnode' ]]; then
         cp requirements_${codename}.txt requirements.txt
         cp setup_${codename}.py setup.py
         pip install -e . --extra-index-url https://pypi.chia.net/simple/
+
+        # v0.8.5 - upgrade to new log file name
+        if [[ -f /root/.chia/machinaris/logs/fd-cli.log ]]; then 
+            if [[ -f /root/.chia/machinaris/logs/rewards.log ]]; then
+                rm -f /root/.chia/machinaris/logs/fd-cli.log
+            else  # Save old log
+                mv /root/.chia/machinaris/logs/fd-cli.log /root/.chia/machinaris/logs/rewards.log
+            fi
+        fi
     fi
 fi

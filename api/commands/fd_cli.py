@@ -20,7 +20,7 @@ def reward_recovery(wallet_id, launcher_id, pool_contract_address):
     if not rpc_port:
         app.logger.info("Skipping NFT reward recovery on unsupported blockchain: {0}".format(blockchain))
         return
-    logfile = "/root/.chia/machinaris/logs/fd-cli.log"
+    logfile = "/root/.chia/machinaris/logs/rewards.log"
     log_fd = os.open(logfile, os.O_RDWR | os.O_CREAT)
     log_fo = os.fdopen(log_fd, "a+")
     vars = {}
