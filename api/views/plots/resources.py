@@ -118,10 +118,10 @@ class PlotByHostname(MethodView):
             # Skip any previously sent by existing plot_id
             if not db.session.query(Plot).filter(Plot.hostname==new_item['hostname'], 
                 Plot.plot_id==new_item['plot_id']).first():
-                short_plot_id = new_item['plot_id'][:8]
+                short_plot_id = new_item['plot_id']
                 item = Plot(**new_item)
-                item.plot_analyze = analyze_status(plots_status, short_plot_id)
-                item.plot_check = check_status(plots_status, short_plot_id)
+                item.plot_analyze = analyze_status(plots_status, short_plot_id[:8])
+                item.plot_check = check_status(plots_status, short_plot_id[:8])
                 items.append(item)
                 db.session.add(item)
         db.session.commit()

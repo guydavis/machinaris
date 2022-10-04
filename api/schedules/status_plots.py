@@ -31,10 +31,10 @@ def get_plot_attrs(plot_id, filename):
     dir,file = os.path.split(filename)
     match = re.match("plot(?:-mmx)?-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", file)
     if match:
-        short_plot_id = match.group(7)[:8]
+        short_plot_id = match.group(7)[:16]
         created_at = "{0}-{1}-{2} {3}:{4}".format( match.group(2),match.group(3),match.group(4),match.group(5),match.group(6))
     else:
-        short_plot_id = plot_id[2:10]
+        short_plot_id = plot_id[2:18]
         created_at = "" 
     return [short_plot_id, dir,file,created_at]
 
@@ -114,7 +114,7 @@ def update_chia_plots(plots_status, since):
         blockchain_rpc = rpc.RPC()
         items = []
         plots_farming = blockchain_rpc.get_all_plots()
-        plots_by_id = {}
+        plots_by_filename = {}
         duplicate_plots = {}
         displaynames = {}
         app.logger.info("PLOT STATUS: Chia farmer RPC reports {0} total plots in this farm.".format(len(plots_farming)))
@@ -130,18 +130,17 @@ def update_chia_plots(plots_status, since):
                     displayname = plot['hostname']
                 displaynames[plot['hostname']] = displayname
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
-            #app.logger.info("{0} -> {1}".format(short_plot_id, file))
             duplicated_on_same_host = False
-            if not since and short_plot_id in plots_by_id:  # Only check for duplicates on full load
-                if plot['hostname'] == plots_by_id[short_plot_id]['hostname']:
+            if not since and file in plots_by_filename:  # Only check for duplicates on full load
+                if plot['hostname'] == plots_by_filename[file]['hostname']:
                     app.logger.error("PLOT STATUS: Duplicate Chia plot found on same worker {0} at both {1}/{2} and {3}/{4}".format(
-                        displayname, plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], dir, file))
+                        displayname, plots_by_filename[file]['path'], plots_by_filename[file]['file'], dir, file))
                     duplicated_on_same_host = True
                 else:
                     app.logger.error("PLOT STATUS: Duplicate Chia plot found on different workers at {0}@{1}/{2} and {3}@{4}/{5}".format(
-                        plots_by_id[short_plot_id]['worker'], plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], displayname, dir, file))
-                add_duplicate_plots(duplicate_plots, file, plot['hostname'], dir, plots_by_id[short_plot_id]['hostname'], plots_by_id[short_plot_id]['path'])
-            plots_by_id[short_plot_id] = { 'hostname': plot['hostname'], 'worker': displayname, 'path': dir, 'file': file }
+                        plots_by_filename[file]['worker'], plots_by_filename[file]['path'], plots_by_filename[file]['file'], displayname, dir, file))
+                add_duplicate_plots(duplicate_plots, file, plot['hostname'], dir, plots_by_filename[file]['hostname'], plots_by_filename[file]['path'])
+            plots_by_filename[file] = { 'hostname': plot['hostname'], 'worker': displayname, 'path': dir, 'file': file }
             if not duplicated_on_same_host and (not since or created_at > since):
                 items.append(p.Plot(**{
                     "plot_id": short_plot_id,
@@ -152,8 +151,8 @@ def update_chia_plots(plots_status, since):
                     "file": file,
                     "type": plot['type'],
                     "created_at": created_at,
-                    "plot_analyze": analyze_status(plots_status, short_plot_id),
-                    "plot_check": check_status(plots_status, short_plot_id),
+                    "plot_analyze": analyze_status(plots_status, short_plot_id[:8]),
+                    "plot_check": check_status(plots_status, short_plot_id[:8]),
                     "size": plot['file_size']
                 }))
         if items:
@@ -171,7 +170,7 @@ def update_chia_plots(plots_status, since):
         traceback.print_exc()
     finally:
         del plots_farming
-        del plots_by_id
+        del plots_by_filename
         if items:
             del items
         gc.collect()
@@ -191,19 +190,19 @@ def update_chives_plots(since):
         hostname = utils.get_hostname()
         plots_farming = blockchain_rpc.get_all_plots()
         payload = []
-        plots_by_id = {}
+        plots_by_filename = {}
         for plot in plots_farming:
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
             duplicated_on_same_host = False
-            if not since and short_plot_id in plots_by_id:  # Only check for duplicates on full load
-                if plot['hostname'] == plots_by_id[short_plot_id]['hostname']:
+            if not since and file in plots_by_filename:  # Only check for duplicates on full load
+                if plot['hostname'] == plots_by_filename[file]['hostname']:
                     app.logger.error("DUPLICATE CHIVES PLOT FOUND ON SAME WORKER {0} AT BOTH {1}/{2} AND {3}/{4}".format(
-                        plot['hostname'], plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], dir, file))
+                        plot['hostname'], plots_by_filename[file]['path'], plots_by_filename[file]['file'], dir, file))
                     duplicated_on_same_host = True
                 else:
                     app.logger.error("DUPLICATE CHIVES PLOT FOUND ON DIFFERENT WORKERS AT {0}@{1}/{2} AND {3}@{4}/{5}".format(
-                        plots_by_id[short_plot_id]['worker'], plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], plot['hostname'], dir, file))
-            plots_by_id[short_plot_id] = { 'hostname': plot['hostname'], 'worker': plot['hostname'], 'path': dir, 'file': file }
+                        plots_by_filename[file]['worker'], plots_by_filename[file]['path'], plots_by_filename[file]['file'], plot['hostname'], dir, file))
+            plots_by_filename[file] = { 'hostname': plot['hostname'], 'worker': plot['hostname'], 'path': dir, 'file': file }
             if not duplicated_on_same_host and not since or created_at > since:
                 payload.append({
                     "plot_id": short_plot_id,
@@ -232,19 +231,19 @@ def update_mmx_plots(since):
         hostname = utils.get_hostname()
         plots_farming = mmx_cli.list_plots()
         payload = []
-        plots_by_id = {}
+        plots_by_filename = {}
         for plot in plots_farming.rows:
             short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
             duplicated_on_same_host = False
-            if not since and short_plot_id in plots_by_id:  # Only check for duplicates on full load
-                if plot['hostname'] == plots_by_id[short_plot_id]['hostname']:
+            if not since and file in plots_by_filename:  # Only check for duplicates on full load
+                if plot['hostname'] == plots_by_filename[file]['hostname']:
                     app.logger.error("DUPLICATE MMX PLOT FOUND ON SAME WORKER {0} AT BOTH {1}/{2} AND {3}/{4}".format(
-                        plot['hostname'], plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], dir, file))
+                        plot['hostname'], plots_by_filename[file]['path'], plots_by_filename[file]['file'], dir, file))
                     duplicated_on_same_host = True
                 else:
                     app.logger.error("DUPLICATE MMX PLOT FOUND ON DIFFERENT WORKERS AT {0}@{1}/{2} AND {3}@{4}/{5}".format(
-                        plots_by_id[short_plot_id]['worker'], plots_by_id[short_plot_id]['path'], plots_by_id[short_plot_id]['file'], plot['hostname'], dir, file))
-            plots_by_id[short_plot_id] = { 'hostname': plot['hostname'], 'worker': plot['hostname'], 'path': dir, 'file': file }
+                        plots_by_filename[file]['worker'], plots_by_filename[file]['path'], plots_by_filename[file]['file'], plot['hostname'], dir, file))
+            plots_by_filename[file] = { 'hostname': plot['hostname'], 'worker': plot['hostname'], 'path': dir, 'file': file }
             if not duplicated_on_same_host and not since or created_at > since:
                 payload.append({
                     "plot_id": short_plot_id,
