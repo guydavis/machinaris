@@ -19,7 +19,7 @@ def on_starting(server):
         log_rotate, restart_stuck_farmer, geolocate_peers, \
         stats_effort, status_warnings
     from common.config import globals
-    from common.models import pools
+    from common.models import pools, plottings
 
     from api.commands import websvcs
 
@@ -73,7 +73,7 @@ def on_starting(server):
         scheduler.add_job(func=stats_blocks.collect, name="status_blocks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=restart_stuck_farmer.execute, name="status_blockchain_sync", trigger='interval', minutes=5, jitter=0) 
         scheduler.add_job(func=periodically_sync_wallet.execute, name="status_wallet_sync", trigger='interval', minutes=15, jitter=0) 
-        if globals.enabled_blockchains()[0] in ['chia', 'chives', 'mmx']: # Only get plot listing from these three blockchains
+        if globals.enabled_blockchains()[0] in plottings.PLOTTABLE_BLOCKCHAINS: # Only get plot listing from these three blockchains
             scheduler.add_job(func=status_plots.update, name="status_plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         if globals.enabled_blockchains()[0] in pools.POOLABLE_BLOCKCHAINS: # Only get pool submissions from poolable blockchains
             scheduler.add_job(func=status_pools.update, name="status_pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)

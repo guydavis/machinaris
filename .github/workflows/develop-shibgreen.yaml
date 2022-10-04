@@ -43,6 +43,7 @@ jobs:
             "MACHINARIS_STREAM=develop"
             "CHIADOG_BRANCH=dev"
             "FDCLI_BRANCH=dev"
+            "FORKTOOLS_BRANCH=reserved_cores"
             "SHIBGREEN_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-shibgreen:develop

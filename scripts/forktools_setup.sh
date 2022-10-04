@@ -3,7 +3,7 @@
 # Installs forktools - https://github.com/Qwinn1/forktools
 #
 
-FORKTOOLS_BRANCH=testing
+FORKTOOLS_BRANCH=$1
 
 if [[ "${forktools_skip_build}" != 'true' ]]; then
 	if [[ (${mode} == 'fullnode' || ${mode} =~ "harvester") && ${blockchains} != 'mmx' ]]; then
