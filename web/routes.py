@@ -205,10 +205,10 @@ def plotting_workers():
 def farming_plots():
     if request.args.get('analyze'):  # Xhr with a plot_id
         plot_id = request.args.get('analyze')
-        return plotman.analyze(plot_id)
+        return plotman.analyze(plot_id[:8])
     elif request.args.get('check'):  # Xhr with a plot_id
         plot_id = request.args.get('check')
-        return chia.check(plot_id)
+        return chia.check(plot_id[:8])
     gc = globals.load()
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()
