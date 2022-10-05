@@ -3,8 +3,8 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.8.5] - 2022-10-?
- - Chart memory usage per container (GiB) as well as total host memory usage (%) for OS and all apps. Add 'SYS_RAWIO' to your `docker-compose.yml`
- - Enhanced Forktools to limit a blockchain's process count, which greatly limits full_node memory usage.
+ - Chart memory usage per container (GiB) as well as total host memory usage (%) for OS and all apps.
+ - Enhanced Forktools to decrease a blockchain's full_node process count, which greatly limits memory usage.
  - Fixes: Enhance 'NFT Reward Recovery' tool to support v2 databases. Fix for invalid Chiadog harvester alerts.
  - Update: [Maize](https://github.com/Maize-Network/maize-blockchain/releases/tag/1.6.0) to v1.6.0, [MMX](https://github.com/madMAx43v3r/mmx-node) to `testnet7`.
 
