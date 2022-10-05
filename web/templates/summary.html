@@ -104,9 +104,9 @@
                     {% elif summary.status.lower().startswith('synced') %}
                         <i class="bi-check-circle text-success"></i> {{_('Synced')}}
                     {% elif summary.status.lower().startswith('syncing') %}
-                        <i class="bi-check-circle text-warning"></i> {{_('Syncing')}}
+                        <i class="bi-exclamation-triangle text-warning"></i> {{_('Syncing')}}
                     {% elif summary.status.lower().startswith('not synced') %}
-                        <i class="bi-check-circle text-warning"></i> {{_('Not Synced')}}
+                        <i class="bi-exclamation-triangle text-warning"></i> {{_('Not Synced')}}
                     {% else %}
                       <i class="bi-exclamation-triangle text-warning"></i> {{summary.status}}
                     {% endif %} &nbsp;

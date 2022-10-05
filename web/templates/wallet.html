@@ -172,10 +172,10 @@
                       <i class="bi-check-circle text-success"></i> &nbsp;
                       <a class="text-white" title="{{_('Pause Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{wallet.hostname}}" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="pause">{{_('Synced')}}</a>
                     {% elif wallet.status.lower().startswith('syncing') %}
-                      <i class="bi-check-circle text-warning"></i> &nbsp;
+                      <i class="bi-exclamation-triangle text-warning"></i> &nbsp;
                       <a class="text-white" title="{{_('Pause Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{wallet.hostname}}" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="pause">{{_('Syncing')}}</a>
                     {% elif wallet.status.lower().startswith('not synced') %}
-                      <i class="bi-check-circle text-danger"></i> &nbsp; 
+                      <i class="bi-dash-circle text-danger"></i> &nbsp; 
                       <a class="text-white" title="{{_('Pause Wallet')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{wallet.hostname}}" data-bs-blockchain="{{wallet.blockchain}}" data-bs-action="pause">{{_('Not Synced')}}</a>
                     {% else %}
                       <i class="bi-exclamation-triangle text-warning"></i> 
