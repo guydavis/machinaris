@@ -47,7 +47,7 @@ def write_status_json(status):
 
 def set_analyze_status(workers, status, plot):
     #app.logger.info("Checking for analyze of {0}".format(plot.plot_id))
-    analyze_log = ANALYZE_LOGS + '/' + plot.plot_id + '.log'
+    analyze_log = ANALYZE_LOGS + '/' + plot.plot_id[:8] + '.log'
     analysis_seconds = None
     if not os.path.exists(analyze_log):
         [hostname, displayname, result] = request_analyze(plot.file, workers)
@@ -75,11 +75,11 @@ def set_analyze_status(workers, status, plot):
                 except Exception as ex:
                     app.log.error("Failed to parse plotman analyze line because: {0}".format(str(ex)))
                     app.log.error(line)
-    if plot.plot_id in status:
-        plot_state = status[plot.plot_id]
+    if plot.plot_id[:8] in status:
+        plot_state = status[plot.plot_id[:8]]
     else:
         plot_state = {}
-        status[plot.plot_id] = plot_state
+        status[plot.plot_id[:8]] = plot_state
     if analysis_seconds:
         #app.logger.info("For {0} found {1} seconds.".format(plot.plot_id, analysis_seconds))
         plot_state['analyze'] = { 'host': hostname, 'seconds': analysis_seconds }
@@ -113,7 +113,7 @@ def request_analyze(plot_file, workers):
 
 def set_check_status(workers, status, plot):
     #app.logger.info("Checking for plot check of {0}".format(plot.plot_id))
-    check_log = CHECK_LOGS + '/' + plot.plot_id + '.log'
+    check_log = CHECK_LOGS + '/' + plot.plot_id[:8] + '.log'
     check_status = None
     requested_status = False
     if not os.path.exists(check_log):
@@ -140,11 +140,11 @@ def set_check_status(workers, status, plot):
                     app.log.error(line)
             elif "Found 1 valid plots" in line:
                 check_status = 'GOOD'
-    if plot.plot_id in status:
-        plot_state = status[plot.plot_id]
+    if plot.plot_id[:8] in status:
+        plot_state = status[plot.plot_id[:8]]
     else:
         plot_state = {}
-        status[plot.plot_id] = plot_state
+        status[plot.plot_id[:8]] = plot_state
     if check_status:
         #app.logger.info("For {0} found {1} status.".format(plot.plot_id, check_status))
         plot_state['check'] = { 'host': hostname, 'status': check_status }

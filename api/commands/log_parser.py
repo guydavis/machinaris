@@ -161,6 +161,6 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         app.logger.info("No log file found at {0}".format(log_file))
         return 'No log file found!'
     #app.logger.info("Log file found at {0}".format(log_file))
-    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+    ansi_escape = re.compile(r'\x1B(?:[@A-Z\\-_]|\[[0-9:;<=>?]*[ -/]*[@-~])')
     proc = Popen(['tail', '-n', str(MAX_LOG_LINES), log_file], stdout=PIPE)
     return ansi_escape.sub('', proc.stdout.read().decode("utf-8"))

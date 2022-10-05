@@ -416,7 +416,7 @@ def restart_farmer(hostname, blockchain):
     farmer = wk.get_worker(hostname, blockchain)
     try: # Send request, but timeout in only a second while API works in background
         utils.send_post(farmer, "/actions/", \
-            { 'service': 'farming', 'action': 'restart', 'blockchain': blockchain, }, debug=True, timeout=1) 
+            { 'service': 'farming', 'action': 'restart', 'blockchain': blockchain, }, debug=False, timeout=1) 
     except requests.exceptions.ReadTimeout: 
         pass
 
@@ -454,7 +454,7 @@ def load_current_wallet_sync_frequency():
 
 def save_current_wallet_sync_frequency(freq):
     settings = {} # An "always" (-1) frequency is an empty settings dict to fullnodes
-    if int(freq) > 0:
+    if int(freq) >= 0:  # 0 is Never, other is hours of frequency
         settings = {'wallet_sync_frequency': freq}
     fullnodes = wk.get_fullnodes_by_blockchain()
     for blockchain in fullnodes.keys():

@@ -82,6 +82,7 @@ def store_balance_locally(blockchain, wallet_balance, current_datetime):
     db.session.commit()
 
 def store_total_locally(total_balance, currency_symbol, current_datetime):
+    app.logger.info("Storing total wallet balance (all blockchains) of {0}".format(total_balance))
     try:
         db.session.add(stats.StatTotalBalance(
             hostname=utils.get_hostname(),

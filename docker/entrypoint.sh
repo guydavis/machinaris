@@ -93,7 +93,7 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   /usr/bin/bash /machinaris/scripts/plotman_autoplot.sh > /tmp/plotman_autoplot.log 2>&1
 
   # Conditionally install forktools on fullnodes
-  /usr/bin/bash /machinaris/scripts/forktools_setup.sh > /tmp/forktools_setup.log 2>&1
+  /usr/bin/bash /machinaris/scripts/forktools_setup.sh ${FORKTOOLS_BRANCH} > /tmp/forktools_setup.log 2>&1
 
 fi
 

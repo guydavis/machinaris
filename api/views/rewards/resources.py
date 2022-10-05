@@ -10,7 +10,7 @@ from flask.views import MethodView
 from api import app
 from api.extensions.api import Blueprint
 
-from api.commands import fd_cli
+from api.commands import fd_cli, blockchain_db
 from common.models import pools
 
 blp = Blueprint(
@@ -22,6 +22,12 @@ blp = Blueprint(
 
 @blp.route('/')
 class Rewards(MethodView):
+
+    def get(self):
+        coins = blockchain_db.get_unspent_coins('TESTING')
+        response = make_response(json.dumps(coins), 200)
+        response.mimetype = "text/json"
+        return response
 
     def post(self):
         try:

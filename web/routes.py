@@ -110,6 +110,9 @@ def chart():
     elif chart_type == 'timetowin':
         chart_data = stats.load_time_to_win(blockchain)
         return render_template('charts/timetowin.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
+    elif chart_type == 'container_memory':
+        chart_data = stats.load_container_memory(request.args.get('hostname'), blockchain)
+        return render_template('charts/container_memory.html', reload_seconds=120, global_config=gc, chart_data=chart_data, lang=get_lang(request)) 
 
 @app.route('/summary', methods=['GET', 'POST'])
 def summary():
@@ -195,16 +198,17 @@ def plotting_workers():
         return redirect(url_for('plotting_workers')) # Force a redirect to allow time to update status
     plotters = plotman.load_plotters()
     disk_usage = stats.load_recent_disk_usage('plotting')
-    return render_template('plotting/workers.html', plotters=plotters, disk_usage=disk_usage, global_config=gc)
+    mem_usage = stats.load_recent_mem_usage('plotting')
+    return render_template('plotting/workers.html', plotters=plotters, disk_usage=disk_usage, mem_usage=mem_usage, global_config=gc)
 
 @app.route('/farming/plots')
 def farming_plots():
     if request.args.get('analyze'):  # Xhr with a plot_id
         plot_id = request.args.get('analyze')
-        return plotman.analyze(plot_id)
+        return plotman.analyze(plot_id[:8])
     elif request.args.get('check'):  # Xhr with a plot_id
         plot_id = request.args.get('check')
-        return chia.check(plot_id)
+        return chia.check(plot_id[:8])
     gc = globals.load()
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()
@@ -227,8 +231,9 @@ def farming_workers():
     daily_summaries = stats.load_daily_farming_summaries(farmers)
     disk_usage = stats.load_current_disk_usage('plots')
     stats.set_disk_usage_per_farmer(farmers, disk_usage)
+    mem_usage = stats.load_recent_mem_usage('farming')
     return render_template('farming/workers.html', farmers=farmers, 
-        daily_summaries=daily_summaries, disk_usage=disk_usage, 
+        daily_summaries=daily_summaries, disk_usage=disk_usage, mem_usage=mem_usage, 
         MAX_COLUMNS_ON_CHART=stats.MAX_ALLOWED_PATHS_ON_BAR_CHART,
         global_config=gc)
 
@@ -310,8 +315,9 @@ def workers():
         if request.form.get('action') == "prune":
             worker.prune_workers_status(request.form.getlist('worker'))
     wkrs = worker.load_worker_summary()
+    chart_data = stats.load_host_memory_usage()
     return render_template('workers.html', reload_seconds=120, 
-        workers=wkrs, global_config=gc, lang=get_lang(request))
+        workers=wkrs, global_config=gc, chart_data=chart_data, lang=get_lang(request))
 
 @app.route('/worker', methods=['GET'])
 def worker_route():
@@ -322,9 +328,10 @@ def worker_route():
     plotting = plotman.load_plotting_summary(hostname=hostname)
     plots_disk_usage = stats.load_current_disk_usage('plots',hostname=hostname)
     plotting_disk_usage = stats.load_current_disk_usage('plotting',hostname=hostname)
+    mem_usage = stats.load_recent_mem_usage('all', only_hostname=hostname, only_blockchain=blockchain)
     warnings = worker.generate_warnings(wkr)
     return render_template('worker.html', worker=wkr, 
-        plotting=plotting, plots_disk_usage=plots_disk_usage, 
+        plotting=plotting, mem_usage=mem_usage, plots_disk_usage=plots_disk_usage, 
         plotting_disk_usage=plotting_disk_usage, warnings=warnings, global_config=gc,
         MAX_COLUMNS_ON_CHART=stats.MAX_ALLOWED_PATHS_ON_BAR_CHART,
         lang=get_lang(request))

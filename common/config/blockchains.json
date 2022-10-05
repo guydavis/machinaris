@@ -275,8 +275,8 @@
         "name": "MMX",
         "symbol": "MMX" ,
         "binary":  "/mmx-node/build/mmx",
-        "network_path": "/root/.mmx/testnet6",
-        "network_name": "testnet6",
+        "network_path": "/root/.mmx/testnet7",
+        "network_name": "testnet7",
         "network_port": 12334,
         "farmer_port": 11330,
         "worker_port": 8940,
@@ -352,7 +352,7 @@
         "blocks_per_day": 4608,
         "git_url": "https://github.com/SHIBgreen-Network/shibgreen-blockchain",
         "discord_url": "https://discord.gg/yZSKtPf8",
-        "website_url": "https://shibgreen.com/"
+        "website_url": "https://shib.green/"
     },
     "silicoin": {
         "name": "Silicoin",

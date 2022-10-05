@@ -570,3 +570,15 @@ def upgrade_warnings():
 
 def downgrade_warnings():
     pass
+
+def upgrade_stat_container_mem_gib():
+    pass
+
+def downgrade_stat_container_mem_gib():
+    pass
+
+def upgrade_stat_host_mem_pct():
+    pass
+
+def downgrade_stat_host_mem_pct():
+    pass

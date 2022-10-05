@@ -42,6 +42,8 @@ jobs:
             "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=develop"
             "CHIADOG_BRANCH=dev"
+            "FDCLI_BRANCH=dev"
+            "FORKTOOLS_BRANCH=reserved_cores"
             "LITTLELAMBOCOIN_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-littlelambocoin:develop

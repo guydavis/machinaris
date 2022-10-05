@@ -158,3 +158,22 @@ class StatTotalBalance(db.Model):
     value = db.Column(db.REAL)
     currency = db.Column(db.String())
     created_at = db.Column(db.String())
+
+class StatContainerMemoryUsageGib(db.Model):
+    __bind_key__ = 'stat_container_mem_gib'
+    __tablename__ = "stat_container_mem_gib"
+
+    id = db.Column(db.Integer, primary_key=True)
+    hostname = db.Column(db.String())
+    blockchain = db.Column(db.String(length=64), nullable=False)
+    value = db.Column(db.Integer)
+    created_at = db.Column(db.String())
+
+class StatHostMemoryUsagePercent(db.Model):
+    __bind_key__ = 'stat_host_mem_pct'
+    __tablename__ = "stat_host_mem_pct"
+
+    id = db.Column(db.Integer, primary_key=True)
+    hostname = db.Column(db.String())
+    value = db.Column(db.Integer)
+    created_at = db.Column(db.String())

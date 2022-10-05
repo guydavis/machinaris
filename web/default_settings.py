@@ -36,6 +36,8 @@ class DefaultConfig:
         'stat_farmed_blocks':       'sqlite:////root/.chia/machinaris/dbs/stat_farmed_blocks.db',
         'stat_wallet_balances':     'sqlite:////root/.chia/machinaris/dbs/stat_wallet_balances.db',
         'stat_total_balance':       'sqlite:////root/.chia/machinaris/dbs/stat_total_balance.db',
+        'stat_container_mem_gib':   'sqlite:////root/.chia/machinaris/dbs/stat_container_mem_gib.db',
+        'stat_host_mem_pct':        'sqlite:////root/.chia/machinaris/dbs/stat_host_mem_pct.db',
     }
     SQLALCHEMY_ECHO = True if 'FLASK_ENV' in os.environ and os.environ['FLASK_ENV'] == "development" else False
     CONTROLLER_SCHEME = 'http'
