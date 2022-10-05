@@ -117,7 +117,7 @@ def load_blockchain_show(blockchain):
 
 def load_connections_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    if blockchain in ['cactus', 'maize']:  # Cactus & Maize now supports only 'peer' command
+    if blockchain in ['cactus', 'littlelambocoin', 'maize']:  # These now support only the 'peer' command
         proc = Popen("{0} peer -c full_node".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     else:
         proc = Popen("{0} show --connections".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
@@ -208,7 +208,7 @@ def pause_wallet(blockchain):
 def remove_connection(node_id, ip, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     try:
-        if blockchain in ['cactus', 'maize']:  # Cactus & Maize now supports only 'peer' command
+        if blockchain in ['cactus', 'littlelambocoin', 'maize']:  # These now support only the 'peer' command
             proc = Popen("{0} peer --remove-connection {1} full_node".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
         else:
             proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
@@ -292,7 +292,7 @@ def add_connections(connections, blockchain):
             elif socket.gethostbyname(hostname) != hostname:
                 app.logger.debug('{} is a valid hostname'.format(hostname))
             app.logger.info("Adding {0} connection to peer: {1}".format(blockchain, connection))
-            if blockchain in ['cactus', 'maize']:  # Cactus & Maize now supports only 'peer' command
+            if blockchain in ['cactus', 'littlelambocoin', 'maize']:  # These now support only the 'peer' command
                 proc = Popen("{0} peer --add-connection {1} full_node".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
             else:
                 proc = Popen("{0} show --add-connection {1}".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
