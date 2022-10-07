@@ -30,6 +30,7 @@ class Configs(MethodView):
 class ConfigByType(MethodView):
 
     def get(self, type, blockchain):
+        mimetype = "application/x-yaml"
         if type == "farming":
             if blockchain == 'mmx':
                 config = mmx_cli.load_config(blockchain)
@@ -39,12 +40,15 @@ class ConfigByType(MethodView):
             config = chiadog_cli.load_config(blockchain)
         elif type == "plotting":
             config = plotman_cli.load_config(blockchain)
+        elif type == "plotting_dirs":
+            config = plotman_cli.load_dirs(blockchain)
+            mimetype = "application/json"
         elif type == "tools":
             config = forktools_cli.load_config(blockchain)
         else:
             abort(400, "Unknown config type provided: {0}".format(type))
         response = make_response(config, 200)
-        response.mimetype = "application/x-yaml"
+        response.mimetype = mimetype
         return response
 
     def clean_config(self, req_data):

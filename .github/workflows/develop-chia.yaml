@@ -42,6 +42,7 @@ jobs:
           build-args: |
             "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=develop"
+            "PLOTMAN_BRANCH=dirs_json"
             "CHIADOG_BRANCH=dev"
             "FORKTOOLS_BRANCH=reserved_cores"
             "CHIA_BRANCH=latest"

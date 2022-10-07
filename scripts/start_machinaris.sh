@@ -26,7 +26,7 @@ else # If Chia
 fi
 # Import ssh key if exists
 if [ -f "/id_rsa" ]; then
-    echo "/id_rsa exists, trying to import private ssh key"
+    echo "Importing SSH key at /id_rsa volume mount."
     mkdir -p ~/.ssh/
     cp -f /id_rsa ~/.ssh/id_rsa
     cat > ~/.ssh/config <<'_EOF'

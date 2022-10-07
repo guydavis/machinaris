@@ -516,6 +516,11 @@ def views_settings_config(path):
             response.headers.set('ConfigReplacementsOccurred', replaced)
         except requests.exceptions.ConnectionError as ex:
             response = make_response(_("For Plotting config, found no responding fullnode found for %(blockchain)s. Please check your workers.", blockchain=escape(request.args.get('blockchain'))))
+    elif config_type == "plotting_dirs":
+        try:
+            response = make_response(plotman.load_dirs(w, request.args.get('blockchain')), 200)
+        except requests.exceptions.ConnectionError as ex:
+            response = make_response(_("No responding fullnode found for %(blockchain)s. Please check your workers.", blockchain=escape(request.args.get('blockchain'))))
     elif config_type == "tools":
         try:
             response = make_response(forktools.load_config(w, request.args.get('blockchain')), 200)

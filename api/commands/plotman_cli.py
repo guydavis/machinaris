@@ -4,6 +4,7 @@
 
 import datetime
 import itertools
+import json
 import os
 import pathlib
 import psutil
@@ -284,3 +285,31 @@ def get_prometheus_metrics():
         raise Exception("The timeout expired during plotman call.")
     cli_stdout = outs.decode('utf-8')
     return cli_stdout
+
+def load_dirs(blockchain):
+    if not check_script():
+        raise Exception("No plotman script found yet at {0}. Container probably just launched. Please allow 15 minutes for startup." \
+                .format(PLOTMAN_SCRIPT))
+    check_config()
+    proc = Popen("{0} {1} {2}".format(PLOTMAN_SCRIPT, 'dirs', '--json'), stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=90)
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        raise Exception("The timeout expired during plotman dirs.")
+    result = {}
+    try:
+        response = json.loads(outs.decode('utf-8'))
+        if not 'temporary' in response:
+            response['temporary'] = []
+        if not 'destination' in response:
+            response['destination'] = []
+        if not 'archiving' in response:
+            response['archiving'] = []
+    except:
+        response = outs.decode('utf-8')
+    result = {'response': response, }
+    if errs.decode('utf-8'):
+        result['errors'] = errs.decode('utf-8')
+    return json.dumps(result)

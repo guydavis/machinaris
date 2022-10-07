@@ -209,6 +209,10 @@ def load_config(plotter, blockchain):
         #app.logger.info("Return false for replaced.")
         return [ False, '\n'.join(lines) ]
 
+def load_dirs(plotter, blockchain):
+    result = utils.send_get(plotter, "/configs/plotting_dirs/" + blockchain, debug=False).content.decode('utf-8')
+    return result
+
 def inspect_config(hostname, config):
     if 'plotting' in config:
         if 'pool_contract_address' in config['plotting']:
