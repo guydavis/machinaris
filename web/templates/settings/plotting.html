@@ -50,7 +50,7 @@
                     </select>
                 </div>
             </div>
-            <div class="alert alert-dark" role="alert" id="dirs_listing" style="display: none; padding-bottom: 0px">
+            <div class="alert alert-info" role="alert" id="dirs_listing" style="display: none; padding-bottom: 0px">
                 <div class="row align-items-start">
                   <div class="col" id="tmp_dirs"></div>
                   <div class="col" id="dst_dirs"></div>
@@ -94,7 +94,6 @@
                     });
             }
             $('#dirs_error').hide();
-            $('#dirs_error').hide();
             function load_dirs(worker, blockchain) {
                 jqxhr = $.getJSON({
                     url: "{{ url_for('views_settings_config') }}?type=plotting_dirs&worker=" + worker + "&blockchain=" + blockchain,
@@ -125,10 +124,15 @@
                             }
                             html += "</ul>";
                             $("#arch_dirs").html(html);
-                            $("#dirs_listing").show();
                         } else {
-                            $("#dirs_listing").hide();
+                            html = "<h6>Temporary Directories</h6><ul><li>?</li></ul>";
+                            $("#tmp_dirs").html(html);
+                            html = "<h6>Destination Directories (optional)</h6><ul><li>?</li></ul>"
+                            $("#dst_dirs").html(html);
+                            html = "<h6>Archiving Directories (optional)</h6><ul><li>?</li></ul>"
+                            $("#arch_dirs").html(html);
                         }
+                        $('#dirs_listing').show();
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         console.log("jqXHR, textStatus, errorThrown");
                     });
