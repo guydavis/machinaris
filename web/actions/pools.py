@@ -27,6 +27,7 @@ from sqlalchemy import or_
 from os import path
 
 from web import app, db, utils
+from common.config import globals
 from common.models import plotnfts as pn, pools as po, wallets as w, partials as pr
 from web.models.pools import Plotnfts, Pools, PoolConfigs, PartialsChartData
 from . import worker as wk
@@ -94,3 +95,13 @@ def partials_chart_data(farm_summary):
         app.logger.debug("Counting partials starting at {0} and later...".format(start_time))
         partials = db.session.query(pr.Partial).filter(pr.Partial.blockchain==blockchain,pr.Partial.created_at>=start_time).order_by(pr.Partial.created_at.desc()).all()
         farm_summary.farms[blockchain]['partials'] =  PartialsChartData(partials)
+
+def get_unclaimed_plotnft_rewards():
+    fullnodes = wk.get_fullnodes_by_blockchain()
+    for blockchain in fullnodes.keys():
+        #if blockchain == 'apple':
+        try:
+            response = utils.send_get(fullnodes[blockchain], '/rewards/', {}, debug=True)
+            app.logger.info("RESPONSE: {0}".format(response))
+        except Exception as ex:
+            app.logger.error("Failed to query for {0} recoverable rewards due to {1}.".format(blockchain, str(ex)))

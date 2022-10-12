@@ -13,13 +13,18 @@ from flask import g
 from common.models import wallets as w, plotnfts as p, workers as wk
 from common.config import globals
 from api import app, utils
+from api.commands import blockchain_db
 
 def execute():
     with app.app_context():
         from api import db
         gc = globals.load()
-        if not gc['is_controller']: # Only Chia fullnode should gather plotnft.launchers and trigger recover on each fork
-            return
+        if gc['is_controller']: # Only Chia fullnode should gather plotnft.launchers and trigger recover on each fork
+            execute_chia_recovery(db)
+        else: # Forks execute reward recovery and cache the results
+            blockchain_db.update_qualified_coins_cache()
+
+def execute_chia_recovery(db):
         app.logger.info("****************** Starting twice daily NFT 7/8 reward recovery. *********************")
         fullnodes = db.session.query(wk.Worker).filter(wk.Worker.mode == 'fullnode', 
             wk.Worker.blockchain != 'chia', wk.Worker.blockchain != 'chives').order_by(wk.Worker.blockchain).all()
@@ -60,4 +65,3 @@ def execute():
                 except Exception as ex:
                     app.logger.error("Failed to request reward recovery for {0} to {1}:{2} because {3}.".format(
                         fullnode.blockchain, fullnode.hostname, fullnode.port, str(ex)))
-            

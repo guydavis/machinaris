@@ -44,7 +44,6 @@ jobs:
             "MACHINARIS_STREAM=develop"
             "CHIADOG_BRANCH=dev"
             "FDCLI_BRANCH=dev"
-            "FORKTOOLS_BRANCH=reserved_cores"
             "CACTUS_BRANCH=main"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-cactus:develop

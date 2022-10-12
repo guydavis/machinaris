@@ -8,7 +8,7 @@ from flask.views import MethodView
 from api import app
 from api.extensions.api import Blueprint
 
-from api.commands import chiadog_cli, chia_cli, plotman_cli, forktools_cli, mmx_cli
+from api.commands import chiadog_cli, chia_cli, plotman_cli, forktools_cli, mmx_cli, blockchain_db
 
 blp = Blueprint(
     'Config',
@@ -74,6 +74,8 @@ class ConfigByType(MethodView):
                 forktools_cli.save_config(self.clean_config(request.data), blockchain)
             elif type == "wallet":
                 chia_cli.save_wallet_settings(json.loads(request.data.decode('utf-8')), blockchain)
+            elif type == "plotnfts":
+                blockchain_db.save_chia_plotnfts(json.loads(request.data.decode('utf-8')))
             else:
                 abort(400, "Unknown config type provided: {0}".format(type))
             response = make_response("Successfully saved config.", 200)

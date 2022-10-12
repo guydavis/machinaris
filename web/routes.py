@@ -294,6 +294,7 @@ def wallet():
     sync_wallet_frequencies = chia.load_wallet_sync_frequencies()
     sync_wallet_frequency = chia.load_current_wallet_sync_frequency()
     chart_data = stats.load_total_balances(fiat.get_local_currency_symbol().lower())
+    # TODO Display: p.get_unclaimed_plotnft_rewards()
     return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, 
         reload_seconds=120, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
         chart_data=chart_data, local_cur_sym=fiat.get_local_currency_symbol(), sync_wallet_frequencies=sync_wallet_frequencies, 

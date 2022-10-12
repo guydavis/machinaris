@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file. The format 
  - Enhanced Forktools to optionally decrease a blockchain's full_node process count, which greatly limits memory usage.
  - Improve Plotting page to display configured tmp, dst, and archiving directories before starting to plot. Support `site_path_filter` for archive folders under `site_root`.
  - Fixes: Enhance 'NFT Reward Recovery' tool to support v2 databases. Fix for invalid Chiadog harvester alerts.
- - Update: [Littlelambocoin](https://github.com/BTCgreen-Network/littlelambocoin-blockchain/releases/tag/1.6.0) to v1.6.0, [Maize](https://github.com/Maize-Network/maize-blockchain/releases/tag/1.6.0) to v1.6.0, [MMX](https://github.com/madMAx43v3r/mmx-node) to `testnet7`.
+ - Update: [Littlelambocoin](https://github.com/BTCgreen-Network/littlelambocoin-blockchain/releases/tag/1.6.1) to v1.6.1, [Maize](https://github.com/Maize-Network/maize-blockchain/releases/tag/1.6.0) to v1.6.0, [MMX](https://github.com/madMAx43v3r/mmx-node) to `testnet7`.
 
 ## [0.8.4] - 2022-09-21
 - Scaling-Down: Optional mode where wallets are synced daily, not run 24/7.  Saves ~35% memory so smaller farmers can farm more blockchains concurrently on the same machine. See Wallets page, top-right Settings.

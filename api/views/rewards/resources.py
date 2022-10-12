@@ -24,10 +24,14 @@ blp = Blueprint(
 class Rewards(MethodView):
 
     def get(self):
-        coins = blockchain_db.get_unspent_coins('TESTING')
-        response = make_response(json.dumps(coins), 200)
-        response.mimetype = "text/json"
-        return response
+        try:
+            coins = blockchain_db.get_unspent_coins()
+            response = make_response(json.dumps(coins), 200)
+            response.mimetype = "text/json"
+            return response
+        except Exception as ex:
+            traceback.print_exc()
+            return "Failed query for rewards due to {0}".format(str(ex)), 400
 
     def post(self):
         try:
