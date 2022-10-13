@@ -60,15 +60,15 @@ class Plotnfts(MethodView):
                 puzzle_bytes = decode_puzzle_hash(plotnft['pool_contract_address'])
                 plotnft['puzzle_hash'] = puzzle_bytes.hex()
                 for wk in db.session.query(Worker).filter(Worker.mode=='fullnode', Worker.blockchain!='chia').all():
-                    #if wk.blockchain == 'apple':
-                    thread = threading.Thread(target=self.save_chia_plotnft_config,
-                        kwargs={
-                            'url': wk.url + '/configs/plotnfts/' + wk.blockchain,
-                            'plotnfts': plotnfts,
-                            'debug': False
-                        }
-                    )
-                    thread.start()
+                    if wk.connection_status() == 'Responding':
+                        thread = threading.Thread(target=self.save_chia_plotnft_config,
+                            kwargs={
+                                'url': wk.url + '/configs/plotnfts/' + wk.blockchain,
+                                'plotnfts': plotnfts,
+                                'debug': False
+                            }
+                        )
+                        thread.start()
         return items
 
     def save_chia_plotnft_config(self, url, plotnfts, debug):

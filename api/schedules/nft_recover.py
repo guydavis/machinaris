@@ -19,11 +19,10 @@ def execute():
     with app.app_context():
         from api import db
         gc = globals.load()
-        if gc['is_controller']: # Only Chia fullnode should gather plotnft.launchers and trigger recover on each fork
-            execute_chia_recovery(db)
-        else: # Forks execute reward recovery and cache the results
-            blockchain_db.update_qualified_coins_cache()
+        app.logger.info("****************** Starting hourly NFT 7/8 qualified reward coins check... *********************")
+        blockchain_db.update_qualified_coins_cache()
 
+# DISABLED: Old method of running fd-cli tool blindly twice a day
 def execute_chia_recovery(db):
         app.logger.info("****************** Starting twice daily NFT 7/8 reward recovery. *********************")
         fullnodes = db.session.query(wk.Worker).filter(wk.Worker.mode == 'fullnode', 

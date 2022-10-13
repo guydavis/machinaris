@@ -5,7 +5,6 @@
 import json
 import os
 import sqlite3
-from this import d
 
 from common.config import globals
 from api import app
@@ -54,7 +53,7 @@ def get_unspent_coins(puzzle_hash, qualified=True):
                 'amount': row[2]
             })
     if len(rows) == 0:
-        app.logger.info("No coins are eligible for recovery yet. Notice that 604800 seconds must pass since coin creation to recover it.")
+        app.logger.info("No coins are eligible for recovery yet. Note that 604800 seconds must pass since coin creation to recover it.")
     app.logger.info("Completed loop for unspent coins.")
     return rows
 
