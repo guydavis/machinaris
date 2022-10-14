@@ -109,6 +109,7 @@ def get_unclaimed_plotnft_rewards():
                         total_coin_amount += float(coin['amount'])
             except Exception as ex:
                 app.logger.error("Failed to query for {0} recoverable rewards due to {1}.".format(wkr.blockchain, str(ex)))
+            #if total_coins > 0: # Only show if recoverable rewards are available
             rewards[wkr.blockchain.capitalize() + '|' + wkr.hostname] = "{0} {1}".format(
                 converters.round_balance(total_coins),
                 globals.get_blockchain_symbol(wkr.blockchain).lower()
