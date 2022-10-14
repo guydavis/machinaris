@@ -25,7 +25,7 @@ class Rewards(MethodView):
 
     def get(self):
         try:
-            coins = blockchain_db.get_unspent_coins()
+            coins = blockchain_db.load_qualified_coins_cache()
             response = make_response(json.dumps(coins), 200)
             response.mimetype = "text/json"
             return response

@@ -286,6 +286,8 @@ def wallet():
             elif action == "pause":
                 chia.start_or_pause_wallet(request.form.get('hostname'), request.form.get('blockchain'), action)
                 flash(_("Pausing wallet sync.  Please allow a few minutes..."), 'success')
+        elif request.form.get('action') == 'recover':
+            p.request_unclaimed_plotnft_reward_recovery()
         else:
             app.logger.info("Saving {0} cold wallet address of: {1}".format(request.form.get('blockchain'), request.form.get('cold_wallet_address')))
             selected_blockchain = request.form.get('blockchain')
@@ -296,7 +298,6 @@ def wallet():
     sync_wallet_frequencies = chia.load_wallet_sync_frequencies()
     sync_wallet_frequency = chia.load_current_wallet_sync_frequency()
     chart_data = stats.load_total_balances(fiat.get_local_currency_symbol().lower())
-    # TODO Display: p.get_unclaimed_plotnft_rewards()
     return render_template('wallet.html', wallets=wallets, global_config=gc, selected_blockchain = selected_blockchain, 
         reload_seconds=120, exchange_rates=fiat.load_exchange_rates_cache(), local_currency=fiat.get_local_currency(), 
         chart_data=chart_data, local_cur_sym=fiat.get_local_currency_symbol(), sync_wallet_frequencies=sync_wallet_frequencies, 
@@ -540,9 +541,9 @@ def logs():
 
 @app.route('/logfile')
 def logfile():
-    w = worker.get_worker(request.args.get('hostname'), request.args.get('blockchain'))
+    w = worker.get_worker(request.args.get('hostname'), request.args.get('blockchain').lower())
     log_type = request.args.get("log")
-    if log_type in [ 'alerts', 'farming', 'plotting', 'archiving', 'apisrv', 'webui', 'pooling']:
+    if log_type in [ 'alerts', 'farming', 'plotting', 'archiving', 'apisrv', 'webui', 'pooling', 'rewards']:
         log_id = request.args.get("log_id")
         blockchain = request.args.get("blockchain")
         return log_handler.get_log_lines(get_lang(request), w, log_type, log_id, blockchain)
