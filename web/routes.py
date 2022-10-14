@@ -1,4 +1,4 @@
-
+import json
 import pathlib
 import pytz
 import os
@@ -290,6 +290,8 @@ def wallet():
             app.logger.info("Saving {0} cold wallet address of: {1}".format(request.form.get('blockchain'), request.form.get('cold_wallet_address')))
             selected_blockchain = request.form.get('blockchain')
             chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
+    if request.args.get('rewards'):
+        return json.dumps(p.get_unclaimed_plotnft_rewards()), 200
     wallets = chia.load_wallets()
     sync_wallet_frequencies = chia.load_wallet_sync_frequencies()
     sync_wallet_frequency = chia.load_current_wallet_sync_frequency()

@@ -28,7 +28,7 @@ from os import path
 
 from web import app, db, utils
 from common.config import globals
-from common.models import plotnfts as pn, pools as po, wallets as w, partials as pr
+from common.models import plotnfts as pn, pools as po, wallets as w, partials as pr, workers as wkrs
 from web.models.pools import Plotnfts, Pools, PoolConfigs, PartialsChartData
 from . import worker as wk
 
@@ -97,11 +97,11 @@ def partials_chart_data(farm_summary):
         farm_summary.farms[blockchain]['partials'] =  PartialsChartData(partials)
 
 def get_unclaimed_plotnft_rewards():
-    fullnodes = wk.get_fullnodes_by_blockchain()
-    for blockchain in fullnodes.keys():
-        #if blockchain == 'apple':
-        try:
-            response = utils.send_get(fullnodes[blockchain], '/rewards/', {}, debug=True)
-            app.logger.info("RESPONSE: {0}".format(response))
-        except Exception as ex:
-            app.logger.error("Failed to query for {0} recoverable rewards due to {1}.".format(blockchain, str(ex)))
+    for wkr in db.session.query(wkrs.Worker).filter(wkrs.Worker.mode=='fullnode', wkrs.Worker.blockchain!='chia').all():
+        if wkr.connection_status() == 'Responding':
+            try:
+                response = utils.send_get(wkr.blockchain, '/rewards/', {}, debug=True)
+                app.logger.info("RESPONSE: {0}".format(response))
+            except Exception as ex:
+                app.logger.error("Failed to query for {0} recoverable rewards due to {1}.".format(wkr.blockchain, str(ex)))
+    return []

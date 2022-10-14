@@ -98,7 +98,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">{{_('Cancel')}}</button>
+          <button type="button" class="btn btn-secondary" id="btnCancelWallet" data-bs-dismiss="modal">{{_('Cancel')}}</button>
           <button type="button" class="btn btn-outline-success" id="btnSave">{{_('Save')}}</button>
         </div>
       </div>
@@ -128,7 +128,28 @@
     </div>
   </div>
 
+  <div class="modal fade" id="rewardsModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="rewardsModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="rewardsModalLabel">{{_('Portable Plots - 7/8 Reward Recovery')}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+                {{_('Block rewards won by your portable plots require recovery.')}}
+                {{_('Continue with recovery for rewards older than one week?')}}
+            </div>
+            <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelRewards">{{_('Cancel')}}</button>
+                <button type="button" class="btn btn-outline-success" id="btnConfirmRecover">{{_('Recover')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <header class="pb-3 mb-4 border-bottom">
+    <button type="button" class="btn btn-success fw-bold" style="float:right; margin-right:150px" data-bs-toggle="modal" 
+      data-bs-target="#rewardsModal">{{_('Claim Rewards')}}</button>
     <span class="fs-4">{{_('Wallet Summary')}} {{ chart_data.last_value }} </span>
 </header>
 
@@ -310,7 +331,21 @@
                     restartModalMessage.textContent = "{{_('This will pause the blockchain\'s wallet.  Please allow a few minutes for this to be reflected on this page.  Your patience is appreciated! Continue anyway?')}}"
                   }
               })
+              var rewardsModal = document.getElementById('rewardsModal')
+              rewardsModal.addEventListener('show.bs.modal', function (event) {
+                load_rewards();
+              });
             })
+        function load_rewards() {
+            jqxhr = $.getJSON({
+                url: "{{ url_for('wallet') }}?rewards=get",
+            })
+                .done(function (data) {
+                    console.log(data)
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log("jqXHR, textStatus, errorThrown");
+                });
+        }
         function ViewTransactions(blockchain, wallet_id) {
           var d = new Date();
           var height = 600;
