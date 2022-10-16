@@ -35,7 +35,10 @@ def analyze_status(plots_status, short_plot_id):
     if short_plot_id in plots_status:
         if "analyze" in plots_status[short_plot_id]:
             if plots_status[short_plot_id]['analyze'] and 'seconds' in plots_status[short_plot_id]['analyze']:
-                return plots_status[short_plot_id]['analyze']['seconds']
+                return '|'.join([
+                    plots_status[short_plot_id]['analyze']['host'], 
+                    plots_status[short_plot_id]['analyze']['seconds']
+                ])
             else:
                 return "-"
     return None

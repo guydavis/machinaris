@@ -293,6 +293,7 @@ def prune_workers_status(hostname, displayname, blockchain):
         app.logger.info("Failed to remove stale stats for worker {0} - {1} because {2}".format(displayname, blockchain, str(ex)))
 
 def load_plotting_stats():
+    worker_ips_to_displaynames = {}
     summary_by_size = {}
     for k in [29, 30, 31, 32, 33, 34]:  # Current k sizes
         dates = []
@@ -306,13 +307,26 @@ def load_plotting_stats():
             converted_date = p.created_at.replace(' ', 'T') # Change space between date & time to 'T' for luxon
             if not converted_date in dates:
                 dates.append(converted_date)
-            if not p.displayname in workers:
-                workers[p.displayname] = {}
-            values = workers[p.displayname]
+            if '|' in p.plot_analyze:
+                [worker_hostname, analyze_seconds] = p.plot_analyze.split('|')
+                if worker_hostname in worker_ips_to_displaynames:
+                    worker_displayname = worker_ips_to_displaynames[worker_hostname]
+                else:
+                    try:
+                        worker_displayname = worker.get_worker(worker_hostname) # Convert ip_addr to worker displayname
+                        worker_ips_to_displaynames[worker_hostname] = worker_displayname
+                    except:
+                        pass
+            else: # Old format, just seconds
+                analyze_seconds =  p.plot_analyze
+                worker_displayname = p.displayname  # Pretend plot host was also the plotter
+            if not worker_displayname in workers:
+                workers[worker_displayname] = {}
+            values = workers[worker_displayname]
             try:
-                values[converted_date] = round(float(p.plot_analyze) / 60, 2) # Convert from seconds to minutes
+                values[converted_date] = round(float(analyze_seconds) / 60, 2) # Convert from seconds to minutes
             except:
-                app.logger.error("Inavlid plot_analyze time in seconds: {0}".format(p.plot_analyze))
+                app.logger.error("Inavlid plot_analyze time found in ip_addr|seconds: {0}".format(p.plot_analyze))
                 values[converted_date] = 'null'
         if len(dates) > 0:
             summary_by_size[k] = { "dates": dates, "workers": workers.keys(),  }
