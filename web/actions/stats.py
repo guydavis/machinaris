@@ -126,11 +126,7 @@ def wallet_balance_diff(since, blockchain):
     result = ''
     try:
         latest = db.session.query(StatWalletBalances).filter(StatWalletBalances.blockchain==blockchain).order_by(StatWalletBalances.created_at.desc()).limit(1).first()
-        #if blockchain == 'cactus':
-        #    app.logger.info(latest.value)
         before = db.session.query(StatWalletBalances).filter(StatWalletBalances.blockchain==blockchain, StatWalletBalances.created_at <= since).order_by(StatWalletBalances.created_at.desc()).limit(1).first()
-        #if blockchain == 'cactus':
-        #    app.logger.info(before.value)
         if (latest and before) and (latest.value - before.value) != 0:
             result = ("%+6g " % (latest.value - before.value)) + _('in last day.')
             #app.logger.info("Total coins daily diff: {0}".format(result))
