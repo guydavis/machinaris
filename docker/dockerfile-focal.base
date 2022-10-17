@@ -41,9 +41,9 @@ RUN apt-get update \
 		vim \
 		wget \
 	\
-# update smartmontools drive db \
+# update smartmontools drive db 
 	\
-	&& update-smart-drivedb
+	&& update-smart-drivedb \
 	\
 # cleanup apt cache
 	\
