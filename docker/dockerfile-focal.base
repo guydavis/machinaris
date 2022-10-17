@@ -43,7 +43,7 @@ RUN apt-get update \
 	\
 # update smartmontools drive db 
 	\
-	&& update-smart-drivedb \
+	&& /usr/sbin/update-smart-drivedb \
 	\
 # cleanup apt cache
 	\
