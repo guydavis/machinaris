@@ -132,9 +132,9 @@ def get_unspent_coins(puzzle_hash, qualified=True):
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     app.logger.info("Starting to query for unspent coins...")
-    query = f"SELECT coin_name, coin_parent, amount FROM coin_record WHERE {spent_column_name} == 0 AND timestamp {qualified_op} (strftime('%s', 'now') - 604800) AND puzzle_hash == '{puzzle_hash}' ORDER BY timestamp DESC"
-    app.logger.info(query)
-    cursor.execute(query)
+    query = f"SELECT coin_name, coin_parent, amount FROM coin_record WHERE {spent_column_name} == 0 AND timestamp {qualified_op} (strftime('%s', 'now') - 604800) AND puzzle_hash LIKE ? ORDER BY timestamp DESC"
+    app.logger.debug(query)
+    cursor.execute(query, (bytes.fromhex(puzzle_hash),))
     app.logger.info("Completed query for unspent coins.")
     rows = []
     for row in cursor.fetchall():
