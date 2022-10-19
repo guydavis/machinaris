@@ -98,7 +98,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" id="btnCancel" data-bs-dismiss="modal">{{_('Cancel')}}</button>
+          <button type="button" class="btn btn-secondary" id="btnCancelWallet" data-bs-dismiss="modal">{{_('Cancel')}}</button>
           <button type="button" class="btn btn-outline-success" id="btnSave">{{_('Save')}}</button>
         </div>
       </div>
@@ -128,7 +128,37 @@
     </div>
   </div>
 
+  <div class="modal fade" id="rewardsModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="rewardsModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3">
+        <div class="modal-content bg-dark">
+          <form method="POST" id="rewards-form">
+            <input type="hidden" name="action" value="recover"/>
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="rewardsModalLabel">{{_('Portable Plots - 7/8 Reward Recovery')}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+              {% autoescape false %}
+              {{_('Block rewards won by your portable plots %(wikilink_open)srequire recovery%(wikilink_close)s.', 
+                wikilink_open='<a href="https://github.com/guydavis/machinaris/wiki/Wallets#claim-rewards" class="text-white" target="_blank">', wikilink_close='</a>')}}
+              <br/>
+              {{_('This is an experimental feature.  Try %(atb_open)sAllTheBlocks%(atb_close)s if any issue.', 
+                atb_open='<a href="https://alltheblocks.net/nft-recovery" class="text-white" target="_blank">', atb_close='</a>')}}
+              {% endautoescape %}
+              <div id="rewards_table"></div>
+            </div>
+            <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelRewards">{{_('Cancel')}}</button>
+                <button type="button" class="btn btn-outline-success" id="btnConfirmRecover">{{_('Recover')}}</button>
+            </div>
+          </form>
+        </div>
+    </div>
+</div>
+
 <header class="pb-3 mb-4 border-bottom">
+    <button type="button" class="btn btn-success fw-bold" style="float:right; margin-right:150px" data-bs-toggle="modal" 
+      data-bs-target="#rewardsModal">{{_('Claim Rewards')}}</button>
     <span class="fs-4">{{_('Wallet Summary')}} {{ chart_data.last_value }} </span>
 </header>
 
@@ -270,6 +300,14 @@
                 );
                 $("#restart-form").submit();
             });
+            $("#btnConfirmRecover").click(function () {
+                $("#btnCancelRewards").prop("disabled", true);
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...`
+                );
+                $("#rewards-form").submit();
+            });
             var walletModal = document.getElementById('walletModal')
             walletModal.addEventListener('show.bs.modal', function (event) {
                 var button = event.relatedTarget
@@ -280,7 +318,7 @@
                 var coldWalletAddressField = document.getElementById('cold_wallet_address_field')
                 coldWalletAddressField.value = coldWalletAddress
                 var modalTitle = walletModal.querySelector('.modal-title')
-                modalTitle.textContent = 'Wallet Settings - ' + blockchain
+                modalTitle.textContent = "{{_('Wallet Settings')}} - " + blockchain
             })
             var restartModal = document.getElementById('restartModal')
               restartModal.addEventListener('show.bs.modal', function (event) {
@@ -310,7 +348,44 @@
                     restartModalMessage.textContent = "{{_('This will pause the blockchain\'s wallet.  Please allow a few minutes for this to be reflected on this page.  Your patience is appreciated! Continue anyway?')}}"
                   }
               })
+              var rewardsModal = document.getElementById('rewardsModal')
+              rewardsModal.addEventListener('show.bs.modal', function (event) {
+                load_rewards();
+              });
             })
+        function ViewRewardsLog(hostname, blockchain) {
+            var d = new Date();
+            var height = 600;
+            var width = 900;
+            var top = (screen.height - height) / 2;
+            var left = (screen.width - width) / 2;
+            window.open("{{ url_for('logs') }}?log=rewards" + "&hostname=" + hostname + "&blockchain=" + blockchain, '{{_('Reward Recovery Log for ')}}' + blockchain + ' - ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+        }
+        function load_rewards() {
+            jqxhr = $.getJSON({
+                url: "{{ url_for('wallet') }}?rewards=get",
+            })
+                .done(function (data) {
+                    if (Object.entries(data).length > 0) {
+                      html = "<table class='table table-dark table-striped'><thead><tr><th>Blockchain</th><th>Recoverable Coins</th><th>Log</th></tr></thead><tbody>";
+                      for (const [blockchain_hostname, amount] of Object.entries(data)) {
+                          var [blockchain, hostname] = blockchain_hostname.split('|');
+                          html += "<tr><td>" + blockchain + "</td><td>" + amount + "</td>";
+                          html += "<td class='icon_cell'><a href='#' title='" + "{{_('View Recovery Log')}}" + "' onclick='ViewRewardsLog(\""+hostname+"\",\""+blockchain+"\");return false;'><i class='fs-4 bi-file-text'></i></a></td>";
+                          html += "</tr>";
+                      }
+                      html += "</tbody></table>";
+                      html += "{{_('Continue with recovery for rewards older than one week?')}}";
+                      $("#rewards_table").html(html);
+                      $("#btnConfirmRecover").show();
+                    } else {
+                      $("#rewards_table").html("<br>{{_('Sorry, no recoverable coins currently.  Please check back later.')}}");
+                      $("#btnConfirmRecover").hide();
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log("jqXHR, textStatus, errorThrown");
+                });
+        }
         function ViewTransactions(blockchain, wallet_id) {
           var d = new Date();
           var height = 600;

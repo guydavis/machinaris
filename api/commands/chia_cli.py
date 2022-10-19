@@ -33,6 +33,9 @@ MAX_LOG_LINES = 2000
 # When this file present, we are leaving wallet paused normally, syncing every day or so
 WALLET_SETTINGS_FILE = '/root/.chia/machinaris/config/wallet_settings.json'
 
+# Blockchains which dropped compatibility with `show -c` commands around v1.6
+BLOCKCHAINS_USING_PEER_CMD = ['cactus', 'chia', 'littlelambocoin', 'maize']
+
 def load_farm_summary(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     if globals.farming_enabled():
@@ -117,7 +120,7 @@ def load_blockchain_show(blockchain):
 
 def load_connections_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    if blockchain in ['cactus', 'littlelambocoin', 'maize']:  # These now support only the 'peer' command
+    if blockchain in BLOCKCHAINS_USING_PEER_CMD:  # These now support only the 'peer' command
         proc = Popen("{0} peer -c full_node".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     else:
         proc = Popen("{0} show --connections".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
@@ -208,7 +211,7 @@ def pause_wallet(blockchain):
 def remove_connection(node_id, ip, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     try:
-        if blockchain in ['cactus', 'littlelambocoin', 'maize']:  # These now support only the 'peer' command
+        if blockchain in BLOCKCHAINS_USING_PEER_CMD:  # These now support only the 'peer' command
             proc = Popen("{0} peer --remove-connection {1} full_node".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
         else:
             proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
@@ -292,7 +295,7 @@ def add_connections(connections, blockchain):
             elif socket.gethostbyname(hostname) != hostname:
                 app.logger.debug('{} is a valid hostname'.format(hostname))
             app.logger.info("Adding {0} connection to peer: {1}".format(blockchain, connection))
-            if blockchain in ['cactus', 'littlelambocoin', 'maize']:  # These now support only the 'peer' command
+            if blockchain in BLOCKCHAINS_USING_PEER_CMD:  # These now support only the 'peer' command
                 proc = Popen("{0} peer --add-connection {1} full_node".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
             else:
                 proc = Popen("{0} show --add-connection {1}".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)

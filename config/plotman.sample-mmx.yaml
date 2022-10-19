@@ -3,8 +3,10 @@
 version: [2]
 
 logging:
-        # DO NOT CHANGE THIS IN-CONTAINER PATH USED BY MACHINARIS!
+        # DO NOT CHANGE THESE IN-CONTAINER PATHS USED BY MACHINARIS!
         plots: /root/.chia/plotman/logs
+        transfers: /root/.chia/plotman/logs/archiving
+        application: /root/.chia/plotman/logs/plotman.log
 
 user_interface:
         use_stty_size: False

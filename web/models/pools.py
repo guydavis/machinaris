@@ -82,7 +82,7 @@ class Pools:
                 'pool_state': pool_state,
                 'updated_at': pool.updated_at,
                 'status': status,
-                'points_successful_last_24h': points_successful_last_24h
+                'points_successful_last_24h': points_successful_last_24h,
             }
             if pool.blockchain in self.blockchains:
                 blockchain_pools = self.blockchains[pool.blockchain]

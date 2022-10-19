@@ -1,4 +1,4 @@
-
+import json
 import pathlib
 import pytz
 import os
@@ -286,10 +286,14 @@ def wallet():
             elif action == "pause":
                 chia.start_or_pause_wallet(request.form.get('hostname'), request.form.get('blockchain'), action)
                 flash(_("Pausing wallet sync.  Please allow a few minutes..."), 'success')
+        elif request.form.get('action') == 'recover':
+            p.request_unclaimed_plotnft_reward_recovery()
         else:
             app.logger.info("Saving {0} cold wallet address of: {1}".format(request.form.get('blockchain'), request.form.get('cold_wallet_address')))
             selected_blockchain = request.form.get('blockchain')
             chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
+    if request.args.get('rewards'):
+        return json.dumps(p.get_unclaimed_plotnft_rewards()), 200
     wallets = chia.load_wallets()
     sync_wallet_frequencies = chia.load_wallet_sync_frequencies()
     sync_wallet_frequency = chia.load_current_wallet_sync_frequency()
@@ -516,6 +520,11 @@ def views_settings_config(path):
             response.headers.set('ConfigReplacementsOccurred', replaced)
         except requests.exceptions.ConnectionError as ex:
             response = make_response(_("For Plotting config, found no responding fullnode found for %(blockchain)s. Please check your workers.", blockchain=escape(request.args.get('blockchain'))))
+    elif config_type == "plotting_dirs":
+        try:
+            response = make_response(plotman.load_dirs(w, request.args.get('blockchain')), 200)
+        except requests.exceptions.ConnectionError as ex:
+            response = make_response(_("No responding fullnode found for %(blockchain)s. Please check your workers.", blockchain=escape(request.args.get('blockchain'))))
     elif config_type == "tools":
         try:
             response = make_response(forktools.load_config(w, request.args.get('blockchain')), 200)
@@ -532,9 +541,9 @@ def logs():
 
 @app.route('/logfile')
 def logfile():
-    w = worker.get_worker(request.args.get('hostname'), request.args.get('blockchain'))
+    w = worker.get_worker(request.args.get('hostname'), request.args.get('blockchain').lower())
     log_type = request.args.get("log")
-    if log_type in [ 'alerts', 'farming', 'plotting', 'archiving', 'apisrv', 'webui', 'pooling']:
+    if log_type in [ 'alerts', 'farming', 'plotting', 'archiving', 'apisrv', 'webui', 'pooling', 'rewards']:
         log_id = request.args.get("log_id")
         blockchain = request.args.get("blockchain")
         return log_handler.get_log_lines(get_lang(request), w, log_type, log_id, blockchain)

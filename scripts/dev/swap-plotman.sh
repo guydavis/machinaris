@@ -7,5 +7,5 @@ echo 'Swapping to development Plotman...'
 cd /chia-blockchain/venv/lib/python3.10/site-packages
 if [ -d ./plotman ]; then
     mv ./plotman ./plotman.orig
-    ln -s /code/plotman/src/plotman
 fi
+ln -s /code/plotman/src/plotman

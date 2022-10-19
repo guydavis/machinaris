@@ -28,7 +28,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-dark">
-                {{_('This action will start Plotman and launch a plotting run using your configured plotter. Be careful about running more than one plotter on a single machine at a time. Continue?')}}
+                {{_('This action will start Plotman and launch a plotting run using your configured plotter, into these directories:')}}
+                <div id="tmp_dirs" style="display:none; padding-top:10px"></div>
+                <div id="dst_dirs" style="display:none"></div>
+                <div id="arch_dirs" style="display:none"></div>
+                <div class="alert alert-warning" role="error" id="dirs_error" style="display:none"></div>
+                {{_('Be careful about running more than one plotter on a single machine at a time. Continue?')}}
             </div>
             <div class="modal-footer bg-dark">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStart">{{_('Cancel')}}</button>
@@ -121,7 +126,7 @@
                         <li>
                             <a class="dropdown-item text-white text-decoration-none" 
                                 data-bs-hostname="{{ plotter.hostname }}" 
-                                data-bs-blockchain="{{ worker.blockchain }}" 
+                                data-bs-blockchain="{{ worker.blockchain }}"
                                 href="#" {% 
                                 if worker.plotting_status == 'offline' %}
                                 data-bs-toggle="modal" data-bs-target="#disabledModal">
@@ -336,6 +341,63 @@
         function modal() {
             $('#modal_spinner').modal('show');
         }
+        function load_dirs(worker, blockchain) {
+            jqxhr = $.getJSON({
+                url: "{{ url_for('views_settings_config') }}?type=plotting_dirs&worker=" + worker + "&blockchain=" + blockchain,
+            })
+                .done(function (data) {
+                    if ('errors' in data) {
+                        $('#dirs_error').html("Wait! Plotman directory listing returned this error: <br/><pre>" + data['errors'] + '</pre> Please correct the problem before launching a plotting run!');
+                        $('#dirs_error').show();
+                    } else {
+                        $('#dirs_error').hide();
+                    }
+                    if ('response' in data) {
+                        html = "<h6>Temporary Directories</h6><ul>";
+                        for (dir of data['response']['temporary']) {
+                            html += "<li>" + dir['tmp'] + "</li>";
+                        }
+                        html += "</ul>";
+                        $("#tmp_dirs").html(html);
+                        if (data['response']['temporary'].length === 0) {
+                            $('#tmp_dirs').hide();
+                        } else {
+                            $('#tmp_dirs').show();
+                        }
+                        html = "<h6>Destination Directories (optional)</h6><ul>"
+                        for (dir of data['response']['destination']) {
+                            html += "<li>" + dir['dst'] + " (" + dir['plots'] + 'plots, ' + dir['gb_free'] + " GB free)</li>";
+                        }
+                        html += "</ul>"
+                        $("#dst_dirs").html(html);
+                        if (data['response']['destination'].length === 0) {
+                            $('#dst_dirs').hide();
+                        } else {
+                            $('#dst_dirs').show();
+                        }
+                        html = "<h6>Archiving Directories (optional)</h6><ul>"
+                        for (dir of data['response']['archiving']) {
+                            html += "<li>" + dir['dir'] + " (" + dir['gb_free'] + " GB free)</li>";
+                        }
+                        html += "</ul>";
+                        $("#arch_dirs").html(html);
+                        if (data['response']['archiving'].length === 0) {
+                            $('#arch_dirs').hide();
+                        } else {
+                            $('#arch_dirs').show();
+                        }
+                    } else {
+                        html = "<h6>Temporary Directories</h6><ul><li>?</li></ul>";
+                        $("#tmp_dirs").html(html);
+                        html = "<h6>Destination Directories (optional)</h6><ul><li>?</li></ul>"
+                        $("#dst_dirs").html(html);
+                        html = "<h6>Archiving Directories (optional)</h6><ul><li>?</li></ul>"
+                        $("#arch_dirs").html(html);
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log("jqXHR, textStatus, errorThrown");
+                });
+        }
         $(document).ready(function () {
             $('#data').DataTable({
                 "stateSave": true, 
@@ -399,9 +461,10 @@
             startModal.addEventListener('show.bs.modal', function (event) {
                 var button = event.relatedTarget
                 var hostname = button.getAttribute('data-bs-hostname')
-                var blockchain = button.getAttribute('data-bs-blockchain')
                 document.getElementById('hostname').value = hostname
+                var blockchain = button.getAttribute('data-bs-blockchain')
                 document.getElementById('blockchain').value = blockchain
+                load_dirs(hostname, blockchain);
             });
             var stopModal = document.getElementById('stopModal')
             stopModal.addEventListener('show.bs.modal', function (event) {

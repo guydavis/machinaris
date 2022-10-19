@@ -30,7 +30,8 @@
         {% endwith %}
     </div>
 
-    <div class="alert alert-warning" role="error" id="xhr_error" style="display: none"></div>
+    <div class="alert alert-warning" role="error" id="config_error" style="display: none"></div>
+    <div class="alert alert-warning" role="error" id="dirs_error" style="display: none"></div>
     <form method="POST" id="settings-form">
         <fieldset>
             <div class="row mb-3">
@@ -49,6 +50,13 @@
                     </select>
                 </div>
             </div>
+            <div class="alert alert-info" role="alert" id="dirs_listing" style="display: none; padding-bottom: 0px">
+                <div class="row align-items-start">
+                  <div class="col" id="tmp_dirs"></div>
+                  <div class="col" id="dst_dirs"></div>
+                  <div class="col" id="arch_dirs"></div>
+                </div>
+            </div>
             <div class="mb-3" id="texteditor">
                 <textarea style="background: #D3D3D3;" class="form-control fs-6" id="config" name="config" rows="18"
                     style="height:100%;"></textarea>
@@ -65,7 +73,7 @@
     {% block scripts %}
     <script>
         $(document).ready(function () {
-            $('#xhr_error').hide();
+            $('#config_error').hide();
             function load_config(worker, blockchain) {
                 jqxhr = $.ajax({
                     type: "GET",
@@ -75,12 +83,56 @@
                         //console.log(data);
                         replacements_occurred = jqxhr.getResponseHeader('ConfigReplacementsOccurred');
                         if (replacements_occurred == 'True') {
-                            $('#xhr_error').html("Plotting keys automatically replaced below. Please review and Save at least once!");
-                            $('#xhr_error').show();
+                            $('#config_error').html("Plotting keys automatically replaced below. Please review and Save at least once!");
+                            $('#config_error').show();
                         } else {
-                            $('#xhr_error').hide();
+                            $('#config_error').hide();
                         }
                         $("#config").val(data)
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log("jqXHR, textStatus, errorThrown");
+                    });
+            }
+            $('#dirs_error').hide();
+            function load_dirs(worker, blockchain) {
+                jqxhr = $.getJSON({
+                    url: "{{ url_for('views_settings_config') }}?type=plotting_dirs&worker=" + worker + "&blockchain=" + blockchain,
+                })
+                    .done(function (data) {
+                        if ('errors' in data) {
+                            $('#dirs_error').html("Plotman directory listing returned this error: <br/><pre>" + data['errors'] + '</pre>');
+                            $('#dirs_error').show();
+                        } else {
+                            $('#dirs_error').hide();
+                        }
+                        if ('response' in data) {
+                            html = "<h6>Temporary Directories</h6><ul>";
+                            for (dir of data['response']['temporary']) {
+                                html += "<li>" + dir['tmp'] + "</li>";
+                            }
+                            html += "</ul>";
+                            $("#tmp_dirs").html(html);
+                            html = "<h6>Destination Directories (optional)</h6><ul>"
+                            for (dir of data['response']['destination']) {
+                                html += "<li>" + dir['dst'] + " (" + dir['plots'] + 'plots, ' + dir['gb_free'] + " GB free)</li>";
+                            }
+                            html += "</ul>"
+                            $("#dst_dirs").html(html);
+                            html = "<h6>Archiving Directories (optional)</h6><ul>"
+                            for (dir of data['response']['archiving']) {
+                                html += "<li>" + dir['dir'] + " (" + dir['gb_free'] + " GB free)</li>";
+                            }
+                            html += "</ul>";
+                            $("#arch_dirs").html(html);
+                        } else {
+                            html = "<h6>Temporary Directories</h6><ul><li>?</li></ul>";
+                            $("#tmp_dirs").html(html);
+                            html = "<h6>Destination Directories (optional)</h6><ul><li>?</li></ul>"
+                            $("#dst_dirs").html(html);
+                            html = "<h6>Archiving Directories (optional)</h6><ul><li>?</li></ul>"
+                            $("#arch_dirs").html(html);
+                        }
+                        $('#dirs_listing').show();
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         console.log("jqXHR, textStatus, errorThrown");
                     });
@@ -90,12 +142,15 @@
             $(document).on("change", "#worker", function (e) {
                 load_config($("#worker").val(), $("#blockchain").val())
                 update_blockchain_options($("#worker").val());
+                load_dirs($("#worker").val(), $("#blockchain").val())
             });
             $(document).on("change", "#blockchain", function (e) {
                 load_config($("#worker").val(), $("#blockchain").val())
+                load_dir($("#worker").val(), $("#blockchain").val())
             });
             //Call the function when the page loads
             load_config("{{selected_worker}}", "{{selected_blockchain}}");
+            load_dirs("{{selected_worker}}", "{{selected_blockchain}}");
         });
 
         function update_blockchain_options(hostname) {

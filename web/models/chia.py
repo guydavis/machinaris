@@ -311,7 +311,11 @@ class FarmPlots:
 
     def get_analzye_cell_value(self, plot_id, plot_analyze):
         if plot_analyze and plot_analyze != '-':
-            return "{0} | {1}".format(plot_analyze, plot_id)
+            if '|' in plot_analyze:
+                analyze_seconds = plot_analyze.split('|')[1]
+            else: # Old format, just seconds
+                analyze_seconds =  plot_analyze
+            return "{0} | {1}".format(analyze_seconds, plot_id)
         return ""
 
     def get_check_cell_value(self, plot_id, plot_check):

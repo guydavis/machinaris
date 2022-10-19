@@ -26,7 +26,7 @@ else # If Chia
 fi
 # Import ssh key if exists
 if [ -f "/id_rsa" ]; then
-    echo "/id_rsa exists, trying to import private ssh key"
+    echo "Importing SSH key at /id_rsa volume mount."
     mkdir -p ~/.ssh/
     cp -f /id_rsa ~/.ssh/id_rsa
     cat > ~/.ssh/config <<'_EOF'
@@ -41,7 +41,7 @@ fi
 . /machinaris/scripts/setup_databases.sh
 
 mkdir -p /root/.chia/machinaris/config
-mkdir -p /root/.chia/machinaris/logs
+mkdir -p /root/.chia/machinaris/logs/archiving
 cd /machinaris
 if [ $FLASK_ENV == "development" ];
 then

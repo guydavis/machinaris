@@ -10,7 +10,7 @@ from flask.views import MethodView
 from api import app
 from api.extensions.api import Blueprint
 
-from api.commands import fd_cli, blockchain_db
+from api.commands import rewards
 from common.models import pools
 
 blp = Blueprint(
@@ -24,10 +24,14 @@ blp = Blueprint(
 class Rewards(MethodView):
 
     def get(self):
-        coins = blockchain_db.get_unspent_coins('TESTING')
-        response = make_response(json.dumps(coins), 200)
-        response.mimetype = "text/json"
-        return response
+        try:
+            coins = rewards.load_qualified_coins_cache()
+            response = make_response(json.dumps(coins), 200)
+            response.mimetype = "text/json"
+            return response
+        except Exception as ex:
+            traceback.print_exc()
+            return "Failed query for rewards due to {0}".format(str(ex)), 400
 
     def post(self):
         try:
@@ -39,11 +43,8 @@ class Rewards(MethodView):
         except:
             abort("Invalid rewards recovery request without blockchain, launcher_id, or pool_contract_address.", 400)
         
-        if blockchain in pools.POOLABLE_BLOCKCHAINS:
-            abort(f"No need to recover rewards for blockchain: {blockchain}")
-
         try:
-            thread = threading.Thread(target=fd_cli.reward_recovery, 
+            thread = threading.Thread(target=rewards.reward_recovery, 
                 kwargs={
                     'wallet_id': wallet_id, 
                     'launcher_id': launcher_id, 
