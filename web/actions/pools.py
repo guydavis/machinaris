@@ -37,7 +37,7 @@ def load_plotnfts():
     plotnfts = db.session.query(pn.Plotnft).all()
     return Plotnfts(plotnfts)
 
-def load_plotnfts(blockchain):
+def load_plotnfts_by_blockchain(blockchain):
     plotnfts = db.session.query(pn.Plotnft).filter(pn.Plotnft.blockchain==blockchain).all()
     return Plotnfts(plotnfts)
 
@@ -99,14 +99,14 @@ def partials_chart_data(farm_summary):
 
 def get_unclaimed_plotnft_rewards():
     rewards = {}
-    for wkr in db.session.query(wkrs.Worker).filter(wkrs.Worker.mode=='fullnode', wkrs.Worker.blockchain!='chia').order_by(wkrs.Worker.blockchain).all():
+    for wkr in db.session.query(wkrs.Worker).filter(wkrs.Worker.mode=='fullnode').order_by(wkrs.Worker.blockchain).all():
         if wkr.connection_status() == 'Responding':
             total_coins = 0.0
             try:
                 rewards_by_launcher_id = json.loads(utils.send_get(wkr, '/rewards/', {}, debug=False).content)
                 for launcher_id in rewards_by_launcher_id.keys():
                     for coin in rewards_by_launcher_id[launcher_id]:
-                        total_coin_amount += float(coin['amount'])
+                        total_coins += float(coin['amount'])
             except Exception as ex:
                 app.logger.error("Failed to query for {0} recoverable rewards due to {1}.".format(wkr.blockchain, str(ex)))
             #if total_coins > 0: # Only show if recoverable rewards are available

@@ -162,7 +162,7 @@ def load_key_pk(type, blockchain):
     return None
 
 def load_pool_contract_address(blockchain):
-    plotnfts = p.load_plotnfts(blockchain)
+    plotnfts = p.load_plotnfts_by_blockchain(blockchain)
     if len(plotnfts.rows) == 1:
         m = re.search('Pool contract address .*: (\w+)'.format(type), plotnfts.rows[0]['details'])
         if m:
