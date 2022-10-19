@@ -14,24 +14,29 @@ import traceback
 from subprocess import Popen, TimeoutExpired, PIPE
 
 from common.config import globals
+from common.models import wallets as w
 from api import app
 
 CHIA_PLOTNFT_INFO_FILE = '/root/.chia/machinaris/config/chia_plotnfts.json'
 QUALIFIED_COINS_CACHE_FILE = '/root/.chia/machinaris/cache/reward_coins.json'
-BLOCKCHAINS_WITH_PLOTNFT_CLAIM_CMD = ['cactus', 'chia', 'hddcoin']
+BLOCKCHAINS_WITH_PLOTNFT_CLAIM_CMD = ['chia']
 
 def reward_recovery(wallet_id, launcher_id, pool_contract_address):
-    app.logger.info("NFT reward recovery requested for {wallet_id} {launcher_id} {pool_contract_address}")
-    blockchain = globals.get_supported_blockchains()[0]
-    if blockchain in BLOCKCHAINS_WITH_PLOTNFT_CLAIM_CMD:
-        execute_plotnft_claim_recovery(wallet_id)
-    else: # Try old FD-CLI recovery instead
-        execute_fd_cli_recovery(wallet_id, launcher_id, pool_contract_address)
+    with app.app_context():
+        from api import db
+        blockchain = globals.enabled_blockchains()[0]
+        app.logger.info(f"On {blockchain}, NFT reward recovery requested for wallet {wallet_id} {launcher_id} {pool_contract_address}")
+        if blockchain in BLOCKCHAINS_WITH_PLOTNFT_CLAIM_CMD:
+            for wallet in db.session.query(w.Wallet).filter(w.Wallet.blockchain==blockchain).order_by(w.Wallet.blockchain).all():
+                for wallet_num in wallet.wallet_nums():
+                    execute_plotnft_claim_recovery(wallet_num)
+        else: # Try old FD-CLI recovery instead
+            execute_fd_cli_recovery(wallet_id, launcher_id, pool_contract_address)
 
-def execute_plotnft_claim_recovery(wallet_id):
+def execute_plotnft_claim_recovery(wallet_num):
     blockchain = globals.enabled_blockchains()[0]
     blockchain_binary = globals.get_blockchain_binary(blockchain)
-    cmd = "{0} plotnft claim -i {1}".format(blockchain_binary, wallet_id)
+    cmd = "{0} plotnft claim -i {1}".format(blockchain_binary, wallet_num)
     app.logger.info(f"Claiming NFT reward recovery for {blockchain}: {cmd}")
     logfile = "/root/.chia/machinaris/logs/rewards.log"
     log_fd = os.open(logfile, os.O_RDWR | os.O_CREAT)
@@ -45,8 +50,6 @@ def execute_plotnft_claim_recovery(wallet_id):
             app.logger.error(errs.decode('utf-8'))
         elif outs:
             app.logger.info(outs.decode('utf-8'))
-        else:
-            app.logger.error("Nothing returned from plotnft claim call.")
     except TimeoutExpired:
         proc.kill()
         proc.communicate()

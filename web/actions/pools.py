@@ -137,8 +137,7 @@ def request_unclaimed_plotnft_reward_recovery():
         if not pool_contract_address: 
             app.logger.info("Found no pool contract address, so skipping NFT 7/8 reward recovery on plotnft: {0}".format(plotnft))
             continue
-        for wkr in db.session.query(wkrs.Worker).filter(wkrs.Worker.mode == 'fullnode', 
-            wkrs.Worker.blockchain != 'chia', wkrs.Worker.blockchain != 'chives', wkrs.Worker.blockchain != 'mmx').order_by(wkrs.Worker.blockchain).all():
+        for wkr in db.session.query(wkrs.Worker).filter(wkrs.Worker.mode == 'fullnode', wkrs.Worker.blockchain != 'chives', wkrs.Worker.blockchain != 'mmx').order_by(wkrs.Worker.blockchain).all():
             if wkr.connection_status() == 'Responding':
                 payload = {
                     'blockchain': wkr.blockchain,

@@ -141,6 +141,9 @@
               {% autoescape false %}
               {{_('Block rewards won by your portable plots %(wikilink_open)srequire recovery%(wikilink_close)s.', 
                 wikilink_open='<a href="https://github.com/guydavis/machinaris/wiki/Wallets#claim-rewards" class="text-white" target="_blank">', wikilink_close='</a>')}}
+              <br/>
+              {{_('This is an experimental feature.  Try %(atb_open)sAllTheBlocks%(atb_close)s if any issue.', 
+                atb_open='<a href="https://alltheblocks.net/nft-recovery" class="text-white" target="_blank">', atb_close='</a>')}}
               {% endautoescape %}
               <div id="rewards_table"></div>
             </div>
@@ -315,7 +318,7 @@
                 var coldWalletAddressField = document.getElementById('cold_wallet_address_field')
                 coldWalletAddressField.value = coldWalletAddress
                 var modalTitle = walletModal.querySelector('.modal-title')
-                modalTitle.textContent = 'Wallet Settings - ' + blockchain
+                modalTitle.textContent = "{{_('Wallet Settings')}} - " + blockchain
             })
             var restartModal = document.getElementById('restartModal')
               restartModal.addEventListener('show.bs.modal', function (event) {
@@ -363,7 +366,6 @@
                 url: "{{ url_for('wallet') }}?rewards=get",
             })
                 .done(function (data) {
-                    console.log(data)
                     if (Object.entries(data).length > 0) {
                       html = "<table class='table table-dark table-striped'><thead><tr><th>Blockchain</th><th>Recoverable Coins</th><th>Log</th></tr></thead><tbody>";
                       for (const [blockchain_hostname, amount] of Object.entries(data)) {
