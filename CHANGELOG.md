@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.8.5] - 2022-10-?
+ - Wallets page - Claim Rewards button offers portable plot reward recovery after one week has elapsed. (EARLY BETA!)
  - Chart memory usage per container (GiB) as well as total host memory usage (%) for OS and all apps.
  - Enhanced Forktools to optionally decrease a blockchain's full_node process count, which greatly limits memory usage.
  - Improve Plotting page to display configured tmp, dst, and archiving directories before starting to plot. Support `site_path_filter` for archive folders under `site_root`.
