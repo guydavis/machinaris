@@ -28,9 +28,9 @@ if [ ! -d /root/.chia/mmx/config ]; then
 EOF
 	# For a fresh install of Machinaris-MMX, disable timelord by default to save CPU usage
 	echo false > /root/.chia/mmx/config/local/timelord
-elif [ ! -d /root/.chia/mmx/config/testnet7 ]; then # Handle an upgrade from older testnet
+elif [ ! -d /root/.chia/mmx/config/testnet8 ]; then # Handle an upgrade from older testnet
 	echo 'Copying over new testnet configs to /root/.chia/mmx/config/'
-	cp -r ./config/testnet7 /root/.chia/mmx/config/
+	cp -r ./config/testnet8 /root/.chia/mmx/config/
 fi
 rm -rf ./config
 ln -s /root/.chia/mmx/config /mmx-node/config
@@ -54,19 +54,19 @@ else
 	echo "No OPENCL_GPU provided.  MMX blockchain will use use CPU instead."
 fi
 
-# Symlink the NETWORK file, use 'testnet7' for now
+# Symlink the NETWORK file, use 'testnet8' for now
 #if [ ! -f /root/.chia/mmx/NETWORK ]; then
-echo 'testnet7' > /root/.chia/mmx/NETWORK
+echo 'testnet8' > /root/.chia/mmx/NETWORK
 #fi
 rm -f ./NETWORK
 ln -s /root/.chia/mmx/NETWORK /mmx-node/NETWORK
 
-# Symlink the testnet7 folder
-if [ ! -d /root/.chia/mmx/testnet7 ]; then
-	mkdir /root/.chia/mmx/testnet7
+# Symlink the testnet8 folder
+if [ ! -d /root/.chia/mmx/testnet8 ]; then
+	mkdir /root/.chia/mmx/testnet8
 fi
-rm -rf ./testnet7
-ln -s /root/.chia/mmx/testnet7 /mmx-node/testnet7
+rm -rf ./testnet8
+ln -s /root/.chia/mmx/testnet8 /mmx-node/testnet8
 
 # Create a key if none found from previous runs
 if [[ ${mode} == 'fullnode' ]]; then
