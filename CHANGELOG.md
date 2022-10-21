@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file. The format 
  - Chart memory usage per container (GiB) as well as total host memory usage (%) for OS and all apps.
  - Enhanced Forktools to optionally decrease a blockchain's full_node process count, which greatly limits memory usage.
  - Improve Plotting page to display configured tmp, dst, and archiving directories before starting to plot. Support `site_path_filter` for archive folders under `site_root`.
- - Fixes: Enhance 'NFT Reward Recovery' tool to support v2 databases. Fix for invalid Chiadog harvester alerts.
+ - Fixes: Enhance 'NFT Reward Recovery' tool to support v2 databases. Fix for invalid Chiadog harvester alerts. Fix for bladebit diskplot mode (NOTE: ramplot mode under development again by original author.)
  - Update: [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.6.1) to v1.6.1, [Chinilla](https://github.com/Chinilla/chinilla-blockchain/releases/tag/1.3.0 to v1.3.0, [Littlelambocoin](https://github.com/BTCgreen-Network/littlelambocoin-blockchain/releases/tag/1.6.1) to v1.6.1, [Maize](https://github.com/Maize-Network/maize-blockchain/releases/tag/1.6.0) to v1.6.0, [MMX](https://github.com/madMAx43v3r/mmx-node) to `testnet8`.
 
 ## [0.8.4] - 2022-09-21
