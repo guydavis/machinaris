@@ -29,7 +29,7 @@ from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalCoins, St
         StatPlottingDiskUsed, StatPlottingDiskFree, StatFarmedBlocks, StatWalletBalances, StatTotalBalance, \
         StatContainerMemoryUsageGib, StatHostMemoryUsagePercent
 from web import app, db, utils
-from web.actions import chia, worker as wkr
+from web.actions import chia, worker
 
 ALL_TABLES_BY_HOSTNAME = [
     StatPlotsDiskUsed,
@@ -309,7 +309,7 @@ def load_plotting_stats():
                     worker_displayname = worker_ips_to_displaynames[worker_hostname]
                 else:
                     try:
-                        worker_displayname = wkr.get_worker(worker_hostname).displayname # Convert ip_addr to worker displayname
+                        worker_displayname = worker.get_worker(worker_hostname).displayname # Convert ip_addr to worker displayname
                         worker_ips_to_displaynames[worker_hostname] = worker_displayname
                     except Exception as ex:
                         app.logger.info("Unable to convert {0} to a worker's displayname because: {1}".format(worker_hostname, str(ex)))
@@ -327,17 +327,17 @@ def load_plotting_stats():
                 values[converted_date] = 'null'
         if len(dates) > 0:
             summary_by_size[k] = { "dates": dates, "workers": workers.keys(),  }
-            for worker in workers.keys():
+            for wkr in workers.keys():
                 worker_values = []
                 for date in dates:
-                    if worker in workers:
-                        if date in workers[worker]:  
-                            worker_values.append(workers[worker][date])
+                    if wkr in workers:
+                        if date in workers[wkr]:  
+                            worker_values.append(workers[wkr][date])
                         else: # Due to exeception reported by one user
                             worker_values.append('null')
                     else:
                         worker_values.append('null')
-                summary_by_size[k][worker] = worker_values
+                summary_by_size[k][wkr] = worker_values
     #app.logger.info(summary_by_size.keys())
     return summary_by_size
 
