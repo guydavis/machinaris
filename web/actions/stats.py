@@ -29,7 +29,7 @@ from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalCoins, St
         StatPlottingDiskUsed, StatPlottingDiskFree, StatFarmedBlocks, StatWalletBalances, StatTotalBalance, \
         StatContainerMemoryUsageGib, StatHostMemoryUsagePercent
 from web import app, db, utils
-from web.actions import chia, worker
+from web.actions import chia, worker as wkr
 
 ALL_TABLES_BY_HOSTNAME = [
     StatPlotsDiskUsed,
@@ -309,10 +309,11 @@ def load_plotting_stats():
                     worker_displayname = worker_ips_to_displaynames[worker_hostname]
                 else:
                     try:
-                        worker_displayname = worker.get_worker(worker_hostname) # Convert ip_addr to worker displayname
+                        worker_displayname = wkr.get_worker(worker_hostname).displayname # Convert ip_addr to worker displayname
                         worker_ips_to_displaynames[worker_hostname] = worker_displayname
-                    except:
-                        pass
+                    except Exception as ex:
+                        app.logger.info("Unable to convert {0} to a worker's displayname because: {1}".format(worker_hostname, str(ex)))
+                        worker_displayname = p.displayname  # Pretend plot host was also the plotter
             else: # Old format, just seconds
                 analyze_seconds =  p.plot_analyze
                 worker_displayname = p.displayname  # Pretend plot host was also the plotter

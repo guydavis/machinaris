@@ -41,7 +41,7 @@ fi
 . /machinaris/scripts/setup_databases.sh
 
 mkdir -p /root/.chia/machinaris/config
-mkdir -p /root/.chia/machinaris/logs/archiving
+mkdir -p /root/.chia/machinaris/logs
 cd /machinaris
 if [ $FLASK_ENV == "development" ];
 then

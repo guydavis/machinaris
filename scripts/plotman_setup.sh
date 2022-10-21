@@ -13,5 +13,6 @@ if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chi
         cd plotman
         /chia-blockchain/venv/bin/python setup.py install
         apt update && apt install -y rsync
+        mkdir -p /root/.chia/plotman/logs/archiving
     fi
 fi
