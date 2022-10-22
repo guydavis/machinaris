@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-10-19 14:25-0600\n"
+"POT-Creation-Date: 2022-10-22 06:07-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: Antonio Casqueiro\n"
 "Language: pt\n"
@@ -45,7 +45,8 @@ msgstr "Definições da moeda local e da wallet sincronizadas."
 #: routes.py:285
 msgid "Starting wallet sync.  Please allow at least 15 minutes..."
 msgstr ""
-"Iniciar sincronização da wallet. Por favor aguarde pelo menos 15 minutos..."
+"Iniciar sincronização da wallet. Por favor aguarde pelo menos 15 "
+"minutos..."
 
 #: routes.py:288
 msgid "Pausing wallet sync.  Please allow a few minutes..."
@@ -371,8 +372,8 @@ msgid ""
 "Removed all drive status.  Please allow 15 minutes for active devices to "
 "be listed below again."
 msgstr ""
-"O estado de todas as drives foi removido. Por favor aguarde 15 minutos para "
-"os dispositivos activos aparecerem novamente na lista abaixo."
+"O estado de todas as drives foi removido. Por favor aguarde 15 minutos "
+"para os dispositivos activos aparecerem novamente na lista abaixo."
 
 #: actions/forktools.py:19
 msgid "Failed to save config to farmer. Please check log files."
@@ -496,96 +497,96 @@ msgid ""
 " coins."
 msgstr ""
 "A recuperação da recompensa dos portable plots foi iniciada. Por favor "
-"verifique gráfico do Total Balance amanhã para cada blockchain com moedas "
-"recuperadas."
+"verifique gráfico do Total Balance amanhã para cada blockchain com moedas"
+" recuperadas."
 
 #: actions/stats.py:83 actions/stats.py:118 actions/stats.py:131
 #: actions/stats.py:151 actions/stats.py:153
 msgid "in last day."
 msgstr "no último dia."
 
-#: actions/stats.py:411
+#: actions/stats.py:412
 msgid "secs"
 msgstr "segs"
 
-#: actions/stats.py:421 models/chia.py:268
+#: actions/stats.py:422 models/chia.py:268
 msgid "hour"
 msgstr "hora"
 
-#: actions/stats.py:451 templates/index.html:97
+#: actions/stats.py:452 templates/index.html:97
 #: templates/views/index_script_block.js:51
 msgid "Farmed Coins"
 msgstr "Moedas farmed"
 
-#: actions/stats.py:468 templates/index.html:89
+#: actions/stats.py:469 templates/index.html:89
 #: templates/views/index_script_block.js:56 templates/wallet.html:184
 msgid "Total Balance"
 msgstr "Saldo"
 
-#: actions/stats.py:485
+#: actions/stats.py:486
 msgid "Wallets Total"
 msgstr "Detalhes da Wallet"
 
-#: actions/stats.py:485
+#: actions/stats.py:486
 msgid "Fiat Currency"
 msgstr "Moeda do país"
 
-#: actions/stats.py:525
+#: actions/stats.py:526
 msgid "Host Memory Usage"
 msgstr "Host: Memória utilizada"
 
-#: actions/stats.py:545 templates/index.html:105
+#: actions/stats.py:546 templates/index.html:105
 msgid "Netspace Size"
 msgstr "Tamanho do Netspace"
 
-#: actions/stats.py:546 actions/stats.py:606
+#: actions/stats.py:547 actions/stats.py:607
 msgid "Size"
 msgstr "Tamanho"
 
-#: actions/stats.py:584 templates/farming/workers.html:80
+#: actions/stats.py:585 templates/farming/workers.html:80
 msgid "Plot Counts"
 msgstr "Número de Plots"
 
-#: actions/stats.py:605 templates/index.html:78
+#: actions/stats.py:606 templates/index.html:78
 msgid "Plots Size"
 msgstr "Plots: Total de espaço ocupado"
 
-#: actions/stats.py:620 actions/stats.py:621
+#: actions/stats.py:621 actions/stats.py:622
 msgid "Effort"
 msgstr "Porto"
 
-#: actions/stats.py:672 templates/summary.html:84
+#: actions/stats.py:673 templates/summary.html:84
 msgid "ETW"
 msgstr "ETW"
 
-#: actions/stats.py:673
+#: actions/stats.py:674
 msgid "Estimated Time to Win"
 msgstr "Tempo expectável para ganhar"
 
-#: actions/stats.py:673 models/chia.py:151 models/chia.py:262
+#: actions/stats.py:674 models/chia.py:151 models/chia.py:262
 #: models/drives.py:44
 msgid "days"
 msgstr "dias"
 
-#: actions/stats.py:697 templates/farming/workers.html:310
+#: actions/stats.py:698 templates/farming/workers.html:310
 #: templates/worker.html:267
 msgid "Container Memory Usage"
 msgstr "Container: Memório utilizada"
 
-#: actions/stats.py:698
+#: actions/stats.py:699
 msgid "GiB"
 msgstr "GiB"
 
-#: actions/stats.py:704 actions/stats.py:712
+#: actions/stats.py:705 actions/stats.py:713
 msgid "plots"
 msgstr "plots"
 
-#: actions/stats.py:726 templates/farming/workers.html:197
+#: actions/stats.py:727 templates/farming/workers.html:197
 #: templates/worker.html:298 templates/worker.html:363
 msgid "full"
 msgstr "cheio"
 
-#: actions/stats.py:730
+#: actions/stats.py:731
 msgid "free"
 msgstr "livre"
 
@@ -1046,10 +1047,10 @@ msgid ""
 "appreciated! Continue with Restart?"
 msgstr ""
 "Isto irá reiniciar o TODOS os serviços do fullnode para este blockchain, "
-"incluindo farming, harvesting e a wallet (se estiver a correr). Por favor "
-"aguarde pelo menos 15 minutes após o reiniciar para que todos os serviços "
-"do blockchain fiquem novamente activos, antes de tentar reiniciar de novo."
-"Seja paciente! Reiniciar?"
+"incluindo farming, harvesting e a wallet (se estiver a correr). Por favor"
+" aguarde pelo menos 15 minutes após o reiniciar para que todos os "
+"serviços do blockchain fiquem novamente activos, antes de tentar "
+"reiniciar de novo.Seja paciente! Reiniciar?"
 
 #: templates/blockchains.html:67
 msgid "Restart"
@@ -1613,8 +1614,8 @@ msgid ""
 "Also ensure the blockchain fullnode is not Offline, by checking the "
 "Workers page."
 msgstr ""
-"Certifique-se também que o fullnode do blockchain fullnode não está Offline, "
-"verificando a página dos Workers."
+"Certifique-se também que o fullnode do blockchain fullnode não está "
+"Offline, verificando a página dos Workers."
 
 #: templates/wallet.html:62
 msgid "Sync Wallets:"
@@ -1698,8 +1699,9 @@ msgid ""
 "No wallet status received.  Perhaps just starting?  Please allow at least"
 " 10 minutes to update."
 msgstr ""
-"Não foi recebido o estado da wallet. Talvez tenha acabado de ser iniciada? "
-"Por favor aguarde pelo menos 10 minutos para que fique actualizada."
+"Não foi recebido o estado da wallet. Talvez tenha acabado de ser "
+"iniciada? Por favor aguarde pelo menos 10 minutos para que fique "
+"actualizada."
 
 #: templates/wallet.html:260
 msgid ""
@@ -1721,8 +1723,8 @@ msgid ""
 "action.  Your patience is appreciated! Continue anyway?"
 msgstr ""
 "Isto irá iniciar a wallet do blockchain. Por favor aguarde pelo menos 15 "
-"minutes para que os serviços fiquem novamente activos, antes de fazer outra acção."
-"Seja paciente! Continuar?"
+"minutes para que os serviços fiquem novamente activos, antes de fazer "
+"outra acção.Seja paciente! Continuar?"
 
 #: templates/wallet.html:347
 msgid "Pause"
@@ -1734,8 +1736,8 @@ msgid ""
 "this to be reflected on this page.  Your patience is appreciated! "
 "Continue anyway?"
 msgstr ""
-"Isto irá para a wallet do blockchain. Por favor aguarde alguns minutos para "
-"a página ser actualizada. Seja paciente! Continuar?"
+"Isto irá para a wallet do blockchain. Por favor aguarde alguns minutos "
+"para a página ser actualizada. Seja paciente! Continuar?"
 
 #: templates/wallet.html:362
 msgid "Reward Recovery Log for "
@@ -1752,8 +1754,8 @@ msgstr "Continar a recuperação para recompensas com mais de 1 semana?"
 #: templates/wallet.html:382
 msgid "Sorry, no recoverable coins currently.  Please check back later."
 msgstr ""
-"Ainda não foram recuperadas as moedas. Por favor verifique novamente mais "
-"tarde."
+"Ainda não foram recuperadas as moedas. Por favor verifique novamente mais"
+" tarde."
 
 #: templates/wallet.html:395
 msgid " Transactions"
