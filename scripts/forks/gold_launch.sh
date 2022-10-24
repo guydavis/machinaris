@@ -18,11 +18,12 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.gold/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   echo "Downloading Gold blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
+  /usr/bin/bash /machinaris/scripts/megacmd_setup.sh > /tmp/megacmd_setup.log 2>&1
   mkdir -p /root/.gold/mainnet/db/ && cd /root/.gold/mainnet/db/
-  # Latest Blockchain DB download as per the Gold Discord
-  curl -skJLO http://58.7.212.211/C%3A/http/Gold/951456/Gold.blockchain_v1_mainnet.height.951456.db.rar
-  unrar e *.rar 
-  rm -f *.rar
+  # Mega links for Gold blockchain DB from their Discord 2022-10-24
+  mega-get https://mega.nz/folder/XAhB1bbC#vvlz5NKwtL0iS_WXGsVg2w
+  cd db/ && unzip "db-$(date +'%Y-%m-%d').zip" && mv *.sqlite ../
+  cd ../ && rm -rf db
 fi
 
 mkdir -p /root/.gold/mainnet/log

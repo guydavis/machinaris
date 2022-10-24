@@ -18,6 +18,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.btcgreen/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   mkdir -p /root/.btcgreen/mainnet/db/ && cd /root/.btcgreen/mainnet/db/
   # Mega links for BTCGreen blockchain DB from their Discord 2022-08-23
+  /usr/bin/bash /machinaris/scripts/megacmd_setup.sh > /tmp/megacmd_setup.log 2>&1
   mega-get https://mega.nz/folder/YllTjSYR#S-YDbL6Y98qPpAN81UTs-g
   mv BTCgreen_8_21_22/* . && rm -rf BTCgreen_8_21_22
 fi

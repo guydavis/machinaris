@@ -20,8 +20,8 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Downloading Cryptodoge blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.cryptodoge/mainnet/db/ && cd /root/.cryptodoge/mainnet/db/
-  # Latest Blockchain DB download from https://gamefi.cryptodoge.cc
-  curl -skLJO https://gamefi.cryptodoge.cc/blockchain_v2_mainnet.sqlite
+  # Latest Blockchain DB download from their Discord - Oct 2022
+  curl -skLJO https://dbs.ctek.cc/$/oXE5V
 fi
 
 mkdir -p /root/.cryptodoge/mainnet/log
