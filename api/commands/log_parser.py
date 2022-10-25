@@ -18,6 +18,7 @@ from subprocess import Popen, TimeoutExpired, PIPE
 
 from common.config import globals
 from api.models import log
+from . import plotman_cli
 from api import app
 
 # Rough number of challenges arriving per minute on a blockchain
@@ -114,25 +115,6 @@ def recent_farmed_blocks(blockchain):
     #app.logger.info(blocks.rows)
     return blocks
 
-def find_plotting_job_log(plot_id):
-    dir_path = '/root/.chia/plotman/logs'
-    directory = os.fsencode(dir_path)
-    for file in os.listdir(directory):
-        filename = os.fsdecode(file)
-        try:
-            if filename.endswith(".log") and not filename.startswith('plotman.'):
-                with open(os.path.join(str(dir_path), filename)) as logfile:
-                    for line in itertools.islice(logfile, 0, 20):
-                        if plot_id in line:
-                            return os.path.join(str(dir_path), filename)
-                continue
-            else:
-                continue
-        except:
-            app.logger.info("find_plotting_job_log: Skipping error when reading head of {0}".format(filename))
-            app.logger.info(traceback.format_exc())
-    return None
-
 def get_farming_log_file(blockchain):
     mainnet_folder = globals.get_blockchain_network_path(blockchain)
     if blockchain == 'mmx':
@@ -144,7 +126,7 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         log_file = "/root/.chia/chiadog/logs/chiadog.log"
     elif log_type == "plotting":
         if log_id:
-            log_file = find_plotting_job_log(log_id)
+            log_file = plotman_cli.find_plotting_job_log(log_id)
         else:
             log_file = "/root/.chia/plotman/logs/plotman.log"
     elif log_type == "archiving":
@@ -157,10 +139,12 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         log_file = "/root/.chia/machinaris/logs/apisrv.log"
     elif log_type == "pooling":
         log_file = "/root/.chia/machinaris/logs/plotnft.log"
+    elif log_type == "rewards":
+        log_file = "/root/.chia/machinaris/logs/rewards.log"
     if not log_file or not os.path.exists(log_file):
         app.logger.info("No log file found at {0}".format(log_file))
         return 'No log file found!'
     #app.logger.info("Log file found at {0}".format(log_file))
-    ansi_escape = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
+    ansi_escape = re.compile(r'\x1B(?:[@A-Z\\-_]|\[[0-9:;<=>?]*[ -/]*[@-~])')
     proc = Popen(['tail', '-n', str(MAX_LOG_LINES), log_file], stdout=PIPE)
     return ansi_escape.sub('', proc.stdout.read().decode("utf-8"))

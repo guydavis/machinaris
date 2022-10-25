@@ -4,8 +4,8 @@
 #
 
 STAICOIN_BRANCH=$1
-# On 2022-09-17
-HASH=4808632d8147b1fb8ec9ec7aad5a80f86a509b3d
+# On 2022-10-24
+HASH=2fad4e4f12e374eff6e83b2830876902139156f9
 
 if [ -z ${STAICOIN_BRANCH} ]; then
 	echo 'Skipping Staicoin install as not requested.'

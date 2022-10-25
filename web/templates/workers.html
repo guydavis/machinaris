@@ -30,6 +30,16 @@
     {% endwith %}
   </div>
 
+  {% if chart_data.dates|length > 0 %}
+  <div class="col-md-12" style="margin-top:5px; margin-bottom:25px;">
+    <div class="h-100 p-2 text-white bg-dark rounded-3">
+      <div style="position: relative; height: 300px">
+        <canvas id="host_memory_usage_chart"></canvas>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
   {% if workers.workers|length > 0 %}
   <form method="POST" id="workers-form" style="padding-bottom: 10px;">
     <fieldset>
@@ -42,6 +52,7 @@
             <th scope="col" class="text-success">{{_('Hostname')}}</th>
             <th scope="col" class="text-success">{{_('Blockchain')}}</th>
             <th scope="col" class="text-success">{{_('Mode')}}</th>
+            <th scope="col" class="text-success">{{_('Memory')}}</th>
             <th scope="col" class="text-success">{{_('Last Status Received')}}</th>
             <th scope="col" class="text-success">{{_('Last Ping')}}</th>
             <th scope="col" class="text-success">{{_('Last Successful Ping')}}</th>
@@ -52,11 +63,11 @@
         <tbody>
           {% for worker in workers.workers %}
           <tr>
-            <td class="text-center"><input type="checkbox" name="worker" value="{{ worker.hostname }}|{{ worker.blockchain }}" />
-              <td><a class="text-white" href="{{ url_for('worker_route') }}?hostname={{worker.hostname}}&blockchain={{ worker.blockchain }}" data-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
-                title="{{worker.hostname}}:{{worker.port}}">{{worker.displayname}}</a></td>
+            <td class="text-center">{{ worker.hostname }}|{{ worker.blockchain }}|{{ worker.port }}</td>
+            <td>{{worker.displayname}}</td>
             <td>{{worker.blockchain}}</td>
             <td>{{worker.mode}}</td>
+            <td><a href="#" class='text-white' title="{{_('Chart Memory')}}" onclick='PopupChart("container_memory","{{worker.hostname}}", "{{ worker.blockchain }}");return false;'>{{worker.container_memory_usage_gib()}}</a></td>
             <td data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
               title="Time on Worker:<br/> {{worker.time_on_worker}}">{{worker.updated_at | datetimefilter}}</td>
             <td>
@@ -76,8 +87,7 @@
               {% endif %}
             </td>
             <td>{{worker.ping_success_at | datetimefilter}}</td>
-            <td><a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" 
-                title="{{worker.versions.components}}">{{worker.versions.machinaris}}</a></td>
+            <td>{{worker.versions.machinaris}}|{{worker.versions.components}}</td>
             <td style="padding:0px">
               <a href="#" title="View Server Log" onclick='MachinarisLog("apisrv","{{ worker.hostname }}","{{ worker.blockchain }}");return false;'><i class="fs-4 bi-file-text"></i></a>
               {% if worker.mode == "fullnode" and worker.blockchain == "chia" %}
@@ -118,6 +128,14 @@
 
   {% block scripts %}
   <script>
+    function PopupChart(chart_type, hostname, blockchain) {
+        var d = new Date();
+        var height = 600;
+        var width = 900;
+        var top = (screen.height - height) / 2;
+        var left = (screen.width - width) / 2;
+        window.open("{{ url_for('chart') }}?type=" + chart_type + "&hostname=" + hostname + "&blockchain=" + blockchain, blockchain + ' - ' + chart_type, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+    }
     function WorkerLaunch(hostname) {
         var d = new Date();
         var height = 600;
@@ -140,7 +158,39 @@
           "pageLength": 25,
           "lengthMenu": [ [25, 50, 100, 200, -1], [25, 50, 100, 200, "All"] ],
           "order": [[1, "asc"]],
-          "columnDefs": [{ "orderable": false, targets: [0,8] }],
+          "columnDefs": [
+            { 
+                targets: [0], "orderable": false, 
+                "render": function ( data, type, row, meta ) {
+                    arr = data.split('|');
+                    hostname = arr[0];
+                    blockchain = arr[1];
+                    port = arr[2];
+                    return '<input type="checkbox" name="worker" value="' + hostname +'|'+ blockchain +'" />';
+                }
+            },
+            { 
+                targets: [2], "orderable": true, 
+                "render": function ( data, type, row, meta ) {
+                    var url = "{{ url_for('worker_route') }}";
+                    arr = row[0].split('|');
+                    hostname = arr[0];
+                    blockchain = arr[1];
+                    port = arr[2];
+                    return '<a class="text-white" href="' + url + '?hostname='+hostname+'&blockchain='+blockchain+'" data-toggle="tooltip" data-bs-placement="top" data-bs-html="true" title="'+hostname+':'+port+'">' + data +'</a>';
+                }
+            },
+            { 
+                targets: [8], "orderable": true, 
+                "render": function ( data, type, row, meta ) {
+                    arr = data.split('|');
+                    machinaris_version = arr[0];
+                    component_versions = arr[1];
+                    return '<a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true" title="'+component_versions+'">'+machinaris_version+'</a>';
+                }
+            },
+            { "orderable": false, targets: [9] },
+          ],
           {% if lang != 'en' %}
           "language": {
               "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
@@ -163,5 +213,117 @@
           if (bxs[j].type == "checkbox")
             bxs[j].checked = bx.checked;
     }
+    const COLORS = [
+          '#3aac59',
+          // https://www.chartjs.org/docs/master/samples/utils.html
+          //'#4dc9f6',
+          '#f67019',
+          '#f53794',
+          //'#537bc4',
+          '#acc236',
+          //'#166a8f',
+          //'#00a950',
+          //'#58595b',
+          '#8549ba',
+          // https://colorbrewer2.org/#type=qualitative&scheme=Paired&n=9
+          '#a6cee3',
+          '#1f78b4',
+          '#b2df8a',
+          '#33a02c',
+          '#fb9a99',
+          '#e31a1c',
+          '#fdbf6f',
+          '#ff7f00',
+          '#cab2d6',
+          // https://learnui.design/tools/data-color-picker.html#palette
+          '#003f5c',
+          '#2f4b7c',
+          '#665191',
+          '#a05195',
+          '#d45087',
+          '#f95d6a',
+          '#ff7c43',
+          '#ffa600',
+        ];
+
+        function color(index) {
+          return COLORS[index % COLORS.length];
+        }
+
+    {% if chart_data.dates|length > 0 %}
+        var ctx = document.getElementById('host_memory_usage_chart');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ chart_data.dates | safe }},
+                datasets: [
+                {% for wk in chart_data.workers|sort %}
+                    {
+                        label: "{{wk}}",
+                        data: {{ chart_data.values_per_worker[wk] | safe }},
+                        backgroundColor: color({{ loop.index - 1 }}),
+                    },
+                {% endfor %}
+                ],
+            },
+            borderWidth: 1,
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {  
+                legend: {
+                    labels: {
+                    color: "#c7c7c7",  
+                    font: {
+                      size: 18 
+                    }
+                  }
+                }
+              },
+              scales: {
+                x: {
+                        type: 'time',
+                        time: {
+                            tooltipFormat: 'DD T'
+                        },
+                        title: {
+                            display: true,
+                            text: "{{_('Time - Last 24 Hours')}}",
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        },
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
+                    },
+                  y: {
+                      ticks: {
+                          color: "#c7c7c7",  
+                          font: {
+                            size: 16 
+                          }
+                      },
+                      beginAtZero: true,
+                      max: 100,
+                      steps: 10,
+                      stepValue: 5,
+                      title: {
+                          display: true,
+                          text: "{{ chart_data.y_axis_title }}",
+                          color: "#c7c7c7",  
+                          font: {
+                            size: 18 
+                          }
+                      }
+                  }
+              }
+            }
+          });
+    {% endif %}
   </script>
   {% endblock %}

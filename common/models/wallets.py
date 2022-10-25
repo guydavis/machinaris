@@ -22,6 +22,13 @@ class Wallet(db.Model):
                 return line.split(':')[1].strip()
         return None
 
+    def wallet_nums(self):
+        wallet_nums = []
+        for line in self.details.split('\n'):
+            if "Wallet ID:" in line:
+                wallet_nums.append(line.split(':')[1].strip())
+        return wallet_nums
+
     def is_synced(self):
         for line in self.details.split('\n'):
             if line.strip().startswith("Sync status: Synced"):

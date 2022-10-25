@@ -130,6 +130,18 @@
         </div>
         <div class="row">
             <div class="col-12" style="margin-top:15px; margin-bottom:5px;">
+                {% if mem_usage[farmer.hostname] %}
+                <canvas id="mem_{{farmer.hostname}}" width="400"></canvas>
+                {% else %}
+                {% autoescape false %}
+                <p>{{_('No memory usage stats recorded recently for %(hostname)s with Chia blockchain. Please ensure the Chia worker is reporting into the controller on the Workers page.', hostname=farmer.hostname)}}
+                </p>
+                {% endautoescape %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12" style="margin-top:15px; margin-bottom:5px;">
                 {% if disk_usage[farmer.hostname] %}
                 <canvas id="disk_{{farmer.hostname}}" width="400"></canvas>
                 {% if disk_usage[farmer.hostname]['paths']|length >= MAX_COLUMNS_ON_CHART %}
@@ -153,11 +165,23 @@
 
     {% block scripts %}
     <script>
-        Chart.register(ChartDataLabels);
-    </script>
+        const COLORS = [
+            '#3aac59',
+            '#4dc9f6',
+            '#f67019',
+            '#f53794',
+            '#537bc4',
+            '#acc236',
+            '#166a8f',
+            '#00a950',
+            '#58595b',
+            '#8549ba'
+        ];
+        function color(index) {
+            return COLORS[index % COLORS.length];
+        }
     {% for farmer in farmers %}
     {% if disk_usage[farmer.hostname] %}
-    <script>
         var ctx = document.getElementById('disk_{{farmer.hostname}}');
         var myChart = new Chart(ctx, {
             type: 'bar',
@@ -211,6 +235,14 @@
                     y: {
                         stacked: true,
                         beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "{{_('Plot Disk Used')}} (TB)",
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        },
                         ticks: {
                           color: "#c7c7c7",
                           font: {
@@ -221,7 +253,77 @@
                 }
             }
         });
-    </script>
+    {% endif %}
+    {% if mem_usage[farmer.hostname] %}
+        var ctx = document.getElementById('mem_{{farmer.hostname}}');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ mem_usage[farmer.hostname].dates | safe }},
+                datasets: [
+                {% for blockchain in mem_usage[farmer.hostname].blockchains|sort %}
+                    {
+                        label: "{{blockchain}}",
+                        data: {{ mem_usage[farmer.hostname][blockchain] | safe }},
+                        backgroundColor: color({{ loop.index - 1 }}),
+                    },
+                {% endfor %}
+                ],
+            },
+            borderWidth: 1,
+            options: {
+                plugins: {  
+                    legend: {
+                        labels: {
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            tooltipFormat: 'DD T'
+                        },
+                        title: {
+                            display: true,
+                            text: "{{_('Time - Last 24 Hours')}}",
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        },
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "{{_('Container Memory Usage')}} (GiB)",
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        },
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
+                    }
+                }
+            }
+        });
     {% endif %}
     {% endfor %}
+    </script>
     {% endblock %}

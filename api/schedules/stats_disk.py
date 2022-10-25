@@ -16,7 +16,8 @@ from api import app, utils, db
 DELETE_OLD_STATS_AFTER_DAYS = 1
 
 TABLES = [ stats.StatPlotsTotalUsed, stats.StatPlotsDiskUsed, stats.StatPlotsDiskFree,
-           stats.StatPlottingTotalUsed, stats.StatPlottingDiskUsed, stats.StatPlottingDiskFree, ]
+           stats.StatPlottingTotalUsed, stats.StatPlottingDiskUsed, stats.StatPlottingDiskFree,
+           stats.StatContainerMemoryUsageGib, stats.StatHostMemoryUsagePercent, ] # Also delete memory stats
 
 def delete_old_stats():
     try:

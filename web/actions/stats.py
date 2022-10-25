@@ -26,7 +26,8 @@ from common.models.pools import Pool
 from common.models.partials import Partial
 from common.models.stats import StatPlotCount, StatPlotsSize, StatTotalCoins, StatNetspaceSize, StatTimeToWin, \
         StatPlotsTotalUsed, StatPlotsDiskUsed, StatPlotsDiskFree, StatPlottingTotalUsed, StatEffort, \
-        StatPlottingDiskUsed, StatPlottingDiskFree, StatFarmedBlocks, StatWalletBalances, StatTotalBalance
+        StatPlottingDiskUsed, StatPlottingDiskFree, StatFarmedBlocks, StatWalletBalances, StatTotalBalance, \
+        StatContainerMemoryUsageGib, StatHostMemoryUsagePercent
 from web import app, db, utils
 from web.actions import chia, worker
 
@@ -125,11 +126,7 @@ def wallet_balance_diff(since, blockchain):
     result = ''
     try:
         latest = db.session.query(StatWalletBalances).filter(StatWalletBalances.blockchain==blockchain).order_by(StatWalletBalances.created_at.desc()).limit(1).first()
-        #if blockchain == 'cactus':
-        #    app.logger.info(latest.value)
         before = db.session.query(StatWalletBalances).filter(StatWalletBalances.blockchain==blockchain, StatWalletBalances.created_at <= since).order_by(StatWalletBalances.created_at.desc()).limit(1).first()
-        #if blockchain == 'cactus':
-        #    app.logger.info(before.value)
         if (latest and before) and (latest.value - before.value) != 0:
             result = ("%+6g " % (latest.value - before.value)) + _('in last day.')
             #app.logger.info("Total coins daily diff: {0}".format(result))
@@ -292,6 +289,7 @@ def prune_workers_status(hostname, displayname, blockchain):
         app.logger.info("Failed to remove stale stats for worker {0} - {1} because {2}".format(displayname, blockchain, str(ex)))
 
 def load_plotting_stats():
+    worker_ips_to_displaynames = {}
     summary_by_size = {}
     for k in [29, 30, 31, 32, 33, 34]:  # Current k sizes
         dates = []
@@ -305,27 +303,41 @@ def load_plotting_stats():
             converted_date = p.created_at.replace(' ', 'T') # Change space between date & time to 'T' for luxon
             if not converted_date in dates:
                 dates.append(converted_date)
-            if not p.displayname in workers:
-                workers[p.displayname] = {}
-            values = workers[p.displayname]
+            if '|' in p.plot_analyze:
+                [worker_hostname, analyze_seconds] = p.plot_analyze.split('|')
+                if worker_hostname in worker_ips_to_displaynames:
+                    worker_displayname = worker_ips_to_displaynames[worker_hostname]
+                else:
+                    try:
+                        worker_displayname = worker.get_worker(worker_hostname).displayname # Convert ip_addr to worker displayname
+                        worker_ips_to_displaynames[worker_hostname] = worker_displayname
+                    except Exception as ex:
+                        app.logger.info("Unable to convert {0} to a worker's displayname because: {1}".format(worker_hostname, str(ex)))
+                        worker_displayname = p.displayname  # Pretend plot host was also the plotter
+            else: # Old format, just seconds
+                analyze_seconds =  p.plot_analyze
+                worker_displayname = p.displayname  # Pretend plot host was also the plotter
+            if not worker_displayname in workers:
+                workers[worker_displayname] = {}
+            values = workers[worker_displayname]
             try:
-                values[converted_date] = round(float(p.plot_analyze) / 60, 2) # Convert from seconds to minutes
+                values[converted_date] = round(float(analyze_seconds) / 60, 2) # Convert from seconds to minutes
             except:
-                app.logger.error("Inavlid plot_analyze time in seconds: {0}".format(p.plot_analyze))
+                app.logger.error("Inavlid plot_analyze time found in ip_addr|seconds: {0}".format(p.plot_analyze))
                 values[converted_date] = 'null'
         if len(dates) > 0:
             summary_by_size[k] = { "dates": dates, "workers": workers.keys(),  }
-            for worker in workers.keys():
+            for wkr in workers.keys():
                 worker_values = []
                 for date in dates:
-                    if worker in workers:
-                        if date in workers[worker]:  
-                            worker_values.append(workers[worker][date])
+                    if wkr in workers:
+                        if date in workers[wkr]:  
+                            worker_values.append(workers[wkr][date])
                         else: # Due to exeception reported by one user
                             worker_values.append('null')
                     else:
                         worker_values.append('null')
-                summary_by_size[k][worker] = worker_values
+                summary_by_size[k][wkr] = worker_values
     #app.logger.info(summary_by_size.keys())
     return summary_by_size
 
@@ -474,6 +486,46 @@ def load_total_balances(current_currency_symbol):
     return { 'title': _('Wallets Total') + ' (' + current_currency_symbol + ')', 'y_axis_title': _('Fiat Currency'),
          'dates': dates, 'vals': values, 'last_value': " - {0} {1}".format(last_value, current_currency_symbol) }
 
+def load_host_memory_usage():
+    dates = []
+    workers = {}
+    displaynames_for_hosts = {}
+    result = db.session.query(StatHostMemoryUsagePercent).order_by(StatHostMemoryUsagePercent.created_at.asc()).all()
+    for p in result:
+        converted_date = converters.convert_date_for_luxon(p.created_at)
+        if not converted_date in dates:
+            dates.append(converted_date)
+        if p.hostname in displaynames_for_hosts:
+            displayname = displaynames_for_hosts[p.hostname]
+        else:
+            try:
+                w = worker.get_worker(p.hostname)
+                displayname = w.displayname
+            except:
+                app.logger.debug("Failed to find worker for hostname: {0}".format(p.hostname))
+                displayname = p.hostname
+        if not displayname in workers:
+            workers[displayname] = {}
+        values = workers[displayname]
+        values[converted_date] = p.value # Integer as percent of all host memory used
+    values_per_worker = {}
+    if len(dates) > 0:
+        for wk in workers.keys():
+            worker_values = []
+            for date in dates:
+                if wk in workers:
+                    if date in workers[wk]:  
+                        worker_values.append(str(workers[wk][date]))
+                    else: # Due to exeception reported by one user
+                        worker_values.append('null')
+                else:
+                    worker_values.append('null')
+            values_per_worker[wk] = worker_values
+    #app.logger.info(dates)
+    #app.logger.info(values_per_worker)
+    return {'y_axis_title': _('Host Memory Usage') + ' (%)',
+         'dates': dates, "workers": workers.keys(), "values_per_worker": values_per_worker }
+
 def load_netspace_size(blockchain):
     dates = []
     values = []
@@ -503,7 +555,7 @@ def load_farmed_blocks(blockchain):
             w = worker.get_worker(row.hostname)
             displayname = w.displayname
         except:
-            app.logger.debug("Failed to find worker for hostname: {0}".format(ResourceWarning.hostname))
+            app.logger.debug("Failed to find worker for hostname: {0}".format(w.hostname))
             displayname = row.hostname
         blocks.append({
             'hostname': displayname,
@@ -621,6 +673,31 @@ def load_time_to_win(blockchain):
     return { 'title': blockchain.capitalize() + ' - ' + _('ETW'), 'dates': dates, 'vals': converted_values, 
         'y_axis_title': _('Estimated Time to Win') + ' (' + _('days') + ')'}
 
+def load_container_memory(hostname, blockchain):
+    dates = []
+    values = []
+    result = db.session.query(StatContainerMemoryUsageGib).order_by(StatContainerMemoryUsageGib.created_at.asc()).filter(
+            StatContainerMemoryUsageGib.hostname == hostname, StatContainerMemoryUsageGib.blockchain == blockchain).all()
+    for i in range(len(result)):
+        s = result[i]
+        converted_date = converters.convert_date_for_luxon(s.created_at)
+        # First, last, and every 5th (at ~2x5 min intervals)
+        if (i == 0) or (i % 5 == 0) or (i == len(result) - 1):
+            dates.append(converted_date)
+            values.append(s.value)
+    app.logger.debug("{0} before {1}".format(blockchain, values))
+    if len(values) > 0:
+        converted_values = list(map(lambda x: round(x/1024/1024/1024,2), values))  # Bytes to GiB
+    else:
+        converted_values = []
+    app.logger.debug("{0} after {1}".format(blockchain, converted_values))
+    try:
+        displayname = worker.get_worker(hostname).displayname
+    except:
+        displayname = hostname
+    return { 'title': blockchain.capitalize() + ' - ' + _('Container Memory Usage') +  ' - ' + displayname, 'dates': dates, 'vals': converted_values, 
+        'y_axis_title': _('GiB') }
+
 def count_plots_by_type(hostname):
     plots_by_type = {}
     result = db.session.query(Plot.type, func.count(Plot.hostname)).filter(Plot.hostname==hostname).group_by(Plot.type).all()
@@ -656,3 +733,46 @@ def set_disk_usage_per_farmer(farmers, disk_usage):
         else:
             app.logger.info("No disk usage stats found for {0}".format(farmer.hostname))
             farmer.drive_usage = "" # Empty string to report
+
+def load_recent_mem_usage(worker_type, only_hostname=None, only_blockchain=None):
+    summary_by_worker = {}
+    for host in worker.load_workers():
+        hostname = host.hostname
+        if only_hostname and hostname != only_hostname:
+            continue
+        dates = []
+        data_by_blockchain = {}
+        if only_blockchain:
+            mem_result = db.session.query(StatContainerMemoryUsageGib).filter( 
+                StatContainerMemoryUsageGib.hostname == host.hostname, StatContainerMemoryUsageGib.blockchain == only_blockchain). \
+                order_by(StatContainerMemoryUsageGib.created_at, StatContainerMemoryUsageGib.blockchain).all()
+        else: # all blockchains on that hostname
+            mem_result = db.session.query(StatContainerMemoryUsageGib).filter( 
+                StatContainerMemoryUsageGib.hostname == host.hostname). \
+                order_by(StatContainerMemoryUsageGib.created_at, StatContainerMemoryUsageGib.blockchain).all()
+        for row in mem_result:
+            if worker_type == 'plotting' and host.mode != 'plotter' and (host.mode == 'fullnode' and not row.blockchain in ['chia', 'chives', 'mmx']):
+                continue  # Not a plotting container
+            elif worker_type == 'farming' and host.mode == 'plotter':
+                continue # Not a farmer or harvester
+            converted_date = converters.convert_date_for_luxon(row.created_at)
+            if not converted_date in dates:
+                dates.append(converted_date)
+            if not row.blockchain in data_by_blockchain:
+                data_by_blockchain[row.blockchain] = {}
+            data_by_blockchain[row.blockchain][converted_date] = round((row.value / 1024 / 1024 /1024), 2)
+        if len(dates) > 0:
+            summary_by_worker[hostname] = { "dates": dates, "blockchains": data_by_blockchain.keys(),  }
+            for blockchain in data_by_blockchain.keys():
+                blockchain_values = []
+                for date in dates:
+                    if blockchain in data_by_blockchain:
+                        if date in data_by_blockchain[blockchain]:
+                            blockchain_values.append(str(data_by_blockchain[blockchain][date]))
+                        else: 
+                            blockchain_values.append('null')
+                    else:
+                        blockchain_values.append('null')
+                # TODO Decimate the memory usage datapoints as too many being returned...
+                summary_by_worker[hostname][blockchain] = blockchain_values
+    return summary_by_worker

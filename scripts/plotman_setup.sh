@@ -3,7 +3,7 @@
 # Installs Plotman for plotting management; customized for non-interactive use by Machinaris
 #
 
-PLOTMAN_BRANCH=development
+PLOTMAN_BRANCH=$1
 
 if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia' || ${blockchains} == 'chives' || ${blockchains} == 'mmx') ]]; then
     if [[ ! -f /chia-blockchain/venv/bin/plotman ]]; then
@@ -13,5 +13,6 @@ if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chi
         cd plotman
         /chia-blockchain/venv/bin/python setup.py install
         apt update && apt install -y rsync
+        mkdir -p /root/.chia/plotman/logs/archiving
     fi
 fi

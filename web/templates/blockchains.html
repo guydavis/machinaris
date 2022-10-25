@@ -129,7 +129,7 @@
                       <i class="bi-check-circle text-success"></i>
                       &nbsp; <a class="text-white" title="{{_('Restart Blockchain')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{ fullnodes[blockchain.blockchain].hostname }}" data-bs-blockchain="{{blockchain.blockchain}}">{{_('Synced')}}</a>
                     {% elif blockchain.status.lower().startswith('not synced') %}
-                      <i class="bi-check-circle text-warning"></i>
+                      <i class="bi-exclamation-triangle text-warning"></i>
                       &nbsp; <a class="text-white" title="{{_('Restart Blockchain')}}" href="#" data-bs-toggle="modal" data-bs-target="#restartModal" data-bs-hostname="{{ fullnodes[blockchain.blockchain].hostname }}" data-bs-blockchain="{{blockchain.blockchain}}">{{_('Not Synced')}}</a>
                     {% elif blockchain.status.lower().startswith('syncing')  %}
                       <i class="bi-exclamation-triangle text-warning"></i>

@@ -180,6 +180,18 @@
         </div>
         <div class="row">
             <div class="col-12" style="margin-top:5px; margin-bottom:5px;">
+                {% if mem_usage[plotter.hostname] %}
+                <canvas id="mem_{{plotter.hostname}}"></canvas>
+                {% else %}
+                <p>
+                    No Docker container memory usage recorded recently for {{plotter.hostname}}. 
+                    Also ensure the worker is reporting into the controller on the Workers page.
+                </p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12" style="margin-top:5px; margin-bottom:5px;">
                 {% if disk_usage[plotter.hostname] %}
                 <canvas id="disk_{{plotter.hostname}}"></canvas>
                 {% else %}
@@ -216,10 +228,8 @@
         function color(index) {
             return COLORS[index % COLORS.length];
         }
-    </script>
     {% for plotter in plotters %}
     {% if disk_usage[plotter.hostname] %}
-    <script>
         var ctx = document.getElementById('disk_{{plotter.hostname}}');
         var myChart = new Chart(ctx, {
             type: 'line',
@@ -288,6 +298,79 @@
                 }
             }
         });
+    {% endif %}
+    {% if mem_usage[plotter.hostname] %}
+        var ctx = document.getElementById('mem_{{plotter.hostname}}');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ mem_usage[plotter.hostname].dates | safe }},
+                datasets: [
+                {% for blockchain in mem_usage[plotter.hostname].blockchains|sort %}
+                    {
+                        label: "{{blockchain}}",
+                        data: {{ mem_usage[plotter.hostname][blockchain] | safe }},
+                        backgroundColor: color({{ loop.index - 1 }}),
+                    },
+                {% endfor %}
+                ],
+            },
+            borderWidth: 1,
+            options: {
+                plugins: {  
+                    legend: {
+                        labels: {
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            tooltipFormat: 'DD T'
+                        },
+                        title: {
+                            display: true,
+                            text: "{{_('Time - Last 24 Hours')}}",
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        },
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: "{{_('Container Memory Usage (GiB)')}}",
+                            color: "#c7c7c7",  
+                            font: {
+                                size: 18 
+                            }
+                        },
+                        ticks: {
+                          color: "#c7c7c7",
+                          font: {
+                            size: 16 
+                          }  
+                        },
+                    }
+                }
+            }
+        });
+    {% endif %}
+    {% endfor %}
+
         $(document).ready(function () {
             $("#btnConfirmStart").click(function () {
                 $("#btnCancelStart").prop("disabled", true);
@@ -335,6 +418,4 @@
             });
         });
     </script>
-    {% endif %}
-    {% endfor %}
     {% endblock %}

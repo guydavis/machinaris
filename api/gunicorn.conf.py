@@ -19,6 +19,7 @@ def on_starting(server):
         log_rotate, restart_stuck_farmer, geolocate_peers, \
         stats_effort, status_warnings
     from common.config import globals
+    from common.models import pools, plottings
 
     from api.commands import websvcs
 
@@ -52,6 +53,8 @@ def on_starting(server):
         scheduler.add_job(func=status_challenges.update, name="status_challenges", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_alerts.update, name="status_alerts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=log_rotate.execute, name="log_rotate", trigger='cron', minute=0)  # Hourly
+    
+    if globals.farming_enabled() and 'chia' in globals.enabled_blockchains():  # For now, only Chia fullnodes
         scheduler.add_job(func=status_warnings.collect, name="status_warnings", trigger='cron', minute="*/20") # Every 20 minutes
 
     # Status for plotters
@@ -66,15 +69,18 @@ def on_starting(server):
         scheduler.add_job(func=status_blockchains.update, name="status_blockchains", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_connections.update, name="status_connections", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_keys.update, name="status_keys", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
-        scheduler.add_job(func=status_farm.update, name="status_farms", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
-        scheduler.add_job(func=status_plots.update, name="status_plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
-        scheduler.add_job(func=status_plotnfts.update, name="status_plotnfts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
-        scheduler.add_job(func=status_pools.update, name="status_pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
+        scheduler.add_job(func=status_farm.update, name="status_farm", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        scheduler.add_job(func=stats_blocks.collect, name="status_blocks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=restart_stuck_farmer.execute, name="status_blockchain_sync", trigger='interval', minutes=5, jitter=0) 
         scheduler.add_job(func=periodically_sync_wallet.execute, name="status_wallet_sync", trigger='interval', minutes=15, jitter=0) 
-        scheduler.add_job(func=status_partials.update, name="status_partials", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
-        scheduler.add_job(func=stats_blocks.collect, name="status_blocks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
-
+        scheduler.add_job(func=nft_recover.execute, name="status_nft_recover", trigger='interval', hours=1) # Once an hour
+        if globals.enabled_blockchains()[0] in plottings.PLOTTABLE_BLOCKCHAINS: # Only get plot listing from these three blockchains
+            scheduler.add_job(func=status_plots.update, name="status_plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
+        if globals.enabled_blockchains()[0] in pools.POOLABLE_BLOCKCHAINS: # Only get pool submissions from poolable blockchains
+            scheduler.add_job(func=status_pools.update, name="status_pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
+            scheduler.add_job(func=status_partials.update, name="status_partials", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
+            scheduler.add_job(func=status_plotnfts.update, name="status_plotnfts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        
     # Status for single Machinaris controller only, should be blockchain=chia
     if utils.is_controller():
         scheduler.add_job(func=plots_check.execute, name="plot_checks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER, 
@@ -82,18 +88,16 @@ def on_starting(server):
         scheduler.add_job(func=status_controller.update, name="status_controller", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=websvcs.get_prices, name="status_exchange_prices", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=websvcs.get_chain_statuses, name="status_blockchain_networks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
-        scheduler.add_job(func=nft_recover.execute, name="status_nft_recover", trigger='interval', hours=12)
         scheduler.add_job(func=geolocate_peers.execute, name="stats_geolocate_peers", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='cron', minute=0)  # Hourly
         
     # Testing only
-    #scheduler.add_job(func=status_plots.update, name="status_plots", trigger='interval', seconds=60) # Test immediately
-    #scheduler.add_job(func=stats_blocks.collect, name="stats_blocks", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=status_plotnfts.update, name="status_plotnfts", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=stats_effort.collect, name="stats_effort", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=websvcs.get_chain_statuses, name="get_chain_statuses", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=10) # Test immediately
-    #scheduler.add_job(func=status_warnings.collect, name="farms", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=status_alerts.update, name="alerts", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=periodically_sync_wallet.execute, name="periodically_sync_wallet", trigger='interval', seconds=60) # Test immediately
     #scheduler.add_job(func=status_warnings.collect, name="status_warnings", trigger='interval', seconds=60) # Test immediately
     #scheduler.add_job(func=nft_recover.execute, name="status_nft_recover", trigger='interval', seconds=60)

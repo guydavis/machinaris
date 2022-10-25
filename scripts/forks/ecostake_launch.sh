@@ -16,12 +16,8 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.ecostake/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
   && [[ ! -f /root/.ecostake/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
-  echo "Downloading Ecostake blockchain DB (many GBs in size) on first launch..."
-  echo "Please be patient as takes minutes now, but saves days of syncing time later."
-  mkdir -p /root/.ecostake/mainnet/db/ && cd /root/.ecostake/mainnet/db/
-  # Download link from their Discord on 2022-08-20, not compressed, 6 GB
-  gdown 1MmbxJRvWXdN317Ikv7JQe370yx8m0SDB
-  #p7zip --decompress --force blockchain_v1_mainnet*.7z
+  echo "Sorry, Ecostake does not offer a recent blockchain DB for download.  Standard sync will happen over a few weeks."
+  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/ecostake"
 fi
 
 mkdir -p /root/.ecostake/mainnet/log

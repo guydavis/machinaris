@@ -4,8 +4,8 @@
 #
 
 LITTLELAMBOCOIN_BRANCH=$1
-# On 2022-08-20
-HASH=8454a7093626a388364ff7425e1b9400ffbbb15a
+# On 2022-10-10
+HASH=a656e0d3478773a38ac4959a611b5d064bb22cb5
 
 if [ -z ${LITTLELAMBOCOIN_BRANCH} ]; then
 	echo 'Skipping LittleLamboCoin install as not requested.'

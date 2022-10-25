@@ -34,14 +34,15 @@ if [ -f /root/.littlelambocoin/mainnet/config/config.yaml ]; then
   sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.littlelambocoin/mainnet/config/config.yaml
   sed -i 's/localhost/127.0.0.1/g' /root/.littlelambocoin/mainnet/config/config.yaml
 fi
-
 # Loop over provided list of key paths
+label_num=0
 for k in ${keys//:/ }; do
   if [[ "${k}" == "persistent" ]]; then
     echo "Not touching key directories."
   elif [ -s ${k} ]; then
-    echo "Adding key at path: ${k}"
-    littlelambocoin keys add -f ${k} > /dev/null
+    echo "Adding key #${label_num} at path: ${k}"
+    littlelambocoin keys add -l "key_${label_num}" -f ${k} > /dev/null
+    ((label_num=label_num+1))
   fi
 done
 

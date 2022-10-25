@@ -12,6 +12,10 @@ if [[ ${mode} == 'fullnode' ]]; then
         cd /
         git clone --branch ${FDCLI_BRANCH} https://github.com/guydavis/flora-dev-cli.git
         cd flora-dev-cli
-        pip install -e . --extra-index-url https://pypi.chia.net/simple/
+        codename=`lsb_release -c -s`
+        echo "Building fd-cli on Ubuntu ${codename}..."
+        cp requirements_${codename}.txt requirements.txt
+        cp setup_${codename}.py setup.py
+        pip install -e . --extra-index-url https://pypi.chia.net/simple/       
     fi
 fi

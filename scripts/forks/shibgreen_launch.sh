@@ -18,6 +18,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.shibgreen/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   mkdir -p /root/.shibgreen/mainnet/db/ && cd /root/.shibgreen/mainnet/db/
   # Mega links for SHIBGreen blockchain DB from their Discord 2022-08-23
+  /usr/bin/bash /machinaris/scripts/megacmd_setup.sh > /tmp/megacmd_setup.log 2>&1
   mega-get https://mega.nz/folder/QpU3UbgQ#J76hG6GE5cYioiLyCweV1w
   mv shibgreen_8_21_22/* . && rm -rf shibgreen_8_21_22
 fi

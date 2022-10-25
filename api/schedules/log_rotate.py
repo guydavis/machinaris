@@ -11,6 +11,7 @@ from api import app
 MAX_LOG_SIZE_MB = 20
 LOG_ROTATE_CONFIG_DIR = '/etc/logrotate.d/'
 LOG_ROTATE_CONFIGS = [
+    'machinaris',
     'farmr',
     'mmx-node',
 ]

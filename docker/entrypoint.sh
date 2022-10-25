@@ -45,6 +45,25 @@ if [[ -d /root/.chia/machinaris/cache ]] && [[ -f /root/.chia/machinaris/cache/b
   fi
 fi
 
+# v0.8.5 - upgrade to new log file name for fd-cli
+if [[ -f /root/.chia/machinaris/logs/fd-cli.log ]]; then 
+    if [[ -f /root/.chia/machinaris/logs/rewards.log ]]; then
+        rm -f /root/.chia/machinaris/logs/fd-cli.log
+    else  # Save old log
+        mv /root/.chia/machinaris/logs/fd-cli.log /root/.chia/machinaris/logs/rewards.log
+    fi
+fi
+# v0.8.5 - improve plotman logging configuration for archving
+if [[ -f /root/.chia/plotman/plotman.yaml ]]; then
+  grep -q "transfers:" /root/.chia/plotman/plotman.yaml
+  if [[ $? != 0 ]]; then
+    echo 'Patching Plotman logging configuration in /root/.chia/plotman/plotman.yaml'
+    backup=`date +plotman.%Y%m%d-%H%M%S.yaml`
+    cp /root/.chia/plotman/plotman.yaml /root/.chia/plotman/$backup
+    perl -0777 -pe 's/logging:\n        # DO NOT CHANGE THIS IN-CONTAINER PATH USED BY MACHINARIS!\n        plots: \/root\/.chia\/plotman\/logs/logging:\n        # DO NOT CHANGE THESE IN-CONTAINER PATHS USED BY MACHINARIS!\n        plots: \/root\/.chia\/plotman\/logs\n        transfers: \/root\/.chia\/plotman\/logs\/archiving\n        application: \/root\/.chia\/plotman\/logs\/plotman.log/g' < /root/.chia/plotman/$backup > /root/.chia/plotman/plotman.yaml
+  fi
+fi
+
 # Refuse to run if Portainer launched containers out of order and created a directory for mnemonic.txt
 if [[ "${mode}" == 'fullnode' ]] && [[ -d /root/.chia/mnemonic.txt ]]; then
   echo "Portainer (or similar) launched a fork container before the main Machinaris container on first run."
@@ -69,7 +88,7 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   trap "chia stop all -d; exit 0" SIGINT SIGTERM
 
   # Conditionally install plotman on plotters and fullnodes, after the plotters setup
-  /usr/bin/bash /machinaris/scripts/plotman_setup.sh > /tmp/plotman_setup.log 2>&1
+  /usr/bin/bash /machinaris/scripts/plotman_setup.sh ${PLOTMAN_BRANCH} > /tmp/plotman_setup.log 2>&1
 
   # Conditionally install chiadog on harvesters and fullnodes
   /usr/bin/bash /machinaris/scripts/chiadog_setup.sh ${CHIADOG_BRANCH} > /tmp/chiadog_setup.log 2>&1
@@ -93,7 +112,7 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   /usr/bin/bash /machinaris/scripts/plotman_autoplot.sh > /tmp/plotman_autoplot.log 2>&1
 
   # Conditionally install forktools on fullnodes
-  /usr/bin/bash /machinaris/scripts/forktools_setup.sh > /tmp/forktools_setup.log 2>&1
+  /usr/bin/bash /machinaris/scripts/forktools_setup.sh ${FORKTOOLS_BRANCH} > /tmp/forktools_setup.log 2>&1
 
 fi
 
