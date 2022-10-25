@@ -309,10 +309,11 @@ def load_plotting_stats():
                     worker_displayname = worker_ips_to_displaynames[worker_hostname]
                 else:
                     try:
-                        worker_displayname = worker.get_worker(worker_hostname) # Convert ip_addr to worker displayname
+                        worker_displayname = worker.get_worker(worker_hostname).displayname # Convert ip_addr to worker displayname
                         worker_ips_to_displaynames[worker_hostname] = worker_displayname
-                    except:
-                        pass
+                    except Exception as ex:
+                        app.logger.info("Unable to convert {0} to a worker's displayname because: {1}".format(worker_hostname, str(ex)))
+                        worker_displayname = p.displayname  # Pretend plot host was also the plotter
             else: # Old format, just seconds
                 analyze_seconds =  p.plot_analyze
                 worker_displayname = p.displayname  # Pretend plot host was also the plotter
@@ -326,17 +327,17 @@ def load_plotting_stats():
                 values[converted_date] = 'null'
         if len(dates) > 0:
             summary_by_size[k] = { "dates": dates, "workers": workers.keys(),  }
-            for worker in workers.keys():
+            for wkr in workers.keys():
                 worker_values = []
                 for date in dates:
-                    if worker in workers:
-                        if date in workers[worker]:  
-                            worker_values.append(workers[worker][date])
+                    if wkr in workers:
+                        if date in workers[wkr]:  
+                            worker_values.append(workers[wkr][date])
                         else: # Due to exeception reported by one user
                             worker_values.append('null')
                     else:
                         worker_values.append('null')
-                summary_by_size[k][worker] = worker_values
+                summary_by_size[k][wkr] = worker_values
     #app.logger.info(summary_by_size.keys())
     return summary_by_size
 

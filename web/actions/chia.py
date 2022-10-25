@@ -155,7 +155,7 @@ def load_keys():
 def load_farmers():
     farmers = wk.load_worker_summary().farmers_harvesters()
     for farmer in farmers:
-        app.logger.info("Load farmer statistics for {0}".format(farmer.displayname))
+        #app.logger.info("Load farmer statistics for {0}".format(farmer.displayname))
         farmer.plot_counts = str(stats.count_plots_by_ksize(farmer.hostname))[1:-1].replace("'", "")
         farmer.plot_types = str(stats.count_plots_by_type(farmer.hostname))[1:-1].replace("'", "")
         farmer.drive_count = stats.count_drives(farmer.hostname)
