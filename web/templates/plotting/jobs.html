@@ -366,7 +366,7 @@
                         }
                         html = "<h6>Destination Directories (optional)</h6><ul>"
                         for (dir of data['response']['destination']) {
-                            html += "<li>" + dir['dst'] + " (" + dir['plots'] + 'plots, ' + dir['gb_free'] + " GB free)</li>";
+                            html += "<li>" + dir['dst'] + " (" + dir['plots'] + ' plots, ' + dir['gb_free'] + " GB free)</li>";
                         }
                         html += "</ul>"
                         $("#dst_dirs").html(html);
