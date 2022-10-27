@@ -10,10 +10,11 @@ All notable changes to this project will be documented in this file. The format 
  - Chart memory usage per container (GiB) as well as total host memory usage (%) for OS and all apps.
  - Enhanced Forktools to optionally decrease a blockchain's full_node process count, which greatly limits memory usage.
  - Improve Plotting page to display configured tmp, dst, and archiving directories before starting to plot. Support `site_path_filter` for archive folders under `site_root`.
+  - Bladebit support for new `ramplot` mode (needs 416 GB RAM) 
 ### Changed
  - Enhance 'NFT Reward Recovery' tool to support v2 databases. 
  - Fixes for invalid Chiadog harvester alerts. 
- - Fixes for bladebit diskplot mode (NOTE: ramplot mode coming soon). 
+ - Fixes for bladebit `diskplot` mode (less than 416 GB RAM, needs 400+GB of tmp disk) 
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.6.1) to v1.6.1
  - [Chinilla](https://github.com/Chinilla/chinilla-blockchain/releases/tag/1.3.0 to v1.3.0
