@@ -52,7 +52,7 @@ chia init >> /root/.chia/mainnet/log/init.log 2>&1
 
 echo 'Configuring Chia...'
 if [ ! -f /root/.chia/mainnet/config/config.yaml ]; then
-  sleep 10
+  sleep 60  # Give Chia long enough to initialize and create a config file...
 fi
 if [ -f /root/.chia/mainnet/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/mainnet/config/config.yaml

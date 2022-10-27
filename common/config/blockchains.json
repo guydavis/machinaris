@@ -281,7 +281,7 @@
         "farmer_port": 11330,
         "worker_port": 8940,
         "mojos_per_coin": 1000000,
-        "blocks_per_day": 10800,
+        "blocks_per_day": 8640,
         "git_url": "https://github.com/madMAx43v3r/mmx-node",
         "discord_url": "https://discord.gg/pQwkebKnPB",
         "website_url": "https://github.com/madMAx43v3r/mmx-node"
