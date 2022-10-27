@@ -103,16 +103,8 @@ plotting:
         # If you enable 'madmax', plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
         type: madmax
 
-        chia:
-                # The stock plotter: https://github.com/Chia-Network/chia-blockchain
-                k: 32                # k-size of plot, leave at 32 most of the time
-                e: False             # Disable bitfield back sorting (default is True) 
-                n_threads: 2         # Threads per job
-                n_buckets: 128       # Number of buckets to split data into
-                job_buffer: 3389     # Per job memory
-
         madmax:
-                # madMAx plotter: https://github.com/madMAx43v3r/chia-plotter
+                # madMAx plotter; see https://github.com/guydavis/machinaris/wiki/MadMax
                 k: 32                 # Default is 32 for Chia, but can do 33 or 34. Use 29,30,31 for Chives
                 n_threads: 4          # Default is 4, SLOWLY crank up if you have many cores
                 n_buckets: 256        # Default is 256
@@ -121,8 +113,16 @@ plotting:
                 network_port: 8444    # Default is 8444, but use 9699 for Chives
 
         bladebit:
-                # BladeBit plotter: https://github.com/Chia-Network/bladebit/
+                # BladeBit plotter; see https://github.com/guydavis/machinaris/wiki/Bladebit
                 threads: 2            # Threads per job
-                no_numa: false        # Whether to disable NUMA memory support or not
-                diskplot: True        # Whether to plot to tmp1 (and tmp2) disks or only RAM (false)
+                no_numa: true         # Whether to disable NUMA memory support or not
+                diskplot: true        # Whether to plot to tmp1 (and tmp2) disks or only RAM (false)
                 diskplot_cache:   4GB # If diskplot, amount of RAM to allocate to caching disk writes
+        
+        chia:
+                # The stock plotter; see https://github.com/guydavis/machinaris/wiki/Chia#plotting
+                k: 32                # k-size of plot, leave at 32 most of the time
+                e: False             # Disable bitfield back sorting (default is True) 
+                n_threads: 2         # Threads per job
+                n_buckets: 128       # Number of buckets to split data into
+                job_buffer: 3389     # Per job memory
