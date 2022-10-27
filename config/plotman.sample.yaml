@@ -44,13 +44,10 @@ directories:
 
 # See: https://github.com/guydavis/machinaris/wiki/Plotman#archiving
 #archiving:
-        #target: rsyncd
+        #target: local_rsync
         #env:
-                #site_root: /mnt/disks
-                #user: root
-                #host: aragorn
-                #rsync_port: 12000
-                #site: disks
+                #site_root: /
+                #site_path_filter: plots
 
 # Plotting scheduling parameters
 scheduling:
