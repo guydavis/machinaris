@@ -221,6 +221,8 @@ def strip_data_layer_msg(lines):
 last_blockchain_version = None
 last_blockchain_version_load_time = None
 def load_blockchain_version(blockchain):
+    if blockchain == 'mmx':
+        return "recent" # Author didn't bother to version his binaries
     chia_binary = get_blockchain_binary(blockchain)
     global last_blockchain_version
     global last_blockchain_version_load_time
