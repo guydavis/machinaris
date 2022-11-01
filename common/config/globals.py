@@ -90,10 +90,10 @@ def load():
     fullnode_db_version = load_fullnode_db_version()
     if fullnode_db_version:
         cfg['fullnode_db_version'] = fullnode_db_version
-    if cfg['enabled_blockchains'][0] == 'mmx':
-        cfg['mmx_reward'] = gather_mmx_reward()
     if cfg['machinaris_mode'] == 'fullnode':
         cfg['wallet_status'] = "running" if wallet_running() else "paused"
+        if cfg['enabled_blockchains'][0] == 'mmx':
+            cfg['mmx_reward'] = gather_mmx_reward()
     return cfg
 
 def load_blockchain_info(blockchain, key):
@@ -221,6 +221,8 @@ def strip_data_layer_msg(lines):
 last_blockchain_version = None
 last_blockchain_version_load_time = None
 def load_blockchain_version(blockchain):
+    if blockchain == 'mmx':
+        return "recent" # Author didn't bother to version his binaries
     chia_binary = get_blockchain_binary(blockchain)
     global last_blockchain_version
     global last_blockchain_version_load_time
@@ -438,7 +440,6 @@ def load_fullnode_db_version():
     except:
         logging.info(traceback.format_exc())
     fullnode_db_version_load_time = datetime.datetime.now()
-    logging.info("Found neither!")
     return fullnode_db_version
 
 def get_disks(disk_type):
