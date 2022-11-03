@@ -4,8 +4,8 @@
 #
 
 TAD_BRANCH=$1
-# On 2022-08-10
-HASH=80ccd218e21f71450420c88c4158bf3a43571caa
+# On 2022-11-03
+HASH=01925bb7c59b808a9ed6a8f985386817edbba554
 
 if [ -z ${TAD_BRANCH} ]; then
 	echo 'Skipping Tad install as not requested.'

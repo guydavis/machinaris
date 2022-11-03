@@ -21,6 +21,7 @@ All notable changes to this project will be documented in this file. The format 
  - [Littlelambocoin](https://github.com/BTCgreen-Network/littlelambocoin-blockchain/releases/tag/1.6.1) to v1.6.1
  - [Maize](https://github.com/Maize-Network/maize-blockchain/releases/tag/1.6.0) to v1.6.0
  - [MMX](https://github.com/madMAx43v3r/mmx-node) to `testnet8`.
+ - [Tad](https://github.com/BTCgreen-Network/tad-blockchain/releases/tag/1.6.0) to v1.6.0
 ### Known Issues
  - Incorrect reward recovery calculations for some blockchains.  Please use AllTheBlocks site if this affects you.
  - Chia CLI broke `chia plots check`, affecting new plots on Farming page.  Still investigating...
