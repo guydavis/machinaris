@@ -1,6 +1,6 @@
 #!/bin/env bash
 #
-# Installs Maize as per https://github.com/MOONCOINTEAM/moon-blockchain
+# Installs Moon as per https://github.com/MOONCOINTEAM/moon-blockchain
 
 MOON_BRANCH=$1
 # On 2022-11-04
@@ -11,7 +11,7 @@ if [ -z ${MOON_BRANCH} ]; then
 else
 	cd /
 	rm -rf /root/.cache
-	git clone --branch ${MAIZE_BRANCH} --single-branch https://github.com/MOONCOINTEAM/moon-blockchain.git /moon-blockchain
+	git clone --branch ${MOON_BRANCH} --single-branch https://github.com/MOONCOINTEAM/moon-blockchain.git /moon-blockchain
 	cd /moon-blockchain 
 	git submodule update --init mozilla-ca 
 	git checkout $HASH
