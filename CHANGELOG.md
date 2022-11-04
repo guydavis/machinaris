@@ -2,13 +2,30 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.8.5] - 2022-10-?
+## [Unreleased]
+
+## [0.8.5] - 2022-11-03
+### Added
  - Wallets page - Claim Rewards button offers portable plot reward recovery after one week has elapsed. (EARLY BETA!)
  - Chart memory usage per container (GiB) as well as total host memory usage (%) for OS and all apps.
  - Enhanced Forktools to optionally decrease a blockchain's full_node process count, which greatly limits memory usage.
  - Improve Plotting page to display configured tmp, dst, and archiving directories before starting to plot. Support `site_path_filter` for archive folders under `site_root`.
- - Fixes: Enhance 'NFT Reward Recovery' tool to support v2 databases. Fix for invalid Chiadog harvester alerts. Fix for bladebit diskplot mode (NOTE: ramplot mode under development again by original author.)
- - Update: [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.6.1) to v1.6.1, [Chinilla](https://github.com/Chinilla/chinilla-blockchain/releases/tag/1.3.0 to v1.3.0, [Littlelambocoin](https://github.com/BTCgreen-Network/littlelambocoin-blockchain/releases/tag/1.6.1) to v1.6.1, [Maize](https://github.com/Maize-Network/maize-blockchain/releases/tag/1.6.0) to v1.6.0, [MMX](https://github.com/madMAx43v3r/mmx-node) to `testnet8`.
+  - Bladebit support for new `ramplot` mode (needs 416 GB RAM) 
+### Changed
+ - Enhance 'NFT Reward Recovery' tool to support v2 databases. 
+ - Fixes for invalid Chiadog harvester alerts. 
+ - Fixes for bladebit `diskplot` mode (less than 416 GB RAM, needs 400+GB of tmp disk) 
+### Updated
+ - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v2.0.0) to v2.0.0
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.6.1) to v1.6.1
+ - [Chinilla](https://github.com/Chinilla/chinilla-blockchain/releases/tag/1.3.0 to v1.3.0
+ - [Littlelambocoin](https://github.com/BTCgreen-Network/littlelambocoin-blockchain/releases/tag/1.6.1) to v1.6.1
+ - [Maize](https://github.com/Maize-Network/maize-blockchain/releases/tag/1.6.0) to v1.6.0
+ - [MMX](https://github.com/madMAx43v3r/mmx-node) to `testnet8`.
+ - [Tad](https://github.com/BTCgreen-Network/tad-blockchain/releases/tag/1.6.0) to v1.6.0
+### Known Issues
+ - Incorrect reward recovery calculations for some blockchains.  Please use AllTheBlocks site if this affects you.
+ - Chia CLI broke `chia plots check`, affecting new plots on Farming page.  Still investigating...
 
 ## [0.8.4] - 2022-09-21
 - Scaling-Down: Optional mode where wallets are synced daily, not run 24/7.  Saves ~35% memory so smaller farmers can farm more blockchains concurrently on the same machine. See Wallets page, top-right Settings.

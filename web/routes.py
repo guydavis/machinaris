@@ -278,6 +278,10 @@ def wallet():
             app.logger.info("Saving local currency setting of: {0}".format(request.form.get('local_currency')))
             chia.save_current_wallet_sync_frequency(request.form.get('sync_wallet_frequency'))
             flash(_("Saved local currency and wallet sync settings."), 'success')
+        elif request.form.get('cold_wallet_address'):
+            app.logger.info("Saving {0} cold wallet address of: {1}".format(request.form.get('blockchain'), request.form.get('cold_wallet_address')))
+            selected_blockchain = request.form.get('blockchain')
+            chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
         elif request.form.get('blockchain'):
             action = request.form.get('action')
             if action == "start":
@@ -289,9 +293,7 @@ def wallet():
         elif request.form.get('action') == 'recover':
             p.request_unclaimed_plotnft_reward_recovery()
         else:
-            app.logger.info("Saving {0} cold wallet address of: {1}".format(request.form.get('blockchain'), request.form.get('cold_wallet_address')))
-            selected_blockchain = request.form.get('blockchain')
-            chia.save_cold_wallet_addresses(request.form.get('blockchain'), request.form.get('cold_wallet_address'))
+            app.logger.error("Unknown wallet page form submitted.  No action taken.")
     if request.args.get('rewards'):
         return json.dumps(p.get_unclaimed_plotnft_rewards()), 200
     wallets = chia.load_wallets()

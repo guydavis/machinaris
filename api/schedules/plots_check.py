@@ -112,7 +112,7 @@ def request_analyze(plot_file, workers):
     return [None, None, None]
 
 def set_check_status(workers, status, plot):
-    #app.logger.info("Checking for plot check of {0}".format(plot.plot_id))
+    app.logger.debug("Checking for plot check of {0}".format(plot.plot_id))
     check_log = CHECK_LOGS + '/' + plot.plot_id[:8] + '.log'
     check_status = None
     requested_status = False
@@ -155,20 +155,20 @@ def set_check_status(workers, status, plot):
 def request_check(plot, workers):
     # Don't know which harvester might have the plot result so try them in-turn
     for harvester in workers:
-        #app.logger.info("{0}:{1} - {2} - {3}".format(harvester.hostname, harvester.port, harvester.blockchain, harvester.mode))
+        app.logger.debug("{0}:{1} - {2} - {3}".format(harvester.hostname, harvester.port, harvester.blockchain, harvester.mode))
         if harvester.mode == 'fullnode' or 'harvester' in harvester.mode:
             if harvester.latest_ping_result != "Responding":
-                #app.logger.info("Skipping check call to {0} as last ping was: {1}".format( \
-                #    harvester.hostname, harvester.latest_ping_result))
+                app.logger.debug("Skipping check call to {0} as last ping was: {1}".format( \
+                    harvester.hostname, harvester.latest_ping_result))
                 continue
             if harvester.hostname != plot.hostname or harvester.blockchain != plot.blockchain:
-                #app.logger.info("Skipping check call to {0} ({1}) for plot on {2} ({3})".format( \
-                #    harvester.hostname, harvester.blockchain, plot.hostname, plot.blockchain))
+                app.logger.debug("Skipping check call to {0} ({1}) for plot on {2} ({3})".format( \
+                    harvester.hostname, harvester.blockchain, plot.hostname, plot.blockchain))
                 continue
             try:
                 app.logger.debug("Trying {0}:{1} for plot check....".format(harvester.hostname, harvester.port))
                 payload = {"service":"farming", "action":"check", "plot_file": plot.dir + '/' + plot.file }
-                response = utils.send_worker_post(harvester, "/analysis/", payload, debug=False)
+                response = utils.send_worker_post(harvester, "/analysis/", payload, debug=True)
                 if response.status_code == 200:
                     return [harvester.hostname, harvester.displayname, response.content.decode('utf-8')]
                 elif response.status_code == 404:

@@ -50,8 +50,9 @@ def on_starting(server):
     
     # Status for both farmers and harvesters (includes fullnodes)
     if globals.farming_enabled() or globals.harvesting_enabled():
-        scheduler.add_job(func=status_challenges.update, name="status_challenges", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
-        scheduler.add_job(func=status_alerts.update, name="status_alerts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
+        if not 'mmx' in globals.enabled_blockchains():
+            scheduler.add_job(func=status_challenges.update, name="status_challenges", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
+            scheduler.add_job(func=status_alerts.update, name="status_alerts", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=log_rotate.execute, name="log_rotate", trigger='cron', minute=0)  # Hourly
     
     if globals.farming_enabled() and 'chia' in globals.enabled_blockchains():  # For now, only Chia fullnodes
@@ -92,7 +93,7 @@ def on_starting(server):
         scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='cron', minute=0)  # Hourly
         
     # Testing only
-    #scheduler.add_job(func=status_plotnfts.update, name="status_plotnfts", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=plots_check.execute, name="plots_check", trigger='interval', seconds=60) # Test immediately
     #scheduler.add_job(func=stats_effort.collect, name="stats_effort", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=websvcs.get_chain_statuses, name="get_chain_statuses", trigger='interval', seconds=10) # Test immediately

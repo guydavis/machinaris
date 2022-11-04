@@ -240,7 +240,7 @@ def find_plotting_job_log(plot_id):
         try:
             if filename.endswith(".log") and not filename.startswith('plotman.') and not filename.startswith('archiver.'):
                 with open(os.path.join(str(dir_path), filename)) as logfile:
-                    for line in itertools.islice(logfile, 0, 35):
+                    for line in itertools.islice(logfile, 0, 50):
                         if plot_id in line:
                             return os.path.join(str(dir_path), filename)
                 continue

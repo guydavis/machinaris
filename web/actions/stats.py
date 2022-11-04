@@ -326,7 +326,7 @@ def load_plotting_stats():
                 app.logger.error("Inavlid plot_analyze time found in ip_addr|seconds: {0}".format(p.plot_analyze))
                 values[converted_date] = 'null'
         if len(dates) > 0:
-            summary_by_size[k] = { "dates": dates, "workers": workers.keys(),  }
+            summary_by_size[k] = { "dates": dates, "workers": sorted(workers.keys()),  }
             for wkr in workers.keys():
                 worker_values = []
                 for date in dates:

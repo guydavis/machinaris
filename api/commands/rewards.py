@@ -29,7 +29,8 @@ def reward_recovery(wallet_id, launcher_id, pool_contract_address):
         if blockchain in BLOCKCHAINS_WITH_PLOTNFT_CLAIM_CMD:
             for wallet in db.session.query(w.Wallet).filter(w.Wallet.blockchain==blockchain).order_by(w.Wallet.blockchain).all():
                 for wallet_num in wallet.wallet_nums():
-                    execute_plotnft_claim_recovery(wallet_num)
+                    if wallet.get_wallet_type(wallet_num) == 'POOLING_WALLET':
+                        execute_plotnft_claim_recovery(wallet_num)
         else: # Try old FD-CLI recovery instead
             execute_fd_cli_recovery(wallet_id, launcher_id, pool_contract_address)
 
