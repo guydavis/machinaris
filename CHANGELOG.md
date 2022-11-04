@@ -18,14 +18,12 @@ All notable changes to this project will be documented in this file. The format 
 ### Updated
  - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v2.0.0) to v2.0.0
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.6.1) to v1.6.1
- - [Chinilla](https://github.com/Chinilla/chinilla-blockchain/releases/tag/1.3.0 to v1.3.0
+ - [Chinilla](https://github.com/Chinilla/chinilla-blockchain/releases/tag/1.3.0) to v1.3.0
  - [Littlelambocoin](https://github.com/BTCgreen-Network/littlelambocoin-blockchain/releases/tag/1.6.1) to v1.6.1
  - [Maize](https://github.com/Maize-Network/maize-blockchain/releases/tag/1.6.0) to v1.6.0
  - [MMX](https://github.com/madMAx43v3r/mmx-node) to `testnet8`.
- - [Tad](https://github.com/BTCgreen-Network/tad-blockchain/releases/tag/1.6.0) to v1.6.0
 ### Known Issues
  - Incorrect reward recovery calculations for some blockchains.  Please use AllTheBlocks site if this affects you.
- - Chia CLI broke `chia plots check`, affecting new plots on Farming page.  Still investigating...
 
 ## [0.8.4] - 2022-09-21
 - Scaling-Down: Optional mode where wallets are synced daily, not run 24/7.  Saves ~35% memory so smaller farmers can farm more blockchains concurrently on the same machine. See Wallets page, top-right Settings.

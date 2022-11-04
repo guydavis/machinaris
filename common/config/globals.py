@@ -241,7 +241,7 @@ def load_blockchain_version(blockchain):
             except:
                 pass
             last_blockchain_version = ""
-        if last_blockchain_version.endswith('dev0'):
+        if last_blockchain_version.endswith('dev0') or last_blockchain_version.endswith('dev1'):
             # Chia version with .dev is actually one # to high, never fixed by Chia team...
             # See: https://github.com/Chia-Network/chia-blockchain/issues/5655
             sem_ver = last_blockchain_version.split('.')
