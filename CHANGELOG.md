@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 
-## [0.8.5] - 2022-11-?
+## [0.8.5] - 2022-11-03
 ### Added
  - Wallets page - Claim Rewards button offers portable plot reward recovery after one week has elapsed. (EARLY BETA!)
  - Chart memory usage per container (GiB) as well as total host memory usage (%) for OS and all apps.
