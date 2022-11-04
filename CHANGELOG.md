@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file. The format 
  - Fixes for invalid Chiadog harvester alerts. 
  - Fixes for bladebit `diskplot` mode (less than 416 GB RAM, needs 400+GB of tmp disk) 
 ### Updated
+ - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v2.0.0) to v2.0.0
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.6.1) to v1.6.1
  - [Chinilla](https://github.com/Chinilla/chinilla-blockchain/releases/tag/1.3.0 to v1.3.0
  - [Littlelambocoin](https://github.com/BTCgreen-Network/littlelambocoin-blockchain/releases/tag/1.6.1) to v1.6.1
