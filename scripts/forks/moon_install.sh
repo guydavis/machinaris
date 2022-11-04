@@ -11,7 +11,7 @@ if [ -z ${MOON_BRANCH} ]; then
 else
 	cd /
 	rm -rf /root/.cache
-	git clone --branch ${MAIZE_BRANCH} --single-branch https://github.com/MOONCOINTEAM/moon-blockchain/moon-blockchain.git /moon-blockchain
+	git clone --branch ${MAIZE_BRANCH} --single-branch https://github.com/MOONCOINTEAM/moon-blockchain.git /moon-blockchain
 	cd /moon-blockchain 
 	git submodule update --init mozilla-ca 
 	git checkout $HASH
