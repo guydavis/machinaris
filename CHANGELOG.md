@@ -6,8 +6,10 @@ All notable changes to this project will be documented in this file. The format 
 ### Added
  - [Moon](https://github.com/MOONCOINTEAM/moon-blockchain) at 1.6.0
 ### Changed
-
+ - 
 ### Updated
+ - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v2.0.1) to v2.0.1
+ - [Chiadog](https://github.com/guydavis/chiadog/releases/tag/v0.7.5) to v0.7.5
  - [Flax](https://github.com/Flax-Network/flax-blockchain/releases/tag/0.1.11) to v0.1.11
 
 ### Known Issues
