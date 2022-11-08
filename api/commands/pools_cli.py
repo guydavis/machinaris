@@ -144,7 +144,7 @@ def process_pool_leave(blockchain, pool_wallet_id):
         stdout_lines = result.splitlines()
     out_file = '/root/.chia/machinaris/logs/plotnft.log'
     with open(out_file, 'a') as f:
-        f.write("\n{0} plotnft plotnft leave -y -i 1 --> Executed at: {1}\n".format(blockchain, time.strftime("%Y%m%d-%H%M%S")))
+        f.write("\n{0} plotnft leave -y -i {1} --> Executed at: {2}\n".format(blockchain, pool_wallet_id, time.strftime("%Y%m%d-%H%M%S")))
         for line in stdout_lines:
             f.write(line)
         f.write("\n**********************************************************************\n")

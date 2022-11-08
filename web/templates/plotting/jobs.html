@@ -30,8 +30,8 @@
             <div class="modal-body bg-dark">
                 {{_('This action will start Plotman and launch a plotting run using your configured plotter, into these directories:')}}
                 <div id="tmp_dirs" style="display:none; padding-top:10px"></div>
-                <div id="dst_dirs" style="display:none"></div>
-                <div id="arch_dirs" style="display:none"></div>
+                <div id="dst_dirs" style="display:none; "></div>
+                <div id="arch_dirs" style="display:none; max-height: 200px; overflow-y: scroll"></div>
                 <div class="alert alert-warning" role="error" id="dirs_error" style="display:none"></div>
                 {{_('Be careful about running more than one plotter on a single machine at a time. Continue?')}}
             </div>

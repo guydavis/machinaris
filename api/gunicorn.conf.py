@@ -98,7 +98,7 @@ def on_starting(server):
     #scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=websvcs.get_chain_statuses, name="get_chain_statuses", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=10) # Test immediately
-    #scheduler.add_job(func=status_alerts.update, name="alerts", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=periodically_sync_wallet.execute, name="periodically_sync_wallet", trigger='interval', seconds=60) # Test immediately
     #scheduler.add_job(func=status_warnings.collect, name="status_warnings", trigger='interval', seconds=60) # Test immediately
     #scheduler.add_job(func=nft_recover.execute, name="status_nft_recover", trigger='interval', seconds=60)

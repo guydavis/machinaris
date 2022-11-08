@@ -100,8 +100,8 @@ plotting:
         #pool_contract_address: REPLACE_WITH_THE_REAL_VALUE
 
         # If you enable 'chia', plot in *parallel* with higher tmpdir_max_jobs and global_max_jobs
-        # If you enable 'madmax', plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
-        type: madmax
+        # If you enable 'bladebit or 'madmax', plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
+        type: bladebit
 
         madmax:
                 # madMAx plotter; see https://github.com/guydavis/machinaris/wiki/MadMax
