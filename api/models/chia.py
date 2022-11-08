@@ -121,7 +121,7 @@ class Wallets:
                 total_balance = float(hot_balance) + float(cold_balance)
             except:
                 total_balance = hot_balance
-            if hot_balance:
+            if hot_balance or cold_balance:
                 self.rows.append({ 
                     'hostname': wallet.hostname,
                     'blockchain': wallet.blockchain,

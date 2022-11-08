@@ -9,10 +9,11 @@ All notable changes to this project will be documented in this file. The format 
  - 
 ### Updated
  - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v2.0.1) to v2.0.1
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.6.1) to v1.6.1
  - [Chiadog](https://github.com/guydavis/chiadog/releases/tag/v0.7.5) to v0.7.5
  - [Flax](https://github.com/Flax-Network/flax-blockchain/releases/tag/0.1.11) to v0.1.11
-
 ### Known Issues
+ - 
 
 ## [0.8.5] - 2022-11-03
 ### Added
