@@ -32,17 +32,14 @@ if [ -f /root/.moon/mainnet/config/config.yaml ]; then
 fi
 
 # Loop over provided list of key paths
-label_num=0
 for k in ${keys//:/ }; do
   if [[ "${k}" == "persistent" ]]; then
     echo "Not touching key directories."
   elif [ -s ${k} ]; then
-    echo "Adding key #${label_num} at path: ${k}"
-    moon keys add -l "key_${label_num}" -f ${k} > /dev/null
-    ((label_num=label_num+1))
+    echo "Adding key at path: ${k}"
+    moon keys add -f ${k} > /dev/null
   fi
 done
-
 
 # Loop over provided list of completed plot directories
 IFS=':' read -r -a array <<< "$plots_dir"
