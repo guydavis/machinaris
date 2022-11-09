@@ -82,11 +82,11 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
   else
     if [ ! -f /root/.moon/farmer_ca/private_ca.crt ]; then
       mkdir -p /root/.moon/farmer_ca
-      response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8933/certificates/?type=moon --output /tmp/certs.zip)
+      response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8953/certificates/?type=moon --output /tmp/certs.zip)
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.moon/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${farmer_address}:8933/certificates/?type=moon.  Is the fork's fullnode container running?"
+        echo "Certificates response of ${response} from http://${farmer_address}:8953/certificates/?type=moon.  Is the fork's fullnode container running?"
       fi
       rm -f /tmp/certs.zip 
     fi
