@@ -1452,7 +1452,7 @@ msgstr "Neuen Schlüssel generieren"
 #: templates/setup.html:111
 #, python-format
 msgid ""
-"NOTE: If you would prefer to instead import your mnenmoic seed phrase "
+"NOTE: If you would prefer to instead import your mnemonic seed phrase "
 "yourself at the command-line, see the %(wiki_link)s for details."
 msgstr ""
 "Achtung: Du kannst deinen 24 Wort schlüssel auch über die "

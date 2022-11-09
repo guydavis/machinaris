@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Added
  - [Moon](https://github.com/MOONCOINTEAM/moon-blockchain) at 1.6.0
 ### Changed
- - 
+ - Fixed broken 'Generate Key' action for Chia 1.6.1 on Setup page. Thanks @SilverFolfy
 ### Updated
  - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v2.0.1) to v2.0.1
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.6.1) to v1.6.1

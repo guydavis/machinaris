@@ -1434,11 +1434,11 @@ msgstr "Créer une nouvelle clé"
 #: templates/setup.html:111
 #, python-format
 msgid ""
-"NOTE: If you would prefer to instead import your mnenmoic seed phrase "
+"NOTE: If you would prefer to instead import your mnemonic seed phrase "
 "yourself at the command-line, see the %(wiki_link)s for details."
 msgstr ""
 "REMARQUE: Si vous préférez plutôt importer votre phrase de départ "
-"mnenmoic vous-même sur la ligne de commande, consultez les %(wiki_link)s "
+"mnemonic vous-même sur la ligne de commande, consultez les %(wiki_link)s "
 "pour plus de détails."
 
 #: templates/summary.html:79
