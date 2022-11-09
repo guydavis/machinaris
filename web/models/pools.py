@@ -72,6 +72,7 @@ class Pools:
                     points_successful_last_24h = "0"
                 else:
                     points_successful_last_24h = "%.2f"% ( (points_found_24h - pool_errors_24h) / points_found_24h * 100)
+            errors = self.extract_unique_errors(pool_state)
             pool_obj = { 
                 'displayname': displayname, 
                 'hostname': pool.hostname,
@@ -82,6 +83,7 @@ class Pools:
                 'pool_state': pool_state,
                 'updated_at': pool.updated_at,
                 'status': status,
+                'errors': errors,
                 'points_successful_last_24h': points_successful_last_24h,
             }
             if pool.blockchain in self.blockchains:
@@ -102,6 +104,14 @@ class Pools:
             if line.startswith(key):
                 return line[line.index(':')+1:].strip()
         return None
+    
+    def extract_unique_errors(self, pool_state):
+        errors = []
+        if 'pool_errors_24h' in pool_state:
+            for error in pool_state['pool_errors_24h']:
+                if not error['error_message'] in errors:
+                    errors.append(error['error_message'])
+        return errors
 
 class PartialsChartData:
     

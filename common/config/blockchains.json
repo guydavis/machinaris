@@ -286,6 +286,23 @@
         "discord_url": "https://discord.gg/pQwkebKnPB",
         "website_url": "https://github.com/madMAx43v3r/mmx-node"
     },
+    "moon": {
+        "name": "Moon",
+        "symbol": "MOC" ,
+        "binary":  "/moon-blockchain/venv/bin/moon",
+        "network_path": "/root/.moon/mainnet",
+        "network_name": "mainnet",
+        "network_port": 26888,
+        "farmer_port": 26882,
+        "fullnode_rpc_port": 26897,
+        "worker_port": 8953,
+        "reward": 16.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/MOONCOINTEAM/moon-blockchain",
+        "discord_url": null,
+        "website_url": "https://mooncoin.top/"
+    },
     "nchain": {
         "name": "N-Chain",
         "symbol": "NCH" ,

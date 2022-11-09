@@ -84,6 +84,16 @@
                       {{ pool.launcher_id }}
                     {% endif %}
                   </span>
+                  {% if pool.errors  %}
+                  <h6 class="display-7" style="padding-top:12px">{{_('Errors')}}: 
+                    <span class="text-warning">{{_('Last 24 Hours')}}</span>
+                  </h6>
+                  <ul>
+                    {% for error in pool.errors %} 
+                      <li>{{error}}</li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
                 </div>
               </div>
               {% endfor %}

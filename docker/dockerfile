@@ -27,6 +27,7 @@ ARG LITTLELAMBOCOIN_BRANCH
 ARG MAIZE_BRANCH
 ARG MINT_BRANCH
 ARG MMX_BRANCH
+ARG MOON_BRANCH
 ARG NCHAIN_BRANCH
 ARG PETROLEUM_BRANCH
 ARG PROFIT_BRANCH
@@ -62,6 +63,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/maize_install.sh ${MAIZE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/mint_install.sh ${MINT_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/mmx_install.sh ${MMX_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/moon_install.sh ${MOON_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/petroleum_install.sh ${PETROLEUM_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/profit_install.sh ${PROFIT_BRANCH} \

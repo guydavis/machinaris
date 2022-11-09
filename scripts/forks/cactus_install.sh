@@ -4,8 +4,8 @@
 #
 
 CACTUS_BRANCH=$1
-# On 2022-09-16
-HASH=b006b43ef4bf5b1be114a5648f56db966733e74d
+# On 2022-11-08
+HASH=699f5cf43fcbfaf002d834d79a29fadc0700d34f
 
 if [ -z ${CACTUS_BRANCH} ]; then
 	echo 'Skipping Cactus install as not requested.'

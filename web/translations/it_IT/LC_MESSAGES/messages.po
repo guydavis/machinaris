@@ -1431,7 +1431,7 @@ msgstr "Genera Nuova Chiave"
 #: templates/setup.html:111
 #, python-format
 msgid ""
-"NOTE: If you would prefer to instead import your mnenmoic seed phrase "
+"NOTE: If you would prefer to instead import your mnemonic seed phrase "
 "yourself at the command-line, see the %(wiki_link)s for details."
 msgstr ""
 "Se invece preferiresti importate la tua frase seed mnemonica da te usando"

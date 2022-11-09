@@ -35,12 +35,13 @@ if [[ ${OPENCL_GPU} == 'nvidia' ]]; then
     mkdir -p /etc/OpenCL/vendors
     echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
 elif [[ ${OPENCL_GPU} == 'amd' ]]; then
-	cd /tmp
+	pushd /tmp
 	apt update
 	amdgpu-install -y --usecase=opencl --opencl=rocr --no-dkms --no-32 --accept-eula
 	# If AMD GPU is older than vega 10,use under command, but can't promise work normally.
 	# Because, with --opencl=legacy, dkms will must be installed, it may pollute your kernel
 	# amdgpu-install -y --usecase=opencl --opencl=rocr,legacy --no-32 --accept-eula
+	popd
 elif [[ ${OPENCL_GPU} == 'intel' ]]; then
 	apt update
 	apt install -y intel-opencl-icd

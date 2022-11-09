@@ -129,6 +129,13 @@ elif blockchain == "mint":
     from mint.util.config import load_config as load_fork_config
 elif blockchain == "mmx":
     pass
+elif blockchain == "moon":
+    from moon.rpc.full_node_rpc_client import FullNodeRpcClient
+    from moon.rpc.farmer_rpc_client import FarmerRpcClient
+    from moon.rpc.wallet_rpc_client import WalletRpcClient
+    from moon.util.default_root import DEFAULT_ROOT_PATH
+    from moon.util.ints import uint16
+    from moon.util.config import load_config as load_fork_config
 elif blockchain == "nchain": 
     from chia.rpc.full_node_rpc_client import FullNodeRpcClient
     from chia.rpc.farmer_rpc_client import FarmerRpcClient
