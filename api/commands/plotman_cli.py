@@ -69,6 +69,10 @@ def load_plotting_summary():
     cli_stdout = outs.decode('utf-8')
     return plotman.PlottingSummary(cli_stdout.splitlines(), get_plotman_pid())
 
+def load_archiving_summary():
+    # TODO - Load the 10 most recent archiving log files only
+    return None
+
 def dispatch_action(job):
     if not check_script():
         raise Exception("No plotman script found yet at {0}. Container probably just launched. Please allow 15 minutes for startup." \
