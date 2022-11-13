@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 ### Added
+ - List recent plot archiving (local and remote) on Plotting | Workers page.
  - [Moon](https://github.com/MOONCOINTEAM/moon-blockchain) at 1.6.0
 ### Changed
  - Fixed broken 'Generate Key' action for Chia 1.6.1 on Setup page. Thanks @SilverFolfy
