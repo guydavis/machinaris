@@ -19,8 +19,6 @@ def update():
             hostname = utils.get_hostname()
             blockchain = globals.enabled_blockchains()[0]
             archiving_summary = plotman_cli.load_archiving_summary()
-            if not archiving_summary:
-                return
             payload = []
             for transfer in archiving_summary:
                 payload.append({

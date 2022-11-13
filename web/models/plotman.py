@@ -79,7 +79,7 @@ class ArchivingSummary:
                         'path',
                         'plot_id',
                         #'k',
-                        'size',
+                        #'size',
                         #'type',
                         'dest',
                         'status',
