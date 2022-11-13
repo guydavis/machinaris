@@ -78,7 +78,7 @@ def load_archiving_summary():
     rsync_processes = []
     for process in psutil.process_iter():
         cmdline = process.cmdline()
-        if cmdline and (len(cmdline) > 0) and cmdline[0] == 'rsync' and '--infoprogress=2' in cmdline:
+        if cmdline and (len(cmdline) > 0) and cmdline[0] == 'rsync' and '--info=progress2' in cmdline:
             app.logger.info("Found running rsync transfer: {0} {1}".format(process.pid, cmdline))
             rsync_processes.append(process)
     # Then load most recent transfers (running and not) from archiving log folder

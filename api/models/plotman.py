@@ -103,7 +103,7 @@ class Transfer:
             elif self.source in running_transfers:
                 # Flag only this most recent transfer as running, any others earlier on same plot are failures
                 self.status = "Transferring"
-                del running_transfers[self.source]
+                running_transfers.remove(self.source)
             else: 
                 self.status = "Failed"
 

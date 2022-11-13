@@ -109,7 +109,7 @@ class ArchivingSummary:
                 'type': transfer.type,
                 'dest': transfer.dest,
                 'status': transfer.status,
-                'pct': "{0} %".format(transfer.pct_complete),
+                'pct': "{0}%".format(transfer.pct_complete),
                 'sent': transfer.size_complete,
                 'rate': transfer.rate,
                 'time': transfer.duration,
