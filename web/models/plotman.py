@@ -3,6 +3,7 @@ import traceback
 
 from flask_babel import _, lazy_gettext as _l
 
+from common.utils import converters
 from web import app
 from web.actions import worker as w
 
@@ -54,10 +55,6 @@ class PlottingSummary:
                 'io': plotting.io
             })
         self.calc_status()
-        if True:
-            self.plotman_running = True
-        else:
-            self.plotman_running = False
 
     def calc_status(self):
         if len(self.rows) > 0:
@@ -73,3 +70,60 @@ class PlottingSummary:
         if path.endswith('/'):
             return path[:-1]
         return path
+
+class ArchivingSummary:
+
+    def __init__(self, transfers):
+        self.columns = ['worker',
+                        'fork',
+                        'path',
+                        'plot_id',
+                        #'k',
+                        'size',
+                        #'type',
+                        'dest',
+                        'status',
+                        'pct',
+                        'sent',
+                        'rate',
+                        'time',
+                        'start',
+                        #'end',
+                        ]
+        self.rows = []
+        for transfer in transfers:
+            try:
+                app.logger.debug("Found worker with hostname '{0}'".format(transfer.hostname))
+                displayname = w.get_worker(transfer.hostname).displayname
+            except:
+                app.logger.info("PlottingSummary.init(): Unable to find a worker with hostname '{0}'".format(transfer.hostname))
+                displayname = transfer.hostname
+            self.rows.append({
+                'hostname': transfer.hostname,
+                'fork': transfer.blockchain,
+                'worker': displayname,
+                'path': self.plot_path(transfer.source),
+                'plot_id': transfer.plot_id,
+                'k': transfer.k,
+                'size': converters.sizeof_fmt(transfer.size),
+                'type': transfer.type,
+                'dest': transfer.dest,
+                'status': transfer.status,
+                'pct': "{0} %".format(transfer.pct_complete),
+                'sent': transfer.size_complete,
+                'rate': transfer.rate,
+                'time': transfer.duration,
+                'start': transfer.start_date,
+                'end': transfer.end_date,
+                'log_file': self.log_file_name(transfer.log_file),
+            })
+
+    def plot_path(self, source):
+        if source and source.endswith('.plot'):
+            return os.path.dirname(source)
+        return ""
+    
+    def log_file_name(self, log_file_path):
+        if log_file_path and log_file_path.endswith('.log'):
+            return os.path.basename(log_file_path)
+        return ""

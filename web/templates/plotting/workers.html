@@ -169,6 +169,38 @@
         {% endwith %}
     </div>
 
+    <form method="POST" id="archiving-form">
+        <div class="p-3 mb-4 bg-light border rounded-3">
+            <div class="table-responsive">
+                <table id="data" class="table table-dark">
+                    <thead>
+                        <tr>
+                            {% for column in transfers.columns %}
+                            <th scope="col" class="text-success">{{ column }}</th>
+                            {% endfor %}
+                            <th scope="col" class="text-success"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in transfers.rows %}
+                        <tr>
+                            {% for column in transfers.columns %}
+                                <td>{{ row[column] }}</td>
+                            {% endfor %}
+                            <td style="padding:0px">
+                                <!-- Careful, VS Code likes to wrap next line and break it. -->
+                                <a href="#" title="View Transfer Log" onclick='ArchivingLogs("archiving","{{ row['hostname'] }}","{{ row['fork'] }}","{{ row['plot_id'] }}","{{ row['log_file'] }}");return false;'>
+                                    <i class="fs-4 bi-file-text"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+
     <div class="p-1 mb-4 bg-light border rounded-3">
         {% for plotter in plotters %}
         <div class="row">
@@ -370,8 +402,35 @@
         });
     {% endif %}
     {% endfor %}
-
+        function ArchivingLogs(type, hostname, blockchain, plot_id, log_file) {
+            var d = new Date();
+            var height = 600;
+            var width = 900;
+            var top = (screen.height - height) / 2;
+            var left = (screen.width - width) / 2;
+            if (typeof log_file !== 'undefined') {
+                window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname + "&blockchain=" + blockchain + "&log_id=" + log_file, 'Transfer Log ' + plot_id + ' on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+            } else {
+                window.open("{{ url_for('logs') }}?log=" + type + "&hostname=" + hostname + "&blockchain=" + blockchain, 'Archiver Log on ' + hostname, 'resizeable=yes,scrollbars=yes,height=' + height + ',width=' + width + ',top=' + top + ',left=' + left).focus();
+            }
+        }
         $(document).ready(function () {
+            $('#data').DataTable({
+                "stateSave": true, 
+                "pageLength": 5,
+                "lengthMenu": [ [5, 10, 25, 100, -1], [5, 10, 25, 100, "All"] ],
+                "order": [[13, "desc"]],
+                "columnDefs": [
+                    { 
+                        targets: [15], "orderable": false
+                    }
+                ],
+                {% if lang != 'en' %}
+                "language": {
+                    "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
+                },
+                {% endif %}
+            });
             $("#btnConfirmStart").click(function () {
                 $("#btnCancelStart").prop("disabled", true);
                 $(this).prop("disabled", true);

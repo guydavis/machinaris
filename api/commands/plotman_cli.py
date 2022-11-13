@@ -3,6 +3,7 @@
 #
 
 import datetime
+import glob
 import itertools
 import json
 import os
@@ -26,6 +27,9 @@ PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 
 # Don't query plotman unless at least this long since last time.
 RELOAD_MINIMUM_SECS = 30
+
+# Only load this many recent transfer log files, ignore older ones
+NUM_RECENT_TRANSFER_LOGS = 10
 
 def check_plotter(plotter_path):
     if not os.path.exists(plotter_path):
@@ -70,8 +74,20 @@ def load_plotting_summary():
     return plotman.PlottingSummary(cli_stdout.splitlines(), get_plotman_pid())
 
 def load_archiving_summary():
-    # TODO - Load the 10 most recent archiving log files only
-    return None
+    # First collect any running rsync processes to see if transfer(s) are still in progress
+    rsync_processes = []
+    for process in psutil.process_iter():
+        cmdline = process.cmdline()
+        if cmdline and (len(cmdline) > 0) and cmdline[0] == 'rsync' and '--infoprogress=2' in cmdline:
+            app.logger.info("Found running rsync transfer: {0} {1}".format(process.pid, cmdline))
+            rsync_processes.append(process)
+    # Then load most recent transfers (running and not) from archiving log folder
+    transfers = []
+    for transfer_log in sorted(glob.iglob('/root/.chia/plotman/logs/archiving/*.transfer.log'), key=os.path.getctime, reverse=True)[:NUM_RECENT_TRANSFER_LOGS]:
+        transfer = plotman.Transfer(transfer_log, rsync_processes)
+        if transfer and transfer.log_file:
+            transfers.append(transfer)
+    return transfers
 
 def dispatch_action(job):
     if not check_script():

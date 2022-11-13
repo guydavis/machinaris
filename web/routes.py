@@ -197,9 +197,11 @@ def plotting_workers():
                 plotman.stop_archiving(plotter)
         return redirect(url_for('plotting_workers')) # Force a redirect to allow time to update status
     plotters = plotman.load_plotters()
+    transfers = plotman.load_archiving_summary()
     disk_usage = stats.load_recent_disk_usage('plotting')
     mem_usage = stats.load_recent_mem_usage('plotting')
-    return render_template('plotting/workers.html', plotters=plotters, disk_usage=disk_usage, mem_usage=mem_usage, global_config=gc)
+    return render_template('plotting/workers.html', plotters=plotters, transfers=transfers, 
+        disk_usage=disk_usage, mem_usage=mem_usage, global_config=gc, lang=get_lang(request))
 
 @app.route('/farming/plots')
 def farming_plots():

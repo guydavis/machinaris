@@ -396,3 +396,9 @@ def upgrade_stat_host_mem_pct():
 
 def downgrade_stat_host_mem_pct():
     pass
+
+def upgrade_transfers():
+    pass
+
+def downgrade_transfers():
+    pass

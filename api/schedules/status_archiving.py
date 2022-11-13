@@ -24,18 +24,26 @@ def update():
             payload = []
             for transfer in archiving_summary:
                 payload.append({
-                    "plot_id": transfer['plot_id'],
+                    "log_file": transfer.log_file,
+                    "plot_id": transfer.plot_id,
                     "hostname": hostname,
                     "blockchain": blockchain,
-                    "k": transfer['k'],
-                    "size": transfer['size'],
-                    "source": transfer['source'],
-                    "dest": transfer['dest'],
-                    "status": transfer['status']
+                    "k": transfer.k,
+                    "size": transfer.size,
+                    "source": transfer.source,
+                    "type": transfer.type,
+                    "dest": transfer.dest,
+                    "status": transfer.status,
+                    "rate": transfer.rate,
+                    "pct_complete": transfer.pct_complete,
+                    "size_complete": transfer.size_complete,
+                    "start_date": transfer.start_date,
+                    "end_date": transfer.end_date,
+                    "duration": transfer.duration
                 })
             if len(payload) > 0:
                 utils.send_post('/transfers/{0}/{1}'.format(hostname, blockchain), payload, debug=False)
             else:
                 utils.send_delete('/transfers/{0}/{1}'.format(hostname, blockchain), debug=False)
         except Exception as ex:
-            app.logger.info("Failed to load and send plotting jobs because {0}".format(str(ex)))
+            app.logger.info("Failed to load and send archiving transfers because {0}".format(str(ex)))
