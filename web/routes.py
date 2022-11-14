@@ -195,7 +195,7 @@ def plotting_transfers():
             plotter = worker.get_worker(hostname, blockchain)
             if request.form.get('service') == 'archiving':
                 plotman.stop_archiving(plotter)
-        return redirect(url_for('plotting_workers')) # Force a redirect to allow time to update status
+        return redirect(url_for('plotting_transfers')) # Force a redirect to allow time to update status
     plotters = plotman.load_plotters()
     transfers = plotman.load_archiving_summary()
     disk_usage = stats.load_current_disk_usage('plots')
