@@ -202,7 +202,7 @@ def plotting_transfers():
     farmers = chia.load_farmers()
     stats.set_disk_usage_per_farmer(farmers, disk_usage)
     return render_template('plotting/transfers.html', plotters=plotters, farmers=farmers, transfers=transfers, 
-        disk_usage=disk_usage, global_config=gc, lang=get_lang(request))
+        disk_usage=disk_usage, global_config=gc, lang=get_lang(request), reload_seconds=120)
 
 @app.route('/plotting/workers')
 def plotting_workers():
