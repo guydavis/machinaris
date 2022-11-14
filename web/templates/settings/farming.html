@@ -108,10 +108,10 @@
         endfor %}
             var unknown_target_addresses = [];
             for (target_address of target_addresses) {
-                if (hot_addresses.get(blockchain).includes(target_address)) {
+                if (hot_addresses.has(blockchain) && hot_addresses.get(blockchain).includes(target_address)) {
                     continue;
                 }
-                if (cold_addresses.get(blockchain).includes(target_address)) {
+                if (cold_addresses.has(blockchain) && cold_addresses.get(blockchain).includes(target_address)) {
                     continue;
                 }
                 unknown_target_addresses.push(target_address);
