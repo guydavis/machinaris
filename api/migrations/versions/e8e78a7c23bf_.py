@@ -435,3 +435,8 @@ def downgrade_stat_host_mem_pct():
     op.drop_table('stat_host_mem_pct')
     # ### end Alembic commands ###
 
+def upgrade_transfers():
+    pass
+
+def downgrade_transfers():
+    pass

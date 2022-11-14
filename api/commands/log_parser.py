@@ -130,7 +130,10 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         else:
             log_file = "/root/.chia/plotman/logs/plotman.log"
     elif log_type == "archiving":
-        log_file = "/root/.chia/plotman/logs/archiver.log"
+        if log_id:
+            log_file = "/root/.chia/plotman/logs/archiving/" + os.path.basename(log_id) 
+        else:
+            log_file = "/root/.chia/plotman/logs/archiver.log"
     elif log_type == "farming":
         log_file= get_farming_log_file(blockchain)
     elif log_type == "webui":
@@ -146,5 +149,24 @@ def get_log_lines(log_type, log_id=None, blockchain=None):
         return 'No log file found!'
     #app.logger.info("Log file found at {0}".format(log_file))
     ansi_escape = re.compile(r'\x1B(?:[@A-Z\\-_]|\[[0-9:;<=>?]*[ -/]*[@-~])')
+    if log_file.startswith("/root/.chia/plotman/logs/archiving/"):
+        return cleanup_archiving_log_lines(log_file)
+    # All other regular log files, return trailing log lines only
     proc = Popen(['tail', '-n', str(MAX_LOG_LINES), log_file], stdout=PIPE)
     return ansi_escape.sub('', proc.stdout.read().decode("utf-8"))
+
+def cleanup_archiving_log_lines(log_file):
+    archiving_log_content = []
+    # Must strip out the redundant progress status updates from rsync, keep only last
+    with open(log_file,'rb') as f:
+        for line in f.readlines():
+            if line.decode("utf-8").startswith('+ rsync'): # Discard + on start of rsyn line
+                archiving_log_content.append(line.decode("utf-8")[2:])
+            elif line.decode("utf-8").startswith('+') or line.decode("utf-8").startswith('echo'): # Discard echo lines from bash script
+                continue
+            elif re.findall('\r', line.decode("utf-8")): # The rsync progress bar line, each status split by \r
+                progress_updates = line.decode("utf-8").replace('\r', '\n').split('\n') # 2nd last is one to grab
+                archiving_log_content.append(progress_updates[-2] + '\n') # Add back a line break that was last above
+            elif len(line.decode("utf-8").strip()) > 0:
+                archiving_log_content.append(line.decode("utf-8"))
+    return '\n'.join(archiving_log_content)

@@ -4,8 +4,6 @@
 #
 
 MMX_BRANCH=$1
-# On 2022-11-08
-HASH=7d07e0b6d3e4fc0941fd6f33cdb637532fe7bead
 
 if [ -z ${MMX_BRANCH} ]; then
 	echo 'Skipping MMX install as not requested.'
@@ -22,6 +20,5 @@ else
 	git clone --branch ${MMX_BRANCH} --single-branch https://github.com/madMAx43v3r/mmx-node.git /mmx-node
 	cd /mmx-node
 	git submodule update --init --recursive 
-	git checkout $HASH
 	./make_release.sh
 fi

@@ -96,6 +96,9 @@
                 <a class="nav-link active" aria-current="page" href="{{ url_for('plotting_jobs') }}">{{_('Jobs')}}</a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('plotting_transfers') }}">{{_('Transfers')}}</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('plotting_workers') }}">{{_('Workers')}}</a>
             </li>
         </ul>
@@ -133,7 +136,7 @@
                                 <i class="fs-4 bi-dash-circle text-danger" title="{{_('Worker is offline.')}}"></i>
                                 {% elif worker.plotting_status == 'running' %}
                                 data-bs-toggle="modal" data-bs-target="#stopModal">
-                                <i class="fs-4 bi-pause-circle text-success" title="{{_('Stop Plotting')}}"></i>
+                                <i class="fs-4 bi-stop-circle text-success" title="{{_('Stop Plotting')}}"></i>
                                 {% else %}
                                 data-bs-toggle="modal" data-bs-target="#startModal">
                                 <i class="fs-4 bi-play-circle text-success" title="{{_('Start Plotting')}}"></i>

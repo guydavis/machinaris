@@ -18,10 +18,10 @@ from flask.helpers import make_response
 from flask_babel import _, lazy_gettext as _l
 from subprocess import Popen, TimeoutExpired, PIPE
 
-from common.models import plottings as pl, keys as k
+from common.models import plottings as pl, transfers as t, keys as k
 from common.models.plottings import PLOTTABLE_BLOCKCHAINS
 from web import app, db, utils
-from web.models.plotman import PlottingSummary
+from web.models.plotman import PlottingSummary, ArchivingSummary
 from . import worker as w
 from . import pools as p
 
@@ -53,6 +53,14 @@ def load_plotting_summary_by_blockchains(blockchains):
                 summary[blockchain] = summary['chia']
     #app.logger.info(summary)
     return summary
+
+def load_archiving_summary(hostname=None):
+    query = db.session.query(t.Transfer)
+    if hostname:
+        transfers = query.filter(t.Transfer.hostname==hostname)
+    else:
+        transfers = query.all()
+    return ArchivingSummary(transfers)
 
 def load_plotters():
     return w.load_worker_summary().plotters()

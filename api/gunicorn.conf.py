@@ -17,7 +17,7 @@ def on_starting(server):
         status_plotnfts, status_pools, status_partials, status_drives, \
         stats_blocks, stats_balances, stats_disk, stats_farm, nft_recover, plots_check, \
         log_rotate, restart_stuck_farmer, geolocate_peers, \
-        stats_effort, status_warnings
+        stats_effort, status_warnings, status_archiving
     from common.config import globals
     from common.models import pools, plottings
 
@@ -60,7 +60,8 @@ def on_starting(server):
 
     # Status for plotters
     if globals.plotting_enabled():
-        scheduler.add_job(func=status_plotting.update, name="plottings", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
+        scheduler.add_job(func=status_plotting.update, name="status_plottings", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
+        scheduler.add_job(func=status_archiving.update, name="status_archiving", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
           
     # Status for fullnodes, all different forks
     if utils.is_fullnode():
@@ -98,7 +99,7 @@ def on_starting(server):
     #scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=websvcs.get_chain_statuses, name="get_chain_statuses", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=10) # Test immediately
-    #scheduler.add_job(func=status_pools.update, name="pools", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=status_archiving.update, name="archiving", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=periodically_sync_wallet.execute, name="periodically_sync_wallet", trigger='interval', seconds=60) # Test immediately
     #scheduler.add_job(func=status_warnings.collect, name="status_warnings", trigger='interval', seconds=60) # Test immediately
     #scheduler.add_job(func=nft_recover.execute, name="status_nft_recover", trigger='interval', seconds=60)

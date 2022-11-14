@@ -19,6 +19,7 @@ from . import plottings
 from . import pools
 from . import rewards
 from . import transactions
+from . import transfers
 from . import wallets
 from . import warnings
 from . import workers
@@ -48,6 +49,7 @@ MODULES = (
     pools,
     rewards,
     transactions,
+    transfers,
     wallets,
     warnings,
     workers,

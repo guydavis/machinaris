@@ -11,7 +11,7 @@ from api.extensions.api import Blueprint
 
 from api.commands import chiadog_cli, chia_cli, plotman_cli, pools_cli
 from api.schedules import status_worker, status_plotting, status_farm, \
-    status_alerts, status_connections, status_pools, status_plotnfts
+    status_alerts, status_connections, status_pools, status_plotnfts, status_archiving
 
 blp = Blueprint(
     'Action',
@@ -47,8 +47,10 @@ class Actions(MethodView):
             # Now trigger updates after a delay
             time.sleep(17)
             status_worker.update()
-            if service in ["plotting", "archiving"]:
+            if service == "plotting":
                 status_plotting.update()
+            elif service == "archiving":
+                status_archiving.update()
             elif service == "farming":
                 status_farm.update()
             elif service == "networking":
