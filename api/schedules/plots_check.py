@@ -36,9 +36,12 @@ def have_recent_plot_check_log(plot_check_log):
 
 def open_status_json():
     status = {}
-    if os.path.exists(STATUS_FILE): 
-        with open(STATUS_FILE, 'r+') as fp:
-            status = json.load(fp)
+    try:
+        if os.path.exists(STATUS_FILE): 
+            with open(STATUS_FILE, 'r') as fp:
+                status = json.load(fp)
+    except Exception as ex:
+        app.logger.error("Failed to read JSON from {0} because {1}".format(STATUS_FILE, str(ex)))
     return status
 
 def write_status_json(status):
