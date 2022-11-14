@@ -7,14 +7,14 @@ All notable changes to this project will be documented in this file. The format 
  - List recent plot archiving (local and remote) on Plotting | Workers page.
  - [Moon](https://github.com/MOONCOINTEAM/moon-blockchain) at 1.6.0
 ### Changed
- - Fixed broken 'Generate Key' action for Chia 1.6.1 on Setup page. Thanks @SilverFolfy
+ - Fixed broken 'Generate/Import Key' actions for Chia 1.6.1 on Setup page. Thanks @SilverFolfy
 ### Updated
  - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v2.0.1) to v2.0.1
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.6.1) to v1.6.1
  - [Chiadog](https://github.com/guydavis/chiadog/releases/tag/v0.7.5) to v0.7.5
  - [Flax](https://github.com/Flax-Network/flax-blockchain/releases/tag/0.1.11) to v0.1.11
 ### Known Issues
- - 
+ - Incorrect reward recovery calculations for some blockchains.  Please use AllTheBlocks site if this affects you.
 
 ## [0.8.5] - 2022-11-03
 ### Added
