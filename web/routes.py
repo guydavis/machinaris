@@ -179,8 +179,8 @@ def plotting_jobs():
     return render_template('plotting/jobs.html', reload_seconds=120,  plotting=plotting, 
         plotters=plotters, job_stats=job_stats, global_config=gc, lang=get_lang(request))
 
-@app.route('/plotting/workers', methods=['GET', 'POST'])
-def plotting_workers():
+@app.route('/plotting/transfers', methods=['GET', 'POST'])
+def plotting_transfers():
     gc = globals.load()
     if request.method == 'POST':
         if request.form.get('action') == 'start':
@@ -198,9 +198,19 @@ def plotting_workers():
         return redirect(url_for('plotting_workers')) # Force a redirect to allow time to update status
     plotters = plotman.load_plotters()
     transfers = plotman.load_archiving_summary()
+    disk_usage = stats.load_current_disk_usage('plots')
+    farmers = chia.load_farmers()
+    stats.set_disk_usage_per_farmer(farmers, disk_usage)
+    return render_template('plotting/transfers.html', plotters=plotters, farmers=farmers, transfers=transfers, 
+        disk_usage=disk_usage, global_config=gc, lang=get_lang(request))
+
+@app.route('/plotting/workers')
+def plotting_workers():
+    gc = globals.load()
+    plotters = plotman.load_plotters()
     disk_usage = stats.load_recent_disk_usage('plotting')
     mem_usage = stats.load_recent_mem_usage('plotting')
-    return render_template('plotting/workers.html', plotters=plotters, transfers=transfers, 
+    return render_template('plotting/workers.html', plotters=plotters, 
         disk_usage=disk_usage, mem_usage=mem_usage, global_config=gc, lang=get_lang(request))
 
 @app.route('/farming/plots')

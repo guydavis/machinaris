@@ -95,12 +95,64 @@
                 <a class="nav-link" href="{{ url_for('plotting_jobs') }}">{{_('Jobs')}}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('plotting_transfers') }}">{{_('Transfers')}}</a>
+                <a class="nav-link active" aria-current="page" href="{{ url_for('plotting_transfers') }}">{{_('Transfers')}}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{{ url_for('plotting_workers') }}">{{_('Workers')}}</a>
+                <a class="nav-link" href="{{ url_for('plotting_workers') }}">{{_('Workers')}}</a>
             </li>
         </ul>
+        <form method="POST" id="plotman-form" style="padding-bottom: 10px;">
+            <input type="hidden" id="hostname" name="hostname" />
+            <input type="hidden" id="blockchain" name="blockchain" />
+            <fieldset>
+                <b style="vertical-align: bottom; font-weight: 500">{{_('Archiving')}}: </b>
+                {% for plotter in plotters %}
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false" id="{{ plotter.hostname }}_btn">
+                        {{ plotter.displayname }}:
+                        {% if plotter.archiving_status().lower() == 'disabled' %}
+                            {{_('Disabled')}}
+                        {% elif plotter.archiving_status().lower() == 'running' %}
+                            {{_('Running')}}
+                        {% elif plotter.archiving_status().lower() == 'stopped' %}
+                            {{_('Stopped')}}
+                        {% elif plotter.archiving_status().lower() == 'offline' %}
+                            {{_('Offline')}}
+                        {% else %}
+                            {{plotter.archiving_status()}}
+                        {% endif %}
+                    </button>
+                    <ul class="dropdown-menu bg-dark btn-outline-success">
+                        {% for worker in plotter.workers %}
+                        <li>
+                            <a class="dropdown-item text-white text-decoration-none" 
+                                data-bs-hostname="{{ plotter.hostname }}" 
+                                data-bs-blockchain="{{ worker.blockchain }}" 
+                                href="#" {% 
+                                if worker.archiving_status == 'disabled' %}
+                                data-bs-toggle="modal" data-bs-target="#disabledModal">
+                                <i class="fs-4 bi-dash-circle text-warning" title="{{_('Archiving is disabled.  See Settings | Plotting page.')}}"></i>
+                                {% elif worker.archiving_status == 'offline' %}
+                                data-bs-toggle="modal" data-bs-target="#offlineModal">
+                                <i class="fs-4 bi-dash-circle text-danger" title="{{_('Worker is offline.')}}"></i>
+                                {% elif worker.archiving_status == 'running' %}
+                                data-bs-toggle="modal" data-bs-target="#stopModal">
+                                <i class="fs-4 bi-stop-circle text-success" title="{{_('Stop Archiving')}}"></i>
+                                {% else %}
+                                data-bs-toggle="modal" data-bs-target="#startModal">
+                                <i class="fs-4 bi-play-circle text-success" title="{{_('Start Archiving')}}"></i>
+                                {% endif %}
+                                &nbsp;
+                                <span class="align-text-bottom">{{ worker.blockchain }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </fieldset>
+        </form>
     </div>
 </nav>
 
@@ -120,36 +172,54 @@
         {% endwith %}
     </div>
 
+    <form method="POST" id="archiving-form">
+        <div class="p-3 mb-4 bg-light border rounded-3">
+            <div class="table-responsive">
+                <table id="data" class="table table-dark">
+                    <thead>
+                        <tr>
+                            {% for column in transfers.columns %}
+                            <th scope="col" class="text-success">{{ column }}</th>
+                            {% endfor %}
+                            <th scope="col" class="text-success"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in transfers.rows %}
+                        <tr>
+                            {% for column in transfers.columns %}
+                                <td>{{ row[column] }}</td>
+                            {% endfor %}
+                            <td style="padding:0px">
+                                <!-- Careful, VS Code likes to wrap next line and break it. -->
+                                <a href="#" title="View Transfer Log" onclick='ArchivingLogs("archiving","{{ row['hostname'] }}","{{ row['fork'] }}","{{ row['plot_id'] }}","{{ row['log_file'] }}");return false;'>
+                                    <i class="fs-4 bi-file-text"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+
     <div class="p-1 mb-4 bg-light border rounded-3">
-        {% for plotter in plotters %}
+        {% for farmer in farmers %}
         <div class="row">
             <div class="col" style="margin-top:5px; margin-bottom:5px;">
                 <div class="h-100 p-2 text-white">
-                    <h6 class="display-6 text-center">{{ plotter.displayname }}</h6>
+                    <h6 class="display-6 text-center">{{ farmer.displayname }}</h6>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-12" style="margin-top:5px; margin-bottom:5px;">
-                {% if mem_usage[plotter.hostname] %}
-                <canvas id="mem_{{plotter.hostname}}"></canvas>
+                {% if disk_usage[farmer.hostname] %}
+                <canvas id="disk_{{farmer.hostname}}"></canvas>
                 {% else %}
                 <p>
-                    No Docker container memory usage recorded recently for {{plotter.hostname}}. 
-                    Also ensure the worker is reporting into the controller on the Workers page.
-                </p>
-                {% endif %}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12" style="margin-top:5px; margin-bottom:5px;">
-                {% if disk_usage[plotter.hostname] %}
-                <canvas id="disk_{{plotter.hostname}}"></canvas>
-                {% else %}
-                <p>
-                    No plotting disk stats recorded recently for {{plotter.hostname}}. 
-                    Please check that valid plotting paths (aka "tmp") are set 
-                    in the worker's Plotman config on the Settings | Plotting page. 
+                    No plot disk stats recorded recently for {{farmer.hostname}}. 
                     Also ensure the worker is reporting into the controller on the
                     Workers page.
                 </p>
@@ -179,24 +249,36 @@
         function color(index) {
             return COLORS[index % COLORS.length];
         }
-    {% for plotter in plotters %}
-    {% if disk_usage[plotter.hostname] %}
-        var ctx = document.getElementById('disk_{{plotter.hostname}}');
+    {% for farmer in farmers %}
+    {% if disk_usage[farmer.hostname] %}
+        var ctx = document.getElementById('disk_{{farmer.hostname}}');
         var myChart = new Chart(ctx, {
-            type: 'line',
+            type: 'bar',
             data: {
-                labels: {{ disk_usage[plotter.hostname].dates | safe }},
-                datasets: [
-                {% for path in disk_usage[plotter.hostname].paths %}
-                    {
-                        label: "{{path}}",
-                        data: {{ disk_usage[plotter.hostname][path] | safe }},
-                        backgroundColor: color({{ loop.index - 1 }}),
+                labels: {{ disk_usage[farmer.hostname].paths | safe }},
+                datasets: [{
+                    label: "{{_('Disk Space Used (TB)')}}",
+                    data: {{ disk_usage[farmer.hostname].used | safe }},
+                    datalabels: { align: 'end', anchor: 'end', 
+                        formatter: function(value, context) {
+                            return Math.round(context.chart.data.datasets[0].data[context.dataIndex] / 
+                                (context.chart.data.datasets[0].data[context.dataIndex] + 
+                                context.chart.data.datasets[1].data[context.dataIndex]) * 100) + "% {{_('full')}}";
+                        }
                     },
-                {% endfor %}
-                ],
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                },
+                {
+                    label: "{{_('Disk Space Free (TB)')}}",
+                    data: {{ disk_usage[farmer.hostname].free | safe }},
+                    datalabels: { labels: { title: null } },
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                }],
             },
             borderWidth: 1,
+            plugins: [ChartDataLabels],
             options: {
                 plugins: {  
                     legend: {
@@ -208,20 +290,10 @@
                         }
                     }
                 },
+                responsive: true,
                 scales: {
                     x: {
-                        type: 'time',
-                        time: {
-                            tooltipFormat: 'DD T'
-                        },
-                        title: {
-                            display: true,
-                            text: "{{_('Time - Last 24 Hours')}}",
-                            color: "#c7c7c7",  
-                            font: {
-                                size: 18 
-                            }
-                        },
+                        stacked: true,
                         ticks: {
                           color: "#c7c7c7",
                           font: {
@@ -230,80 +302,11 @@
                         },
                     },
                     y: {
+                        stacked: true,
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: "{{_('Plotting Disk Usage (GB)')}}",
-                            color: "#c7c7c7",  
-                            font: {
-                                size: 18 
-                            }
-                        },
-                        ticks: {
-                          color: "#c7c7c7",
-                          font: {
-                            size: 16 
-                          }  
-                        },
-                    }
-                }
-            }
-        });
-    {% endif %}
-    {% if mem_usage[plotter.hostname] %}
-        var ctx = document.getElementById('mem_{{plotter.hostname}}');
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: {{ mem_usage[plotter.hostname].dates | safe }},
-                datasets: [
-                {% for blockchain in mem_usage[plotter.hostname].blockchains|sort %}
-                    {
-                        label: "{{blockchain}}",
-                        data: {{ mem_usage[plotter.hostname][blockchain] | safe }},
-                        backgroundColor: color({{ loop.index - 1 }}),
-                    },
-                {% endfor %}
-                ],
-            },
-            borderWidth: 1,
-            options: {
-                plugins: {  
-                    legend: {
-                        labels: {
-                            color: "#c7c7c7",  
-                            font: {
-                                size: 18 
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            tooltipFormat: 'DD T'
-                        },
-                        title: {
-                            display: true,
-                            text: "{{_('Time - Last 24 Hours')}}",
-                            color: "#c7c7c7",  
-                            font: {
-                                size: 18 
-                            }
-                        },
-                        ticks: {
-                          color: "#c7c7c7",
-                          font: {
-                            size: 16 
-                          }  
-                        },
-                    },
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: "{{_('Container Memory Usage (GiB)')}}",
+                            text: "{{_('Plot Disk Used')}} (TB)",
                             color: "#c7c7c7",  
                             font: {
                                 size: 18 
