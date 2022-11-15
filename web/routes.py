@@ -462,6 +462,7 @@ def settings_alerts():
         selected_worker = worker.get_worker(selected_worker_hostname, selected_blockchain)
         if request.form.get('action') == 'test':
             chiadog.send_test_alert(selected_worker)
+            return redirect(url_for('alerts')) # Redirct to page showing the test alert
         else: # Save config
             chiadog.save_config(selected_worker, selected_blockchain, request.form.get("config"))
     farmers = chiadog.load_farmers()

@@ -84,4 +84,4 @@ def send_test_alert(farmer):
         flash(_('Failed to contact farmer to send test alert.  Please ensure the worker is running and check it\'s logs.'), 'danger')
         flash(str(ex), 'warning')
     else:
-        flash(_("Test alert has been sent.  Please check notification target(s) for test success."), 'success')
+        flash(_("Test alert has been sent. Please check your configured notification target(s) for receipt of the test alert."), 'success')
