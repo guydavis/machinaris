@@ -5,9 +5,11 @@ All notable changes to this project will be documented in this file. The format 
 ## [Unreleased]
 ### Added
  - List recent plot archiving (local and remote) on Plotting | Workers page.
+ - Settings | Alerts page: new 'Send Test Alert' button to validate Chiadog configs.
  - [Moon](https://github.com/MOONCOINTEAM/moon-blockchain) at 1.6.0
 ### Changed
  - Fixed broken 'Generate/Import Key' actions for Chia 1.6.1 on Setup page. Thanks @SilverFolfy
+ - Missing plots on Farming page when a status.json file was corrupted. Thanks @Yurly
 ### Updated
  - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v2.0.1) to v2.0.1
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.6.1) to v1.6.1

@@ -2,6 +2,34 @@
 
 {% block content %}
 
+<div class="modal fade" id="testModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="testModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3">
+        <div class="modal-content bg-dark">
+          <form method="POST" id="test-form">
+            <input type="hidden" id="hostname_field" name="worker" value="" />
+            <input type="hidden" id="blockchain_field" name="blockchain" value="" />
+            <input type="hidden" name="action" value="test"/>
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="testModalLabel">{{_('Send Test Alert')}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+              {% autoescape false %}
+              {{_('This will send a test alert using your %(wikilink_open)slast saved settings%(wikilink_close)s for', 
+                wikilink_open='<a href="https://github.com/guydavis/machinaris/wiki/ChiaDog#configuration" class="text-white" target="_blank">', wikilink_close='</a>')}}
+              <span id="blockchain_label"></span> on <span id="hostname_label"></span>.
+                {{_('Please save before testing. Continue?')}}
+                {% endautoescape %} 
+            </div>
+            <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelTest">{{_('Cancel')}}</button>
+                <button type="button" class="btn btn-outline-success" id="btnConfirmTest">{{_('Send')}}</button>
+            </div>
+          </form>
+        </div>
+    </div>
+</div>
+
 <div class="position-relative">
     <div class="position-absolute top-0 end-0" style="z-index: 2000;">
         <a href="https://github.com/guydavis/machinaris/wiki/Chiadog" target="_blank">
@@ -11,6 +39,8 @@
 </div>
 
 <header class="pb-3 mb-4 border-bottom">
+    <button type="button" class="btn btn-success fw-bold" style="float:right; margin-right:150px" data-bs-toggle="modal" 
+    data-bs-target="#testModal">{{_('Send Test Alert')}}</button>
     <span class="fs-4">{{_('Alerts')}} - config.yaml </span>
 </header>
 
@@ -86,6 +116,17 @@
             });
             //Call the function when the page loads
             load_config("{{selected_worker}}", "{{selected_blockchain}}");
+
+            var testModal = document.getElementById('testModal')
+            testModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget
+                var blockchainField = document.getElementById('blockchain_field')
+                blockchainField.value = $("#blockchain").val()
+                $('#blockchain_label').text($("#blockchain option:selected").text())
+                var workerField = document.getElementById('hostname_field')
+                workerField.value = $("#worker").val()
+                $('#hostname_label').text($("#worker option:selected").text())
+            })
         });
 
         function update_blockchain_options(hostname) {
@@ -119,6 +160,14 @@
             worker = $("#worker").val()
             blockchain = $("#blockchain").val()
             window.location.href = '/settings/config/' + worker + '_' + blockchain + 'dog_config.yaml?type=alerts&worker=' + worker + "&blockchain=" + blockchain
+        });
+        $("#btnConfirmTest").click(function () {
+            $("#btnCancelTest").prop("disabled", true);
+            $(this).prop("disabled", true);
+            $(this).html(
+                `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sending...`
+            );
+            $("#test-form").submit();
         });
     </script>
     {% endblock %}

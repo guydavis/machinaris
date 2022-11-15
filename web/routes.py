@@ -459,7 +459,11 @@ def settings_alerts():
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
         selected_blockchain = request.form.get('blockchain')
-        chiadog.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
+        selected_worker = worker.get_worker(selected_worker_hostname, selected_blockchain)
+        if request.form.get('action') == 'test':
+            chiadog.send_test_alert(selected_worker)
+        else: # Save config
+            chiadog.save_config(selected_worker, selected_blockchain, request.form.get("config"))
     farmers = chiadog.load_farmers()
     selected_worker = find_selected_worker(farmers, selected_worker_hostname, selected_blockchain)
     if not selected_blockchain:

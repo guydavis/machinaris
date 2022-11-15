@@ -3,8 +3,11 @@
 #
 
 import datetime
+import http
+import json
 import os
 import psutil
+import requests
 import signal
 import shutil
 import sqlite3
@@ -58,6 +61,8 @@ def dispatch_action(job):
         stop_chiadog()
         time.sleep(5)
         start_chiadog()
+    elif action == "test":
+        test_chiadog()
     else:
         raise Exception("Unsupported action {0} for monitoring.".format(action))
 
@@ -90,3 +95,26 @@ def stop_chiadog():
         except:
             app.logger.info('Failed to stop monitoring!')
             app.logger.info(traceback.format_exc())
+
+# If enhanced Chiadog is running within container, then its listening on http://localhost:8925
+# Example: curl -X POST http://localhost:8925 -H 'Content-Type: application/json' -d '{"type":"user", "service":"farmer", "priority":"high", "message":"Hello World"}'
+def test_chiadog(debug=False):
+    try:
+        headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+        if debug:
+            http.client.HTTPConnection.debuglevel = 1
+        mode = 'full_node'
+        if 'mode' in os.environ and 'harvester' in os.environ['mode']:
+            mode = 'harvester'
+        response = requests.post("http://localhost:8925", headers = headers, data = json.dumps(
+            {
+                "type": "user", 
+                "service": mode, 
+                "priority": "high", 
+                "message": "Test alert from Machinaris!"
+            }
+        ))
+    except Exception as ex:
+        app.logger.info("Failed to notify Chiadog with test alert.")
+    finally:
+        http.client.HTTPConnection.debuglevel = 0
