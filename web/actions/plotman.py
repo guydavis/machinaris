@@ -272,3 +272,13 @@ def load_plotting_keys(blockchain):
     if not pool_contract_address:
         pool_contract_address = None if os.environ['pool_contract_address'] == 'null' else os.environ['pool_contract_address']
     return [farmer_pk, pool_pk, pool_contract_address]
+
+def load_replotting_settings():
+    # TODO Load from file with real settings, here are some test defaults
+    settings = {}
+    for blockchain in PLOTTABLE_BLOCKCHAINS:
+        if blockchain == 'chia':
+            settings[blockchain] = { "enabled": True, "delete_solo": True, "delete_before": "2021-07-01", "delete_ksizes": [ 29, 30], "free_ksize": 32 }
+        else:
+            settings[blockchain] = { "enabled": False, "delete_solo": False, }
+    return settings

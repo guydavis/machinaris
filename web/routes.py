@@ -224,8 +224,10 @@ def farming_plots():
     gc = globals.load()
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()
-    return render_template('farming/plots.html', farmers=farmers, plots=plots, global_config=gc, 
-        lang=get_lang(request))
+    ksizes = [29, 30, 31, 32, 33, 34]
+    settings = { 'replotting': plotman.load_replotting_settings() }
+    return render_template('farming/plots.html', farmers=farmers, plots=plots, 
+        settings=settings, ksizes=ksizes, global_config=gc, lang=get_lang(request))
 
 @app.route('/farming/data')
 def farming_data():

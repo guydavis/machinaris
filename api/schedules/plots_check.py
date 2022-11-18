@@ -185,7 +185,7 @@ def request_check(plot, workers):
     return [None, None, None]
 
 def execute():
-    if 'plots_check_analyze_skip' in os.environ:
+    if 'plots_check_analyze_skip' in os.environ and os.environ['plots_check_analyze_skip'].lower() == 'true':
         app.logger.info("Skipping plots check and analyze as environment variable 'plots_check_analyze_skip' is present.")
         return
     with app.app_context():

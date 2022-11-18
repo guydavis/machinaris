@@ -37,7 +37,17 @@
         <i class="fs-4 bi-question-circle"></i>
       </a>
     </div>
-  </div>
+</div>
+
+<div class="position-relative">
+    <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -3px;">
+        <a href="#" title="{{_('Settings')}}" data-bs-toggle="modal" data-bs-target="#settingsModal" target="_blank"><i class="fs-4 bi-gear"></i></a>
+        &nbsp;
+        <a href="https://github.com/guydavis/machinaris/wiki/Chia" target="_blank">
+            <i class="fs-4 bi-question-circle"></i>
+        </a>
+    </div>
+</div>
 
 <style>
     a.active.nav-link {
@@ -59,6 +69,128 @@
     }
 </style>
 
+<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3">
+      <div class="modal-content bg-dark">
+        <div class="modal-header bg-dark">
+          <h5 class="modal-title" id="settingsModalLabel">{{_('Settings')}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-dark">
+          <form method="POST" id="settings-form">
+            <div class="mb-3">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <label for="replot_blockchain_field" class="col-form-label">{{_('Blockchain')}}:</label> 
+                        <select type="text" class="form-control" id="replot_blockchain_field" name="replot_blockchain"
+                            onchange="ToggleBlockchainReplottingSettings(this); return false;">
+                        {% for blockchain in settings.replotting.keys() %}
+                            <option value="{{blockchain}}">{{blockchain|capitalize}}</option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    {% for blockchain in settings.replotting.keys() %}
+                    <div class="replotting_{{blockchain}} col" {% if not loop.first %} style="display:none"{%endif%}>
+                        <label class="col-form-label">{{_('Replotting')}}:</label> 
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <input type="radio" id="replotting_{{blockchain}}_enabled" name="replotting_{{blockchain}}" value="true"
+                                {% if not settings.replotting[blockchain].enabled %}checked="checked"{% endif %}>
+                                <label for="replotting_{{blockchain}}_enabled" class="col-form-label">{{_('Disabled')}}</label>
+                            </div>
+                            <div class="col">
+                                <input type="radio" id="replotting_{{blockchain}}_disabled" name="replotting_{{blockchain}}" value="false"
+                                {% if settings.replotting[blockchain].enabled %}checked="checked"{% endif %}>
+                                <label for="replotting_{{blockchain}}_enabled" class="col-form-label">{{_('Enabled')}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <br/>
+                {% for blockchain in settings.replotting.keys() %}
+                <div class="replotting_{{blockchain}} row align-items-center" {% if not loop.first %} style="display:none"{%endif%}>
+                    <label class="col-form-label">{{_('Free up space for new plots of k-size')}}:</label>
+                    {% for ksize in ksizes %}
+                    <div class="col">
+                        <input type="radio" id="replotting_{{blockchain}}_free_k{{ksize}}" name="replotting_{{blockchain}}_free_ksize"
+                          {% if ksize == settings.replotting[blockchain].free_ksize %} checked="checked" {% endif %} value='{{ksize}}' />
+                        <label for="replotting_{{blockchain}}_free_k{{ksize}}" class="col-form-label">k{{ksize}}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="replotting_{{blockchain}} row align-items-center" {% if not loop.first %} style="padding-top:10px; display:none"{%endif%}>
+                    <label class="col-form-label">{{_('Criteria for selecting plots to delete')}}:</label>
+                    <div class="col">
+                        <input type="checkbox" id="replotting_{{blockchain}}_delete_solo" name="replotting_{{blockchain}}_delete_solo"
+                          {% if settings.replotting[blockchain].delete_solo %} checked="checked" {% endif %} />
+                        <label for="replotting_{{blockchain}}_delete_solo" class="col-form-label">{{_('Delete Solo Plots - Keep Portable Plots')}}</label>
+                    </div>
+                </div>
+                <div class="replotting_{{blockchain}} row align-items-start" {% if not loop.first %} style="display:none"{%endif%}>
+                    <div class="col">
+                        <input type="checkbox" id="replotting_{{blockchain}}_delete_before" name="replotting_{{blockchain}}_delete_before"
+                          {% if settings.replotting[blockchain].delete_before %} checked="checked" {% endif %} />
+                        <label for="replotting_{{blockchain}}_delete_before" class="col-form-label">{{_('Delete Plots Older Than')}}:</label>
+                    </div>
+                    <div class="col">
+                        <input class="form-control" id="replotting_{{blockchain}}_delete_before_date" name="replotting_{{blockchain}}_delete_before_date" type="date">
+                    </div>
+                </div>
+                <div class="replotting_{{blockchain}} row align-items-center" {% if not loop.first %} style="display:none"{%endif%}>
+                    <div class="col">
+                        <input type="checkbox" id="replotting_{{blockchain}}_delete_ksizes" name="replotting_{{blockchain}}_delete_ksizes"
+                          {% if settings.replotting[blockchain].delete_ksizes %} checked="checked" {% endif %} />
+                        <label for="replotting_{{blockchain}}_delete_ksizes" class="col-form-label">{{_('Delete K-Sizes')}}:</label>
+                        &nbsp;&nbsp;
+                        {% for ksize in ksizes %}
+                        <input type="checkbox" id="replotting_{{blockchain}}_free_k{{ksize}}" name="replotting_{{blockchain}}_delete_ksizes"
+                        {% if ksize in settings.replotting[blockchain].delete_ksizes %} checked="checked" {% endif %} />
+                        <label for="replotting_{{blockchain}}_free_k{{ksize}}" class="col-form-label">k{{ksize}}</label>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+                <br/>
+                <p>{{_('When enabled, this action will repeatedly DELETE a few selected plots from each folder on all farmers and harvesters, freeing space for new plots.  Are you sure?')}}</p>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancelSettings" data-bs-dismiss="modal">{{_('Cancel')}}</button>
+          <button type="button" class="btn btn-outline-success" id="btnSaveSettings">{{_('Save')}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="modal fade" id="walletModal" tabindex="-1" aria-labelledby="walletModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3 modal-lg">
+      <div class="modal-content bg-dark">
+        <div class="modal-header bg-dark">
+          <h5 class="modal-title" id="walletModalLabel">{{_('Wallet Settings')}}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-dark">
+          <form method="POST" id="wallet-form">
+            <input type="hidden" id="blockchain_field" name="blockchain" value="" />
+            <div class="mb-3">
+              <a style='float:right' href="https://github.com/guydavis/machinaris/wiki/Wallets" target="_blank">
+                  <i class="fs-4 bi-question-circle"></i>
+              </a>
+              <label for="cold_wallet_address" class="col-form-label">{{_('Cold Wallet Address:')}}</label>
+              <input type="text" class="form-control" id="cold_wallet_address_field" name="cold_wallet_address"/>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="btnCancelWallet" data-bs-dismiss="modal">{{_('Cancel')}}</button>
+          <button type="button" class="btn btn-outline-success" id="btnSave">{{_('Save')}}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <nav class="navbar navbar-dark" style="padding-bottom: 0px;">
     <div class="container-fluid">
         <ul class="nav nav-tabs bg-dark">
@@ -75,7 +207,7 @@
         <form class="d-flex" method="POST" style="padding-bottom:5px" id="main-form">
             <fieldset>
                     {% for farmer in farmers %}
-                    <div class="btn-group">
+                    <div class="btn-group" {% if loop.last %}style="padding-right:50px"{% endif %} >
                         <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
                             aria-expanded="false" id="{{ farmer.hostname }}_btn">
                             {{ farmer.displayname }}: {{farmer.farming_status()}}
@@ -141,6 +273,15 @@
 
     {% block scripts %}
     <script>
+        function ToggleBlockchainReplottingSettings(sel) {
+            {% for blockchain in settings.replotting.keys() %}
+            if (sel.value == '{{blockchain}}') {
+                $('.replotting_{{blockchain}}').show();
+            } else {
+                $('.replotting_{{blockchain}}').hide();
+            }
+            {% endfor %}
+        }
         function ViewLogs(hostname, blockchain) {
             var d = new Date();
             var height = 600;
@@ -170,6 +311,14 @@
             };
         }
         $(document).ready(function () {
+            $("#btnSaveSettings").click(function () {
+                $("#btnCancelSettings").prop("disabled", true);
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...`
+                );
+                $("#settings-form").submit();
+            });
             $('#data').DataTable({
                 "stateSave": true,
                 "pageLength": 25,

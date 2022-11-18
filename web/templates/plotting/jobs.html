@@ -108,7 +108,7 @@
             <fieldset>
                 <b style="vertical-align: bottom; font-weight: 500">{{_('Plotting')}}: </b>
                 {% for plotter in plotters %}
-                <div class="btn-group">
+                <div class="btn-group" {% if loop.last %}style="padding-right:25px"{% endif %}>
                     <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false" id="{{ plotter.hostname }}_btn">
                         {{ plotter.displayname }}: 
