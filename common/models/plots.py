@@ -5,6 +5,9 @@ from sqlalchemy.sql import func
 
 from common.extensions.database import db
 
+# Currently supported ksizes for replot free space
+KSIZES = [29, 30, 31, 32, 33, 34] 
+
 class Plot(db.Model):
     __bind_key__ = 'plots'
     __tablename__ = "plots"

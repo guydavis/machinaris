@@ -6,6 +6,7 @@ import asyncio
 import datetime
 import json
 import os
+import pathlib
 import pexpect
 import psutil
 import re
@@ -23,6 +24,8 @@ from subprocess import Popen, TimeoutExpired, PIPE, STDOUT
 from os import path
 
 from common.config import globals
+from common.models import plottings as pl
+from common.utils import converters
 from api import app
 from api.models import chia
 from api.commands import websvcs
@@ -35,6 +38,9 @@ WALLET_SETTINGS_FILE = '/root/.chia/machinaris/config/wallet_settings.json'
 
 # Blockchains which dropped compatibility with `show -c` commands around v1.6
 BLOCKCHAINS_USING_PEER_CMD = ['cactus', 'chia', 'littlelambocoin', 'maize']
+
+# For safety, do not delete any plot if more than this much free space exists on disk
+MAX_FREE_SPACE_ON_DISK_DURING_REPLOTTING_GIBS = 500
 
 def load_farm_summary(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
@@ -279,6 +285,8 @@ def dispatch_action(job):
     elif service == 'farming':
         if action == 'restart':
             restart_farmer(blockchain)
+        elif action == 'delete_for_replotting':
+            delete_plots(blockchain, job['plot_files'])
     elif service == 'wallet':
         if action == 'start':
             start_wallet(blockchain)
@@ -307,7 +315,7 @@ def add_connections(connections, blockchain):
             except TimeoutExpired:
                 proc.kill()
                 proc.communicate()
-                app.logger.error("For add conneciton, the process timeout expired!")
+                app.logger.error("For add connection, the process timeout expired!")
         except Exception as ex:
             app.logger.error(traceback.format_exc())
             app.logger.error('Invalid connection "{0}" provided.  Must be HOST:PORT.'.format(connection))
@@ -350,3 +358,46 @@ def save_wallet_settings(settings, blockchain):
     except Exception as ex:
         app.logger.debug(traceback.format_exc())
         raise Exception('Failed to store {0} wallet settings to {1}.'.format(blockchain, WALLET_SETTINGS_FILE) + '\n' + str(ex))
+
+def get_free_bytes(dir):  # Unused as shutil gives this more easily
+    parent = pathlib.Path(dir).parent.absolute()
+    proc = Popen("df | grep {0}$ | tr -s ' ' | cut -d ' ' -f 4".format(dir), stdout=PIPE, stderr=PIPE, shell=True)
+    try:
+        outs, errs = proc.communicate(timeout=60)
+        if errs:
+            app.logger.error(errs.decode('utf-8'))
+            return 0
+    except TimeoutExpired:
+        proc.kill()
+        proc.communicate()
+        app.logger.error("Failed to find free disk space. The process timeout expired!")
+        return 0
+    try:
+        size = outs.decode('utf-8')
+        if size.strip():
+            return int(size) # Found a free size in bytes so use that
+        elif parent.name != '/':
+            app.logger.info("Attempting to find free space at {0} from parent {1}".format(dir, parent))
+            return get_free_bytes(parent)
+    except Exception as ex:
+        app.logger.error("Failed to determine free space for {0} because {1}".format(dir, str(ex)))
+    return 0
+
+def delete_plots(blockchain, plot_files):
+    if not blockchain in pl.PLOTTABLE_BLOCKCHAINS:
+        app.logger.error("REPLOT: {0} is not a plottable blockchain so no plot deletes allowed.".format(blockchain.capitalize()))
+        return
+    for plot_file in plot_files:
+        if os.path.exists(plot_file) and plot_file.endswith('.plot'):
+            dir = os.path.dirname(plot_file)
+            total, used, free = shutil.disk_usage(dir)
+            #free = get_free_bytes(dir) # Use shutil instead.
+            app.logger.debug("REPLOT: For {0} found {1} free space.".format(dir, converters.sizeof_fmt(free)))
+            if free >= (MAX_FREE_SPACE_ON_DISK_DURING_REPLOTTING_GIBS * 1024 * 1024 * 1024 ):
+                app.logger.error("REPLOT: Rejecting plot deletion request as found {0} of free space on disk. Plot: {1}".format(converters.sizeof_fmt(free), plot_file))
+                continue
+            app.logger.info("REPLOT: With only {0} free space on disk, removing old plot file: {1}".format(converters.sizeof_fmt(free), plot_file))
+            # TODO Enable this only when fully tested
+            # os.remove(plot_file)
+        else:
+            app.logger.error("REPLOT: No such plot file found to delete: {0}".format(plot_file))

@@ -94,12 +94,12 @@
                         <label class="col-form-label">{{_('Replotting')}}:</label> 
                         <div class="row align-items-center">
                             <div class="col">
-                                <input type="radio" id="replotting_{{blockchain}}_enabled" name="replotting_{{blockchain}}" value="true"
+                                <input type="radio" id="replotting_{{blockchain}}_enabled" name="replotting_{{blockchain}}" value="false"
                                 {% if not settings.replotting[blockchain].enabled %}checked="checked"{% endif %}>
                                 <label for="replotting_{{blockchain}}_enabled" class="col-form-label">{{_('Disabled')}}</label>
                             </div>
                             <div class="col">
-                                <input type="radio" id="replotting_{{blockchain}}_disabled" name="replotting_{{blockchain}}" value="false"
+                                <input type="radio" id="replotting_{{blockchain}}_disabled" name="replotting_{{blockchain}}" value="true"
                                 {% if settings.replotting[blockchain].enabled %}checked="checked"{% endif %}>
                                 <label for="replotting_{{blockchain}}_enabled" class="col-form-label">{{_('Enabled')}}</label>
                             </div>
@@ -119,34 +119,35 @@
                     </div>
                     {% endfor %}
                 </div>
-                <div class="replotting_{{blockchain}} row align-items-center" {% if not loop.first %} style="padding-top:10px; display:none"{%endif%}>
+                <div class="replotting_{{blockchain}} row align-items-center" {% if not loop.first %} style="display:none"{%endif%}>
                     <label class="col-form-label">{{_('Criteria for selecting plots to delete')}}:</label>
                     <div class="col">
                         <input type="checkbox" id="replotting_{{blockchain}}_delete_solo" name="replotting_{{blockchain}}_delete_solo"
-                          {% if settings.replotting[blockchain].delete_solo %} checked="checked" {% endif %} />
+                          {% if settings.replotting[blockchain].delete_solo == 'true' %} checked="checked" {% endif %} value='true'/>
                         <label for="replotting_{{blockchain}}_delete_solo" class="col-form-label">{{_('Delete Solo Plots - Keep Portable Plots')}}</label>
                     </div>
                 </div>
                 <div class="replotting_{{blockchain}} row align-items-start" {% if not loop.first %} style="display:none"{%endif%}>
                     <div class="col">
                         <input type="checkbox" id="replotting_{{blockchain}}_delete_before" name="replotting_{{blockchain}}_delete_before"
-                          {% if settings.replotting[blockchain].delete_before %} checked="checked" {% endif %} />
+                          {% if settings.replotting[blockchain].delete_before %} checked="checked" {% endif %} value='true'/>
                         <label for="replotting_{{blockchain}}_delete_before" class="col-form-label">{{_('Delete Plots Older Than')}}:</label>
                     </div>
                     <div class="col">
-                        <input class="form-control" id="replotting_{{blockchain}}_delete_before_date" name="replotting_{{blockchain}}_delete_before_date" type="date">
+                        <input class="form-control" id="replotting_{{blockchain}}_delete_before_date" name="replotting_{{blockchain}}_delete_before_date" 
+                            type="date" value="{{settings.replotting[blockchain].delete_before_date}}">
                     </div>
                 </div>
                 <div class="replotting_{{blockchain}} row align-items-center" {% if not loop.first %} style="display:none"{%endif%}>
                     <div class="col">
-                        <input type="checkbox" id="replotting_{{blockchain}}_delete_ksizes" name="replotting_{{blockchain}}_delete_ksizes"
-                          {% if settings.replotting[blockchain].delete_ksizes %} checked="checked" {% endif %} />
-                        <label for="replotting_{{blockchain}}_delete_ksizes" class="col-form-label">{{_('Delete K-Sizes')}}:</label>
+                        <input type="checkbox" id="replotting_{{blockchain}}_delete_by_ksize" name="replotting_{{blockchain}}_delete_by_ksize"
+                          {% if settings.replotting[blockchain].delete_by_ksize %} checked="checked" {% endif %} value='true'/>
+                        <label for="replotting_{{blockchain}}_delete_by_ksize" class="col-form-label">{{_('Delete K-Sizes')}}:</label>
                         &nbsp;&nbsp;
                         {% for ksize in ksizes %}
-                        <input type="checkbox" id="replotting_{{blockchain}}_free_k{{ksize}}" name="replotting_{{blockchain}}_delete_ksizes"
-                        {% if ksize in settings.replotting[blockchain].delete_ksizes %} checked="checked" {% endif %} />
-                        <label for="replotting_{{blockchain}}_free_k{{ksize}}" class="col-form-label">k{{ksize}}</label>
+                        <input type="checkbox" id="replotting_{{blockchain}}_delete_by_ksizes_{{ksize}}" name="replotting_{{blockchain}}_delete_by_ksizes"
+                        {% if ksize in settings.replotting[blockchain].delete_by_ksizes %} checked="checked" {% endif %} value="{{ksize}}"/>
+                        &nbsp;<label for="replotting_{{blockchain}}_delete_by_ksizes_{{ksize}}" class="col-form-label">k{{ksize}}</label>&nbsp;
                         {% endfor %}
                     </div>
                 </div>
