@@ -24,7 +24,7 @@ from subprocess import Popen, TimeoutExpired, PIPE, STDOUT
 from os import path
 
 from common.config import globals
-from common.models import plottings as pl
+from common.models import plots as p, plottings as pl
 from common.utils import converters
 from api import app
 from api.models import chia
@@ -38,9 +38,6 @@ WALLET_SETTINGS_FILE = '/root/.chia/machinaris/config/wallet_settings.json'
 
 # Blockchains which dropped compatibility with `show -c` commands around v1.6
 BLOCKCHAINS_USING_PEER_CMD = ['cactus', 'chia', 'littlelambocoin', 'maize']
-
-# For safety, do not delete any plot if more than this much free space exists on disk
-MAX_FREE_SPACE_ON_DISK_DURING_REPLOTTING_GIBS = 500
 
 def load_farm_summary(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
@@ -286,7 +283,7 @@ def dispatch_action(job):
         if action == 'restart':
             restart_farmer(blockchain)
         elif action == 'delete_for_replotting':
-            delete_plots(blockchain, job['plot_files'])
+            delete_plots(blockchain, job['free_ksize'], job['plot_files'])
     elif service == 'wallet':
         if action == 'start':
             start_wallet(blockchain)
@@ -383,7 +380,7 @@ def get_free_bytes(dir):  # Unused as shutil gives this more easily
         app.logger.error("Failed to determine free space for {0} because {1}".format(dir, str(ex)))
     return 0
 
-def delete_plots(blockchain, plot_files):
+def delete_plots(blockchain, free_ksize, plot_files):
     if not blockchain in pl.PLOTTABLE_BLOCKCHAINS:
         app.logger.error("REPLOT: {0} is not a plottable blockchain so no plot deletes allowed.".format(blockchain.capitalize()))
         return
@@ -393,8 +390,8 @@ def delete_plots(blockchain, plot_files):
             total, used, free = shutil.disk_usage(dir)
             #free = get_free_bytes(dir) # Use shutil instead.
             app.logger.debug("REPLOT: For {0} found {1} free space.".format(dir, converters.sizeof_fmt(free)))
-            if free >= (MAX_FREE_SPACE_ON_DISK_DURING_REPLOTTING_GIBS * 1024 * 1024 * 1024 ):
-                app.logger.error("REPLOT: Rejecting plot deletion request as found {0} of free space on disk. Plot: {1}".format(converters.sizeof_fmt(free), plot_file))
+            if free >= (p.FREE_GIBS_REQUIRED_FOR_KSIZE[free_ksize] * 1024 * 1024 * 1024 ):
+                app.logger.info("REPLOT: Skipping plot deletion request as found {0} of free space on disk. Plot: {1}".format(converters.sizeof_fmt(free), plot_file))
                 continue
             app.logger.info("REPLOT: With only {0} free space on disk, removing old plot file: {1}".format(converters.sizeof_fmt(free), plot_file))
             # TODO Enable this only when fully tested

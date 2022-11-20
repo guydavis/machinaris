@@ -23,16 +23,6 @@ from api import app, utils
 
 REPLOTTING_CONFIG = '/root/.chia/machinaris/config/replotting.json'
 
-# Round up to ensure at least this much free space on disk, allowing a replot at this ksize
-FREE_GIBS_REQUIRED_FOR_KSIZE = {
-    29: 13,
-    30: 26,
-    31: 52,
-    32: 104,
-    33: 210,
-    34: 432,
-}
-
 def load_replotting_settings():
     settings = {}
     if os.path.exists(REPLOTTING_CONFIG):
@@ -74,7 +64,7 @@ def limit_deletes_to_accomodate_ksize(db, candidate_plots, free_ksize):
     size_bytes_to_delete = 0
     plots_to_delete = []
     try:
-        required_free_space = FREE_GIBS_REQUIRED_FOR_KSIZE[free_ksize]
+        required_free_space = p.FREE_GIBS_REQUIRED_FOR_KSIZE[free_ksize]
         for plot in candidate_plots:
             if size_bytes_to_delete >= (required_free_space * 1024 * 1024 * 1024):
                 return plots_to_delete
@@ -84,9 +74,9 @@ def limit_deletes_to_accomodate_ksize(db, candidate_plots, free_ksize):
         app.logger.error("Error limiting candidate plots to minimum required for k{0} size replotting because {1}".format(free_ksize, str(ex)))
     return plots_to_delete # Maybe empty if no candiate plots needed
 
-def send_delete_request(harvester, blockchain, candidate_plots):
+def send_delete_request(harvester, blockchain, free_ksize, candidate_plots):
     app.logger.info("Requesting deletion of these plots on {0} ({1}) to allow replotting: {2}".format(harvester.displayname, harvester.hostname, candidate_plots))
-    payload = {"service": "farming", "blockchain": blockchain, "action": "delete_for_replotting", "plot_files": candidate_plots }
+    payload = {"service": "farming", "blockchain": blockchain, "action": "delete_for_replotting", "free_ksize": free_ksize, "plot_files": candidate_plots }
     try:
         utils.send_worker_post(harvester, "/actions/", payload=payload, debug=False)        
     except Exception as ex:
@@ -119,7 +109,7 @@ def execute():
                 if len(candidate_plots) > 0:
                     candidate_plots = limit_deletes_to_accomodate_ksize(db, candidate_plots, settings['free_ksize'])
                 if len(candidate_plots) > 0:
-                    send_delete_request(harvester, blockchain, candidate_plots)
+                    send_delete_request(harvester, blockchain, settings['free_ksize'], candidate_plots)
                 else:
                     app.logger.info("Found no candidate plots for replotting on {0} ({1})".format(harvester.displayname, harvester.hostname))
         except Exception as ex:
