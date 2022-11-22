@@ -10,6 +10,7 @@ import json
 import pathlib
 import os
 import sqlite3
+import threading
 import time
 import traceback
 
@@ -43,11 +44,11 @@ def gather_harvesters(db, blockchain):
 
 def gather_oldest_solo_plots(db, harvester):
     return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
-        p.Plot.type == 'solo').order_by(p.Plot.created_at.asc()).limit(20)
+        p.Plot.type == 'solo').order_by(p.Plot.created_at.asc()).limit(20).all()
 
 def gather_plots_before(db, harvester, delete_before_date):
     return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
-        p.Plot.created_at > "{0} 00:00".format(delete_before_date)).order_by(p.Plot.created_at.asc()).limit(20)
+        p.Plot.created_at < "{0} 00:00".format(delete_before_date)).order_by(p.Plot.created_at.asc()).limit(20).all()
 
 def gather_plots_by_ksize(db, harvester, delete_by_ksizes):
     if len(delete_by_ksizes) == 0:
@@ -58,7 +59,7 @@ def gather_plots_by_ksize(db, harvester, delete_by_ksizes):
             app.logger.error("Invalid target ksize for deletion provided: {0}".format(ksize))
             return []
     return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
-        or_(*[p.Plot.file.like("-k{0}-".format(ksize)) for ksize in delete_by_ksizes])).order_by(p.Plot.created_at.asc()).limit(20)
+        or_(*[p.Plot.file.like("-k{0}-".format(ksize)) for ksize in delete_by_ksizes])).order_by(p.Plot.created_at.asc()).limit(20).all()
 
 def limit_deletes_to_accomodate_ksize(db, candidate_plots, free_ksize):
     size_bytes_to_delete = 0
@@ -81,37 +82,47 @@ def send_delete_request(harvester, blockchain, free_ksize, candidate_plots):
         utils.send_worker_post(harvester, "/actions/", payload=payload, debug=False)        
     except Exception as ex:
         app.logger.error('Failed request plot deletion for replotting from {0} ({1}) because {2}'.format(harvester.displayname, harvester.hostname, str(ex)))
-
+    
 def execute():
     with app.app_context():
         from api import db
         gc = globals.load()
         if not gc['is_controller']:
             return # Only controller should initiate a check for plots to delete, allowing replotting
-        blockchain = globals.enabled_blockchains()[0]
-        if not blockchain in pl.PLOTTABLE_BLOCKCHAINS:
-            return # Only attempt plot deletions for a plottable blockchain
-        settings = load_replotting_settings()
-        if not blockchain in settings or not settings[blockchain]['enabled']:
-            app.logger.info("Skipping check for plot deletion as replotting on {0} is disabled.".format(blockchain.capitalize()))
-            return
-        try:
-            settings = settings[blockchain] # Work with settings for this blockchain in particular
-            for harvester in gather_harvesters(db, blockchain):
-                app.logger.debug("Checking harvester {0} for candidate plot deletions. ({1})".format(harvester.displayname, harvester.hostname))
-                candidate_plots = []
-                if settings['delete_solo']:
-                    candidate_plots.extend(gather_oldest_solo_plots(db, harvester))
-                if settings['delete_before']:
-                    candidate_plots.extend(gather_plots_before(db, harvester, settings['delete_before_date']))
-                if settings['delete_by_ksize']:
-                    candidate_plots.extend(gather_plots_by_ksize(db, harvester, settings['delete_by_ksizes']))
-                if len(candidate_plots) > 0:
-                    candidate_plots = limit_deletes_to_accomodate_ksize(db, candidate_plots, settings['free_ksize'])
-                if len(candidate_plots) > 0:
-                    send_delete_request(harvester, blockchain, settings['free_ksize'], candidate_plots)
-                else:
-                    app.logger.info("Found no candidate plots for replotting on {0} ({1})".format(harvester.displayname, harvester.hostname))
-        except Exception as ex:
-            app.logger.error("Failed to check for candidate replotting deletions because {0}".format(str(ex)))
-            traceback.print_exc()
+        replotting_settings = load_replotting_settings()
+        for blockchain in pl.PLOTTABLE_BLOCKCHAINS:
+            if not blockchain in replotting_settings or not replotting_settings[blockchain]['enabled']:
+                app.logger.info("Skipping check for plot deletion as replotting on {0} is disabled.".format(blockchain.capitalize()))
+            else:
+                try:
+                    settings = replotting_settings[blockchain] # Work with settings for this blockchain in particular
+                    for harvester in gather_harvesters(db, blockchain):
+                        app.logger.debug("Checking {0} harvester {1} for candidate plot deletions. ({2})".format(blockchain, harvester.displayname, harvester.hostname))
+                        candidate_plots = []
+                        if settings['delete_solo']:
+                            candidate_plots.extend(gather_oldest_solo_plots(db, harvester))
+                        if settings['delete_before']:
+                            candidate_plots.extend(gather_plots_before(db, harvester, settings['delete_before_date']))
+                        if settings['delete_by_ksize']:
+                            candidate_plots.extend(gather_plots_by_ksize(db, harvester, settings['delete_by_ksizes']))
+                        if len(candidate_plots) > 0:
+                            candidate_plots = limit_deletes_to_accomodate_ksize(db, candidate_plots, settings['free_ksize'])
+                        if len(candidate_plots) > 0:
+                            try:
+                                thread = threading.Thread(target=send_delete_request, 
+                                    kwargs={
+                                        'harvester': harvester, 
+                                        'blockchain': blockchain, 
+                                        'free_ksize': settings['free_ksize'],
+                                        'candidate_plots': candidate_plots
+                                    }
+                                )
+                                thread.start()
+                            except Exception as ex:
+                                app.logger.info(traceback.format_exc())
+                            #send_delete_request(harvester, blockchain, settings['free_ksize'], candidate_plots)
+                        else:
+                            app.logger.info("Found no candidate plots for {0} replotting on {1} ({2})".format(blockchain, harvester.displayname, harvester.hostname))
+                except Exception as ex:
+                    app.logger.error("Failed to check for candidate {0} replotting deletions because {1}".format(blockchain, str(ex)))
+                    traceback.print_exc()

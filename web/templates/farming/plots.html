@@ -123,7 +123,7 @@
                     <label class="col-form-label">{{_('Criteria for selecting plots to delete')}}:</label>
                     <div class="col">
                         <input type="checkbox" id="replotting_{{blockchain}}_delete_solo" name="replotting_{{blockchain}}_delete_solo"
-                          {% if settings.replotting[blockchain].delete_solo == 'true' %} checked="checked" {% endif %} value='true'/>
+                          {% if settings.replotting[blockchain].delete_solo %} checked="checked" {% endif %} value='true'/>
                         <label for="replotting_{{blockchain}}_delete_solo" class="col-form-label">{{_('Delete Solo Plots - Keep Portable Plots')}}</label>
                     </div>
                 </div>

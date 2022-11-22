@@ -301,7 +301,7 @@ def save_replotting_settings(form):
         with open(REPLOTTING_CONFIG, 'w') as f:
             json.dump(settings, f)
         if replotting_enabled:
-            flash(_('Replotting has been enabled for %(blockchains)s. Please start Plotting (and Archving) once free space for replotting appears in about 15 minutes.', blockchains=', '.join(replotting_enabled)), 'success')
+            flash(_('Replotting has been enabled for %(blockchains)s. Please start Plotting (and Archiving) once free space for replotting appears in about 15 minutes.', blockchains=', '.join(replotting_enabled)), 'success')
         else:
             flash(_('Replotting has been DISABLED for all blockchains.  Machinaris will NOT remove any plots now.'), 'success')
     except Exception as ex:
