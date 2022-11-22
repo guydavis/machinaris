@@ -4,19 +4,19 @@
 #
 
 # Bootstrap Icons
-BSI_VERSION=1.9.1
-BOOTSTRAP_VERSION=5.2.2
+BSI_VERSION=1.10.2
+BOOTSTRAP_VERSION=5.2.3
 BASEPATH=${JS_LIBS_BASEPATH:-/machinaris/web/static/3rd_party}
 
 # List of other css/js links
 LIST="
-https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.css
-https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.js
-https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js
-https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js
-https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.2.0/dist/chartjs-adapter-luxon.min.js
+https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.css
+https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.js
+https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js
+https://cdn.jsdelivr.net/npm/chart.js@4.0.1/dist/chart.min.js
+https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.2.1/dist/chartjs-adapter-luxon.min.js
 https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.1.0/dist/chartjs-plugin-datalabels.min.js
-https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js
+https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js
 https://moment.github.io/luxon/global/luxon.min.js"
 
 mkdir -p $BASEPATH
