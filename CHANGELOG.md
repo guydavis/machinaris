@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file. The format 
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.6.1) to v1.6.1
  - [Chiadog](https://github.com/guydavis/chiadog/releases/tag/v0.7.5) to v0.7.5
  - [Flax](https://github.com/Flax-Network/flax-blockchain/releases/tag/0.1.11) to v0.1.11
+ - [Tad](https://github.com/BTCgreen-Network/tad-blockchain/releases/tag/1.7.0b2) to v1.7.0
 ### Known Issues
  - Incorrect reward recovery calculations for some blockchains.  Please use AllTheBlocks site if this affects you.
 
