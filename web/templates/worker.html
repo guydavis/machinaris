@@ -284,27 +284,27 @@
     {% if plots_disk_usage[worker.hostname] %}
     var ctx = document.getElementById('plots_disk');
     var myChart = new Chart(ctx, {
-      plugins: [ChartDataLabels],
+      //plugins: [ChartDataLabels],
       type: 'bar',
       data: {
         labels: {{ plots_disk_usage[worker.hostname].paths | safe }},
         datasets: [{
           label: "{{_('Disk Space Used (TB)')}}",
           data: {{ plots_disk_usage[worker.hostname].used | safe }},
-          datalabels: { align: 'end', anchor: 'end', 
+          /*datalabels: { align: 'end', anchor: 'end', 
               formatter: function(value, context) {
                   return Math.round(context.chart.data.datasets[0].data[context.dataIndex] / 
                       (context.chart.data.datasets[0].data[context.dataIndex] + 
                       context.chart.data.datasets[1].data[context.dataIndex]) * 100) + "% {{_('full')}}";
               }
-          },
+          },*/
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
         },
         {
           label: "{{_('Disk Space Free (TB)')}}",
           data: {{ plots_disk_usage[worker.hostname].free | safe }},
-          datalabels: { labels: { title: null } },
+          //datalabels: { labels: { title: null } },
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
         }],
@@ -349,19 +349,19 @@
     {% if plotting_disk_usage[worker.hostname] %}
     var ctx = document.getElementById('plotting_disk');
     var myChart = new Chart(ctx, {
-      plugins: [ChartDataLabels],
+      //plugins: [ChartDataLabels],
       type: 'bar',
       data: {
         labels: {{ plotting_disk_usage[worker.hostname].paths | safe }},
         datasets: [{
           label: "{{_('Disk Space Used (GB)')}}",
           data: {{ plotting_disk_usage[worker.hostname].used | safe }},
-          datalabels: { align: 'end', anchor: 'end', 
+          /*datalabels: { align: 'end', anchor: 'end', 
               formatter: function(value, context) {
                   return Math.round(context.chart.data.datasets[0].data[context.dataIndex] / 
                       (context.chart.data.datasets[0].data[context.dataIndex] + 
                       context.chart.data.datasets[1].data[context.dataIndex]) * 100) + "% {{_('full')}}";
-              }
+              }*/
           },
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)',
@@ -369,7 +369,7 @@
         {
           label: "{{_('Disk Space Free (GB)')}}",
           data: {{ plotting_disk_usage[worker.hostname].free | safe }},
-          datalabels: { labels: { title: null } },
+          //datalabels: { labels: { title: null } },
           backgroundColor: 'rgba(54, 162, 235, 0.2)',
           borderColor: 'rgba(54, 162, 235, 1)',
         }],
