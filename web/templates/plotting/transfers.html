@@ -259,13 +259,13 @@
                 datasets: [{
                     label: "{{_('Disk Space Used (TB)')}}",
                     data: {{ disk_usage[farmer.hostname].used | safe }},
-                    /*datalabels: { align: 'end', anchor: 'end', 
+                    datalabels: { align: 'end', anchor: 'end', 
                         formatter: function(value, context) {
                             return Math.round(context.chart.data.datasets[0].data[context.dataIndex] / 
                                 (context.chart.data.datasets[0].data[context.dataIndex] + 
                                 context.chart.data.datasets[1].data[context.dataIndex]) * 100) + "% {{_('full')}}";
                         }
-                    },*/
+                    },
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderColor: 'rgba(255, 99, 132, 1)',
                 },
