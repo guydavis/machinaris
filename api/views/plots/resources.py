@@ -138,3 +138,12 @@ class PlotByHostname(MethodView):
     def delete(self, hostname, blockchain):
         db.session.query(Plot).filter(Plot.hostname==hostname, Plot.blockchain==blockchain).delete()
         db.session.commit()
+
+@blp.route('/<hostname>/<blockchain>/<plot_file>')
+class PlotByHostnameBlockchainFile(MethodView):
+    
+    @blp.etag
+    @blp.response(204)
+    def delete(self, hostname, blockchain, plot_file):
+        db.session.query(Plot).filter(Plot.hostname==hostname, Plot.blockchain==blockchain, Plot.file==plot_file).delete()
+        db.session.commit()

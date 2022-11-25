@@ -26,7 +26,7 @@ from os import path
 from common.config import globals
 from common.models import plots as p, plottings as pl
 from common.utils import converters
-from api import app
+from api import app, utils
 from api.models import chia
 from api.commands import websvcs
 
@@ -394,7 +394,18 @@ def delete_plots(blockchain, free_ksize, plot_files):
                 app.logger.info("REPLOT: Skipping plot deletion request as found {0} of free space on disk. Plot: {1}".format(converters.sizeof_fmt(free), plot_file))
                 continue
             app.logger.info("REPLOT: With only {0} free space on disk, removing old plot file: {1}".format(converters.sizeof_fmt(free), plot_file))
-            # TODO Enable this only when fully tested
-            # os.remove(plot_file)
+            try:
+                os.remove(plot_file)
+                total, used, free = shutil.disk_usage(dir)
+                app.logger.info("REPLOT: Now {0} free space on disk, after removing old plot file: {1}".format(converters.sizeof_fmt(free), plot_file))
+                try:
+                    url = "/{0}/{1}/{2}".format(utils.get_hostname(), blockchain, os.path.basename(plot_file))
+                    utils.send_delete(url, debug=True)
+                except Exception as ex:
+                    app.logger.error("REPLOT: Failed to notify controller of plot deletion at {0}".format(url))
+                    traceback.print_exc()
+            except Exception as ex:
+                app.logger.error("REPLOT: Failed to remove old plot file for replotting: {0}".format(plot_file))
+                traceback.print_exc()
         else:
             app.logger.error("REPLOT: No such plot file found to delete: {0}".format(plot_file))
