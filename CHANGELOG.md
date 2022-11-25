@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 ### Added
- - List recent plot archiving (local and remote) on Plotting | Workers page.
+ - **Optional** background deletion of a few old plots to free space for new plotting. See Farming page, Settings icon, top-right.
+ - List recent plot archiving (local and remote) on new "Plotting | Transfers" page.
  - Settings | Alerts page: new 'Send Test Alert' button to validate Chiadog configs.
  - [Moon](https://github.com/MOONCOINTEAM/moon-blockchain) at 1.6.0
 ### Changed

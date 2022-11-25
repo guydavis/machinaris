@@ -147,8 +147,10 @@ def start_plotman():
     if len(load_plotting_summary().rows) == 0:  # No plots running
         clean_tmp_dirs_before_run()  
     logfile = "/root/.chia/plotman/logs/plotman.log"
+    fd_env = os.environ.copy()
+    fd_env["PYTHONUNBUFFERED"] = "TRUE"  # Added to force Plotman to log properly
     proc = Popen("nohup {0} {1} >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'plot', logfile),
-                    shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
+                    env=fd_env, shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
     app.logger.info("Completed launch of plotman.")
 
 def clean_tmp_dirs_before_run():
@@ -220,8 +222,10 @@ def start_archiver():
     check_config()
     logfile = "/root/.chia/plotman/logs/archiver.log"
     app.logger.info("About to start archiver...")
-    proc = Popen("nohup {0} {1} >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'archive', logfile),
-                    shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
+    fd_env = os.environ.copy()
+    fd_env["PYTHONUNBUFFERED"] = "TRUE"  # Added to force Plotman to log properly
+    proc = Popen("nohup {0} {1} >{2} 2>&1 &".format(PLOTMAN_SCRIPT, 'archive', logfile),
+                    env=fd_env, shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
     app.logger.info("Completed launch of archiver.")
 
 def stop_archiver():
