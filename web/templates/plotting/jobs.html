@@ -29,15 +29,20 @@
             </div>
             <div class="modal-body bg-dark">
                 {{_('This action will start Plotman and launch a plotting run using your configured plotter, into these directories:')}}
-                <div id="tmp_dirs" style="display:none; padding-top:10px"></div>
-                <div id="dst_dirs" style="display:none; "></div>
-                <div id="arch_dirs" style="display:none; max-height: 200px; overflow-y: scroll"></div>
+                <div id="dirs" style="padding-top:10px; max-height: 350px; overflow-y: scroll">
+                    <div id="tmp_dirs" style="display:none; "></div>
+                    <div id="dst_dirs" style="display:none; "></div>
+                    <div id="arch_dirs" style="display:none; "></div>
+                </div>
                 <div class="alert alert-warning" role="error" id="dirs_error" style="display:none"></div>
                 {{_('Be careful about running more than one plotter on a single machine at a time. Continue?')}}
             </div>
-            <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStart">{{_('Cancel')}}</button>
-                <button type="button" class="btn btn-outline-success" id="btnConfirmStart">{{_('Start')}}</button>
+            <div class="modal-footer bg-dark justify-content-between">
+                <button type="button" class="btn btn-secondary mr-auto" onclick='PlottingLog();return false;'>{{_('View Log')}}</button>
+                <div>
+                    <button type="button" class="btn btn-secondary" style="padding-left: 5px;" data-bs-dismiss="modal" id="btnCancelStart">{{_('Cancel')}}</button>
+                    <button type="button" class="btn btn-outline-success" id="btnConfirmStart">{{_('Start')}}</button>
+                </div>
             </div>
         </div>
     </div>
@@ -53,9 +58,12 @@
             <div class="modal-body bg-dark">
                 {{_('This action will stop Plotman from launching new plotting jobs.  Running jobs will run to completion. Continue?')}}
             </div>
-            <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStop">{{_('Cancel')}}</button>
-                <button type="button" class="btn btn-outline-success" id="btnConfirmStop">{{_('Stop')}}</button>
+            <div class="modal-footer bg-dark justify-content-between">
+                <button type="button" class="btn btn-secondary mr-auto" onclick='PlottingLog();return false;'>{{_('View Log')}}</button>
+                <div>
+                    <button type="button" class="btn btn-secondary" style="padding-left: 5px;" data-bs-dismiss="modal" id="btnCancelStop">{{_('Cancel')}}</button>
+                    <button type="button" class="btn btn-outline-success" id="btnConfirmStop">{{_('Stop')}}</button>
+                </div>
             </div>
         </div>
     </div>
@@ -329,6 +337,9 @@
     </script>
     {% endfor %}
     <script>
+        function PlottingLog() {
+            PlottingLogs('plotting', document.getElementById('hostname').value, document.getElementById('blockchain').value);
+        }
         function PlottingLogs(type, hostname, blockchain, plot_id) {
             var d = new Date();
             var height = 600;

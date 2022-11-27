@@ -390,9 +390,9 @@ def delete_plots(blockchain, free_ksize, plot_files):
             total, used, free = shutil.disk_usage(dir)
             #free = get_free_bytes(dir) # Use shutil instead.
             app.logger.debug("REPLOT: For {0} found {1} free space.".format(dir, converters.sizeof_fmt(free)))
-            if free >= (p.FREE_GIBS_REQUIRED_FOR_KSIZE[free_ksize] * 1024 * 1024 * 1024 ):
+            if (free == 0) or (free >= (p.FREE_GIBS_REQUIRED_FOR_KSIZE[free_ksize] * 1024 * 1024 * 1024)):
                 app.logger.info("REPLOT: Skipping plot deletion request as found {0} of free space on disk. Plot: {1}".format(converters.sizeof_fmt(free), plot_file))
-                continue
+                continue # Also treat free space of exactly zero as highly suspicious and don't delete plots in that case
             app.logger.info("REPLOT: With only {0} free space on disk, removing old plot file: {1}".format(converters.sizeof_fmt(free), plot_file))
             try:
                 os.remove(plot_file)

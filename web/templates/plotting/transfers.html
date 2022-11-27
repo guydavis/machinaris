@@ -12,9 +12,12 @@
             <div class="modal-body bg-dark">
                 {{_('This action will start Plotman archiving from the destination folder. Completed plots will be distributed locally or transferred remotely. Continue?')}}
             </div>
-            <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStart">{{_('Cancel')}}</button>
-                <button type="button" class="btn btn-outline-success" id="btnConfirmStart">{{_('Start')}}</button>
+            <div class="modal-footer bg-dark justify-content-between">
+                <button type="button" class="btn btn-secondary mr-auto" onclick='ArchiverLog();return false;'>{{_('View Log')}}</button>
+                <div>
+                    <button type="button" class="btn btn-secondary" style="padding-left: 5px;" data-bs-dismiss="modal" id="btnCancelStart">{{_('Cancel')}}</button>
+                    <button type="button" class="btn btn-outline-success" id="btnConfirmStart">{{_('Start')}}</button>
+                </div>
             </div>
         </div>
     </div>
@@ -30,9 +33,12 @@
             <div class="modal-body bg-dark">
                 {{_('This action will stop Plotman archiving from the destination folder, preventing further completed plot transfers. Continue?')}}
             </div>
-            <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelStop">{{_('Cancel')}}</button>
-                <button type="button" class="btn btn-outline-success" id="btnConfirmStop">{{_('Stop')}}</button>
+            <div class="modal-footer bg-dark justify-content-between">
+                <button type="button" class="btn btn-secondary mr-auto" onclick='ArchiverLog();return false;'>{{_('View Log')}}</button>
+                <div>
+                    <button type="button" class="btn btn-secondary" style="padding-left: 5px;" data-bs-dismiss="modal" id="btnCancelStop">{{_('Cancel')}}</button>
+                    <button type="button" class="btn btn-outline-success" id="btnConfirmStop">{{_('Stop')}}</button>
+                </div>
             </div>
         </div>
     </div>
@@ -324,6 +330,9 @@
         });
     {% endif %}
     {% endfor %}
+        function ArchiverLog() {
+            ArchivingLogs('archiving', document.getElementById('hostname').value, document.getElementById('blockchain').value);
+        }
         function ArchivingLogs(type, hostname, blockchain, plot_id, log_file) {
             var d = new Date();
             var height = 600;

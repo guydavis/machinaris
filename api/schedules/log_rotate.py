@@ -14,6 +14,7 @@ LOG_ROTATE_CONFIGS = [
     'machinaris',
     'farmr',
     'mmx-node',
+    'plotman',
 ]
 
 def execute():
