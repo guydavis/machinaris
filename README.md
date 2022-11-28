@@ -8,13 +8,17 @@ For details, see your particular platform: [Windows](https://github.com/guydavis
 
 ## Plotting View
 
-Plotting with the [MadMax](https://github.com/madMAx43v3r/chia-plotter), [Bladebit](https://github.com/harold-b/bladebit), and [Chia™](https://github.com/Chia-Network/chia-blockchain) plotters is managed by [Plotman](https://github.com/ericaltendorf/plotman) through the Machinaris WebUI.
+Plotting with the [MadMax](https://github.com/madMAx43v3r/chia-plotter), [Bladebit](https://github.com/harold-b/bladebit), and [Chia™](https://github.com/Chia-Network/chia-blockchain) plotters is managed by [Plotman](https://github.com/ericaltendorf/plotman) through the Machinaris WebUI across many machines:
 
 ![Plotting](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_plotting.png)
 
 Track your plotter machines performance as you fine-tune your plotting, graphed for each k-size you plot.
 
 ![Speed](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/plotting_speed_chart.png)
+
+Archive your new plots to their final destination on local drives or on remote harvesters (via rsync):
+
+![Transfers](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/archiving_transfers.png)
 
 ## Farming View
 
@@ -26,11 +30,13 @@ Machinaris also optionally farms your plots to other blockchains including [BPX]
 
 ## Alerts
 
-[Chiadog](https://github.com/martomi/chiadog) provides monitoring of the log files, ensuring you get notified when important events occur across your farm:
+[Chiadog](https://github.com/guydavis/machinaris/wiki/ChiaDog) provides monitoring of the log files, ensuring you get notified when important events occur across your farm:
 
 ![Alerts](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/ChiaDog-1-Example.png)
 
-Notifications can be sent to e-mail, telegram, discord, slack, etc.
+[Drive health](https://github.com/guydavis/machinaris/wiki/Drives) is monitored as with `smartctl` on Linux. Notifications can be sent to e-mail, telegram, discord, slack, etc.
+
+![Drives](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/drives_grid.png)
 
 ## Setup
 

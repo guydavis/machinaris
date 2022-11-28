@@ -14,7 +14,7 @@ from flask_babel import _, lazy_gettext as _l
 
 from common.config import globals
 from common.utils import fiat
-from common.models import pools as po
+from common.models import pools as po, plots as pl
 from web import app, utils
 from web.actions import chia, pools as p, plotman, chiadog, worker, \
         log_handler, stats, warnings, forktools, mapping, drives as d
@@ -213,8 +213,12 @@ def plotting_workers():
     return render_template('plotting/workers.html', plotters=plotters, 
         disk_usage=disk_usage, mem_usage=mem_usage, global_config=gc, lang=get_lang(request))
 
-@app.route('/farming/plots')
+@app.route('/farming/plots', methods=['GET', 'POST'])
 def farming_plots():
+    if request.method == 'POST':
+        settings = { 'replotting': plotman.save_replotting_settings(request.form) }
+    else: # Get so load defaults or get saved settings
+        settings = { 'replotting': plotman.load_replotting_settings() }
     if request.args.get('analyze'):  # Xhr with a plot_id
         plot_id = request.args.get('analyze')
         return plotman.analyze(plot_id[:8])
@@ -224,8 +228,8 @@ def farming_plots():
     gc = globals.load()
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()
-    return render_template('farming/plots.html', farmers=farmers, plots=plots, global_config=gc, 
-        lang=get_lang(request))
+    return render_template('farming/plots.html', farmers=farmers, plots=plots, 
+        settings=settings, ksizes=pl.KSIZES, global_config=gc, lang=get_lang(request))
 
 @app.route('/farming/data')
 def farming_data():
@@ -459,7 +463,12 @@ def settings_alerts():
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
         selected_blockchain = request.form.get('blockchain')
-        chiadog.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
+        selected_worker = worker.get_worker(selected_worker_hostname, selected_blockchain)
+        if request.form.get('action') == 'test':
+            chiadog.send_test_alert(selected_worker)
+            return redirect(url_for('alerts')) # Redirct to page showing the test alert
+        else: # Save config
+            chiadog.save_config(selected_worker, selected_blockchain, request.form.get("config"))
     farmers = chiadog.load_farmers()
     selected_worker = find_selected_worker(farmers, selected_worker_hostname, selected_blockchain)
     if not selected_blockchain:
