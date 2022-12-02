@@ -252,7 +252,8 @@
                 </td>
                 <td>
                   {% if drive.power_on_hours %}
-                    {{drive.power_on_hours}}
+                    {% set drive_power_split = drive.power_on_hours.split('|') %}
+                    {{drive_power_split[1]}}
                   {% endif %}
                 </td>  
             </tr>
