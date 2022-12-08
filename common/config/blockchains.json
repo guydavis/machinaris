@@ -277,7 +277,7 @@
         "binary":  "/mmx-node/build/mmx",
         "network_path": "/root/.mmx/testnet9",
         "network_name": "testnet9",
-        "network_port": 12334,
+        "network_port": 12339,
         "farmer_port": 11330,
         "worker_port": 8940,
         "mojos_per_coin": 1000000,

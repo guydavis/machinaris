@@ -242,13 +242,13 @@ def load_blockchain_version(blockchain):
                 pass
             last_blockchain_version = ""
         if last_blockchain_version.endswith('dev0') or last_blockchain_version.endswith('dev1'):
-            # Chia version with .dev is actually one # to high, never fixed by Chia team...
-            # See: https://github.com/Chia-Network/chia-blockchain/issues/5655
-            sem_ver = last_blockchain_version.split('.')
-            if 'rc' in sem_ver[2]: # Strip out 'rcX' if found.
-                sem_ver[2] = sem_ver[2][:sem_ver[2].index('rc')]
-            last_blockchain_version = sem_ver[0] + '.' + \
-                sem_ver[1] + '.' + str(int(sem_ver[2])-1)
+            if 'rc' in last_blockchain_version: # Strip out 'rcX' if found.
+                last_blockchain_version = last_blockchain_version[:last_blockchain_version.index('rc')]
+            else:
+                # Chia version with .dev is actually one # to high, never fixed by Chia team...
+                # See: https://github.com/Chia-Network/chia-blockchain/issues/5655
+                sem_ver = last_blockchain_version.split('.')
+                last_blockchain_version = sem_ver[0] + '.' + sem_ver[1] + '.' + str(int(sem_ver[2])-1)
         elif '.dev' in last_blockchain_version:
             sem_ver = last_blockchain_version.split('.')
             last_blockchain_version = sem_ver[0] + '.' + sem_ver[1] + '.' + sem_ver[2]
