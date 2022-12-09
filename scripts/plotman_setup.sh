@@ -17,11 +17,11 @@ if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chi
         tee /etc/logrotate.d/plotman >/dev/null <<EOF
 /root/.chia/plotman/logs/plotman.log {
   rotate 3
-  hourly
+  daily
 }
 /root/.chia/plotman/logs/archiver.log {
   rotate 3
-  hourly
+  daily
 }
 EOF
     fi

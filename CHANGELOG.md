@@ -13,10 +13,12 @@ All notable changes to this project will be documented in this file. The format 
  - Missing plots on Farming page when a status.json file was corrupted. Thanks @Yurly
 ### Updated
  - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v2.0.1) to v2.0.1
- - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.6.1) to v1.6.1
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.7.0) to v1.7.0
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.7.0) to v1.7.0
  - [Chiadog](https://github.com/guydavis/chiadog/releases/tag/v0.7.5) to v0.7.5
  - [Flax](https://github.com/Flax-Network/flax-blockchain/releases/tag/0.1.11) to v0.1.11
  - [Tad](https://github.com/BTCgreen-Network/tad-blockchain/releases/tag/1.7.0b2) to v1.7.0
+ - [MMX](https://github.com/madMAx43v3r/mmx-node) to `testnet9`.
 ### Known Issues
  - Incorrect reward recovery calculations for some blockchains.  Please use AllTheBlocks site if this affects you.
 
@@ -26,7 +28,7 @@ All notable changes to this project will be documented in this file. The format 
  - Chart memory usage per container (GiB) as well as total host memory usage (%) for OS and all apps.
  - Enhanced Forktools to optionally decrease a blockchain's full_node process count, which greatly limits memory usage.
  - Improve Plotting page to display configured tmp, dst, and archiving directories before starting to plot. Support `site_path_filter` for archive folders under `site_root`.
-  - Bladebit support for new `ramplot` mode (needs 416 GB RAM) 
+ - Bladebit support for new `ramplot` mode (needs 416 GB RAM) 
 ### Changed
  - Enhance 'NFT Reward Recovery' tool to support v2 databases. 
  - Fixes for invalid Chiadog harvester alerts. 
