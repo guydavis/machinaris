@@ -4,10 +4,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 ### Added
- - **Optional** background deletion of a few old plots to free space for new plotting. See Farming page, Settings icon, top-right.
- - List recent plot archiving (local and remote) on new "Plotting | Transfers" page.
- - Settings | Alerts page: new 'Send Test Alert' button to validate Chiadog configs.
- - [Moon](https://github.com/MOONCOINTEAM/moon-blockchain) at 1.6.0
+ - Re-plotting: **Optional** background deletion of a few old plots to free space for new plotting. See Farming page, Settings icon, top-right.
+ - Table of recent plot archiving (local and remote) on new "Plotting | Transfers" page, including status and transfer speed.
+ - "Settings | Alerts" page: new 'Send Test Alert' button to validate Chiadog configs and receive sample alert to mail/discord/etc.
+ - [Moon](https://github.com/MOONCOINTEAM/moon-blockchain) blockchain at version 1.6.0,
 ### Changed
  - Fixed broken 'Generate/Import Key' actions for Chia 1.6.1 on Setup page. Thanks @SilverFolfy
  - Missing plots on Farming page when a status.json file was corrupted. Thanks @Yurly
@@ -16,10 +16,9 @@ All notable changes to this project will be documented in this file. The format 
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.7.0) to v1.7.0
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.7.0) to v1.7.0
  - [Chiadog](https://github.com/guydavis/chiadog/releases/tag/v0.7.5) to v0.7.5
- - [Chinilla](https://github.com/Chinilla/chinilla-blockchain/releases/tag/1.3.1) to v1.3.1
  - [Flax](https://github.com/Flax-Network/flax-blockchain/releases/tag/0.1.11) to v0.1.11
+ - [MMX](https://github.com/madMAx43v3r/mmx-node) to `testnet9`.  Support the latest AMD GPU driver.
  - [Tad](https://github.com/BTCgreen-Network/tad-blockchain/releases/tag/1.7.0b2) to v1.7.0
- - [MMX](https://github.com/madMAx43v3r/mmx-node) to `testnet9`.
 ### Known Issues
  - Incorrect reward recovery calculations for some blockchains.  Please use AllTheBlocks site if this affects you.
 
