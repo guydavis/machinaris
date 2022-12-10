@@ -14,7 +14,7 @@ https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.css
 https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.js
 https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js
 https://cdn.jsdelivr.net/npm/chart.js@4.0.1/dist/chart.umd.min.js
-https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.0/dist/chartjs-adapter-luxon.min.js
+https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.0/dist/chartjs-adapter-luxon.umd.min.js
 https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js
 https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js
 https://moment.github.io/luxon/global/luxon.min.js"
