@@ -36,7 +36,7 @@ unzip -q -o -j ${BASEPATH}/bs.zip -d $BASEPATH/ bootstrap-${BOOTSTRAP_VERSION}*/
 rm -f ${BASEPATH}/bs.zip
 
 # Leaflet and plugins
-wget -O ${BASEPATH}/leaflet.zip -nv "https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/v1.7.1/leaflet.zip" && \
+wget -O ${BASEPATH}/leaflet.zip -nv "https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/v1.9.3/leaflet.zip" && \
 unzip -q -o ${BASEPATH}/leaflet.zip -d $BASEPATH/ && \
 rm -f ${BASEPATH}/leaflet.zip
 wget -O ${BASEPATH}/leaflet-layervisibility.js -nv "https://unpkg.com/leaflet-layervisibility/dist/leaflet-layervisibility.js"
