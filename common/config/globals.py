@@ -337,14 +337,10 @@ def load_madmax_version():
         return last_madmax_version
     last_madmax_version = ""
     try:
-        proc = Popen("{0} --help".format(MADMAX_BINARY),
+        proc = Popen("{0} --version".format(MADMAX_BINARY),
             stdout=PIPE, stderr=PIPE, shell=True)
-        outs, errs = proc.communicate(timeout=90)
-        for line in outs.decode('utf-8').splitlines():
-            m = re.search(
-                r'^Multi-threaded pipelined Chia k32 plotter - (\w+)$', line, flags=re.IGNORECASE)
-            if m:
-                last_madmax_version = m.group(1)
+        outs, errs = proc.communicate(timeout=90)  # Example: 1.1.8-d1a9e88
+        last_madmax_version = outs.decode('utf-8').strip().split('-')[0]
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
