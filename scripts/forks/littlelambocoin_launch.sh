@@ -107,8 +107,6 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     # This configure command fails, as this blockchain chokes on its own config file!
     littlelambocoin configure --set-farmer-peer ${farmer_address}:${farmer_port}
     littlelambocoin configure --enable-upnp false
-    # So, perform the configuration into the config.yaml file directly instead...
-    sed -z -i "s/  farmer_peer:\n    host: 127.0.0.1\n    port: 18714/  farmer_peer:\n    host: ${farmer_address}\n    port: ${farmer_port}/g" config.yaml
     littlelambocoin start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then
