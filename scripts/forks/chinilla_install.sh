@@ -4,8 +4,8 @@
 #
 
 CHINILLA_BRANCH=$1
-# On 2022-10-17
-HASH=498e558ad0e1d6ef428f0a4cdf062f98baa02f41
+# On 2022-12-17
+HASH=5dae312708d9dea5ff44f432da8052ed6fb75b4d
 
 if [ -z ${CHINILLA_BRANCH} ]; then
 	echo 'Skipping Chinilla install as not requested.'
