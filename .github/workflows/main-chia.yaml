@@ -43,7 +43,7 @@ jobs:
           build-args: |
             "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=latest"
-            "CHIA_BRANCH=release/1.7.0"
+            "CHIA_BRANCH=release/1.6.2"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:v${{ github.event.inputs.version }}
