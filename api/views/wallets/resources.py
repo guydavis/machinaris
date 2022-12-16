@@ -59,7 +59,7 @@ class WalletsByHostname(MethodView):
     @blp.etag
     @blp.response(200, WalletSchema)
     def get(self, hostname, blockchain):
-        return db.session.query(Wallet).get_or_404(hostname)
+        return db.session.query(Wallet).filter(Wallet.hostname==hostname, Wallet.blockchain==blockchain).first()
 
     @blp.etag
     @blp.arguments(WalletSchema)
@@ -77,8 +77,8 @@ class WalletsByHostname(MethodView):
 
     @blp.etag
     @blp.response(204)
-    def delete(self, hostname):
-        item = db.session.query(Wallet).get_or_404(hostname)
+    def delete(self, hostname, blockchain):
+        item = db.session.query(Wallet).filter(Wallet.hostname==hostname, Wallet.blockchain==blockchain).first()
         blp.check_etag(item, WalletSchema)
         db.session.delete(item)
         db.session.commit()
