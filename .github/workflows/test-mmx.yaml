@@ -42,7 +42,7 @@ jobs:
           build-args: |
             "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=test"
-            "MMX_BRANCH=master"
+            "MMX_BRANCH=v0.9.2"
             "CHIA_BRANCH=latest"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:test
