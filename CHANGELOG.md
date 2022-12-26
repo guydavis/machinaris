@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Changed
  - Fixed broken 'Generate/Import Key' actions for Chia 1.6.1 on Setup page. Thanks @SilverFolfy
  - Missing plots on Farming page when a status.json file was corrupted. Thanks @Yurly
+ - Fix for duplicated Chiadog alerts of wallet additions. Thanks @GravitasProblem and @doma2345
 ### Updated
  - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v2.0.1) to v2.0.1
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.7.0) to v1.7.0
@@ -18,7 +19,7 @@ All notable changes to this project will be documented in this file. The format 
  - [Chinilla](https://github.com/Chinilla/chinilla-blockchain/releases/tag/1.4.0) to v1.4.0
  - [Chiadog](https://github.com/guydavis/chiadog/releases/tag/v0.7.5) to v0.7.5
  - [Flax](https://github.com/Flax-Network/flax-blockchain/releases/tag/0.1.11) to v0.1.11
- - [MMX](https://github.com/madMAx43v3r/mmx-node) to `testnet9`.  Support the latest AMD GPU driver.
+ - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.9.3) to (v0.9.3) on `testnet9`.  Supporting the latest AMD GPU driver.
  - [Tad](https://github.com/BTCgreen-Network/tad-blockchain/releases/tag/1.7.0b2) to v1.7.0
 ### Known Issues
  - Incorrect reward recovery calculations for some blockchains.  Please use AllTheBlocks site if this affects you.

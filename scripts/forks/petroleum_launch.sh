@@ -17,7 +17,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.petroleum/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
   && [[ ! -f /root/.petroleum/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   mkdir -p /root/.petroleum/mainnet/db/ && cd /root/.petroleum/mainnet/db/
-  echo "Sorry, Petroleum does not offer a recent blockchain DB for download via script.  Standard sync will happen over a few days..."
+  echo "Sorry, Petroleum does not offer a recent blockchain DB for download via script.  Standard sync will happen over a few weeks."
   echo "It is recommended to add some peer node connections on the Connections page of Machinaris."
 fi
 

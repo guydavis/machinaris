@@ -22,7 +22,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   mkdir -p /root/.gold/mainnet/db/ && cd /root/.gold/mainnet/db/
   # Mega links for Gold blockchain DB from their Discord 2022-10-24
   mega-get https://mega.nz/folder/XAhB1bbC#vvlz5NKwtL0iS_WXGsVg2w
-  cd db/ && unzip "db-$(date +'%Y-%m-%d').zip" && mv *.sqlite ../
+  cd db/ && unrar e "db-$(date +'%Y-%m-%d').rar" && mv *.sqlite ../
   cd ../ && rm -rf db
 fi
 
