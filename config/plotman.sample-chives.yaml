@@ -106,14 +106,6 @@ plotting:
         # If you enable 'madmax', plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
         type: madmax
 
-        chia:
-                # The stock plotter: https://github.com/Chia-Network/chia-blockchain
-                k: 32                # k-size of plot, leave at 32 most of the time
-                e: False             # Disable bitfield back sorting (default is True) 
-                n_threads: 2         # Threads per job
-                n_buckets: 128       # Number of buckets to split data into
-                job_buffer: 3389     # Per job memory
-
         madmax:
                 # madMAx plotter: https://github.com/madMAx43v3r/chia-plotter
                 k: 31                 # Default is 32 for Chia, but use 29,30,31 for Chives
@@ -122,10 +114,3 @@ plotting:
                 n_buckets3: 256       # Default is 256
                 n_rmulti2: 1          # Default is 1
                 network_port: 9699    # Default is 8444, but use 9699 for Chives
-
-        bladebit:
-                # BladeBit plotter: https://github.com/Chia-Network/bladebit/
-                threads: 2            # Threads per job
-                no_numa: false        # Whether to disable NUMA memory support or not
-                diskplot: True        # Whether to plot to tmp1 (and tmp2) disks or only RAM (false)
-                diskplot_cache:   4GB # If diskplot, amount of RAM to allocate to caching disk writes
