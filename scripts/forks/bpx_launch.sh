@@ -19,8 +19,8 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Downloading BPX blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.bpx/mainnet/db/ && cd /root/.bpx/mainnet/db/
-  # Download link from their Discord on 2022-07-08
-  gdown 1--AeEqxW_ZhABSLfbGghRMx_9aS94DvA
+  # Download link to blockchain_v2_mainnet.sqlite from their Discord on 2022-10-17
+  curl -skJLO https://dbs.ctek.cc/$/6RnzB
 fi
 
 mkdir -p /root/.bpx/mainnet/log

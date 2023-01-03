@@ -43,7 +43,7 @@ jobs:
             "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=develop"
             "CHIADOG_BRANCH=dev"
-            "CHIA_BRANCH=release/1.7.0"
+            "CHIA_BRANCH=release/1.6.2"
             "BLADEBIT_BRANCH=master"
             "PLOTMAN_BRANCH=development"
           tags: |

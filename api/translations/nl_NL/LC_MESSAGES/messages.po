@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-03-13 10:30-0600\n"
-"POT-Creation-Date: 2022-11-21 20:10-0700\n"
+"POT-Creation-Date: 2023-01-02 17:14-0700\n"
 "PO-Revision-Date: 2022-03-13 10:29-0600\n"
 "Last-Translator: Bernie Deprez\n"
 "Language: nl_NL\n"
@@ -22,11 +22,11 @@ msgstr ""
 msgid "Updated config.yaml failed validation!"
 msgstr "Gewijzigde config.yaml kon niet gevalideerd worden!"
 
-#: commands/pools_cli.py:68
+#: commands/pools_cli.py:76
 msgid "No requested pool modifications were sent. Current settings are unchanged."
 msgstr "Geen pool wijzigingen verstuurd. Huidige configuratie is ongewijzigd."
 
-#: commands/pools_cli.py:154
+#: commands/pools_cli.py:166
 msgid ""
 "Successfully left pool, switching to self-pooling. Please wait a few "
 "minutes or more to complete. DO NOT immediately re-submit your request. "
@@ -36,19 +36,19 @@ msgstr ""
 " minuten (of meer) te wachten. Stuur NIET ONMIDDELLIJK een nieuwe "
 "aanvraag maar controleer de logs voor meer details."
 
-#: commands/pools_cli.py:198
+#: commands/pools_cli.py:212
 #, python-format
 msgid ""
-"Successfully joined %(pool_url)s pool by creating Chia NFT.  Please wait "
-"a few minutes or more to complete. DO NOT immediately re-submit your "
-"request. Be patient! View the log for details."
+"Successfully joined %(pool_url)s pool.  Please wait a few minutes or more"
+" to complete. DO NOT immediately re-submit your request. Be patient! View"
+" the log for details."
 msgstr ""
 "Succesvol aangesloten bij de %(pool_url) pool door creatie van een Chia "
 "NFT. Gelieve enkele minuten (of meer) te wachten. Stuur NIET ONMIDDELLIJK"
 " een nieuwe aanvraag. Wees geduldig! Controleer de logs voor meer "
 "details."
 
-#: commands/pools_cli.py:227
+#: commands/pools_cli.py:243
 msgid ""
 "Successfully created a NFT for self-pooling.  Please wait a few minutes "
 "or more to complete. DO NOT immediately re-submit your request. Be "

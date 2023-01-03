@@ -45,19 +45,21 @@ class Keys(MethodView):
         return item
 
 
-@blp.route('/<hostname>')
-class KeysByHostname(MethodView):
+@blp.route('/<hostname>/<blockchain>')
+class KeysByHostnameBlockchain(MethodView):
 
     @blp.etag
     @blp.response(200, KeySchema)
-    def get(self, hostname):
-        return db.session.query(Key).get_or_404(hostname)
+    def get(self, hostname, blockchain):
+        return db.session.query(Key).filter(Key.hostname==hostname, \
+            Key.blockchain==blockchain).first()
 
     @blp.etag
     @blp.arguments(KeySchema)
     @blp.response(200, KeySchema)
-    def put(self, new_item, hostname):
-        item = db.session.query(Key).get_or_404(hostname)
+    def put(self, new_item, hostname, blockchain):
+        item = db.session.query(Key).filter(Key.hostname==hostname, \
+            Key.blockchain==blockchain).first()
         new_item['hostname'] = item.hostname
         new_item['created_at'] = item.created_at
         new_item['updated_at'] = dt.datetime.now()
@@ -69,8 +71,9 @@ class KeysByHostname(MethodView):
 
     @blp.etag
     @blp.response(204)
-    def delete(self, hostname):
-        item = db.session.query(Key).get_or_404(hostname)
+    def delete(self, hostname, blockchain):
+        item = db.session.query(Key).filter(Key.hostname==hostname, \
+            Key.blockchain==blockchain).first()
         blp.check_etag(item, KeySchema)
         db.session.delete(item)
         db.session.commit()

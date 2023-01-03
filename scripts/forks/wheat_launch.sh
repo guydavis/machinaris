@@ -17,7 +17,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.wheat/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
   && [[ ! -f /root/.wheat/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   echo "Sorry, Wheat does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
-  echo "It is recommended to add some peer node connections on the Connections page of Machinaris from: https://alltheblocks.net/wheat"
+  echo "It is recommended to add some peer node connections on the Connections page of Machinaris."
 fi
 
 mkdir -p /root/.wheat/mainnet/log

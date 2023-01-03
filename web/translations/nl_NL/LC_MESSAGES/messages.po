@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-03-13 10:29-0600\n"
-"POT-Creation-Date: 2022-11-21 20:10-0700\n"
+"POT-Creation-Date: 2023-01-02 17:14-0700\n"
 "PO-Revision-Date: 2022-03-13 10:29-0600\n"
 "Last-Translator: Bernie Deprez\n"
 "Language: nl_NL\n"
@@ -66,7 +66,7 @@ msgstr ""
 msgid "Unknown form action"
 msgstr "Ongekende formulier actie"
 
-#: routes.py:527
+#: routes.py:531
 #, python-format
 msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
@@ -75,7 +75,7 @@ msgstr ""
 "Geen werker op %(worker)s voor blockchain %(blockchain)s. Gelieve een "
 "ander blockchain te kiezen."
 
-#: routes.py:533
+#: routes.py:537
 #, python-format
 msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
@@ -84,7 +84,7 @@ msgstr ""
 "Voor Waarschuwingsconfiguratie, geen reagerende fullnode voor "
 "%(blockchain)s gevonden. Gelieve uw werkers te controleren."
 
-#: routes.py:538
+#: routes.py:542
 #, python-format
 msgid ""
 "For Farming config, found no responding fullnode found for "
@@ -93,7 +93,7 @@ msgstr ""
 "Voor Farming configuratie, geen reagerende fullnode voor %(blockchain)s "
 "gevonden. Gelieve uw werkers te controleren."
 
-#: routes.py:545
+#: routes.py:549
 #, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
@@ -102,7 +102,7 @@ msgstr ""
 "Voor Plotting configuratie, geen reagerende fullnode gevonden voor "
 "%(blockchain)s. Gelieve uw werkers te controleren."
 
-#: routes.py:550 routes.py:555
+#: routes.py:554 routes.py:559
 #, python-format
 msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
@@ -111,7 +111,7 @@ msgstr ""
 "Geen reagerende fullnode gevonden voor %(blockchain)s. Gelieve uw werkers"
 " te controleren."
 
-#: routes.py:574
+#: routes.py:578
 msgid "Unsupported log type"
 msgstr "Log type niet ondersteund"
 
@@ -471,6 +471,10 @@ msgid ""
 " coins."
 msgstr ""
 
+#: actions/pools.py:157
+msgid "Unconfirmed transaction cleanup has been initiated. Please wait..."
+msgstr ""
+
 #: actions/stats.py:83 actions/stats.py:118 actions/stats.py:131
 #: actions/stats.py:151 actions/stats.py:153
 msgid "in last day."
@@ -553,7 +557,7 @@ msgid "plots"
 msgstr ""
 
 #: actions/stats.py:728 templates/farming/workers.html:197
-#: templates/plotting/transfers.html:266 templates/worker.html:298
+#: templates/plotting/transfers.html:272 templates/worker.html:298
 #: templates/worker.html:363
 msgid "full"
 msgstr ""
@@ -637,7 +641,7 @@ msgid "Not synced"
 msgstr "Niet gesynchroniseerd"
 
 #: models/chia.py:237 templates/blockchains.html:127 templates/index.html:54
-#: templates/plotting/jobs.html:122 templates/plotting/transfers.html:121
+#: templates/plotting/jobs.html:130 templates/plotting/transfers.html:127
 #: templates/summary.html:103 templates/wallet.html:197
 #: templates/worker.html:78 templates/workers.html:83
 msgid "Offline"
@@ -846,19 +850,19 @@ msgstr ""
 msgid "Chiadog Log on "
 msgstr "Chiadog Log van "
 
-#: templates/alerts.html:148 templates/plotting/jobs.html:447
+#: templates/alerts.html:148 templates/plotting/jobs.html:458
 msgid "Starting..."
 msgstr "Starten..."
 
-#: templates/alerts.html:155 templates/plotting/jobs.html:457
+#: templates/alerts.html:155 templates/plotting/jobs.html:468
 msgid "Stopping..."
 msgstr "Stoppen..."
 
-#: templates/alerts.html:162 templates/drives.html:324
+#: templates/alerts.html:162 templates/drives.html:325
 msgid "Removing..."
 msgstr "Verwijderen..."
 
-#: templates/alerts.html:170 templates/drives.html:332
+#: templates/alerts.html:170 templates/drives.html:333
 msgid "Purging..."
 msgstr "Eliminatie..."
 
@@ -872,7 +876,7 @@ msgid "Summary"
 msgstr "Samenvatting"
 
 #: templates/base.html:39 templates/base.html:114 templates/index.html:41
-#: templates/plotting/jobs.html:109 templates/settings/plotting.html:14
+#: templates/plotting/jobs.html:117 templates/settings/plotting.html:14
 msgid "Plotting"
 msgstr "Plotting"
 
@@ -908,7 +912,7 @@ msgstr "Pools"
 
 #: templates/base.html:87 templates/farming/plots.html:202
 #: templates/farming/warnings.html:28 templates/farming/workers.html:28
-#: templates/plotting/jobs.html:102 templates/plotting/transfers.html:101
+#: templates/plotting/jobs.html:110 templates/plotting/transfers.html:107
 #: templates/plotting/workers.html:28 templates/summary.html:81
 #: templates/workers.html:14
 msgid "Workers"
@@ -979,12 +983,12 @@ msgstr "Lokale Munt:"
 #: templates/blockchains.html:44 templates/blockchains.html:66
 #: templates/connections.html:50 templates/drives.html:84
 #: templates/farming/plots.html:161 templates/farming/plots.html:188
-#: templates/plotting/jobs.html:16 templates/plotting/jobs.html:39
-#: templates/plotting/jobs.html:57 templates/plotting/transfers.html:16
-#: templates/plotting/transfers.html:34 templates/settings/alerts.html:25
-#: templates/settings/pools.html:39 templates/summary.html:44
-#: templates/wallet.html:74 templates/wallet.html:101 templates/wallet.html:124
-#: templates/wallet.html:151
+#: templates/plotting/jobs.html:16 templates/plotting/jobs.html:43
+#: templates/plotting/jobs.html:64 templates/plotting/transfers.html:18
+#: templates/plotting/transfers.html:39 templates/settings/alerts.html:25
+#: templates/settings/pools.html:45 templates/settings/pools.html:69
+#: templates/summary.html:44 templates/wallet.html:74 templates/wallet.html:101
+#: templates/wallet.html:124 templates/wallet.html:151
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -992,7 +996,7 @@ msgstr "Annuleren"
 #: templates/drives.html:85 templates/farming/plots.html:162
 #: templates/farming/plots.html:189 templates/settings/alerts.html:86
 #: templates/settings/farming.html:57 templates/settings/plotting.html:65
-#: templates/settings/pools.html:41 templates/settings/tools.html:56
+#: templates/settings/pools.html:47 templates/settings/tools.html:56
 #: templates/summary.html:45 templates/wallet.html:75 templates/wallet.html:102
 msgid "Save"
 msgstr "Opslaan"
@@ -1243,19 +1247,19 @@ msgstr ""
 msgid "Passed"
 msgstr ""
 
-#: templates/drives.html:266
+#: templates/drives.html:267
 msgid "Drive status updated"
 msgstr ""
 
-#: templates/drives.html:275
+#: templates/drives.html:276
 msgid "No drives accessible to smartctl inside the Machinaris containers."
 msgstr ""
 
-#: templates/drives.html:276
+#: templates/drives.html:277
 msgid "Please configure Docker to allow smartctl access to host devices."
 msgstr ""
 
-#: templates/drives.html:277 templates/workers.html:116
+#: templates/drives.html:278 templates/workers.html:116
 #, python-format
 msgid "For more, see the Machinaris %(wiki_link_open)swiki%(wiki_link_close)s."
 msgstr ""
@@ -1643,7 +1647,7 @@ msgid ""
 "container shell to verify."
 msgstr ""
 
-#: templates/plotting/jobs.html:40 templates/plotting/transfers.html:17
+#: templates/plotting/jobs.html:44 templates/plotting/transfers.html:19
 #: templates/wallet.html:342
 msgid "Start"
 msgstr "Start"
@@ -1694,7 +1698,7 @@ msgstr ""
 #: templates/charts/effort.html:85 templates/charts/farmed.html:134
 #: templates/charts/netspace.html:91 templates/charts/plot_count.html:84
 #: templates/charts/plots_size.html:84 templates/charts/timetowin.html:85
-#: templates/plotting/jobs.html:296 templates/views/index_script_block.js:90
+#: templates/plotting/jobs.html:304 templates/views/index_script_block.js:90
 #: templates/wallet.html:485
 msgid "Date"
 msgstr ""
@@ -1777,12 +1781,12 @@ msgstr ""
 msgid "Time - Last 24 Hours"
 msgstr ""
 
-#: templates/farming/workers.html:191 templates/plotting/transfers.html:260
+#: templates/farming/workers.html:191 templates/plotting/transfers.html:266
 #: templates/worker.html:292
 msgid "Disk Space Used (TB)"
 msgstr "Gebruikte Schijfruimte (TB)"
 
-#: templates/farming/workers.html:204 templates/plotting/transfers.html:273
+#: templates/farming/workers.html:204 templates/plotting/transfers.html:279
 #: templates/worker.html:305
 msgid "Disk Space Free (TB)"
 msgstr "Vrije Schijfruimte (TB)"
@@ -2070,8 +2074,8 @@ msgstr "Plot Controle"
 msgid "Replotting"
 msgstr ""
 
-#: templates/farming/plots.html:99 templates/plotting/jobs.html:116
-#: templates/plotting/transfers.html:115
+#: templates/farming/plots.html:99 templates/plotting/jobs.html:124
+#: templates/plotting/transfers.html:121
 msgid "Disabled"
 msgstr ""
 
@@ -2111,8 +2115,8 @@ msgstr ""
 msgid "Warnings"
 msgstr ""
 
-#: templates/farming/plots.html:222 templates/plotting/jobs.html:136
-#: templates/plotting/transfers.html:138
+#: templates/farming/plots.html:222 templates/plotting/jobs.html:144
+#: templates/plotting/transfers.html:144
 msgid "Worker is offline."
 msgstr "Werker is offline"
 
@@ -2242,7 +2246,7 @@ msgstr ""
 "%(wiki_link_open)s geconfigureerd %(wiki_link_close)s. Verifieer ook op "
 "de Werkers pagina of de Chia werker rapporteert naar de controller."
 
-#: templates/farming/workers.html:240 templates/plotting/transfers.html:309
+#: templates/farming/workers.html:240 templates/plotting/transfers.html:315
 msgid "Plot Disk Used"
 msgstr ""
 
@@ -2262,11 +2266,11 @@ msgstr ""
 "actief is zal onmiddellijk een nieuwe plot starten, zorg er dus voor om "
 "eerst Plotman te stoppen (bovenaan rechts op de pagina). Verder gaan?"
 
-#: templates/plotting/jobs.html:17 templates/plotting/jobs.html:212
+#: templates/plotting/jobs.html:17 templates/plotting/jobs.html:220
 msgid "Kill Selected"
 msgstr "Kill geselecteerde"
 
-#: templates/plotting/jobs.html:27 templates/plotting/jobs.html:142
+#: templates/plotting/jobs.html:27 templates/plotting/jobs.html:150
 msgid "Start Plotting"
 msgstr "Start Plotting"
 
@@ -2279,7 +2283,7 @@ msgstr ""
 "geconfigureerde plotter. Wees voorzichting met het starten van meer dan "
 "één plotter terzelfdertijd op eenzelfde machine. Verder gaan?"
 
-#: templates/plotting/jobs.html:36
+#: templates/plotting/jobs.html:38
 msgid ""
 "Be careful about running more than one plotter on a single machine at a "
 "time. Continue?"
@@ -2288,11 +2292,17 @@ msgstr ""
 "geconfigureerde plotter. Wees voorzichting met het starten van meer dan "
 "één plotter terzelfdertijd op eenzelfde machine. Verder gaan?"
 
-#: templates/plotting/jobs.html:50 templates/plotting/jobs.html:139
+#: templates/plotting/jobs.html:41 templates/plotting/jobs.html:62
+#: templates/plotting/transfers.html:16 templates/plotting/transfers.html:37
+#: templates/settings/pools.html:196
+msgid "View Log"
+msgstr "Bekijk log"
+
+#: templates/plotting/jobs.html:55 templates/plotting/jobs.html:147
 msgid "Stop Plotting"
 msgstr "Stop plotting"
 
-#: templates/plotting/jobs.html:54
+#: templates/plotting/jobs.html:59
 msgid ""
 "This action will stop Plotman from launching new plotting jobs.  Running "
 "jobs will run to completion. Continue?"
@@ -2300,16 +2310,16 @@ msgstr ""
 "Deze actie voorkomt dat Plotman nieuwe plotting jobs start. Actieve jobs "
 "blijven actief tot deze compleet zijn. Verder gaan?"
 
-#: templates/plotting/jobs.html:58 templates/plotting/transfers.html:35
+#: templates/plotting/jobs.html:65 templates/plotting/transfers.html:40
 msgid "Stop"
 msgstr "Stop"
 
-#: templates/plotting/jobs.html:68 templates/plotting/transfers.html:45
-#: templates/plotting/transfers.html:65
+#: templates/plotting/jobs.html:76 templates/plotting/transfers.html:51
+#: templates/plotting/transfers.html:71
 msgid "Worker Offline"
 msgstr "Werker offline"
 
-#: templates/plotting/jobs.html:72 templates/plotting/transfers.html:69
+#: templates/plotting/jobs.html:80 templates/plotting/transfers.html:75
 msgid ""
 "This worker is not currently online and responding to pings from the "
 "controller.  Please check the Workers page and bring the system back "
@@ -2319,59 +2329,59 @@ msgstr ""
 "controller. Gelieve de pagina Werkers te controleren en het systeem terug"
 " online te brengen."
 
-#: templates/plotting/jobs.html:75 templates/plotting/transfers.html:55
-#: templates/plotting/transfers.html:72
+#: templates/plotting/jobs.html:83 templates/plotting/transfers.html:61
+#: templates/plotting/transfers.html:78
 msgid "OK"
 msgstr "OK"
 
-#: templates/plotting/jobs.html:96 templates/plotting/transfers.html:95
+#: templates/plotting/jobs.html:104 templates/plotting/transfers.html:101
 #: templates/plotting/workers.html:22
 msgid "Jobs"
 msgstr "Jobs"
 
-#: templates/plotting/jobs.html:99 templates/plotting/transfers.html:98
+#: templates/plotting/jobs.html:107 templates/plotting/transfers.html:104
 #: templates/plotting/workers.html:25
 msgid "Transfers"
 msgstr ""
 
-#: templates/plotting/jobs.html:118 templates/plotting/transfers.html:117
+#: templates/plotting/jobs.html:126 templates/plotting/transfers.html:123
 msgid "Running"
 msgstr ""
 
-#: templates/plotting/jobs.html:120 templates/plotting/transfers.html:119
+#: templates/plotting/jobs.html:128 templates/plotting/transfers.html:125
 msgid "Stopped"
 msgstr ""
 
-#: templates/plotting/jobs.html:208
+#: templates/plotting/jobs.html:216
 msgid "Suspend Selected"
 msgstr "Geselecteerde opschorten"
 
-#: templates/plotting/jobs.html:210
+#: templates/plotting/jobs.html:218
 msgid "Resume Selected"
 msgstr "Geselecteerde herstarten"
 
-#: templates/plotting/jobs.html:223
+#: templates/plotting/jobs.html:231
 #, python-format
 msgid "Plotting Speed - k%(k_size)s Plots"
 msgstr "Plotting snelheid - k%(k_size)s Plots"
 
-#: templates/plotting/jobs.html:313
+#: templates/plotting/jobs.html:321
 msgid "Time (minutes)"
 msgstr ""
 
-#: templates/plotting/jobs.html:421
+#: templates/plotting/jobs.html:432
 msgid "Suspending..."
 msgstr "Opschorten..."
 
-#: templates/plotting/jobs.html:429
+#: templates/plotting/jobs.html:440
 msgid "Resuming..."
 msgstr "Herstarten..."
 
-#: templates/plotting/jobs.html:438
+#: templates/plotting/jobs.html:449
 msgid "Killing..."
 msgstr "Killing..."
 
-#: templates/plotting/transfers.html:9 templates/plotting/transfers.html:144
+#: templates/plotting/transfers.html:9 templates/plotting/transfers.html:150
 msgid "Start Archiving"
 msgstr "Start Archivering"
 
@@ -2385,11 +2395,11 @@ msgstr ""
 "Afgewerkte plots zullen locaal gedistribueerd of extern getransfereerd "
 "worden. Verder gaan?"
 
-#: templates/plotting/transfers.html:27 templates/plotting/transfers.html:141
+#: templates/plotting/transfers.html:30 templates/plotting/transfers.html:147
 msgid "Stop Archiving"
 msgstr "Stop Archivering"
 
-#: templates/plotting/transfers.html:31
+#: templates/plotting/transfers.html:34
 msgid ""
 "This action will stop Plotman archiving from the destination folder, "
 "preventing further completed plot transfers. Continue?"
@@ -2397,7 +2407,7 @@ msgstr ""
 "Deze actie stopt Plotman archivering vanuit de geconfigureerde dst map en"
 " voorkomt verdere transferts van afgewerkte plots. Verder gaan?"
 
-#: templates/plotting/transfers.html:50
+#: templates/plotting/transfers.html:56
 #, python-format
 msgid ""
 "This worker is not currently configured for Plotman "
@@ -2410,11 +2420,11 @@ msgstr ""
 "transferts van afgewerkte plots uit te voeren. Gelieve de pagina "
 "Instellingen | Plotting te bezoeken om de werker te configureren."
 
-#: templates/plotting/transfers.html:108
+#: templates/plotting/transfers.html:114
 msgid "Archiving"
 msgstr "Archivering"
 
-#: templates/plotting/transfers.html:135
+#: templates/plotting/transfers.html:141
 msgid "Archiving is disabled.  See Settings | Plotting page."
 msgstr "Archivering is uitgeschakeld. Zie pagina Instellingen | Plotting."
 
@@ -2451,7 +2461,7 @@ msgid "Download"
 msgstr "Download"
 
 #: templates/settings/alerts.html:155 templates/settings/farming.html:160
-#: templates/settings/plotting.html:180 templates/settings/pools.html:185
+#: templates/settings/plotting.html:180 templates/settings/pools.html:220
 #: templates/settings/tools.html:115
 msgid "Saving..."
 msgstr "Opslaan..."
@@ -2482,14 +2492,33 @@ msgstr "Bevestig pool wijziging"
 
 #: templates/settings/pools.html:36
 msgid ""
-"This action will switch your current pooling selection, possibly "
-"resulting in a small charge (few mojos) against your wallet. Continue "
-"anyway?"
+"This action will switch your current pooling selection, resulting in a "
+"small fee charged against your wallet by the blockchain."
 msgstr ""
 "Deze actie wisselt uw huidige pooling selectie, mogelijks leidend tot een"
 " kleine kost (enkele mojos) in uw portefeuille.  Verder gaan?"
 
-#: templates/settings/pools.html:85
+#: templates/settings/pools.html:38
+msgid "Fee in Mojos: "
+msgstr ""
+
+#: templates/settings/pools.html:59
+msgid "Delete Unconfirmed Transactions?"
+msgstr ""
+
+#: templates/settings/pools.html:64
+#, python-format
+msgid ""
+"Chia sometimes requires %(wikilink_open)sunconfirmed transaction "
+"cleanup%(wikilink_close)s to successfully change pool settings. If you "
+"encounter such errors, please try this transaction cleanup for Chia."
+msgstr ""
+
+#: templates/settings/pools.html:70
+msgid "Continue"
+msgstr ""
+
+#: templates/settings/pools.html:116
 #, python-format
 msgid ""
 "Join a pool and get consistent farming rewards. The average returns are "
@@ -2500,39 +2529,39 @@ msgstr ""
 "gemiddelde rendement is gelijk, %(break)sechter het is minder volatiel. U"
 " kunt gemakkelijk pools wisselen zonder plots te hoeven hermaken."
 
-#: templates/settings/pools.html:88
+#: templates/settings/pools.html:119
 msgid "ERROR: Unable to join a pool because:"
 msgstr "ERROR: Pool kon niet worden vervoegd omdat:"
 
-#: templates/settings/pools.html:111
+#: templates/settings/pools.html:135
+msgid "Delete Unconfirmed Transactions"
+msgstr ""
+
+#: templates/settings/pools.html:146
 msgid "Self pool. When you win a block, you will earn rewards."
 msgstr "Self pool. Wanneer u een block wint, krijgt u de compensatie."
 
-#: templates/settings/pools.html:122
+#: templates/settings/pools.html:157
 msgid "Connected to pool:"
 msgstr "Verbonden met pool: "
 
-#: templates/settings/pools.html:122
+#: templates/settings/pools.html:157
 msgid "Connect to pool:"
 msgstr "Verbind met pool:"
 
-#: templates/settings/pools.html:132
+#: templates/settings/pools.html:167
 msgid "Compare Pools"
 msgstr "Vergelijk pools"
 
-#: templates/settings/pools.html:135
+#: templates/settings/pools.html:170
 msgid "Get Mojos"
 msgstr "Ontvang Mojos"
 
-#: templates/settings/pools.html:157
+#: templates/settings/pools.html:192
 msgid "Save Changes"
 msgstr "Bewaar wijzigingen"
 
-#: templates/settings/pools.html:161
-msgid "View Log"
-msgstr "Bekijk log"
-
-#: templates/settings/pools.html:172
+#: templates/settings/pools.html:207
 msgid ""
 "No wallets found yet.  Perhaps this is a brand-new installation? If so, "
 "please wait for complete start-up."
@@ -2540,15 +2569,19 @@ msgstr ""
 "Nog geen portefeuilles gevonden. Misschie is dit een gloednieuwe "
 "installatie? Indien zo, wacht tot het opstarten is beëindigt."
 
-#: templates/settings/pools.html:173
+#: templates/settings/pools.html:208
 msgid "For more on Pooling, see the Machinaris"
 msgstr "Voor meer omtrent Pooling, zie Machinaris"
 
-#: templates/settings/pools.html:173
+#: templates/settings/pools.html:208
 msgid "wiki"
 msgstr "wiki"
 
-#: templates/settings/pools.html:197
+#: templates/settings/pools.html:236
+msgid "Deleting..."
+msgstr ""
+
+#: templates/settings/pools.html:247
 msgid "PlotNFT Log on "
 msgstr "PlotNFS log op "
 
