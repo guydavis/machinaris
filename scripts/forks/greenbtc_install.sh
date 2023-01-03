@@ -11,7 +11,7 @@ if [ -z ${GREENBTC_BRANCH} ]; then
 	echo 'Skipping GreenBTC install as not requested.'
 else
 	rm -rf /root/.cache
-	git clone --branch ${GREENBTC_BRANCH} --single-branch https://github.com/GreenBTC-Network/greenbtc-blockchain.git /greenbtc-blockchain
+	git clone --branch ${GREENBTC_BRANCH} --single-branch https://github.com/greenbtc/greenbtc-blockchain.git /greenbtc-blockchain
 	cd /greenbtc-blockchain 
 	git submodule update --init mozilla-ca 
 	git checkout $HASH
