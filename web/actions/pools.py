@@ -61,14 +61,14 @@ def get_first_pool_wallet_id():
                 return m.group(1)
     return None
 
-def send_request(fullnode, selected_blockchain, launcher_ids, choices, pool_urls, wallet_nums,current_pool_urls):
+def send_request(fullnode, selected_blockchain, launcher_ids, choices, pool_urls, wallet_nums,current_pool_urls, fee_mojos):
     app.logger.info("Sending pooling settings change request...")
     try:
         response = utils.send_post(fullnode, "/actions/", 
             payload={
                     "service": "pooling","action": "save", "blockchain": selected_blockchain, 
                         "choices": choices, "pool_urls": pool_urls, "current_pool_urls": current_pool_urls,
-                        "launcher_ids": launcher_ids, "wallet_nums": wallet_nums
+                        "launcher_ids": launcher_ids, "wallet_nums": wallet_nums, "fee_mojos": fee_mojos
                     }, 
             debug=True)
     except:
@@ -151,3 +151,9 @@ def request_unclaimed_plotnft_reward_recovery():
                     app.logger.error("Failed to request {0} reward recovery due to {1}.".format(wkr.blockchain, str(ex)))
     flash(_("Reward recovery for portable plots has been initiated.  Tomorrow, please check the Total Balance charts below for each blockchain with recoverable coins."))
         
+def delete_unconfirmed_transactions(walletid):
+    try:
+        stream = os.popen("chia wallet delete_unconfirmed_transactions -i {0}".format(walletid))
+        flash(_("Unconfirmed transaction cleanup has been initiated. Please wait...") + " <pre>" + stream.read() + "</pre>")
+    except Exception as ex:
+        app.logger.info("Failed to delete unconfirmed transactions: {0}".format(str(ex)))

@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2022-11-21 20:10-0700\n"
+"POT-Creation-Date: 2023-01-02 17:14-0700\n"
 "PO-Revision-Date: 2022-02-15 14:29-0700\n"
 "Last-Translator: Guy Davis\n"
 "Language: fr\n"
@@ -22,13 +22,13 @@ msgstr ""
 msgid "Updated config.yaml failed validation!"
 msgstr "Échec de la validation du fichier config.yaml mis à jour!"
 
-#: commands/pools_cli.py:68
+#: commands/pools_cli.py:76
 msgid "No requested pool modifications were sent. Current settings are unchanged."
 msgstr ""
 "Aucune modification de pool demandée n'a été envoyée. Les paramètres "
 "actuels sont inchangés."
 
-#: commands/pools_cli.py:154
+#: commands/pools_cli.py:166
 msgid ""
 "Successfully left pool, switching to self-pooling. Please wait a few "
 "minutes or more to complete. DO NOT immediately re-submit your request. "
@@ -39,19 +39,19 @@ msgstr ""
 "soumettre à nouveau votre demande immédiatement.Afficher le journal pour "
 "plus de détails."
 
-#: commands/pools_cli.py:198
+#: commands/pools_cli.py:212
 #, python-format
 msgid ""
-"Successfully joined %(pool_url)s pool by creating Chia NFT.  Please wait "
-"a few minutes or more to complete. DO NOT immediately re-submit your "
-"request. Be patient! View the log for details."
+"Successfully joined %(pool_url)s pool.  Please wait a few minutes or more"
+" to complete. DO NOT immediately re-submit your request. Be patient! View"
+" the log for details."
 msgstr ""
 "Rejoindre avec succès le pool %(pool_url)s en créant Chia NFT. Veuillez "
 "patienterquelques minutes ou plus pour terminer. NE RENOUVELEZ PAS "
 "immédiatement votre demande. Soyez patient! Consultez le journal pour "
 "plus de détails."
 
-#: commands/pools_cli.py:227
+#: commands/pools_cli.py:243
 msgid ""
 "Successfully created a NFT for self-pooling.  Please wait a few minutes "
 "or more to complete. DO NOT immediately re-submit your request. Be "
