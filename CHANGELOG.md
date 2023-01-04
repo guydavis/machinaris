@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.8.6] - 2023-01-03
 ### Added
  - Re-plotting: **Optional** background deletion of a few old plots to free space for new plotting. See Farming page, Settings icon, top-right.
  - Table of recent plot archiving (local and remote) on new "Plotting | Transfers" page, including status and transfer speed.
@@ -25,7 +25,8 @@ All notable changes to this project will be documented in this file. The format 
  - [Flax](https://github.com/Flax-Network/flax-blockchain/releases/tag/0.1.11) to v0.1.11
  - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.9.3) to (v0.9.3) on `testnet9`.  Supporting the latest AMD GPU driver.
  - [Tad](https://github.com/BTCgreen-Network/tad-blockchain/releases/tag/1.7.0b2) to v1.7.0
-### Known Issues
+### 
+ - Support for new Chia forks DOES NOT imply my endorsement for them.  Only run those you are comfortable with.
  - Incorrect reward recovery calculations for some blockchains.  Please use AllTheBlocks site if this affects you.
 
 ## [0.8.5] - 2022-11-03
