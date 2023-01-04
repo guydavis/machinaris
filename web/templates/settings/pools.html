@@ -33,13 +33,43 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body bg-dark">
-                {{_('This action will switch your current pooling selection, possibly resulting in a small charge (few mojos) against your wallet. Continue anyway?')}}
-            </div>
+                {{_('This action will switch your current pooling selection, resulting in a small fee charged against your wallet by the blockchain.')}}
+                <div class="row mb-3 pt-3">
+                    <label class="col-sm-3 col-form-label col-form-label-sm" for="fee_mojos">{{_('Fee in Mojos: ')}}</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" value="10" aria-label="fee_mojos" name="fee_mojos" id="fee_mojos"/>
+                    </div>
+                </div>
+             </div>
             <div class="modal-footer bg-dark">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{_('Cancel')}}</button>
                 <button type="button" class="btn btn-outline-success" data-bs-dismiss="modal"
                     id="btnConfirmSave">{{_('Save')}}</button>
             </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="unconfirmedModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="unconfirmedModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3">
+        <div class="modal-content bg-dark">
+          <form method="POST" id="unconfirmed-form">
+            <input type="hidden" id="walletid" name="walletid" />
+            <input type="hidden" name="action" value="deleteUnconfirmed"/>
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="unconfirmedModalLabel">{{_('Delete Unconfirmed Transactions?')}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+              {% autoescape false %}
+              {{_('Chia sometimes requires %(wikilink_open)sunconfirmed transaction cleanup%(wikilink_close)s to successfully change pool settings. If you encounter such errors, please try this transaction cleanup for Chia.', 
+                wikilink_open='<a href="https://github.com/guydavis/machinaris/wiki/Pooling#unconfirmed-transaction-error-when-joining-a-pool" class="text-white" target="_blank">', wikilink_close='</a>')}}
+              {% endautoescape %}
+            </div>
+            <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelUnconfirmed">{{_('Cancel')}}</button>
+                <button type="button" class="btn btn-outline-success" id="btnDeleteUnconfirmed">{{_('Continue')}}</button>
+            </div>
+          </form>
         </div>
     </div>
 </div>
@@ -79,6 +109,7 @@
                 {% for blockchain in blockchains %}
                 <div class="tab-pane {% if blockchain == selected_blockchain %}active{% endif %}" id="{{blockchain}}" role="tabpanel" aria-labelledby="{{blockchain}}-tab">
                     <form method="POST" id="{{blockchain}}-pooling-form">
+                    <input type="hidden" id="{{blockchain}}-fee_mojos" name="{{blockchain}}-fee_mojos" />
                     <div class="p-1 mb-4 bg-light border rounded-3">
                         <div class="container m-4">
                             {% autoescape false %}
@@ -99,8 +130,12 @@
                                 {% endif %}
                                 {% if plotnft.details %}
                                 <div class="container-fluid">
-                                    <pre style="float:right">Updated at: {{plotnft.updated_at|datetimefilter}}</pre>
+                                    <pre style="float:right; padding-right:20px">
+                                        Updated at: {{plotnft.updated_at|datetimefilter}}
+                                        {% if plotnft.blockchain == 'chia' %}<a href="#" class="text-white" data-bs-toggle="modal" data-bs-target="#unconfirmedModal" data-bs-walletid="{{ plotnft.wallet_num }}">{{_('Delete Unconfirmed Transactions')}}</a>{% endif %}
+                                    </pre>
                                     <pre>{{plotnft.header}}</pre>
+                                    <br/>
                                 </div>
                                 {% endif %}
                                 <div class="col-12">
@@ -185,7 +220,22 @@
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Saving...')}}`
                 );
                 var selected_blockchain = $(".nav-link.active").attr('data-bs-blockchain');
+                $('#' + selected_blockchain + '-fee_mojos').val($("#fee_mojos").val())
                 $('#' + selected_blockchain + '-pooling-form').submit();
+            });
+            var exampleModal = document.getElementById('unconfirmedModal')
+            exampleModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget
+                var walletid = button.getAttribute('data-bs-walletid')
+                $('#walletid').val(walletid)
+            });
+            $("#btnDeleteUnconfirmed").click(function () {
+                $("#btnCancelUnconfirmed").prop("disabled", true);
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Deleting...')}}`
+                );
+                $("#unconfirmed-form").submit();
             });
         })
         function viewLogs(hostname, blockchain) {

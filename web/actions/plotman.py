@@ -18,14 +18,14 @@ from flask.helpers import make_response
 from flask_babel import _, lazy_gettext as _l
 from subprocess import Popen, TimeoutExpired, PIPE
 
-from common.models import plottings as pl, keys as k
-from common.models.plottings import PLOTTABLE_BLOCKCHAINS
+from common.models import plottings as pl, transfers as t, keys as k
 from web import app, db, utils
-from web.models.plotman import PlottingSummary
+from web.models.plotman import PlottingSummary, ArchivingSummary
 from . import worker as w
 from . import pools as p
 
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
+REPLOTTING_CONFIG = '/root/.chia/machinaris/config/replotting.json'
 
 # Don't query plotman unless at least this long since last time.
 RELOAD_MINIMUM_SECS = 30
@@ -49,10 +49,18 @@ def load_plotting_summary_by_blockchains(blockchains):
             summary[plotting.blockchain] = _('Suspended')
     if 'chia' in summary and summary['chia']:
         for blockchain in blockchains: # All forks sharing Chia plots show as "Active" too
-            if not blockchain in PLOTTABLE_BLOCKCHAINS:
+            if not blockchain in pl.PLOTTABLE_BLOCKCHAINS:
                 summary[blockchain] = summary['chia']
     #app.logger.info(summary)
     return summary
+
+def load_archiving_summary(hostname=None):
+    query = db.session.query(t.Transfer)
+    if hostname:
+        transfers = query.filter(t.Transfer.hostname==hostname)
+    else:
+        transfers = query.all()
+    return ArchivingSummary(transfers)
 
 def load_plotters():
     return w.load_worker_summary().plotters()
@@ -264,3 +272,41 @@ def load_plotting_keys(blockchain):
     if not pool_contract_address:
         pool_contract_address = None if os.environ['pool_contract_address'] == 'null' else os.environ['pool_contract_address']
     return [farmer_pk, pool_pk, pool_contract_address]
+
+def load_replotting_settings():
+    settings = {}
+    if os.path.exists(REPLOTTING_CONFIG):
+        with open(REPLOTTING_CONFIG, 'r') as fp:
+            settings = json.loads(fp.read())
+    for blockchain in pl.PLOTTABLE_BLOCKCHAINS:
+        if not blockchain in settings:  # Default is to have replotting disabled.
+            settings[blockchain] = { "enabled": False, "delete_solo": False, "free_ksize": 32, }
+    return settings
+
+def save_replotting_settings(form):
+    settings = load_replotting_settings()
+    app.logger.info(form)
+    replotting_enabled = []
+    for blockchain in pl.PLOTTABLE_BLOCKCHAINS:
+        settings[blockchain]['enabled'] = form.get('replotting_{0}'.format(blockchain)) == 'true'
+        if settings[blockchain]['enabled']:
+            replotting_enabled.append(blockchain.capitalize())
+        settings[blockchain]['free_ksize'] = int(form.get('replotting_{0}_free_ksize'.format(blockchain)))
+        settings[blockchain]['delete_solo'] = form.get('replotting_{0}_delete_solo'.format(blockchain)) == 'true'
+        settings[blockchain]['delete_before'] = form.get('replotting_{0}_delete_before'.format(blockchain)) == 'true'
+        settings[blockchain]['delete_before_date'] = form.get('replotting_{0}_delete_before_date'.format(blockchain))
+        settings[blockchain]['delete_by_ksize'] = form.get('replotting_{0}_delete_by_ksize'.format(blockchain)) == 'true'
+        settings[blockchain]['delete_by_ksizes'] = list(map(int, form.getlist('replotting_{0}_delete_by_ksizes'.format(blockchain))))
+    try:
+        with open(REPLOTTING_CONFIG, 'w') as f:
+            json.dump(settings, f)
+        if replotting_enabled:
+            flash(_('Replotting has been enabled for %(blockchains)s. Please start Plotting (and Archiving) once free space for replotting appears in about 15 minutes.', blockchains=', '.join(replotting_enabled)), 'success')
+        else:
+            flash(_('Replotting has been DISABLED for all blockchains.  Machinaris will NOT remove any plots now.'), 'success')
+    except Exception as ex:
+        msg = _("Unable to save replotting settings in %(file)s because %(exception)s", file=REPLOTTING_CONFIG, exception=str(ex))
+        app.logger.error(msg)
+        flash(msg, 'danger')
+        return
+    return settings

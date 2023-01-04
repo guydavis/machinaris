@@ -4,10 +4,10 @@ ARG MACHINARIS_STREAM=main
 FROM ghcr.io/guydavis/machinaris-base-${UBUNTU_VER}:${MACHINARIS_STREAM}
 
 ARG DEBIAN_FRONTEND=noninteractive
-ARG PLOTMAN_BRANCH=development
+ARG PLOTMAN_BRANCH=main
 ARG CHIADOG_BRANCH=main
 ARG FDCLI_BRANCH=master
-ARG FORKTOOLS_BRANCH=testing
+ARG FORKTOOLS_BRANCH=main
 ARG BLADEBIT_BRANCH=master
 
 ARG APPLE_BRANCH
@@ -17,17 +17,21 @@ ARG CACTUS_BRANCH
 ARG CHIA_BRANCH
 ARG CHINILLA_BRANCH
 ARG CHIVES_BRANCH
+ARG COFFEE_BRANCH
 ARG CRYPTODOGE_BRANCH
 ARG ECOSTAKE_BRANCH
 ARG FLAX_BRANCH
 ARG FLORA_BRANCH
+ARG GREENBTC_BRANCH
 ARG GOLD_BRANCH
 ARG HDDCOIN_BRANCH
 ARG LITTLELAMBOCOIN_BRANCH
 ARG MAIZE_BRANCH
 ARG MINT_BRANCH
 ARG MMX_BRANCH
+ARG MOON_BRANCH
 ARG NCHAIN_BRANCH
+ARG ONE_BRANCH
 ARG PETROLEUM_BRANCH
 ARG PROFIT_BRANCH
 ARG SHIBGREEN_BRANCH
@@ -52,17 +56,21 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/chia_install.sh ${CHIA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chives_install.sh ${CHIVES_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chinilla_install.sh ${CHINILLA_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/coffee_install.sh ${COFFEE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/cryptodoge_install.sh ${CRYPTODOGE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/ecostake_install.sh ${ECOSTAKE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/flax_install.sh ${FLAX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/flora_install.sh ${FLORA_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/greenbtc_install.sh ${GREENBTC_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/gold_install.sh ${GOLD_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/littlelambocoin_install.sh ${LITTLELAMBOCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/maize_install.sh ${MAIZE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/mint_install.sh ${MINT_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/mmx_install.sh ${MMX_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/moon_install.sh ${MOON_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/one_install.sh ${ONE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/petroleum_install.sh ${PETROLEUM_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/profit_install.sh ${PROFIT_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/shibgreen_install.sh ${SHIBGREEN_BRANCH} \

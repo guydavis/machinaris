@@ -43,8 +43,9 @@ jobs:
             "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=develop"
             "CHIADOG_BRANCH=dev"
-            "CHIA_BRANCH=release/1.6.1"
-            "BLADEBIT_BRANCH=develop"
+            "CHIA_BRANCH=release/1.6.2"
+            "BLADEBIT_BRANCH=master"
+            "PLOTMAN_BRANCH=development"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:develop
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:develop

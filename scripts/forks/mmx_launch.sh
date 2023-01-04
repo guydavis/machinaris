@@ -35,24 +35,22 @@ if [[ ${OPENCL_GPU} == 'nvidia' ]]; then
     mkdir -p /etc/OpenCL/vendors
     echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
 elif [[ ${OPENCL_GPU} == 'amd' ]]; then
-	cd /tmp
-	apt update
-	amdgpu-install -y --usecase=opencl --opencl=rocr --no-dkms --no-32 --accept-eula
-	# If AMD GPU is older than vega 10,use under command, but can't promise work normally.
-	# Because, with --opencl=legacy, dkms will must be installed, it may pollute your kernel
-	# amdgpu-install -y --usecase=opencl --opencl=rocr,legacy --no-32 --accept-eula
+	pushd /tmp
+	apt-get update 2>&1 > /tmp/amdgpu_setup.log
+	amdgpu-install -y --usecase=opencl --opencl=rocr --no-dkms --no-32 --accept-eula 2>&1 >> /tmp/amdgpu_setup.log
+	popd
 elif [[ ${OPENCL_GPU} == 'intel' ]]; then
-	apt update
-	apt install -y intel-opencl-icd
+	apt-get update 2>&1 > /tmp/intelgpu_setup.log
+	apt-get install -y intel-opencl-icd 2>&1 >> /tmp/intelgpu_setup.log
 else
 	echo "No OPENCL_GPU provided.  MMX blockchain will use use CPU instead."
 fi
 
-echo 'testnet8' > /root/.chia/mmx/NETWORK
+echo 'testnet9' > /root/.chia/mmx/NETWORK
 
-# Symlink the testnet8 folder
-if [ ! -d /root/.chia/mmx/testnet8 ]; then
-	mkdir /root/.chia/mmx/testnet8
+# Symlink the testnet9 folder
+if [ ! -d /root/.chia/mmx/testnet9 ]; then
+	mkdir /root/.chia/mmx/testnet9
 fi
 
 # Create a key if none found from previous runs

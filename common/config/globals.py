@@ -242,13 +242,13 @@ def load_blockchain_version(blockchain):
                 pass
             last_blockchain_version = ""
         if last_blockchain_version.endswith('dev0') or last_blockchain_version.endswith('dev1'):
-            # Chia version with .dev is actually one # to high, never fixed by Chia team...
-            # See: https://github.com/Chia-Network/chia-blockchain/issues/5655
-            sem_ver = last_blockchain_version.split('.')
-            if 'rc' in sem_ver[2]: # Strip out 'rcX' if found.
-                sem_ver[2] = sem_ver[2][:sem_ver[2].index('rc')]
-            last_blockchain_version = sem_ver[0] + '.' + \
-                sem_ver[1] + '.' + str(int(sem_ver[2])-1)
+            if 'rc' in last_blockchain_version: # Strip out 'rcX' if found.
+                last_blockchain_version = last_blockchain_version[:last_blockchain_version.index('rc')]
+            else:
+                # Chia version with .dev is actually one # to high, never fixed by Chia team...
+                # See: https://github.com/Chia-Network/chia-blockchain/issues/5655
+                sem_ver = last_blockchain_version.split('.')
+                last_blockchain_version = sem_ver[0] + '.' + sem_ver[1] + '.' + str(int(sem_ver[2])-1)
         elif '.dev' in last_blockchain_version:
             sem_ver = last_blockchain_version.split('.')
             last_blockchain_version = sem_ver[0] + '.' + sem_ver[1] + '.' + sem_ver[2]
@@ -337,14 +337,10 @@ def load_madmax_version():
         return last_madmax_version
     last_madmax_version = ""
     try:
-        proc = Popen("{0} --help".format(MADMAX_BINARY),
+        proc = Popen("{0} --version".format(MADMAX_BINARY),
             stdout=PIPE, stderr=PIPE, shell=True)
-        outs, errs = proc.communicate(timeout=90)
-        for line in outs.decode('utf-8').splitlines():
-            m = re.search(
-                r'^Multi-threaded pipelined Chia k32 plotter - (\w+)$', line, flags=re.IGNORECASE)
-            if m:
-                last_madmax_version = m.group(1)
+        outs, errs = proc.communicate(timeout=90)  # Example: 1.1.8-d1a9e88
+        last_madmax_version = outs.decode('utf-8').strip().split('-')[0]
     except TimeoutExpired:
         proc.kill()
         proc.communicate()
@@ -466,7 +462,7 @@ def get_alltheblocks_name(blockchain):
     return blockchain
 
 def legacy_blockchain(blockchain):
-    return blockchain in ['bpx', 'ecostake', 'flora', 'gold', 'hddcoin', 'mint', 'nchain', 'petroleum', 'profit', 'silicoin', 'stor']
+    return blockchain in ['ecostake', 'flora', 'gold', 'hddcoin', 'mint', 'nchain', 'petroleum', 'profit', 'silicoin', 'stor']
 
 last_mmx_reward = None
 last_mmx_reward_load_time = None

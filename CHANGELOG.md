@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+ - Re-plotting: **Optional** background deletion of a few old plots to free space for new plotting. See Farming page, Settings icon, top-right.
+ - Table of recent plot archiving (local and remote) on new "Plotting | Transfers" page, including status and transfer speed.
+ - "Settings | Alerts" page: new 'Send Test Alert' button to validate Chiadog configs and receive sample alert to mail/discord/etc.
+ - [Coffee](https://github.com/Coffee-Network/coffee-blockchain) blockchain at version 1.0.1, a slow Silicoin fork.
+ - [GreenBTC](https://github.com/greenbtc/greenbtc-blockchain) blockchain at version 1.6.3, another slow Silicoin fork.
+ - [Moon](https://github.com/MOONCOINTEAM/moon-blockchain) blockchain at version 1.6.0, a recent Chia fork.
+ - [One](https://github.com/xone-network/one-blockchain) blockchain at version 1.6.2, a recent Chia fork.
+### Changed
+ - Fixed broken 'Generate/Import Key' actions for Chia 1.6.1 on Setup page. Thanks @SilverFolfy
+ - Missing plots on Farming page when a status.json file was corrupted. Thanks @Yurly
+ - Fix for duplicated Chiadog alerts of wallet additions. Thanks @GravitasProblem and @doma2345
+ - Improved "Settings | Pools" page with fee amount and `delete_unconfirmed_transactions` action.
+### Updated
+ - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v2.0.1) to v2.0.1
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.7.0) to v1.7.0
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.6.2) to v1.6.2
+ - [Chinilla](https://github.com/Chinilla/chinilla-blockchain/releases/tag/1.4.0) to v1.4.0
+ - [Chiadog](https://github.com/guydavis/chiadog/releases/tag/v0.7.5) to v0.7.5
+ - [Flax](https://github.com/Flax-Network/flax-blockchain/releases/tag/0.1.11) to v0.1.11
+ - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.9.3) to (v0.9.3) on `testnet9`.  Supporting the latest AMD GPU driver.
+ - [Tad](https://github.com/BTCgreen-Network/tad-blockchain/releases/tag/1.7.0b2) to v1.7.0
+### Known Issues
+ - Incorrect reward recovery calculations for some blockchains.  Please use AllTheBlocks site if this affects you.
 
 ## [0.8.5] - 2022-11-03
 ### Added
@@ -10,7 +34,7 @@ All notable changes to this project will be documented in this file. The format 
  - Chart memory usage per container (GiB) as well as total host memory usage (%) for OS and all apps.
  - Enhanced Forktools to optionally decrease a blockchain's full_node process count, which greatly limits memory usage.
  - Improve Plotting page to display configured tmp, dst, and archiving directories before starting to plot. Support `site_path_filter` for archive folders under `site_root`.
-  - Bladebit support for new `ramplot` mode (needs 416 GB RAM) 
+ - Bladebit support for new `ramplot` mode (needs 416 GB RAM) 
 ### Changed
  - Enhance 'NFT Reward Recovery' tool to support v2 databases. 
  - Fixes for invalid Chiadog harvester alerts. 

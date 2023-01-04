@@ -118,6 +118,23 @@
         "discord_url": "https://discord.gg/9aAbYNqjtA",
         "website_url": "https://www.chivescoin.org/"
     },
+    "coffee": {
+        "name": "Coffee",
+        "symbol": "XCF" ,
+        "binary":  "/coffee-blockchain/venv/bin/coffee",
+        "network_path": "/root/.coffee/mainnet",
+        "network_name": "mainnet",
+        "network_port": 33844,
+        "farmer_port": 33847,
+        "fullnode_rpc_port": 33859,
+        "worker_port": 8954,
+        "reward": 1.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/Coffee-Network/coffee-blockchain",
+        "discord_url": "https://discord.gg/8pqVh6MKzY",
+        "website_url": "https://farming.coffee/"
+    },
     "cryptodoge": {
         "name": "Cryptodoge",
         "symbol": "XCD" ,
@@ -185,6 +202,23 @@
         "git_url": "https://github.com/Flora-Network/flora-blockchain",
         "discord_url": "https://discord.gg/GvwQhW4Yk3",
         "website_url": "http://floracoin.farm/"
+    },
+    "greenbtc": {
+        "name": "GreenBTC",
+        "symbol": "GBTC",
+        "binary":  "/greenbtc-blockchain/venv/bin/greenbtc",
+        "network_path": "/root/.greenbtc/mainnet",
+        "network_name": "mainnet",
+        "network_port": 23333,
+        "farmer_port": 23332,
+        "fullnode_rpc_port": 23331,
+        "worker_port": 8955,
+        "reward": 2500.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/greenbtc/greenbtc-blockchain",
+        "discord_url": null,
+        "website_url": "https://greenbtc.top/"
     },
     "gold": {
         "name": "Gold",
@@ -275,9 +309,9 @@
         "name": "MMX",
         "symbol": "MMX" ,
         "binary":  "/mmx-node/build/mmx",
-        "network_path": "/root/.mmx/testnet8",
-        "network_name": "testnet8",
-        "network_port": 12334,
+        "network_path": "/root/.mmx/testnet9",
+        "network_name": "testnet9",
+        "network_port": 12339,
         "farmer_port": 11330,
         "worker_port": 8940,
         "mojos_per_coin": 1000000,
@@ -285,6 +319,23 @@
         "git_url": "https://github.com/madMAx43v3r/mmx-node",
         "discord_url": "https://discord.gg/pQwkebKnPB",
         "website_url": "https://github.com/madMAx43v3r/mmx-node"
+    },
+    "moon": {
+        "name": "Moon",
+        "symbol": "MOC" ,
+        "binary":  "/moon-blockchain/venv/bin/moon",
+        "network_path": "/root/.moon/mainnet",
+        "network_name": "mainnet",
+        "network_port": 26888,
+        "farmer_port": 26882,
+        "fullnode_rpc_port": 26897,
+        "worker_port": 8953,
+        "reward": 16.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/MOONCOINTEAM/moon-blockchain",
+        "discord_url": null,
+        "website_url": "https://mooncoin.top/"
     },
     "nchain": {
         "name": "N-Chain",
@@ -302,6 +353,23 @@
         "git_url": "https://gitee.com/ext9/ext9-blockchain",
         "discord_url": "https://discord.gg/AdwYxxVnas",
         "website_url": "http://n-chain.org/"
+    },
+    "one": {
+        "name": "One",
+        "symbol": "XONE" ,
+        "binary":  "/one-blockchain/venv/bin/one",
+        "network_path": "/root/.one/mainnet",
+        "network_name": "mainnet",
+        "network_port": 11111,
+        "farmer_port": 11113,
+        "fullnode_rpc_port": 11114,
+        "worker_port": 8956,
+        "reward": 2.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/xone-network/one-blockchain",
+        "discord_url": null,
+        "website_url": "https://onechain.vip/"
     },
     "petroleum": {
         "name": "Petroleum",

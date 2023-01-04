@@ -14,7 +14,7 @@ from flask_babel import _, lazy_gettext as _l
 
 from common.config import globals
 from common.utils import fiat
-from common.models import pools as po
+from common.models import pools as po, plots as pl
 from web import app, utils
 from web.actions import chia, pools as p, plotman, chiadog, worker, \
         log_handler, stats, warnings, forktools, mapping, drives as d
@@ -179,8 +179,8 @@ def plotting_jobs():
     return render_template('plotting/jobs.html', reload_seconds=120,  plotting=plotting, 
         plotters=plotters, job_stats=job_stats, global_config=gc, lang=get_lang(request))
 
-@app.route('/plotting/workers', methods=['GET', 'POST'])
-def plotting_workers():
+@app.route('/plotting/transfers', methods=['GET', 'POST'])
+def plotting_transfers():
     gc = globals.load()
     if request.method == 'POST':
         if request.form.get('action') == 'start':
@@ -195,14 +195,30 @@ def plotting_workers():
             plotter = worker.get_worker(hostname, blockchain)
             if request.form.get('service') == 'archiving':
                 plotman.stop_archiving(plotter)
-        return redirect(url_for('plotting_workers')) # Force a redirect to allow time to update status
+        return redirect(url_for('plotting_transfers')) # Force a redirect to allow time to update status
+    plotters = plotman.load_plotters()
+    transfers = plotman.load_archiving_summary()
+    disk_usage = stats.load_current_disk_usage('plots')
+    farmers = chia.load_farmers()
+    stats.set_disk_usage_per_farmer(farmers, disk_usage)
+    return render_template('plotting/transfers.html', plotters=plotters, farmers=farmers, transfers=transfers, 
+        disk_usage=disk_usage, global_config=gc, lang=get_lang(request), reload_seconds=120)
+
+@app.route('/plotting/workers')
+def plotting_workers():
+    gc = globals.load()
     plotters = plotman.load_plotters()
     disk_usage = stats.load_recent_disk_usage('plotting')
     mem_usage = stats.load_recent_mem_usage('plotting')
-    return render_template('plotting/workers.html', plotters=plotters, disk_usage=disk_usage, mem_usage=mem_usage, global_config=gc)
+    return render_template('plotting/workers.html', plotters=plotters, 
+        disk_usage=disk_usage, mem_usage=mem_usage, global_config=gc, lang=get_lang(request))
 
-@app.route('/farming/plots')
+@app.route('/farming/plots', methods=['GET', 'POST'])
 def farming_plots():
+    if request.method == 'POST':
+        settings = { 'replotting': plotman.save_replotting_settings(request.form) }
+    else: # Get so load defaults or get saved settings
+        settings = { 'replotting': plotman.load_replotting_settings() }
     if request.args.get('analyze'):  # Xhr with a plot_id
         plot_id = request.args.get('analyze')
         return plotman.analyze(plot_id[:8])
@@ -212,8 +228,8 @@ def farming_plots():
     gc = globals.load()
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()
-    return render_template('farming/plots.html', farmers=farmers, plots=plots, global_config=gc, 
-        lang=get_lang(request))
+    return render_template('farming/plots.html', farmers=farmers, plots=plots, 
+        settings=settings, ksizes=pl.KSIZES, global_config=gc, lang=get_lang(request))
 
 @app.route('/farming/data')
 def farming_data():
@@ -447,7 +463,12 @@ def settings_alerts():
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
         selected_blockchain = request.form.get('blockchain')
-        chiadog.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
+        selected_worker = worker.get_worker(selected_worker_hostname, selected_blockchain)
+        if request.form.get('action') == 'test':
+            chiadog.send_test_alert(selected_worker)
+            return redirect(url_for('alerts')) # Redirct to page showing the test alert
+        else: # Save config
+            chiadog.save_config(selected_worker, selected_blockchain, request.form.get("config"))
     farmers = chiadog.load_farmers()
     selected_worker = find_selected_worker(farmers, selected_worker_hostname, selected_blockchain)
     if not selected_blockchain:
@@ -460,16 +481,20 @@ def settings_pools():
     gc = globals.load()
     selected_blockchain = worker.default_blockchain()
     if request.method == 'POST':
-        selected_blockchain = request.form.get('blockchain')
-        selected_fullnode = worker.get_fullnode(selected_blockchain)
-        launcher_ids = request.form.getlist('{0}-launcher_id'.format(selected_blockchain))
-        wallet_nums = request.form.getlist('{0}-wallet_num'.format(selected_blockchain))
-        choices = []
-        for num in wallet_nums:
-            choices.append(request.form.get('{0}-choice-{1}'.format(selected_blockchain, num)))
-        pool_urls = request.form.getlist('{0}-pool_url'.format(selected_blockchain))
-        current_pool_urls = request.form.getlist('{0}-current_pool_url'.format(selected_blockchain))
-        p.send_request(selected_fullnode, selected_blockchain, launcher_ids, choices, pool_urls, wallet_nums, current_pool_urls)
+        if request.form.get("action") == 'deleteUnconfirmed':
+            p.delete_unconfirmed_transactions(request.form.get('walletid'))
+        else: # Updating settings for pooling
+            selected_blockchain = request.form.get('blockchain')
+            selected_fullnode = worker.get_fullnode(selected_blockchain)
+            launcher_ids = request.form.getlist('{0}-launcher_id'.format(selected_blockchain))
+            wallet_nums = request.form.getlist('{0}-wallet_num'.format(selected_blockchain))
+            choices = []
+            for num in wallet_nums:
+                choices.append(request.form.get('{0}-choice-{1}'.format(selected_blockchain, num)))
+            pool_urls = request.form.getlist('{0}-pool_url'.format(selected_blockchain))
+            current_pool_urls = request.form.getlist('{0}-current_pool_url'.format(selected_blockchain))
+            fee_mojos = request.form.getlist('{0}-fee_mojos'.format(selected_blockchain))
+            p.send_request(selected_fullnode, selected_blockchain, launcher_ids, choices, pool_urls, wallet_nums, current_pool_urls, fee_mojos)
     pool_configs = p.get_pool_configs()
     fullnodes_by_blockchain = worker.get_fullnodes_by_blockchain()
     poolable_blockchains = []

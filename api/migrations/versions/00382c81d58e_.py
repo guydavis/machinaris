@@ -15,7 +15,6 @@ down_revision = 'e5c6d9a6d9c3'
 branch_labels = None
 depends_on = None
 
-
 def upgrade(engine_name):
     globals()["upgrade_%s" % engine_name]()
 
@@ -413,4 +412,10 @@ def upgrade_stat_host_mem_pct():
     pass
 
 def downgrade_stat_host_mem_pct():
+    pass
+
+def upgrade_transfers():
+    pass
+
+def downgrade_transfers():
     pass

@@ -186,7 +186,7 @@ def generate_key(key_path, blockchain):
         flash(_('Skipping key generation as file exists and is NOT empty!'), 'danger')
         flash(_('In-container path:') +  ' {0}'.format(key_path), 'warning')
         return False
-    proc = Popen("{0} keys generate".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} keys generate --label key_0".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
         if errs:
@@ -260,7 +260,7 @@ def import_key(key_path, mnemonic, blockchain):
     with open(key_path, 'w') as keyfile:
         keyfile.write('{0}\n'.format(mnemonic))
     time.sleep(3)
-    proc = Popen("{0} keys add -f {1}".format(chia_binary, key_path), stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen("{0} keys add --label key_0 -f {1}".format(chia_binary, key_path), stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
         if errs:

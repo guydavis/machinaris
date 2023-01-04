@@ -17,7 +17,7 @@ blp = Blueprint(
 )
 
 @blp.route('<id>')
-class LogByType(MethodView):
+class TransactionsByWalletId(MethodView):
 
     def get(self, id):
         blockchain_rpc = rpc.RPC()

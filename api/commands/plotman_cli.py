@@ -3,6 +3,7 @@
 #
 
 import datetime
+import glob
 import itertools
 import json
 import os
@@ -26,6 +27,9 @@ PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 
 # Don't query plotman unless at least this long since last time.
 RELOAD_MINIMUM_SECS = 30
+
+# Only load this many recent transfer log files, ignore older ones
+NUM_RECENT_TRANSFER_LOGS = 25
 
 def check_plotter(plotter_path):
     if not os.path.exists(plotter_path):
@@ -68,6 +72,22 @@ def load_plotting_summary():
         raise Exception("The timeout expired during plotman status.")
     cli_stdout = outs.decode('utf-8')
     return plotman.PlottingSummary(cli_stdout.splitlines(), get_plotman_pid())
+
+def load_archiving_summary():
+    # First collect any running rsync processes to see if transfer(s) are still in progress
+    rsync_processes = []
+    for process in psutil.process_iter():
+        cmdline = process.cmdline()
+        if cmdline and (len(cmdline) > 0) and cmdline[0] == 'rsync' and '--info=progress2' in cmdline:
+            app.logger.info("Found running rsync transfer: {0} {1}".format(process.pid, cmdline))
+            rsync_processes.append(process)
+    # Then load most recent transfers (running and not) from archiving log folder
+    transfers = []
+    for transfer_log in sorted(glob.iglob('/root/.chia/plotman/logs/archiving/*.transfer.log'), key=os.path.getctime, reverse=True)[:NUM_RECENT_TRANSFER_LOGS]:
+        transfer = plotman.Transfer(transfer_log, rsync_processes)
+        if transfer and transfer.log_file:
+            transfers.append(transfer)
+    return transfers
 
 def dispatch_action(job):
     if not check_script():
@@ -127,8 +147,10 @@ def start_plotman():
     if len(load_plotting_summary().rows) == 0:  # No plots running
         clean_tmp_dirs_before_run()  
     logfile = "/root/.chia/plotman/logs/plotman.log"
+    fd_env = os.environ.copy()
+    fd_env["PYTHONUNBUFFERED"] = "TRUE"  # Added to force Plotman to log properly
     proc = Popen("nohup {0} {1} >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'plot', logfile),
-                    shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
+                    env=fd_env, shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
     app.logger.info("Completed launch of plotman.")
 
 def clean_tmp_dirs_before_run():
@@ -200,8 +222,10 @@ def start_archiver():
     check_config()
     logfile = "/root/.chia/plotman/logs/archiver.log"
     app.logger.info("About to start archiver...")
-    proc = Popen("nohup {0} {1} >> {2} 2>&1 &".format(PLOTMAN_SCRIPT, 'archive', logfile),
-                    shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
+    fd_env = os.environ.copy()
+    fd_env["PYTHONUNBUFFERED"] = "TRUE"  # Added to force Plotman to log properly
+    proc = Popen("nohup {0} {1} >{2} 2>&1 &".format(PLOTMAN_SCRIPT, 'archive', logfile),
+                    env=fd_env, shell=True, stdin=DEVNULL, stdout=None, stderr=None, close_fds=True)
     app.logger.info("Completed launch of archiver.")
 
 def stop_archiver():

@@ -31,6 +31,7 @@ def update():
                 hostname = utils.get_hostname()
                 pools =  blockchain_rpc.get_pool_states(blockchain)
                 for pool in pools:
+                    app.logger.debug(pool)
                     launcher_id = pool['pool_config']['launcher_id']
                     login_link = ""  # Only request login link if a pool_url is found (not self-farming)
                     if 'pool_url' in pool['pool_config'] and pool['pool_config']['pool_url']:

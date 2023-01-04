@@ -22,8 +22,8 @@ class FarmSummary:
                 # For now, treating the wallet balance as 100% farmed until better approach is found
                 elif line.startswith('Balance'):  
                     self.total_coins = line.split(':')[1].strip().split(' ')[0].strip()
-                elif line.startswith('Netspace'):
-                    self.calc_netspace_size(line.split(':')[1].strip())
+                elif line.startswith('Netspace'): # Example: Netspace:   88.3439 PB (99.9 % physical)
+                    self.calc_netspace_size(line.split(':')[1].strip().split('(')[0].strip())
                 elif line.startswith('Synced'):
                     if 'Yes' == line.split(':')[1].strip():
                         self.calc_status('Farming')

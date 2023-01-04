@@ -8,6 +8,7 @@ cd /code/machinaris/api
 FLASK_APP=__init__.py flask db stamp head
 FLASK_APP=__init__.py flask db migrate
 chown -R 1000.users .
+chmod 666 migrations/versions/*.py
 ```
 This creates migration based on current model.  Sometimes need 'flask db stamp head' before migrate.
 

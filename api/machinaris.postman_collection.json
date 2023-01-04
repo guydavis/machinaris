@@ -2,7 +2,8 @@
 	"info": {
 		"_postman_id": "c483592b-5a62-42cf-8e15-1ffabaa1b9ab",
 		"name": "Machinaris",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16013669"
 	},
 	"item": [
 		{
@@ -16,66 +17,6 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"start\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/actions/",
-							"protocol": "{{proto}}",
-							"host": [
-								"{{hostname}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"actions",
-								""
-							]
-						},
-						"description": "Add a new Alert."
-					},
-					"response": []
-				},
-				{
-					"name": "Actions - Suspend a Plot",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"suspend\",\r\n    \"plot_ids\": [\"6e0ea650\"]\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/actions/",
-							"protocol": "{{proto}}",
-							"host": [
-								"{{hostname}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"actions",
-								""
-							]
-						},
-						"description": "Add a new Alert."
-					},
-					"response": []
-				},
-				{
-					"name": "Actions - Resume a Plot",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"resume\",\r\n    \"plot_ids\": [\"6e0ea650\"]\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -221,71 +162,6 @@
 			]
 		},
 		{
-			"name": "Analysis",
-			"item": [
-				{
-					"name": "Analysis - Check Plots",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"service\": \"farming\",\r\n    \"action\": \"check_plots\",\r\n    \"first_load\": \"true\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/analysis/",
-							"protocol": "{{proto}}",
-							"host": [
-								"{{hostname}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"analysis",
-								""
-							]
-						},
-						"description": "Add a new Alert."
-					},
-					"response": []
-				},
-				{
-					"name": "Analysis - Analyze Plot",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"analyze\",\r\n    \"plot_file\": \"plot-k32-2021-05-30-19-25-d81461844857bb09d7b253f9ae1aaf9f37cb4535abd02a264ccfb06e027785ae.plot\"\r\n}\r\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/analysis/",
-							"protocol": "{{proto}}",
-							"host": [
-								"{{hostname}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"analysis",
-								""
-							]
-						},
-						"description": "Add a new Alert."
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Alerts",
 			"item": [
 				{
@@ -417,6 +293,71 @@
 							]
 						},
 						"description": "Delete an alert by id."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Analysis",
+			"item": [
+				{
+					"name": "Analysis - Check Plots",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"farming\",\r\n    \"action\": \"check_plots\",\r\n    \"plot_file\": \"/plots/plot-k32-2021-09-07-10-01-769a2e8db60b76e55c1496615b868a2dc7040df565e1bff462b66463f25f415e.plot\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/analysis/",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"analysis",
+								""
+							]
+						},
+						"description": "Request that a plots check be returned (or initiated) for a given plot file (full path)."
+					},
+					"response": []
+				},
+				{
+					"name": "Analysis - Analyze Plot",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"service\": \"plotting\",\r\n    \"action\": \"analyze\",\r\n    \"plot_file\": \"plot-k32-2021-05-30-19-25-d81461844857bb09d7b253f9ae1aaf9f37cb4535abd02a264ccfb06e027785ae.plot\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/analysis/",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"analysis",
+								""
+							]
+						},
+						"description": "Add a new Alert."
 					},
 					"response": []
 				}
@@ -593,6 +534,33 @@
 					"response": []
 				},
 				{
+					"name": "Certificates - Flax",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/certificates/?type=flax",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"certificates",
+								""
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "flax"
+								}
+							]
+						},
+						"description": "Get all alerts from all workers."
+					},
+					"response": []
+				},
+				{
 					"name": "Certificates - Flora",
 					"request": {
 						"method": "GET",
@@ -647,12 +615,12 @@
 					"response": []
 				},
 				{
-					"name": "Certificates - Maize",
+					"name": "Certificates - Cryptodoge",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/certificates/?type=maize",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/certificates/?type=cryptodoge",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -665,7 +633,7 @@
 							"query": [
 								{
 									"key": "type",
-									"value": "maize"
+									"value": "cryptodoge"
 								}
 							]
 						},
@@ -684,15 +652,20 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/challenges/",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/challenges?page_size=100",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
 							],
 							"port": "{{port}}",
 							"path": [
-								"challenges",
-								""
+								"challenges"
+							],
+							"query": [
+								{
+									"key": "page_size",
+									"value": "100"
+								}
 							]
 						},
 						"description": "Get all plotting jobs from all workers."
@@ -1127,6 +1100,83 @@
 			]
 		},
 		{
+			"name": "Drives",
+			"item": [
+				{
+					"name": "Drives",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/drives/",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"drives",
+								""
+							]
+						},
+						"description": "Get all plotting jobs from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Drives",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"blockchain\": \"chia\",\r\n        \"capacity\": \"8.00 TB\",\r\n        \"comment\": \"/dev/sda [SAT], ATA device\",\r\n        \"created_at\": \"2022-07-16T14:20:02.054722\",\r\n        \"device\": \"/dev/sda\",\r\n        \"device_model\": \"ST8000DM004-2CX188\",\r\n        \"hostname\": \"192.168.1.129\",\r\n        \"model_family\": \"Seagate BarraCuda 3.5 (SMR)\",\r\n        \"power_on_hours\": 13753.0,\r\n        \"serial_number\": \"ZR10QVRW\",\r\n        \"size_gibs\": 7452.036,\r\n        \"smart_info\": \"smartctl 7.2 2020-12-30 r5155 [x86_64-linux-5.19.17-Unraid] (local build)\\nCopyright (C) 2002-20, Bruce Allen, Christian Franke, www.smartmontools.org\\n\\n=== START OF INFORMATION SECTION ===\\nModel Family:     Seagate BarraCuda 3.5 (SMR)\\nDevice Model:     ST8000DM004-2CX188\\nSerial Number:    ZR10QVRW\\nLU WWN Device Id: 5 000c50 0db039cc9\\nFirmware Version: 0001\\nUser Capacity:    8,001,563,222,016 bytes [8.00 TB]\\nSector Sizes:     512 bytes logical, 4096 bytes physical\\nRotation Rate:    5425 rpm\\nForm Factor:      3.5 inches\\nDevice is:        In smartctl database [for details use: -P show]\\nATA Version is:   ACS-3 T13/2161-D revision 5\\nSATA Version is:  SATA 3.1, 6.0 Gb/s (current: 3.0 Gb/s)\\nLocal Time is:    Fri Dec 16 10:30:00 2022 MST\\nSMART support is: Available - device has SMART capability.\\nSMART support is: Enabled\\nPower mode is:    ACTIVE or IDLE\\n\\n=== START OF READ SMART DATA SECTION ===\\nSMART overall-health self-assessment test result: PASSED\\n\\nGeneral SMART Values:\\nOffline data collection status:  (0x00)\\tOffline data collection activity\\n\\t\\t\\t\\t\\twas never started.\\n\\t\\t\\t\\t\\tAuto Offline Data Collection: Disabled.\\nSelf-test execution status:      (   0)\\tThe previous self-test routine completed\\n\\t\\t\\t\\t\\twithout error or no self-test has ever \\n\\t\\t\\t\\t\\tbeen run.\\nTotal time to complete Offline \\ndata collection: \\t\\t(    0) seconds.\\nOffline data collection\\ncapabilities: \\t\\t\\t (0x73) SMART execute Offline immediate.\\n\\t\\t\\t\\t\\tAuto Offline data collection on/off support.\\n\\t\\t\\t\\t\\tSuspend Offline collection upon new\\n\\t\\t\\t\\t\\tcommand.\\n\\t\\t\\t\\t\\tNo Offline surface scan supported.\\n\\t\\t\\t\\t\\tSelf-test supported.\\n\\t\\t\\t\\t\\tConveyance Self-test supported.\\n\\t\\t\\t\\t\\tSelective Self-test supported.\\nSMART capabilities:            (0x0003)\\tSaves SMART data before entering\\n\\t\\t\\t\\t\\tpower-saving mode.\\n\\t\\t\\t\\t\\tSupports SMART auto save timer.\\nError logging capability:        (0x01)\\tError logging supported.\\n\\t\\t\\t\\t\\tGeneral Purpose Logging supported.\\nShort self-test routine \\nrecommended polling time: \\t (   1) minutes.\\nExtended self-test routine\\nrecommended polling time: \\t ( 995) minutes.\\nConveyance self-test routine\\nrecommended polling time: \\t (   2) minutes.\\nSCT capabilities: \\t       (0x30a5)\\tSCT Status supported.\\n\\t\\t\\t\\t\\tSCT Data Table supported.\\n\\nSMART Attributes Data Structure revision number: 10\\nVendor Specific SMART Attributes with Thresholds:\\nID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_FAILED RAW_VALUE\\n  1 Raw_Read_Error_Rate     0x000f   081   064   006    Pre-fail  Always       -       125306608\\n  3 Spin_Up_Time            0x0003   093   093   000    Pre-fail  Always       -       0\\n  4 Start_Stop_Count        0x0032   100   100   020    Old_age   Always       -       17\\n  5 Reallocated_Sector_Ct   0x0033   100   100   010    Pre-fail  Always       -       0\\n  7 Seek_Error_Rate         0x000f   078   060   045    Pre-fail  Always       -       66596783\\n  9 Power_On_Hours          0x0032   085   085   000    Old_age   Always       -       13753h+42m+08.104s\\n 10 Spin_Retry_Count        0x0013   100   100   097    Pre-fail  Always       -       0\\n 12 Power_Cycle_Count       0x0032   100   100   020    Old_age   Always       -       16\\n183 Runtime_Bad_Block       0x0032   100   100   000    Old_age   Always       -       0\\n184 End-to-End_Error        0x0032   100   100   099    Old_age   Always       -       0\\n187 Reported_Uncorrect      0x0032   100   100   000    Old_age   Always       -       0\\n188 Command_Timeout         0x0032   100   100   000    Old_age   Always       -       0 0 0\\n189 High_Fly_Writes         0x003a   100   100   000    Old_age   Always       -       0\\n190 Airflow_Temperature_Cel 0x0022   060   053   040    Old_age   Always       -       40 (Min/Max 37/41)\\n191 G-Sense_Error_Rate      0x0032   100   100   000    Old_age   Always       -       0\\n192 Power-Off_Retract_Count 0x0032   100   100   000    Old_age   Always       -       529\\n193 Load_Cycle_Count        0x0032   100   100   000    Old_age   Always       -       924\\n194 Temperature_Celsius     0x0022   040   047   000    Old_age   Always       -       40 (0 20 0 0 0)\\n195 Hardware_ECC_Recovered  0x001a   081   064   000    Old_age   Always       -       125306608\\n197 Current_Pending_Sector  0x0012   100   100   000    Old_age   Always       -       0\\n198 Offline_Uncorrectable   0x0010   100   100   000    Old_age   Offline      -       0\\n199 UDMA_CRC_Error_Count    0x003e   200   200   000    Old_age   Always       -       0\\n240 Head_Flying_Hours       0x0000   100   253   000    Old_age   Offline      -       13471h+47m+58.435s\\n241 Total_LBAs_Written      0x0000   100   253   000    Old_age   Offline      -       15662042645\\n242 Total_LBAs_Read         0x0000   100   253   000    Old_age   Offline      -       3338747026\\n\\nSMART Error Log Version: 1\\nNo Errors Logged\\n\\nSMART Self-test log structure revision number 1\\nNo self-tests have been logged.  [To run self-tests, use: smartctl -t]\\n\\nSMART Selective self-test log data structure revision number 1\\n SPAN  MIN_LBA  MAX_LBA  CURRENT_TEST_STATUS\\n    1        0        0  Not_testing\\n    2        0        0  Not_testing\\n    3        0        0  Not_testing\\n    4        0        0  Not_testing\\n    5        0        0  Not_testing\\nSelective self-test flags (0x0):\\n  After scanning selected spans, do NOT read-scan remainder of disk.\\nIf Selective self-test is pending on power-up, resume after 0 minute delay.\\n\\n\",\r\n        \"status\": \"PASSED\",\r\n        \"temperature\": 40.0,\r\n        \"type\": \"sat\",\r\n        \"updated_at\": \"2022-12-16T10:30:01.927767\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/drives/",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"drives",
+								""
+							]
+						},
+						"description": "Creates the current plottings for the given hostname (of first plotting).  Deletes any old plottings."
+					},
+					"response": []
+				},
+				{
+					"name": "Drives",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/drives/",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"drives",
+								""
+							]
+						},
+						"description": "Delete a plotting job's status."
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Farms",
 			"item": [
 				{
@@ -1296,12 +1346,12 @@
 					"response": []
 				},
 				{
-					"name": "Keys",
+					"name": "Keys by Worker",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/keys/aragorn",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/keys/192.168.1.129/chia",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -1309,7 +1359,8 @@
 							"port": "{{port}}",
 							"path": [
 								"keys",
-								"aragorn"
+								"192.168.1.129",
+								"chia"
 							]
 						},
 						"description": "Get a worker by hostname."
@@ -1757,6 +1808,137 @@
 			]
 		},
 		{
+			"name": "Pools",
+			"item": [
+				{
+					"name": "Pools",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/pools/",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"pools",
+								""
+							]
+						},
+						"description": "Get all completed plots from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Pools",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"blockchain\": \"chia\",\r\n        \"details\": \"Wallet height: 1234546\\nSync status: Synced\\n\",\r\n        \"hostname\": \"aragorn\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/plots/",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"plots",
+								""
+							]
+						},
+						"description": "Add a new completed Plot."
+					},
+					"response": []
+				},
+				{
+					"name": "Pools by IP/Blockchain",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/pools/192.168.1.129/chia",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"pools",
+								"192.168.1.129",
+								"chia"
+							]
+						},
+						"description": "Get all completed plots from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Pools by IP/Blockchain",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"blockchain\": \"chia\",\r\n        \"details\": \"Wallet height: 1234546\\nSync status: Synced\\n\",\r\n        \"hostname\": \"aragorn\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/pools/192.168.1.129/chia",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"pools",
+								"192.168.1.129",
+								"chia"
+							]
+						},
+						"description": "Add a new completed Plot."
+					},
+					"response": []
+				},
+				{
+					"name": "Pools by IP/Blockchain",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/pools/192.168.1.129/chia",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"pools",
+								"192.168.1.129",
+								"chia"
+							]
+						},
+						"description": "Delete a completed plot's status."
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Rewards",
 			"item": [
 				{
@@ -1766,7 +1948,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"blockchain\": \"flora\",\r\n    \"wallet_id\": \"1606814864\",\r\n    \"launcher_id\": \"0bf90046f2eeff6a22c7bf44f22dad8b84583c7c08cf6973ce246e16c378f3d6\",\r\n    \"pool_contract_address\": \"xch1tu5yjwqcakt3867u07ln7w2wkfe3dqyazh4ac00vfy4v8mu3xq6qa9ax6d\"\r\n}",
+							"raw": "{\r\n    \"blockchain\": \"flora\",\r\n    \"wallet_id\": \"123456789\",\r\n    \"launcher_id\": \"0bXXXXXXXXXXXXXXXXXXXXX\",\r\n    \"pool_contract_address\": \"xch1234567898\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1877,6 +2059,110 @@
 			]
 		},
 		{
+			"name": "Transactions",
+			"item": [
+				{
+					"name": "Transactions by WalletID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/transactions/1",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"transactions",
+								"1"
+							]
+						},
+						"description": "Get all plotting jobs from all workers."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transfers",
+			"item": [
+				{
+					"name": "Transfers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/transfers/",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"transfers",
+								""
+							]
+						},
+						"description": "Get all plotting jobs from all workers."
+					},
+					"response": []
+				},
+				{
+					"name": "Transfers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n{\r\n        \"blockchain\": \"chia\",\r\n        \"created_at\": \"2022-12-16T16:49:33\",\r\n        \"dest\": \"rsync://root@aragorn:12000/plots/plots9/\",\r\n        \"duration\": \"0:20:06\",\r\n        \"end_date\": \"2022-11-28 12:53:13\",\r\n        \"hostname\": \"192.168.1.217\",\r\n        \"k\": 32,\r\n        \"log_file\": \"/root/.chia/plotman/logs/archiving/2022-11-28T12_33_07.131543-07_00.transfer.log\",\r\n        \"pct_complete\": 100,\r\n        \"plot_id\": \"c90e385362a7e70b\",\r\n        \"rate\": \"85.98MB/s\",\r\n        \"size\": 0,\r\n        \"size_complete\": \"108.79G\",\r\n        \"source\": \"/plotting/plot-k32-2022-11-28-10-36-c90e385362a7e70b894ed9149467a27587cb43894dc2510b467f419aa1404205.plot\",\r\n        \"start_date\": \"2022-11-28 12:33:07\",\r\n        \"status\": \"Complete\",\r\n        \"type\": \"Remote\"\r\n    },\r\n    {\r\n        \"blockchain\": \"chia\",\r\n        \"created_at\": \"2022-12-16T16:49:33\",\r\n        \"dest\": \"rsync://root@aragorn:12000/plots/plots9/\",\r\n        \"duration\": \"0:33:12\",\r\n        \"end_date\": \"2022-11-28 11:10:13\",\r\n        \"hostname\": \"192.168.1.217\",\r\n        \"k\": 32,\r\n        \"log_file\": \"/root/.chia/plotman/logs/archiving/2022-11-28T10_37_00.909307-07_00.transfer.log\",\r\n        \"pct_complete\": 100,\r\n        \"plot_id\": \"38334f8a4633c970\",\r\n        \"rate\": \"52.07MB/s\",\r\n        \"size\": 0,\r\n        \"size_complete\": \"108.77G\",\r\n        \"source\": \"/plotting/plot-k32-2022-11-28-08-40-38334f8a4633c9709feb6091b7d53b036d850b68eedb0e6e0e0144ac0df966a5.plot\",\r\n        \"start_date\": \"2022-11-28 10:37:00\",\r\n        \"status\": \"Complete\",\r\n        \"type\": \"Remote\"\r\n    },\r\n    {\r\n        \"blockchain\": \"chia\",\r\n        \"created_at\": \"2022-12-16T16:49:33\",\r\n        \"dest\": \"rsync://root@aragorn:12000/plots/plots9/\",\r\n        \"duration\": \"0:33:36\",\r\n        \"end_date\": \"2022-11-28 09:14:11\",\r\n        \"hostname\": \"192.168.1.217\",\r\n        \"k\": 32,\r\n        \"log_file\": \"/root/.chia/plotman/logs/archiving/2022-11-28T08_40_34.758846-07_00.transfer.log\",\r\n        \"pct_complete\": 100,\r\n        \"plot_id\": \"dab365d2d2ce3f0b\",\r\n        \"rate\": \"51.45MB/s\",\r\n        \"size\": 0,\r\n        \"size_complete\": \"108.81G\",\r\n        \"source\": \"/plotting/plot-k32-2022-11-28-06-44-dab365d2d2ce3f0b70ef0569bc1c0428b1bb55a477bcad0fbc2c73bddfc76d7a.plot\",\r\n        \"start_date\": \"2022-11-28 08:40:34\",\r\n        \"status\": \"Complete\",\r\n        \"type\": \"Remote\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/transfers/",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"transfers",
+								""
+							]
+						},
+						"description": "Creates the current plottings for the given hostname (of first plotting).  Deletes any old plottings."
+					},
+					"response": []
+				},
+				{
+					"name": "Transfers",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/transfers/aragorn/chia",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"transfers",
+								"aragorn",
+								"chia"
+							]
+						},
+						"description": "Delete a plotting job's status."
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Wallets",
 			"item": [
 				{
@@ -1907,7 +2193,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"details\": \"Wallet height: 412124242\\nSync status: Synced\\nBalances, fingerprint: 29832489032\\nWallet ID 1 type STANDARD_WALLET\\n   -Total Balance: 1e-10 xch (100 mojo)\\n   -Pending Total Balance: 1e-10 xch (100 mojo)\\n   -Spendable: 1e-10 xch (100 mojo)\\n\"\r\n}",
+							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"blockchain\": \"chia\",\r\n    \"details\": \"Wallet height: 412124242\\nSync status: Synced\\nBalances, fingerprint: 29832489032\\nWallet ID 1 type STANDARD_WALLET\\n   -Total Balance: 1e-10 xch (100 mojo)\\n   -Pending Total Balance: 1e-10 xch (100 mojo)\\n   -Spendable: 1e-10 xch (100 mojo)\\n\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1931,7 +2217,7 @@
 					"response": []
 				},
 				{
-					"name": "Wallet",
+					"name": "Wallet by IP/Blockchain",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1952,13 +2238,13 @@
 					"response": []
 				},
 				{
-					"name": "Wallet",
+					"name": "Wallet by IP/Blockchain",
 					"request": {
 						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"details\": \"Wallet height: 412124242\\nSync status: Synced\\nBalances, fingerprint: 29832489032\\nWallet ID 1 type STANDARD_WALLET\\n   -Total Balance: 1e-10 xch (100 mojo)\\n   -Pending Total Balance: 1e-10 xch (100 mojo)\\n   -Spendable: 1e-10 xch (100 mojo)\\n\"\r\n}",
+							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"blockchain\": \"chia\",\r\n    \"details\": \"Wallet height: 412124242\\nSync status: Synced\\nBalances, fingerprint: 29832489032\\nWallet ID 1 type STANDARD_WALLET\\n   -Total Balance: 1e-10 xch (100 mojo)\\n   -Pending Total Balance: 1e-10 xch (100 mojo)\\n   -Spendable: 1e-10 xch (100 mojo)\\n\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1966,7 +2252,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/wallets/aragorn",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/wallets/192.168.1.129/chia",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -1974,7 +2260,8 @@
 							"port": "{{port}}",
 							"path": [
 								"wallets",
-								"aragorn"
+								"192.168.1.129",
+								"chia"
 							]
 						},
 						"description": "Update a worker's status by hostname."
@@ -1982,7 +2269,7 @@
 					"response": []
 				},
 				{
-					"name": "Wallet",
+					"name": "Wallet by IP/Blockchain",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -1996,7 +2283,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/wallets/aragorn",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/wallets/192.168.1.129/chia",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -2004,7 +2291,76 @@
 							"port": "{{port}}",
 							"path": [
 								"wallets",
-								"aragorn"
+								"192.168.1.129",
+								"chia"
+							]
+						},
+						"description": "Delete a worker's status by hostname."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Warnings",
+			"item": [
+				{
+					"name": "Warnings by IP/Blockchain/Type",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/warnings/192.168.1.129/chia/duplicate_plots",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"warnings",
+								"192.168.1.129",
+								"chia",
+								"duplicate_plots"
+							]
+						},
+						"description": "Get all workers reporting in with their status."
+					},
+					"response": []
+				},
+				{
+					"name": "Warnings by IP/Blockchain/Type",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{proto}}://{{hostname}}:{{port}}/warnings/192.168.1.129/duplicate_plots",
+							"protocol": "{{proto}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"warnings",
+								"192.168.1.129",
+								"duplicate_plots"
 							]
 						},
 						"description": "Delete a worker's status by hostname."
@@ -2038,13 +2394,13 @@
 					"response": []
 				},
 				{
-					"name": "Workers",
+					"name": "Workers by IP/Port",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"mode\": \"fullnode\",\r\n    \"plotting\": \"stopped\",\r\n    \"url\": \"http://aragorn:8927\",\r\n    \"config\": \"{\\\"plotting_enabled\\\": true, \\\"farming_enabled\\\": true, \\\"harvesting_enabled\\\": true, \\\"now\\\": \\\"2021-06-10 16: 03: 19\\\", \\\"machinaris_version\\\": \\\"0.4.0\\\", \\\"machinaris_mode\\\": \\\"fullnode\\\", \\\"chiadog_version\\\": \\\"0.6.0\\\", \\\"plotman_version\\\": \\\"0.3.1\\\", \\\"chia_version\\\": \\\"1.1.6\\\"}\"\r\n}",
+							"raw": "[\n    {\n        \"blockchain\": \"cactus\",\n        \"config\": \"{\\\"plotting_enabled\\\": false, \\\"archiving_enabled\\\": false, \\\"farming_enabled\\\": true, \\\"harvesting_enabled\\\": true, \\\"enabled_blockchains\\\": [\\\"cactus\\\"], \\\"now\\\": \\\"2022-12-16 10:57:37\\\", \\\"machinaris_version\\\": \\\"0.8.6\\\", \\\"machinaris_mode\\\": \\\"fullnode\\\", \\\"plotman_version\\\": \\\"\\\", \\\"blockchain_version\\\": \\\"1.7\\\", \\\"chiadog_version\\\": \\\"0.7.5+dev\\\", \\\"madmax_version\\\": \\\"\\\", \\\"bladebit_version\\\": \\\"\\\", \\\"farmr_version\\\": \\\"\\\", \\\"is_controller\\\": false, \\\"fullnode_db_version\\\": \\\"v2\\\", \\\"wallet_status\\\": \\\"paused\\\", \\\"farmr_device_id\\\": null}\",\n        \"created_at\": \"2022-03-18T20:38:50\",\n        \"displayname\": \"aragorn\",\n        \"hostname\": \"192.168.1.129\",\n        \"latest_ping_result\": \"Responding\",\n        \"mode\": \"fullnode\",\n        \"ping_success_at\": \"2022-12-16T10:58:48.478074\",\n        \"port\": 8936,\n        \"services\": \"{\\\"plotting_status\\\": \\\"disabled\\\", \\\"archiving_status\\\": \\\"disabled\\\", \\\"monitoring_status\\\": \\\"running\\\", \\\"farming_status\\\": \\\"Farming\\\", \\\"wallet_status\\\": \\\"disabled\\\", \\\"container_memory_usage_bytes\\\": 3291365376}\",\n        \"updated_at\": \"2022-12-16T10:58:48.478065\",\n        \"url\": \"http://192.168.1.129:8936\"\n    }\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2052,7 +2408,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/192.168.1.129/8936",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -2060,28 +2416,8 @@
 							"port": "{{port}}",
 							"path": [
 								"workers",
-								""
-							]
-						},
-						"description": "Add a new Worker."
-					},
-					"response": []
-				},
-				{
-					"name": "Worker",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/aragorn",
-							"protocol": "{{proto}}",
-							"host": [
-								"{{hostname}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"workers",
-								"aragorn"
+								"192.168.1.129",
+								"8936"
 							]
 						},
 						"description": "Get a worker by hostname."
@@ -2089,37 +2425,7 @@
 					"response": []
 				},
 				{
-					"name": "Worker",
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"hostname\": \"aragorn\",\r\n    \"mode\": \"fullnode\",\r\n    \"plotting\": \"stopped\",\r\n    \"url\": \"http://aragorn:8927\",\r\n    \"config\": \"{\\\"plotting_enabled\\\": true, \\\"farming_enabled\\\": true, \\\"harvesting_enabled\\\": true, \\\"now\\\": \\\"2021-06-10 16: 03: 19\\\", \\\"machinaris_version\\\": \\\"0.4.0\\\", \\\"machinaris_mode\\\": \\\"fullnode\\\", \\\"chiadog_version\\\": \\\"0.6.0\\\", \\\"plotman_version\\\": \\\"0.3.1\\\", \\\"chia_version\\\": \\\"1.1.6\\\"}\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/aragorn",
-							"protocol": "{{proto}}",
-							"host": [
-								"{{hostname}}"
-							],
-							"port": "{{port}}",
-							"path": [
-								"workers",
-								"aragorn"
-							]
-						},
-						"description": "Update a worker's status by hostname."
-					},
-					"response": []
-				},
-				{
-					"name": "Worker",
+					"name": "Worker by IP/Port",
 					"request": {
 						"method": "DELETE",
 						"header": [],
@@ -2133,7 +2439,7 @@
 							}
 						},
 						"url": {
-							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/aragorn",
+							"raw": "{{proto}}://{{hostname}}:{{port}}/workers/192.168.1.129/8936",
 							"protocol": "{{proto}}",
 							"host": [
 								"{{hostname}}"
@@ -2141,7 +2447,8 @@
 							"port": "{{port}}",
 							"path": [
 								"workers",
-								"aragorn"
+								"192.168.1.129",
+								"8936"
 							]
 						},
 						"description": "Delete a worker's status by hostname."

@@ -136,6 +136,7 @@
             <th scope="col" class="text-success">{{_('Capacity')}}</th>
             <th scope="col" class="text-success">{{_('Status')}}</th>
             <th scope="col" class="text-success">{{_('Temperature')}}</th>
+            <th scope="col" class="text-success">{{_('Powered On')}}</th>
             <th scope="col" class="text-success">{{_('Updated At')}}</th>
             <th scope="col" class="text-success"></th>
           </tr>
@@ -154,7 +155,7 @@
                  {% endif %}
             </td>
             <td>{% if drive.serial_number %}{{drive.serial_number}}{% endif %}</td>
-            <td>{% if drive.capacity %}{{drive.capacity}}{% endif %}</td>
+            <td>{% if drive.size_gibs and drive.capacity %}{{drive.size_gibs}}|{{drive.capacity}}{% endif %}</td>
             <td>
               {% if not drive.status %}
                 &nbsp;
@@ -176,6 +177,11 @@
                 <i class="bi-dash-circle text-danger"></i> {{ drive.temperature }} &deg;C
               {% endif %}
             </td>
+            <td>
+              {% if drive.power_on_hours %}
+                {{drive.power_on_hours}}
+              {% endif %}
+            </td>  
             <td>{{drive.updated_at | datetimefilter}}</td>
             <td style="padding:0px">
               <a href="#" title="View Details" data-bs-toggle="modal" data-bs-target="#smartctlModal" onclick='SmartctlDeviceInfo("{{ drive.hostname }}", "{{ drive.device }}", "{{ drive.worker }}", "{{ drive.device_model }}", "{{ drive.model_family }}");return false;'><i class="fs-4 bi-file-text"></i></a>
@@ -246,7 +252,8 @@
                 </td>
                 <td>
                   {% if drive.power_on_hours %}
-                    {{drive.power_on_hours}}
+                    {% set drive_power_split = drive.power_on_hours.split('|') %}
+                    {{drive_power_split[1]}}
                   {% endif %}
                 </td>  
             </tr>
@@ -336,6 +343,34 @@
           "columnDefs": [
             {
                 targets: [0,9], "orderable": false,
+            },
+            {   targets: [5], "orderable": true, "render": function ( data, type, row, meta ) {
+                    if (data && data.includes('|')) {
+                        arr = data.split("|");
+                        size_gibs = arr[0].trim();
+                        capacity = arr[1].trim();
+                        if (type == 'sort' || type == 'type') {
+                          return size_gibs;
+                        } else {
+                          return capacity;
+                        }
+                    }
+                    return data;
+                }
+            },
+            {   targets: [8], "orderable": true, "render": function ( data, type, row, meta ) {
+                    if (data && data.includes('|')) {
+                        arr = data.split("|");
+                        pwr_on_hrs = arr[0].trim();
+                        pwr_on_readable = arr[1].trim();
+                        if (type == 'sort' || type == 'type') {
+                          return pwr_on_hrs;
+                        } else {
+                          return pwr_on_readable;
+                        }
+                    }
+                    return data;
+                }
             }
           ],
           {% if lang != 'en' %}

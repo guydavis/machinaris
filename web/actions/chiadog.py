@@ -76,3 +76,12 @@ def stop_chiadog(farmer):
         flash(_('Failed to stop Chiadog monitoring! Please see log files.'), 'danger')
     else:
         flash(_('Chiadog monitoring stopped successfully.  No notifications will be sent!'), 'success')
+
+def send_test_alert(farmer):
+    try:
+        utils.send_post(farmer, "/actions/", payload={"service": "monitoring","action": "test"}, debug=False)
+    except Exception as ex:
+        flash(_('Failed to contact farmer to send test alert.  Please ensure the worker is running and check it\'s logs.'), 'danger')
+        flash(str(ex), 'warning')
+    else:
+        flash(_("Test alert has been sent. Please check your configured notification target(s) for receipt of the test alert."), 'success')

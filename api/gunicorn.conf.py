@@ -16,8 +16,8 @@ def on_starting(server):
         status_connections, status_keys, status_alerts, status_controller, \
         status_plotnfts, status_pools, status_partials, status_drives, \
         stats_blocks, stats_balances, stats_disk, stats_farm, nft_recover, plots_check, \
-        log_rotate, restart_stuck_farmer, geolocate_peers, \
-        stats_effort, status_warnings
+        log_rotate, restart_stuck_farmer, geolocate_peers, plots_replot, \
+        stats_effort, status_warnings, status_archiving
     from common.config import globals
     from common.models import pools, plottings
 
@@ -60,7 +60,8 @@ def on_starting(server):
 
     # Status for plotters
     if globals.plotting_enabled():
-        scheduler.add_job(func=status_plotting.update, name="plottings", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
+        scheduler.add_job(func=status_plotting.update, name="status_plottings", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
+        scheduler.add_job(func=status_archiving.update, name="status_archiving", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
           
     # Status for fullnodes, all different forks
     if utils.is_fullnode():
@@ -91,6 +92,7 @@ def on_starting(server):
         scheduler.add_job(func=websvcs.get_chain_statuses, name="status_blockchain_networks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=geolocate_peers.execute, name="stats_geolocate_peers", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='cron', minute=0)  # Hourly
+        scheduler.add_job(func=plots_replot.execute, name="replot_check", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         
     # Testing only
     #scheduler.add_job(func=plots_check.execute, name="plots_check", trigger='interval', seconds=60) # Test immediately
@@ -98,10 +100,11 @@ def on_starting(server):
     #scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=websvcs.get_chain_statuses, name="get_chain_statuses", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=10) # Test immediately
-    #scheduler.add_job(func=status_alerts.update, name="alerts", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=status_archiving.update, name="archiving", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=periodically_sync_wallet.execute, name="periodically_sync_wallet", trigger='interval', seconds=60) # Test immediately
     #scheduler.add_job(func=status_warnings.collect, name="status_warnings", trigger='interval', seconds=60) # Test immediately
     #scheduler.add_job(func=nft_recover.execute, name="status_nft_recover", trigger='interval', seconds=60)
+    #scheduler.add_job(func=plots_replot.execute, name="replot_check", trigger='interval', seconds=60) # Test immediately
 
     app.logger.debug("Starting background scheduler...")
     scheduler.start()

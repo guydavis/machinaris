@@ -100,8 +100,16 @@ plotting:
         #pool_contract_address: REPLACE_WITH_THE_REAL_VALUE
 
         # If you enable 'chia', plot in *parallel* with higher tmpdir_max_jobs and global_max_jobs
-        # If you enable 'madmax', plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
-        type: madmax
+        # If you enable 'bladebit or 'madmax', plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
+        type: bladebit
+
+        bladebit:
+                # BladeBit plotter; see https://github.com/guydavis/machinaris/wiki/Bladebit
+                threads: 2            # Threads per job
+                no_numa: true         # Whether to disable NUMA memory support or not
+                diskplot: true        # Whether to plot to tmp1 (and tmp2) disks or only RAM (false)
+                diskplot_cache:   4GB # If diskplot, amount of RAM to allocate to caching disk writes
+                diskplot_buckets: 256 # Optionally set a different number of buckets to use for diskplot
 
         madmax:
                 # madMAx plotter; see https://github.com/guydavis/machinaris/wiki/MadMax
@@ -111,13 +119,6 @@ plotting:
                 n_buckets3: 256       # Default is 256
                 n_rmulti2: 1          # Default is 1
                 network_port: 8444    # Default is 8444, but use 9699 for Chives
-
-        bladebit:
-                # BladeBit plotter; see https://github.com/guydavis/machinaris/wiki/Bladebit
-                threads: 2            # Threads per job
-                no_numa: true         # Whether to disable NUMA memory support or not
-                diskplot: true        # Whether to plot to tmp1 (and tmp2) disks or only RAM (false)
-                diskplot_cache:   4GB # If diskplot, amount of RAM to allocate to caching disk writes
         
         chia:
                 # The stock plotter; see https://github.com/guydavis/machinaris/wiki/Chia#plotting

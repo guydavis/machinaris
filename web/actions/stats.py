@@ -721,15 +721,19 @@ def set_disk_usage_per_farmer(farmers, disk_usage):
         if farmer.hostname in disk_usage:
             used = sum(disk_usage[farmer.hostname]['used'])
             free = sum(disk_usage[farmer.hostname]['free'])
-            percent = used / (used + free) * 100
-            farmer.drive_usage = "{0}% {1} ({2} TB of {3} TB). {4} TB {5}.".format(
-                format_decimal(round(percent)),
-                _('full'), 
-                format_decimal(round(used)), 
-                format_decimal(round(used + free)),
-                format_decimal(round(free)),
-                _('free')
-            )
+            if (used + free) > 0:
+                percent = used / (used + free) * 100
+                farmer.drive_usage = "{0}% {1} ({2} TB of {3} TB). {4} TB {5}.".format(
+                    format_decimal(round(percent)),
+                    _('full'), 
+                    format_decimal(round(used)), 
+                    format_decimal(round(used + free)),
+                    format_decimal(round(free)),
+                    _('free')
+                )
+            else:
+                app.logger.info("Zero-sized disk usage stats found for {0}".format(farmer.hostname))
+                farmer.drive_usage = "" # Empty string to report
         else:
             app.logger.info("No disk usage stats found for {0}".format(farmer.hostname))
             farmer.drive_usage = "" # Empty string to report

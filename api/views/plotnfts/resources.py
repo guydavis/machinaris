@@ -36,6 +36,7 @@ class Plotnfts(MethodView):
                 PlotnftSchema().update(item, new_item)
             else:
                 item = Plotnft(**new_item)
+                item.created_at = item.updated_at = dt.datetime.now()
             db.session.add(item)
             plotnfts.append({
                 'unique_id': item.unique_id,
