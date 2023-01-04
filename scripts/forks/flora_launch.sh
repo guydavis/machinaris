@@ -19,7 +19,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ ! -f /root/.flora/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
   mkdir -p /root/.flora/mainnet/db/ && cd /root/.flora/mainnet/db/
   echo "Sorry, Flora does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
-  echo "It is recommended to add some peer node connections on the Connections page of Machinaris.
+  echo "It is recommended to add some peer node connections on the Connections page of Machinaris."
 fi
 
 mkdir -p /root/.flora/mainnet/log
