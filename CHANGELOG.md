@@ -7,11 +7,15 @@ All notable changes to this project will be documented in this file. The format 
  - Re-plotting: **Optional** background deletion of a few old plots to free space for new plotting. See Farming page, Settings icon, top-right.
  - Table of recent plot archiving (local and remote) on new "Plotting | Transfers" page, including status and transfer speed.
  - "Settings | Alerts" page: new 'Send Test Alert' button to validate Chiadog configs and receive sample alert to mail/discord/etc.
- - [Moon](https://github.com/MOONCOINTEAM/moon-blockchain) blockchain at version 1.6.0,
+ - [Coffee](https://github.com/Coffee-Network/coffee-blockchain) blockchain at version 1.0.1, a slow Silicoin fork.
+ - [GreenBTC](https://github.com/greenbtc/greenbtc-blockchain) blockchain at version 1.6.3, another slow Silicoin fork.
+ - [Moon](https://github.com/MOONCOINTEAM/moon-blockchain) blockchain at version 1.6.0, a recent Chia fork.
+ - [One](https://github.com/xone-network/one-blockchain) blockchain at version 1.6.2, a recent Chia fork.
 ### Changed
  - Fixed broken 'Generate/Import Key' actions for Chia 1.6.1 on Setup page. Thanks @SilverFolfy
  - Missing plots on Farming page when a status.json file was corrupted. Thanks @Yurly
  - Fix for duplicated Chiadog alerts of wallet additions. Thanks @GravitasProblem and @doma2345
+ - Improved "Settings | Pools" page with fee amount and `delete_unconfirmed_transactions` action.
 ### Updated
  - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v2.0.1) to v2.0.1
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.7.0) to v1.7.0
