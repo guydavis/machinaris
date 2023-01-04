@@ -357,6 +357,9 @@ def request_peers(blockchain, debug=False):
             if 'show -a' in add_cmd:
                 peer = add_cmd[(add_cmd.index('show -a ') + len('show -a ')):].strip()
                 peers.append(peer)
+            elif 'peer -a' in add_cmd:
+                peer = add_cmd[(add_cmd.index('peer -a ') + len('peer -a ')):].strip()
+                peers.append(peer.splitlines()[0])
             else:
                 app.logger.error("Unparseable peer connection: {0}".format(row.contents[0].string))
     return peers
@@ -471,7 +474,7 @@ def request_chain_statuses(statuses, debug=False):
             chain_status = 'IN SYNC' # Default
             for cell in row.find_all('td'):
                 try:
-                    blockchain = cell.a.contents[0].string.strip().lower().replace('stai', 'staicoin').replace('n-chain', 'nchain')
+                    blockchain = cell.a.contents[0].string.strip().lower().replace('stai', 'staicoin').replace('n-chain', 'nchain').replace('onechain', 'one')
                 except:
                     pass
                 try:
