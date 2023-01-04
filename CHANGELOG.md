@@ -25,7 +25,7 @@ All notable changes to this project will be documented in this file. The format 
  - [Flax](https://github.com/Flax-Network/flax-blockchain/releases/tag/0.1.11) to v0.1.11
  - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.9.3) to (v0.9.3) on `testnet9`.  Supporting the latest AMD GPU driver.
  - [Tad](https://github.com/BTCgreen-Network/tad-blockchain/releases/tag/1.7.0b2) to v1.7.0
-### 
+### Notes
  - Support for new Chia forks DOES NOT imply my endorsement for them.  Only run those you are comfortable with.
  - Incorrect reward recovery calculations for some blockchains.  Please use AllTheBlocks site if this affects you.
 
