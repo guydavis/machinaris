@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file. The format 
  - 
 ## Updated 
  - Fix missing Connections listing for Flax and MMX blockchains
+ - [Staicoin](https://github.com/STATION-I/stai-blockchain/releases/tag/1.3.0) to v1.3.0. Note, they require a fresh `config.yaml`.
 ## Notes
  - 
 
