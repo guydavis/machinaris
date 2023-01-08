@@ -612,6 +612,8 @@ class Blockchains:
                 return None
             if blockchain == 'mmx':
                 pattern = '^Synced: (.*)$'
+            elif blockchain == 'staicoin': # Staicoin being different for no good reason...
+                pattern = '^Current Status: (.*)$'
             else:
                 pattern = '^Current Blockchain Status: (.*)$'
             for line in details.split('\n'):
