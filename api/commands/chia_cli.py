@@ -92,7 +92,7 @@ def load_wallet_show(blockchain):
     app.logger.debug("Default SELECTED_WALLET_NUM is {0}".format(wallet_id_num))
     while True:
         i = child.expect(["Wallet height:.*\r\n", "Wallet keys:.*\r\n", "Choose wallet key:.*\r\n", 
-            "Choose a wallet key:.*\r\n", "No online backup file found.*\r\n", "Connection error.*\r\n"], timeout=90)
+            "Choose a wallet key .*\r\n", "No online backup file found.*\r\n", "Connection error.*\r\n"], timeout=90)
         if i == 0:
             app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
             wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
