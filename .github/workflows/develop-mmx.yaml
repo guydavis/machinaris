@@ -42,7 +42,7 @@ jobs:
           build-args: |
             "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=develop"
-            "MMX_BRANCH=v0.9.3"
+            "MMX_BRANCH=master"
             "CHIA_BRANCH=latest"
             "PLOTMAN_BRANCH=development"
           tags: |
