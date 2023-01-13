@@ -4,14 +4,13 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 ### Added
- - 
+ - [MMX Cuda Plotter](https://github.com/madMAx43v3r/mmx-binaries/tree/master/mmx-cuda-plotter) - currently only at commandline: `cuda_plot_kXX` 
 ## Changed
  - 
 ## Updated 
  - Fix missing Connections listing for Flax and MMX blockchains
  - [Chives](https://github.com/HiveProject2021/chives-blockchain/releases/tag/1.5.3) to v1.5.3, including staking.
  - [Staicoin](https://github.com/STATION-I/stai-blockchain/releases/tag/1.3.0) to v1.3.0. Note, they require a fresh `config.yaml`.
-
 ## Notes
  - 
 
