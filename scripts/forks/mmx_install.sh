@@ -27,4 +27,8 @@ else
 	popd
 	rm -f mmx-binaries
 	popd
+	tee /etc/ld.so.conf.d/30-mmx.conf >/dev/null <<EOF
+/mmx-node/lib
+EOF
+	/usr/sbin/ldconfig
 fi

@@ -121,7 +121,7 @@ ENV FORKTOOLSDIR=/forktools
 ENV FORKTOOLSBLOCKCHAINDIRS=/
 ENV FORKTOOLSHIDDENDIRS=/root
 
-ENV PATH="${PATH}:/chia-blockchain/venv/bin:/forktools:/mmx-node/build"
+ENV PATH="${PATH}:/chia-blockchain/venv/bin:/forktools:/mmx-node/bin"
 ENV TZ=Etc/UTC
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
