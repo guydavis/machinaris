@@ -27,6 +27,4 @@ else
 	popd
 	rm -f mmx-binaries
 	popd
-	ls -1 /
-	ls -1 /mmx-node/
 fi
