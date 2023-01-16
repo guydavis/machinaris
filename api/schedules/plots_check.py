@@ -190,12 +190,10 @@ def request_check(plot, workers):
 last_retry_time = None
 def execute(plot_id=None):
     global last_retry_time
-    refresh =   # Refresh if single plot is asked for from WebUI manual check
-    if not refresh:  # Otherwise only perform refresh of missing/stale checks if interval has elapsed.
-        if not last_retry_time or last_retry_time <= \
-            (datetime.datetime.now() - datetime.timedelta(minutes=RETRY_INTERVAL_MINS)):
-            last_retry_time = datetime.datetime.now()  # Delete any empty markers allowing a retry once a day.
-            os.system("/usr/bin/find /root/.chia/plotman/checks/ -type f -empty -print -delete")
+    if not last_retry_time or last_retry_time <= \
+        (datetime.datetime.now() - datetime.timedelta(minutes=RETRY_INTERVAL_MINS)):
+        last_retry_time = datetime.datetime.now()  # Delete any empty markers allowing a retry once a day.
+        os.system("/usr/bin/find /root/.chia/plotman/checks/ -type f -empty -print -delete")
     if 'plots_check_analyze_skip' in os.environ and os.environ['plots_check_analyze_skip'].lower() == 'true':
         app.logger.info("Skipping plots check and analyze as environment variable 'plots_check_analyze_skip' is present.")
         return
