@@ -432,7 +432,7 @@ class Wallets:
 
     def link_to_wallet_transactions(self, blockchain, details):
         lines = []
-        if globals.legacy_blockchain(blockchain) or blockchain in ['btcgreen', 'cryptodoge', 'flax', 'shibgreen', 'staicoin']: 
+        if globals.legacy_blockchain(blockchain) or blockchain in ['cryptodoge']: 
             for line in details.split('\n'):
                 if 'wallet id' in line.lower():
                     lines.append("<a href='#' class='text-white' title='" + _('View Transactions') + "' onclick='ViewTransactions(\""+ blockchain + "\", \"1\");return false;'>" + line.strip() + "</a>:")

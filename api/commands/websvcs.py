@@ -451,7 +451,7 @@ def request_chain_statuses(statuses, debug=False):
         if resp.status_code == 200:
             result = json.loads(resp.text)
             for fork in result['forks']:
-                fork_name = fork['pathName'].replace('stai', 'staicoin')
+                fork_name = fork['pathName'].replace('stai', 'staicoin').replace('ballcoin', 'ball')
                 peak_time = datetime.datetime.fromtimestamp(int(fork['peakTimestamp'])).strftime("%Y-%m-%d %H:%M:%S")
                 statuses[fork_name] = { 'peak_height': fork['peakHeight'], 'peak_time': peak_time, }
         else:

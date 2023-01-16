@@ -16,6 +16,23 @@
         "discord_url": null,
         "website_url": "https://applecoin.in/"
     },
+    "ballcoin": {
+        "name": "Ballcoin",
+        "symbol": "BALL",
+        "binary":  "/ballcoin-blockchain/venv/bin/ball",
+        "network_path": "/root/.ball/mainnet",
+        "network_name": "mainnet",
+        "network_port": 38888,
+        "farmer_port": 38891,
+        "fullnode_rpc_port": 38885,
+        "worker_port": 8957,
+        "reward": 2.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/ball-network/ballcoin-blockchain",
+        "discord_url": null,
+        "website_url": "https://ballcoin.top/"
+    },
     "bpx": {
         "name": "BPX",
         "symbol": "BPX",
