@@ -19,8 +19,8 @@ from common.models import workers as w
 from common.config import globals
 from api import app, utils
 
-# If found no valid plots check for a plot, don't ask again for at least a day
-RETRY_INTERVAL_MINS = 60 * 24
+# If found no valid check for a plot, don't attempt again for at least a week
+RETRY_INTERVAL_MINS = 60 * 24 * 7 
 
 STATUS_FILE = '/root/.chia/plotman/status.json'
 ANALYZE_LOGS = '/root/.chia/plotman/analyze'
@@ -187,16 +187,31 @@ def request_check(plot, workers):
                 app.logger.info(str(ex))
     return [None, None, None]
 
+def refresh_status_file_from_logs():
+    status = open_status_json()
+    for key in list(status.keys()):
+        if (status[key]['check'] is None) and (status[key]['analyze'] is None):
+            app.logger.info("Deleting {0} both".format(key))
+            del status[key]
+        elif status[key]['check'] is None:
+            app.logger.info("Deleting {0} check".format(key))
+            del status[key]['check']
+        elif status[key]['analyze'] is None:
+            app.logger.info("Deleting {0} analyze".format(key))
+            del status[key]['analyze']
+    write_status_json(status)
+
 last_retry_time = None
 def execute(plot_id=None):
     global last_retry_time
+    if 'plots_check_analyze_skip' in os.environ and os.environ['plots_check_analyze_skip'].lower() == 'true':
+        app.logger.info("Skipping plots check and analyze as environment variable 'plots_check_analyze_skip' is present.")
+        return
     if not last_retry_time or last_retry_time <= \
         (datetime.datetime.now() - datetime.timedelta(minutes=RETRY_INTERVAL_MINS)):
         last_retry_time = datetime.datetime.now()  # Delete any empty markers allowing a retry once a day.
         os.system("/usr/bin/find /root/.chia/plotman/checks/ -type f -empty -print -delete")
-    if 'plots_check_analyze_skip' in os.environ and os.environ['plots_check_analyze_skip'].lower() == 'true':
-        app.logger.info("Skipping plots check and analyze as environment variable 'plots_check_analyze_skip' is present.")
-        return
+        refresh_status_file_from_logs()
     with app.app_context():
         from api import db
         gc = globals.load()

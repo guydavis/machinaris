@@ -404,7 +404,7 @@ def check(plot_id):
         db.session.commit()
     except Exception as ex:
         app.logger.info(traceback.format_exc())
-    return _("Plot check initiated for ID: %(plot_id)s. Please refresh in a few minutes.\nPlease note that all plots will be checked slowly in the background so you\ndon't need to check each one individually.  Please be patient.", plot_id=plot_id)
+    return _("Plot check initiated for ID: %(plot_id)s. Please refresh in a few minutes.\n\Note that all plots will be checked slowly in the background so you\ndon't need to check each one individually.  Please be patient.", plot_id=plot_id)
 
 def get_transactions(lang, worker, blockchain, wallet_id):
     try:
