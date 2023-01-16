@@ -28,7 +28,7 @@ def get_lang(request):
             first_accept = accept.split(',')[0]  # Like 'nl'
             alternative = "{0}_{1}".format(first_accept, first_accept.upper())
             if alternative in app.config['LANGUAGES']:
-                app.logger.info("LOCALE: Accept-Language: {0}  ---->  using locale: {1}".format(accept, match))
+                app.logger.info("LOCALE: Accept-Language: {0}  ---->  using locale: {1}".format(accept, alternative))
                 return alternative
         if match:
             app.logger.info("LOCALE: Accept-Language: {0}  ---->  matched locale: {1}".format(accept, match))
