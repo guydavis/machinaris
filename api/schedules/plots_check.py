@@ -20,7 +20,7 @@ from common.config import globals
 from api import app, utils
 
 # If found no valid plots check for a plot, don't ask again for at least a day
-REFRESH_INTERVAL_MINS = 60 * 24
+RETRY_INTERVAL_MINS = 60 * 24
 
 STATUS_FILE = '/root/.chia/plotman/status.json'
 ANALYZE_LOGS = '/root/.chia/plotman/analyze'
@@ -187,15 +187,15 @@ def request_check(plot, workers):
                 app.logger.info(str(ex))
     return [None, None, None]
 
-last_refresh_time = None
+last_retry_time = None
 def execute(plot_id=None):
-    global last_refresh_time
-    refresh = plot_id != None  # Refresh if single plot is asked for from WebUI manual check
+    global last_retry_time
+    refresh =   # Refresh if single plot is asked for from WebUI manual check
     if not refresh:  # Otherwise only perform refresh of missing/stale checks if interval has elapsed.
-        if not last_refresh_time or last_refresh_time <= \
-            (datetime.datetime.now() - datetime.timedelta(minutes=REFRESH_INTERVAL_MINS)):
-            last_refresh_time = datetime.datetime.now()
-            refresh = True
+        if not last_retry_time or last_retry_time <= \
+            (datetime.datetime.now() - datetime.timedelta(minutes=RETRY_INTERVAL_MINS)):
+            last_retry_time = datetime.datetime.now()  # Delete any empty markers allowing a retry once a day.
+            os.system("/usr/bin/find /root/.chia/plotman/checks/ -type f -empty -print -delete")
     if 'plots_check_analyze_skip' in os.environ and os.environ['plots_check_analyze_skip'].lower() == 'true':
         app.logger.info("Skipping plots check and analyze as environment variable 'plots_check_analyze_skip' is present.")
         return
@@ -225,7 +225,7 @@ def execute(plot_id=None):
             set_analyze_status(workers, status, plot)
             if os.environ['blockchains'][0] == 'mmx':
                 continue # Skip over MMX plots as they can't be checked
-            if set_check_status(workers, status, plot, refresh):
+            if set_check_status(workers, status, plot, plot_id != None):
                 requested_status_count += 1
             if requested_status_count > 5:  # Only remote request `check plots` on at most 5 plots per cycle
                 break
