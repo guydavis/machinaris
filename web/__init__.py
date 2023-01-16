@@ -20,7 +20,6 @@ app.config.from_object(DefaultConfig)
 app.config.from_envvar('WEB_SETTINGS_FILE', silent=True)
 babel = Babel(app)
 
-@babel.localeselector
 def get_locale():
     try:
         accept = request.headers['Accept-Language']

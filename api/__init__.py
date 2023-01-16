@@ -32,7 +32,6 @@ app.config.from_object(DefaultConfig)
 app.config.from_envvar('API_SETTINGS_FILE', silent=True)
 babel = Babel(app)
 
-@babel.localeselector
 def get_locale():
     #for d in babel.translation_directories:
     #    app.logger.info(d)
