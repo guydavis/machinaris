@@ -253,7 +253,7 @@ def plot_check(blockchain, plot_path):
     proc = Popen("{0} plots check -g {1}".format(chia_binary, plot_path),
         universal_newlines=True, stdout=PIPE, stderr=STDOUT, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=30)
+        outs, errs = proc.communicate(timeout=180)
     except TimeoutExpired:
         proc.kill()
         proc.communicate()

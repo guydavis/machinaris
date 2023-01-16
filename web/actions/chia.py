@@ -14,6 +14,7 @@ import shutil
 import socket
 import sys
 import time
+import threading
 import traceback
 import urllib
 import yaml
@@ -34,6 +35,7 @@ from web.models.chia import FarmSummary, FarmPlots, Wallets, Transactions, \
     Blockchains, Connections, Keys, ChallengesChartData, Summaries
 from . import worker as wk
 from . import stats
+from api.schedules import plots_check
 
 COLD_WALLET_ADDRESSES_FILE = '/root/.chia/machinaris/config/cold_wallet_addresses.json'
 WALLET_SETTINGS_FILE = '/root/.chia/machinaris/config/wallet_settings.json'
@@ -75,6 +77,7 @@ def order_plots_query(args, query):
 
 def search_plots_query(search, query):
     app.logger.info("Searching all plots for: {0}".format(search))
+    search = '%{0}%'.format(search)
     query = query.filter(or_(
         p.Plot.displayname.like(search),
         p.Plot.blockchain.like(search),
@@ -382,11 +385,26 @@ def save_cold_wallet_addresses(blockchain, cold_wallet_addresses):
         return
 
 def check(plot_id):
-    check_file = '/root/.chia/plotman/checks/{0}.log'.format(plot_id)
-    if os.path.exists(check_file):
+    check_file = '/root/.chia/plotman/checks/{0}.log'.format(plot_id[:8])
+    if os.path.exists(check_file) and os.path.getsize(check_file):
         with open(check_file, 'r+') as fp:
             return fp.read()
-    return make_response(_("Sorry, no plot check log found. Please wait for scheduled plot check to run."), 200)
+    try:
+        thread = threading.Thread(target=plots_check.execute, 
+            kwargs={
+                'plot_id': plot_id
+            }
+        )
+        thread.start()
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+    try: # Clear any stale status
+        plot = db.session.query(p.Plot).filter(p.Plot.plot_id == plot_id).first()
+        plot.plot_check = None
+        db.session.commit()
+    except Exception as ex:
+        app.logger.info(traceback.format_exc())
+    return _("Plot check initiated for ID: %(plot_id)s. Please refresh in a few minutes.\nPlease note that all plots will be checked slowly in the background so you\ndon't need to check each one individually.  Please be patient.", plot_id=plot_id)
 
 def get_transactions(lang, worker, blockchain, wallet_id):
     try:

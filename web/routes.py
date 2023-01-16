@@ -224,7 +224,7 @@ def farming_plots():
         return plotman.analyze(plot_id[:8])
     elif request.args.get('check'):  # Xhr with a plot_id
         plot_id = request.args.get('check')
-        return chia.check(plot_id[:8])
+        return chia.check(plot_id)
     gc = globals.load()
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()

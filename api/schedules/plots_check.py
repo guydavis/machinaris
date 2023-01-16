@@ -19,6 +19,9 @@ from common.models import workers as w
 from common.config import globals
 from api import app, utils
 
+# If found no valid plots check for a plot, don't ask again for at least a day
+REFRESH_INTERVAL_MINS = 60 * 24
+
 STATUS_FILE = '/root/.chia/plotman/status.json'
 ANALYZE_LOGS = '/root/.chia/plotman/analyze'
 CHECK_LOGS = '/root/.chia/plotman/checks'
@@ -99,27 +102,27 @@ def request_analyze(plot_file, workers):
                     plotter.hostname, plotter.latest_ping_result))
                 continue
             try:
-                app.logger.debug("Trying {0}:{1} for analyze....".format(plotter.hostname, plotter.port))
+                app.logger.info("Trying {0}:{1} for analyze....".format(plotter.hostname, plotter.port))
                 payload = {"service":"plotting", "action":"analyze", "plot_file": plot_file }
                 response = utils.send_worker_post(plotter, "/analysis/", payload, debug=False)
                 if response.status_code == 200:
                     return [plotter.hostname, plotter.displayname, response.content.decode('utf-8')]
                 elif response.status_code == 404:
-                    app.logger.debug("Plotter on {0}:{1} did not have plot log for {2}".format(
+                    app.logger.info("Plotter on {0}:{1} did not have plot log for {2}".format(
                         plotter.hostname, plotter.port, plot_file))
                 else:
-                    app.logger.debug("Plotter on {0}:{1} returned an unexpected error: {2}".format(
+                    app.logger.info("Plotter on {0}:{1} returned an unexpected error: {2}".format(
                         plotter.hostname, plotter.port, response.status_code))
             except Exception as ex:
                 app.logger.error(str(ex))
     return [None, None, None]
 
-def set_check_status(workers, status, plot):
-    app.logger.debug("Checking for plot check of {0}".format(plot.plot_id))
+def set_check_status(workers, status, plot, refresh):
     check_log = CHECK_LOGS + '/' + plot.plot_id[:8] + '.log'
     check_status = None
     requested_status = False
-    if not os.path.exists(check_log):
+    if refresh or not os.path.exists(check_log):
+        app.logger.info("Requesting plot check of {0}".format(plot.plot_id))
         requested_status = True
         [hostname, displayname, result] = request_check(plot, workers)
         if result:
@@ -158,24 +161,24 @@ def set_check_status(workers, status, plot):
 def request_check(plot, workers):
     # Don't know which harvester might have the plot result so try them in-turn
     for harvester in workers:
-        app.logger.debug("{0}:{1} - {2} - {3}".format(harvester.hostname, harvester.port, harvester.blockchain, harvester.mode))
+        #app.logger.info("{0}:{1} - {2} - {3}".format(harvester.hostname, harvester.port, harvester.blockchain, harvester.mode))
         if harvester.mode == 'fullnode' or 'harvester' in harvester.mode:
             if harvester.latest_ping_result != "Responding":
-                app.logger.debug("Skipping check call to {0} as last ping was: {1}".format( \
+                app.logger.info("Skipping check call to {0} as last ping was: {1}".format( \
                     harvester.hostname, harvester.latest_ping_result))
                 continue
             if harvester.hostname != plot.hostname or harvester.blockchain != plot.blockchain:
-                app.logger.debug("Skipping check call to {0} ({1}) for plot on {2} ({3})".format( \
+                app.logger.info("Skipping check call to {0} ({1}) for plot on {2} ({3})".format( \
                     harvester.hostname, harvester.blockchain, plot.hostname, plot.blockchain))
                 continue
             try:
-                app.logger.debug("Trying {0}:{1} for plot check....".format(harvester.hostname, harvester.port))
+                app.logger.info("Trying {0}:{1} for plot check....".format(harvester.hostname, harvester.port))
                 payload = {"service":"farming", "action":"check", "plot_file": plot.dir + '/' + plot.file }
                 response = utils.send_worker_post(harvester, "/analysis/", payload, debug=True)
                 if response.status_code == 200:
                     return [harvester.hostname, harvester.displayname, response.content.decode('utf-8')]
                 elif response.status_code == 404:
-                    app.logger.debug("Harvester on {0}:{1} did not have plot check for {2}".format(
+                    app.logger.info("Harvester on {0}:{1} did not have plot check for {2}".format(
                         harvester.hostname, harvester.port, plot.file))
                 else:
                     app.logger.info("Harvester on {0}:{1} returned an unexpected error: {2}".format(
@@ -184,7 +187,15 @@ def request_check(plot, workers):
                 app.logger.info(str(ex))
     return [None, None, None]
 
-def execute():
+last_refresh_time = None
+def execute(plot_id=None):
+    global last_refresh_time
+    refresh = plot_id != None  # Refresh if single plot is asked for from WebUI manual check
+    if not refresh:  # Otherwise only perform refresh of missing/stale checks if interval has elapsed.
+        if not last_refresh_time or last_refresh_time <= \
+            (datetime.datetime.now() - datetime.timedelta(minutes=REFRESH_INTERVAL_MINS)):
+            last_refresh_time = datetime.datetime.now()
+            refresh = True
     if 'plots_check_analyze_skip' in os.environ and os.environ['plots_check_analyze_skip'].lower() == 'true':
         app.logger.info("Skipping plots check and analyze as environment variable 'plots_check_analyze_skip' is present.")
         return
@@ -194,13 +205,18 @@ def execute():
         if not gc['is_controller']:
             return # Only controller should initiate check/analyze against other fullnodes/harvesters
         try:
-            os.makedirs(ANALYZE_LOGS)
-            os.makedirs(CHECK_LOGS)
+            if not os.path.isdir(ANALYZE_LOGS):
+                os.makedirs(ANALYZE_LOGS)
+            if not os.path.isdir(CHECK_LOGS):
+                os.makedirs(CHECK_LOGS)
         except Exception as ex:
-            app.logger.debug("Unable to create analyze and check folders in plotman. {0}".format(str(ex)))
+            app.logger.info("Unable to create analyze and check folders in plotman. {0}".format(str(ex)))
         workers = db.session.query(w.Worker)
-        plots = db.session.query(p.Plot).filter(or_(p.Plot.plot_check.is_(None), 
-            p.Plot.plot_analyze.is_(None))).order_by(p.Plot.created_at.desc()).all()
+        if plot_id:
+            plots = db.session.query(p.Plot).filter(p.Plot.plot_id == plot_id).all()
+        else:    
+            plots = db.session.query(p.Plot).filter(or_(p.Plot.plot_check.is_(None), 
+                p.Plot.plot_analyze.is_(None))).order_by(p.Plot.created_at.desc()).all()
         status = open_status_json()
         requested_status_count = 0
         #app.logger.info("Querying for plots...")
@@ -209,7 +225,7 @@ def execute():
             set_analyze_status(workers, status, plot)
             if os.environ['blockchains'][0] == 'mmx':
                 continue # Skip over MMX plots as they can't be checked
-            if set_check_status(workers, status, plot):
+            if set_check_status(workers, status, plot, refresh):
                 requested_status_count += 1
             if requested_status_count > 5:  # Only remote request `check plots` on at most 5 plots per cycle
                 break

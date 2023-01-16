@@ -348,11 +348,16 @@
                                 plot_id = arr[1].trim();
                                 if (status == 'GOOD') {
                                     return '<a href="#" title="{{_('Good Plot')}}" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-check-circle text-success"></i></a>';
-                                } else {
+                                } else if (status == 'BAD') {
                                     return '<a href="#" title="{{_('Bad Plot')}}" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-exclamation-triangle text-warning"></i></a>';
+                                } else {
+                                    return '<a href="#" title="{{_('Unknown')}}" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-question-circle text-white"></i></a>';
                                 }
-                            }               
-                            return "";
+                            }
+                            if (row[1] == 'mmx') {
+                                return ""; 
+                            }             
+                            return '<a href="#" title="{{_('Unchecked')}}" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+row[2]+'");return false;\'><i class="fs-4 bi-question-circle text-white"></i></a>';
                         }
                     }, 
                 ],

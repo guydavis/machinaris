@@ -8,7 +8,7 @@ echo 'Starting Machinaris...'
 mkdir -p /root/.chia/machinaris/logs
 cd /code/machinaris
 
-if [ $FLASK_ENV == "development" ];
+if [ -n $FLASK_DEBUG ];
 then
     LOG_LEVEL='debug'
     RELOAD='--reload'

@@ -43,7 +43,7 @@ fi
 mkdir -p /root/.chia/machinaris/config
 mkdir -p /root/.chia/machinaris/logs
 cd /machinaris
-if [ $FLASK_ENV == "development" ];
+if [ -n $FLASK_DEBUG ];
 then
     LOG_LEVEL='debug'
     RELOAD='--reload'
