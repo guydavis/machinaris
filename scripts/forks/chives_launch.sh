@@ -64,6 +64,9 @@ if [[ ${mode} == 'fullnode' ]]; then
   else
     chives start farmer
   fi
+  if [[ ${chives_masternode} == "true" ]]; then
+    chives start masternode
+  fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.chives/mainnet/config/ssl/wallet/public_wallet.key ]; then
     echo "No wallet key found, so not starting farming services.  Please add your Chia mnemonic.txt to the ~/.machinaris/ folder and restart."
