@@ -63,9 +63,10 @@ if [[ ${mode} == 'fullnode' ]]; then
     chives start farmer-no-wallet
   else
     chives start farmer
-  fi
-  if [[ ${chives_masternode} == "true" ]]; then
-    chives start masternode
+    if [[ ${chives_masternode} == "true" ]]; then
+      echo "Starting Chives masternode in a minute..."
+      sleep 60 && chives start masternode
+    fi
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.chives/mainnet/config/ssl/wallet/public_wallet.key ]; then
