@@ -4,13 +4,13 @@
 #
 
 PIPSCOIN_BRANCH=$1
-# On 2023-01-02
-HASH=29854541a4a6b2b9bc4d423302642e10ddf8fc77
+# On 2023-01-17
+HASH=3017cde5f8c463f5e494c5c1e258dd2bf8281fee
 
 if [ -z ${PIPSCOIN_BRANCH} ]; then
 	echo 'Skipping Pipscoin install as not requested.'
 else
-	git clpipscoin --branch ${PIPSCOIN_BRANCH} --recurse-submodules https://github.com/Pipscoin-Network/pipscoin-blockchain.git /pipscoin-blockchain 
+	git clone --branch ${PIPSCOIN_BRANCH} --recurse-submodules https://github.com/Pipscoin-Network/pipscoin-blockchain.git /pipscoin-blockchain 
 	cd /pipscoin-blockchain 
 	git submodule update --init mozilla-ca
 	git checkout $HASH

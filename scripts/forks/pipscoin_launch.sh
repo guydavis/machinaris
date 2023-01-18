@@ -40,7 +40,7 @@ for k in ${keys//:/ }; do
     pipscoin keys add -l "key_${label_num}" -f ${k} > /dev/null
     ((label_num=label_num+1))
   fi
-dpipscoin
+done
 
 # Loop over provided list of completed plot directories
 IFS=':' read -r -a array <<< "$plots_dir"
@@ -48,7 +48,7 @@ joined=$(printf ", %s" "${array[@]}")
 echo "Adding plot directories at: ${joined:1}"
 for p in ${plots_dir//:/ }; do
   pipscoin plots add -d ${p}
-dpipscoin
+done
 
 chmod 755 -R /root/.pipscoin/mainnet/config/ssl/ &> /dev/null
 pipscoin init --fix-ssl-permissions > /dev/null 
@@ -63,8 +63,8 @@ if [[ ${mode} == 'fullnode' ]]; then
         pipscoin keys add -f ${k}
         sleep 10
       fi
-    dpipscoin
-  dpipscoin
+    done
+  done
   if [ -f /root/.chia/machinaris/config/wallet_settings.json ]; then
     pipscoin start farmer-no-wallet
   else
