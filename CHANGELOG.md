@@ -4,8 +4,9 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 ### Added
- - [MMX Cuda Plotter](https://github.com/madMAx43v3r/mmx-binaries/tree/master/mmx-cuda-plotter) - currently only at commandline: `cuda_plot_kXX` 
+ - [MMX Cuda Plotter](https://github.com/madMAx43v3r/mmx-binaries/tree/master/mmx-cuda-plotter) - currently only at commandline: `cuda_plot_kXX`. 
  - [Ballcoin](https://github.com/ball-network/ballcoin-blockchain) blockchain at version 1.6.0, another slow Silicoin fork.
+ - [Pipscoin](https://github.com/Pipscoin-Network/pipscoin-blockchain") blockchain at version 1.7.0.
 ## Changed
  - Fix missing Connections listing for Flax and MMX blockchains
 ## Updated 
@@ -14,7 +15,7 @@ All notable changes to this project will be documented in this file. The format 
  - [SHIBGreen](https://github.com/BTCgreen-Network/shibgreen-blockchain/releases/tag/1.7.0b) to v1.7.0b
  - [Staicoin](https://github.com/STATION-I/stai-blockchain/releases/tag/1.3.0) to v1.3.0. Note, they require a fresh `config.yaml`.
 ## Notes
- - 
+ - Support for new Chia forks DOES NOT imply my endorsement for them.  Only run those you are comfortable with.
 
 ## [0.8.6] - 2023-01-03
 ### Added

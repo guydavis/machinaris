@@ -405,6 +405,23 @@
         "discord_url": "https://discord.gg/7bFQxmtjHx",
         "website_url": "https://petroleum.farm/"
     },
+    "pipscoin": {
+        "name": "Pipscoin",
+        "symbol": "PIPS" ,
+        "binary":  "/pipscoin-blockchain/venv/bin/pipscoin",
+        "network_path": "/root/.pipscoin/mainnet",
+        "network_name": "mainnet",
+        "network_port": 7477,
+        "farmer_port": 16339,
+        "fullnode_rpc_port": 18868,
+        "worker_port": 8958,
+        "reward": 1.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/Pipscoin-Network/pipscoin-blockchain",
+        "discord_url": "https://discord.gg/T8taazt7Pf",
+        "website_url": "https://www.pipscoin.net/"
+    },
     "profit": {
         "name": "Profit",
         "symbol": "PROFIT" ,

@@ -22,6 +22,13 @@ if blockchain == "apple":
     from apple.util.default_root import DEFAULT_ROOT_PATH
     from apple.util.ints import uint16
     from apple.util.config import load_config as load_fork_config
+elif blockchain == "ballcoin":
+    from ballcoin.rpc.full_node_rpc_client import FullNodeRpcClient
+    from ballcoin.rpc.farmer_rpc_client import FarmerRpcClient
+    from ballcoin.rpc.wallet_rpc_client import WalletRpcClient
+    from ballcoin.util.default_root import DEFAULT_ROOT_PATH
+    from ballcoin.util.ints import uint16
+    from ballcoin.util.config import load_config as load_fork_config
 elif blockchain == "bpx":
     from chia.rpc.full_node_rpc_client import FullNodeRpcClient
     from chia.rpc.farmer_rpc_client import FarmerRpcClient
@@ -64,6 +71,13 @@ elif blockchain == "chives":
     from chives.util.default_root import DEFAULT_ROOT_PATH
     from chives.util.ints import uint16
     from chives.util.config import load_config as load_fork_config
+elif blockchain == "coffee":
+    from coffee.rpc.full_node_rpc_client import FullNodeRpcClient
+    from coffee.rpc.farmer_rpc_client import FarmerRpcClient
+    from coffee.rpc.wallet_rpc_client import WalletRpcClient
+    from coffee.util.default_root import DEFAULT_ROOT_PATH
+    from coffee.util.ints import uint16
+    from coffee.util.config import load_config as load_fork_config
 elif blockchain == "cryptodoge":
     from cryptodoge.rpc.full_node_rpc_client import FullNodeRpcClient
     from cryptodoge.rpc.farmer_rpc_client import FarmerRpcClient
@@ -92,6 +106,13 @@ elif blockchain == "flora":
     from chia.util.default_root import DEFAULT_ROOT_PATH
     from chia.util.ints import uint16
     from chia.util.config import load_config as load_fork_config
+elif blockchain == "greenbtc":
+    from greenbtc.rpc.full_node_rpc_client import FullNodeRpcClient
+    from greenbtc.rpc.farmer_rpc_client import FarmerRpcClient
+    from greenbtc.rpc.wallet_rpc_client import WalletRpcClient
+    from greenbtc.util.default_root import DEFAULT_ROOT_PATH
+    from greenbtc.util.ints import uint16
+    from greenbtc.util.config import load_config as load_fork_config
 elif blockchain == "gold":
     from chia.rpc.full_node_rpc_client import FullNodeRpcClient
     from chia.rpc.farmer_rpc_client import FarmerRpcClient
@@ -143,6 +164,13 @@ elif blockchain == "nchain":
     from chia.util.default_root import DEFAULT_ROOT_PATH
     from chia.util.ints import uint16
     from chia.util.config import load_config as load_fork_config
+elif blockchain == "one": 
+    from one.rpc.full_node_rpc_client import FullNodeRpcClient
+    from one.rpc.farmer_rpc_client import FarmerRpcClient
+    from one.rpc.wallet_rpc_client import WalletRpcClient
+    from one.util.default_root import DEFAULT_ROOT_PATH
+    from one.util.ints import uint16
+    from one.util.config import load_config as load_fork_config
 elif blockchain == "petroleum":
     from chia.rpc.full_node_rpc_client import FullNodeRpcClient
     from chia.rpc.farmer_rpc_client import FarmerRpcClient
@@ -150,6 +178,13 @@ elif blockchain == "petroleum":
     from chia.util.default_root import DEFAULT_ROOT_PATH
     from chia.util.ints import uint16
     from chia.util.config import load_config as load_fork_config
+elif blockchain == "pipscoin":
+    from pipscoin.rpc.full_node_rpc_client import FullNodeRpcClient
+    from pipscoin.rpc.farmer_rpc_client import FarmerRpcClient
+    from pipscoin.rpc.wallet_rpc_client import WalletRpcClient
+    from pipscoin.util.default_root import DEFAULT_ROOT_PATH
+    from pipscoin.util.ints import uint16
+    from pipscoin.util.config import load_config as load_fork_config
 elif blockchain == "profit":
     from profit.rpc.full_node_rpc_client import FullNodeRpcClient
     from profit.rpc.farmer_rpc_client import FarmerRpcClient

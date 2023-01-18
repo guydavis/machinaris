@@ -227,6 +227,9 @@
             if (blockchain == 'petroleum') {
                 return 8943;
             }
+            if (blockchain == 'pipscoin') {
+                return 8958;
+            }
             if (blockchain == 'profit') {
                 return 8944;
             }
@@ -323,6 +326,9 @@
             }
             if (blockchain == 'petroleum') {
                 return 33347;
+            }
+            if (blockchain == 'pipscoin') {
+                return 16339;
             }
             if (blockchain == 'profit') {
                 return 48447;
@@ -798,13 +804,20 @@
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
+                                id="blockchain-pipscoin" onclick="updateDocker()" value="pipscoin">
+                            <label class="form-check-label" for="blockchain-pipscoin">
+                                Pipscoin
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-profit" onclick="updateDocker()" value="profit">
                             <label class="form-check-label" for="blockchain-profit">
                                 Profit
                             </label>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-shibgreen" onclick="updateDocker()" value="shibgreen">
@@ -833,6 +846,8 @@
                                 Tad
                             </label>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-wheat" onclick="updateDocker()" value="wheat">
@@ -840,6 +855,10 @@
                                 Wheat
                             </label>
                         </div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
                     </div>
                 </div>
             </div>

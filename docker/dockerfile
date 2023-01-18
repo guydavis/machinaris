@@ -34,6 +34,7 @@ ARG MOON_BRANCH
 ARG NCHAIN_BRANCH
 ARG ONE_BRANCH
 ARG PETROLEUM_BRANCH
+ARG PIPSCOIN_BRANCH
 ARG PROFIT_BRANCH
 ARG SHIBGREEN_BRANCH
 ARG SILICOIN_BRANCH
@@ -74,6 +75,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/one_install.sh ${ONE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/petroleum_install.sh ${PETROLEUM_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/pipscoin_install.sh ${PIPSCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/profit_install.sh ${PROFIT_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/shibgreen_install.sh ${SHIBGREEN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/silicoin_install.sh ${SILICOIN_BRANCH} \
