@@ -23,12 +23,12 @@ if blockchain == "apple":
     from apple.util.ints import uint16
     from apple.util.config import load_config as load_fork_config
 elif blockchain == "ballcoin":
-    from ballcoin.rpc.full_node_rpc_client import FullNodeRpcClient
-    from ballcoin.rpc.farmer_rpc_client import FarmerRpcClient
-    from ballcoin.rpc.wallet_rpc_client import WalletRpcClient
-    from ballcoin.util.default_root import DEFAULT_ROOT_PATH
-    from ballcoin.util.ints import uint16
-    from ballcoin.util.config import load_config as load_fork_config
+    from ball.rpc.full_node_rpc_client import FullNodeRpcClient
+    from ball.rpc.farmer_rpc_client import FarmerRpcClient
+    from ball.rpc.wallet_rpc_client import WalletRpcClient
+    from ball.util.default_root import DEFAULT_ROOT_PATH
+    from ball.util.ints import uint16
+    from ball.util.config import load_config as load_fork_config
 elif blockchain == "bpx":
     from chia.rpc.full_node_rpc_client import FullNodeRpcClient
     from chia.rpc.farmer_rpc_client import FarmerRpcClient
