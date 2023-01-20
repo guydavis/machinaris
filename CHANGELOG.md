@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. The format 
  - [Pipscoin](https://github.com/Pipscoin-Network/pipscoin-blockchain") blockchain at version 1.7.0.
 ## Changed
  - Fix missing Connections listing for Flax and MMX blockchains
+ - Fix for Bladebit ramplot relaunching.  Thanks @JoeZotacExperience!
 ## Updated 
  - [BTCGreen](https://github.com/BTCgreen-Network/btcgreen-blockchain/releases/tag/1.7.0b) to v1.7.0b
  - [Chives](https://github.com/HiveProject2021/chives-blockchain/releases/tag/1.5.3) to v1.5.3, including staking.
