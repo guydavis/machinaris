@@ -102,6 +102,7 @@ A big thanks to all that contributed with dev and test including:
 * Gnomuz
 * borifrmr (aka Inabon)
 * DeathandDestruction
+* @ekersey
 * Joe Zotac Experience
 
 ## Trademark Notice

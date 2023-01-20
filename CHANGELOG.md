@@ -6,9 +6,9 @@ All notable changes to this project will be documented in this file. The format 
 ### Added
  - [MMX Cuda Plotter](https://github.com/madMAx43v3r/mmx-binaries/tree/master/mmx-cuda-plotter) - currently only at commandline: `cuda_plot_kXX`. 
  - [Ballcoin](https://github.com/ball-network/ballcoin-blockchain) blockchain at version 1.6.0, another slow Silicoin fork.
- - [Pipscoin](https://github.com/Pipscoin-Network/pipscoin-blockchain") blockchain at version 1.7.0.
+ - [Pipscoin](https://github.com/Pipscoin-Network/pipscoin-blockchain) blockchain at version 1.7.0.
 ## Changed
- - Fix missing Connections listing for Flax and MMX blockchains
+ - Fix missing Connections listing for Flax and MMX blockchains.  Thanks @ekersey!
  - Fix for Bladebit ramplot relaunching.  Thanks @JoeZotacExperience!
 ## Updated 
  - [BTCGreen](https://github.com/BTCgreen-Network/btcgreen-blockchain/releases/tag/1.7.0b) to v1.7.0b
