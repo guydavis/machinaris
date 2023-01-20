@@ -72,7 +72,7 @@ def on_starting(server):
         scheduler.add_job(func=status_connections.update, name="status_connections", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_keys.update, name="status_keys", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_farm.update, name="status_farm", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
-        scheduler.add_job(func=stats_blocks.collect, name="status_blocks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
+        scheduler.add_job(func=stats_blocks.collect, name="status_blocks", trigger='interval', minutes=10, jitter=0)
         scheduler.add_job(func=restart_stuck_farmer.execute, name="status_blockchain_sync", trigger='interval', minutes=5, jitter=0) 
         scheduler.add_job(func=periodically_sync_wallet.execute, name="status_wallet_sync", trigger='interval', minutes=15, jitter=0) 
         scheduler.add_job(func=nft_recover.execute, name="status_nft_recover", trigger='interval', hours=1) # Once an hour
@@ -96,7 +96,7 @@ def on_starting(server):
         
     # Testing only
     #scheduler.add_job(func=plots_check.execute, name="plots_check", trigger='interval', seconds=60) # Test immediately
-    #scheduler.add_job(func=stats_effort.collect, name="stats_effort", trigger='interval', seconds=10) # Test immediately
+    #scheduler.add_job(func=stats_blocks.collect, name="stats_effort", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=websvcs.get_chain_statuses, name="get_chain_statuses", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=status_farm.update, name="farms", trigger='interval', seconds=10) # Test immediately

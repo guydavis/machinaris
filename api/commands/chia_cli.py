@@ -157,7 +157,7 @@ def load_keys_show(blockchain):
 def restart_farmer(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     if os.path.exists(WALLET_SETTINGS_FILE):
-        cmd = "{0} stop farmer && {0} start farmer-no-wallet".format(chia_binary)
+        cmd = "{0} stop -d farmer && {0} start farmer-no-wallet".format(chia_binary)
     else:
         cmd = "{0} start farmer && {0} start farmer -r".format(chia_binary)
     app.logger.info("Executing farmer restart: {0}".format(cmd))
@@ -194,7 +194,7 @@ def start_wallet(blockchain):
 def pause_wallet(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     if globals.legacy_blockchain(blockchain):  # Old chains will stop fullnode(!) if ask to stop just the wallet...
-        cmd = "{0} stop farmer && {0} start farmer-no-wallet".format(chia_binary)
+        cmd = "{0} stop -d farmer && {0} start farmer-no-wallet".format(chia_binary)
     else:  # Updated blockchains can simply stop the wallet
         cmd = "{0} stop wallet".format(chia_binary)
     app.logger.info("Executing wallet pause: {0}".format(cmd))
