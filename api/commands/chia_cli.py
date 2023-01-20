@@ -37,7 +37,7 @@ MAX_LOG_LINES = 2000
 WALLET_SETTINGS_FILE = '/root/.chia/machinaris/config/wallet_settings.json'
 
 # Blockchains which dropped compatibility with `show -c` commands around v1.6
-BLOCKCHAINS_USING_PEER_CMD = ['cactus', 'chia', 'chinilla', 'littlelambocoin', 'maize', 'one', 'tad']
+BLOCKCHAINS_USING_PEER_CMD = ['btcgreen', 'cactus', 'chia', 'chinilla', 'flax', 'littlelambocoin', 'maize', 'one', 'pipscoin', 'shibgreen', 'tad']
 
 def load_farm_summary(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
@@ -92,7 +92,7 @@ def load_wallet_show(blockchain):
     app.logger.debug("Default SELECTED_WALLET_NUM is {0}".format(wallet_id_num))
     while True:
         i = child.expect(["Wallet height:.*\r\n", "Wallet keys:.*\r\n", "Choose wallet key:.*\r\n", 
-            "Choose a wallet key:.*\r\n", "No online backup file found.*\r\n", "Connection error.*\r\n"], timeout=90)
+            "Choose a wallet key .*\r\n", "No online backup file found.*\r\n", "Connection error.*\r\n"], timeout=90)
         if i == 0:
             app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
             wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
@@ -253,7 +253,7 @@ def plot_check(blockchain, plot_path):
     proc = Popen("{0} plots check -g {1}".format(chia_binary, plot_path),
         universal_newlines=True, stdout=PIPE, stderr=STDOUT, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=30)
+        outs, errs = proc.communicate(timeout=180)
     except TimeoutExpired:
         proc.kill()
         proc.communicate()

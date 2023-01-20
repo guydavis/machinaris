@@ -311,9 +311,9 @@ def request_posat_prices(debug=False):
         app.logger.error("Failed to request recent blockchain pricing from {0} due to {1}".format(url, str(ex)))
     return prices
 
-def request_vayamos_prices(debug=False):
+def request_infinex_prices(debug=False):
     prices = {}
-    url = "https://api.vayamos.cc/spot/markets"
+    url = "https://api.infinex.cc/spot/markets"
     try:
         app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
         if debug:
@@ -327,15 +327,15 @@ def request_vayamos_prices(debug=False):
                 if not market['pair'].endswith('USDT'):
                     continue # Skip other market pairs than USDT
                 for blockchain in SUPPORTED_BLOCKCHAINS:
-                    vayamos_symbol = globals.get_blockchain_symbol(blockchain).upper()
-                    if market['base'] == vayamos_symbol:
+                    infinex_symbol = globals.get_blockchain_symbol(blockchain).upper()
+                    if market['base'] == infinex_symbol:
                         #app.logger.info("VAYAMOS: {0} @ {1}".format(blockchain, market['price']))
                         try:
                             prices[blockchain] = float(market['price'])
                         except Exception as ex:
                             traceback.print_exc()
         else:
-            app.logger.info("vayamos response was not success=True.")
+            app.logger.info("infinex response was not success=True.")
     except Exception as ex:
         app.logger.error("Failed to request recent blockchain pricing from {0} due to {1}".format(url, str(ex)))
     return prices
@@ -373,7 +373,7 @@ def get_prices():
             last_price_request_time = datetime.datetime.now()
             store_exchange_prices(prices, 'alltheblocks', request_atb_prices(), last_price_request_time)
             #store_exchange_prices(prices, 'posat', request_posat_prices(), last_price_request_time) # Dead as of Sept 2022
-            store_exchange_prices(prices, 'vayamos', request_vayamos_prices(), last_price_request_time)
+            store_exchange_prices(prices, 'infinex', request_infinex_prices(), last_price_request_time)
             save_prices_cache(prices)
         except Exception as ex:
             app.logger.info("Failed to save current blockchain prices because {0}".format(str(ex)))
@@ -451,7 +451,7 @@ def request_chain_statuses(statuses, debug=False):
         if resp.status_code == 200:
             result = json.loads(resp.text)
             for fork in result['forks']:
-                fork_name = fork['pathName'].replace('stai', 'staicoin')
+                fork_name = fork['pathName'].replace('stai', 'staicoin').replace('ballcoin', 'ball')
                 peak_time = datetime.datetime.fromtimestamp(int(fork['peakTimestamp'])).strftime("%Y-%m-%d %H:%M:%S")
                 statuses[fork_name] = { 'peak_height': fork['peakHeight'], 'peak_time': peak_time, }
         else:

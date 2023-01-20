@@ -1,13 +1,13 @@
-name: develop-chia
+name: test-ballcoin
 
 on:
   push:
     branches:
-      - 'develop'
+      - 'integration'
 
 jobs:
   docker:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     steps:
       -
         name: Checkout
@@ -37,15 +37,13 @@ jobs:
         with:
           file: docker/dockerfile
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
-            "UBUNTU_VER=jammy"
-            "MACHINARIS_STREAM=develop"
+            "UBUNTU_VER=focal"
+            "MACHINARIS_STREAM=test"
             "CHIADOG_BRANCH=dev"
-            "CHIA_BRANCH=main"
-            "BLADEBIT_BRANCH=master"
-            "PLOTMAN_BRANCH=development"
+            "BALLCOIN_BRANCH=main"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:develop
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:develop
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-ballcoin:test
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-ballcoin:test

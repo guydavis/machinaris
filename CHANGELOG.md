@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+ - [MMX Cuda Plotter](https://github.com/madMAx43v3r/mmx-binaries/tree/master/mmx-cuda-plotter) - currently only at commandline: `cuda_plot_kXX`. 
+ - [Ballcoin](https://github.com/ball-network/ballcoin-blockchain) blockchain at version 1.6.0, another slow Silicoin fork.
+ - [Pipscoin](https://github.com/Pipscoin-Network/pipscoin-blockchain") blockchain at version 1.7.0.
+## Changed
+ - Fix missing Connections listing for Flax and MMX blockchains
+ - Fix for Bladebit ramplot relaunching.  Thanks @JoeZotacExperience!
+## Updated 
+ - [BTCGreen](https://github.com/BTCgreen-Network/btcgreen-blockchain/releases/tag/1.7.0b) to v1.7.0b
+ - [Chives](https://github.com/HiveProject2021/chives-blockchain/releases/tag/1.5.3) to v1.5.3, including staking.
+ - [SHIBGreen](https://github.com/BTCgreen-Network/shibgreen-blockchain/releases/tag/1.7.0b) to v1.7.0b
+ - [Staicoin](https://github.com/STATION-I/stai-blockchain/releases/tag/1.3.0) to v1.3.0. Note, they require a fresh `config.yaml`.
+## Notes
+ - Support for new Chia forks DOES NOT imply my endorsement for them.  Only run those you are comfortable with.
+
 ## [0.8.6] - 2023-01-03
 ### Added
  - Re-plotting: **Optional** background deletion of a few old plots to free space for new plotting. See Farming page, Settings icon, top-right.

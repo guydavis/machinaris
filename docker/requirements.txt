@@ -1,6 +1,6 @@
-apscheduler==3.8.0
-click==7.1.2
-jinja2==3.0.3
+apscheduler
+click
+jinja2
 flask
 flask-smorest
 python-dotenv

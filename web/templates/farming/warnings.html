@@ -163,7 +163,12 @@
         {% endif %}
     
     </div>
-
+    <form method="POST" id="warnings-form">
+    <fieldset>
+        <button form="warnings-form" type="submit" name="action" value="clear" class="btn btn-outline-success"
+            id="btnClear">{{_('Clear All')}}</button>
+    </fieldset>
+    </form>
     {% endblock %}
 
     {% block scripts %}
@@ -195,6 +200,14 @@
                     "url": "{{ url_for('static', filename='3rd_party/i18n/datatables.'+lang+'.json') }}"
                 },
                 {% endif %}
+            });
+            $("#btnClear").click(function () {
+                $('#btnClear').prop("disabled", true);
+                $('#btnClear').html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Clearing...')}}`
+                );
+                $('#warnings-form').append('<input type="hidden" id="action" name="action" value="clear" />');
+                $("#warnings-form").submit();
             });
         })
         </script>

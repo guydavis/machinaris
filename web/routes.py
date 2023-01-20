@@ -28,7 +28,7 @@ def get_lang(request):
             first_accept = accept.split(',')[0]  # Like 'nl'
             alternative = "{0}_{1}".format(first_accept, first_accept.upper())
             if alternative in app.config['LANGUAGES']:
-                app.logger.info("LOCALE: Accept-Language: {0}  ---->  using locale: {1}".format(accept, match))
+                app.logger.info("LOCALE: Accept-Language: {0}  ---->  using locale: {1}".format(accept, alternative))
                 return alternative
         if match:
             app.logger.info("LOCALE: Accept-Language: {0}  ---->  matched locale: {1}".format(accept, match))
@@ -224,7 +224,7 @@ def farming_plots():
         return plotman.analyze(plot_id[:8])
     elif request.args.get('check'):  # Xhr with a plot_id
         plot_id = request.args.get('check')
-        return chia.check(plot_id[:8])
+        return chia.check(plot_id)
     gc = globals.load()
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()
@@ -253,9 +253,12 @@ def farming_workers():
         MAX_COLUMNS_ON_CHART=stats.MAX_ALLOWED_PATHS_ON_BAR_CHART,
         global_config=gc)
 
-@app.route('/farming/warnings')
+@app.route('/farming/warnings', methods=['GET', 'POST'])
 def farming_warnings():
     gc = globals.load()
+    if request.method == 'POST':
+        if request.form.get('action') == 'clear':
+            warnings.clear_plot_warnings()
     farmers = chia.load_farmers()
     plot_warnings = warnings.load_plot_warnings()
     return render_template('farming/warnings.html', farmers=farmers, 

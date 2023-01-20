@@ -158,6 +158,9 @@
             if (blockchain == 'apple') {
                 return 8947;
             }
+            if (blockchain == 'ballcoin') {
+                return 8957;
+            }
             if (blockchain == 'bpx') {
                 return 8945;
             }
@@ -224,6 +227,9 @@
             if (blockchain == 'petroleum') {
                 return 8943;
             }
+            if (blockchain == 'pipscoin') {
+                return 8958;
+            }
             if (blockchain == 'profit') {
                 return 8944;
             }
@@ -251,6 +257,9 @@
         function lookup_farmer_port(blockchain) {
             if (blockchain == 'apple') {
                 return 26667;
+            }
+            if (blockchain == 'ballcoin') {
+                return 38891;
             }
             if (blockchain == 'bpx') {
                 return 27914;
@@ -317,6 +326,9 @@
             }
             if (blockchain == 'petroleum') {
                 return 33347;
+            }
+            if (blockchain == 'pipscoin') {
+                return 16339;
             }
             if (blockchain == 'profit') {
                 return 48447;
@@ -623,6 +635,13 @@
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
+                                id="blockchain-ballcoin" onclick="updateDocker()" value="ballcoin">
+                            <label class="form-check-label" for="blockchain-ballcoin" onclick="updateDocker()">
+                                Ballcoin
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-bpx" onclick="updateDocker()" value="bpx">
                             <label class="form-check-label" for="blockchain-bpx" onclick="updateDocker()">
                                 BPX
@@ -642,6 +661,8 @@
                                 Cactus
                             </label>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" checked name="blockchains"
                                 id="blockchain-chia" onclick="updateDocker()" value="chia">
@@ -649,8 +670,6 @@
                                 Chia
                             </label>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-chinilla" onclick="updateDocker()" value="chinilla">
@@ -679,6 +698,8 @@
                                 Cryptodoge
                             </label>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-ecostake" onclick="updateDocker()" value="ecostake">
@@ -686,8 +707,6 @@
                                 Ecostake
                             </label>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-flax" onclick="updateDocker()" value="flax">
@@ -716,6 +735,8 @@
                                 Gold
                             </label>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-hddcoin" onclick="updateDocker()" value="hddcoin">
@@ -723,8 +744,6 @@
                                 HDDCoin
                             </label>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-littlelambocoin" onclick="updateDocker()" value="littlelambocoin">
@@ -753,6 +772,8 @@
                                 MMX
                             </label>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-moon" onclick="updateDocker()" value="moon">
@@ -760,8 +781,6 @@
                                 Moon
                             </label>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-nchain" onclick="updateDocker()" value="nchain">
@@ -785,6 +804,15 @@
                         </div>
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
+                                id="blockchain-pipscoin" onclick="updateDocker()" value="pipscoin">
+                            <label class="form-check-label" for="blockchain-pipscoin">
+                                Pipscoin
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-profit" onclick="updateDocker()" value="profit">
                             <label class="form-check-label" for="blockchain-profit">
                                 Profit
@@ -797,8 +825,6 @@
                                 SHIBGreen
                             </label>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-staicoin" onclick="updateDocker()" value="staicoin">
@@ -820,6 +846,8 @@
                                 Tad
                             </label>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-wheat" onclick="updateDocker()" value="wheat">
@@ -827,6 +855,9 @@
                                 Wheat
                             </label>
                         </div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
+                        <div class="col">&nbsp;</div>
                         <div class="col">&nbsp;</div>
                     </div>
                 </div>
