@@ -4,12 +4,14 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 ### Added
+ - [Bladebit](https://github.com/Chia-Network/bladebit) - support for plotting via GPU (NOT YET, PENDING!)
  - [MMX Cuda Plotter](https://github.com/madMAx43v3r/mmx-binaries/tree/master/mmx-cuda-plotter) - currently only at commandline: `cuda_plot_kXX`. 
  - [Ballcoin](https://github.com/ball-network/ballcoin-blockchain) blockchain at version 1.6.0, another slow Silicoin fork.
  - [Pipscoin](https://github.com/Pipscoin-Network/pipscoin-blockchain) blockchain at version 1.7.0.
 ## Changed
  - Fix missing Connections listing for Flax and MMX blockchains.  Thanks @ekersey!
  - Fix for Bladebit ramplot relaunching.  Thanks @JoeZotacExperience!
+ - Multiple functionality & performance cleanups from excellent code review by @qoole.
 ## Updated 
  - [BTCGreen](https://github.com/BTCgreen-Network/btcgreen-blockchain/releases/tag/1.7.0b) to v1.7.0b
  - [Chives](https://github.com/HiveProject2021/chives-blockchain/releases/tag/1.5.3) to v1.5.3, including staking.

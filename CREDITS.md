@@ -5,12 +5,13 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 
 ## Core Components
 * [Chia™](https://www.chia.net/): the distributed cryptocurrency project.
+* [Forks](https://github.com/guydavis/machinaris/wiki/Forks): All the other blockchain clones.
 * [Plotman](https://github.com/ericaltendorf/plotman): a parallel plotting manager.
 * [Chiadog](https://github.com/martomi/chiadog): a log monitor with alerting.
 * [Madmax](https://github.com/madMAx43v3r/chia-plotter): a pipelined, multi-threaded plotter.
 * [Bladebit](https://github.com/harold-b/bladebit): an in-memory plotter.
-* [Farmr](https://github.com/gilnobrega/farmr): provides advanced monitoring at [farmr.net](https://farmr.net).
 * [Forktools](https://github.com/Qwinn1/forktools): shell utilities for managing Chia forks.
+* [FD-CLI](https://github.com/Flora-Network/flora-dev-cli) - script to regularly recover 7/8 rewards 
 
 ## Web Application
 * [Flask](https://flask.palletsprojects.com/en/2.0.x/): Web UI application server.
@@ -28,25 +29,9 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Maxmind](https://maxmind.com/): Geolocation API for mapping IP addresses of peer connections.
 * [Mapbox](https://mapbox.com): Nice looking map tiles for use with Leaflet on the Connections page map.
 
-## Blockchains
-* [BTCgreen](https://github.com/BTCgreen-Network/btcgreen-blockchain)
-* [Cactus](https://github.com/Cactus-Network/cactus-blockchain)
-* [Chives](https://github.com/HiveProject2021/chives-blockchain)
-* [Cryptodoge](https://github.com/CryptoDoge-Network/cryptodoge)
-* [Flax](https://github.com/Flax-Network/flax-blockchain)
-* [Flora](https://github.com/Flora-Network/flora-blockchain)
-* [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain)
-* [Maize](https://github.com/Maize-Network/maize-blockchain)
-* [MMX](https://github.com/madMAx43v3r/mmx-node)
-* [NChain](https://gitee.com/ext9/ext9-blockchain)
-* [SHIBgreen](https://github.com/BTCgreen-Network/shibgreen-blockchain)
-* [Staicoin](https://github.com/STATION-I/staicoin-blockchain)
-* [Stor](https://github.com/Stor-Network/stor-blockchain)
-
 ## Other Resources
-* [FD-CLI](https://github.com/Flora-Network/flora-dev-cli) - script to regularly recover 7/8 rewards 
-* [Chia DB Downloads](https://www.chia-database.com/) - for Chia blockchain database
 * [All the Blocks](https://alltheblocks.net/) - blockchain, wallet, and pricing info
+* [Infinex](infinex.cc) - blockchain coin exchange, also for pricing info
 * [Coin Gecko](https://coingecko.com/) - fiat currency exchange info
 
 ## Testers and Developers

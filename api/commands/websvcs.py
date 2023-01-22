@@ -289,28 +289,6 @@ def request_atb_prices(debug=False):
         app.logger.error("Failed to request recent blockchain pricing from {0} due to {1}".format(url, str(ex)))
     return prices
 
-def request_posat_prices(debug=False):
-    prices = {}
-    url = "https://mrkt.posat.io/api/prices/v2"
-    try:
-        app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
-        if debug:
-            http.client.HTTPConnection.debuglevel = 1
-        data = json.loads(requests.get(url, timeout=30).content)
-        http.client.HTTPConnection.debuglevel = 0
-        for blockchain in data.keys():
-            machinaris_blockchain = blockchain.replace('stai', 'staicoin').lower()
-            if not machinaris_blockchain in SUPPORTED_BLOCKCHAINS:
-                continue
-            #app.logger.info("POSAT: {0} @ {1}".format(blockchain, data[blockchain]['price']['usd']))
-            try:
-                prices[machinaris_blockchain] = float(data[blockchain]['price']['usd'])
-            except Exception as ex:
-                traceback.print_exc()
-    except Exception as ex:
-        app.logger.error("Failed to request recent blockchain pricing from {0} due to {1}".format(url, str(ex)))
-    return prices
-
 def request_infinex_prices(debug=False):
     prices = {}
     url = "https://api.infinex.cc/spot/markets"
@@ -364,7 +342,6 @@ def get_prices():
         try:
             last_price_request_time = datetime.datetime.now()
             store_exchange_prices(prices, 'alltheblocks', request_atb_prices(), last_price_request_time)
-            #store_exchange_prices(prices, 'posat', request_posat_prices(), last_price_request_time) # Dead as of Sept 2022
             store_exchange_prices(prices, 'infinex', request_infinex_prices(), last_price_request_time)
             save_prices_cache(prices)
         except Exception as ex:

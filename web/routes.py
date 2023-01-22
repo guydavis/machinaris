@@ -28,15 +28,15 @@ def get_lang(request):
             first_accept = accept.split(',')[0]  # Like 'nl'
             alternative = "{0}_{1}".format(first_accept, first_accept.upper())
             if alternative in app.config['LANGUAGES']:
-                app.logger.info("LOCALE: Accept-Language: {0}  ---->  using locale: {1}".format(accept, alternative))
+                app.logger.debug("LOCALE: Accept-Language: {0}  ---->  using locale: {1}".format(accept, alternative))
                 return alternative
         if match:
-            app.logger.info("LOCALE: Accept-Language: {0}  ---->  matched locale: {1}".format(accept, match))
+            app.logger.debug("LOCALE: Accept-Language: {0}  ---->  matched locale: {1}".format(accept, match))
             return match
-        app.logger.info("LOCALE: Accept-Language: {0} returned no match so defaulting to 'en'.".format(accept))
+        app.logger.debug("LOCALE: Accept-Language: {0} returned no match so defaulting to 'en'.".format(accept))
         return "en"
     except:
-        app.logger.info("LOCALE: Request had no Accept-Language header, returning default locale of 'en'")
+        app.logger.debug("LOCALE: Request had no Accept-Language header, returning default locale of 'en'")
         return "en" 
 
 def find_selected_worker(hosts, hostname, blockchain= None):
