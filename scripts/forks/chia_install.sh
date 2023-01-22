@@ -8,6 +8,7 @@ CHIA_BRANCH=$1
 if [ -z ${CHIA_BRANCH} ]; then
     echo 'Skipping Chia install as not requested.'
 else
+    cd /tmp
     rm -rf /root/.cache
 	apt-get update
 	# Install dependencies for GPU support
