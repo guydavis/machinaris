@@ -50,3 +50,6 @@ class DefaultConfig:
     # Note, babel looks in /machinaris/web/translations with this path.
     BABEL_TRANSLATION_DIRECTORIES = "translations"
     LANGUAGES = ['en', 'de_DE', 'fr_FR', 'it_IT', 'nl_NL', 'pt_PT', 'zh']
+
+    # Enable client-side caching of static files; Thanks @qoole!
+    SEND_FILE_MAX_AGE_DEFAULT = 86400
