@@ -1,4 +1,5 @@
 import os
+import traceback
 
 class DefaultConfig:
     API_TITLE = "Machinaris API"
@@ -62,3 +63,10 @@ class DefaultConfig:
 
     BABEL_TRANSLATION_DIRECTORIES = "api/translations"
     LANGUAGES = ['en', 'de_DE', 'fr_FR', 'it_IT', 'nl_NL', 'pt_PT', 'zh']
+
+    # For latest APScheduler library, pass the TZ through
+    try:
+        SCHEDULER_TIMEZONE = os.environ['TZ']
+    except:
+        print("Found no TZ environment variable containing timezone.  Generate a working Machinaris launch at https://www.machinaris.app")
+        traceback.print_exc()
