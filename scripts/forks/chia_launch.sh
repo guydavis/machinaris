@@ -90,10 +90,10 @@ if [[ ${OPENCL_GPU} == 'nvidia' ]]; then
     mkdir -p /etc/OpenCL/vendors
     echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
 elif [[ ${OPENCL_GPU} == 'amd' ]]; then
-	pushd /tmp
+	pushd /tmp > /dev/null
 	apt-get update 2>&1 > /tmp/amdgpu_setup.log
 	amdgpu-install -y --usecase=opencl --opencl=rocr --no-dkms --no-32 --accept-eula 2>&1 >> /tmp/amdgpu_setup.log
-	popd
+	popd > /dev/null
 elif [[ ${OPENCL_GPU} == 'intel' ]]; then
 	apt-get update 2>&1 > /tmp/intelgpu_setup.log
 	apt-get install -y intel-opencl-icd 2>&1 >> /tmp/intelgpu_setup.log

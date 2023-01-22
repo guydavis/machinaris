@@ -6,6 +6,7 @@ def on_starting(server):
     import atexit
     import os
     import time
+    import tzlocal
 
     from datetime import datetime, timedelta
     from apscheduler.schedulers.background import BackgroundScheduler
@@ -23,7 +24,7 @@ def on_starting(server):
 
     from api.commands import websvcs
 
-    scheduler = BackgroundScheduler()
+    scheduler = BackgroundScheduler(timezone=str(tzlocal.get_localzone()))
 
     schedule_every_x_minutes = "?"
     try:
