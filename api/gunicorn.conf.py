@@ -30,20 +30,19 @@ def on_starting(server):
     try:
         schedule_every_x_minutes = app.config['STATUS_EVERY_X_MINUTES']
         JOB_FREQUENCY = 60 * int(schedule_every_x_minutes)
-        JOB_JITTER = JOB_FREQUENCY / 2
     except:
         app.logger.info("Failed to configure job schedule frequency in minutes as setting was: '{0}'".format(schedule_every_x_minutes))
-        JOB_FREQUENCY = 60 # once a minute
-        JOB_JITTER = 30 # 30 seconds
+        JOB_FREQUENCY = 120 # once every two minutes
     app.logger.info("Scheduler frequency will be once every {0} seconds.".format(JOB_FREQUENCY))
+    JOB_JITTER = JOB_FREQUENCY / 2
 
     # Every single container should report as a worker
     scheduler.add_job(func=status_worker.update, name="status_workers", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
 
     # Collect disk stats from all modes where blockchain is chia, avoiding duplicate disks from multiple forks on same host
     if 'chia' in globals.enabled_blockchains():
-        scheduler.add_job(func=stats_disk.collect, name="stats_disk", trigger='cron', minute="*/10") # Every 10 minutes
-        scheduler.add_job(func=status_drives.update, name="status_drives", trigger='cron', minute="*/15") # Every 15 minutes
+        scheduler.add_job(func=stats_disk.collect, name="stats_disk", trigger='cron', minute="*/10", jitter=JOB_JITTER) # Every 10 minutes
+        scheduler.add_job(func=status_drives.update, name="status_drives", trigger='cron', minute="*/15", jitter=JOB_JITTER) # Every 15 minutes
         
     # MMX needs to report plots from harvesters directly as they are not listed via the fullnode like Chia does
     if not utils.is_fullnode() and globals.harvesting_enabled() and 'mmx' in globals.enabled_blockchains():
@@ -57,7 +56,7 @@ def on_starting(server):
         scheduler.add_job(func=log_rotate.execute, name="log_rotate", trigger='cron', minute=0)  # Hourly
     
     if globals.farming_enabled() and 'chia' in globals.enabled_blockchains():  # For now, only Chia fullnodes
-        scheduler.add_job(func=status_warnings.collect, name="status_warnings", trigger='cron', minute="*/20") # Every 20 minutes
+        scheduler.add_job(func=status_warnings.collect, name="status_warnings", trigger='cron', minute="*/20", jitter=JOB_JITTER) # Every 20 minutes
 
     # Status for plotters
     if globals.plotting_enabled():
@@ -73,10 +72,10 @@ def on_starting(server):
         scheduler.add_job(func=status_connections.update, name="status_connections", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=status_keys.update, name="status_keys", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_farm.update, name="status_farm", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
-        scheduler.add_job(func=stats_blocks.collect, name="status_blocks", trigger='interval', minutes=10, jitter=0)
-        scheduler.add_job(func=restart_stuck_farmer.execute, name="status_blockchain_sync", trigger='interval', minutes=5, jitter=0) 
-        scheduler.add_job(func=periodically_sync_wallet.execute, name="status_wallet_sync", trigger='interval', minutes=15, jitter=0) 
-        scheduler.add_job(func=nft_recover.execute, name="status_nft_recover", trigger='interval', hours=1) # Once an hour
+        scheduler.add_job(func=stats_blocks.collect, name="status_blocks", trigger='interval', minutes=10, jitter=JOB_JITTER)
+        scheduler.add_job(func=restart_stuck_farmer.execute, name="status_blockchain_sync", trigger='interval', minutes=5, jitter=JOB_JITTER) 
+        scheduler.add_job(func=periodically_sync_wallet.execute, name="status_wallet_sync", trigger='interval', minutes=15, jitter=JOB_JITTER) 
+        scheduler.add_job(func=nft_recover.execute, name="status_nft_recover", trigger='interval', hours=1, jitter=JOB_JITTER) # Once an hour
         if globals.enabled_blockchains()[0] in plottings.PLOTTABLE_BLOCKCHAINS: # Only get plot listing from these three blockchains
             scheduler.add_job(func=status_plots.update, name="status_plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         if globals.enabled_blockchains()[0] in pools.POOLABLE_BLOCKCHAINS: # Only get pool submissions from poolable blockchains
@@ -92,7 +91,7 @@ def on_starting(server):
         scheduler.add_job(func=websvcs.get_prices, name="status_exchange_prices", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=websvcs.get_chain_statuses, name="status_blockchain_networks", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=geolocate_peers.execute, name="stats_geolocate_peers", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
-        scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='cron', minute=0)  # Hourly
+        scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='cron', minute=0, jitter=JOB_JITTER)  # Hourly
         scheduler.add_job(func=plots_replot.execute, name="replot_check", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         
     # Testing only
