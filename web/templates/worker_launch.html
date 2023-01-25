@@ -179,9 +179,6 @@
             if (blockchain == 'chives') {
                 return 8931;
             }
-            if (blockchain == 'chives-foxy') {
-                return 8931;
-            }
             if (blockchain == 'coffee') {
                 return 8954;
             }
@@ -282,7 +279,7 @@
             if (blockchain == 'chives') {
                 return 9647;
             }
-            if (blockchain == 'chives-foxy') {
+            if (blockchain == 'chives') {
                 return 9647;
             }
             if (blockchain == 'coffee') {
@@ -374,8 +371,8 @@
                     var blockchain = blockchains[i].value
                     if (!document.getElementById('mode-harvester').checked &&
                             document.getElementById('mode-plotter').checked &&
-                            blockchain != "chia" && blockchain != "chives" && blockchain != "chives-foxy") {
-                        continue;  // Don't add plotter-only containers for forks beyond Chia & Chives & Chives-foxy
+                            blockchain != "chia" && blockchain != "chives") {
+                        continue;  // Don't add plotter-only containers for forks beyond Chia & Chives
                     }
                     if (blockchain == "chia") {
                         cmd += "    machinaris:" + line_end;
@@ -385,6 +382,9 @@
                         cmd += "    machinaris-" + blockchain + ":" + line_end;
                         cmd += "        image: ghcr.io/guydavis/machinaris-" + blockchain + ":latest" + line_end;
                         cmd += "        container_name: machinaris-" + blockchain + line_end;
+                    }
+                    if (blockchain == "chives") {
+                        errors.push("{{_('NOTE: If you want to run the FoxyPool port of Chives, change the image from machinaris-chives to machinaris-chivesfoxy in generated config below.')}}")
                     }
                     if (document.getElementById("worker_hostname").value) {
                         cmd += '        hostname: ' + document.getElementById("worker_hostname").value + line_end;
@@ -421,9 +421,6 @@
                             if ((blockchain == "chives") && ($('#volume_type' + index).val() == 'plots')) {
                                 volume_host_path += '/chives'
                             }
-                            if ((blockchain == "chives-foxy") && ($('#volume_type' + index).val() == 'plots')) {
-                                volume_host_path += '/chives-foxy'
-                            }
                             if ((blockchain == "mmx") && ($('#volume_type' + index).val() == 'plots')) {
                                 volume_host_path += '/mmx'
                             }
@@ -442,7 +439,7 @@
                         var farmer_port = lookup_farmer_port(blockchain);
                         cmd += '            - farmer_port=' + farmer_port + line_end;
                     }
-                    if ((blockchain == "chia" || blockchain == "chives" || blockchain == "foxy-chives") && (document.getElementById('mode-plotter').checked)) {
+                    if ((blockchain == "chia" || blockchain == "chives" || blockchain == "mmx") && (document.getElementById('mode-plotter').checked)) {
                         if (mode) {
                             mode += ',plotter';
                         }
@@ -691,13 +688,6 @@
                                 id="blockchain-chives" onclick="updateDocker()" value="chives">
                             <label class="form-check-label" for="blockchain-chives">
                                 Chives
-                            </label>
-                        </div>
-                        <div class="col">
-                            <input class="form-check-input" type="checkbox" name="blockchains"
-                                id="blockchain-chives-foxy" onclick="updateDocker()" value="chives-foxy">
-                            <label class="form-check-label" for="blockchain-chives-foxy">
-                                Chives-foxy
                             </label>
                         </div>
                         <div class="col">

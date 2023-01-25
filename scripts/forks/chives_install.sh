@@ -1,14 +1,16 @@
 #!/bin/env bash
 #
 # Installs Chives as per https://github.com/HiveProject2021/chives-blockchain
+# Alternatively, also supports the Foxy port: https://github.com/foxypool/chives-blockchain
 #
 
-CHIVES_BRANCH=$1
+CHIVES_REPO=$1
+CHIVES_BRANCH=$2
 
 if [ -z ${CHIVES_BRANCH} ]; then
     echo 'Skipping Chives install as not requested.'
 else
-    git clone --branch ${CHIVES_BRANCH} --recurse-submodules https://github.com/HiveProject2021/chives-blockchain.git /chives-blockchain 
+    git clone --branch ${CHIVES_BRANCH} --recurse-submodules ${CHIVES_REPO} /chives-blockchain 
     cd /chives-blockchain
     chmod +x install.sh
     # 2022-07-20: Python needs 'packaging==21.3'
