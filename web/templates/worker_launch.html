@@ -53,7 +53,7 @@
                     </div>
                     <div class="col-sm">
                         <label for="volume_container_path0" class="form-label">{{_('Container Path')}}</label>
-                        <input type="text" class="form-control" placeholder="/plots" onkeyup="updateDocker()" 
+                        <input type="text" class="form-control" placeholder="/plots" onkeyup="updateDocker()"
                             name="volume_container_path" id="volume_container_path0" aria-label="volume_container_path0">
                     </div>
                     <div class="col-auto">
@@ -176,6 +176,9 @@
             if (blockchain == 'chives') {
                 return 8931;
             }
+            if (blockchain == 'chives-foxy') {
+                return 8931;
+            }
             if (blockchain == 'coffee') {
                 return 8954;
             }
@@ -270,6 +273,9 @@
             if (blockchain == 'chives') {
                 return 9647;
             }
+            if (blockchain == 'chives-foxy') {
+                return 9647;
+            }
             if (blockchain == 'coffee') {
                 return 33847;
             }
@@ -354,10 +360,10 @@
             for(var i = 0; i < blockchains.length; ++i) {
                 if (blockchains[i].checked) {
                     var blockchain = blockchains[i].value
-                    if (!document.getElementById('mode-harvester').checked && 
+                    if (!document.getElementById('mode-harvester').checked &&
                             document.getElementById('mode-plotter').checked &&
-                            blockchain != "chia" && blockchain != "chives") {
-                        continue;  // Don't add plotter-only containers for forks beyond Chia & Chives
+                            blockchain != "chia" && blockchain != "chives" && blockchain != "chives-foxy") {
+                        continue;  // Don't add plotter-only containers for forks beyond Chia & Chives & Chives-foxy
                     }
                     if (blockchain == "chia") {
                         cmd += "    machinaris:" + line_end;
@@ -393,7 +399,7 @@
                             if (is_first_loop_pass) { // Record error on first pass
                                 if (volume_host_path.endsWith(':')) {
                                     errors.push("{{_('Invalid host path ending with colon. Try adding a slash to the end like this')}} " + volume_host_path + '/');
-                                } 
+                                }
                                 if (!volume_host_path) {
                                     errors.push("{{_('Empty host path provided for volume at ')}}" + volume_container_path + "'. {{_('Please provide a host path.')}}");
                                 } else if (!volume_container_path) {
@@ -402,6 +408,9 @@
                             }
                             if ((blockchain == "chives") && ($('#volume_type' + index).val() == 'plots')) {
                                 volume_host_path += '/chives'
+                            }
+                            if ((blockchain == "chives-foxy") && ($('#volume_type' + index).val() == 'plots')) {
+                                volume_host_path += '/chives-foxy'
                             }
                             if ((blockchain == "mmx") && ($('#volume_type' + index).val() == 'plots')) {
                                 volume_host_path += '/mmx'
@@ -421,7 +430,7 @@
                         var farmer_port = lookup_farmer_port(blockchain);
                         cmd += '            - farmer_port=' + farmer_port + line_end;
                     }
-                    if ((blockchain == "chia" || blockchain == "chives") && (document.getElementById('mode-plotter').checked)) {
+                    if ((blockchain == "chia" || blockchain == "chives" || blockchain == "foxy-chives") && (document.getElementById('mode-plotter').checked)) {
                         if (mode) {
                             mode += ',plotter';
                         }
@@ -479,11 +488,11 @@
             }
             return cmd;
         }
-        function valid_ip_addr(ipaddress) {  
-            if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {  
-                return (true)  
-            }  
-            return (false)  
+        function valid_ip_addr(ipaddress) {
+            if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
+                return (true)
+            }
+            return (false)
         }
         $(document).ready(function () {
             $('#plotting_keys_row').hide();
@@ -663,6 +672,13 @@
                                 id="blockchain-chives" onclick="updateDocker()" value="chives">
                             <label class="form-check-label" for="blockchain-chives">
                                 Chives
+                            </label>
+                        </div>
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" name="blockchains"
+                                id="blockchain-chives-foxy" onclick="updateDocker()" value="chives-foxy">
+                            <label class="form-check-label" for="blockchain-chives-foxy">
+                                Chives-foxy
                             </label>
                         </div>
                         <div class="col">
