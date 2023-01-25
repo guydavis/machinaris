@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file. The format 
  - Multiple functionality & performance cleanups from excellent code review by @qoole.
 ## Updated 
  - [BTCGreen](https://github.com/BTCgreen-Network/btcgreen-blockchain/releases/tag/1.7.0b) to v1.7.0b
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.6.2) to v1.6.2
  - [Chives](https://github.com/HiveProject2021/chives-blockchain/releases/tag/1.5.3) to v1.5.3, including staking.
  - [SHIBGreen](https://github.com/BTCgreen-Network/shibgreen-blockchain/releases/tag/1.7.0b) to v1.7.0b
  - [Staicoin](https://github.com/STATION-I/stai-blockchain/releases/tag/1.3.0) to v1.3.0. Note, they require a fresh `config.yaml`.
@@ -36,7 +37,6 @@ All notable changes to this project will be documented in this file. The format 
  - Improved "Settings | Pools" page with fee amount and `delete_unconfirmed_transactions` action.
 ### Updated
  - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v2.0.1) to v2.0.1
- - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.7.0) to v1.7.0
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.6.2) to v1.6.2
  - [Chinilla](https://github.com/Chinilla/chinilla-blockchain/releases/tag/1.4.0) to v1.4.0
  - [Chiadog](https://github.com/guydavis/chiadog/releases/tag/v0.7.5) to v0.7.5
