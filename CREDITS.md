@@ -32,6 +32,7 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [BTCgreen](https://github.com/BTCgreen-Network/btcgreen-blockchain)
 * [Cactus](https://github.com/Cactus-Network/cactus-blockchain)
 * [Chives](https://github.com/HiveProject2021/chives-blockchain)
+* [Chives-foxy](https://github.com/foxypool/chives-blockchain)
 * [Cryptodoge](https://github.com/CryptoDoge-Network/cryptodoge)
 * [Flax](https://github.com/Flax-Network/flax-blockchain)
 * [Flora](https://github.com/Flora-Network/flora-blockchain)
@@ -44,7 +45,7 @@ A huge thank-you to the great teams/devs behind these projects, being used by Ma
 * [Stor](https://github.com/Stor-Network/stor-blockchain)
 
 ## Other Resources
-* [FD-CLI](https://github.com/Flora-Network/flora-dev-cli) - script to regularly recover 7/8 rewards 
+* [FD-CLI](https://github.com/Flora-Network/flora-dev-cli) - script to regularly recover 7/8 rewards
 * [Chia DB Downloads](https://www.chia-database.com/) - for Chia blockchain database
 * [All the Blocks](https://alltheblocks.net/) - blockchain, wallet, and pricing info
 * [Coin Gecko](https://coingecko.com/) - fiat currency exchange info
