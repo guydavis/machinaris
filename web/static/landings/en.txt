@@ -65,3 +65,4 @@ Lights out! Does the system still boot?
 Lights out! Lets replot again!
 1337.png
 You said 'Buy Crypto'! No... I said 'Bye Crypto'
+2023: Dust off your GPU, Chia is going PoW! :)

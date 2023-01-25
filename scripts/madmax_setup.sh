@@ -8,7 +8,7 @@
 HASH=d1a9e88b44ba37f61bfabcb68e80e83f8b939648
 MADMAX_BRANCH=master
 
-if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia' || ${blockchains} == 'chives' || ${blockchains} == 'mmx') ]]; then
+if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia' || ${blockchains} == 'chives') ]]; then
     if [ ! -f /usr/bin/chia_plot ] && [[ "${madmax_skip_build}" != 'true' ]]; then
         arch_name="$(uname -m)"
         if [[ "${arch_name}" = "x86_64" ]] || [[ "${arch_name}" = "arm64" ]]; then
@@ -29,7 +29,30 @@ if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chi
             cd /
             rm -rf chia-plotter
         else
-            echo "Building madmax skipped -> unsupported architecture: ${arch_name}"
+            echo "Building madmax plotter skipped -> unsupported architecture: ${arch_name}"
+        fi
+    fi
+fi
+
+# The MMX blockchain uses plotters from: https://github.com/madMAx43v3r/mmx-binaries
+if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && ${blockchains} == 'mmx' ]]; then
+    if [ ! -f /usr/bin/chia_plot ] && [[ "${madmax_skip_build}" != 'true' ]]; then
+        arch_name="$(uname -m)"
+        if [[ "${arch_name}" = "x86_64" ]]; then
+            pushd /usr/bin
+            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/master/mmx-cpu-plotter/linux/x86_64/chia_plot
+            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/master/mmx-cpu-plotter/linux/x86_64/chia_plot_k34
+            chmod 755 chia_plot*
+            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/master/mmx-cuda-plotter/linux/x86_64/cuda_plot_k26
+            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/master/mmx-cuda-plotter/linux/x86_64/cuda_plot_k29
+            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/master/mmx-cuda-plotter/linux/x86_64/cuda_plot_k30
+            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/master/mmx-cuda-plotter/linux/x86_64/cuda_plot_k31
+            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/master/mmx-cuda-plotter/linux/x86_64/cuda_plot_k32
+            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/master/mmx-cuda-plotter/linux/x86_64/cuda_plot_k33
+            chmod 755 cuda_plot*
+            popd
+        else
+            echo "Downloading MMX chia_plot and cuda_plot skipped -> unsupported architecture: ${arch_name}"
         fi
     fi
 fi

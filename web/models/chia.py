@@ -432,7 +432,7 @@ class Wallets:
 
     def link_to_wallet_transactions(self, blockchain, details):
         lines = []
-        if globals.legacy_blockchain(blockchain) or blockchain in ['btcgreen', 'cryptodoge', 'flax', 'shibgreen', 'staicoin']: 
+        if globals.legacy_blockchain(blockchain) or blockchain in ['cryptodoge']: 
             for line in details.split('\n'):
                 if 'wallet id' in line.lower():
                     lines.append("<a href='#' class='text-white' title='" + _('View Transactions') + "' onclick='ViewTransactions(\""+ blockchain + "\", \"1\");return false;'>" + line.strip() + "</a>:")
@@ -612,6 +612,8 @@ class Blockchains:
                 return None
             if blockchain == 'mmx':
                 pattern = '^Synced: (.*)$'
+            elif blockchain == 'staicoin': # Staicoin being different for no good reason...
+                pattern = '^Current Status: (.*)$'
             else:
                 pattern = '^Current Blockchain Status: (.*)$'
             for line in details.split('\n'):
@@ -789,7 +791,7 @@ class Connections:
         for line in connection.details.split('\n'):
             try:
                 #app.logger.info(line)
-                m = re.match("\[(.+)\]\s+height\s+=\s+(\!?\d+), (\w+) \(\d+\.\d+\), (\d+\.?\d*) (\w)B/s recv, (\d*\.?\d*) (\w)B/s send,.* since (\d+) min, .* (\d+\.?\d?) sec timeout", line.strip(), re.IGNORECASE)
+                m = re.match("\[(.+)\]\s+height\s+=\s+(\!?\d+), (\w+) \(\d+\.\d+\), (\d+\.?\d*) (\w)B recv, (\d*\.?\d*) (\w)B sent,.* since (\d+) min, .* (\d+\.?\d?) sec timeout", line.strip(), re.IGNORECASE)
                 if m:
                     connection = {
                         'type': m.group(3),

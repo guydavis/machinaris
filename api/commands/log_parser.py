@@ -97,8 +97,9 @@ def recent_farmed_blocks(blockchain):
         #app.logger.info("MMX executing: grep 'Created block' {0}".format(log_file))
         proc = Popen("grep 'Created block' {0}".format(log_file), stdout=PIPE, stderr=PIPE, shell=True)
     else:
-        # Chia 1.4+ sprays lots of useless "Cumulative cost" log lines right in middle of important lines, so ignore them
-        proc = Popen("grep -v 'Cumulative cost' {0} {1} | grep -v 'CompressorArg' | grep -B 15 'Farmed unfinished_block'".format(rotated_log_file, log_file),
+        # Chia 1.4+ sprays lots of useless "Cumulative cost" and "CompressorArg" log lines right in middle of important lines, so ignore them
+        # Hopefully, there are not more than about 80 of such useless log lines else the selection of 100 before lines might exclude some blocks
+        proc = Popen("grep -B 100 'Farmed unfinished_block' {0} {1} | grep -ve 'Cumulative cost' -ve 'CompressorArg'".format(rotated_log_file, log_file),
                  stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
@@ -112,7 +113,7 @@ def recent_farmed_blocks(blockchain):
     cli_stdout = outs.decode('utf-8')
     #app.logger.info("Blocks grep: {0}".format(cli_stdout))
     blocks = log.Blocks(blockchain, cli_stdout.splitlines())
-    #app.logger.info(blocks.rows)
+    app.logger.info(blocks.rows)
     return blocks
 
 def get_farming_log_file(blockchain):

@@ -135,3 +135,8 @@ def load_plot_warnings():
     result['invalids'] = sorted(invalids, key = lambda x: (x['plot_id'], x['worker'], x['path']))
     result['missingkeys'] = sorted(missingkeys, key = lambda x: (x['plot_id'], x['worker'], x['path']))
     return result
+
+def clear_plot_warnings():
+    db.session.query(w.Warning).delete()
+    db.session.commit()
+    flash(_('Plot warnings have been cleared.  If they re-appear shortly, then please recheck the underlying cause has been addressed.'), 'success')
