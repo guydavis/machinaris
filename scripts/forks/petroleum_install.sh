@@ -8,24 +8,24 @@ PETROLEUM_BRANCH=$1
 HASH=8fae07695353b4e7fb7d861ab747b04aebab176c
 
 if [ -z ${PETROLEUM_BRANCH} ]; then
-	echo 'Skipping Petroleum install as not requested.'
+    echo 'Skipping Petroleum install as not requested.'
 else
-	rm -rf /root/.cache
-	git clone --branch ${PETROLEUM_BRANCH} --single-branch https://github.com/petroleum-network/petroleum-blockchain /petroleum-blockchain
-	cd /petroleum-blockchain 
-	git submodule update --init mozilla-ca 
-	git checkout $HASH
-	chmod +x install.sh
-	# 2022-01-30: pip broke due to https://github.com/pypa/pip/issues/10825
-	sed -i 's/upgrade\ pip$/upgrade\ "pip<22.0"/' install.sh
-	# 2022-07-20: Python needs 'packaging==21.3'
-	sed -i 's/packaging==21.0/packaging==21.3/g' setup.py
-	/usr/bin/sh ./install.sh
+    rm -rf /root/.cache
+    git clone --branch ${PETROLEUM_BRANCH} --single-branch https://github.com/petroleum-network/petroleum-blockchain /petroleum-blockchain
+    cd /petroleum-blockchain 
+    git submodule update --init mozilla-ca 
+    git checkout $HASH
+    chmod +x install.sh
+    # 2022-01-30: pip broke due to https://github.com/pypa/pip/issues/10825
+    sed -i 's/upgrade\ pip$/upgrade\ "pip<22.0"/' install.sh
+    # 2022-07-20: Python needs 'packaging==21.3'
+    sed -i 's/packaging==21.0/packaging==21.3/g' setup.py
+    /usr/bin/sh ./install.sh
 
-	if [ ! -d /chia-blockchain/venv ]; then
-		cd /
-		rmdir /chia-blockchain
-		ln -s /petroleum-blockchain /chia-blockchain
-		ln -s /petroleum-blockchain/venv/bin/sit /chia-blockchain/venv/bin/chia
-	fi
+    if [ ! -d /chia-blockchain/venv ]; then
+        cd /
+        rmdir /chia-blockchain
+        ln -s /petroleum-blockchain /chia-blockchain
+        ln -s /petroleum-blockchain/venv/bin/sit /chia-blockchain/venv/bin/chia
+    fi
 fi
