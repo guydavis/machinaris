@@ -38,6 +38,7 @@ jobs:
           file: docker/dockerfile
           context: .
           platforms: linux/amd64
+          provenance: false
           push: true
           build-args: |
             "UBUNTU_VER=jammy"

@@ -38,12 +38,13 @@ jobs:
           file: docker/dockerfile
           context: .
           platforms: linux/amd64
+          provenance: false
           push: true
           build-args: |
             "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=develop"
             "CHIADOG_BRANCH=dev"
-            "CHIA_BRANCH=main"
+            "CHIA_BRANCH=release/1.7.0"
             "BLADEBIT_BRANCH=master"
             "PLOTMAN_BRANCH=development"
           tags: |
