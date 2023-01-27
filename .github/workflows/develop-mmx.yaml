@@ -45,7 +45,7 @@ jobs:
             "MACHINARIS_STREAM=develop"
             "MMX_BRANCH=master"
             "CHIA_BRANCH=latest"
-            "PLOTMAN_BRANCH=development"
+            "PLOTMAN_BRANCH=compress"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:develop
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:develop
