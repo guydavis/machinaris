@@ -289,28 +289,6 @@ def request_atb_prices(debug=False):
         app.logger.error("Failed to request recent blockchain pricing from {0} due to {1}".format(url, str(ex)))
     return prices
 
-def request_posat_prices(debug=False):
-    prices = {}
-    url = "https://mrkt.posat.io/api/prices/v2"
-    try:
-        app.logger.info("Requesting recent pricing for blockchains from {0}".format(url))
-        if debug:
-            http.client.HTTPConnection.debuglevel = 1
-        data = json.loads(requests.get(url, timeout=30).content)
-        http.client.HTTPConnection.debuglevel = 0
-        for blockchain in data.keys():
-            machinaris_blockchain = blockchain.replace('stai', 'staicoin').lower()
-            if not machinaris_blockchain in SUPPORTED_BLOCKCHAINS:
-                continue
-            #app.logger.info("POSAT: {0} @ {1}".format(blockchain, data[blockchain]['price']['usd']))
-            try:
-                prices[machinaris_blockchain] = float(data[blockchain]['price']['usd'])
-            except Exception as ex:
-                traceback.print_exc()
-    except Exception as ex:
-        app.logger.error("Failed to request recent blockchain pricing from {0} due to {1}".format(url, str(ex)))
-    return prices
-
 def request_infinex_prices(debug=False):
     prices = {}
     url = "https://api.infinex.cc/spot/markets"
@@ -343,25 +321,17 @@ def request_infinex_prices(debug=False):
 def request_peers(blockchain, debug=False):
     peers = []
     alltheblocks_blockchain = globals.get_alltheblocks_name(blockchain)
-    url = "https://alltheblocks.net/{0}/peers".format(alltheblocks_blockchain)
+    url = "https://api.alltheblocks.net/{0}/peer/recent?amount=10".format(alltheblocks_blockchain)
     app.logger.info("Requesting node peers for {0} from {1}".format(blockchain, url))
-    if debug:
-        http.client.HTTPConnection.debuglevel = 1
-    data = requests.get(url, timeout=30).text
-    http.client.HTTPConnection.debuglevel = 0
-    soup = bs4.BeautifulSoup(data, 'html.parser')
-    div = soup.find('div', class_="p-2 text-monospace")
-    for row in div.find_all('div'):
-        if len(row.contents) == 1:
-            add_cmd = row.contents[0].string.strip()
-            if 'show -a' in add_cmd:
-                peer = add_cmd[(add_cmd.index('show -a ') + len('show -a ')):].strip()
-                peers.append(peer)
-            elif 'peer -a' in add_cmd:
-                peer = add_cmd[(add_cmd.index('peer -a ') + len('peer -a ')):].strip()
-                peers.append(peer.splitlines()[0])
-            else:
-                app.logger.error("Unparseable peer connection: {0}".format(row.contents[0].string))
+    try:
+        if debug:
+            http.client.HTTPConnection.debuglevel = 1
+        data = json.loads(requests.get(url, timeout=30).content)
+        http.client.HTTPConnection.debuglevel = 0
+        for peer in data:
+            peers.append("{0}:{1}".format(peer['host'], peer['port']))
+    except Exception as ex:
+        app.logger.error("Failed to request network peers from {0} due to {1}".format(url, str(ex)))
     return peers
 
 last_price_request_time = None
@@ -372,7 +342,6 @@ def get_prices():
         try:
             last_price_request_time = datetime.datetime.now()
             store_exchange_prices(prices, 'alltheblocks', request_atb_prices(), last_price_request_time)
-            #store_exchange_prices(prices, 'posat', request_posat_prices(), last_price_request_time) # Dead as of Sept 2022
             store_exchange_prices(prices, 'infinex', request_infinex_prices(), last_price_request_time)
             save_prices_cache(prices)
         except Exception as ex:

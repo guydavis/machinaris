@@ -92,17 +92,17 @@ def load_wallet_show(blockchain):
     app.logger.debug("Default SELECTED_WALLET_NUM is {0}".format(wallet_id_num))
     while True:
         i = child.expect(["Wallet height:.*\r\n", "Wallet keys:.*\r\n", "Choose wallet key:.*\r\n", 
-            "Choose a wallet key .*\r\n", "No online backup file found.*\r\n", "Connection error.*\r\n"], timeout=90)
+            "Choose a wallet key .*\r\n", "Active Wallet Key.*\r\n", "No online backup file found.*\r\n", "Connection error.*\r\n"], timeout=90)
         if i == 0:
             app.logger.debug("wallet show returned 'Wallet height...' so collecting details.")
             wallet_show += child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8")
             break
-        elif i == 1 or i == 2 or i == 3:
+        elif i == 1 or i == 2 or i == 3 or i == 4:
             app.logger.info("Wallet show got num prompt so selecting wallet #{0}".format(wallet_id_num))
             child.sendline("{0}".format(wallet_id_num))
-        elif i == 4:
-            child.sendline("S")
         elif i == 5:
+            child.sendline("S")
+        elif i == 6:
             raise Exception("Skipping wallet status gathering as it returned 'Connection Error', so possibly still starting up. If this error persists more than 30 minutes after startup, try restarting the Machinaris Docker container.")
         else:
             raise Exception("ERROR:\n" + child.after.decode("utf-8") + child.before.decode("utf-8") + child.read().decode("utf-8"))
@@ -157,7 +157,7 @@ def load_keys_show(blockchain):
 def restart_farmer(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     if os.path.exists(WALLET_SETTINGS_FILE):
-        cmd = "{0} stop farmer && {0} start farmer-no-wallet".format(chia_binary)
+        cmd = "{0} stop -d farmer && {0} start farmer-no-wallet".format(chia_binary)
     else:
         cmd = "{0} start farmer && {0} start farmer -r".format(chia_binary)
     app.logger.info("Executing farmer restart: {0}".format(cmd))
@@ -194,7 +194,7 @@ def start_wallet(blockchain):
 def pause_wallet(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
     if globals.legacy_blockchain(blockchain):  # Old chains will stop fullnode(!) if ask to stop just the wallet...
-        cmd = "{0} stop farmer && {0} start farmer-no-wallet".format(chia_binary)
+        cmd = "{0} stop -d farmer && {0} start farmer-no-wallet".format(chia_binary)
     else:  # Updated blockchains can simply stop the wallet
         cmd = "{0} stop wallet".format(chia_binary)
     app.logger.info("Executing wallet pause: {0}".format(cmd))

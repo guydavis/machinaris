@@ -19,14 +19,23 @@ config = context.config
 fileConfig(config.config_file_name)
 logger = logging.getLogger('alembic.env')
 
+
+def get_engine(bind_key=None):
+    try:
+        # this works with Flask-SQLAlchemy<3 and Alchemical
+        return current_app.extensions['migrate'].db.get_engine(bind=bind_key)
+    except TypeError:
+        # this works with Flask-SQLAlchemy>=3
+        return current_app.extensions['migrate'].db.engines.get(bind_key)
+
+
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 config.set_main_option(
-    'sqlalchemy.url',
-    str(current_app.extensions['migrate'].db.get_engine().url).replace(
-        '%', '%%'))
+    'sqlalchemy.url', str(get_engine().url).replace('%', '%%'))
+bind_names = []
 if current_app.config.get('SQLALCHEMY_BINDS') is not None:
     bind_names = list(current_app.config['SQLALCHEMY_BINDS'].keys())
 else:
@@ -37,10 +46,8 @@ else:
 for bind in bind_names:
     context.config.set_section_option(
         bind, "sqlalchemy.url",
-        str(current_app.extensions['migrate'].db.get_engine(
-            bind=bind).url).replace('%', '%%'))
-target_metadata = current_app.extensions['migrate'].db.metadata
-
+        str(get_engine(bind_key=bind).url).replace('%', '%%'))
+target_db = current_app.extensions['migrate'].db
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -52,8 +59,12 @@ def get_metadata(bind):
     """Return the metadata for a bind."""
     if bind == '':
         bind = None
+    if hasattr(target_db, 'metadatas'):
+        return target_db.metadatas[bind]
+
+    # legacy, less flexible implementation
     m = MetaData()
-    for t in target_metadata.tables.values():
+    for t in target_db.metadata.tables.values():
         if t.info.get('bind_key') == bind:
             t.tometadata(m)
     return m
@@ -124,12 +135,11 @@ def run_migrations_online():
     # for the direct-to-DB use case, start a transaction on all
     # engines, then run all migrations, then commit all transactions.
     engines = {
-        '': {'engine': current_app.extensions['migrate'].db.get_engine()}
+        '': {'engine': get_engine()}
     }
     for name in bind_names:
         engines[name] = rec = {}
-        rec['engine'] = current_app.extensions['migrate'].db.get_engine(
-            bind=name)
+        rec['engine'] = get_engine(bind_key=name)
 
     for name, rec in engines.items():
         engine = rec['engine']

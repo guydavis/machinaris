@@ -53,7 +53,7 @@
                     </div>
                     <div class="col-sm">
                         <label for="volume_container_path0" class="form-label">{{_('Container Path')}}</label>
-                        <input type="text" class="form-control" placeholder="/plots" onkeyup="updateDocker()" 
+                        <input type="text" class="form-control" placeholder="/plots" onkeyup="updateDocker()"
                             name="volume_container_path" id="volume_container_path0" aria-label="volume_container_path0">
                     </div>
                     <div class="col-auto">
@@ -279,6 +279,9 @@
             if (blockchain == 'chives') {
                 return 9647;
             }
+            if (blockchain == 'chives') {
+                return 9647;
+            }
             if (blockchain == 'coffee') {
                 return 33847;
             }
@@ -366,7 +369,7 @@
             for(var i = 0; i < blockchains.length; ++i) {
                 if (blockchains[i].checked) {
                     var blockchain = blockchains[i].value
-                    if (!document.getElementById('mode-harvester').checked && 
+                    if (!document.getElementById('mode-harvester').checked &&
                             document.getElementById('mode-plotter').checked &&
                             blockchain != "chia" && blockchain != "chives") {
                         continue;  // Don't add plotter-only containers for forks beyond Chia & Chives
@@ -379,6 +382,9 @@
                         cmd += "    machinaris-" + blockchain + ":" + line_end;
                         cmd += "        image: ghcr.io/guydavis/machinaris-" + blockchain + ":latest" + line_end;
                         cmd += "        container_name: machinaris-" + blockchain + line_end;
+                    }
+                    if (blockchain == "chives") {
+                        errors.push("{{_('NOTE: If you want to run the FoxyPool port of Chives, change the image from machinaris-chives to machinaris-chivesfoxy in generated config below.')}}")
                     }
                     if (document.getElementById("worker_hostname").value) {
                         cmd += '        hostname: ' + document.getElementById("worker_hostname").value + line_end;
@@ -405,7 +411,7 @@
                             if (is_first_loop_pass) { // Record error on first pass
                                 if (volume_host_path.endsWith(':')) {
                                     errors.push("{{_('Invalid host path ending with colon. Try adding a slash to the end like this')}} " + volume_host_path + '/');
-                                } 
+                                }
                                 if (!volume_host_path) {
                                     errors.push("{{_('Empty host path provided for volume at ')}}" + volume_container_path + "'. {{_('Please provide a host path.')}}");
                                 } else if (!volume_container_path) {
@@ -433,7 +439,7 @@
                         var farmer_port = lookup_farmer_port(blockchain);
                         cmd += '            - farmer_port=' + farmer_port + line_end;
                     }
-                    if ((blockchain == "chia" || blockchain == "chives") && (document.getElementById('mode-plotter').checked)) {
+                    if ((blockchain == "chia" || blockchain == "chives" || blockchain == "mmx") && (document.getElementById('mode-plotter').checked)) {
                         if (mode) {
                             mode += ',plotter';
                         }
@@ -491,11 +497,11 @@
             }
             return cmd;
         }
-        function valid_ip_addr(ipaddress) {  
-            if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {  
-                return (true)  
-            }  
-            return (false)  
+        function valid_ip_addr(ipaddress) {
+            if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
+                return (true)
+            }
+            return (false)
         }
         $(document).ready(function () {
             $('#plotting_keys_row').hide();

@@ -8,21 +8,21 @@ CRYPTODOGE_BRANCH=$1
 HASH=02ce973fe88d62c0c0ee106d988e172ee3f5aecf
 
 if [ -z ${CRYPTODOGE_BRANCH} ]; then
-	echo 'Skipping Cryptodoge install as not requested.'
+    echo 'Skipping Cryptodoge install as not requested.'
 else
-	git clone --branch ${CRYPTODOGE_BRANCH} --recurse-submodules https://github.com/CryptoDoge-Network/cryptodoge.git /cryptodoge-blockchain 
-	cd /cryptodoge-blockchain
-	git submodule update --init mozilla-ca
-	git checkout $HASH
-	chmod +x install.sh
-	# 2022-07-20: Python needs 'packaging==21.3'
-	sed -i 's/packaging==21.0/packaging==21.3/g' setup.py
-	/usr/bin/sh ./install.sh
+    git clone --branch ${CRYPTODOGE_BRANCH} --recurse-submodules https://github.com/CryptoDoge-Network/cryptodoge.git /cryptodoge-blockchain 
+    cd /cryptodoge-blockchain
+    git submodule update --init mozilla-ca
+    git checkout $HASH
+    chmod +x install.sh
+    # 2022-07-20: Python needs 'packaging==21.3'
+    sed -i 's/packaging==21.0/packaging==21.3/g' setup.py
+    /usr/bin/sh ./install.sh
 
-	if [ ! -d /chia-blockchain/venv ]; then
-		cd /
-		rmdir /chia-blockchain
-		ln -s /cryptodoge-blockchain /chia-blockchain
-		ln -s /cryptodoge-blockchain/venv/bin/cryptodoge /chia-blockchain/venv/bin/chia
-	fi
+    if [ ! -d /chia-blockchain/venv ]; then
+        cd /
+        rmdir /chia-blockchain
+        ln -s /cryptodoge-blockchain /chia-blockchain
+        ln -s /cryptodoge-blockchain/venv/bin/cryptodoge /chia-blockchain/venv/bin/chia
+    fi
 fi

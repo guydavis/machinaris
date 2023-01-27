@@ -3,20 +3,23 @@
 # Due to complaints about JS CDNs, this pulls all JS libs into web/static/3rd_party folder
 #
 
-# Bootstrap Icons
-BSI_VERSION=1.10.2
+# Bootstrap and Icons
+BSI_VERSION=1.10.3
 BOOTSTRAP_VERSION=5.2.3
 BASEPATH=${JS_LIBS_BASEPATH:-/machinaris/web/static/3rd_party}
+
+# Mapping library
+LEAFLET_VERSION=1.9.3
 
 # List of other css/js links
 LIST="
 https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap5.css
 https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.js
 https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js
-https://cdn.jsdelivr.net/npm/chart.js@4.0.1/dist/chart.umd.min.js
+https://cdn.jsdelivr.net/npm/chart.js@4.2.0/dist/chart.umd.min.js
 https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.0/dist/chartjs-adapter-luxon.umd.min.js
 https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js
-https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js
+https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js
 https://moment.github.io/luxon/global/luxon.min.js"
 
 mkdir -p $BASEPATH
@@ -36,7 +39,7 @@ unzip -q -o -j ${BASEPATH}/bs.zip -d $BASEPATH/ bootstrap-${BOOTSTRAP_VERSION}*/
 rm -f ${BASEPATH}/bs.zip
 
 # Leaflet and plugins
-wget -O ${BASEPATH}/leaflet.zip -nv "https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/v1.9.3/leaflet.zip" && \
+wget -O ${BASEPATH}/leaflet.zip -nv "https://leafletjs-cdn.s3.amazonaws.com/content/leaflet/v${LEAFLET_VERSION}/leaflet.zip" && \
 unzip -q -o ${BASEPATH}/leaflet.zip -d $BASEPATH/ && \
 rm -f ${BASEPATH}/leaflet.zip
 wget -O ${BASEPATH}/leaflet-layervisibility.js -nv "https://unpkg.com/leaflet-layervisibility/dist/leaflet-layervisibility.js"

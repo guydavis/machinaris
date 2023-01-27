@@ -17,6 +17,7 @@ ARG BTCGREEN_BRANCH
 ARG CACTUS_BRANCH
 ARG CHIA_BRANCH
 ARG CHINILLA_BRANCH
+ARG CHIVES_REPO
 ARG CHIVES_BRANCH
 ARG COFFEE_BRANCH
 ARG CRYPTODOGE_BRANCH
@@ -57,7 +58,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/btcgreen_install.sh ${BTCGREEN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/cactus_install.sh ${CACTUS_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chia_install.sh ${CHIA_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/chives_install.sh ${CHIVES_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/chives_install.sh ${CHIVES_REPO} ${CHIVES_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chinilla_install.sh ${CHINILLA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/coffee_install.sh ${COFFEE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/cryptodoge_install.sh ${CRYPTODOGE_BRANCH} \
@@ -93,11 +94,11 @@ RUN \
 		/var/tmp/*
 
 # Provide a colon-separated list of in-container paths to your mnemonic keys
-ENV keys="/root/.chia/mnemonic.txt"  
+ENV keys="/root/.chia/mnemonic.txt"
 # Provide a colon-separated list of in-container paths to your completed plots
 ENV plots_dir="/plots"
 # One of fullnode, farmer, harvester, plotter, farmer+plotter, harvester+plotter. Default is fullnode
-ENV mode="fullnode" 
+ENV mode="fullnode"
 ENV chives_masternode="false"
 # The single blockchain to run: chia, flax, nchain, hddcoin, chives, etc
 ENV blockchains="chia"

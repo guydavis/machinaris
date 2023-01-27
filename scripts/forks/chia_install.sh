@@ -8,6 +8,15 @@ CHIA_BRANCH=$1
 if [ -z ${CHIA_BRANCH} ]; then
     echo 'Skipping Chia install as not requested.'
 else
+    cd /tmp
+    rm -rf /root/.cache
+	apt-get update && apt-get install -y dialog apt-utils
+	# Install dependencies for GPU support
+	apt-get install -y git cmake build-essential ocl-icd-opencl-dev clinfo screen initramfs-tools ocl-icd-libopencl1 opencl-headers libnuma1
+	# For AMDGPU, install the amdgpu-install stub, optionally invoked later if OPENCL_GPU=amd at launch time
+	curl -O http://repo.radeon.com/amdgpu-install/22.20.5/ubuntu/jammy/amdgpu-install_22.20.50205-1_all.deb
+	apt-get install -y ./amdgpu-install_22.20.50205-1_all.deb
+	
     git clone --branch ${CHIA_BRANCH} --recurse-submodules=mozilla-ca https://github.com/Chia-Network/chia-blockchain.git /chia-blockchain
     cd /chia-blockchain
 
