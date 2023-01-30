@@ -16,7 +16,7 @@ All notable changes to this project will be documented in this file. The format 
  - [BTCGreen](https://github.com/BTCgreen-Network/btcgreen-blockchain/releases/tag/1.7.0b) to v1.7.0b
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.6.2) to v1.6.2
  - [Chives](https://github.com/HiveProject2021/chives-blockchain/releases/tag/1.5.3) to v1.5.3, including staking.
- - [SHIBGreen](https://github.com/BTCgreen-Network/shibgreen-blockchain/releases/tag/1.7.0b) to v1.7.0b
+ - [SHIBGreen](https://github.com/BTCgreen-Network/shibgreen-blockchain/releases/tag/1.7.0.1) to v1.7.0.1
  - [Staicoin](https://github.com/STATION-I/stai-blockchain/releases/tag/1.3.0) to v1.3.0. Note, they require a fresh `config.yaml`.
 ## Notes
  - Support for new Chia forks DOES NOT imply my endorsement for them.  Only run those you are comfortable with.

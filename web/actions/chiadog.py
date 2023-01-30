@@ -44,8 +44,13 @@ def save_config(farmer, blockchain, config):
         flash(_("Nice! Chiadog's config.yaml validated and saved successfully."), 'success')
 
 def get_notifications():
-    alerts = db.session.query(a.Alert).order_by(a.Alert.created_at.desc()).all()
-    return Alerts(alerts)
+    try: # Due to defect in date formatting around January 2023, if get a Value
+        alerts = db.session.query(a.Alert).order_by(a.Alert.created_at.desc()).all()
+        return Alerts(alerts)
+    except ValueError:
+        app.logger.error("Found likely malformeed alert timestamp.  Now clearing bad alerts.")
+        remove_all_alerts()
+        return Alerts([])
 
 def remove_alerts(unique_ids):
     app.logger.info("Removing {0} alerts: {1}".format(len(unique_ids), unique_ids))

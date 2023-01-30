@@ -1,13 +1,16 @@
 #!/bin/env bash
 #
-# Installs chia-plotter (pipelined multi-threaded)
-# See https://github.com/madMAx43v3r/chia-plotter
+# Installs chia-plotter (pipelined multi-threaded) from binaries
+#
+# https://github.com/madMAx43v3r/chia-plotter
+# https://github.com/madMAx43v3r/mmx-binaries
 #
 
 # As of 2022-08-20
 HASH=d1a9e88b44ba37f61bfabcb68e80e83f8b939648
 MADMAX_BRANCH=master
 
+# Currently Chia and Chives get the "old" Madmax plotter (no compresssion), built from source
 if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia' || ${blockchains} == 'chives') ]]; then
     if [ ! -f /usr/bin/chia_plot ] && [[ "${madmax_skip_build}" != 'true' ]]; then
         arch_name="$(uname -m)"
@@ -29,13 +32,13 @@ if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chi
             cd /
             rm -rf chia-plotter
         else
-            echo "Building madmax plotter skipped -> unsupported architecture: ${arch_name}"
+            echo "Building madmax skipped -> unsupported architecture: ${arch_name}"
         fi
     fi
 fi
 
-# The MMX blockchain uses plotters from: https://github.com/madMAx43v3r/mmx-binaries
-if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && ${blockchains} == 'mmx' ]]; then
+# MMX blockchain container gets the "new" Madmax plotters, with compression, only available as binaries
+if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'mmx') ]]; then
     if [ ! -f /usr/bin/chia_plot ] && [[ "${madmax_skip_build}" != 'true' ]]; then
         arch_name="$(uname -m)"
         if [[ "${arch_name}" = "x86_64" ]]; then
