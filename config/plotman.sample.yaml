@@ -119,8 +119,6 @@ plotting:
                 n_buckets3: 256       # Default is 256
                 n_rmulti2: 1          # Default is 1
                 network_port: 8444    # Default is 8444, but use 9699 for Chives
-                compression: 1        # Compression level (default = 1, min = 1, max = 9)
-                gpu_plot: false       # If true, requires a GPU device in-container to plot
        
         chia:
                 # The stock plotter; see https://github.com/guydavis/machinaris/wiki/Chia#plotting

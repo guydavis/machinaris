@@ -325,7 +325,7 @@
     "mmx": {
         "name": "MMX",
         "symbol": "MMX" ,
-        "binary":  "/mmx-node/build/mmx",
+        "binary":  "/mmx-node/bin/mmx",
         "network_path": "/root/.mmx/testnet9",
         "network_name": "testnet9",
         "network_port": 12339,
