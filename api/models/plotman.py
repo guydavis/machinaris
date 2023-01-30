@@ -16,7 +16,7 @@ class PlottingSummary:
             elif "plot id" in line.strip(): # The header row
                 self.columns = line.replace('plot id', 'plot_id').strip().split()
                 # Plotman has two columns both named 'tmp' so change the 2nd one to 'size'
-                self.columns[7] = 'size'
+                self.columns[8] = 'size'
             else: # Check for a plotting job row
                 values = line.split()
                 if len(values) > 1 and values[1] in ['chia', 'madmax', 'bladebit']:
