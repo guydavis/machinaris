@@ -106,7 +106,7 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   /usr/bin/bash /machinaris/scripts/bladebit_setup.sh ${BLADEBIT_BRANCH} > /tmp/bladebit_setup.log 2>&1
 
   # Conditionally madmax on plotters and fullnodes, sleep a bit first
-  /usr/bin/bash /machinaris/scripts/madmax_setup.sh ${MMX_BRANCH} > /tmp/madmax_setup.log 2>&1
+  /usr/bin/bash /machinaris/scripts/madmax_setup.sh ${MADMAX_BRANCH} > /tmp/madmax_setup.log 2>&1
 
   # Conditionally install plotman on plotters and fullnodes, after the plotters setup
   /usr/bin/bash /machinaris/scripts/plotman_autoplot.sh > /tmp/plotman_autoplot.log 2>&1
