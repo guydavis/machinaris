@@ -84,7 +84,7 @@ class Transfer:
                 elif line.startswith("Completed"):
                     self.end_date = line[line.index(' at ')+4:].strip()
                 elif line.startswith("+ rsync"):
-                    m = re.search("plot(?:-mmx)?-k(\d+)(-c\d)?-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", line)
+                    m = re.search("plot(?:-mmx)?-k(\d+)(?:-c\d)?-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", line)
                     if m:
                         self.plot_id = m.group(7)[:16].strip()
                         self.k = int(m.group(1).strip())
