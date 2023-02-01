@@ -241,7 +241,7 @@ def load_current_disk_usage(disk_type, hostname=None):
         if disk_type == 'plots':
             created_at_max = db.session.query(StatPlotsDiskUsed).filter(or_(StatPlotsDiskUsed.hostname == host.hostname, 
                 StatPlotsDiskUsed.hostname == host.displayname)).order_by(StatPlotsDiskUsed.created_at.desc()).first()
-            if datetime.datetime.strptime(created_at_max.created_at, '%Y%m%d%H%M%S') <= (datetime.datetime.now() - datetime.timedelta(minutes=STALE_MINUTES_DISK_STATS)):
+            if datetime.datetime.strptime(created_at_max.created_at, '%Y%m%d%H%M') <= (datetime.datetime.now() - datetime.timedelta(minutes=STALE_MINUTES_DISK_STATS)):
                 app.logger.info("Last disk stats from {0} at {1}, ignoring as stale and out-of-date.  Check on worker status!".format(host.displayname, created_at_max.created_at))
             elif created_at_max:
                 used_result = db.session.query(StatPlotsDiskUsed).filter( 
