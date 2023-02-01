@@ -33,7 +33,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Build and push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           file: docker/dockerfile
           context: .
@@ -89,6 +89,7 @@ jobs:
             "CHIADOG_BRANCH=dev"
             "CHIVES_REPO=https://github.com/foxypool/chives-blockchain.git"
             "CHIVES_BRANCH=main"
+            "PLOTMAN_BRANCH=development"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chivesfoxy:test
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chivesfoxy:test

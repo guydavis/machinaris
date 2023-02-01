@@ -16,7 +16,7 @@ class PlottingSummary:
             elif "plot id" in line.strip(): # The header row
                 self.columns = line.replace('plot id', 'plot_id').strip().split()
                 # Plotman has two columns both named 'tmp' so change the 2nd one to 'size'
-                self.columns[7] = 'size'
+                self.columns[8] = 'size'
             else: # Check for a plotting job row
                 values = line.split()
                 if len(values) > 1 and values[1] in ['chia', 'madmax', 'bladebit']:
@@ -84,7 +84,7 @@ class Transfer:
                 elif line.startswith("Completed"):
                     self.end_date = line[line.index(' at ')+4:].strip()
                 elif line.startswith("+ rsync"):
-                    m = re.search("plot(?:-mmx)?-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", line)
+                    m = re.search("plot(?:-mmx)?-k(\d+)(?:-c\d)?-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", line)
                     if m:
                         self.plot_id = m.group(7)[:16].strip()
                         self.k = int(m.group(1).strip())

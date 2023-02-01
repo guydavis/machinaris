@@ -190,13 +190,13 @@ def request_check(plot, workers):
 def refresh_status_file_from_logs():
     status = open_status_json()
     for key in list(status.keys()):
-        if (status[key]['check'] is None) and (status[key]['analyze'] is None):
+        if (not 'check' in status[key] or status[key]['check'] is None) and (not 'analyze' in status[key] or status[key]['analyze'] is None):
             app.logger.info("Deleting {0} both".format(key))
             del status[key]
-        elif status[key]['check'] is None:
+        elif 'check' in status[key] and status[key]['check'] is None:
             app.logger.info("Deleting {0} check".format(key))
             del status[key]['check']
-        elif status[key]['analyze'] is None:
+        elif 'analyze' in status[key] and status[key]['analyze'] is None:
             app.logger.info("Deleting {0} analyze".format(key))
             del status[key]['analyze']
     write_status_json(status)

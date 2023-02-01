@@ -34,7 +34,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Build and push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           file: docker/dockerfile
           context: .
@@ -44,7 +44,7 @@ jobs:
           build-args: |
             "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=latest"
-            "MMX_BRANCH=v0.9.3"
+            "MMX_BRANCH=v0.9.8"
             "CHIA_BRANCH=latest"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:latest

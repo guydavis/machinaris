@@ -16,6 +16,7 @@ class Plotting(db.Model):
     plotter = sa.Column(sa.String(length=64), nullable=False)
     blockchain = sa.Column(sa.String(length=64), nullable=False)
     k = sa.Column(sa.Integer, nullable=False)
+    lvl = sa.Column(sa.Integer, nullable=True)
     tmp = sa.Column(sa.String(length=255), nullable=False)
     dst = sa.Column(sa.String(length=255), nullable=False)
     wall = sa.Column(sa.String(length=8), nullable=False)

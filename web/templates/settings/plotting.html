@@ -146,7 +146,7 @@
             });
             $(document).on("change", "#blockchain", function (e) {
                 load_config($("#worker").val(), $("#blockchain").val())
-                load_dir($("#worker").val(), $("#blockchain").val())
+                load_dirs($("#worker").val(), $("#blockchain").val())
             });
             //Call the function when the page loads
             load_config("{{selected_worker}}", "{{selected_blockchain}}");

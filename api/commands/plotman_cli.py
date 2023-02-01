@@ -175,7 +175,7 @@ def clean_tmp_dirs_before_run():
 
 def check_tmp_file_is_day_old(path):
     try:
-        match = re.match("plot(?:-mmx)?-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+)", path.name)
+        match = re.match("plot(?:-mmx)?-k(\d+)(?:-c\d)?-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+)", path.name)
         if match:
             plot_date = datetime.datetime.strptime("{0}-{1}-{2} {3}:{4}".format(
                 match.group(2), match.group(3), match.group(4), match.group(5), match.group(6)), 
@@ -276,7 +276,7 @@ def find_plotting_job_log(plot_id):
     return None
 
 def analyze(plot_file):
-    groups = re.match("plot(?:-mmx)?-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", plot_file)
+    groups = re.match("plot(?:-mmx)?-k(\d+)(?:-c\d)?-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", plot_file)
     if not groups:
         return "Invalid plot file name provided: {0}".format(plot_file)
     plot_log_file = find_plotting_job_log(groups[7])
