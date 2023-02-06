@@ -46,6 +46,7 @@ jobs:
             "CHIADOG_BRANCH=dev"
             "CHIVES_REPO=https://github.com/HiveProject2021/chives-blockchain.git"
             "CHIVES_BRANCH=1.5.3"
+            "MADMAX_BRANCH=master"
             "PLOTMAN_BRANCH=development"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chives:develop
