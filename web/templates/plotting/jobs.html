@@ -85,13 +85,110 @@
         </div>
     </div>
 </div>
+
+<script>
+    function scheduleAdd() {
+        var cur_schedules = $('#schedules').children().length
+        var new_schedule_row = `<div class="row m-3 schedule" id="schedule_row0">
+                        <div class="col-auto" style="padding-right: 0px">
+                            <input type="text" class="form-control" placeholder="0 22 * * *" style="width: 150px"
+                                name="schedule_start" id="schedule_start0" aria-label="schedule_start0">
+                        </div>
+                        <div class="col-sm" style="padding-right: 0px">
+                            <a href="#" onclick="editCron('start', 0)" title="{{_('Edit Cron')}}"><i class="fs-4 bi-box-arrow-up-right"></i></a>
+                        </div>
+                        <div class="col-auto" style="padding-right: 0px">
+                            <input type="text" class="form-control" placeholder="0 5 * * *" style="width: 150px"
+                                name="schedule_stop" id="schedule_stop0" aria-label="schedule_stop0">
+                        </div>
+                        <div class="col-sm" style="padding-right: 0px">
+                            <a href="#" onclick="editCron('stop', 0)"title="{{_('Edit Cron')}}"><i class="fs-4 bi-box-arrow-up-right"></i></a>
+                        </div>
+                        <div class="col-auto">
+                            <a href="#" onclick="scheduleRemove(0);"title="{{_('Delete')}}"><i class="fs-4 bi-trash"></i></a>
+                        </div>
+                    </div>`;
+            new_schedule_row = new_schedule_row.replaceAll('0', cur_schedules)
+        $('#schedules').append(new_schedule_row);
+    }
+    function scheduleRemove(row_num) {
+        $('#schedule_row' + row_num).remove()
+    }
+    function editCron(type, row_num) {
+        var url = "https://crontab.guru/#" + document.getElementById('schedule_' + type + row_num).value
+        window.open(url, '_blank');
+    }
+</script>
+
+<div class="modal fade" id="scheduleModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="scheduleModalLabel">{{_('Scheduled Plotting')}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+                {{_('Optionally, you may schedule start and stop of the plotting manager to save on electricity (off-peak), avoid back-ups, minimize fan noise, etc.')}}
+            </div>
+            <form method="POST" id="schedule-form">
+                <div class="row pl-3 pr-3">
+                    <div class="col text-end"><b>Start</b></div>
+                    <div class="col" style="padding-right: 0px">&nbsp;</div>
+                    <div class="col text-end"><b>Stop</b></div>
+                    <div class="col" style="padding-right: 0px">&nbsp;</div>
+                    <div class="col">&nbsp;</div>
+                </div>
+                <div class="mb-3 pl-3 pr-3" id="schedules">
+                    {% for schedule in schedules %}
+                    <div class="row m-3 schedule" id="schedule_row{{loop.index}}">
+                        <div class="col-auto" style="padding-right: 0px">
+                            <input type="text" class="form-control" placeholder="0 22 * * *" style="width: 150px"
+                                name="schedule_start" id="schedule_start{{loop.index}}" aria-label="schedule_start{{loop.index}}">
+                        </div>
+                        <div class="col-sm" style="padding-right: 0px">
+                            <a href="#" onclick="editCron('start', {{loop.index}})" title="{{_('Edit Cron')}}"><i class="fs-4 bi-box-arrow-up-right"></i></a>
+                        </div>
+                        <div class="col-auto" style="padding-right: 0px">
+                            <input type="text" class="form-control" placeholder="0 5 * * *" style="width: 150px"
+                                name="schedule_stop" id="schedule_stop{{loop.index}}" aria-label="schedule_stop{{loop.index}}">
+                        </div>
+                        <div class="col-sm" style="padding-right: 0px">
+                            <a href="#" onclick="editCron('stop', {{loop.index}})" title="{{_('Edit Cron')}}"><i class="fs-4 bi-box-arrow-up-right"></i></a>
+                        </div>
+                        <div class="col-auto">
+                            <a href="#" onclick="scheduleRemove({{loop.index}});" title="{{_('Delete')}}"><i class="fs-4 bi-trash"></i></a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-auto" style="padding-right: 40px">
+                        <a href="#schedules" onclick="scheduleAdd();" title="{{_('Add New Schedule')}}"><i class="fs-4 bi-plus text-white text-right"></i></a>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-body bg-dark">
+                {{_('NOTE: The scheduled stop time will not terminate running jobs.  New plotting jobs will no longer be started however.')}}
+            </div>
+            <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-secondary" style="padding-left: 5px;" data-bs-dismiss="modal" id="btnCancelSchedule">{{_('Cancel')}}</button>
+                <button type="button" class="btn btn-outline-success" id="btnSaveSchedule">{{_('Save')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="position-relative">
     <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -8px;">
-      <a href="https://github.com/guydavis/machinaris/wiki/Plotman#plotting-view" target="_blank">
+        <a href="#" title="{{_('Schedule')}}" data-bs-toggle="modal" data-bs-target="#scheduleModal" target="_blank"><i class="fs-4 bi-calendar2-week"></i></a>
+        &nbsp;
+        <a href="https://github.com/guydavis/machinaris/wiki/Plotman#plotting-view" target="_blank">
         <i class="fs-4 bi-question-circle"></i>
       </a>
     </div>
-  </div>
+</div>
+
 <style>
     a.active.nav-link {
         background-color: #3d3f42 !important
@@ -116,7 +213,7 @@
             <fieldset>
                 <b style="vertical-align: bottom; font-weight: 500">{{_('Plotting')}}: </b>
                 {% for plotter in plotters %}
-                <div class="btn-group" {% if loop.last %}style="padding-right:25px"{% endif %}>
+                <div class="btn-group" {% if loop.last %}style="padding-right:50px"{% endif %}>
                     <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false" id="{{ plotter.hostname }}_btn">
                         {{ plotter.displayname }}: 
@@ -470,6 +567,16 @@
                 $('#plotman-form').append('<input type="hidden" id="service" name="service" value="plotting" />');
                 $('#plotman-form').append('<input type="hidden" id="action" name="action" value="stop" />');
                 $("#plotman-form").submit();
+            });
+            $("#btnSaveSchedule").click(function () {
+                $("#btnCancelSchedule").prop("disabled", true);
+                $(this).prop("disabled", true);
+                $(this).html(
+                    `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Saving...')}}`
+                );
+                $('#schedule-form').append('<input type="hidden" id="service" name="service" value="plotting" />');
+                $('#schedule-form').append('<input type="hidden" id="action" name="action" value="schedule" />');
+                $("#schedule-form").submit();
             });
             var startModal = document.getElementById('startModal')
             startModal.addEventListener('show.bs.modal', function (event) {

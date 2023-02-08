@@ -26,6 +26,7 @@ from . import pools as p
 
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 REPLOTTING_CONFIG = '/root/.chia/machinaris/config/replotting.json'
+PLOTTING_SCHEDULES = '/root/.chia/machinaris/config/plotting_schedules.json'
 
 # Don't query plotman unless at least this long since last time.
 RELOAD_MINIMUM_SECS = 30
@@ -310,3 +311,15 @@ def save_replotting_settings(form):
         flash(msg, 'danger')
         return
     return settings
+
+def save_schedules(schedule):
+    flash(_('Plotting schedule has been saved and applied.  Current plotting manager status of running or stopped is not immediately affected.'))
+
+def load_schedules():
+    schedules = []
+    if os.path.exists(PLOTTING_SCHEDULES):
+        with open(PLOTTING_SCHEDULES, 'r') as fp:
+            settings = json.loads(fp.read())
+    if len(schedules) == 0:
+        schedules.append({'start': '', 'stop': ''})
+    return schedules

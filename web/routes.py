@@ -170,14 +170,18 @@ def plotting_jobs():
             action = request.form.get('action')
             plot_ids = request.form.getlist('plot_id')
             plotman.action_plots(action, plot_ids)
+        elif request.form.get('action') == 'schedule':
+            schedules = request.form.getlist('schedules')
+            plotman.save_schedules(schedules)
         else:
             app.logger.info(_("Unknown plotting form") + ": {0}".format(request.form))
         return redirect(url_for('plotting_jobs')) # Force a redirect to allow time to update status
     plotters = plotman.load_plotters()
     plotting = plotman.load_plotting_summary()
+    schedules = plotman.load_schedules()
     job_stats = stats.load_plotting_stats()
     return render_template('plotting/jobs.html', reload_seconds=120,  plotting=plotting, 
-        plotters=plotters, job_stats=job_stats, global_config=gc, lang=get_lang(request))
+        plotters=plotters, job_stats=job_stats, schedules=schedules, global_config=gc, lang=get_lang(request))
 
 @app.route('/plotting/transfers', methods=['GET', 'POST'])
 def plotting_transfers():
