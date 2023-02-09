@@ -24,6 +24,7 @@ from api import app
 PLOTMAN_CONFIG = '/root/.chia/plotman/plotman.yaml'
 PLOTMAN_SAMPLE = '/machinaris/config/plotman.sample.yaml'
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
+PLOTTING_SCHEDULES = '/root/.chia/machinaris/config/plotting_schedules.json'
 
 # Don't query plotman unless at least this long since last time.
 RELOAD_MINIMUM_SECS = 30
@@ -142,6 +143,10 @@ def get_plotman_pid():
     return None
 
 def start_plotman():
+    pid = get_plotman_pid()
+    if pid:
+        app.logger.error("Not starting Plotman as already running with PID: {0}".format(pid))
+        return
     app.logger.info("Starting Plotman run...")
     check_config()
     if len(load_plotting_summary().rows) == 0:  # No plots running
@@ -208,8 +213,12 @@ def clean_tmp_dirs_after_kill(plot_id):
         app.logger.info("Skipping deletion of temp files due to {0}.".format(traceback.format_exc()))
 
 def stop_plotman():
+    pid = get_plotman_pid()
+    if not pid:
+        app.logger.error("No need to stop Plotman as not currently running.")
+        return
     app.logger.info("Stopping Plotman run...")
-    os.kill(get_plotman_pid(), signal.SIGTERM)
+    os.kill(pid, signal.SIGTERM)
 
 def get_archiver_pid():
     for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
@@ -337,3 +346,49 @@ def load_dirs(blockchain):
     if errs.decode('utf-8'):
         result['errors'] = errs.decode('utf-8')
     return json.dumps(result)
+
+def load_schedule():
+    if os.path.exists(PLOTTING_SCHEDULES):
+        try:
+            return json.dumps(json.loads(open(PLOTTING_SCHEDULES,'r').read()))
+        except Exception as ex:
+            app.logger.error("Failed to read plotting schedule from {0} due to {1}.".format(PLOTTING_SCHEDULES, str(ex)))
+    return [] # Return an empty schedule response if not present.
+
+# A reference to the scheduler
+saved_scheduler = None
+
+def save_schedule(schedule):
+    global saved_scheduler
+    with open(PLOTTING_SCHEDULES, 'w') as writer:
+        writer.write(schedule)
+    if saved_scheduler:
+        schedule_plotting(saved_scheduler)
+    app.logger.info("Saved updated plotting schedule to {0}.".format(PLOTTING_SCHEDULES))
+
+# Invoked on launch of the API app when it creates the scheduler
+def schedule_plotting(scheduler):
+    global saved_scheduler
+    if scheduler:
+        saved_scheduler = scheduler
+    for job in scheduler.get_jobs():
+        app.logger.debug("JOB NAME: {0}".format(job.name))
+        if job.name in ['scheduled_start_plotman', 'scheduled_stop_plotman']:
+            app.logger.info("Removing previously scheduled job {0}".format(job.id))
+            job.remove()
+    try:
+        schedules = json.loads(load_schedule())
+        for schedule in schedules:
+            app.logger.info("Scheduling plotting with schedule: {0}".format(schedule))
+            start = schedule['start'].split(' ')
+            if len(start) == 5:
+                scheduler.add_job(func=start_plotman, name="scheduled_start_plotman", trigger='cron', minute=start[0], hour=start[1], day=start[2], month=start[3], day_of_week=start[4])
+            else:
+                app.logger.error("Skipped stop of plotting for malformed schedule cron: {0}")
+            stop = schedule['stop'].split(' ')
+            if len(stop) == 5:
+                scheduler.add_job(func=stop_plotman, name="scheduled_stop_plotman", trigger='cron', minute=stop[0], hour=stop[1], day=stop[2], month=stop[3], day_of_week=stop[4])
+            else:
+                app.logger.error("Skipped stop of plotting for malformed schedule cron: {0}")
+    except Exception as ex:
+        app.logger.error("Error when scheduling plotman: {0}".format(str(ex)))

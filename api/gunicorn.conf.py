@@ -22,7 +22,7 @@ def on_starting(server):
     from common.config import globals
     from common.models import pools, plottings
 
-    from api.commands import websvcs
+    from api.commands import websvcs, plotman_cli
 
     scheduler = BackgroundScheduler(timezone=str(tzlocal.get_localzone()))
 
@@ -62,6 +62,7 @@ def on_starting(server):
     if globals.plotting_enabled():
         scheduler.add_job(func=status_plotting.update, name="status_plottings", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_archiving.update, name="status_archiving", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
+        plotman_cli.schedule_plotting(scheduler)
           
     # Status for fullnodes, all different forks
     if utils.is_fullnode():

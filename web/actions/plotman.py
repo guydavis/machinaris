@@ -26,7 +26,6 @@ from . import pools as p
 
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 REPLOTTING_CONFIG = '/root/.chia/machinaris/config/replotting.json'
-PLOTTING_SCHEDULES = '/root/.chia/machinaris/config/plotting_schedules.json'
 
 # Don't query plotman unless at least this long since last time.
 RELOAD_MINIMUM_SECS = 30
@@ -312,14 +311,16 @@ def save_replotting_settings(form):
         return
     return settings
 
-def save_schedules(schedule):
-    flash(_('Plotting schedule has been saved and applied.  Current plotting manager status of running or stopped is not immediately affected.'))
 
-def load_schedules():
-    schedules = []
-    if os.path.exists(PLOTTING_SCHEDULES):
-        with open(PLOTTING_SCHEDULES, 'r') as fp:
-            settings = json.loads(fp.read())
-    if len(schedules) == 0:
-        schedules.append({'start': '', 'stop': ''})
-    return schedules
+def load_schedule(plotter, blockchain):
+    result = utils.send_get(plotter, "/configs/plotting_schedule/" + blockchain, debug=False).content.decode('utf-8')
+    return json.loads(result)
+
+# Method is invoked by a XHR post from the Settings | Plotting page.  Don't use flash()
+def save_schedules(worker, blockchain, schedule):
+    try:
+        response = utils.send_put(worker, "/configs/plotting_schedule/" + blockchain, schedule, debug=False)
+    except Exception as ex:
+        app.logger.error('Failed to save schedule to plotter because {0}'.format(str(ex)))
+    else:
+        app.logger.info('Plotting schedule has been saved and applied.  Current plotting manager status of running or stopped is not immediately affected.')
