@@ -7,7 +7,7 @@
 HASH=d1a9e88b44ba37f61bfabcb68e80e83f8b939648
 ORIG_MADMAX_BRANCH=master
 
-# MMX Plotter binaries, https://github.com/madMAx43v3r/mmx-binaries
+# MMX Plotter binaries, https://github.com/madMAx43v3r/chia-gigahorse
 MADMAX_BRANCH=$1
 
 # Currently Chia and Chives get the "old" Madmax plotter (no compresssion), built from source
@@ -43,15 +43,15 @@ if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'mmx
         arch_name="$(uname -m)"
         if [[ "${arch_name}" = "x86_64" ]]; then
             pushd /usr/bin
-            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/${MADMAX_BRANCH}/mmx-cpu-plotter/linux/x86_64/chia_plot
-            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/${MADMAX_BRANCH}/mmx-cpu-plotter/linux/x86_64/chia_plot_k34
+            curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${MADMAX_BRANCH}/cpu-plotter/linux/x86_64/chia_plot
+            curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${MADMAX_BRANCH}/cpu-plotter/linux/x86_64/chia_plot_k34
             chmod 755 chia_plot*
-            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/${MADMAX_BRANCH}/mmx-cuda-plotter/linux/x86_64/cuda_plot_k26
-            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/${MADMAX_BRANCH}/mmx-cuda-plotter/linux/x86_64/cuda_plot_k29
-            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/${MADMAX_BRANCH}/mmx-cuda-plotter/linux/x86_64/cuda_plot_k30
-            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/${MADMAX_BRANCH}/mmx-cuda-plotter/linux/x86_64/cuda_plot_k31
-            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/${MADMAX_BRANCH}/mmx-cuda-plotter/linux/x86_64/cuda_plot_k32
-            curl -sLJO https://github.com/madMAx43v3r/mmx-binaries/raw/${MADMAX_BRANCH}/mmx-cuda-plotter/linux/x86_64/cuda_plot_k33
+            curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${MADMAX_BRANCH}/cuda-plotter/linux/x86_64/cuda_plot_k26
+            curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${MADMAX_BRANCH}/cuda-plotter/linux/x86_64/cuda_plot_k29
+            curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${MADMAX_BRANCH}/cuda-plotter/linux/x86_64/cuda_plot_k30
+            curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${MADMAX_BRANCH}/cuda-plotter/linux/x86_64/cuda_plot_k31
+            curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${MADMAX_BRANCH}/cuda-plotter/linux/x86_64/cuda_plot_k32
+            curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${MADMAX_BRANCH}/cuda-plotter/linux/x86_64/cuda_plot_k33
             chmod 755 cuda_plot*
             popd
             echo "Completed download of Madmax binaries for plotting:"
