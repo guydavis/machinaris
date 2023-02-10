@@ -105,10 +105,10 @@ plotting:
         madmax:
                 # madMAx plotter: https://github.com/madMAx43v3r/chia-plotter
                 k: 30                 # The minimum K size for mainnet will probably be k30
+                mode: diskplot        # Either enable diskplot, or gpuplot. 
                 n_threads: 4          # Default is 4, SLOWLY crank up if you have many cores
                 n_buckets: 256        # Default is 256
                 n_buckets3: 256       # Default is 256
                 n_rmulti2: 1          # Default is 1
                 network_port: 11337   # Use 11337
                 compression: 1        # Compression level (default = 1, min = 1, max = 9)
-                gpuplot: false        # If true, requires a GPU device in-container to plot

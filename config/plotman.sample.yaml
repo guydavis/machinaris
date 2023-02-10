@@ -107,23 +107,21 @@ plotting:
                 # BladeBit plotter; see https://github.com/guydavis/machinaris/wiki/Bladebit
                 threads: 2            # Threads per job
                 no_numa: true         # Whether to disable NUMA memory support or not
-                ramplot: false        # Either enable ramplot, diskplot, or gpuplot.  Choose only one.
-                diskplot: true        # Whether to plot to tmp1 (and tmp2) disks or only RAM (false)
+                mode: diskplot        # Either enable ramplot, diskplot, or gpuplot. 
                 diskplot_cache:   4GB # If diskplot, amount of RAM to allocate to caching disk writes
                 diskplot_buckets: 256 # Optionally set a different number of buckets to use for diskplot
                 compression: 1        # Compression level (default = 1, min = 1, max = 9)
-                gpuplot: false        # If true, requires a GPU device in-container to plot
 
         madmax:
                 # madMAx plotter; see https://github.com/guydavis/machinaris/wiki/MadMax
                 k: 32                 # Default is 32 for Chia, but can do 33 or 34. Use 29,30,31 for Chives
+                mode: diskplot        # Either enable diskplot or gpuplot. 
                 n_threads: 4          # Default is 4, SLOWLY crank up if you have many cores
                 n_buckets: 256        # Default is 256
                 n_buckets3: 256       # Default is 256
                 n_rmulti2: 1          # Default is 1
                 network_port: 8444    # Default is 8444, but use 9699 for Chives
                 compression: 1        # Compression level (default = 1, min = 1, max = 9)
-                gpuplot: false        # If true, requires a GPU device in-container to plot
        
         chia:
                 # The stock plotter; see https://github.com/guydavis/machinaris/wiki/Chia#plotting
