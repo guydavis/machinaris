@@ -20,10 +20,6 @@ class PlottingSummary:
             else: # Check for a plotting job row
                 values = line.split()
                 if len(values) > 1 and values[1] in ['chia', 'madmax', 'bladebit']:
-                    if len(values) == len(self.columns) - 1:
-                        app.logger.info("Bladebit job before: {0}".format(values))
-                        values.insert(3, '-') # bladebit rows don't have a tmp directory
-                        app.logger.info("Bladebit job after: {0}".format(values))
                     if len(values) == len(self.columns):
                         row = {}
                         i = 0

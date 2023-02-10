@@ -29,6 +29,8 @@ def safely_gather_plots_size_gibs(plots_size):
     return plots_size_gibs
 
 def update():
+    if not utils.is_fullnode():
+        return # Only fullnodes have farm info, skip on harvesters & plotters.
     with app.app_context():
         hostname = utils.get_hostname()
         blockchain = globals.enabled_blockchains()[0]

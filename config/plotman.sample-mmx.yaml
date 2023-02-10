@@ -111,4 +111,4 @@ plotting:
                 n_rmulti2: 1          # Default is 1
                 network_port: 11337    # Use 11337
                 compression: 1        # Compression level (default = 1, min = 1, max = 9)
-                gpu_plot: false       # If true, requires a GPU device in-container to plot
+                gpuplot: false       # If true, requires a GPU device in-container to plot
