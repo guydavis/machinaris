@@ -112,7 +112,7 @@ plotting:
                 diskplot_cache:   4GB # If diskplot, amount of RAM to allocate to caching disk writes
                 diskplot_buckets: 256 # Optionally set a different number of buckets to use for diskplot
                 compression: 1        # Compression level (default = 1, min = 1, max = 9)
-                gpuplot: false       # If true, requires a GPU device in-container to plot
+                gpuplot: false        # If true, requires a GPU device in-container to plot
 
         madmax:
                 # madMAx plotter; see https://github.com/guydavis/machinaris/wiki/MadMax
@@ -123,7 +123,7 @@ plotting:
                 n_rmulti2: 1          # Default is 1
                 network_port: 8444    # Default is 8444, but use 9699 for Chives
                 compression: 1        # Compression level (default = 1, min = 1, max = 9)
-                gpuplot: false       # If true, requires a GPU device in-container to plot
+                gpuplot: false        # If true, requires a GPU device in-container to plot
        
         chia:
                 # The stock plotter; see https://github.com/guydavis/machinaris/wiki/Chia#plotting
