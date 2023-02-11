@@ -4,7 +4,7 @@
 #
 
 GIGAHORSE_BRANCH=$1
-GIGAHORSE_VERSION=${GIGAHORSE_VERSION#?}  # Strip off the leading 'v' from his branch
+GIGAHORSE_VERSION=${GIGAHORSE_BRANCH#?}  # Strip off the leading 'v' from his branch
 
 if [ -z ${GIGAHORSE_BRANCH} ]; then
     echo 'Skipping Gigahorse install as not requested.'
