@@ -159,7 +159,7 @@ def restart_farmer(blockchain):
     if os.path.exists(WALLET_SETTINGS_FILE):
         cmd = "{0} stop -d farmer && {0} start farmer-no-wallet".format(chia_binary)
     else:
-        cmd = "{0} start farmer && {0} start farmer -r".format(chia_binary)
+        cmd = "{0} stop -d farmer && {0} start farmer -r".format(chia_binary)
     app.logger.info("Executing farmer restart: {0}".format(cmd))
     proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
     try:

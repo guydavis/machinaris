@@ -1,13 +1,46 @@
 #!/bin/env bash
 #
-# Installs Madmax plotters from his binary repository
+# Installs Madmax plotters:
+#   * Classic open source for the default Chia image
+#   * Closed source binary for the Madmax Gigahorse farmer image
 #
 
-# MMX Plotter binaries, https://github.com/madMAx43v3r/chia-gigahorse
-MADMAX_BRANCH=$1
+# As of 2022-08-20
+HASH=d1a9e88b44ba37f61bfabcb68e80e83f8b939648
+CLASSIC_MADMAX_BRANCH=master
 
-# MMX blockchain container gets the "new" Madmax plotters, with compression, only available as binaries
-if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'mmx' || ${blockchains} == 'chia' || ${blockchains} == 'chives') ]]; then
+if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia' || ${blockchains} == 'chives') ]]; then
+    if [ ! -f /usr/bin/chia_plot ] && [[ "${madmax_skip_build}" != 'true' ]]; then
+        arch_name="$(uname -m)"
+        if [[ "${arch_name}" = "x86_64" ]] || [[ "${arch_name}" = "arm64" ]]; then
+            apt update && apt install -y libsodium-dev cmake g++ git build-essential
+            cd /
+            git clone --branch ${CLASSIC_MADMAX_BRANCH} https://github.com/madMAx43v3r/chia-plotter.git 
+            cd chia-plotter && echo "Building madmax on ${arch_name}..."
+            if [[ -z "${madmax_relic_main}" ]]; then  # Hack on 2021-11-29 due to failed builds on some systems...
+                sed -i 's/set(ENV{RELIC_MAIN} "1")/#set(ENV{RELIC_MAIN} "1")/g' CMakeLists.txt
+            fi
+            git submodule update --init
+            git checkout $HASH
+            ./make_devel.sh
+            mkdir -p /usr/lib/chia-plotter
+            cp -r ./build/* /usr/lib/chia-plotter
+            ln -s /usr/lib/chia-plotter/chia_plot /usr/bin/chia_plot
+            ln -s /usr/lib/chia-plotter/chia_plot_k34 /usr/bin/chia_plot_k34
+            cd /
+            rm -rf chia-plotter
+        else
+            echo "Building madmax skipped -> unsupported architecture: ${arch_name}"
+        fi
+    fi
+fi
+
+
+# MMX Plotter binaries, https://github.com/madMAx43v3r/chia-gigahorse
+GIGAHORSE_MADMAX_BRANCH=$1
+
+# MMX and Gigahorse container gets the "new" Madmax plotters with compression, only available as binaries
+if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'mmx' || ${blockchains} == 'gigahorse') ]]; then
     if [ ! -f /usr/bin/chia_plot ] && [[ "${madmax_skip_build}" != 'true' ]]; then
         arch_name="$(uname -m)"
         if [[ "${arch_name}" = "x86_64" ]]; then

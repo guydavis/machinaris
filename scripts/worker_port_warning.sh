@@ -41,6 +41,9 @@ fi
 if [[ "${blockchains}"  == "greenbtc" && "${worker_api_port}" != '8955' ]]; then
   echo "GreenBTC worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8955?"
 fi
+if [[ "${blockchains}"  == "gigahorse" && "${worker_api_port}" != '8959' ]]; then
+  echo "Gigahorse worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8959?"
+fi
 if [[ "${blockchains}"  == "gold" && "${worker_api_port}" != '8949' ]]; then
   echo "Gold worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8949?"
 fi

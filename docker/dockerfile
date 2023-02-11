@@ -26,6 +26,7 @@ ARG ECOSTAKE_BRANCH
 ARG FLAX_BRANCH
 ARG FLORA_BRANCH
 ARG GREENBTC_BRANCH
+ARG GIGAHORSE_BRANCH
 ARG GOLD_BRANCH
 ARG HDDCOIN_BRANCH
 ARG LITTLELAMBOCOIN_BRANCH
@@ -67,6 +68,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/flax_install.sh ${FLAX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/flora_install.sh ${FLORA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/greenbtc_install.sh ${GREENBTC_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/gigahorse_install.sh ${GIGAHORSE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/gold_install.sh ${GOLD_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/littlelambocoin_install.sh ${LITTLELAMBOCOIN_BRANCH} \

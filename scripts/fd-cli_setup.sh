@@ -8,7 +8,7 @@
 FDCLI_BRANCH=$1
 
 if [[ ${mode} == 'fullnode' ]]; then
-    if [[ "${blockchains}" != 'chia' ]] && [[ "${blockchains}" != 'chives' ]] && [[ "${blockchains}" != 'mmx' ]]; then
+    if [[ "${blockchains}" != 'chia' ]] && [[ "${blockchains}" != 'chives' ]] && [[ "${blockchains}" != 'mmx' ]] && [[ "${blockchains}" != 'gigahorse' ]]; then
         cd /
         git clone --branch ${FDCLI_BRANCH} https://github.com/guydavis/flora-dev-cli.git
         cd flora-dev-cli
