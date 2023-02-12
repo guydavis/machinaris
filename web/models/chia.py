@@ -34,9 +34,12 @@ class Summaries:
             if not farm:
                 app.logger.error("No farm summary found for {0}".format(blockchain['blockchain']))
                 continue
-            wallet = self.find_wallet(wallets, blockchain['blockchain'])
+            blockhain_for_wallet = blockchain['blockchain']
+            if blockhain_for_wallet == 'gigahorse':
+                blockhain_for_wallet = 'chia' # Same wallet
+            wallet = self.find_wallet(wallets, blockhain_for_wallet)
             if not wallet:
-                app.logger.error("No wallet found for {0}".format(blockchain['blockchain']))
+                app.logger.error("No wallet found for {0}".format(blockhain_for_wallet))
                 continue
             if not blockchain['blockchain'] in stats:
                 app.logger.error("No blockhain stats for {0} in {1}".format(blockchain['blockchain'], stats.keys()))
@@ -589,7 +592,7 @@ class Blockchains:
                         row['atb_peak_height'] = atb_statuses[blockchain.blockchain]['peak_height']
                     if 'peak_time' in atb_statuses[blockchain.blockchain]:
                         row['atb_peak_time'] = atb_statuses[blockchain.blockchain]['peak_time']
-                else:
+                elif blockchain.blockchain != 'mmx':
                     app.logger.info("No ATB blockchain status found for: {0}".format(blockchain.blockchain))
             except Exception as ex:
                 app.logger.info("Failed to include ATB blockchain status because {0}".format(str(ex)))
@@ -604,6 +607,8 @@ class Blockchains:
             except Exception as ex:
                 msg = "Unable to read ATB blockchain status cache from {0} because {1}".format(BLOCKCHAIN_STATUSES_CACHE_FILE, str(ex))
                 print(msg)
+        if 'chia' in data:
+            data['gigahorse'] = data['chia'] # Same status for both
         return data
     
     def extract_status(self, blockchain, details, worker_status):
