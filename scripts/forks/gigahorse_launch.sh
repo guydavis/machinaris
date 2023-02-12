@@ -5,7 +5,10 @@
 
 cd /chia-gigahorse-farmer
 
+# Link the Madmax chia.bin to chia in main PATH
 . ./activate.sh
+mv /chia-blockchain/venv/bin/chia /chia-blockchain/venv/bin/chia.orig
+ln -s /chia-gigahorse-farmer/chia.bin /chia-blockchain/venv/bin/chia
 
 mkdir -p /root/.chia/mainnet/db
 mkdir -p /root/.chia/mainnet/log

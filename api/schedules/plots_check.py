@@ -236,8 +236,6 @@ def execute(plot_id=None):
         for plot in plots:
             #app.logger.info("Checking plot {0}".format(plot.plot_id))
             set_analyze_status(workers, status, plot)
-            if os.environ['blockchains'][0] == 'mmx':
-                continue # Skip over MMX plots as they can't be checked
             if set_check_status(workers, status, plot, plot_id != None):
                 requested_status_count += 1
             if requested_status_count > 5:  # Only remote request `check plots` on at most 5 plots per cycle

@@ -151,7 +151,7 @@
                     if blockchain.blockchain == 'mmx' 
                     %}<a href="https://github.com/madMAx43v3r/mmx-node#mmx-node" target="_blank" title="{{_('View Blockchain Details')}}" ><i class="fs-4 bi-box-arrow-up-right"></i></a>{% 
                      else 
-                     %}<a href="{{ blockchain.blockchain|alltheblocks_blockchainlink }}" target="_blank" 
+                    %}<a href="{{ blockchain.blockchain|alltheblocks_blockchainlink }}" target="_blank" 
                         title="{{_('AllTheBlocks Status')}}" ><i class="fs-4 bi-globe {% 
                           if blockchain.atb_sync_status == 'IN SYNC' %}
                           text-success

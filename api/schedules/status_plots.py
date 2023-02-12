@@ -61,10 +61,12 @@ def update():
             update_chia_plots(plots_status, since)
         elif 'chives' in globals.enabled_blockchains():
             update_chives_plots(since)
+        elif 'gigahorse' in globals.enabled_blockchains():
+            update_gigahorse_plots(since)
         elif 'mmx' in globals.enabled_blockchains():
             update_mmx_plots(since)
         else:
-            app.logger.debug("Skipping plots update from blockchains other than chia and chives as they all farm same as chia.")
+            app.logger.debug("Skipping plots update from other blockchains they all farm same as chia.")
 
 def add_duplicate_plots(duplicated_plots, file, host1, path1, host2, path2):
     if file in duplicated_plots:
@@ -228,6 +230,48 @@ def update_chives_plots(since):
         app.logger.error("Failed to load and send Chives plots farming because {0}".format(str(ex)))
 
 # Sent from a separate fullnode container
+def update_gigahorse_plots(since):
+    try:
+        blockchain = 'gigahorse'
+        blockchain_rpc = rpc.RPC()
+        hostname = utils.get_hostname()
+        plots_farming = blockchain_rpc.get_all_plots()
+        payload = []
+        plots_by_filename = {}
+        for plot in plots_farming:
+            short_plot_id,dir,file,created_at = get_plot_attrs(plot['plot_id'], plot['filename'])
+            duplicated_on_same_host = False
+            if not since and file in plots_by_filename:  # Only check for duplicates on full load
+                if plot['hostname'] == plots_by_filename[file]['hostname']:
+                    app.logger.error("DUPLICATE GIGAHORSE PLOT FOUND ON SAME WORKER {0} AT BOTH {1}/{2} AND {3}/{4}".format(
+                        plot['hostname'], plots_by_filename[file]['path'], plots_by_filename[file]['file'], dir, file))
+                    duplicated_on_same_host = True
+                else:
+                    app.logger.error("DUPLICATE GIGAHORSE PLOT FOUND ON DIFFERENT WORKERS AT {0}@{1}/{2} AND {3}@{4}/{5}".format(
+                        plots_by_filename[file]['worker'], plots_by_filename[file]['path'], plots_by_filename[file]['file'], plot['hostname'], dir, file))
+            plots_by_filename[file] = { 'hostname': plot['hostname'], 'worker': plot['hostname'], 'path': dir, 'file': file }
+            if not duplicated_on_same_host and not since or created_at > since:
+                payload.append({
+                    "plot_id": short_plot_id,
+                    "blockchain": blockchain,
+                    "hostname": hostname if plot['hostname'] in ['127.0.0.1'] else plot['hostname'],
+                    "displayname": None,  # Can't know all Gigahorse workers' displaynames here, done in API receiver
+                    "dir": dir,
+                    "file": file,
+                    "type": plot['type'],
+                    "created_at": created_at,
+                    "plot_analyze": None, # Handled in receiver
+                    "plot_check": None, # Handled in receiver
+                    "size": plot['file_size']
+                })
+        if not since:  # If no filter, delete all before sending all current again
+            utils.send_delete('/plots/{0}/{1}'.format(hostname, blockchain), debug=False)
+        if len(payload) > 0:
+            utils.send_post('/plots/', payload, debug=False)
+    except Exception as ex:
+        app.logger.error("Failed to load and send Gigahorse plots farming because {0}".format(str(ex)))
+
+# Sent from a separate fullnode container
 def update_mmx_plots(since):
     try:
         blockchain = 'mmx'
@@ -252,7 +296,7 @@ def update_mmx_plots(since):
                     "plot_id": short_plot_id,
                     "blockchain": blockchain,
                     "hostname": hostname if plot['hostname'] in ['127.0.0.1'] else plot['hostname'],
-                    "displayname": None,  # Can't know all Chives workers' displaynames here, done in API receiver
+                    "displayname": None,  # Can't know all MMX workers' displaynames here, done in API receiver
                     "dir": dir,
                     "file": file,
                     "type": plot['type'],

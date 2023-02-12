@@ -436,6 +436,8 @@ def get_disks(disk_type):
 def get_alltheblocks_name(blockchain):
     if blockchain == 'staicoin':
         return 'stai' # Special case for staicoin's inconsistent naming convention
+    elif blockchain == 'gigahorse':
+        return 'chia' # Special case for gigahorse which is really Chia
     return blockchain
 
 def legacy_blockchain(blockchain):

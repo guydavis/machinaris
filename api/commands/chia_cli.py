@@ -242,15 +242,16 @@ def is_plots_check_running():
     return None
 
 def plot_check(blockchain, plot_path):
-    if blockchain == 'mmx':
-        app.logger.debug("MMX doesn't offer a plot check function.")
-        return None
     if not os.path.exists(plot_path):
         app.logger.error("No such plot file to check at: {0}".format(plot_path))
         return None
-    chia_binary = globals.get_blockchain_binary(blockchain)
     app.logger.info("Starting plot check on: {0}".format(plot_path))
-    proc = Popen("{0} plots check -g {1}".format(chia_binary, plot_path),
+    if blockchain == 'mmx':
+        proc = Popen("/usr/bin/ProofOfSpace {0}".format(plot_path),
+        universal_newlines=True, stdout=PIPE, stderr=STDOUT, shell=True)
+    else:  # All Chia forks and clones
+        chia_binary = globals.get_blockchain_binary(blockchain)
+        proc = Popen("{0} plots check -g {1}".format(chia_binary, plot_path),
         universal_newlines=True, stdout=PIPE, stderr=STDOUT, shell=True)
     try:
         outs, errs = proc.communicate(timeout=180)
