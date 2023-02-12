@@ -7,8 +7,8 @@ cd /chia-gigahorse-farmer
 
 . ./activate.sh
 
+mkdir -p /root/.chia/mainnet/db
 mkdir -p /root/.chia/mainnet/log
-chia init >> /root/.chia/mainnet/log/init.log 2>&1
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
@@ -40,8 +40,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   rm -rf /root/.chia/mainnet/db/chia
 fi
 
-mkdir -p /root/.chia/mainnet/log
-chia init >> /root/.chia/mainnet/log/init.log 2>&1
+/chia-gigahorse-farmer/chia.bin init >> /root/.chia/mainnet/log/init.log 2>&1
 
 echo 'Configuring Chia...'
 if [ ! -f /root/.chia/mainnet/config/config.yaml ]; then
@@ -64,7 +63,7 @@ for k in ${keys//:/ }; do
     echo "Not touching key directories."
   elif [ -s ${k} ]; then
     echo "Adding key #${label_num} at path: ${k}"
-    chia keys add -l "key_${label_num}" -f ${k} > /dev/null
+    /chia-gigahorse-farmer/chia.bin keys add -l "key_${label_num}" -f ${k} > /dev/null
     ((label_num=label_num+1))
   elif [[ ${mode} == 'fullnode' ]]; then
     echo "Skipping 'chia keys add' as no file found at: ${k}"
@@ -76,11 +75,11 @@ IFS=':' read -r -a array <<< "$plots_dir"
 joined=$(printf ", %s" "${array[@]}")
 echo "Adding plot directories at: ${joined:1}"
 for p in ${plots_dir//:/ }; do
-    chia plots add -d ${p}
+    /chia-gigahorse-farmer/chia.bin plots add -d ${p}
 done
 
 chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
-chia init --fix-ssl-permissions > /dev/null 
+/chia-gigahorse-farmer/chia.bin init --fix-ssl-permissions > /dev/null 
 
 # Support for GPUs used when plotting/farming
 if [[ ${OPENCL_GPU} == 'nvidia' ]]; then   
@@ -103,10 +102,9 @@ fi
 
 # Start services based on mode selected. Always skip a duplicate Chia wallet launch
 if [[ ${mode} == 'fullnode' ]]; then
-  chia start farmer-no-wallet
+  /chia-gigahorse-farmer/chia.bin start farmer-no-wallet
 elif [[ ${mode} =~ ^farmer.* ]]; then
-  # TODO: Change farmer's fullnode_peer to ${controller_host} in config.yaml
-  chia start farmer-only
+  /chia-gigahorse-farmer/chia.bin start farmer-only
 elif [[ ${mode} =~ ^harvester.* ]]; then
   if [[ -z ${farmer_address} || -z ${farmer_port} ]]; then
     echo "A farmer peer address and port are required."
@@ -114,25 +112,25 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
   else
     if [ ! -f /root/.chia/farmer_ca/chia_ca.crt ]; then
       mkdir -p /root/.chia/farmer_ca
-      response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8927/certificates/?type=chia --output /tmp/certs.zip)
+      response=$(curl --write-out '%{http_code}' --silent http://${farmer_address}:8959/certificates/?type=gigahorse --output /tmp/certs.zip)
       if [ $response == '200' ]; then
         unzip /tmp/certs.zip -d /root/.chia/farmer_ca
       else
-        echo "Certificates response of ${response} from http://${farmer_address}:8927/certificates/?type=chia.  Is the Machinaris fullnode container running?"
+        echo "Certificates response of ${response} from http://${farmer_address}:8959/certificates/?type=gigahorse.  Is the Machinaris fullnode container running?"
       fi
       rm -f /tmp/certs.zip 
     fi
     if [[ -f /root/.chia/farmer_ca/chia_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
-      chia init -c /root/.chia/farmer_ca 2>&1 > /root/.chia/mainnet/log/init.log
+      /chia-gigahorse-farmer/chia.bin init -c /root/.chia/farmer_ca 2>&1 > /root/.chia/mainnet/log/init.log
       chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
-      chia init --fix-ssl-permissions > /dev/null 
+      /chia-gigahorse-farmer/chia.bin init --fix-ssl-permissions > /dev/null 
     else
       echo "Did not find your farmer's certificates within /root/.chia/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
-    chia configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    chia configure --enable-upnp false
-    chia start harvester -r
+    /chia-gigahorse-farmer/chia.bin configure --set-farmer-peer ${farmer_address}:${farmer_port}
+    /chia-gigahorse-farmer/chia.bin configure --enable-upnp false
+    /chia-gigahorse-farmer/chia.bin start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then
     echo "Starting in Plotter-only mode.  Run Plotman from either CLI or WebUI."
