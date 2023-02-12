@@ -10,6 +10,39 @@ cd /chia-gigahorse-farmer
 mkdir -p /root/.chia/mainnet/log
 chia init >> /root/.chia/mainnet/log/init.log 2>&1
 
+if [[ "${blockchain_db_download}" == 'true' ]] \
+  && [[ "${mode}" == 'fullnode' ]] \
+  && [[ ! -f /root/.chia/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
+  && [[ ! -f /root/.chia/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
+  # Create machinaris dbs and launch web only while blockchain database downloads
+  . /machinaris/scripts/setup_databases.sh
+  mkdir -p /root/.chia/machinaris/config
+  mkdir -p /root/.chia/machinaris/logs
+  cd /machinaris
+  /chia-blockchain/venv/bin/gunicorn \
+     --bind 0.0.0.0:8926 --timeout 90 \
+      --log-level=info \
+      --workers=2 \
+      --log-config web/log.conf \
+      web:app &
+  echo 'Starting web server...  Browse to port 8926.'
+  echo "Downloading Chia blockchain DB (many GBs in size) on first launch..."
+  echo "Please be patient as takes minutes now, but saves days of syncing time later."
+  mkdir -p /root/.chia/mainnet/db/chia && cd /root/.chia/mainnet/db/chia
+  # Latest Blockchain DB download from direct from https://sweetchia.com/
+  db_url=$(curl -s https://sweetchia.com | grep -Po "https:.*/blockchain_v2_mainnet-\d{4}-\d{2}-\d{2}-\d{4}.7z" | shuf -n 1)
+  echo "Please be patient! Downloading blockchain database from: "
+  echo "    ${db_url}"
+  curl -skLJ -O ${db_url}
+  p7zip --decompress --force blockchain_v2_mainnet*.7z
+  cd /root/.chia/mainnet/db
+  mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.sqlite .
+  rm -rf /root/.chia/mainnet/db/chia
+fi
+
+mkdir -p /root/.chia/mainnet/log
+chia init >> /root/.chia/mainnet/log/init.log 2>&1
+
 echo 'Configuring Chia...'
 if [ ! -f /root/.chia/mainnet/config/config.yaml ]; then
   sleep 60  # Give Chia long enough to initialize and create a config file...
@@ -18,10 +51,10 @@ if [ -f /root/.chia/mainnet/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.chia/mainnet/config/config.yaml
   sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/config.yaml
   sed -i 's/localhost/127.0.0.1/g' /root/.chia/mainnet/config/config.yaml
-  # Fix port conflicts with other blockchains like Chia.
-  #sed -i 's/8444/28445/g' /root/.sit/mainnet/config/config.yaml
-  sed -i 's/8445/28446/g' /root/.sit/mainnet/config/config.yaml
-  #sed -i 's/8555/28556/g' /root/.sit/mainnet/config/config.yaml
+  # Fix port conflicts with other fullnodes like Chia.
+  sed -i 's/8444/28445/g' /root/.chia/mainnet/config/config.yaml
+  sed -i 's/8445/28446/g' /root/.chia/mainnet/config/config.yaml
+  sed -i 's/8555/28556/g' /root/.chia/mainnet/config/config.yaml
 fi
 
 # Loop over provided list of key paths
@@ -68,11 +101,11 @@ elif [[ ${OPENCL_GPU} == 'intel' ]]; then
   echo "Enabling Intel GPU support inside this container."
 fi
 
-# Start services based on mode selected. Gigahorse should NOT be a fullnode within Machinaris.
+# Start services based on mode selected. Always skip a duplicate Chia wallet launch
 if [[ ${mode} == 'fullnode' ]]; then
-  echo "Please run as a farmer instead of fullnode."
-  exit -1
+  chia start farmer-no-wallet
 elif [[ ${mode} =~ ^farmer.* ]]; then
+  # TODO: Change farmer's fullnode_peer to ${controller_host} in config.yaml
   chia start farmer-only
 elif [[ ${mode} =~ ^harvester.* ]]; then
   if [[ -z ${farmer_address} || -z ${farmer_port} ]]; then
