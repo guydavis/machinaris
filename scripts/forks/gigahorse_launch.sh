@@ -52,9 +52,9 @@ if [ -f /root/.chia/mainnet/config/config.yaml ]; then
   sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.chia/mainnet/config/config.yaml
   sed -i 's/localhost/127.0.0.1/g' /root/.chia/mainnet/config/config.yaml
   # Fix port conflicts with other fullnodes like Chia.
-  sed -i 's/8444/28445/g' /root/.chia/mainnet/config/config.yaml
-  sed -i 's/8445/28446/g' /root/.chia/mainnet/config/config.yaml
-  sed -i 's/8555/28556/g' /root/.chia/mainnet/config/config.yaml
+  #sed -i 's/8444/28445/g' /root/.chia/mainnet/config/config.yaml
+  #sed -i 's/8445/28446/g' /root/.chia/mainnet/config/config.yaml
+  #sed -i 's/8555/28556/g' /root/.chia/mainnet/config/config.yaml
 fi
 
 # Loop over provided list of key paths
