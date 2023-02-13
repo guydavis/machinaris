@@ -11,6 +11,9 @@ if [[ "${blockchains}" == 'chives' ]]; then
 elif [[ "${blockchains}" == 'mmx' ]]; then
     cp -f /machinaris/config/plotman.sample-mmx.yaml /root/.chia/plotman/plotman.sample.yaml
     cp -n /machinaris/config/plotman.sample-mmx.yaml /root/.chia/plotman/plotman.yaml
+elif [[ "${blockchains}" == 'gigahorse' ]]; then
+    cp -f /machinaris/config/plotman.sample-gigahorse.yaml /root/.chia/plotman/plotman.sample.yaml
+    cp -n /machinaris/config/plotman.sample-gigahorse.yaml /root/.chia/plotman/plotman.yaml
 else # If Chia
     cp -f /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.sample.yaml
     cp -n /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.yaml

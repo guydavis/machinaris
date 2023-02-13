@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file. The format 
 ## [Unreleased]
 ### Added
  - Schedule plotting on the "Settings | Plotting" page to take advantage of off-peak electricity, lower your fan noise, avoid backups, etc...
- - [Bladebit](https://github.com/Chia-Network/bladebit/tree/cuda-compression) - alpha GPU plotting support. Set `gpuplot: true` under `bladebit` on Settings | Plotting page.
- - [MMX Cuda Plotter](https://github.com/madMAx43v3r/mmx-binaries/tree/master/mmx-cuda-plotter) - beta GPU plotting support. Set `gpuplot: true` under `madmax` on Settings | Plotting page.
+ - [Bladebit](https://github.com/guydavis/machinaris/wiki/Bladebit) - alpha GPU plotting support. Set `mode: gpuplot` under `bladebit` on Settings | Plotting page.
+ - [Gigahorse](https://github.com/guydavis/machinaris/wiki/Gigahorse) - beta GPU plotting support. Set `mode: gpuplot` under `madmax` on Settings | Plotting page.
  - [Ballcoin](https://github.com/ball-network/ballcoin-blockchain) blockchain at version 1.6.0, another slow Silicoin fork.
  - [Pipscoin](https://github.com/Pipscoin-Network/pipscoin-blockchain) blockchain at version 1.7.0.
 ## Changed
