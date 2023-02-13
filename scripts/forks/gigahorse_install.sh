@@ -19,6 +19,10 @@ else
 	apt-get install -y ./amdgpu-install_22.20.50205-1_all.deb
 	
     arch_name="$(uname -m)"
-    cd / && curl -skJLO https://github.com/madMAx43v3r/chia-gigahorse/releases/download/${GIGAHORSE_BRANCH}/chia-gigahorse-farmer-${GIGAHORSE_VERSION}-${arch_name}.tar.gz
+    url="https://github.com/madMAx43v3r/chia-gigahorse/releases/download/${GIGAHORSE_BRANCH}/chia-gigahorse-farmer-${GIGAHORSE_VERSION}-${arch_name}.tar.gz"
+    echo "Pulling Madmax closed-source Chia farming binary from..."
+    echo ${url}
+    cd / && curl -skJLO ${url}
+    ls -ltr .
     tar -xzf chia-gigahorse-farmer*
 fi
