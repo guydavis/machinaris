@@ -22,7 +22,7 @@ else
     url="https://github.com/madMAx43v3r/chia-gigahorse/releases/download/${GIGAHORSE_BRANCH}/chia-gigahorse-farmer-${GIGAHORSE_VERSION}-${arch_name}.tar.gz"
     echo "Pulling Madmax closed-source Chia farming binary from..."
     echo ${url}
-    cd / && curl -skJLO ${url}
-    ls -ltr .
+    cd / && curl --retry 5 --retry-max-time 120 -skJLO ${url}
+    du -hsc chia-gigahorse-farmer*
     tar -xzf chia-gigahorse-farmer*
 fi

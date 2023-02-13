@@ -5,8 +5,8 @@ All notable changes to this project will be documented in this file. The format 
 ## [Unreleased]
 ### Added
  - Schedule plotting on the "Settings | Plotting" page to take advantage of off-peak electricity, lower your fan noise, avoid backups, etc...
- - [Bladebit](https://github.com/guydavis/machinaris/wiki/Bladebit) - alpha GPU plotting support. Set `mode: gpuplot` under `bladebit` on Settings | Plotting page.
- - [Gigahorse](https://github.com/guydavis/machinaris/wiki/Gigahorse) - beta GPU plotting support. Set `mode: gpuplot` under `madmax` on Settings | Plotting page.
+ - [Bladebit](https://github.com/guydavis/machinaris/wiki/Bladebit) - alpha GPU plotting support in main Machinaris image. Set `mode: gpuplot` under `bladebit` on Settings | Plotting page.
+ - [Gigahorse](https://github.com/guydavis/machinaris/wiki/Gigahorse) - beta GPU plotting support in new Machinaris-Gigahorse image. Set `mode: gpuplot` under `madmax` on Settings | Plotting page.
  - [Ballcoin](https://github.com/ball-network/ballcoin-blockchain) blockchain at version 1.6.0, another slow Silicoin fork.
  - [Pipscoin](https://github.com/Pipscoin-Network/pipscoin-blockchain) blockchain at version 1.7.0.
 ## Changed
@@ -21,7 +21,7 @@ All notable changes to this project will be documented in this file. The format 
  - [SHIBGreen](https://github.com/BTCgreen-Network/shibgreen-blockchain/releases/tag/1.7.0.1) to v1.7.0.1
  - [Staicoin](https://github.com/STATION-I/stai-blockchain/releases/tag/1.3.0) to v1.3.0. Note, they require a fresh `config.yaml`.
 ## Notes
- - Support for new Chia forks DOES NOT imply my endorsement for them.  Only run those you are comfortable with.
+ - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
 
 ## [0.8.6] - 2023-01-03
 ### Added

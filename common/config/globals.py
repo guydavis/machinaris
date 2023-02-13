@@ -45,6 +45,11 @@ def get_supported_blockchains():
 def get_blockchain_binary(blockchain):
     return load_blockchain_info(blockchain, 'binary')
 
+def get_blockchain_working_dir(blockchain):
+    if blockchain == 'gigahorse':
+        return os.path.dirname(get_blockchain_binary(blockchain))
+    return None # Default for other blockchains that are cwd-independent
+
 def get_blockchain_network_path(blockchain):
     return load_blockchain_info(blockchain, 'network_path')
 
