@@ -45,7 +45,7 @@ fi
 
 /chia-gigahorse-farmer/chia.bin init >> /root/.chia/mainnet/log/init.log 2>&1
 
-echo 'Configuring Chia...'
+echo 'Configuring Gigahorse for the Chia blockchain...'
 if [ ! -f /root/.chia/mainnet/config/config.yaml ]; then
   sleep 60  # Give Chia long enough to initialize and create a config file...
 fi
@@ -57,6 +57,7 @@ if [ -f /root/.chia/mainnet/config/config.yaml ]; then
   sed -i 's/ 8444/ 28744/g' /root/.chia/mainnet/config/config.yaml
   sed -i 's/ 8445/ 28745/g' /root/.chia/mainnet/config/config.yaml
   sed -i 's/ 8555/ 28855/g' /root/.chia/mainnet/config/config.yaml
+  sed -i '/^ *host: introducer.chia.net/,/^ *[^:]*:/s/port: 28744/port: 8444/' /root/.chia/mainnet/config/config.yaml
 fi
 
 # Loop over provided list of key paths
