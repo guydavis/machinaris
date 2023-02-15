@@ -260,7 +260,7 @@ def plot_check(blockchain, plot_path):
         app.logger.error("No such plot file to check at: {0}".format(plot_path))
         return None
     app.logger.info("Starting plot check on: {0}".format(plot_path))
-    if blockchain == 'mmx':
+    if blockchain in ['gigahorse', 'mmx']:  # Use Madmax's custom plot check binary
         proc = Popen("/usr/bin/ProofOfSpace check -f {0}".format(plot_path), universal_newlines=True, stdout=PIPE, stderr=STDOUT, shell=True)
     else:  # All Chia forks and clones
         chia_binary = globals.get_blockchain_binary(blockchain)
