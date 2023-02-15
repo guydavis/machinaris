@@ -346,9 +346,6 @@
                                     return '<a href="#" title="{{_('Unknown')}}" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+plot_id+'");return false;\'><i class="fs-4 bi-question-circle text-white"></i></a>';
                                 }
                             }
-                            if (row[1] == 'mmx') {
-                                return ""; 
-                            }             
                             return '<a href="#" title="{{_('Unchecked')}}" data-bs-toggle="modal" data-bs-target="#checkModal" onclick=\'PlotCheck("'+row[2]+'");return false;\'><i class="fs-4 bi-question-circle text-white"></i></a>';
                         }
                     }, 
