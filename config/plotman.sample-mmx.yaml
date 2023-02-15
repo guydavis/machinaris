@@ -30,9 +30,13 @@ directories:
         tmp:
                 - /plotting
 
-        # Optional: tmp2 directory.  If specified, will be passed to
-        # the chia and madmax plotters as the '-2' param.
+        # Optional: tmp2 directory.  If specified, will be passed to the  madmax plotter as the '-2' param. 
+        # If gpu-plotting, this will enable 128 GB partial RAM mode onto this SSD path
         # tmp2: /plotting2
+
+        # Optional: tmp3 directory.  If specified, will be passed to the  madmax plotter as the '-3' param. 
+        # If gpu-plotting, this will enable 64 GB partial RAM mode onto this SSD path
+        # tmp3: /plotting3
 
         # One or more directories; the scheduler will use all of them.
         # These again are presumed to be on independent physical devices,

@@ -144,7 +144,7 @@ def set_check_status(workers, status, plot, refresh):
                 except Exception as ex:
                     app.log.error("Failed to parse plots check header because: {0}".format(str(ex)))
                     app.log.error(line)
-            elif "Found 1 valid plots" in line:
+            elif "Found 1 valid plots" in line or "Total success: " in line:
                 check_status = 'GOOD'
     if plot.plot_id[:8] in status:
         plot_state = status[plot.plot_id[:8]]
