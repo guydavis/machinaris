@@ -91,14 +91,6 @@
             <td><a data-toggle="tooltip" data-bs-placement="left" data-bs-html="true"
                 title="{{worker.versions.components}}">{{worker.versions.machinaris}}</a></td>
           </tr>
-          {% if worker.farmr_device_id is defined %}
-          <tr>
-            <td colspan=2>
-              <div class="float-end">{{worker.farmr_device_id}}</div>
-              <a href="https://farmr.net/" target="_blank" class="text-success">{{_('Farmr ID')}}</a> 
-            </td>
-          </tr>
-          {% endif %}
         </tbody>
       </table>
     </div>

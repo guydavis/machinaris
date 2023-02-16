@@ -7,11 +7,6 @@ cd /ext9-blockchain
 
 . ./activate
 
-# farmr binary makes hard-coded assumptions about N-Chain locations, so create symlinks
-if [ ! -d /root/.ext9 ]; then
-  ln -s /root/.chia/ /root/.ext9 
-fi
-
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.chia/ext9/db/blockchain_v1_ext9.sqlite ]] \

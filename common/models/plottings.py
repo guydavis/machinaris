@@ -5,7 +5,7 @@ from sqlalchemy.sql import func
 
 from common.extensions.database import db
 
-PLOTTABLE_BLOCKCHAINS = [ 'chia', 'chives', 'mmx' ]
+PLOTTABLE_BLOCKCHAINS = [ 'chia', 'chives', 'gigahorse', 'mmx' ]
 
 class Plotting(db.Model):
     __bind_key__ = 'plottings'

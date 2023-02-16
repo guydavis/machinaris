@@ -56,7 +56,7 @@ def collect():
         current_datetime = datetime.datetime.now().strftime("%Y%m%d%H%M")
         blockchain = globals.enabled_blockchains()[0]
         try:
-            if blockchain == 'mmx':
+            if blockchain in ['gigahorse', 'mmx']:
                 app.logger.debug("Unable to calculate effort for MMX blockchain.  Only Chia and forks supported.")
                 return
             farm_summary = chia_cli.load_farm_summary(blockchain)

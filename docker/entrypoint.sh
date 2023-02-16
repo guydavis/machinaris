@@ -96,9 +96,6 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   # During concurrent startup of multiple fork containers, stagger less important setups
   sleep $[ ( $RANDOM % 180 )  + 1 ]s
 
-  # Conditionally install farmr on harvesters and fullnodes
-  /usr/bin/bash /machinaris/scripts/farmr_setup.sh > /tmp/farmr_setup.log 2>&1
-
   # Conditionally install fd-cli on fullnodes, excluding Chia and Chives
   /usr/bin/bash /machinaris/scripts/fd-cli_setup.sh ${FDCLI_BRANCH} > /tmp/fd-cli_setup.log 2>&1
 

@@ -170,6 +170,9 @@ def plotting_jobs():
             action = request.form.get('action')
             plot_ids = request.form.getlist('plot_id')
             plotman.action_plots(action, plot_ids)
+        elif request.form.get('action') == 'schedule':
+            schedules = request.form.getlist('schedules')
+            plotman.save_schedules(schedules)
         else:
             app.logger.info(_("Unknown plotting form") + ": {0}".format(request.form))
         return redirect(url_for('plotting_jobs')) # Force a redirect to allow time to update status
@@ -428,12 +431,16 @@ def settings_plotting():
     if request.method == 'POST':
         selected_worker_hostname = request.form.get('worker')
         selected_blockchain = request.form.get('blockchain')
-        plotman.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
+        if request.form.get('type') == 'schedule':
+            app.logger.info('Saving updated plotting schedule for worker: {0}'.format(selected_worker_hostname))
+            plotman.save_schedules(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get('schedules'))
+            return make_response("Successfully saved {0} plotting schedule on {1}.".format(selected_worker_hostname, selected_blockchain), 200)
+        else: #
+            plotman.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
     workers_summary = worker.load_worker_summary()
     selected_worker = find_selected_worker(workers_summary.plotters(), selected_worker_hostname, selected_blockchain)
     if not selected_blockchain:
         selected_blockchain = selected_worker['blockchain']
-    app.logger.info(selected_worker['hostname'])
     return render_template('settings/plotting.html', blockchains=blockchains, selected_blockchain=selected_blockchain,
         workers=workers_summary.plotters, selected_worker=selected_worker['hostname'], global_config=gc)
 
@@ -553,6 +560,11 @@ def views_settings_config(path):
     elif config_type == "plotting_dirs":
         try:
             response = make_response(plotman.load_dirs(w, request.args.get('blockchain')), 200)
+        except requests.exceptions.ConnectionError as ex:
+            response = make_response(_("No responding fullnode found for %(blockchain)s. Please check your workers.", blockchain=escape(request.args.get('blockchain'))))
+    elif config_type == "plotting_schedule":
+        try:
+            response = make_response(plotman.load_schedule(w, request.args.get('blockchain')), 200)
         except requests.exceptions.ConnectionError as ex:
             response = make_response(_("No responding fullnode found for %(blockchain)s. Please check your workers.", blockchain=escape(request.args.get('blockchain'))))
     elif config_type == "tools":

@@ -144,7 +144,7 @@ def set_check_status(workers, status, plot, refresh):
                 except Exception as ex:
                     app.log.error("Failed to parse plots check header because: {0}".format(str(ex)))
                     app.log.error(line)
-            elif "Found 1 valid plots" in line:
+            elif "Found 1 valid plots" in line or "Total success: " in line:
                 check_status = 'GOOD'
     if plot.plot_id[:8] in status:
         plot_state = status[plot.plot_id[:8]]
@@ -236,8 +236,6 @@ def execute(plot_id=None):
         for plot in plots:
             #app.logger.info("Checking plot {0}".format(plot.plot_id))
             set_analyze_status(workers, status, plot)
-            if os.environ['blockchains'][0] == 'mmx':
-                continue # Skip over MMX plots as they can't be checked
             if set_check_status(workers, status, plot, plot_id != None):
                 requested_status_count += 1
             if requested_status_count > 5:  # Only remote request `check plots` on at most 5 plots per cycle

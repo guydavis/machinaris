@@ -45,6 +45,11 @@ def get_supported_blockchains():
 def get_blockchain_binary(blockchain):
     return load_blockchain_info(blockchain, 'binary')
 
+def get_blockchain_working_dir(blockchain):
+    if blockchain == 'gigahorse':
+        return os.path.dirname(get_blockchain_binary(blockchain))
+    return None # Default for other blockchains that are cwd-independent
+
 def get_blockchain_network_path(blockchain):
     return load_blockchain_info(blockchain, 'network_path')
 
@@ -84,7 +89,6 @@ def load():
     cfg['chiadog_version'] = load_chiadog_version()
     cfg['madmax_version'] = load_madmax_version()
     cfg['bladebit_version'] = load_bladebit_version()
-    cfg['farmr_version'] = load_farmr_version()
     cfg['is_controller'] = "localhost" == (
         os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost')
     fullnode_db_version = load_fullnode_db_version()
@@ -377,28 +381,6 @@ def load_bladebit_version():
     last_bladebit_version_load_time = datetime.datetime.now()
     return last_bladebit_version
 
-last_farmr_version = None
-last_farmr_version_load_time = None
-def load_farmr_version():
-    global last_farmr_version
-    global last_farmr_version_load_time
-    if last_farmr_version_load_time and last_farmr_version_load_time >= \
-            (datetime.datetime.now() - datetime.timedelta(days=RELOAD_MINIMUM_DAYS)):
-        return last_farmr_version
-    last_farmr_version = ""
-    try:
-        proc = Popen("apt-cache policy farmr | grep -i installed | cut -f 2 -d ':'",
-                stdout=PIPE, stderr=PIPE, shell=True)
-        outs, errs = proc.communicate(timeout=90)
-        last_farmr_version = outs.decode('utf-8').strip()
-    except TimeoutExpired:
-        proc.kill()
-        proc.communicate()
-    except:
-        logging.debug(traceback.format_exc())
-    last_farmr_version_load_time = datetime.datetime.now()
-    return last_farmr_version
-
 last_machinaris_version = None
 last_machinaris_version_load_time = None
 def load_machinaris_version():
@@ -459,6 +441,8 @@ def get_disks(disk_type):
 def get_alltheblocks_name(blockchain):
     if blockchain == 'staicoin':
         return 'stai' # Special case for staicoin's inconsistent naming convention
+    elif blockchain == 'gigahorse':
+        return 'chia' # Special case for gigahorse which is really Chia
     return blockchain
 
 def legacy_blockchain(blockchain):

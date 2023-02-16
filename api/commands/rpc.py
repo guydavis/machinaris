@@ -50,7 +50,7 @@ elif blockchain == "cactus":
     from cactus.util.default_root import DEFAULT_ROOT_PATH
     from cactus.util.ints import uint16
     from cactus.util.config import load_config as load_fork_config
-elif blockchain == "chia": 
+elif blockchain in ["chia", 'gigahorse']: 
     from chia.rpc.full_node_rpc_client import FullNodeRpcClient
     from chia.rpc.farmer_rpc_client import FarmerRpcClient, PlotPathRequestData
     from chia.rpc.wallet_rpc_client import WalletRpcClient

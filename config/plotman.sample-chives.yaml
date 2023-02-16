@@ -102,12 +102,10 @@ plotting:
         # See 'Settings | Pools' page, for 'Pool contract address' value, UNCOMMENT IF PORTABLE PLOTTING!!!
         #pool_contract_address: REPLACE_WITH_THE_REAL_VALUE
 
-        # If you enable 'chia', plot in *parallel* with higher tmpdir_max_jobs and global_max_jobs
-        # If you enable 'madmax', plot in *sequence* with very low tmpdir_max_jobs and global_max_jobs
         type: madmax
 
         madmax:
-                # madMAx plotter: https://github.com/madMAx43v3r/chia-plotter
+                # Classic Madmax plotter: https://github.com/madMAx43v3r/chia-plotter
                 k: 31                 # Default is 32 for Chia, but use 29,30,31 for Chives
                 n_threads: 4          # Default is 4, SLOWLY crank up if you have many cores
                 n_buckets: 256        # Default is 256

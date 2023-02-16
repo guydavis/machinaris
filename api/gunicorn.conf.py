@@ -22,7 +22,7 @@ def on_starting(server):
     from common.config import globals
     from common.models import pools, plottings
 
-    from api.commands import websvcs
+    from api.commands import websvcs, plotman_cli
 
     scheduler = BackgroundScheduler(timezone=str(tzlocal.get_localzone()))
 
@@ -45,7 +45,7 @@ def on_starting(server):
         scheduler.add_job(func=status_drives.update, name="status_drives", trigger='cron', minute="*/15", jitter=7.5*60) # Every 15 minutes
         
     # MMX needs to report plots from harvesters directly as they are not listed via the fullnode like Chia does
-    if not utils.is_fullnode() and globals.harvesting_enabled() and 'mmx' in globals.enabled_blockchains():
+    if not utils.is_fullnode() and globals.harvesting_enabled() and globals.enabled_blockchains() in ['mmx']:
         scheduler.add_job(func=status_plots.update, name="status_plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
     
     # Status for both farmers and harvesters (includes fullnodes)
@@ -62,6 +62,7 @@ def on_starting(server):
     if globals.plotting_enabled():
         scheduler.add_job(func=status_plotting.update, name="status_plottings", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_archiving.update, name="status_archiving", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
+        plotman_cli.schedule_plotting(scheduler)
           
     # Status for fullnodes, all different forks
     if utils.is_fullnode():
@@ -76,7 +77,7 @@ def on_starting(server):
         scheduler.add_job(func=restart_stuck_farmer.execute, name="status_blockchain_sync", trigger='interval', minutes=5, jitter=JOB_JITTER) 
         scheduler.add_job(func=periodically_sync_wallet.execute, name="status_wallet_sync", trigger='interval', minutes=15, jitter=JOB_JITTER) 
         scheduler.add_job(func=nft_recover.execute, name="status_nft_recover", trigger='interval', hours=1, jitter=JOB_JITTER) # Once an hour
-        if globals.enabled_blockchains()[0] in plottings.PLOTTABLE_BLOCKCHAINS: # Only get plot listing from these three blockchains
+        if globals.enabled_blockchains()[0] in plottings.PLOTTABLE_BLOCKCHAINS: # Only get plot listing from these blockchains
             scheduler.add_job(func=status_plots.update, name="status_plots", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         if globals.enabled_blockchains()[0] in pools.POOLABLE_BLOCKCHAINS: # Only get pool submissions from poolable blockchains
             scheduler.add_job(func=status_pools.update, name="status_pools", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)

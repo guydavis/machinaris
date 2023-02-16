@@ -37,12 +37,13 @@ MAX_LOG_LINES = 2000
 WALLET_SETTINGS_FILE = '/root/.chia/machinaris/config/wallet_settings.json'
 
 # Blockchains which dropped compatibility with `show -c` commands around v1.6
-BLOCKCHAINS_USING_PEER_CMD = ['btcgreen', 'cactus', 'chia', 'chinilla', 'flax', 'littlelambocoin', 'maize', 'one', 'pipscoin', 'shibgreen', 'tad']
+BLOCKCHAINS_USING_PEER_CMD = ['btcgreen', 'cactus', 'chia', 'chinilla', 'flax', 'gigahorse', 'littlelambocoin', 'maize', 'one', 'pipscoin', 'shibgreen', 'tad']
 
 def load_farm_summary(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
+    working_dir = globals.get_blockchain_working_dir(blockchain)
     if globals.farming_enabled():
-        proc = Popen("{0} farm summary".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+        proc = Popen("{0} farm summary".format(chia_binary), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=30)
             if errs:
@@ -110,7 +111,8 @@ def load_wallet_show(blockchain):
 
 def load_blockchain_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
-    proc = Popen("{0} show --state".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+    working_dir = globals.get_blockchain_working_dir(blockchain)
+    proc = Popen("{0} show --state".format(chia_binary), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=30)
         if errs:
@@ -123,10 +125,11 @@ def load_blockchain_show(blockchain):
 
 def load_connections_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
+    working_dir = globals.get_blockchain_working_dir(blockchain)
     if blockchain in BLOCKCHAINS_USING_PEER_CMD:  # These now support only the 'peer' command
-        proc = Popen("{0} peer -c full_node".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+        proc = Popen("{0} peer -c full_node".format(chia_binary), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
     else:
-        proc = Popen("{0} show --connections".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+        proc = Popen("{0} show --connections".format(chia_binary), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=30)
         if errs:
@@ -139,11 +142,12 @@ def load_connections_show(blockchain):
 
 def load_keys_show(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
+    working_dir = globals.get_blockchain_working_dir(blockchain)
     # If a legacy blockchain that hasn't kept pace with Chia, there is only non-observer key
     if globals.legacy_blockchain(blockchain):
-        proc = Popen("{0} keys show".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+        proc = Popen("{0} keys show".format(chia_binary), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
     else: # Get both observer and non-observer keys for newer blockchains
-        proc = Popen("{0} keys show && {0} keys show -d | grep 'non-observer'".format(chia_binary), stdout=PIPE, stderr=PIPE, shell=True)
+        proc = Popen("{0} keys show && {0} keys show -d | grep 'non-observer'".format(chia_binary), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=30)
         if errs:
@@ -156,12 +160,13 @@ def load_keys_show(blockchain):
 
 def restart_farmer(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
+    working_dir = globals.get_blockchain_working_dir(blockchain)
     if os.path.exists(WALLET_SETTINGS_FILE):
         cmd = "{0} stop -d farmer && {0} start farmer-no-wallet".format(chia_binary)
     else:
-        cmd = "{0} start farmer && {0} start farmer -r".format(chia_binary)
+        cmd = "{0} stop -d farmer && {0} start farmer -r".format(chia_binary)
     app.logger.info("Executing farmer restart: {0}".format(cmd))
-    proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen(cmd, cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
         if errs:
@@ -175,10 +180,14 @@ def restart_farmer(blockchain):
     return True
 
 def start_wallet(blockchain):
+    if blockchain == 'gigahorse':
+        app.logger.info("Gigahorse doesn't run it's own wallet.  Machinaris uses the wallet of the main Chia container instead.")
+        return
     chia_binary = globals.get_blockchain_binary(blockchain)
+    working_dir = globals.get_blockchain_working_dir(blockchain)
     cmd = "{0} start wallet -r".format(chia_binary)
     app.logger.info("Executing wallet start: {0}".format(cmd))
-    proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen(cmd, cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
         if errs:
@@ -192,13 +201,17 @@ def start_wallet(blockchain):
     return True
 
 def pause_wallet(blockchain):
+    if blockchain == 'gigahorse':
+        app.logger.info("Gigahorse doesn't run it's own wallet.  Machinaris uses the wallet of the main Chia container instead.")
+        return
     chia_binary = globals.get_blockchain_binary(blockchain)
+    working_dir = globals.get_blockchain_working_dir(blockchain)
     if globals.legacy_blockchain(blockchain):  # Old chains will stop fullnode(!) if ask to stop just the wallet...
         cmd = "{0} stop -d farmer && {0} start farmer-no-wallet".format(chia_binary)
     else:  # Updated blockchains can simply stop the wallet
         cmd = "{0} stop wallet".format(chia_binary)
     app.logger.info("Executing wallet pause: {0}".format(cmd))
-    proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
+    proc = Popen(cmd, cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
     try:
         outs, errs = proc.communicate(timeout=90)
         if errs:
@@ -213,11 +226,12 @@ def pause_wallet(blockchain):
 
 def remove_connection(node_id, ip, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
+    working_dir = globals.get_blockchain_working_dir(blockchain)
     try:
         if blockchain in BLOCKCHAINS_USING_PEER_CMD:  # These now support only the 'peer' command
-            proc = Popen("{0} peer --remove-connection {1} full_node".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
+            proc = Popen("{0} peer --remove-connection {1} full_node".format(chia_binary, node_id), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
         else:
-            proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
+            proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
         try:
             outs, errs = proc.communicate(timeout=30)
             if errs:
@@ -242,16 +256,16 @@ def is_plots_check_running():
     return None
 
 def plot_check(blockchain, plot_path):
-    if blockchain == 'mmx':
-        app.logger.debug("MMX doesn't offer a plot check function.")
-        return None
     if not os.path.exists(plot_path):
         app.logger.error("No such plot file to check at: {0}".format(plot_path))
         return None
-    chia_binary = globals.get_blockchain_binary(blockchain)
     app.logger.info("Starting plot check on: {0}".format(plot_path))
-    proc = Popen("{0} plots check -g {1}".format(chia_binary, plot_path),
-        universal_newlines=True, stdout=PIPE, stderr=STDOUT, shell=True)
+    if blockchain in ['gigahorse', 'mmx']:  # Use Madmax's custom plot check binary
+        proc = Popen("/usr/bin/ProofOfSpace check -r 8 -f {0}".format(plot_path), universal_newlines=True, stdout=PIPE, stderr=STDOUT, shell=True)
+    else:  # All Chia forks and clones
+        chia_binary = globals.get_blockchain_binary(blockchain)
+        working_dir = globals.get_blockchain_working_dir(blockchain)
+        proc = Popen("{0} plots check -g {1}".format(chia_binary, plot_path), cwd=working_dir, universal_newlines=True, stdout=PIPE, stderr=STDOUT, shell=True)
     try:
         outs, errs = proc.communicate(timeout=180)
     except TimeoutExpired:
@@ -292,6 +306,7 @@ def dispatch_action(job):
 
 def add_connections(connections, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
+    working_dir = globals.get_blockchain_working_dir(blockchain)
     for connection in connections:
         try:
             hostname,port = connection.split(':')
@@ -301,9 +316,9 @@ def add_connections(connections, blockchain):
                 app.logger.debug('{} is a valid hostname'.format(hostname))
             app.logger.info("Adding {0} connection to peer: {1}".format(blockchain, connection))
             if blockchain in BLOCKCHAINS_USING_PEER_CMD:  # These now support only the 'peer' command
-                proc = Popen("{0} peer --add-connection {1} full_node".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
+                proc = Popen("{0} peer --add-connection {1} full_node".format(chia_binary, connection), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
             else:
-                proc = Popen("{0} show --add-connection {1}".format(chia_binary, connection), stdout=PIPE, stderr=PIPE, shell=True)
+                proc = Popen("{0} show --add-connection {1}".format(chia_binary, connection), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
             try:
                 outs, errs = proc.communicate(timeout=60)
                 if errs:
@@ -320,10 +335,14 @@ def add_connections(connections, blockchain):
 
 def remove_connection(node_ids, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
+    working_dir = globals.get_blockchain_working_dir(blockchain)
     app.logger.debug("About to remove connection for nodeid: {0}".format(node_ids))
     for node_id in node_ids:
         try:
-            proc = Popen("{0} show --remove-connection {1}".format(chia_binary, node_id), stdout=PIPE, stderr=PIPE, shell=True)
+            if blockchain in BLOCKCHAINS_USING_PEER_CMD:  # These now support only the 'peer' command
+                proc = Popen("{0} peer --add-connection {1} full_node".format(chia_binary, node_id), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
+            else:
+                proc = Popen("{0} show --add-connection {1}".format(chia_binary, node_id), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
             try:
                 outs, errs = proc.communicate(timeout=5)
                 if errs:

@@ -86,8 +86,6 @@ class WorkerSummary:
                 other_versions += blockchain.capitalize() + ": " + config['blockchain_version'] + "<br/>"
         if 'chiadog_version' in config and config['chiadog_version']:
             other_versions += "Chiadog: " + config['chiadog_version'] + "<br/>"
-        if 'farmr_version' in config and config['farmr_version']:
-            other_versions += "Farmr: " + config['farmr_version'] + "<br/>"
         if 'madmax_version' in config and config['madmax_version']:
             other_versions += "Madmax: " + config['madmax_version'] + "<br/>"
         if 'plotman_version' in config and config['plotman_version']:
@@ -97,8 +95,6 @@ class WorkerSummary:
             worker.time_on_worker = config['now']
         else:
             worker.time_on_worker = '?'
-        if 'farmr_device_id' in config and config['farmr_device_id']:
-            worker.farmr_device_id = config['farmr_device_id']
         if not worker.port:  # Old records
             worker.port = 8927
 
