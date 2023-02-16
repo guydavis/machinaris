@@ -5,7 +5,7 @@ from sqlalchemy.sql import func
 
 from common.extensions.database import db
 
-POOLABLE_BLOCKCHAINS = [ 'chia', 'chives' ]
+POOLABLE_BLOCKCHAINS = [ 'chia', 'chives', 'gigahorse' ]
 
 class Pool(db.Model):
     __bind_key__ = 'pools'

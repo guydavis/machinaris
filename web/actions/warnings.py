@@ -84,7 +84,7 @@ def check_warnings(args):
 
 def get_plot_attrs(filename):
     dir,file = os.path.split(filename)
-    match = re.match("plot(?:-mmx)?-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", file)
+    match = re.match("plot(?:-mmx)?-k(\d+)(?:-c\d)?-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", file)
     if match:
         short_plot_id = match.group(7)[:16]
         created_at = "{0}-{1}-{2} {3}:{4}".format( match.group(2),match.group(3),match.group(4),match.group(5),match.group(6))
@@ -135,3 +135,8 @@ def load_plot_warnings():
     result['invalids'] = sorted(invalids, key = lambda x: (x['plot_id'], x['worker'], x['path']))
     result['missingkeys'] = sorted(missingkeys, key = lambda x: (x['plot_id'], x['worker'], x['path']))
     return result
+
+def clear_plot_warnings():
+    db.session.query(w.Warning).delete()
+    db.session.commit()
+    flash(_('Plot warnings have been cleared.  If they re-appear shortly, then please recheck the underlying cause has been addressed.'), 'success')

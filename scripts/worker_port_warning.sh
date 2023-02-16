@@ -2,6 +2,9 @@
 if [[ "${blockchains}"  == "apple" && "${worker_api_port}" != '8947' ]]; then
   echo "Apple worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8947?"
 fi
+if [[ "${blockchains}"  == "ballcoin" && "${worker_api_port}" != '8597' ]]; then
+  echo "Ballcoin worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8957?"
+fi
 if [[ "${blockchains}"  == "bpx" && "${worker_api_port}" != '8945' ]]; then
   echo "BPX worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8945?"
 fi
@@ -20,6 +23,9 @@ fi
 if [[ "${blockchains}"  == "chives" && "${worker_api_port}" != '8931' ]]; then
   echo "Chives worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8931?"
 fi
+if [[ "${blockchains}"  == "coffee" && "${worker_api_port}" != '8954' ]]; then
+  echo "Coffee worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8954?"
+fi
 if [[ "${blockchains}"  == "cryptodoge" && "${worker_api_port}" != '8937' ]]; then
   echo "Cryptodoge worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8937?"
 fi
@@ -31,6 +37,12 @@ if [[ "${blockchains}"  == "flax" && "${worker_api_port}" != '8928' ]]; then
 fi
 if [[ "${blockchains}"  == "flora" && "${worker_api_port}" != '8932' ]]; then
   echo "Flora worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8932?"
+fi
+if [[ "${blockchains}"  == "greenbtc" && "${worker_api_port}" != '8955' ]]; then
+  echo "GreenBTC worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8955?"
+fi
+if [[ "${blockchains}"  == "gigahorse" && "${worker_api_port}" != '8959' ]]; then
+  echo "Gigahorse worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8959?"
 fi
 if [[ "${blockchains}"  == "gold" && "${worker_api_port}" != '8949' ]]; then
   echo "Gold worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8949?"
@@ -50,11 +62,20 @@ fi
 if [[ "${blockchains}"  == "mmx" && "${worker_api_port}" != '8940' ]]; then
   echo "MMX worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8940?"
 fi
+if [[ "${blockchains}"  == "moon" && "${worker_api_port}" != '8953' ]]; then
+  echo "Moon worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8953?"
+fi
 if [[ "${blockchains}"  == "nchain" && "${worker_api_port}" != '8929' ]]; then
   echo "N-Chain worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8936?"
 fi 
+if [[ "${blockchains}"  == "one" && "${worker_api_port}" != '8956' ]]; then
+  echo "One blockchain worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8956?"
+fi
 if [[ "${blockchains}"  == "petroleum" && "${worker_api_port}" != '8943' ]]; then
   echo "Petroleum worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8943?"
+fi
+if [[ "${blockchains}"  == "pipscoin" && "${worker_api_port}" != '8958' ]]; then
+  echo "Pipscoin worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8958?"
 fi
 if [[ "${blockchains}"  == "profit" && "${worker_api_port}" != '8944' ]]; then
   echo "Profit worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8944?"

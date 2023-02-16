@@ -43,6 +43,9 @@ class ConfigByType(MethodView):
         elif type == "plotting_dirs":
             config = plotman_cli.load_dirs(blockchain)
             mimetype = "application/json"
+        elif type == "plotting_schedule":
+            config = plotman_cli.load_schedule()
+            mimetype = "application/json"
         elif type == "tools":
             config = forktools_cli.load_config(blockchain)
         else:
@@ -70,6 +73,8 @@ class ConfigByType(MethodView):
                 chiadog_cli.save_config(self.clean_config(request.data), blockchain)
             elif type == "plotting":
                 plotman_cli.save_config(self.clean_config(request.data), blockchain)
+            elif type == "plotting_schedule":
+                plotman_cli.save_schedule(json.loads(request.data))
             elif type == "tools":
                 forktools_cli.save_config(self.clean_config(request.data), blockchain)
             elif type == "wallet":

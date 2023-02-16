@@ -25,7 +25,7 @@ def update():
         blockchain_rpc = rpc.RPC()
         try:
             for blockchain in globals.enabled_blockchains():
-                if not blockchain in p.POOLABLE_BLOCKCHAINS:
+                if not blockchain in ['chia', 'chives']:
                     continue
                 payload = []
                 hostname = utils.get_hostname()

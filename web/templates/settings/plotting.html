@@ -10,6 +10,43 @@
     </div>
 </div>
 
+<div class="modal fade" id="scheduleModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog bg-dark rounded-3">
+        <div class="modal-content bg-dark">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title" id="scheduleModalLabel">{{_('Scheduled Plotting')}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body bg-dark">
+                {{_('Optionally, you may schedule start and stop of the plotting manager to save on electricity (off-peak), avoid back-ups, minimize fan noise, etc.')}}
+            </div>
+            <form method="POST" id="schedule-form">
+                <div class="row pl-3 pr-3">
+                    <div class="col text-end"><b>Start</b></div>
+                    <div class="col" style="padding-right: 0px">&nbsp;</div>
+                    <div class="col text-end"><b>Stop</b></div>
+                    <div class="col" style="padding-right: 0px">&nbsp;</div>
+                    <div class="col">&nbsp;</div>
+                </div>
+                <div class="mb-3 pl-3 pr-3" id="schedules"></div>
+                <div class="row">
+                    <div class="col"></div>
+                    <div class="col-auto" style="padding-right: 40px">
+                        <a href="#" onclick="scheduleAdd();" title="{{_('Add New Schedule')}}"><i class="fs-4 bi-plus text-white text-right"></i></a>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-body bg-dark">
+                {{_('NOTE: The scheduled stop time will not terminate running jobs.  New plotting jobs will no longer be started however.')}}
+            </div>
+            <div class="modal-footer bg-dark">
+                <button type="button" class="btn btn-secondary" style="padding-left: 5px;" data-bs-dismiss="modal" id="btnCancelSchedule">{{_('Cancel')}}</button>
+                <button type="button" class="btn btn-outline-success" id="btnSaveSchedule">{{_('Save')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <header class="pb-3 mb-4 border-bottom">
     <span class="fs-4">{{_('Plotting')}} - plotman.yaml </span>
 </header>
@@ -49,6 +86,11 @@
                     <select id="blockchain" name="blockchain" class="form-select">
                     </select>
                 </div>
+                <div class="col-sm-3">
+                    <a href="#" title="{{_('Schedule')}}" data-bs-toggle="modal" data-bs-target="#scheduleModal" target="_blank">
+                        <i class="fs-4 bi-calendar2-week" style="padding-left: 50px"></i>
+                    </a>
+                </div>
             </div>
             <div class="alert alert-info" role="alert" id="dirs_listing" style="display: none; padding-bottom: 0px">
                 <div class="row align-items-start">
@@ -61,10 +103,8 @@
                 <textarea style="background: #D3D3D3;" class="form-control fs-6" id="config" name="config" rows="18"
                     style="height:100%;"></textarea>
             </div>
-            <button type="submit" class="btn btn-outline-success"
-            id="btnSave">{{_('Save')}}</button>
-            <button type="button" class="btn btn-outline-success"
-            id="btnDownload">{{_('Download')}}</button>
+            <button type="submit" class="btn btn-outline-success" id="btnSave">{{_('Save')}}</button>
+            <button type="button" class="btn btn-outline-success" id="btnDownload">{{_('Download')}}</button>
         </fieldset>
     </form>
 
@@ -137,20 +177,58 @@
                         console.log("jqXHR, textStatus, errorThrown");
                     });
             }
+            function load_schedule(worker, blockchain) {
+                jqxhr = $.getJSON({
+                    url: "{{ url_for('views_settings_config') }}?type=plotting_schedule&worker=" + worker + "&blockchain=" + blockchain,
+                })
+                    .done(function (data) {
+                        $('#schedules').empty()
+                        for (schedule of data) {
+                            var new_schedule_row = `<div class="row m-3 schedule" id="schedule_rowROWNUM">
+                                            <div class="col-auto" style="padding-right: 0px">
+                                                <input type="text" class="form-control" placeholder="0 22 * * *" style="width: 150px"
+                                                    name="schedule_start" id="schedule_startROWNUM" value="SCHED_START">
+                                            </div>
+                                            <div class="col-sm" style="padding-right: 0px">
+                                                <a href="#" onclick="editCron('start', ROWNUM)" title="{{_('Edit Cron')}}"><i class="fs-4 bi-box-arrow-up-right"></i></a>
+                                            </div>
+                                            <div class="col-auto" style="padding-right: 0px">
+                                                <input type="text" class="form-control" placeholder="0 5 * * *" style="width: 150px"
+                                                    name="schedule_stop" id="schedule_stopROWNUM" value="SCHED_STOP">
+                                            </div>
+                                            <div class="col-sm" style="padding-right: 0px">
+                                                <a href="#" onclick="editCron('stop', ROWNUM)"title="{{_('Edit Cron')}}"><i class="fs-4 bi-box-arrow-up-right"></i></a>
+                                            </div>
+                                            <div class="col-auto">
+                                                <a href="#" onclick="scheduleRemove(ROWNUM);"title="{{_('Delete')}}"><i class="fs-4 bi-trash"></i></a>
+                                            </div>
+                                        </div>`;
+                            new_schedule_row = new_schedule_row.replaceAll('ROWNUM', $('#schedules').children().length)
+                            new_schedule_row = new_schedule_row.replaceAll('SCHED_START', schedule['start'])
+                            new_schedule_row = new_schedule_row.replaceAll('SCHED_STOP', schedule['stop'])
+                            $('#schedules').append(new_schedule_row);
+                        }
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        console.log("jqXHR, textStatus, errorThrown");
+                    });
+            }
             update_blockchain_options("{{selected_worker}}");
             //Call the function when #input is clicked
             $(document).on("change", "#worker", function (e) {
                 load_config($("#worker").val(), $("#blockchain").val())
                 update_blockchain_options($("#worker").val());
                 load_dirs($("#worker").val(), $("#blockchain").val())
+                load_schedule($("#worker").val(), $("#blockchain").val())
             });
             $(document).on("change", "#blockchain", function (e) {
                 load_config($("#worker").val(), $("#blockchain").val())
-                load_dir($("#worker").val(), $("#blockchain").val())
+                load_dirs($("#worker").val(), $("#blockchain").val())
+                load_schedule($("#worker").val(), $("#blockchain").val())
             });
             //Call the function when the page loads
             load_config("{{selected_worker}}", "{{selected_blockchain}}");
             load_dirs("{{selected_worker}}", "{{selected_blockchain}}");
+            load_schedule("{{selected_worker}}", "{{selected_blockchain}}");
         });
 
         function update_blockchain_options(hostname) {
@@ -186,5 +264,67 @@
             blockchain = $("#blockchain").val()
             window.location.href = '/settings/config/' + worker + '_' + blockchain + 'dog_config.yaml?type=alerts&worker=' + worker + "&blockchain=" + blockchain
         });
+        $("#btnSaveSchedule").click(function () {
+            $("#btnCancelSchedule").prop("disabled", true);
+            $(this).prop("disabled", true);
+            $(this).html(
+                `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> {{_('Saving...')}}`
+            );
+            var schedules = new Array();
+            for (var i = 0;  i < $('#schedules').children().length; i++) {
+                if (($("#schedule_start"+i).val().trim() != '') && ($("#schedule_stop"+i).val().trim() != '')) { 
+                    schedules.push({'start': $("#schedule_start"+i).val(), 'stop': $("#schedule_stop"+i).val()})
+                }
+            }
+            console.log(schedules);
+            var data = { 
+                'type': 'schedule',
+                'worker' : $("#worker").val(),
+                'blockchain': $("#blockchain").val(),
+                'schedules': JSON.stringify(schedules)
+            }
+            jqxhr = $.post("{{ url_for('settings_plotting') }}", data, 
+                function(response) {
+                    console.log(response);
+                }, 'json');
+            var myModalEl = document.getElementById('scheduleModal');
+            var modal = bootstrap.Modal.getInstance(myModalEl)
+            modal.hide();
+            $(this).prop("disabled", false);
+            $(this).html(
+                `{{_('Save')}}`
+            );
+        });
+        function scheduleAdd() {
+            var cur_schedules = $('#schedules').children().length
+            var new_schedule_row = `<div class="row m-3 schedule" id="schedule_rowROWNUM">
+                            <div class="col-auto" style="padding-right: 0px">
+                                <input type="text" class="form-control" placeholder="0 22 * * *" style="width: 150px"
+                                    name="schedule_start" id="schedule_startROWNUM">
+                            </div>
+                            <div class="col-sm" style="padding-right: 0px">
+                                <a href="#" onclick="editCron('start', ROWNUM)" title="{{_('Edit Cron')}}"><i class="fs-4 bi-box-arrow-up-right"></i></a>
+                            </div>
+                            <div class="col-auto" style="padding-right: 0px">
+                                <input type="text" class="form-control" placeholder="0 5 * * *" style="width: 150px"
+                                    name="schedule_stop" id="schedule_stopROWNUM">
+                            </div>
+                            <div class="col-sm" style="padding-right: 0px">
+                                <a href="#" onclick="editCron('stop', ROWNUM)"title="{{_('Edit Cron')}}"><i class="fs-4 bi-box-arrow-up-right"></i></a>
+                            </div>
+                            <div class="col-auto">
+                                <a href="#" onclick="scheduleRemove(ROWNUM);"title="{{_('Delete')}}"><i class="fs-4 bi-trash"></i></a>
+                            </div>
+                        </div>`;
+            new_schedule_row = new_schedule_row.replaceAll('ROWNUM', cur_schedules)
+            $('#schedules').append(new_schedule_row);
+        }
+        function scheduleRemove(row_num) {
+            $('#schedule_row' + row_num).remove()
+        }
+        function editCron(type, row_num) {
+            var url = "https://crontab.guru/#" + document.getElementById('schedule_' + type + row_num).value
+            window.open(url, '_blank');
+        }
     </script>
     {% endblock %}

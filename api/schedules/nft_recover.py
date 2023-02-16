@@ -19,5 +19,7 @@ def execute():
     with app.app_context():
         from api import db
         gc = globals.load()
+        if globals.enabled_blockchains()[0] == 'mmx':
+            return  # No such thing for MMX
         app.logger.info("****************** Starting hourly NFT 7/8 qualified reward coins check... *********************")
         rewards.update_qualified_coins_cache()

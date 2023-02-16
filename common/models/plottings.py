@@ -5,7 +5,7 @@ from sqlalchemy.sql import func
 
 from common.extensions.database import db
 
-PLOTTABLE_BLOCKCHAINS = [ 'chia', 'chives', 'mmx' ]
+PLOTTABLE_BLOCKCHAINS = [ 'chia', 'chives', 'gigahorse', 'mmx' ]
 
 class Plotting(db.Model):
     __bind_key__ = 'plottings'
@@ -16,6 +16,7 @@ class Plotting(db.Model):
     plotter = sa.Column(sa.String(length=64), nullable=False)
     blockchain = sa.Column(sa.String(length=64), nullable=False)
     k = sa.Column(sa.Integer, nullable=False)
+    lvl = sa.Column(sa.Integer, nullable=True)
     tmp = sa.Column(sa.String(length=255), nullable=False)
     dst = sa.Column(sa.String(length=255), nullable=False)
     wall = sa.Column(sa.String(length=8), nullable=False)

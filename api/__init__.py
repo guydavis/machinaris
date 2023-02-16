@@ -30,14 +30,14 @@ from api.default_settings import DefaultConfig
 app.config.from_object(DefaultConfig)
 # Override config with optional settings file
 app.config.from_envvar('API_SETTINGS_FILE', silent=True)
-babel = Babel(app)
 
-@babel.localeselector
 def get_locale():
     #for d in babel.translation_directories:
     #    app.logger.info(d)
     #app.logger.info("API=> Returning locale: {0}".format(request.accept_languages.best_match(app.config['LANGUAGES'])))
     return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+babel = Babel(app, locale_selector=get_locale,)
 
 from common.extensions.database import db
 migrate = Migrate(app, db)

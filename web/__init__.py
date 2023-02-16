@@ -18,9 +18,7 @@ app.secret_key = b'$}#P)eu0A.O,s0Mz'
 app.config.from_object(DefaultConfig)
 # Override config with optional settings file
 app.config.from_envvar('WEB_SETTINGS_FILE', silent=True)
-babel = Babel(app)
 
-@babel.localeselector
 def get_locale():
     try:
         accept = request.headers['Accept-Language']
@@ -35,6 +33,8 @@ def get_locale():
     except:
         app.logger.debug("INIT: Request had no Accept-Language, returning default locale of en.")
     return request.accept_languages.best_match(app.config['LANGUAGES'])
+
+babel = Babel(app, locale_selector=get_locale,)
 
 @event.listens_for(Engine, "connect")
 def set_sqlite_pragma(dbapi_connection, connection_record):
@@ -84,13 +84,7 @@ def timesecondstrimmer(value):
 app.jinja_env.filters['timesecondstrimmer'] = timesecondstrimmer
 
 def plotnameshortener(value):
-    #app.logger.info("Shorten: {0}".format(value))
-    match = re.match("plot(?:-mmx)?-k(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", value)
-    if match:
-        return "plot-k{0}-{1}-{2}-{3}-{4}-{5}-{6}...".format( match.group(1), 
-            match.group(2), match.group(3), match.group(4), match.group(5), match.group(6),
-            match.group(7)[:16])
-    return value
+    return value[:30]
 
 app.jinja_env.filters['plotnameshortener'] = plotnameshortener
 

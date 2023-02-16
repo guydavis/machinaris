@@ -29,6 +29,7 @@ def update():
                     "blockchain": blockchain,
                     "plotter": plot['plotter'],
                     "k": plot['k'],
+                    "lvl": plot['lvl'],
                     "tmp": plot['tmp'],
                     "dst": plot['dst'],
                     "wall": plot['wall'],

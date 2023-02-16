@@ -30,9 +30,13 @@ directories:
         tmp:
                 - /plotting
 
-        # Optional: tmp2 directory.  If specified, will be passed to
-        # the chia and madmax plotters as the '-2' param.
+        # Optional: tmp2 directory.  If specified, will be passed to the  madmax plotter as the '-2' param. 
+        # If gpu-plotting, this will enable 128 GB partial RAM mode onto this SSD path
         # tmp2: /plotting2
+
+        # Optional: tmp3 directory.  If specified, will be passed to the  madmax plotter as the '-3' param. 
+        # If gpu-plotting, this will enable 64 GB partial RAM mode onto this SSD path
+        # tmp3: /plotting3
 
         # One or more directories; the scheduler will use all of them.
         # These again are presumed to be on independent physical devices,
@@ -103,10 +107,12 @@ plotting:
         type: madmax
 
         madmax:
-                # madMAx plotter: https://github.com/madMAx43v3r/chia-plotter
-                k: 30                 # The minimum K size for mainnet will probably be k30
+                # Madmax plotter: https://github.com/guydavis/machinaris/wiki/MadMax
+                k: 32                 # The minimum K size for mainnet will probably be k30
+                mode: diskplot        # Either enable diskplot or gpuplot. 
                 n_threads: 4          # Default is 4, SLOWLY crank up if you have many cores
                 n_buckets: 256        # Default is 256
                 n_buckets3: 256       # Default is 256
                 n_rmulti2: 1          # Default is 1
-                network_port: 11337    # Use 11337
+                network_port: 11337   # Use 11337
+                compression: 1        # Compression level (default = 1, min = 1, max = 9)

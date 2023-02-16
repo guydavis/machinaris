@@ -9,13 +9,16 @@ ARG CHIADOG_BRANCH=main
 ARG FDCLI_BRANCH=master
 ARG FORKTOOLS_BRANCH=main
 ARG BLADEBIT_BRANCH=master
+ARG MADMAX_BRANCH=master
 
 ARG APPLE_BRANCH
+ARG BALLCOIN_BRANCH
 ARG BPX_BRANCH
 ARG BTCGREEN_BRANCH
 ARG CACTUS_BRANCH
 ARG CHIA_BRANCH
 ARG CHINILLA_BRANCH
+ARG CHIVES_REPO
 ARG CHIVES_BRANCH
 ARG COFFEE_BRANCH
 ARG CRYPTODOGE_BRANCH
@@ -23,6 +26,7 @@ ARG ECOSTAKE_BRANCH
 ARG FLAX_BRANCH
 ARG FLORA_BRANCH
 ARG GREENBTC_BRANCH
+ARG GIGAHORSE_BRANCH
 ARG GOLD_BRANCH
 ARG HDDCOIN_BRANCH
 ARG LITTLELAMBOCOIN_BRANCH
@@ -33,6 +37,7 @@ ARG MOON_BRANCH
 ARG NCHAIN_BRANCH
 ARG ONE_BRANCH
 ARG PETROLEUM_BRANCH
+ARG PIPSCOIN_BRANCH
 ARG PROFIT_BRANCH
 ARG SHIBGREEN_BRANCH
 ARG SILICOIN_BRANCH
@@ -50,11 +55,12 @@ WORKDIR /chia-blockchain
 # Install specific blockchain fork (based on branch enabled) + tools that depend on the fork
 RUN \
 	/usr/bin/bash /machinaris/scripts/forks/apple_install.sh ${APPLE_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/ballcoin_install.sh ${BALLCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/bpx_install.sh ${BPX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/btcgreen_install.sh ${BTCGREEN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/cactus_install.sh ${CACTUS_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chia_install.sh ${CHIA_BRANCH} \
-	&& /usr/bin/bash /machinaris/scripts/forks/chives_install.sh ${CHIVES_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/chives_install.sh ${CHIVES_REPO} ${CHIVES_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/chinilla_install.sh ${CHINILLA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/coffee_install.sh ${COFFEE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/cryptodoge_install.sh ${CRYPTODOGE_BRANCH} \
@@ -62,6 +68,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/flax_install.sh ${FLAX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/flora_install.sh ${FLORA_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/greenbtc_install.sh ${GREENBTC_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/gigahorse_install.sh ${GIGAHORSE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/gold_install.sh ${GOLD_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/hddcoin_install.sh ${HDDCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/littlelambocoin_install.sh ${LITTLELAMBOCOIN_BRANCH} \
@@ -72,6 +79,7 @@ RUN \
 	&& /usr/bin/bash /machinaris/scripts/forks/nchain_install.sh ${NCHAIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/one_install.sh ${ONE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/petroleum_install.sh ${PETROLEUM_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/pipscoin_install.sh ${PIPSCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/profit_install.sh ${PROFIT_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/shibgreen_install.sh ${SHIBGREEN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/silicoin_install.sh ${SILICOIN_BRANCH} \
@@ -89,11 +97,12 @@ RUN \
 		/var/tmp/*
 
 # Provide a colon-separated list of in-container paths to your mnemonic keys
-ENV keys="/root/.chia/mnemonic.txt"  
+ENV keys="/root/.chia/mnemonic.txt"
 # Provide a colon-separated list of in-container paths to your completed plots
 ENV plots_dir="/plots"
 # One of fullnode, farmer, harvester, plotter, farmer+plotter, harvester+plotter. Default is fullnode
-ENV mode="fullnode" 
+ENV mode="fullnode"
+ENV chives_masternode="false"
 # The single blockchain to run: chia, flax, nchain, hddcoin, chives, etc
 ENV blockchains="chia"
 # If provided then these optional 3 public keys will be set in your plotman.yaml
@@ -121,12 +130,11 @@ ENV FORKTOOLSDIR=/forktools
 ENV FORKTOOLSBLOCKCHAINDIRS=/
 ENV FORKTOOLSHIDDENDIRS=/root
 
-ENV PATH="${PATH}:/chia-blockchain/venv/bin:/forktools:/mmx-node/build"
+ENV PATH="${PATH}:/chia-blockchain/venv/bin:/forktools:/mmx-node/bin"
 ENV TZ=Etc/UTC
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
-ENV FLASK_ENV=production
 ENV XDG_CONFIG_HOME=/root/.chia
 ENV AUTO_PLOT=false
 ENV PLOTMAN_BRANCH=${PLOTMAN_BRANCH}
@@ -134,6 +142,7 @@ ENV CHIADOG_BRANCH=${CHIADOG_BRANCH}
 ENV FDCLI_BRANCH=${FDCLI_BRANCH}
 ENV FORKTOOLS_BRANCH=${FORKTOOLS_BRANCH}
 ENV BLADEBIT_BRANCH=${BLADEBIT_BRANCH}
+ENV MADMAX_BRANCH=${MADMAX_BRANCH}
 ENV MMX_HOME=/root/.mmx/
 
 VOLUME [ "/id_rsa" ]

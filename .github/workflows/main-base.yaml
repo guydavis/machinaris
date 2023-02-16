@@ -30,11 +30,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Build and push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           file: docker/dockerfile-jammy.base
           context: .
           platforms: linux/amd64,linux/arm64
+          provenance: false
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-base-jammy:latest
@@ -67,11 +68,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Build and push
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           file: docker/dockerfile-focal.base
           context: .
           platforms: linux/amd64,linux/arm64
+          provenance: false
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-base-focal:latest

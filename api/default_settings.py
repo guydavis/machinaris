@@ -1,4 +1,5 @@
 import os
+import traceback
 
 class DefaultConfig:
     API_TITLE = "Machinaris API"
@@ -48,7 +49,7 @@ class DefaultConfig:
         'stat_container_mem_gib':   'sqlite:////root/.chia/machinaris/dbs/stat_container_mem_gib.db',
         'stat_host_mem_pct':        'sqlite:////root/.chia/machinaris/dbs/stat_host_mem_pct.db',
     }
-    SQLALCHEMY_ECHO = True if 'FLASK_ENV' in os.environ and os.environ['FLASK_ENV'] == "development" else False
+    SQLALCHEMY_ECHO = True if 'FLASK_DEBUG' in os.environ and os.environ['FLASK_DEBUG'] == "development" else False
     ETAG_DISABLED = True # https://flask-smorest.readthedocs.io/en/latest/etag.html
     CONTROLLER_SCHEME = 'http'
     CONTROLLER_HOST = os.environ['controller_host'] if 'controller_host' in os.environ else 'localhost'
@@ -62,3 +63,10 @@ class DefaultConfig:
 
     BABEL_TRANSLATION_DIRECTORIES = "api/translations"
     LANGUAGES = ['en', 'de_DE', 'fr_FR', 'it_IT', 'nl_NL', 'pt_PT', 'zh']
+
+    # For latest APScheduler library, pass the TZ through
+    try:
+        SCHEDULER_TIMEZONE = os.environ['TZ']
+    except:
+        print("Found no TZ environment variable containing timezone.  Generate a working Machinaris launch at https://www.machinaris.app")
+        traceback.print_exc()

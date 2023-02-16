@@ -93,13 +93,13 @@
                 </tbody>
             </table>
         </div>
-    </form>
     <fieldset>
         <button form="alerts-form" type="submit" name="action" value="remove" class="btn btn-outline-success"
             id="btnRemove">{{_('Remove Selected')}}</button>
         <button form="alerts-form" type="submit" name="action" value="purge" class="btn btn-outline-success"
             id="btnPurge">{{_('Remove All')}}</button>
     </fieldset>
+    </form>
     {% else %}
     <div class="text-center" style="padding-top:50 px; padding-bottom: 50px">
         <h6>{{_('No notifications from Chiadog yet... so check back soon.')}}</h6>

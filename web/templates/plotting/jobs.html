@@ -85,13 +85,15 @@
         </div>
     </div>
 </div>
+
 <div class="position-relative">
     <div class="position-absolute top-0 end-0" style="z-index: 2000; margin-top: -18px; margin-right: -8px;">
-      <a href="https://github.com/guydavis/machinaris/wiki/Plotman#plotting-view" target="_blank">
+        <a href="https://github.com/guydavis/machinaris/wiki/Plotman#plotting-view" target="_blank">
         <i class="fs-4 bi-question-circle"></i>
       </a>
     </div>
-  </div>
+</div>
+
 <style>
     a.active.nav-link {
         background-color: #3d3f42 !important
@@ -116,7 +118,7 @@
             <fieldset>
                 <b style="vertical-align: bottom; font-weight: 500">{{_('Plotting')}}: </b>
                 {% for plotter in plotters %}
-                <div class="btn-group" {% if loop.last %}style="padding-right:25px"{% endif %}>
+                <div class="btn-group" {% if loop.last %}style="padding-right:50px"{% endif %}>
                     <button type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false" id="{{ plotter.hostname }}_btn">
                         {{ plotter.displayname }}: 

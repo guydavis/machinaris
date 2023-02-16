@@ -1,6 +1,6 @@
 #!/bin/env bash
 #
-# Installs bladebit - A fast RAM-only (or disk cached), k32-only, Chia plotter.
+# Installs bladebit - A fast Chia plotter, offering disk, ram, and gpu modes.
 # See https://github.com/Chia-Network/bladebit
 #
 # Can't acutally build on Github servers, must build on each target system 

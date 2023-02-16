@@ -16,6 +16,23 @@
         "discord_url": null,
         "website_url": "https://applecoin.in/"
     },
+    "ballcoin": {
+        "name": "Ballcoin",
+        "symbol": "BALL",
+        "binary":  "/ballcoin-blockchain/venv/bin/ball",
+        "network_path": "/root/.ball/mainnet",
+        "network_name": "mainnet",
+        "network_port": 38888,
+        "farmer_port": 38891,
+        "fullnode_rpc_port": 38885,
+        "worker_port": 8957,
+        "reward": 200,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/ball-network/ballcoin-blockchain",
+        "discord_url": null,
+        "website_url": "https://ballcoin.top/"
+    },
     "bpx": {
         "name": "BPX",
         "symbol": "BPX",
@@ -220,6 +237,23 @@
         "discord_url": null,
         "website_url": "https://greenbtc.top/"
     },
+    "gigahorse": {
+        "name": "Gigahorse",
+        "symbol": "XCH",
+        "binary":  "/chia-gigahorse-farmer/chia.bin",
+        "network_path": "/root/.chia/mainnet",
+        "network_name": "mainnet",
+        "network_port": 28744,
+        "farmer_port": 28745,
+        "fullnode_rpc_port": 28855,
+        "worker_port": 8959,
+        "reward": 2.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/madMAx43v3r/chia-gigahorse",
+        "discord_url": null,
+        "website_url": "https://github.com/madMAx43v3r/chia-gigahorse"
+    },
     "gold": {
         "name": "Gold",
         "symbol": "GL",
@@ -308,7 +342,7 @@
     "mmx": {
         "name": "MMX",
         "symbol": "MMX" ,
-        "binary":  "/mmx-node/build/mmx",
+        "binary":  "/mmx-node/bin/mmx",
         "network_path": "/root/.mmx/testnet9",
         "network_name": "testnet9",
         "network_port": 12339,
@@ -364,7 +398,7 @@
         "farmer_port": 11113,
         "fullnode_rpc_port": 11114,
         "worker_port": 8956,
-        "reward": 2.0,
+        "reward": 10000.0,
         "mojos_per_coin": 1000000000000,
         "blocks_per_day": 4608,
         "git_url": "https://github.com/xone-network/one-blockchain",
@@ -387,6 +421,23 @@
         "git_url": "https://github.com/Petroleum-Network/petroleum-blockchain",
         "discord_url": "https://discord.gg/7bFQxmtjHx",
         "website_url": "https://petroleum.farm/"
+    },
+    "pipscoin": {
+        "name": "Pipscoin",
+        "symbol": "PIPS" ,
+        "binary":  "/pipscoin-blockchain/venv/bin/pipscoin",
+        "network_path": "/root/.pipscoin/mainnet",
+        "network_name": "mainnet",
+        "network_port": 7477,
+        "farmer_port": 16339,
+        "fullnode_rpc_port": 18868,
+        "worker_port": 8958,
+        "reward": 5.0,
+        "mojos_per_coin": 1000000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/Pipscoin-Network/pipscoin-blockchain",
+        "discord_url": "https://discord.gg/T8taazt7Pf",
+        "website_url": "https://www.pipscoin.net/"
     },
     "profit": {
         "name": "Profit",

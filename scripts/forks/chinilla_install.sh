@@ -4,28 +4,28 @@
 #
 
 CHINILLA_BRANCH=$1
-# On 2022-12-19
-HASH=f664e8279f45f5a76a6d67c281c5a1a2740a1931
+# On 2023-01-05
+HASH=de8119eb8e1cc13418e7df30eb7d73aae900c40a
 
 if [ -z ${CHINILLA_BRANCH} ]; then
-	echo 'Skipping Chinilla install as not requested.'
+    echo 'Skipping Chinilla install as not requested.'
 else
-	rm -rf /root/.cache
-	git clone --branch ${CHINILLA_BRANCH} --single-branch https://github.com/Chinilla/chinilla-blockchain.git /chinilla-blockchain
-	cd /chinilla-blockchain 
-	git submodule update --init mozilla-ca 
-	git checkout $HASH
-	chmod +x install.sh
-	# 2022-07-20: Python needs 'packaging==21.3'
-	sed -i 's/packaging==21.0/packaging==21.3/g' setup.py
-	# Log "Added Coins" at info, not debug level.  See: https://github.com/Chia-Network/chia-blockchain/issues/11955
+    rm -rf /root/.cache
+    git clone --branch ${CHINILLA_BRANCH} --single-branch https://github.com/Chinilla/chinilla-blockchain.git /chinilla-blockchain
+    cd /chinilla-blockchain 
+    git submodule update --init mozilla-ca 
+    git checkout $HASH
+    chmod +x install.sh
+    # 2022-07-20: Python needs 'packaging==21.3'
+    sed -i 's/packaging==21.0/packaging==21.3/g' setup.py
+    # Log "Added Coins" at info, not debug level.  See: https://github.com/Chia-Network/chia-blockchain/issues/11955
     sed -e 's/^        self.log.debug($/        self.log.info(/g' chinilla/wallet/wallet_state_manager.py
-	/usr/bin/sh ./install.sh
+    /usr/bin/sh ./install.sh
 
-	if [ ! -d /chia-blockchain/venv ]; then
-		cd /
-		rmdir /chia-blockchain
-		ln -s /chinilla-blockchain /chia-blockchain
-		ln -s /chinilla-blockchain/venv/bin/chinilla /chia-blockchain/venv/bin/chia
-	fi
+    if [ ! -d /chia-blockchain/venv ]; then
+        cd /
+        rmdir /chia-blockchain
+        ln -s /chinilla-blockchain /chia-blockchain
+        ln -s /chinilla-blockchain/venv/bin/chinilla /chia-blockchain/venv/bin/chia
+    fi
 fi

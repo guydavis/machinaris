@@ -34,9 +34,12 @@ class Summaries:
             if not farm:
                 app.logger.error("No farm summary found for {0}".format(blockchain['blockchain']))
                 continue
-            wallet = self.find_wallet(wallets, blockchain['blockchain'])
+            blockhain_for_wallet = blockchain['blockchain']
+            if blockhain_for_wallet == 'gigahorse':
+                blockhain_for_wallet = 'chia' # Same wallet
+            wallet = self.find_wallet(wallets, blockhain_for_wallet)
             if not wallet:
-                app.logger.error("No wallet found for {0}".format(blockchain['blockchain']))
+                app.logger.error("No wallet found for {0}".format(blockhain_for_wallet))
                 continue
             if not blockchain['blockchain'] in stats:
                 app.logger.error("No blockhain stats for {0} in {1}".format(blockchain['blockchain'], stats.keys()))
@@ -432,7 +435,7 @@ class Wallets:
 
     def link_to_wallet_transactions(self, blockchain, details):
         lines = []
-        if globals.legacy_blockchain(blockchain) or blockchain in ['btcgreen', 'cryptodoge', 'flax', 'shibgreen', 'staicoin']: 
+        if globals.legacy_blockchain(blockchain) or blockchain in ['cryptodoge']: 
             for line in details.split('\n'):
                 if 'wallet id' in line.lower():
                     lines.append("<a href='#' class='text-white' title='" + _('View Transactions') + "' onclick='ViewTransactions(\""+ blockchain + "\", \"1\");return false;'>" + line.strip() + "</a>:")
@@ -589,7 +592,7 @@ class Blockchains:
                         row['atb_peak_height'] = atb_statuses[blockchain.blockchain]['peak_height']
                     if 'peak_time' in atb_statuses[blockchain.blockchain]:
                         row['atb_peak_time'] = atb_statuses[blockchain.blockchain]['peak_time']
-                else:
+                elif blockchain.blockchain != 'mmx':
                     app.logger.info("No ATB blockchain status found for: {0}".format(blockchain.blockchain))
             except Exception as ex:
                 app.logger.info("Failed to include ATB blockchain status because {0}".format(str(ex)))
@@ -604,6 +607,8 @@ class Blockchains:
             except Exception as ex:
                 msg = "Unable to read ATB blockchain status cache from {0} because {1}".format(BLOCKCHAIN_STATUSES_CACHE_FILE, str(ex))
                 print(msg)
+        if 'chia' in data:
+            data['gigahorse'] = data['chia'] # Same status for both
         return data
     
     def extract_status(self, blockchain, details, worker_status):
@@ -612,6 +617,8 @@ class Blockchains:
                 return None
             if blockchain == 'mmx':
                 pattern = '^Synced: (.*)$'
+            elif blockchain == 'staicoin': # Staicoin being different for no good reason...
+                pattern = '^Current Status: (.*)$'
             else:
                 pattern = '^Current Blockchain Status: (.*)$'
             for line in details.split('\n'):
@@ -789,7 +796,7 @@ class Connections:
         for line in connection.details.split('\n'):
             try:
                 #app.logger.info(line)
-                m = re.match("\[(.+)\]\s+height\s+=\s+(\!?\d+), (\w+) \(\d+\.\d+\), (\d+\.?\d*) (\w)B/s recv, (\d*\.?\d*) (\w)B/s send,.* since (\d+) min, .* (\d+\.?\d?) sec timeout", line.strip(), re.IGNORECASE)
+                m = re.match("\[(.+)\]\s+height\s+=\s+(\!?\d+), (\w+) \(\d+\.\d+\), (\d+\.?\d*) (\w)B recv, (\d*\.?\d*) (\w)B sent,.* since (\d+) min, .* (\d+\.?\d?) sec timeout", line.strip(), re.IGNORECASE)
                 if m:
                     connection = {
                         'type': m.group(3),
