@@ -55,7 +55,7 @@ if [ -f /root/.chia/mainnet/config/config.yaml ]; then
   sed -i 's/localhost/127.0.0.1/g' /root/.chia/mainnet/config/config.yaml
   # Fix port conflicts with other fullnodes like Chia.
   sed -i 's/ 8444/ 28744/g' /root/.chia/mainnet/config/config.yaml
-  sed -i 's/ 8445/ 28745/g' /root/.chia/mainnet/config/config.yaml
+  sed -i 's/ 8447/ 28745/g' /root/.chia/mainnet/config/config.yaml
   sed -i 's/ 8555/ 28855/g' /root/.chia/mainnet/config/config.yaml
   sed -i '/^ *host: introducer.chia.net/,/^ *[^:]*:/s/port: 28744/port: 8444/' /root/.chia/mainnet/config/config.yaml
 fi
