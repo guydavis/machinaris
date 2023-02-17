@@ -13,7 +13,7 @@ All notable changes to this project will be documented in this file. The format 
  - Fix missing Connections listing for Flax and MMX blockchains.  Thanks @ekersey!
  - Fix for Bladebit ramplot relaunching.  Thanks @JoeZotacExperience!
  - Multiple functionality & performance cleanups from excellent code review by @qoole.
- - Display compression level for active plotting jobs, currently MMX only.
+ - Display compression level for active plotting jobs on Gigahorse and MMX.
 ## Updated 
  - [BTCGreen](https://github.com/BTCgreen-Network/btcgreen-blockchain/releases/tag/1.7.0b) to v1.7.0b
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.6.2) to v1.6.2
