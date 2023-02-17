@@ -108,7 +108,7 @@ plotting:
 
         madmax:
                 # Gigahorse plotter: https://github.com/guydavis/machinaris/wiki/MadMax
-                k: 30                 # The minimum K size for mainnet will probably be k30
+                k: 32                 # The default size for Chia plot is k32
                 mode: diskplot        # Either enable diskplot or gpuplot. 
                 n_threads: 4          # Default is 4, SLOWLY crank up if you have many cores
                 n_buckets: 256        # Default is 256
