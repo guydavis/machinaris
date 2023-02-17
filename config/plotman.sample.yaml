@@ -117,5 +117,4 @@ plotting:
                 n_buckets: 256        # Default is 256
                 n_buckets3: 256       # Default is 256
                 n_rmulti2: 1          # Default is 1
-                network_port: 8444    # Default is 8444, but use 9699 for Chives
-       
+                network_port: 8444    # Use is 8444 for Chia
