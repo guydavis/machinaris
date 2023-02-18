@@ -509,6 +509,8 @@ def settings_pools():
     fullnodes_by_blockchain = worker.get_fullnodes_by_blockchain()
     poolable_blockchains = []
     for pb in po.POOLABLE_BLOCKCHAINS:
+        if pb == 'gigahorse':
+            continue
         if pb in fullnodes_by_blockchain:
             poolable_blockchains.append(pb)
     return render_template('settings/pools.html',  global_config=gc, fullnodes_by_blockchain=fullnodes_by_blockchain,
