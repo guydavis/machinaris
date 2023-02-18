@@ -4,8 +4,8 @@
 #
 
 ONE_BRANCH=$1
-# On 2023-01-02
-HASH=29854541a4a6b2b9bc4d423302642e10ddf8fc77
+# On 2023-02-18
+HASH=2af8e2ca14fca70615c47060fc78b9d5942e4e7c
 
 if [ -z ${ONE_BRANCH} ]; then
     echo 'Skipping One install as not requested.'
