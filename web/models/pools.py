@@ -17,6 +17,8 @@ class Plotnfts:
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
         for plotnft in plotnfts:
+            if plotft.blockchain == 'gigahorse':
+                continue  # Ignore these, use Chia instead.
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(plotnft.hostname))
                 displayname = w.get_worker(plotnft.hostname).displayname
@@ -50,6 +52,8 @@ class Pools:
     def __init__(self, pools, plotnfts):
         self.blockchains = {}
         for pool in pools:
+            if pool.blockchain == 'gigahorse':
+                continue  # Ignore these, use Chia instead.
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(pool.hostname))
                 displayname = w.get_worker(pool.hostname, pool.blockchain).displayname
