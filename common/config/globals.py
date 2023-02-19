@@ -248,6 +248,12 @@ def load_blockchain_version(blockchain):
         if last_blockchain_version.endswith('dev0') or last_blockchain_version.endswith('dev1'):
             if 'rc' in last_blockchain_version: # Strip out 'rcX' if found.
                 last_blockchain_version = last_blockchain_version[:last_blockchain_version.index('rc')]
+            elif 'b1' in last_blockchain_version: # Strip out 'b1' if found.
+                last_blockchain_version = last_blockchain_version[:last_blockchain_version.index('b1')]
+            elif 'b2' in last_blockchain_version: # Strip out 'b2' if found.
+                last_blockchain_version = last_blockchain_version[:last_blockchain_version.index('b2')]
+            elif 'b3' in last_blockchain_version: # Strip out 'b3' if found.
+                last_blockchain_version = last_blockchain_version[:last_blockchain_version.index('b3')]
             else:
                 # Chia version with .dev is actually one # to high, never fixed by Chia team...
                 # See: https://github.com/Chia-Network/chia-blockchain/issues/5655

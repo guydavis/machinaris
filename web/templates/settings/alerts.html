@@ -77,9 +77,16 @@
                     <select id="blockchain" name="blockchain" class="form-select">
                     </select>
                 </div>
+                <div class="col-sm-3">
+                    <div id="loading_div" class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="mb-3" id="texteditor">
-                <textarea style="background: #D3D3D3;" class="form-control fs-6" id="config" name="config" rows="18"
+                <textarea style="background: #D3D3D3;" class="form-control fs-6" id="config" name="config" rows="25"
                     style="height:100%;"></textarea>
             </div>
             <button type="submit" class="btn btn-outline-success"
@@ -95,14 +102,24 @@
     <script>
         $(document).ready(function () {
             function load_config(worker, blockchain) {
+                $('#loading_div').show();
+                $("#config").prop('disabled', true);
+                $("#btnSave").prop('disabled', true);
+                $("#btnDownload").prop('disabled', true);
                 $.ajax({
                     type: "GET",
                     url: "{{ url_for('views_settings_config') }}?type=alerts&worker=" + worker + "&blockchain=" + blockchain,
                 })
                     .done(function (data) {
                         $("#config").val(data)
+                        $('#loading_div').hide();
+                        $("#config").prop('disabled', false);
+                        $("#btnSave").prop('disabled', false);
+                        $("#btnDownload").prop('disabled', false);
                     }).fail(function (jqXHR, textStatus, errorThrown) {
+                        $('#loading_div').hide();
                         console.log(jqXHR, textStatus, errorThrown);
+                        alert("Failed to retrieve configuration in a timely fashion.  Please check server load and refresh this page.");
                     });
             }
             update_blockchain_options("{{selected_worker}}");
