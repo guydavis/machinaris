@@ -17,7 +17,7 @@ class Plotnfts:
         self.columns = ['hostname', 'details', 'updated_at']
         self.rows = []
         for plotnft in plotnfts:
-            if plotft.blockchain == 'gigahorse':
+            if plotnft.blockchain == 'gigahorse':
                 continue  # Ignore these, use Chia instead.
             try:
                 app.logger.debug("Found worker with hostname '{0}'".format(plotnft.hostname))
