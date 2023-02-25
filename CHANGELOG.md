@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. The format 
  - 
 ## Updated 
  - [One](https://github.com/xone-network/one-blockchain/releases/tag/1.7.0) to v1.7.0
+ - [Nvidia Cuda](https://hub.docker.com/layers/nvidia/cuda/12.0.1-base-ubuntu22.04/images/sha256-576121e91eb7620fd1ac8013aa2b258701531a66c62796edbd6b4f63b7c09d2e?context=explore) GPU driver to v12.0.1
 ## Notes
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
 
