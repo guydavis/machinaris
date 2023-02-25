@@ -121,7 +121,7 @@ ENV controller_web_port=8926
 ENV controller_api_port=8927
 ENV worker_address="null"
 ENV worker_api_port=8927
-# Some placeholders for Nvidia GPU support in MMX
+# Nvidia GPU support in Chia, Gigahorse, and MMX containers
 ENV NVIDIA_VISIBLE_DEVICES all
 ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
 
@@ -130,7 +130,8 @@ ENV FORKTOOLSDIR=/forktools
 ENV FORKTOOLSBLOCKCHAINDIRS=/
 ENV FORKTOOLSHIDDENDIRS=/root
 
-ENV PATH="${PATH}:/chia-blockchain/venv/bin:/forktools:/mmx-node/bin"
+ENV PATH="${PATH}:/chia-blockchain/venv/bin:/forktools:/mmx-node/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin"
+ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
 ENV TZ=Etc/UTC
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
