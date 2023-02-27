@@ -14,3 +14,4 @@ apt update && apt install -y git cmake build-essential ocl-icd-opencl-dev clinfo
 amd_deb=$(curl -s http://repo.radeon.com/amdgpu-install/latest/ubuntu/jammy/ | grep -m 1 -Po "amdgpu-install_[-\.\d]+_all.deb" | head -1)
 curl -O http://repo.radeon.com/amdgpu-install/latest/ubuntu/jammy/${amd_deb}
 apt install -y ./${amd_deb}
+apt install -y radeontop
