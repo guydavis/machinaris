@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file. The format 
  - 
 ## Updated 
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.6.2.giga6) to v1.6.2.giga6 with OpenCL support for AMD GPUs.
- - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.9.10) to (v0.9.10) on `testnet9`.  Supporting the latest AMD GPU driver.
+ - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.9.11) to (v0.9.11) on `testnet9`.  Supporting the latest AMD GPU driver.
  - [Nvidia Cuda](https://hub.docker.com/layers/nvidia/cuda/12.0.1-base-ubuntu22.04/images/sha256-576121e91eb7620fd1ac8013aa2b258701531a66c62796edbd6b4f63b7c09d2e?context=explore) GPU driver to v12.0.1
  - [One](https://github.com/xone-network/one-blockchain/releases/tag/1.7.0) to v1.7.0
 ## Notes
