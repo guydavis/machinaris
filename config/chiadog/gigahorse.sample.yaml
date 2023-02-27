@@ -2,7 +2,7 @@
 # instances monitoring multiple harvesters
 notification_title_prefix: '$HOSTNAME-gigahorse'
 log_level: INFO
-coin_name: 'gigahorse'
+coin_name: 'chia'
 coin_symbol: 'xch'
 
 # Only one consumer can be enabled at a time, you can
@@ -11,7 +11,7 @@ coin_symbol: 'xch'
 chia_logs:
   file_log_consumer:
     enable: true
-    prefix: 'gigahorse'
+    prefix: 'chia'
     file_path: '~/.chia/mainnet/log/debug.log'
 
 # Enable this and chiadog will ping a remote server every 5 minutes
