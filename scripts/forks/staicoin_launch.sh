@@ -63,7 +63,7 @@ chmod 755 -R /root/.stai/mainnet/config/ssl/ &> /dev/null
 stai init --fix-ssl-permissions > /dev/null 
 
 # Start services based on mode selected. Default is 'fullnode'
-if [[ ${mode} ~= ^fullnode.* ]]; then
+if [[ ${mode} =~ ^fullnode.* ]]; then
   for k in ${keys//:/ }; do
     while [[ "${k}" != "persistent" ]] && [[ ! -s ${k} ]]; do
       echo 'Waiting for key to be created/imported into mnemonic.txt. See: http://localhost:8926'
@@ -79,7 +79,7 @@ if [[ ${mode} ~= ^fullnode.* ]]; then
   else
     stai start farmer
   fi
-  if [[ ${mode} ~= .*timelord$ ]]; then
+  if [[ ${mode} =~ .*timelord$ ]]; then
     if [! -f vdf_bench ]; then
       BUILD_VDF_CLIENT=Y BUILD_VDF_BENCH=Y /usr/bin/sh ./install-timelord.sh 2>&1 > /tmp/timelord_build.sh
     fi
