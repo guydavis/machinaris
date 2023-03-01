@@ -95,10 +95,8 @@ if [[ ${mode} =~ ^fullnode.* ]]; then
     chia start farmer
   fi
   if [[ ${mode} =~ .*timelord$ ]]; then
-    if [ ! -f vdf_bench ]; then
-      BUILD_VDF_CLIENT=Y BUILD_VDF_BENCH=Y /usr/bin/sh ./install-timelord.sh 2>&1 > /tmp/timelord_build.sh
-    fi
-    chia start timelord
+    sh /machinaris/scripts/timelord_setup.sh
+    chia start timelord-only
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   chia start farmer-only

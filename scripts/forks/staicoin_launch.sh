@@ -80,10 +80,8 @@ if [[ ${mode} =~ ^fullnode.* ]]; then
     stai start farmer
   fi
   if [[ ${mode} =~ .*timelord$ ]]; then
-    if [ ! -f vdf_bench ]; then
-      BUILD_VDF_CLIENT=Y BUILD_VDF_BENCH=Y /usr/bin/sh ./install-timelord.sh 2>&1 > /tmp/timelord_build.sh
-    fi
-    stai start timelord
+    sh /machinaris/scripts/timelord_setup.sh
+    stai start timelord-only
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.stai/mainnet/config/ssl/wallet/public_wallet.key ]; then
