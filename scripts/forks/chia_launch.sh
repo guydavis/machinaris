@@ -95,7 +95,6 @@ if [[ ${mode} =~ ^fullnode.* ]]; then
     chia start farmer
   fi
   if [[ ${mode} =~ .*timelord$ ]]; then
-    sh /machinaris/scripts/timelord_setup.sh
     chia start timelord-only
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then

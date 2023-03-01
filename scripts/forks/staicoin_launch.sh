@@ -80,7 +80,6 @@ if [[ ${mode} =~ ^fullnode.* ]]; then
     stai start farmer
   fi
   if [[ ${mode} =~ .*timelord$ ]]; then
-    sh /machinaris/scripts/timelord_setup.sh
     stai start timelord-only
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
