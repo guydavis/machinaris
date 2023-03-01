@@ -80,7 +80,7 @@ if [[ ${mode} =~ ^fullnode.* ]]; then
     stai start farmer
   fi
   if [[ ${mode} =~ .*timelord$ ]]; then
-    if [! -f vdf_bench ]; then
+    if [ ! -f vdf_bench ]; then
       BUILD_VDF_CLIENT=Y BUILD_VDF_BENCH=Y /usr/bin/sh ./install-timelord.sh 2>&1 > /tmp/timelord_build.sh
     fi
     stai start timelord

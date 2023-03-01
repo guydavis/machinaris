@@ -88,11 +88,17 @@ chia init --fix-ssl-permissions > /dev/null
 /usr/bin/bash /machinaris/scripts/gpu_drivers_setup.sh
 
 # Start services based on mode selected. Default is 'fullnode'
-if [[ ${mode} == 'fullnode' ]]; then
+if [[ ${mode} =~ ^fullnode.* ]]; then
   if [ -f /root/.chia/machinaris/config/wallet_settings.json ]; then
     chia start farmer-no-wallet
   else
     chia start farmer
+  fi
+  if [[ ${mode} =~ .*timelord$ ]]; then
+    if [ ! -f vdf_bench ]; then
+      BUILD_VDF_CLIENT=Y BUILD_VDF_BENCH=Y /usr/bin/sh ./install-timelord.sh 2>&1 > /tmp/timelord_build.sh
+    fi
+    chia start timelord
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   chia start farmer-only
