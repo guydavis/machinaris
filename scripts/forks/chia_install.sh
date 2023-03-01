@@ -23,4 +23,9 @@ else
 	sed -i 's/packaging==21.0/packaging==21.3/g' setup.py
 
     /bin/sh ./install.sh
+
+    arch_name="$(uname -m)"
+    if [[ "${arch_name}" = "x86_64" ]]; then
+        sh /machinaris/scripts/timelord_setup.sh
+    fi
 fi
