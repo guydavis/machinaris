@@ -73,7 +73,7 @@ def gather_services_status():
             monitoring_status = "stopped"
     response['monitoring_status'] = monitoring_status
     response['farming_status'] = farming_status
-    if gc['machinaris_mode'] == 'fullnode':
+    if 'fullnode' in gc['machinaris_mode']:
         response['wallet_status'] = wallet_status
     memory_usage = globals.get_container_memory_usage_bytes()
     if memory_usage:

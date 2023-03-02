@@ -94,7 +94,7 @@ def load():
     fullnode_db_version = load_fullnode_db_version()
     if fullnode_db_version:
         cfg['fullnode_db_version'] = fullnode_db_version
-    if cfg['machinaris_mode'] == 'fullnode':
+    if 'fullnode' in cfg['machinaris_mode']:
         cfg['wallet_status'] = "running" if wallet_running() else "paused"
         if cfg['enabled_blockchains'][0] == 'mmx':
             cfg['mmx_reward'] = gather_mmx_reward()
@@ -180,13 +180,13 @@ def get_key_paths():
     return os.environ['keys'].split(':')
 
 def farming_enabled():
-    return "mode" in os.environ and ("farmer" in os.environ['mode'] or "fullnode" == os.environ['mode'])
+    return "mode" in os.environ and ("farmer" in os.environ['mode'] or "fullnode" in os.environ['mode'])
 
 def harvesting_enabled():
-    return "mode" in os.environ and ("harvester" in os.environ['mode'] or "fullnode" == os.environ['mode'])
+    return "mode" in os.environ and ("harvester" in os.environ['mode'] or "fullnode" in os.environ['mode'])
 
 def plotting_enabled():
-    return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode']) \
+    return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" in os.environ['mode']) \
         and enabled_blockchains()[0] in pl.PLOTTABLE_BLOCKCHAINS
 
 def enabled_blockchains():
