@@ -88,14 +88,11 @@ chia init --fix-ssl-permissions > /dev/null
 /usr/bin/bash /machinaris/scripts/gpu_drivers_setup.sh
 
 # Start services based on mode selected. Default is 'fullnode'
-if [[ ${mode} =~ ^fullnode.* ]]; then
+if [[ ${mode} == 'fullnode' ]]; then
   if [ -f /root/.chia/machinaris/config/wallet_settings.json ]; then
     chia start farmer-no-wallet
   else
     chia start farmer
-  fi
-  if [[ ${mode} =~ .*timelord$ ]]; then
-    chia start timelord-only
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   chia start farmer-only

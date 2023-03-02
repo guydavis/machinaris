@@ -80,6 +80,12 @@ if [[ ${mode} =~ ^fullnode.* ]]; then
     stai start farmer
   fi
   if [[ ${mode} =~ .*timelord$ ]]; then
+    if [ ! -f vdf_bench ]; then
+        echo "Building timelord binaries..."
+        apt update 2>&1 > /tmp/timelord_build.sh
+        apt install -y libgmp-dev libboost-python-dev libboost-system-dev 2>&1 >> /tmp/timelord_build.sh
+        BUILD_VDF_CLIENT=Y BUILD_VDF_BENCH=Y /usr/bin/sh ./install-timelord.sh 2>&1 >> /tmp/timelord_build.sh
+    fi
     stai start timelord-only
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
