@@ -69,7 +69,7 @@ for k in ${keys//:/ }; do
     echo "Adding key #${label_num} at path: ${k}"
     chia keys add -l "key_${label_num}" -f ${k} > /dev/null
     ((label_num=label_num+1))
-  elif [[ ${mode} == 'fullnode' ]]; then
+  elif [[ ${mode} =~ ^fullnode.* ]]; then
     echo "Skipping 'chia keys add' as no file found at: ${k}"
   fi
 done

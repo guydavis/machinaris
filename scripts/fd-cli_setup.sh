@@ -2,12 +2,12 @@
 #
 # Installs fd-cli tool: https://github.com/Flora-Network/fd-cli
 # Used to recover pool plot rewards (7/8) on the forks
-# Not needed on either the Chia or Chives images, only other forks.
+# Not needed on either the Chia, Chives, Gigahorse, or MMX images, only other forks.
 #
 
 FDCLI_BRANCH=$1
 
-if [[ ${mode} == 'fullnode' ]]; then
+if [[ ${mode} =~ ^fullnode.* ]]; then
     if [[ "${blockchains}" != 'chia' ]] && [[ "${blockchains}" != 'chives' ]] && [[ "${blockchains}" != 'mmx' ]] && [[ "${blockchains}" != 'gigahorse' ]]; then
         cd /
         git clone --branch ${FDCLI_BRANCH} https://github.com/guydavis/flora-dev-cli.git

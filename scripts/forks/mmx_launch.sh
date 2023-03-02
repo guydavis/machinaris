@@ -41,7 +41,7 @@ if [ ! -d /root/.chia/mmx/testnet9 ]; then
 fi
 
 # Create a key if none found from previous runs
-if [[ ${mode} == 'fullnode' ]]; then
+if [[ ${mode} =~ ^fullnode.* ]]; then
     if [ ! -f /root/.chia/mmx/wallet.dat ]; then
         echo "Creating key at path: /root/.chia/mmx/wallet.dat"
         mmx wallet create

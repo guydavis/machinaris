@@ -69,7 +69,7 @@ for k in ${keys//:/ }; do
     echo "Adding key #${label_num} at path: ${k}"
     /chia-gigahorse-farmer/chia.bin keys add -l "key_${label_num}" -f ${k} > /dev/null
     ((label_num=label_num+1))
-  elif [[ ${mode} == 'fullnode' ]]; then
+  elif [[ ${mode} =~ ^fullnode.* ]]; then
     echo "Skipping 'chia keys add' as no file found at: ${k}"
   fi
 done
@@ -88,7 +88,7 @@ chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
 /usr/bin/bash /machinaris/scripts/gpu_drivers_setup.sh
 
 # Start services based on mode selected. Always skip a duplicate Chia wallet launch
-if [[ ${mode} == 'fullnode' ]]; then
+if [[ ${mode} =~ ^fullnode.* ]]; then
   /chia-gigahorse-farmer/chia.bin start farmer-no-wallet
 elif [[ ${mode} =~ ^farmer.* ]]; then
   /chia-gigahorse-farmer/chia.bin start farmer-only
