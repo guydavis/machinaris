@@ -72,7 +72,7 @@ def is_controller():
     return app.config['CONTROLLER_HOST'] == "localhost"
 
 def is_fullnode():
-    return os.environ['mode'] == "fullnode"
+    return 'fullnode' in os.environ['mode']
 
 def convert_chia_ip_address(chia_ip_address):
     if chia_ip_address in ['127.0.0.1']:

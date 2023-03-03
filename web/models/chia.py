@@ -162,7 +162,7 @@ class FarmSummary:
         self.farms = {}
         self.wallets = Wallets(wallet_recs)
         for farm_rec in farm_recs: 
-            if farm_rec.mode == "fullnode":
+            if "fullnode" in farm_rec.mode:
                 try:
                     app.logger.debug("Searching for worker with hostname '{0}'".format(farm_rec.hostname))
                     wkr = w.get_worker(farm_rec.hostname, farm_rec.blockchain)

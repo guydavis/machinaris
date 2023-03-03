@@ -110,7 +110,7 @@ class WorkerSummary:
     def fullnodes(self):
         filtered = []
         for worker in self.workers:
-            if worker.mode == "fullnode":
+            if "fullnode" in worker.mode:
                 host = None
                 for h in filtered:
                     if h.displayname == worker.displayname:
@@ -129,7 +129,7 @@ class WorkerSummary:
     def plotters(self):
         filtered = []
         for worker in self.workers:
-            if (worker.mode == "fullnode" or "plotter" in worker.mode) and worker.blockchain in pl.PLOTTABLE_BLOCKCHAINS:
+            if ("fullnode" in worker.mode or "plotter" in worker.mode) and worker.blockchain in pl.PLOTTABLE_BLOCKCHAINS:
                 host = None
                 for h in filtered:
                     if h.displayname == worker.displayname:
@@ -155,7 +155,7 @@ class WorkerSummary:
     def farmers(self):
         filtered = []
         for worker in self.workers:
-            if worker.mode == "fullnode" or "farmer" in worker.mode:
+            if "fullnode" in worker.mode or "farmer" in worker.mode:
                 host = None
                 for h in filtered:
                     if h.displayname == worker.displayname:
@@ -178,7 +178,7 @@ class WorkerSummary:
     def harvesters(self):
         filtered = []
         for worker in self.workers:
-            if worker.mode == "fullnode" or "harvester" in worker.mode:
+            if "fullnode" in worker.mode or "harvester" in worker.mode:
                 host = None
                 for h in filtered:
                     if h.displayname == worker.displayname:
@@ -201,7 +201,7 @@ class WorkerSummary:
     def farmers_harvesters(self, exclude_blockchains=None):
         filtered = []
         for worker in self.workers:
-            if worker.mode == "fullnode" or "farmer" in worker.mode or "harvester" in worker.mode:
+            if "fullnode" in worker.mode or "farmer" in worker.mode or "harvester" in worker.mode:
                 if exclude_blockchains and worker.blockchain in exclude_blockchains:
                     continue
                 host = None

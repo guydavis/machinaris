@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+ - Support for running a blockchain timelord with environment variable `mode` set to `fullnode,timelord`.
+## Changed
+ - Fixes for Gigahorse GPU plotting including 64 GB RAM mode using the `tmp3` SSD plotting path.
+ - Fix for Gigahorse Alerts, please reset earlier broken settings file from [this one](https://github.com/guydavis/machinaris/blob/develop/config/chiadog/gigahorse.sample.yaml).
+## Updated 
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.6.2.giga6) to v1.6.2.giga6 with OpenCL support for AMD GPUs.
+ - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.9.11) to (v0.9.11) on `testnet9`.  Supporting the latest AMD GPU driver.
+ - [One](https://github.com/xone-network/one-blockchain/releases/tag/1.7.0) to v1.7.0
+## Notes
+ - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
+
 ## [0.8.7] - 2023-02-16
 ### Added
  - Schedule plotting on the "Settings | Plotting" page to take advantage of off-peak electricity, lower your fan noise, avoid backups, etc...

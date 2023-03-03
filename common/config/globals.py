@@ -94,7 +94,7 @@ def load():
     fullnode_db_version = load_fullnode_db_version()
     if fullnode_db_version:
         cfg['fullnode_db_version'] = fullnode_db_version
-    if cfg['machinaris_mode'] == 'fullnode':
+    if 'fullnode' in cfg['machinaris_mode']:
         cfg['wallet_status'] = "running" if wallet_running() else "paused"
         if cfg['enabled_blockchains'][0] == 'mmx':
             cfg['mmx_reward'] = gather_mmx_reward()
@@ -180,13 +180,13 @@ def get_key_paths():
     return os.environ['keys'].split(':')
 
 def farming_enabled():
-    return "mode" in os.environ and ("farmer" in os.environ['mode'] or "fullnode" == os.environ['mode'])
+    return "mode" in os.environ and ("farmer" in os.environ['mode'] or "fullnode" in os.environ['mode'])
 
 def harvesting_enabled():
-    return "mode" in os.environ and ("harvester" in os.environ['mode'] or "fullnode" == os.environ['mode'])
+    return "mode" in os.environ and ("harvester" in os.environ['mode'] or "fullnode" in os.environ['mode'])
 
 def plotting_enabled():
-    return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode']) \
+    return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" in os.environ['mode']) \
         and enabled_blockchains()[0] in pl.PLOTTABLE_BLOCKCHAINS
 
 def enabled_blockchains():
@@ -248,6 +248,12 @@ def load_blockchain_version(blockchain):
         if last_blockchain_version.endswith('dev0') or last_blockchain_version.endswith('dev1'):
             if 'rc' in last_blockchain_version: # Strip out 'rcX' if found.
                 last_blockchain_version = last_blockchain_version[:last_blockchain_version.index('rc')]
+            elif 'b1' in last_blockchain_version: # Strip out 'b1' if found.
+                last_blockchain_version = last_blockchain_version[:last_blockchain_version.index('b1')]
+            elif 'b2' in last_blockchain_version: # Strip out 'b2' if found.
+                last_blockchain_version = last_blockchain_version[:last_blockchain_version.index('b2')]
+            elif 'b3' in last_blockchain_version: # Strip out 'b3' if found.
+                last_blockchain_version = last_blockchain_version[:last_blockchain_version.index('b3')]
             else:
                 # Chia version with .dev is actually one # to high, never fixed by Chia team...
                 # See: https://github.com/Chia-Network/chia-blockchain/issues/5655

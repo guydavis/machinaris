@@ -69,7 +69,7 @@ for k in ${keys//:/ }; do
     echo "Adding key #${label_num} at path: ${k}"
     chia keys add -l "key_${label_num}" -f ${k} > /dev/null
     ((label_num=label_num+1))
-  elif [[ ${mode} == 'fullnode' ]]; then
+  elif [[ ${mode} =~ ^fullnode.* ]]; then
     echo "Skipping 'chia keys add' as no file found at: ${k}"
   fi
 done
@@ -85,31 +85,23 @@ done
 chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
 chia init --fix-ssl-permissions > /dev/null 
 
-# Support for GPUs used when plotting/farming
-if [[ ${OPENCL_GPU} == 'nvidia' ]]; then   
-    mkdir -p /etc/OpenCL/vendors
-    echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
-    echo "Enabling Nvidia GPU support inside this container."
-elif [[ ${OPENCL_GPU} == 'amd' ]]; then
-	pushd /tmp > /dev/null
-  echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-	apt-get update 2>&1 > /tmp/amdgpu_setup.log
-	amdgpu-install -y --usecase=opencl --opencl=rocr --no-dkms --no-32 --accept-eula 2>&1 >> /tmp/amdgpu_setup.log
-	popd > /dev/null
-  echo "Enabling AMD GPU support inside this container."
-elif [[ ${OPENCL_GPU} == 'intel' ]]; then
-  echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-	apt-get update 2>&1 > /tmp/intelgpu_setup.log
-	apt-get install -y intel-opencl-icd 2>&1 >> /tmp/intelgpu_setup.log
-  echo "Enabling Intel GPU support inside this container."
-fi
+/usr/bin/bash /machinaris/scripts/gpu_drivers_setup.sh
 
 # Start services based on mode selected. Default is 'fullnode'
-if [[ ${mode} == 'fullnode' ]]; then
+if [[ ${mode} =~ ^fullnode.* ]]; then
   if [ -f /root/.chia/machinaris/config/wallet_settings.json ]; then
     chia start farmer-no-wallet
   else
     chia start farmer
+  fi
+  if [[ ${mode} =~ .*timelord$ ]]; then
+    if [ ! -f vdf_bench ]; then
+        echo "Building timelord binaries..."
+        apt-get update > /tmp/timelord_build.sh 2>&1 
+        apt-get install -y libgmp-dev libboost-python-dev libboost-system-dev >> /tmp/timelord_build.sh 2>&1 
+        BUILD_VDF_CLIENT=Y BUILD_VDF_BENCH=Y /usr/bin/sh ./install-timelord.sh >> /tmp/timelord_build.sh 2>&1 
+    fi
+    chia start timelord-only
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   chia start farmer-only

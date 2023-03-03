@@ -60,7 +60,7 @@ chmod 755 -R /root/.cactus/mainnet/config/ssl/ &> /dev/null
 cactus init --fix-ssl-permissions > /dev/null 
 
 # Start services based on mode selected. Default is 'fullnode'
-if [[ ${mode} == 'fullnode' ]]; then
+if [[ ${mode} =~ ^fullnode.* ]]; then
   for k in ${keys//:/ }; do
     while [[ "${k}" != "persistent" ]] && [[ ! -s ${k} ]]; do
       echo 'Waiting for key to be created/imported into mnemonic.txt. See: http://localhost:8926'
@@ -75,6 +75,15 @@ if [[ ${mode} == 'fullnode' ]]; then
     cactus start farmer-no-wallet
   else
     cactus start farmer
+  fi
+  if [[ ${mode} =~ .*timelord$ ]]; then
+    if [ ! -f vdf_bench ]; then
+        echo "Building timelord binaries..."
+        apt-get update > /tmp/timelord_build.sh 2>&1 
+        apt-get install -y libgmp-dev libboost-python-dev libboost-system-dev >> /tmp/timelord_build.sh 2>&1 
+        BUILD_VDF_CLIENT=Y BUILD_VDF_BENCH=Y /usr/bin/sh ./install-timelord.sh >> /tmp/timelord_build.sh 2>&1 
+    fi
+    cactus start timelord-only
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.cactus/mainnet/config/ssl/wallet/public_wallet.key ]; then

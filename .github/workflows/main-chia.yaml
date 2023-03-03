@@ -90,7 +90,7 @@ jobs:
           build-args: |
             "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=latest"
-            "GIGAHORSE_BRANCH=v1.6.2.giga4"
+            "GIGAHORSE_BRANCH=v1.6.2.giga6"
             "CHIA_BRANCH=release/1.7.0"
             "MADMAX_BRANCH=v1.6.2-1"
           tags: |

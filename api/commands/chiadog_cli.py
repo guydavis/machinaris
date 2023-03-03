@@ -80,7 +80,7 @@ def start_chiadog(chain = None):
                 os.remove(offset_file)
             configfile = "/root/.chia/chiadog/config.yaml"
             logfile = "/root/.chia/chiadog/logs/chiadog.log"
-            proc = Popen("nohup /{0}-blockchain/venv/bin/python3 -u main.py --config {1} >> {2} 2>&1 &".format(blockchain, configfile, logfile), \
+            proc = Popen("nohup /chia-blockchain/venv/bin/python3 -u main.py --config {0} >> {1} 2>&1 &".format(configfile, logfile), \
                 shell=True, universal_newlines=True, stdout=None, stderr=None, cwd="/chiadog")
         except:
             app.logger.info('Failed to start monitoring!')

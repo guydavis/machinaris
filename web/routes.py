@@ -434,7 +434,7 @@ def settings_plotting():
         if request.form.get('type') == 'schedule':
             app.logger.info('Saving updated plotting schedule for worker: {0}'.format(selected_worker_hostname))
             plotman.save_schedules(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get('schedules'))
-            return make_response("Successfully saved {0} plotting schedule on {1}.".format(selected_worker_hostname, selected_blockchain), 200)
+            return make_response("Successfully saved {0} plotting schedule on {1}.".format(escape(selected_worker_hostname), escape(selected_blockchain)), 200)
         else: #
             plotman.save_config(worker.get_worker(selected_worker_hostname, selected_blockchain), selected_blockchain, request.form.get("config"))
     workers_summary = worker.load_worker_summary()

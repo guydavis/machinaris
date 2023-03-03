@@ -761,7 +761,7 @@ def load_recent_mem_usage(worker_type, only_hostname=None, only_blockchain=None)
                 StatContainerMemoryUsageGib.hostname == host.hostname). \
                 order_by(StatContainerMemoryUsageGib.created_at, StatContainerMemoryUsageGib.blockchain).all()
         for row in mem_result:
-            if worker_type == 'plotting' and host.mode != 'plotter' and (host.mode == 'fullnode' and not row.blockchain in ['chia', 'chives', 'mmx']):
+            if worker_type == 'plotting' and host.mode != 'plotter' and ('fullnode' in host.mode and not row.blockchain in ['chia', 'chives', 'mmx']):
                 continue  # Not a plotting container
             elif worker_type == 'farming' and host.mode == 'plotter':
                 continue # Not a farmer or harvester

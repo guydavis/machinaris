@@ -73,7 +73,7 @@
         <fieldset>
             <div class="row mb-3">
                 <label for="worker" class="col-sm-1 col-form-label-lg text-end p-1">{{_('Worker')}}</label>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <select id="worker" name="worker" class="form-select">
                         {% for host in workers() %}
                         <option {% if host.hostname==selected_worker %}selected{% endif %}
@@ -82,14 +82,21 @@
                     </select>
                 </div>
                 <label for="blockchain" class="col-sm-1 col-form-label-lg text-end p-1">{{_('Blockchain')}}</label>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <select id="blockchain" name="blockchain" class="form-select">
                     </select>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <a href="#" title="{{_('Schedule')}}" data-bs-toggle="modal" data-bs-target="#scheduleModal" target="_blank">
                         <i class="fs-4 bi-calendar2-week" style="padding-left: 50px"></i>
                     </a>
+                </div>
+                <div class="col-sm-2">
+                    <div id="loading_div" class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="alert alert-info" role="alert" id="dirs_listing" style="display: none; padding-bottom: 0px">
@@ -100,7 +107,7 @@
                 </div>
             </div>
             <div class="mb-3" id="texteditor">
-                <textarea style="background: #D3D3D3;" class="form-control fs-6" id="config" name="config" rows="18"
+                <textarea style="background: #D3D3D3; font-family: monospace; font-size: 80%;" class="form-control" id="config" name="config" rows="30"
                     style="height:100%;"></textarea>
             </div>
             <button type="submit" class="btn btn-outline-success" id="btnSave">{{_('Save')}}</button>
@@ -113,8 +120,12 @@
     {% block scripts %}
     <script>
         $(document).ready(function () {
-            $('#config_error').hide();
             function load_config(worker, blockchain) {
+                $('#config_error').hide();
+                $('#loading_div').show();
+                $("#config").prop('disabled', true);
+                $("#btnSave").prop('disabled', true);
+                $("#btnDownload").prop('disabled', true);
                 jqxhr = $.ajax({
                     type: "GET",
                     url: "{{ url_for('views_settings_config') }}?type=plotting&worker=" + worker + "&blockchain=" + blockchain,
@@ -129,12 +140,19 @@
                             $('#config_error').hide();
                         }
                         $("#config").val(data)
+                        $('#loading_div').hide();
+                        $("#config").prop('disabled', false);
+                        $("#btnSave").prop('disabled', false);
+                        $("#btnDownload").prop('disabled', false);
                     }).fail(function (jqXHR, textStatus, errorThrown) {
+                        $('#loading_div').hide();
                         console.log("jqXHR, textStatus, errorThrown");
+                        alert("Failed to retrieve configuration in a timely fashion.  Please check server load and refresh this page.");
                     });
             }
             $('#dirs_error').hide();
             function load_dirs(worker, blockchain) {
+                $('#dirs_listing').hide();
                 jqxhr = $.getJSON({
                     url: "{{ url_for('views_settings_config') }}?type=plotting_dirs&worker=" + worker + "&blockchain=" + blockchain,
                 })
@@ -172,6 +190,7 @@
                             html = "<h6>Archiving Directories (optional)</h6><ul><li>?</li></ul>"
                             $("#arch_dirs").html(html);
                         }
+                        $('#loading_div').hide();
                         $('#dirs_listing').show();
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         console.log("jqXHR, textStatus, errorThrown");
