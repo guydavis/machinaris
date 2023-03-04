@@ -421,7 +421,10 @@ def load_summary_stats(blockchains):
             app.logger.info("No recent challenge response times found for {0}".format(blockchain))
         partials_per_hour = ''
         if blockchain in POOLABLE_BLOCKCHAINS:
-            if len(db.session.query(Pool).filter(Pool.blockchain==blockchain).all()) > 0:
+            pool_blockchain = blockchain
+            if blockchain == 'gigahorse':
+                pool_blockchain = 'chia'
+            if len(db.session.query(Pool).filter(Pool.blockchain==pool_blockchain).all()) > 0:
                 try:
                     day_ago = (datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M")
                     partial_records = db.session.query(Partial).filter(Partial.blockchain==blockchain, Partial.created_at >= day_ago ).order_by(Partial.created_at.desc()).all()
