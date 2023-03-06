@@ -8,7 +8,9 @@ All notable changes to this project will be documented in this file. The format 
 ## Changed
  - Fixes for Gigahorse GPU plotting including 64 GB RAM mode using the `tmp3` SSD plotting path.
  - Fix for Gigahorse Alerts, please reset earlier broken settings file from [this one](https://github.com/guydavis/machinaris/blob/develop/config/chiadog/gigahorse.sample.yaml).
+ - Fix for container stop signal to cleanly shutdown forks too, as was already happening for Chia.
 ## Updated 
+ - [Bladebit](https://downloads.chia.net/bladebit/) to 3.0.0-alpha2
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.6.2.giga6) to v1.6.2.giga6 with OpenCL support for AMD GPUs.
  - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.9.11) to (v0.9.11) on `testnet9`.  Supporting the latest AMD GPU driver.
  - [One](https://github.com/xone-network/one-blockchain/releases/tag/1.7.0) to v1.7.0

@@ -32,7 +32,7 @@ directories:
 
         # Optional: tmp2 directory.  If specified, will be passed to
         # the chia and madmax plotters as the '-2' param.
-        # tmp2: /plotting2
+        #tmp2: /plotting2
 
         # One or more directories; the scheduler will use all of them.
         # These again are presumed to be on independent physical devices,

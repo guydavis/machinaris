@@ -84,7 +84,7 @@ if /usr/bin/bash /machinaris/scripts/forks/${blockchains}_launch.sh; then
   # Launch Machinaris web server and other services
   /machinaris/scripts/start_machinaris.sh
 
-  # Cleanly stop all blockchain services cleanly on container stop
+  # Cleanly stop all blockchain services on container stop
   blockchain_binary=$(cat /machinaris/common/config/blockchains.json | jq -r .${blockchains}.binary)
   trap "${blockchain_binary} stop all -d; exit 0" SIGINT SIGTERM
 
