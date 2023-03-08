@@ -11,8 +11,8 @@ All notable changes to this project will be documented in this file. The format 
  - Fix for container stop signal to cleanly shutdown forks too, as was already happening for Chia.
 ## Updated 
  - [Bladebit](https://downloads.chia.net/bladebit/) to 3.0.0-alpha2
- - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.6.2.giga6) to v1.6.2.giga6 with OpenCL support for AMD GPUs.
- - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.9.11) to (v0.9.11) on `testnet9`.  Supporting the latest AMD GPU driver.
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.6.2.giga7) to v1.6.2.giga7 with OpenCL support for AMD GPUs.
+ - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.9.14) to (v0.9.14) on `testnet9`.  Supporting the latest AMD GPU driver.
  - [One](https://github.com/xone-network/one-blockchain/releases/tag/1.7.0) to v1.7.0
 ## Notes
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*

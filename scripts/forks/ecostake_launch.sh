@@ -107,8 +107,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
-    ecostake configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    ecostake configure --enable-upnp false
+    ecostake configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.ecostake/mainnet/log/init.log
+    ecostake configure --enable-upnp false  2>&1 >> /root/.ecostake/mainnet/log/init.log
     ecostake start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

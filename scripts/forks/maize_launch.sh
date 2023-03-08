@@ -106,9 +106,9 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "Did not find your farmer's certificates within /root/.maize/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
-    echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
-    maize configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    maize configure --enable-upnp false
+    echo "Configuring farmer peer at ${farmer_address}:${farmer_port}" 
+    maize configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.maize/mainnet/log/init.log
+    maize configure --enable-upnp false  2>&1 >> /root/.maize/mainnet/log/init.log
     maize start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

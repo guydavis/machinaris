@@ -114,8 +114,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
-    tad configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    tad configure --enable-upnp false
+    tad configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.tad/mainnet/log/init.log
+    tad configure --enable-upnp false  2>&1 >> /root/.tad/mainnet/log/init.log
     tad start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

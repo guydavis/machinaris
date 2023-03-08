@@ -111,8 +111,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "Did not find your farmer's certificates within /root/.flax/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
-    flax configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    flax configure --enable-upnp false
+    flax configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.flax/mainnet/log/init.log
+    flax configure --enable-upnp false  2>&1 >> /root/.flax/mainnet/log/init.log
     flax start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

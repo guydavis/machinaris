@@ -113,8 +113,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "Did not find your farmer's certificates within /root/.stor/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
-    stor configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    stor configure --enable-upnp false
+    stor configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.stor/mainnet/log/init.log
+    stor configure --enable-upnp false  2>&1 >> /root/.stor/mainnet/log/init.log
     stor start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

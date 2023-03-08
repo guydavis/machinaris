@@ -114,8 +114,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "Did not find your farmer's certificates within /root/.cactus/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
-    cactus configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    cactus configure --enable-upnp false
+    cactus configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.cactus/mainnet/log/init.log
+    cactus configure --enable-upnp false  2>&1 >> /root/.cactus/mainnet/log/init.log
     cactus start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

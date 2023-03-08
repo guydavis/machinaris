@@ -98,15 +98,13 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     fi
     if [[ -f /root/.moon/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       moon init -c /root/.moon/farmer_ca 2>&1 > /root/.moon/mainnet/log/init.log
-      #chmod 755 -R /root/.moon/mainnet/config/ssl/ &> /dev/null
-      #moon init --fix-ssl-permissions > /dev/null 
     else
       echo "Did not find your farmer's certificates within /root/.moon/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
-    moon configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    moon configure --enable-upnp false
+    moon configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.moon/mainnet/log/init.log
+    moon configure --enable-upnp false  2>&1 >> /root/.moon/mainnet/log/init.log
     moon start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

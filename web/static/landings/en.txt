@@ -57,7 +57,6 @@ No SSDs were harmed in the making of this movie.
 Please insert Disk 2 and press any key to continue...
 Error in Error reporting, cannot Error @$Error. Starting Log4j in 3... 2... 1...
 10 PRINT "WITTY TEXT GOES HERE"
-Just remember...... You could have bought GPUs instead,
 Congratulations you've won $0.00! Please pay the Gas fee to receive your winnings.
 Power surge! Is your UPS working?
 Lights out! Do your hard drives have bad sectors now?

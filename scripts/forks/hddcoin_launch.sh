@@ -109,8 +109,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "Did not find your farmer's certificates within /root/.hddcoin/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
-    hddcoin configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    hddcoin configure --enable-upnp false
+    hddcoin configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.hddcoin/mainnet/log/init.log
+    hddcoin configure --enable-upnp false  2>&1 >> /root/.hddcoin/mainnet/log/init.log
     hddcoin start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

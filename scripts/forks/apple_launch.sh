@@ -107,8 +107,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
-    apple configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    apple configure --enable-upnp false
+    apple configure --set-farmer-peer ${farmer_address}:${farmer_port} 2>&1 >> /root/.apple/mainnet/log/init.log
+    apple configure --enable-upnp false 2>&1 >> /root/.apple/mainnet/log/init.log
     apple start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

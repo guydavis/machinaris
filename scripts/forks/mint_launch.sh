@@ -107,8 +107,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
-    mint configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    mint configure --enable-upnp false
+    mint configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.mint/mainnet/log/init.log
+    mint configure --enable-upnp false  2>&1 >> /root/.mint/mainnet/log/init.log
     mint start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then
