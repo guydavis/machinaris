@@ -23,8 +23,8 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   db_file=$(curl -s https://eu.stornode.net/ | grep -Po 'db-(\d){4}-(\d){2}-(\d){2}'.zip | tail -n 1)
   curl -skJLO https://eu.stornode.net/${db_file}
   unzip db*.zip 
-  mv db*/*sqlite .
-  rm -rf db*
+  mv root/.stor/mainnet/db/*sqlite .
+  rm -rf db*.zip root
 fi
 
 mkdir -p /root/.stor/mainnet/log
