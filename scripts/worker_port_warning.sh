@@ -2,7 +2,7 @@
 if [[ "${blockchains}"  == "apple" && "${worker_api_port}" != '8947' ]]; then
   echo "Apple worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8947?"
 fi
-if [[ "${blockchains}"  == "ballcoin" && "${worker_api_port}" != '8597' ]]; then
+if [[ "${blockchains}"  == "ballcoin" && "${worker_api_port}" != '8957' ]]; then
   echo "Ballcoin worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8957?"
 fi
 if [[ "${blockchains}"  == "bpx" && "${worker_api_port}" != '8945' ]]; then

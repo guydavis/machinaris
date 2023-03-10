@@ -118,8 +118,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
-    stai configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    stai configure --enable-upnp false
+    stai configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.stai/mainnet/log/init.log
+    stai configure --enable-upnp false  2>&1 >> /root/.stai/mainnet/log/init.log
     stai start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

@@ -108,8 +108,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
-    petroleum configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    petroleum configure --enable-upnp false
+    petroleum configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.petroleum/mainnet/log/init.log
+    petroleum configure --enable-upnp false  2>&1 >> /root/.petroleum/mainnet/log/init.log
     petroleum start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

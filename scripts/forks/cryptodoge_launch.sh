@@ -110,8 +110,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "Did not find your farmer's certificates within /root/.cryptodoge/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
-    cryptodoge configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    cryptodoge configure --enable-upnp false
+    cryptodoge configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.cryptodoge/mainnet/log/init.log
+    cryptodoge configure --enable-upnp false  2>&1 >> /root/.cryptodoge/mainnet/log/init.log
     cryptodoge start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

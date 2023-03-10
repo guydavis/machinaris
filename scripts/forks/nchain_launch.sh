@@ -108,8 +108,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
-    chia configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    chia configure --enable-upnp false
+    chia configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.chia/mainnet/log/init.log
+    chia configure --enable-upnp false  2>&1 >> /root/.chia/mainnet/log/init.log
     chia start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

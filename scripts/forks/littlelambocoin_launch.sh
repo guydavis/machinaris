@@ -114,8 +114,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
     # This configure command fails, as this blockchain chokes on its own config file!
-    littlelambocoin configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    littlelambocoin configure --enable-upnp false
+    littlelambocoin configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.littlelambocoin/mainnet/log/init.log
+    littlelambocoin configure --enable-upnp false  2>&1 >> /root/.littlelambocoin/mainnet/log/init.log
     littlelambocoin start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

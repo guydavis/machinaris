@@ -108,8 +108,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "Did not find your farmer's certificates within /root/.flora/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
-    flora configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    flora configure --enable-upnp false
+    flora configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.flora/mainnet/log/init.log
+    flora configure --enable-upnp false  2>&1 >> /root/.flora/mainnet/log/init.log
     flora start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

@@ -111,8 +111,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
     # This configure command fails, as this blockchain chokes on its own config file!
-    bpx configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    bpx configure --enable-upnp false
+    bpx configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.bpx/mainnet/log/init.log
+    bpx configure --enable-upnp false  2>&1 >> /root/.bpx/mainnet/log/init.log
     # So, perform the configuration into the config.yaml file directly instead...
     sed -z -i "s/  farmer_peer:\n    host: 127.0.0.1\n    port: 18655/  farmer_peer:\n    host: ${farmer_address}\n    port: ${farmer_port}/g" config.yaml
     bpx start harvester -r

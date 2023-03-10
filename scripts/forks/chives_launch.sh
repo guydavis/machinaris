@@ -104,8 +104,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "Did not find your farmer's certificates within /root/.chives/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
-    chives configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    chives configure --enable-upnp false
+    chives configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.chives/mainnet/log/init.log
+    chives configure --enable-upnp false  2>&1 >> /root/.chives/mainnet/log/init.log
     chives start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

@@ -111,9 +111,9 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "Did not find your farmer's certificates within /root/.btcgreen/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
-    echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
-    btcgreen configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    btcgreen configure --enable-upnp false
+    echo "Configuring farmer peer at ${farmer_address}:${farmer_port}" 
+    btcgreen configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.btcgreen/mainnet/log/init.log
+    btcgreen configure --enable-upnp false  2>&1 >> /root/.btcgreen/mainnet/log/init.log
     btcgreen start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

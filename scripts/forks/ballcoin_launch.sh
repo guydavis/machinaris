@@ -109,8 +109,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
-    ball configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    ball configure --enable-upnp false
+    ball configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.ball/mainnet/log/init.log
+    ball configure --enable-upnp false  2>&1 >> /root/.ball/mainnet/log/init.log
     ball start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

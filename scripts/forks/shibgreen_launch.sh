@@ -112,8 +112,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
-    shibgreen configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    shibgreen configure --enable-upnp false
+    shibgreen configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.shibgreen/mainnet/log/init.log
+    shibgreen configure --enable-upnp false  2>&1 >> /root/.shibgreen/mainnet/log/init.log
     shibgreen start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

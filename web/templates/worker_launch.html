@@ -386,9 +386,6 @@
                         cmd += "        image: ghcr.io/guydavis/machinaris-" + blockchain + ":latest" + line_end;
                         cmd += "        container_name: machinaris-" + blockchain + line_end;
                     }
-                    if (blockchain == "chives") {
-                        errors.push("{{_('NOTE: If you want to run the FoxyPool port of Chives, change the image from machinaris-chives to machinaris-chivesfoxy in generated config below.')}}")
-                    }
                     if (document.getElementById("worker_hostname").value) {
                         cmd += '        hostname: ' + document.getElementById("worker_hostname").value + line_end;
                     }
