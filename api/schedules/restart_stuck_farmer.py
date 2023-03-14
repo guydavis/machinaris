@@ -61,16 +61,16 @@ def execute():
             app.logger.info("Skipping stuck farmer check due to exception: {0}".format(str(ex)))
         # If NOT plotting (which uses lots of memory), restart a bloated farmer if exceeds an optional limit of X GiB over Y minutes
         try:
-            max_allowed_container_memory_gib = app.config['RESTART_FARMER_IF_CONTAINER_MEMORY_EXCEEDS_GIB']
-            app.logger.debug("RESTART_FARMER_IF_CONTAINER_MEMORY_EXCEEDS_GIB @ {:.2f} GiB".format(max_allowed_container_memory_gib))
-            plotting_jobs = plotman_cli.load_plotting_summary()
-            if not plotting_jobs or len(plotting_jobs.rows) > 0:
-                memory_exceeded_since = None
-                return
+            max_allowed_container_memory_gib = float(app.config['RESTART_FARMER_IF_CONTAINER_MEMORY_EXCEEDS_GIB'])
             if max_allowed_container_memory_gib <= 0: # Check is disabled if negative default
                 memory_exceeded_since = None
                 return
             container_memory_gib = globals.get_container_memory_usage_bytes() / 1024 / 1024 / 1024
+            app.logger.info("Would RESTART bloated farmer if current {:.2f} GiB usage is more than {:.2f} GiB limit.".format(container_memory_gib, max_allowed_container_memory_gib))
+            plotting_jobs = plotman_cli.load_plotting_summary()
+            if not plotting_jobs or len(plotting_jobs.rows) > 0:
+                memory_exceeded_since = None
+                return
             if container_memory_gib > 0 and max_allowed_container_memory_gib < container_memory_gib:
                 if not memory_exceeded_since:
                     memory_exceeded_since = dt.datetime.now()
