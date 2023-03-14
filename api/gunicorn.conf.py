@@ -96,7 +96,7 @@ def on_starting(server):
         scheduler.add_job(func=plots_replot.execute, name="replot_check", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         
     # Testing only
-    #scheduler.add_job(func=plots_check.execute, name="plots_check", trigger='interval', seconds=60) # Test immediately
+    #scheduler.add_job(func=restart_stuck_farmer.execute, name="status_blockchain_sync", trigger='interval', seconds=60) # Test immediately
     #scheduler.add_job(func=stats_blocks.collect, name="stats_effort", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=stats_balances.collect, name="stats_balances", trigger='interval', seconds=10) # Test immediately
     #scheduler.add_job(func=websvcs.get_chain_statuses, name="get_chain_statuses", trigger='interval', seconds=10) # Test immediately
