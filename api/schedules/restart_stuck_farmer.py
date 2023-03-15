@@ -11,6 +11,7 @@ import datetime as dt
 import math
 import os
 import subprocess
+import traceback
 
 from api import app
 from common.config import globals
@@ -61,25 +62,28 @@ def execute():
             app.logger.info("Skipping stuck farmer check due to exception: {0}".format(str(ex)))
         # If NOT plotting (which uses lots of memory), restart a bloated farmer if exceeds an optional limit of X GiB over Y minutes
         try:
-            max_allowed_container_memory_gib = float(app.config['RESTART_FARMER_IF_CONTAINER_MEMORY_EXCEEDS_GIB'])
-            if max_allowed_container_memory_gib <= 0: # Check is disabled if negative default
+            max_allowed_container_memory_gb = float(app.config['RESTART_FARMER_IF_CONTAINER_MEMORY_EXCEEDS_GB'])
+            if max_allowed_container_memory_gb <= 0: # Check is disabled if negative default
                 memory_exceeded_since = None
                 return
-            container_memory_gib = globals.get_container_memory_usage_bytes() / 1024 / 1024 / 1024
-            app.logger.info("Would RESTART bloated farmer if current {:.2f} GiB usage is more than {:.2f} GiB limit.".format(container_memory_gib, max_allowed_container_memory_gib))
-            plotting_jobs = plotman_cli.load_plotting_summary()
-            if not plotting_jobs or len(plotting_jobs.rows) > 0:
-                memory_exceeded_since = None
-                return
-            if container_memory_gib > 0 and max_allowed_container_memory_gib < container_memory_gib:
+            container_memory_gb = globals.get_container_memory_usage_bytes() / 1024 / 1024 / 1024
+            app.logger.info("Would RESTART bloated farmer if current {:.2f} GiB usage is more than {:.2f} GiB limit.".format(container_memory_gb, max_allowed_container_memory_gb))
+            if globals.plotting_enabled():
+                plotting_jobs = plotman_cli.load_plotting_summary()
+                if not plotting_jobs or len(plotting_jobs.rows) > 0:
+                    memory_exceeded_since = None
+                    return
+            if container_memory_gb > 0 and max_allowed_container_memory_gb < container_memory_gb:
                 if not memory_exceeded_since:
                     memory_exceeded_since = dt.datetime.now()
                 minutes_diff = math.ceil((dt.datetime.now() - memory_exceeded_since).total_seconds() / 60.0)
                 if minutes_diff >= RESTART_IF_STUCK_MINUTES:
-                    app.logger.info("***************** RESTARTING BLOATED FARMER AT {:.2f} GiB!!! ******************".format(container_memory_gib))
+                    app.logger.info("***************** RESTARTING BLOATED FARMER AT {:.2f} GiB!!! ******************".format(container_memory_gb))
                     chia_cli.restart_farmer(blockchain)
                     return
+                app.logger.info("Would RESTART bloated farmer as current {:.2f} GiB usage exceeds the {:.2f} GiB limit".format(container_memory_gb, max_allowed_container_memory_gb) + ", however only {0} minutes elapsed.".format(minutes_diff))
             else:
                 memory_exceeded_since = None # Not over the limit anymore
         except Exception as ex:
             app.logger.info("Skipping bloated farmer check due to exception: {0}".format(str(ex)))
+            traceback.print_exc()

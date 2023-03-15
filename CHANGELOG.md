@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. The format 
 ## [Unreleased]
 ### Added
  - Support for running a blockchain timelord with environment variable `mode` set to `fullnode,timelord`.
+ - Optional config setting to restart fork fullnodes if they consume too much memory.
 ## Changed
  - Fixes for Gigahorse GPU plotting including 64 GB RAM mode using the `tmp3` SSD plotting path.
  - Fix for Gigahorse Alerts, please reset earlier broken settings file from [this one](https://github.com/guydavis/machinaris/blob/develop/config/chiadog/gigahorse.sample.yaml).
