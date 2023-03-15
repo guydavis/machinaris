@@ -74,7 +74,7 @@ def on_starting(server):
         scheduler.add_job(func=status_keys.update, name="status_keys", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER)
         scheduler.add_job(func=status_farm.update, name="status_farm", trigger='interval', seconds=JOB_FREQUENCY, jitter=JOB_JITTER) 
         scheduler.add_job(func=stats_blocks.collect, name="status_blocks", trigger='interval', minutes=10, jitter=JOB_JITTER)
-        scheduler.add_job(func=restart_stuck_farmer.execute, name="status_blockchain_sync", trigger='interval', minutes=5, jitter=JOB_JITTER) 
+        scheduler.add_job(func=restart_stuck_farmer.execute, name="status_blockchain_sync", trigger='interval', minutes=10, jitter=JOB_JITTER) 
         scheduler.add_job(func=periodically_sync_wallet.execute, name="status_wallet_sync", trigger='interval', minutes=15, jitter=JOB_JITTER) 
         scheduler.add_job(func=nft_recover.execute, name="status_nft_recover", trigger='interval', hours=1, jitter=JOB_JITTER) # Once an hour
         if globals.enabled_blockchains()[0] in plottings.PLOTTABLE_BLOCKCHAINS: # Only get plot listing from these blockchains
