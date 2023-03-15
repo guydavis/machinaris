@@ -17,6 +17,7 @@ All notable changes to this project will be documented in this file. The format 
  - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.9.14) to (v0.9.14) on `testnet9`.  Supporting the latest AMD GPU driver.
  - [One](https://github.com/xone-network/one-blockchain/releases/tag/1.7.0) to v1.7.0
 ## Notes
+ - Bladebit has regressed on the ability to `ramplot` as they try to match support by Gigahorse for GPU plotting. Awaiting a fix...
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
 
 ## [0.8.7] - 2023-02-16

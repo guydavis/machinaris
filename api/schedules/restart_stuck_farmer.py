@@ -67,7 +67,6 @@ def execute():
                 memory_exceeded_since = None
                 return
             container_memory_gb = globals.get_container_memory_usage_bytes() / 1024 / 1024 / 1024
-            app.logger.info("Would RESTART bloated farmer if current {:.2f} GiB usage is more than {:.2f} GiB limit.".format(container_memory_gb, max_allowed_container_memory_gb))
             if globals.plotting_enabled():
                 plotting_jobs = plotman_cli.load_plotting_summary()
                 if not plotting_jobs or len(plotting_jobs.rows) > 0:
@@ -78,10 +77,16 @@ def execute():
                     memory_exceeded_since = dt.datetime.now()
                 minutes_diff = math.ceil((dt.datetime.now() - memory_exceeded_since).total_seconds() / 60.0)
                 if minutes_diff >= RESTART_IF_STUCK_MINUTES:
-                    app.logger.info("***************** RESTARTING BLOATED FARMER AT {:.2f} GiB!!! ******************".format(container_memory_gb))
-                    chia_cli.restart_farmer(blockchain)
-                    return
-                app.logger.info("Would RESTART bloated farmer as current {:.2f} GiB usage exceeds the {:.2f} GiB limit".format(container_memory_gb, max_allowed_container_memory_gb) + ", however only {0} minutes elapsed.".format(minutes_diff))
+                    if not globals.wallet_running():  # Only if wallet is not currently being synced
+                        start = dt.time.time()
+                        app.logger.info("***************** RESTARTING BLOATED FARMER AT {:.2f} GiB!!! Exceeded {:.2f} GiB limit. ******************".format(container_memory_gb, max_allowed_container_memory_gb))
+                        chia_cli.restart_farmer(blockchain)
+                        app.logger.info("Completed RESTART of bloated farmer. Took {0} seconds to restart.".format((dt.time.time() - start)))
+                        return
+                    else:
+                        app.logger.info("Would RESTART bloated farmer as current {:.2f} GiB usage exceeds the {:.2f} GiB limit, but wallet is currently running.".format(container_memory_gb, max_allowed_container_memory_gb))
+                else:
+                    app.logger.info("Would RESTART bloated farmer as current {:.2f} GiB usage exceeds the {:.2f} GiB limit".format(container_memory_gb, max_allowed_container_memory_gb) + ", however only {0} minutes elapsed.".format(minutes_diff))
             else:
                 memory_exceeded_since = None # Not over the limit anymore
         except Exception as ex:
