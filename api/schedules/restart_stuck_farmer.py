@@ -56,7 +56,9 @@ def execute():
         try:
             if stale_peak(chia_cli.load_blockchain_show(blockchain).text.replace('\r', '').split('\n')):
                 app.logger.info("***************** RESTARTING STUCK FARMER!!! ******************")
+                start = dt.time.time()
                 chia_cli.restart_farmer(blockchain)
+                app.logger.info("Completed RESTART of stuck farmer. Took {0} seconds to restart.".format((dt.time.time() - start)))
                 return
         except Exception as ex:
             app.logger.info("Skipping stuck farmer check due to exception: {0}".format(str(ex)))

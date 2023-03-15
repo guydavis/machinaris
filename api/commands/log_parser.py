@@ -113,7 +113,7 @@ def recent_farmed_blocks(blockchain):
     cli_stdout = outs.decode('utf-8')
     #app.logger.info("Blocks grep: {0}".format(cli_stdout))
     blocks = log.Blocks(blockchain, cli_stdout.splitlines())
-    app.logger.info(blocks.rows)
+    #app.logger.info(blocks.rows)
     return blocks
 
 def get_farming_log_file(blockchain):

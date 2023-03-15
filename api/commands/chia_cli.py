@@ -168,7 +168,7 @@ def restart_farmer(blockchain):
     app.logger.info("Executing farmer restart: {0}".format(cmd))
     proc = Popen(cmd, cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
     try:
-        outs, errs = proc.communicate(timeout=90)
+        outs, errs = proc.communicate(timeout=300)
         if errs:
             app.logger.error("{0}".format(errs.decode('utf-8')))
             return False
