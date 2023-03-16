@@ -56,9 +56,7 @@ def execute():
         try:
             if stale_peak(chia_cli.load_blockchain_show(blockchain).text.replace('\r', '').split('\n')):
                 app.logger.info("***************** RESTARTING STUCK FARMER!!! ******************")
-                start = dt.time()
                 chia_cli.restart_farmer(blockchain)
-                app.logger.info("Completed RESTART of stuck farmer. Took {0} seconds to restart.".format((dt.time() - start)))
                 return
         except Exception as ex:
             app.logger.info("Skipping stuck farmer check due to exception: {0}".format(str(ex)))
@@ -80,10 +78,8 @@ def execute():
                 minutes_diff = math.ceil((dt.datetime.now() - memory_exceeded_since).total_seconds() / 60.0)
                 if minutes_diff >= RESTART_IF_STUCK_MINUTES:
                     if not globals.wallet_running():  # Only if wallet is not currently being synced
-                        start = dt.time()
                         app.logger.info("***************** RESTARTING BLOATED FARMER AT {:.2f} GiB!!! Exceeded {:.2f} GiB limit. ******************".format(container_memory_gb, max_allowed_container_memory_gb))
                         chia_cli.restart_farmer(blockchain)
-                        app.logger.info("Completed RESTART of bloated farmer. Took {0} seconds to restart.".format((dt.time() - start)))
                         return
                     else:
                         app.logger.info("Would RESTART bloated farmer as current {:.2f} GiB usage exceeds the {:.2f} GiB limit, but wallet is currently running.".format(container_memory_gb, max_allowed_container_memory_gb))
