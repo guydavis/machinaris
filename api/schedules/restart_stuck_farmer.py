@@ -80,6 +80,7 @@ def execute():
                     if not globals.wallet_running():  # Only if wallet is not currently being synced
                         app.logger.info("***************** RESTARTING BLOATED FARMER AT {:.2f} GiB!!! Exceeded {:.2f} GiB limit. ******************".format(container_memory_gb, max_allowed_container_memory_gb))
                         chia_cli.restart_farmer(blockchain)
+                        memory_exceeded_since = None
                         return
                     else:
                         app.logger.info("Would RESTART bloated farmer as current {:.2f} GiB usage exceeds the {:.2f} GiB limit, but wallet is currently running.".format(container_memory_gb, max_allowed_container_memory_gb))
