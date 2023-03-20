@@ -363,6 +363,8 @@
         function updateDockerCompose(errors) {
             var line_end = '\n';
             var os = getRadioButtonValue('os')
+            var gpu_type = $('#gpu_type').val()
+            var gpu_blockchain = $('#gpu_blockchain').val()
             cmd = "version: '3.7'" + line_end;
             cmd += "services:"  + line_end + line_end;
 
@@ -482,6 +484,40 @@
                     }
                     if (remote_windows_shares.length > 0) {
                         cmd += '            - remote_shares=' + remote_windows_shares.join() + line_end;
+                    }
+                    // Add new environment variables above this section as it has both env vars and runtime and devices etc
+                    if (blockchain == gpu_blockchain) {
+                        if (gpu_type == 'nvidia') {
+                            cmd += '            - OPENCL_GPU=nvidia' + line_end;
+                            cmd += '            - NVIDIA_VISIBLE_DEVICES=0' + line_end;
+                            cmd += '            - NVIDIA_DRIVER_CAPABILITIES=compute,utility' + line_end;
+                            cmd += '        runtime: nvidia' + line_end;
+                        }
+                        else if (gpu_type == 'amd') {
+                            if (gpu_blockchain == 'chia') {
+                                errors.push("{{_('Currently Chia and Bladebit require a Nvidia GPU.  Other cards are not supported unfortunately.')}}");
+                            }
+                            else {
+                                cmd += '            - OPENCL_GPU=amd' + line_end;
+                                cmd += '            - ROC_ENABLE_PRE_VEGA=1' + line_end;
+                                cmd += '        devices:' + line_end;
+                                cmd += '            - "/dev/kfd:/dev/kfd"' + line_end;
+                                cmd += '            - "/dev/dri/:/dev/dri/"' + line_end;
+                            }
+                        }
+                        else if (gpu_type == 'intel') {
+                            if (gpu_blockchain == 'chia') {
+                                errors.push("{{_('Currently Chia and Bladebit require a Nvidia GPU.  Other cards are not supported unfortunately.')}}");
+                            }
+                            else if (gpu_blockchain == 'gigahorse') {
+                                errors.push("{{_('Currently Gigahorse requires a Nvidia or AMD GPU.  Intel cards are not supported unfortunately.')}}");
+                            }
+                            else {
+                                cmd += '            - OPENCL_GPU=intel' + line_end;
+                                cmd += '        devices:' + line_end;
+                                cmd += '            - "/dev/dri/:/dev/dri/"' + line_end;
+                            }
+                        }
                     }
                     cmd += '        ports:' + line_end;
                     if (blockchain == "chia") {
@@ -940,6 +976,32 @@
                             class="fs-4 bi-dash text-white text-right"></i></a>
                 </div>
             </div>
+            <div class="row mb-3" id="gpus_row">
+                <div class="col offset">
+                    <h4>{{_('Graphics Devices')}} <a href="https://github.com/guydavis/machinaris/wiki/GPUs" target="_blank"><i class="fs-4 bi-question-circle text-white"></i></a></h4>
+                    <p>{{_('Optionally, if your system has an available and supported GPU, you can pass it thru to the blockchain\'s Docker container. Only Chia, Gigahorse, and MMX blockchains support certain GPUs.')}}</p>
+                    <div class="row">
+                        <div class="col">
+                            <label for="gpu_type" class="form-label">{{_('GPU Type:')}}</label>
+                            <select class="form-select" id="gpu_type" name="gpu_type" aria-label="gpu_type" onchange="updateDocker()">
+                                <option value="none" selected>{{_('None')}}</option>
+                                <option value="nvidia">{{_('Nvidia')}}</option>
+                                <option value="amd">{{_('AMD')}}</option>
+                                <option value="intel">{{_('Intel')}}</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="gpu_blockchain" class="form-label">{{_('Blockchain:')}}</label>
+                            <select class="form-select" id="gpu_blockchain" name="gpu_blockchain" aria-label="gpu_blockchain" onchange="updateDocker()">
+                                <option value="none" selected>{{_('None')}}</option>
+                                <option value="chia">{{_('Chia')}}</option>
+                                <option value="gigahorse">{{_('Gigahorse')}}</option>
+                                <option value="mmx">{{_('MMX')}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
     <div class="rounded-3 small" id="docker_compose">
@@ -950,8 +1012,6 @@
         <h2>{{_('Docker Compose')}}</h2>
         <pre id="compose"></pre>
         <br/>
-        <small><i>{{_('NOTE: Passing a GPU thru into the container requires additional config.  Please see the ')}}
-            <a class='text-white' href="https://github.com/guydavis/machinaris/wiki/MMX#can-i-use-my-gpu" target="_blank">wiki.</a></i></small>
     </div>
 
     <script src="{{ url_for('static', filename='3rd_party/bootstrap.bundle.min.js') }}"></script>

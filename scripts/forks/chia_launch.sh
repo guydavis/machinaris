@@ -36,15 +36,16 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Downloading Chia blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/mainnet/db/chia && cd /root/.chia/mainnet/db/chia
-  # Latest Blockchain DB download from direct from https://sweetchia.com/
-  db_url=$(curl -s https://sweetchia.com | grep -Po "https:.*/blockchain_v2_mainnet-\d{4}-\d{2}-\d{2}-\d{4}.7z" | shuf -n 1)
-  echo "Please be patient! Downloading blockchain database from: "
-  echo "    ${db_url}"
-  curl -skLJ -O ${db_url}
-  p7zip --decompress --force blockchain_v2_mainnet*.7z
+  # Latest Blockchain DB download
+  torrent=$(curl -s https://www.chia.net/downloads/ | grep -Po "https:.*/blockchain_v2_mainnet.\d{4}-\d{2}-\d{2}.sqlite.gz.torrent")
+  echo "Please be patient! Downloading blockchain database (via libtorrent) from: "
+  echo "    ${torrent}"
+  curl -kLJ -O ${torrent}
+  python /machinaris/scripts/chiadb_download.py $PWD/$torrent
+  gunzip *.gz
   cd /root/.chia/mainnet/db
   mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.sqlite .
-  rm -rf /root/.chia/mainnet/db/chia
+  rm -rf /root/.chia/mainnet/db/chia 
 fi
 
 mkdir -p /root/.chia/mainnet/log
