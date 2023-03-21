@@ -170,7 +170,10 @@ def load_key_pk(type, blockchain):
     return None
 
 def load_pool_contract_address(blockchain):
-    plotnfts = p.load_plotnfts_by_blockchain(blockchain)
+    pool_blockchain = blockchain
+    if blockchain == 'gigahorse':  # Use the pool settings for Chia when checking for Gigahorse
+        pool_blockchain = 'chia'
+    plotnfts = p.load_plotnfts_by_blockchain(pool_blockchain)
     if len(plotnfts.rows) == 1:
         m = re.search('Pool contract address .*: (\w+)'.format(type), plotnfts.rows[0]['details'])
         if m:

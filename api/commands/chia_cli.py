@@ -164,20 +164,9 @@ def restart_farmer(blockchain):
     if os.path.exists(WALLET_SETTINGS_FILE):
         cmd = "{0} stop -d farmer && {0} start farmer-no-wallet".format(chia_binary)
     else:
-        cmd = "{0} stop -d farmer && {0} start farmer -r".format(chia_binary)
+        cmd = "{0} stop -d farmer && {0} start farmer".format(chia_binary)
     app.logger.info("Executing farmer restart: {0}".format(cmd))
-    proc = Popen(cmd, cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
-    try:
-        outs, errs = proc.communicate(timeout=90)
-        if errs:
-            app.logger.error("{0}".format(errs.decode('utf-8')))
-            return False
-    except TimeoutExpired as ex:
-        proc.kill()
-        proc.communicate()
-        app.logger.error(traceback.format_exc())
-        return False
-    return True
+    Popen("nohup sh -c '{0}' >/dev/null 2>&1 &".format(cmd), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
 
 def start_wallet(blockchain):
     if blockchain == 'gigahorse':
@@ -187,18 +176,7 @@ def start_wallet(blockchain):
     working_dir = globals.get_blockchain_working_dir(blockchain)
     cmd = "{0} start wallet -r".format(chia_binary)
     app.logger.info("Executing wallet start: {0}".format(cmd))
-    proc = Popen(cmd, cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
-    try:
-        outs, errs = proc.communicate(timeout=90)
-        if errs:
-            app.logger.error("{0}".format(errs.decode('utf-8')))
-            return False
-    except TimeoutExpired as ex:
-        proc.kill()
-        proc.communicate()
-        app.logger.error(traceback.format_exc())
-        return False
-    return True
+    Popen("nohup sh -c '{0}' >/dev/null 2>&1 &".format(cmd), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
 
 def pause_wallet(blockchain):
     if blockchain == 'gigahorse':
@@ -211,18 +189,7 @@ def pause_wallet(blockchain):
     else:  # Updated blockchains can simply stop the wallet
         cmd = "{0} stop wallet".format(chia_binary)
     app.logger.info("Executing wallet pause: {0}".format(cmd))
-    proc = Popen(cmd, cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
-    try:
-        outs, errs = proc.communicate(timeout=90)
-        if errs:
-            app.logger.error("{0}".format(errs.decode('utf-8')))
-            return False
-    except TimeoutExpired as ex:
-        proc.kill()
-        proc.communicate()
-        app.logger.info(traceback.format_exc())
-        return False
-    return True
+    Popen("nohup sh -c '{0}' >/dev/null 2>&1 &".format(cmd), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
 
 def remove_connection(node_id, ip, blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)

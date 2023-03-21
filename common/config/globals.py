@@ -158,9 +158,9 @@ def is_setup():
                 logging.info(traceback.format_exc())
     return foundKey
 
-# On very first launch of the main Chia container, blockchain DB 7zip is being downloaded so must wait.
-CHIA_COMPRESSED_DB_SIZE = 40 * 1024 * 1024 * 1024 # 40 compressed GB in Septemer 2022
-CHIA_BLOCKCHAIN_DB_SIZE = 90 * 1024 * 1024 * 1024 # 90 uncompressed GB in September 2022
+# On very first launch of the main Chia container, blockchain DB gz is being downloaded via torrent so must wait.
+CHIA_COMPRESSED_DB_SIZE = 56 * 1024 * 1024 * 1024 # Compressed GB in March 2023
+CHIA_BLOCKCHAIN_DB_SIZE = 106 * 1024 * 1024 * 1024 # Uncompressed GB in March 2023
 def blockchain_downloading():
     db_path = '/root/.chia/mainnet/db'
     if path.exists(f"{db_path}/blockchain_v1_mainnet.sqlite") or path.exists(f"{db_path}/blockchain_v2_mainnet.sqlite"):

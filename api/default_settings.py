@@ -60,6 +60,7 @@ class DefaultConfig:
     STATUS_EVERY_X_MINUTES = 2  # Run status collection once every two minutes by default
     ALLOW_HARVESTER_CERT_LAN_DOWNLOAD = True
     SELECTED_WALLET_NUM = 1 # Default is read first wallet if multiple are prompted by `chia wallet show`
+    RESTART_FARMER_IF_CONTAINER_MEMORY_EXCEEDS_GB = -1 # Default is to allow a fullnode unlimited memory
 
     BABEL_TRANSLATION_DIRECTORIES = "api/translations"
     LANGUAGES = ['en', 'de_DE', 'fr_FR', 'it_IT', 'nl_NL', 'pt_PT', 'zh']

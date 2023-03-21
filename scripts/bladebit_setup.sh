@@ -25,7 +25,7 @@ if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chi
             cd / && echo "Bladebit version: "`bladebit --version`
             # Now go get the Bladebit closed source binary of 3.0.0 alpha, very securely zipped twice :)
             cd /bladebit/build
-            curl -sLJO https://download.chia.net/bladebit/bladebit-cuda-v3.0.0-alpha3-ubuntu-x86-64.tar.gz.zip
+            curl -sLJO https://download.chia.net/bladebit/alpha3/bladebit-cuda-v3.0.0-alpha3-ubuntu-x86-64.tar.gz.zip
             unzip bladebit-cuda-v3.0.0-alpha3-ubuntu-x86-64.tar.gz.zip
             tar -xzf bladebit-cuda-v3.0.0-alpha3-ubuntu-x86-64.tar.gz
             chmod 755 bladebit_cuda

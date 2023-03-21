@@ -234,8 +234,8 @@
             update_blockchain_options("{{selected_worker}}");
             //Call the function when #input is clicked
             $(document).on("change", "#worker", function (e) {
-                load_config($("#worker").val(), $("#blockchain").val())
                 update_blockchain_options($("#worker").val());
+                load_config($("#worker").val(), $("#blockchain").val())
                 load_dirs($("#worker").val(), $("#blockchain").val())
                 load_schedule($("#worker").val(), $("#blockchain").val())
             });

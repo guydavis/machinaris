@@ -101,8 +101,10 @@ scheduling:
 plotting:
         # See Keys page, for 'Farmer public key' value
         farmer_pk: REPLACE_WITH_THE_REAL_VALUE
-        # See Keys page, for 'Pool public key' value
+        # ONLY FOR OLD SOLO PLOTS, COMMENT OUT IF PORTABLE PLOTTING!!!
         pool_pk: REPLACE_WITH_THE_REAL_VALUE
+        # See 'Settings | Pools' page, for 'Pool contract address' value, UNCOMMENT IF PORTABLE PLOTTING!!!
+        #pool_contract_address: REPLACE_WITH_THE_REAL_VALUE
 
         type: madmax
 
