@@ -40,8 +40,8 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   torrent=$(curl -s https://www.chia.net/downloads/ | grep -Po "https:.*/blockchain_v2_mainnet.\d{4}-\d{2}-\d{2}.sqlite.gz.torrent")
   echo "Please be patient! Downloading blockchain database (via libtorrent) from: "
   echo "    ${torrent}"
-  curl -kLJ -O ${torrent}
-  python /machinaris/scripts/chiadb_download.py $PWD/$torrent
+  curl -skLJ -O ${torrent}
+  python /machinaris/scripts/chiadb_download.py $PWD/*.torrent
   gunzip *.gz
   cd /root/.chia/mainnet/db
   mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.sqlite .
