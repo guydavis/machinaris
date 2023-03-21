@@ -37,11 +37,13 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient! Downloading blockchain database (via libtorrent) from: "
   echo "    ${torrent}"
   curl -skLJ -O ${torrent}
-  python /machinaris/scripts/chiadb_download.py $PWD/*.torrent
+  deactivate # Use the system python
+  /usr/bin/python /machinaris/scripts/chiadb_download.py $PWD/*.torrent
   gunzip *.gz
   cd /root/.chia/mainnet/db
   mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.sqlite .
-  rm -rf /root/.chia/mainnet/db/chia 
+  rm -rf /root/.chia/mainnet/db/chia
+  . ./activate  # Again
 fi
 
 /chia-gigahorse-farmer/chia.bin init >> /root/.chia/mainnet/log/init.log 2>&1
