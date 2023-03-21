@@ -47,7 +47,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   cd /root/.chia/mainnet/db
   mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.sqlite .
   rm -rf /root/.chia/mainnet/db/chia
-  . ./activate  # Again
+  cd /chia-blockchain && . ./activate
 fi
 
 mkdir -p /root/.chia/mainnet/log
