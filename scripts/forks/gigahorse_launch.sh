@@ -38,7 +38,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "    ${torrent}"
   curl -skLJ -O ${torrent}
   deactivate # Use the system python
-  /usr/bin/python /machinaris/scripts/chiadb_download.py $PWD/*.torrent
+  /usr/bin/python /machinaris/scripts/chiadb_download.py $PWD/*.torrent > /tmp/chiadb_download.log 2>&1
   gunzip *.gz
   cd /root/.chia/mainnet/db
   mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.sqlite .

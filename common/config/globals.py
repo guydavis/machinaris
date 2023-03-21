@@ -169,7 +169,8 @@ def blockchain_downloading():
     if not path.exists(tmp_path):
         logging.info("No folder at {0} yet...".format(tmp_path))
         return [0, "0 GB"]
-    bytes = sum(f.stat().st_size for f in pathlib.Path(tmp_path).glob('**/*') if f.is_file())
+    # Use st_blocks to actual size of the sparse files that libtorrent creates during download
+    bytes = sum((f.stat().st_blocks*512) for f in pathlib.Path(tmp_path).glob('**/*') if f.is_file())
     return [ round(100*bytes/(CHIA_COMPRESSED_DB_SIZE + CHIA_BLOCKCHAIN_DB_SIZE), 2), converters.convert_size(bytes) ]
 
 def get_key_paths():
