@@ -982,7 +982,7 @@
                     <p>{{_('Optionally, if your system has an available and supported GPU, you can pass it thru to the blockchain\'s Docker container. Only Chia, Gigahorse, and MMX blockchains support certain GPUs.')}}</p>
                     <div class="row">
                         <div class="col">
-                            <label for="gpu_type" class="form-label">{{_('GPU Type:')}}</label>
+                            <label for="gpu_type" class="form-label">{{_('GPU Type')}}:</label>
                             <select class="form-select" id="gpu_type" name="gpu_type" aria-label="gpu_type" onchange="updateDocker()">
                                 <option value="none" selected>{{_('None')}}</option>
                                 <option value="nvidia">{{_('Nvidia')}}</option>
@@ -991,7 +991,7 @@
                             </select>
                         </div>
                         <div class="col">
-                            <label for="gpu_blockchain" class="form-label">{{_('Blockchain:')}}</label>
+                            <label for="gpu_blockchain" class="form-label">{{_('Blockchain')}}:</label>
                             <select class="form-select" id="gpu_blockchain" name="gpu_blockchain" aria-label="gpu_blockchain" onchange="updateDocker()">
                                 <option value="none" selected>{{_('None')}}</option>
                                 <option value="chia">{{_('Chia')}}</option>
