@@ -5,7 +5,7 @@
 
 PLOTMAN_BRANCH=$1
 
-if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia' || ${blockchains} == 'chives' || ${blockchains} == 'mmx' || ${blockchains} == 'gigahorse') ]]; then
+if [[ (${mode} =~ ^fullnode.*|| ${mode} =~ "plotter") && (${blockchains} == 'chia' || ${blockchains} == 'chives' || ${blockchains} == 'mmx' || ${blockchains} == 'gigahorse') ]]; then
     if [[ ! -f /chia-blockchain/venv/bin/plotman ]]; then
         echo 'Installing Plotman...'
         cd /

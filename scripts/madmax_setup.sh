@@ -9,7 +9,7 @@
 HASH=d1a9e88b44ba37f61bfabcb68e80e83f8b939648
 CLASSIC_MADMAX_BRANCH=master
 
-if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia' || ${blockchains} == 'chives') ]]; then
+if [[ (${mode} =~ ^fullnode.*|| ${mode} =~ "plotter") && (${blockchains} == 'chia' || ${blockchains} == 'chives') ]]; then
     if [ ! -f /usr/bin/chia_plot ] && [[ "${madmax_skip_build}" != 'true' ]]; then
         arch_name="$(uname -m)"
         if [[ "${arch_name}" = "x86_64" ]] || [[ "${arch_name}" = "arm64" ]]; then
@@ -40,7 +40,7 @@ fi
 GIGAHORSE_MADMAX_BRANCH=$1
 
 # MMX and Gigahorse container gets the "new" Madmax plotters with compression, only available as binaries
-if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'mmx' || ${blockchains} == 'gigahorse') ]]; then
+if [[ (${mode} =~ ^fullnode.*|| ${mode} =~ "plotter") && (${blockchains} == 'mmx' || ${blockchains} == 'gigahorse') ]]; then
     if [ ! -f /usr/bin/chia_plot ] && [[ "${madmax_skip_build}" != 'true' ]]; then
         arch_name="$(uname -m)"
         if [[ "${arch_name}" = "x86_64" ]]; then
