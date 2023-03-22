@@ -51,7 +51,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Now decompressing the blockchain database..."
   gunzip *.gz
   cd /root/.chia/mainnet/db
-  mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.sqlite .
+  mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.*.sqlite blockchain_v2_mainnet.sqlite
   rm -rf /root/.chia/mainnet/db/chia
 fi
 
