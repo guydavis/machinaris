@@ -40,19 +40,19 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   torrent=$(curl -s https://www.chia.net/downloads/ | grep -Po "https:.*/blockchain_v2_mainnet.\d{4}-\d{2}-\d{2}.sqlite.gz.torrent")
   echo "Please be patient! Downloading blockchain database directly from: "
   echo "    ${torrent::-8}"
-  curl -kLJ -O ${torrent::-8} > /tmp/chiadb_download.log 2>&1
-  size_at_least=53687091200  # 50 GB
-  size_actual=$(wc -c <blockchain_v2_mainnet.*.sqlite.gz)
+  curl -s -L -o - ${torrent::-8} | gunzip > blockchain_v2_mainnet.sqlite
+  size_at_least=100000000000  # 100 GB
+  size_actual=$(wc -c <blockchain_v2_mainnet.sqlite)
   if [ ${size_actual:-0} -lt $size_at_least ]; then # Direct download was not valid, try to torrent it instead
-    rm -f blockchain_v2_mainnet.*.sqlite.gz
+    rm -f blockchain_v2_mainnet.sqlite
     echo "Please be patient! Downloading blockchain database indirectly (via libtorrent) from: "
     echo "    ${torrent}"
     curl -skLJ -O ${torrent}
     deactivate # Use the system python
     /usr/bin/python /machinaris/scripts/chiadb_download.py $PWD/*.torrent >> /tmp/chiadb_download.log 2>&1
     cd /chia-blockchain && . ./activate # Re-activate
+    gunzip *.gz
   fi
-  gunzip *.gz
   cd /root/.chia/mainnet/db
   mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.sqlite .
   rm -rf /root/.chia/mainnet/db/chia
