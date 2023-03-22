@@ -32,18 +32,27 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Downloading Chia blockchain DB (many GBs in size) on first launch..."
   echo "Please be patient as takes minutes now, but saves days of syncing time later."
   mkdir -p /root/.chia/mainnet/db/chia && cd /root/.chia/mainnet/db/chia
-  # Latest Blockchain DB download
+  # Latest Blockchain DB, first try direct download, then fallback to slower torrent
   torrent=$(curl -s https://www.chia.net/downloads/ | grep -Po "https:.*/blockchain_v2_mainnet.\d{4}-\d{2}-\d{2}.sqlite.gz.torrent")
-  echo "Please be patient! Downloading blockchain database (via libtorrent) from: "
-  echo "    ${torrent}"
-  curl -skLJ -O ${torrent}
-  deactivate # Use the system python
-  /usr/bin/python /machinaris/scripts/chiadb_download.py $PWD/*.torrent > /tmp/chiadb_download.log 2>&1
+  echo "Please be patient! Downloading blockchain database directly from: "
+  echo "    ${torrent::-8}"
+  curl -kLJ -O ${torrent::-8} > /tmp/chiadb_download.log 2>&1
+  file=$(ls -1 blockchain_v2_mainnet.*.sqlite.gz)
+  size_at_least=53687091200  # 50 GB
+  size_actual=$(wc -c <"$file")
+  if [ $size_actual -lt $size_at_least ]; then # Direct download was not valid, try to torrent it instead
+    rm -f $file
+    echo "Please be patient! Downloading blockchain database indirectly (via libtorrent) from: "
+    echo "    ${torrent}"
+    curl -skLJ -O ${torrent}
+    deactivate # Use the system python
+    /usr/bin/python /machinaris/scripts/chiadb_download.py $PWD/*.torrent >> /tmp/chiadb_download.log 2>&1
+    cd /chia-blockchain && . ./activate # Re-activate
+  fi
   gunzip *.gz
   cd /root/.chia/mainnet/db
   mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.sqlite .
   rm -rf /root/.chia/mainnet/db/chia
-  cd /chia-gigahorse-farmer && . ./activate.sh
 fi
 
 /chia-gigahorse-farmer/chia.bin init >> /root/.chia/mainnet/log/init.log 2>&1
