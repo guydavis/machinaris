@@ -5,7 +5,7 @@
 # https://github.com/meganz/MEGAcmd ; requires Ubuntu 22.04 or 20.04
 #
 
-if [[ ${mode} =~ ^fullnode.*]] && [[ "${blockchain_db_download}" == 'true' ]] && [[ ! -f /usr/bin/mega-cmd ]]; then
+if [[ ${mode} =~ ^fullnode.* ]] && [[ "${blockchain_db_download}" == 'true' ]] && [[ ! -f /usr/bin/mega-cmd ]]; then
     arch_name="$(uname -m)"
     ubuntu_ver=`lsb_release -r -s`
     echo "Installing megacmd on ${arch_name}..."

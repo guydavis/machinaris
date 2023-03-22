@@ -9,7 +9,7 @@
 
 BLADEBIT_BRANCH=$1
 
-if [[ (${mode} =~ ^fullnode.*|| ${mode} =~ "plotter") && (${blockchains} == 'chia') ]]; then
+if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "plotter") && (${blockchains} == 'chia') ]]; then
     if [ ! -f /usr/bin/bladebit ] && [[ "${bladebit_skip_build}" != 'true' ]]; then
         arch_name="$(uname -m)"
         if [[ "${arch_name}" = "x86_64" ]] || [[ "${arch_name}" = "arm64" ]]; then

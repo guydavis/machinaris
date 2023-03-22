@@ -6,7 +6,7 @@
 FORKTOOLS_BRANCH=$1
 
 if [[ "${forktools_skip_build}" != 'true' ]]; then
-	if [[ (${mode} =~ ^fullnode.*|| ${mode} =~ "harvester") && ${blockchains} != 'mmx' && ${blockchains} != 'gigahorse' ]]; then
+	if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "harvester") && ${blockchains} != 'mmx' && ${blockchains} != 'gigahorse' ]]; then
 		cd /
 		git clone --branch ${FORKTOOLS_BRANCH} https://github.com/guydavis/forktools.git
 		cd forktools
