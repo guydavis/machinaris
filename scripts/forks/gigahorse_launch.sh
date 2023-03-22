@@ -37,11 +37,10 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient! Downloading blockchain database directly from: "
   echo "    ${torrent::-8}"
   curl -kLJ -O ${torrent::-8} > /tmp/chiadb_download.log 2>&1
-  file=$(ls -1 blockchain_v2_mainnet.*.sqlite.gz)
   size_at_least=53687091200  # 50 GB
-  size_actual=$(wc -c <"$file")
-  if [ $size_actual -lt $size_at_least ]; then # Direct download was not valid, try to torrent it instead
-    rm -f $file
+  size_actual=$(wc -c <blockchain_v2_mainnet.*.sqlite.gz)
+  if [ ${size_actual:-0} -lt $size_at_least ]; then # Direct download was not valid, try to torrent it instead
+    rm -f blockchain_v2_mainnet.*.sqlite.gz
     echo "Please be patient! Downloading blockchain database indirectly (via libtorrent) from: "
     echo "    ${torrent}"
     curl -skLJ -O ${torrent}
