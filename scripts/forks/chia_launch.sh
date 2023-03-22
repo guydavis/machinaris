@@ -40,11 +40,12 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   torrent=$(curl -s https://www.chia.net/downloads/ | grep -Po "https:.*/blockchain_v2_mainnet.\d{4}-\d{2}-\d{2}.sqlite.gz.torrent")
   echo "Please be patient! Downloading blockchain database directly from: "
   echo "    ${torrent::-8}"
+  touch .chiadb_decompressed_on_the_fly # Marker file for globals.py status
   curl -s -L -o - ${torrent::-8} | gunzip > blockchain_v2_mainnet.sqlite
   size_at_least=100000000000  # 100 GB
   size_actual=$(wc -c <blockchain_v2_mainnet.sqlite)
   if [ ${size_actual:-0} -lt $size_at_least ]; then # Direct download was not valid, try to torrent it instead
-    rm -f blockchain_v2_mainnet.sqlite
+    rm -f blockchain_v2_mainnet.sqlite .chiadb_decompressed_on_the_fly
     echo "Please be patient! Downloading blockchain database indirectly (via libtorrent) from: "
     echo "    ${torrent}"
     curl -skLJ -O ${torrent}
