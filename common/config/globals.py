@@ -169,8 +169,16 @@ def blockchain_downloading():
     if not path.exists(tmp_path):
         logging.info("No folder at {0} yet...".format(tmp_path))
         return [0, "0 GB"]
-    bytes = sum(f.stat().st_size for f in pathlib.Path(tmp_path).glob('**/*') if f.is_file())
-    return [ round(100*bytes/(CHIA_COMPRESSED_DB_SIZE + CHIA_BLOCKCHAIN_DB_SIZE), 2), converters.convert_size(bytes) ]
+    target_size = CHIA_COMPRESSED_DB_SIZE + CHIA_BLOCKCHAIN_DB_SIZE
+    if path.exists(db_path + '/chia/.chiadb_decompressed_on_the_fly'): # If decompressed via pipe from download
+        target_size = CHIA_BLOCKCHAIN_DB_SIZE
+    # Chia and Gigahorse download via libtorrent that allocates full file size before any downloading, so use status file
+    if path.exists(db_path + '/chia/.chiadb_download_size'):
+        with open(db_path + '/chia/.chiadb_download_size',"r") as f:
+            bytes = int(f.read())
+    else: # Later when decompressing, just read file sizes on disk
+        bytes = sum(f.stat().st_size for f in pathlib.Path(tmp_path).glob('**/*') if f.is_file())
+    return [ round(100*bytes/(target_size), 2), converters.convert_size(bytes) ]
 
 def get_key_paths():
     if "keys" not in os.environ:
