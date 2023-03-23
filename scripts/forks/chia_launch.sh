@@ -34,16 +34,28 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
       web:app &
   echo 'Starting web server...  Browse to port 8926.'
   echo "Downloading Chia blockchain DB (many GBs in size) on first launch..."
-  echo "Please be patient as takes minutes now, but saves days of syncing time later."
+  echo "Please be patient as this takes hours now, but saves days of syncing time later."
   mkdir -p /root/.chia/mainnet/db/chia && cd /root/.chia/mainnet/db/chia
-  # Latest Blockchain DB download from direct from https://sweetchia.com/
-  db_url=$(curl -s https://sweetchia.com | grep -Po "https:.*/blockchain_v2_mainnet-\d{4}-\d{2}-\d{2}-\d{4}.7z" | shuf -n 1)
-  echo "Please be patient! Downloading blockchain database from: "
-  echo "    ${db_url}"
-  curl -skLJ -O ${db_url}
-  p7zip --decompress --force blockchain_v2_mainnet*.7z
+  # Latest Blockchain DB, first try direct download, then fallback to slower torrent
+  torrent=$(curl -s https://www.chia.net/downloads/ | grep -Po "https:.*/blockchain_v2_mainnet.\d{4}-\d{2}-\d{2}.sqlite.gz.torrent")
+  #echo "Please be patient! Downloading blockchain database directly from: "
+  #echo "    ${torrent::-8}"
+  #curl -kLJ -O ${torrent::-8} > /tmp/chiadb_download.log 2>&1
+  #size_at_least=55000000000  # 55 GB
+  #size_actual=$(wc -c <blockchain_v2_mainnet.*.sqlite.gz)
+  #if [ ${size_actual:-0} -lt $size_at_least ]; then # Direct download was not valid, try to torrent it instead
+    #rm -f blockchain_v2_mainnet.*.sqlite.gz
+  echo "Please be patient! Downloading blockchain database indirectly (via libtorrent) from: "
+  echo "    ${torrent}"
+  curl -skLJ -O ${torrent}
+  deactivate # Use the system python
+  /usr/bin/python /machinaris/scripts/chiadb_download.py $PWD/*.torrent >> /tmp/chiadb_download.log 2>&1
+  cd /chia-blockchain && . ./activate # Re-activate
+  #fi
+  echo "Now decompressing the blockchain database..."
+  gunzip *.gz
   cd /root/.chia/mainnet/db
-  mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.sqlite .
+  mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.*.sqlite blockchain_v2_mainnet.sqlite
   rm -rf /root/.chia/mainnet/db/chia
 fi
 
@@ -69,7 +81,7 @@ for k in ${keys//:/ }; do
     echo "Adding key #${label_num} at path: ${k}"
     chia keys add -l "key_${label_num}" -f ${k} > /dev/null
     ((label_num=label_num+1))
-  elif [[ ${mode} == 'fullnode' ]]; then
+  elif [[ ${mode} =~ ^fullnode.* ]]; then
     echo "Skipping 'chia keys add' as no file found at: ${k}"
   fi
 done
@@ -85,31 +97,23 @@ done
 chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
 chia init --fix-ssl-permissions > /dev/null 
 
-# Support for GPUs used when plotting/farming
-if [[ ${OPENCL_GPU} == 'nvidia' ]]; then   
-    mkdir -p /etc/OpenCL/vendors
-    echo "libnvidia-opencl.so.1" > /etc/OpenCL/vendors/nvidia.icd
-    echo "Enabling Nvidia GPU support inside this container."
-elif [[ ${OPENCL_GPU} == 'amd' ]]; then
-	pushd /tmp > /dev/null
-  echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-	apt-get update 2>&1 > /tmp/amdgpu_setup.log
-	amdgpu-install -y --usecase=opencl --opencl=rocr --no-dkms --no-32 --accept-eula 2>&1 >> /tmp/amdgpu_setup.log
-	popd > /dev/null
-  echo "Enabling AMD GPU support inside this container."
-elif [[ ${OPENCL_GPU} == 'intel' ]]; then
-  echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-	apt-get update 2>&1 > /tmp/intelgpu_setup.log
-	apt-get install -y intel-opencl-icd 2>&1 >> /tmp/intelgpu_setup.log
-  echo "Enabling Intel GPU support inside this container."
-fi
+/usr/bin/bash /machinaris/scripts/gpu_drivers_setup.sh
 
 # Start services based on mode selected. Default is 'fullnode'
-if [[ ${mode} == 'fullnode' ]]; then
+if [[ ${mode} =~ ^fullnode.* ]]; then
   if [ -f /root/.chia/machinaris/config/wallet_settings.json ]; then
     chia start farmer-no-wallet
   else
     chia start farmer
+  fi
+  if [[ ${mode} =~ .*timelord$ ]]; then
+    if [ ! -f vdf_bench ]; then
+        echo "Building timelord binaries..."
+        apt-get update > /tmp/timelord_build.sh 2>&1 
+        apt-get install -y libgmp-dev libboost-python-dev libboost-system-dev >> /tmp/timelord_build.sh 2>&1 
+        BUILD_VDF_CLIENT=Y BUILD_VDF_BENCH=Y /usr/bin/sh ./install-timelord.sh >> /tmp/timelord_build.sh 2>&1 
+    fi
+    chia start timelord-only
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   chia start farmer-only
@@ -136,8 +140,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "Did not find your farmer's certificates within /root/.chia/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
-    chia configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    chia configure --enable-upnp false
+    chia configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.chia/mainnet/log/init.log
+    chia configure --enable-upnp false  2>&1 >> /root/.chia/mainnet/log/init.log
     chia start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

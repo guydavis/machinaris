@@ -9,7 +9,7 @@
 
 BLADEBIT_BRANCH=$1
 
-if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chia') ]]; then
+if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "plotter") && (${blockchains} == 'chia') ]]; then
     if [ ! -f /usr/bin/bladebit ] && [[ "${bladebit_skip_build}" != 'true' ]]; then
         arch_name="$(uname -m)"
         if [[ "${arch_name}" = "x86_64" ]] || [[ "${arch_name}" = "arm64" ]]; then
@@ -23,6 +23,13 @@ if [[ (${mode} == 'fullnode' || ${mode} =~ "plotter") && (${blockchains} == 'chi
             cmake --build . --target bladebit --config Release
             ln -s /bladebit/build/bladebit /usr/bin/bladebit
             cd / && echo "Bladebit version: "`bladebit --version`
+            # Now go get the Bladebit closed source binary of 3.0.0 alpha, very securely zipped twice :)
+            cd /bladebit/build
+            curl -sLJO https://download.chia.net/bladebit/alpha3/bladebit-cuda-v3.0.0-alpha3-ubuntu-x86-64.tar.gz.zip
+            unzip bladebit-cuda-v3.0.0-alpha3-ubuntu-x86-64.tar.gz.zip
+            tar -xzf bladebit-cuda-v3.0.0-alpha3-ubuntu-x86-64.tar.gz
+            chmod 755 bladebit_cuda
+            ln -s /bladebit/build/bladebit_cuda /usr/bin/bladebit_cuda
         else
             echo "Building bladebit skipped -> unsupported architecture: ${arch_name}"
         fi

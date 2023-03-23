@@ -94,7 +94,7 @@ def load():
     fullnode_db_version = load_fullnode_db_version()
     if fullnode_db_version:
         cfg['fullnode_db_version'] = fullnode_db_version
-    if cfg['machinaris_mode'] == 'fullnode':
+    if 'fullnode' in cfg['machinaris_mode']:
         cfg['wallet_status'] = "running" if wallet_running() else "paused"
         if cfg['enabled_blockchains'][0] == 'mmx':
             cfg['mmx_reward'] = gather_mmx_reward()
@@ -158,9 +158,9 @@ def is_setup():
                 logging.info(traceback.format_exc())
     return foundKey
 
-# On very first launch of the main Chia container, blockchain DB 7zip is being downloaded so must wait.
-CHIA_COMPRESSED_DB_SIZE = 40 * 1024 * 1024 * 1024 # 40 compressed GB in Septemer 2022
-CHIA_BLOCKCHAIN_DB_SIZE = 90 * 1024 * 1024 * 1024 # 90 uncompressed GB in September 2022
+# On very first launch of the main Chia container, blockchain DB gz is being downloaded via torrent so must wait.
+CHIA_COMPRESSED_DB_SIZE = 56 * 1024 * 1024 * 1024 # Compressed GB in March 2023
+CHIA_BLOCKCHAIN_DB_SIZE = 106 * 1024 * 1024 * 1024 # Uncompressed GB in March 2023
 def blockchain_downloading():
     db_path = '/root/.chia/mainnet/db'
     if path.exists(f"{db_path}/blockchain_v1_mainnet.sqlite") or path.exists(f"{db_path}/blockchain_v2_mainnet.sqlite"):
@@ -169,8 +169,16 @@ def blockchain_downloading():
     if not path.exists(tmp_path):
         logging.info("No folder at {0} yet...".format(tmp_path))
         return [0, "0 GB"]
-    bytes = sum(f.stat().st_size for f in pathlib.Path(tmp_path).glob('**/*') if f.is_file())
-    return [ round(100*bytes/(CHIA_COMPRESSED_DB_SIZE + CHIA_BLOCKCHAIN_DB_SIZE), 2), converters.convert_size(bytes) ]
+    target_size = CHIA_COMPRESSED_DB_SIZE + CHIA_BLOCKCHAIN_DB_SIZE
+    if path.exists(db_path + '/chia/.chiadb_decompressed_on_the_fly'): # If decompressed via pipe from download
+        target_size = CHIA_BLOCKCHAIN_DB_SIZE
+    # Chia and Gigahorse download via libtorrent that allocates full file size before any downloading, so use status file
+    if path.exists(db_path + '/chia/.chiadb_download_size'):
+        with open(db_path + '/chia/.chiadb_download_size',"r") as f:
+            bytes = int(f.read())
+    else: # Later when decompressing, just read file sizes on disk
+        bytes = sum(f.stat().st_size for f in pathlib.Path(tmp_path).glob('**/*') if f.is_file())
+    return [ round(100*bytes/(target_size), 2), converters.convert_size(bytes) ]
 
 def get_key_paths():
     if "keys" not in os.environ:
@@ -180,13 +188,13 @@ def get_key_paths():
     return os.environ['keys'].split(':')
 
 def farming_enabled():
-    return "mode" in os.environ and ("farmer" in os.environ['mode'] or "fullnode" == os.environ['mode'])
+    return "mode" in os.environ and ("farmer" in os.environ['mode'] or "fullnode" in os.environ['mode'])
 
 def harvesting_enabled():
-    return "mode" in os.environ and ("harvester" in os.environ['mode'] or "fullnode" == os.environ['mode'])
+    return "mode" in os.environ and ("harvester" in os.environ['mode'] or "fullnode" in os.environ['mode'])
 
 def plotting_enabled():
-    return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" == os.environ['mode']) \
+    return "mode" in os.environ and ("plotter" in os.environ['mode'] or "fullnode" in os.environ['mode']) \
         and enabled_blockchains()[0] in pl.PLOTTABLE_BLOCKCHAINS
 
 def enabled_blockchains():
@@ -248,6 +256,12 @@ def load_blockchain_version(blockchain):
         if last_blockchain_version.endswith('dev0') or last_blockchain_version.endswith('dev1'):
             if 'rc' in last_blockchain_version: # Strip out 'rcX' if found.
                 last_blockchain_version = last_blockchain_version[:last_blockchain_version.index('rc')]
+            elif 'b1' in last_blockchain_version: # Strip out 'b1' if found.
+                last_blockchain_version = last_blockchain_version[:last_blockchain_version.index('b1')]
+            elif 'b2' in last_blockchain_version: # Strip out 'b2' if found.
+                last_blockchain_version = last_blockchain_version[:last_blockchain_version.index('b2')]
+            elif 'b3' in last_blockchain_version: # Strip out 'b3' if found.
+                last_blockchain_version = last_blockchain_version[:last_blockchain_version.index('b3')]
             else:
                 # Chia version with .dev is actually one # to high, never fixed by Chia team...
                 # See: https://github.com/Chia-Network/chia-blockchain/issues/5655

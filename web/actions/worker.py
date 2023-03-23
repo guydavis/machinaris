@@ -58,18 +58,18 @@ def get_worker(hostname, blockchain='chia'):
 
 def get_fullnode(blockchain='chia'):
     #app.logger.info("Searching for fullnode with blockchain: {0}".format(blockchain))
-    return db.session.query(workers.Worker).filter(workers.Worker.mode=='fullnode', workers.Worker.blockchain==blockchain).first()
+    return db.session.query(workers.Worker).filter(workers.Worker.mode.like('%fullnode%'), workers.Worker.blockchain==blockchain).first()
 
 def get_fullnodes_by_blockchain():
     fullnodes = {}
-    for worker in db.session.query(workers.Worker).filter(workers.Worker.mode=='fullnode').all():
+    for worker in db.session.query(workers.Worker).filter(workers.Worker.mode.like('%fullnode%')).all():
         fullnodes[worker.blockchain] = worker
         app.logger.debug("{0} -> {1}".format(worker.blockchain, worker.hostname))
     return fullnodes
 
 def default_blockchain():
     first_blockchain = None
-    for worker in db.session.query(workers.Worker).filter(workers.Worker.mode=='fullnode').order_by(workers.Worker.blockchain).all():
+    for worker in db.session.query(workers.Worker).filter(workers.Worker.mode.like('%fullnode%')).order_by(workers.Worker.blockchain).all():
         if not first_blockchain:
             first_blockchain = worker.blockchain
         if worker.blockchain == 'chia':  # Default choice
@@ -80,7 +80,7 @@ def default_blockchain():
 
 def mmx_block_reward():
     try:
-        mmx_worker = db.session.query(workers.Worker).filter(workers.Worker.mode=='fullnode', workers.Worker.blockchain=='mmx').first()
+        mmx_worker = db.session.query(workers.Worker).filter(workers.Worker.mode.like('%fullnode%'), workers.Worker.blockchain=='mmx').first()
         if mmx_worker:
             mmx_config = json.loads(mmx_worker.config)
             if 'mmx_reward' in mmx_config:

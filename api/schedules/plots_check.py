@@ -96,7 +96,7 @@ def request_analyze(plot_file, workers):
     # Don't know which plotter might have the plot result so try them in-turn
     for plotter in workers:
         #app.logger.info("{0}:{1} - {2} - {3}".format(plotter.hostname, plotter.port, plotter.blockchain, plotter.mode))
-        if (plotter.mode == 'fullnode' and plotter.blockchain in pl.PLOTTABLE_BLOCKCHAINS) or 'plotter' in plotter.mode:
+        if ('fullnode' in plotter.mode and plotter.blockchain in pl.PLOTTABLE_BLOCKCHAINS) or 'plotter' in plotter.mode:
             if plotter.latest_ping_result != "Responding":
                 app.logger.info("Skipping analyze call to {0} as last ping was: {1}".format( \
                     plotter.hostname, plotter.latest_ping_result))
@@ -162,7 +162,7 @@ def request_check(plot, workers):
     # Don't know which harvester might have the plot result so try them in-turn
     for harvester in workers:
         #app.logger.info("{0}:{1} - {2} - {3}".format(harvester.hostname, harvester.port, harvester.blockchain, harvester.mode))
-        if harvester.mode == 'fullnode' or 'harvester' in harvester.mode:
+        if 'fullnode' in harvester.mode or 'harvester' in harvester.mode:
             if harvester.latest_ping_result != "Responding":
                 app.logger.info("Skipping check call to {0} as last ping was: {1}".format( \
                     harvester.hostname, harvester.latest_ping_result))

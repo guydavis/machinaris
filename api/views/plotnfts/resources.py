@@ -60,7 +60,7 @@ class Plotnfts(MethodView):
             for plotnft in plotnfts:
                 puzzle_bytes = decode_puzzle_hash(plotnft['pool_contract_address'])
                 plotnft['puzzle_hash'] = puzzle_bytes.hex()
-                for wk in db.session.query(Worker).filter(Worker.mode=='fullnode', Worker.blockchain!='chia').all():
+                for wk in db.session.query(Worker).filter(Worker.mode.like('%fullnode%'), Worker.blockchain!='chia').all():
                     if wk.connection_status() == 'Responding':
                         thread = threading.Thread(target=self.save_chia_plotnft_config,
                             kwargs={

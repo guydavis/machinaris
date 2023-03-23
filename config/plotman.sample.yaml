@@ -32,7 +32,7 @@ directories:
 
         # Optional: tmp2 directory.  If specified, will be passed to
         # the chia and madmax plotters as the '-2' param.
-        # tmp2: /plotting2
+        #tmp2: /plotting2
 
         # One or more directories; the scheduler will use all of them.
         # These again are presumed to be on independent physical devices,
@@ -103,12 +103,12 @@ plotting:
 
         bladebit:
                 # BladeBit plotter; see https://github.com/guydavis/machinaris/wiki/Bladebit
-                threads: 2            # Threads per job
+                threads: 4            # Threads per job
                 no_numa: true         # Whether to disable NUMA memory support or not
+                compression: 0        # Compression level (default = 0, min = 0, max = 6)
                 mode: diskplot        # Either enable ramplot, diskplot, or gpuplot. 
                 diskplot_cache:   4GB # If diskplot, amount of RAM to allocate to caching disk writes
                 diskplot_buckets: 256 # Optionally set a different number of buckets to use for diskplot
-                compression: 1        # Compression level (default = 1, min = 1, max = 9)
 
         madmax:
                 # Classic Madmax plotter; see https://github.com/guydavis/machinaris/wiki/MadMax

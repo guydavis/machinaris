@@ -52,7 +52,7 @@ chmod 755 -R /root/.apple/mainnet/config/ssl/ &> /dev/null
 apple init --fix-ssl-permissions > /dev/null 
 
 # Start services based on mode selected. Default is 'fullnode'
-if [[ ${mode} == 'fullnode' ]]; then
+if [[ ${mode} =~ ^fullnode.* ]]; then
   for k in ${keys//:/ }; do
     while [[ "${k}" != "persistent" ]] && [[ ! -s ${k} ]]; do
       echo 'Waiting for key to be created/imported into mnemonic.txt. See: http://localhost:8926'
@@ -67,6 +67,15 @@ if [[ ${mode} == 'fullnode' ]]; then
     apple start farmer-no-wallet
   else
     apple start farmer
+  fi
+  if [[ ${mode} =~ .*timelord$ ]]; then
+    if [ ! -f vdf_bench ]; then
+        echo "Building timelord binaries..."
+        apt-get update > /tmp/timelord_build.sh 2>&1 
+        apt-get install -y libgmp-dev libboost-python-dev libboost-system-dev >> /tmp/timelord_build.sh 2>&1 
+        BUILD_VDF_CLIENT=Y BUILD_VDF_BENCH=Y /usr/bin/sh ./install-timelord.sh >> /tmp/timelord_build.sh 2>&1 
+    fi
+    apple start timelord-only
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.apple/mainnet/config/ssl/wallet/public_wallet.key ]; then
@@ -98,8 +107,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
-    apple configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    apple configure --enable-upnp false
+    apple configure --set-farmer-peer ${farmer_address}:${farmer_port} 2>&1 >> /root/.apple/mainnet/log/init.log
+    apple configure --enable-upnp false 2>&1 >> /root/.apple/mainnet/log/init.log
     apple start harvester -r
   fi
 elif [[ ${mode} == 'plotter' ]]; then

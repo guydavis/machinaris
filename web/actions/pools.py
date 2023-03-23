@@ -101,7 +101,7 @@ def partials_chart_data(farm_summary):
 
 def get_unclaimed_plotnft_rewards():
     rewards = {}
-    for wkr in db.session.query(wkrs.Worker).filter(wkrs.Worker.mode=='fullnode').order_by(wkrs.Worker.blockchain).all():
+    for wkr in db.session.query(wkrs.Worker).filter(wkrs.Worker.mode.like('%fullnode%')).order_by(wkrs.Worker.blockchain).all():
         if wkr.connection_status() == 'Responding':
             total_coins = 0.0
             try:
@@ -139,7 +139,7 @@ def request_unclaimed_plotnft_reward_recovery():
         if not pool_contract_address: 
             app.logger.info("Found no pool contract address, so skipping NFT 7/8 reward recovery on plotnft: {0}".format(plotnft))
             continue
-        for wkr in db.session.query(wkrs.Worker).filter(wkrs.Worker.mode == 'fullnode', wkrs.Worker.blockchain != 'chives', wkrs.Worker.blockchain != 'mmx').order_by(wkrs.Worker.blockchain).all():
+        for wkr in db.session.query(wkrs.Worker).filter(wkrs.Worker.mode.like('%fullnode%'), wkrs.Worker.blockchain != 'chives', wkrs.Worker.blockchain != 'mmx').order_by(wkrs.Worker.blockchain).all():
             if wkr.connection_status() == 'Responding':
                 payload = {
                     'blockchain': wkr.blockchain,

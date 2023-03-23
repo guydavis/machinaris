@@ -55,7 +55,7 @@ chmod 755 -R /root/.bpx/mainnet/config/ssl/ &> /dev/null
 bpx init --fix-ssl-permissions > /dev/null 
 
 # Start services based on mode selected. Default is 'fullnode'
-if [[ ${mode} == 'fullnode' ]]; then
+if [[ ${mode} =~ ^fullnode.* ]]; then
   for k in ${keys//:/ }; do
     while [[ "${k}" != "persistent" ]] && [[ ! -s ${k} ]]; do
       echo 'Waiting for key to be created/imported into mnemonic.txt. See: http://localhost:8926'
@@ -70,6 +70,15 @@ if [[ ${mode} == 'fullnode' ]]; then
     bpx start farmer-no-wallet
   else
     bpx start farmer
+  fi
+  if [[ ${mode} =~ .*timelord$ ]]; then
+    if [ ! -f vdf_bench ]; then
+        echo "Building timelord binaries..."
+        apt-get update > /tmp/timelord_build.sh 2>&1 
+        apt-get install -y libgmp-dev libboost-python-dev libboost-system-dev >> /tmp/timelord_build.sh 2>&1 
+        BUILD_VDF_CLIENT=Y BUILD_VDF_BENCH=Y /usr/bin/sh ./install-timelord.sh >> /tmp/timelord_build.sh 2>&1 
+    fi
+    bpx start timelord-only
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   if [ ! -f ~/.bpx/mainnet/config/ssl/wallet/public_wallet.key ]; then
@@ -102,8 +111,8 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     fi
     echo "Configuring farmer peer at ${farmer_address}:${farmer_port}"
     # This configure command fails, as this blockchain chokes on its own config file!
-    bpx configure --set-farmer-peer ${farmer_address}:${farmer_port}
-    bpx configure --enable-upnp false
+    bpx configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.bpx/mainnet/log/init.log
+    bpx configure --enable-upnp false  2>&1 >> /root/.bpx/mainnet/log/init.log
     # So, perform the configuration into the config.yaml file directly instead...
     sed -z -i "s/  farmer_peer:\n    host: 127.0.0.1\n    port: 18655/  farmer_peer:\n    host: ${farmer_address}\n    port: ${farmer_port}/g" config.yaml
     bpx start harvester -r

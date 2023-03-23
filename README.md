@@ -4,11 +4,11 @@ A Docker image for plotting and farming the Chia™ cryptocurrency on [one compu
 
 ![Home](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_home.png)
 
-For details, see your particular platform: [Windows](https://github.com/guydavis/machinaris/wiki/Windows), [Linux](https://github.com/guydavis/machinaris/wiki/Linux), [Macintosh](https://github.com/guydavis/machinaris/wiki/MacOS), [Unraid](https://github.com/guydavis/machinaris/wiki/Unraid), [TrueNAS](https://github.com/guydavis/machinaris/wiki/TrueNAS), [Synology](https://github.com/guydavis/machinaris/wiki/Synology) and [others](https://github.com/guydavis/machinaris/wiki/Docker).  *For support, start a [Discussion](https://github.com/guydavis/machinaris/discussions) or join our [Discord](https://discord.gg/mX4AtMTt87)*.
+For details, see your particular platform: [Windows](https://github.com/guydavis/machinaris/wiki/Windows), [Linux](https://github.com/guydavis/machinaris/wiki/Linux), [Macintosh](https://github.com/guydavis/machinaris/wiki/MacOS), [Unraid](https://github.com/guydavis/machinaris/wiki/Unraid), [Synology](https://github.com/guydavis/machinaris/wiki/Synology) and [others](https://github.com/guydavis/machinaris/wiki/Docker).  *For support, start a [Discussion](https://github.com/guydavis/machinaris/discussions) or join our [Discord](https://discord.gg/mX4AtMTt87)*.
 
 ## Plotting View
 
-Plotting with the [MadMax](https://github.com/madMAx43v3r/chia-plotter), [Bladebit](https://github.com/harold-b/bladebit), and [Chia™](https://github.com/Chia-Network/chia-blockchain) plotters is managed by [Plotman](https://github.com/ericaltendorf/plotman) through the Machinaris WebUI across many machines:
+Plotting with the [MadMax](https://github.com/guydavis/machinaris/wiki/Madmax)/[Gigahorse](https://github.com/guydavis/machinaris/wiki/Gigahorse) and [Bladebit](https://github.com/guydavis/machinaris/wiki/Bladebit) plotters, with optional GPU, is managed by [Plotman](https://github.com/guydavis/machinaris/wiki/Plotman) through the Machinaris WebUI across many machines:
 
 ![Plotting](https://raw.githubusercontent.com/guydavis/machinaris-unraid/master/docs/img/machinaris_plotting.png)
 
@@ -46,7 +46,7 @@ Simplified setup allows you to either import your existing key mnemonic or gener
 
 That's for fullnode (default) and farmer modes. However, for [harvester](https://github.com/guydavis/machinaris/wiki/Docker#harvester-only) you only need the farmer's CA certificates and for [plotter](https://github.com/guydavis/machinaris/wiki/Docker#plotter-only) only your pool and farmer public keys.
 
-Immediately on setup, a [fast blockchain download](https://github.com/guydavis/machinaris/wiki/Keys#blockchain-initialization) will get you synced and farming in just minutes, rather than the days required by other blockchain clients.
+Immediately on setup, a [fast blockchain download](https://github.com/guydavis/machinaris/wiki/Keys#blockchain-initialization) will get you synced and farming in just hours, rather than the days required by the official GUI client.
 
 ## Configuration
 

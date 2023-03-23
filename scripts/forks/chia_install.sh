@@ -11,11 +11,7 @@ else
     cd /tmp
     rm -rf /root/.cache
 	apt-get update && apt-get install -y dialog apt-utils
-	# Install dependencies for GPU support
-	apt-get install -y git cmake build-essential ocl-icd-opencl-dev clinfo screen initramfs-tools ocl-icd-libopencl1 opencl-headers libnuma1
-	# For AMDGPU, install the amdgpu-install stub, optionally invoked later if OPENCL_GPU=amd at launch time
-	curl -O http://repo.radeon.com/amdgpu-install/22.20.5/ubuntu/jammy/amdgpu-install_22.20.50205-1_all.deb
-	apt-get install -y ./amdgpu-install_22.20.50205-1_all.deb
+    /usr/bin/bash /machinaris/scripts/gpu_drivers_install.sh
 	
     git clone --branch ${CHIA_BRANCH} --recurse-submodules=mozilla-ca https://github.com/Chia-Network/chia-blockchain.git /chia-blockchain
     cd /chia-blockchain
@@ -27,4 +23,5 @@ else
 	sed -i 's/packaging==21.0/packaging==21.3/g' setup.py
 
     /bin/sh ./install.sh
+
 fi

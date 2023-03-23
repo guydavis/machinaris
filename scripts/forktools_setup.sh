@@ -6,7 +6,7 @@
 FORKTOOLS_BRANCH=$1
 
 if [[ "${forktools_skip_build}" != 'true' ]]; then
-	if [[ (${mode} == 'fullnode' || ${mode} =~ "harvester") && ${blockchains} != 'mmx' && ${blockchains} != 'gigahorse' ]]; then
+	if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "harvester") && ${blockchains} != 'mmx' && ${blockchains} != 'gigahorse' ]]; then
 		cd /
 		git clone --branch ${FORKTOOLS_BRANCH} https://github.com/guydavis/forktools.git
 		cd forktools
@@ -25,7 +25,7 @@ if [[ "${forktools_skip_build}" != 'true' ]]; then
 		source ~/.bashrc
 
 		# Now multiproc patch fullnodes to limit memory usage, but delay to offset resource crunch on launch
-		if [[ ${mode} == 'fullnode' ]]; then
+		if [[ ${mode} =~ ^fullnode.* ]]; then
 			echo 'Y' | ./forkfixconfig all
   			sleep $[ ( $RANDOM % 300 )  + 1 ]s
 			./forkpatch all -multiproc || true

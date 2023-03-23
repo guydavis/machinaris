@@ -1,9 +1,9 @@
 # This is useful to differentiate multiple
 # instances monitoring multiple harvesters
-notification_title_prefix: '$HOSTNAME-pipscoin'
+notification_title_prefix: '$HOSTNAME-gigahorse'
 log_level: INFO
-coin_name: 'pipscoin'
-coin_symbol: 'pips'
+coin_name: 'chia'
+coin_symbol: 'xch'
 
 # Only one consumer can be enabled at a time, you can
 # delete the section for the consumer which you aren't using
@@ -11,8 +11,8 @@ coin_symbol: 'pips'
 chia_logs:
   file_log_consumer:
     enable: true
-    prefix: 'pipscoin'
-    file_path: '~/.chia/pipscoin/mainnet/log/debug.log'
+    prefix: 'chia'
+    file_path: '~/.chia/mainnet/log/debug.log'
 
 # Enable this and chiadog will ping a remote server every 5 minutes
 # That way you can know that the monitoring is running as expected
@@ -52,7 +52,7 @@ notifier:
     daily_stats: true
     wallet_events: true
     credentials:
-      sender: 'pipscoin@example.com'
+      sender: 'gigahorse@example.com'
       sender_name: 'Machinaris'
       recipient: 'you@example.com'
       username_smtp: 'username'
@@ -81,7 +81,7 @@ notifier:
     enable: false
     daily_stats: true
     wallet_events: true
-    topic: pipscoin/pipscoindog/alert
+    topic: gigahorse/gigahorsedog/alert
     qos: 1
     retain: false
     credentials:
