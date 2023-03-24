@@ -19,7 +19,6 @@ else
     # Log "Added Coins" at info, not debug level.  See: https://github.com/Chia-Network/chia-blockchain/issues/11955
     sed -i -e 's/^        self.log.debug($/        self.log.info(/g' chia/wallet/wallet_state_manager.py
 
-
     /bin/sh ./install.sh
 
 fi

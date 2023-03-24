@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Added
  - 
 ## Changed
- -
+ - Fix for Download button on Settings pages that were providing the wrong config file. Thanks @TuftyBruno.
 ## Updated 
  - 
 ## Notes
