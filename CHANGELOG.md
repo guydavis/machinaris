@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file. The format 
 ## Changed
  - Fix for Download button on Settings pages that were providing the wrong config file. Thanks @TuftyBruno.
 ## Updated 
- - 
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.7.1) to v1.7.1
 ## Notes
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
 
