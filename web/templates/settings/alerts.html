@@ -176,7 +176,7 @@
         $("#btnDownload").click(function () {
             worker = $("#worker").val()
             blockchain = $("#blockchain").val()
-            window.location.href = '/settings/config/' + worker + '_' + blockchain + 'dog_config.yaml?type=alerts&worker=' + worker + "&blockchain=" + blockchain
+            window.location.href = '/settings/config/' + worker + '_' + blockchain + '_alerts_config.yaml?type=alerts&worker=' + worker + "&blockchain=" + blockchain
         });
         $("#btnConfirmTest").click(function () {
             $("#btnCancelTest").prop("disabled", true);

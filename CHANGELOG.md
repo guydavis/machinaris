@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+### Added
+ - 
+## Changed
+ - Fix for Download button on Settings pages that were providing the wrong config file. Thanks @TuftyBruno.
+## Updated 
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.7.1) to v1.7.1
+## Notes
+ - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
+
 ## [0.8.8] - 2023-03-23
 ### Added
  - Support for running a blockchain timelord with environment variable `mode` set to `fullnode,timelord`.
