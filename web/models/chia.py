@@ -635,6 +635,8 @@ class Blockchains:
                         return "Synced"
                     if 'No' == status: # MMX
                         return "Syncing" 
+                    if 'Peer(s) Stalled' in status: # Staicoin
+                        return "Peer(s) Stalled"
                     return status
             return "Error"
         return "Offline"
