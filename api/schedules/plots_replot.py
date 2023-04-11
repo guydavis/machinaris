@@ -59,7 +59,7 @@ def gather_plots_by_ksize(db, harvester, delete_by_ksizes):
             app.logger.error("Invalid target ksize for deletion provided: {0}".format(ksize))
             return []
     return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
-        or_(*[p.Plot.file.like("-k{0}-".format(ksize)) for ksize in delete_by_ksizes])).order_by(p.Plot.created_at.asc()).limit(20).all()
+        or_(*[p.Plot.file.like("%-k{0}-%".format(ksize)) for ksize in delete_by_ksizes])).order_by(p.Plot.created_at.asc()).limit(20).all()
 
 def limit_deletes_to_accomodate_ksize(db, candidate_plots, free_ksize):
     size_bytes_to_delete = 0

@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 ### Added
- - 
+ - Concurrent plot transfers to both remote and local archive paths. Previously was one plot transferred at a time.
 ## Changed
  - Fix for Download button on Settings pages that were providing the wrong config file. Thanks @TuftyBruno.
 ## Updated 
