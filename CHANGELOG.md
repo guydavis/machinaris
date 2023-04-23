@@ -5,10 +5,14 @@ All notable changes to this project will be documented in this file. The format 
 ## Unreleased
 ### Added
  - Concurrent plot transfers to both remote and local archive paths. Previously was one plot transferred at a time.
+ - Checking for adequate free space on both tmp and dst paths before starting another plotting job.
 ## Changed
  - Fix for Download button on Settings pages that were providing the wrong config file. Thanks @TuftyBruno.
+ - Updated German translations.  Thanks @slowfinger. All contributions are greatly appreciated.
 ## Updated 
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.7.1) to v1.7.1
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.0) to v1.8.0
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.7.1.giga9) to v1.7.1.giga9.
 ## Notes
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
 
