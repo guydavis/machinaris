@@ -283,7 +283,7 @@ def load_replotting_settings():
             settings = json.loads(fp.read())
     for blockchain in pl.PLOTTABLE_BLOCKCHAINS:
         if not blockchain in settings:  # Default is to have replotting disabled.
-            settings[blockchain] = { "enabled": False, "delete_solo": False, "free_ksize": 32, }
+            settings[blockchain] = { "enabled": False, "delete_solo": False, "delete_uncompressed": False, "free_ksize": 32, }
     return settings
 
 def save_replotting_settings(form):
@@ -296,6 +296,7 @@ def save_replotting_settings(form):
             replotting_enabled.append(blockchain.capitalize())
         settings[blockchain]['free_ksize'] = int(form.get('replotting_{0}_free_ksize'.format(blockchain)))
         settings[blockchain]['delete_solo'] = form.get('replotting_{0}_delete_solo'.format(blockchain)) == 'true'
+        settings[blockchain]['delete_uncompressed'] = form.get('replotting_{0}_delete_uncompressed'.format(blockchain)) == 'true'
         settings[blockchain]['delete_before'] = form.get('replotting_{0}_delete_before'.format(blockchain)) == 'true'
         settings[blockchain]['delete_before_date'] = form.get('replotting_{0}_delete_before_date'.format(blockchain))
         settings[blockchain]['delete_by_ksize'] = form.get('replotting_{0}_delete_by_ksize'.format(blockchain)) == 'true'

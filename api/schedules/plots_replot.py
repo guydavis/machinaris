@@ -23,6 +23,7 @@ from common.config import globals
 from api import app, utils
 
 REPLOTTING_CONFIG = '/root/.chia/machinaris/config/replotting.json'
+COMPRESSION_LEVELS = range(1, 10) # Compression levels are 0 thru 9 for Gigahorse
 
 def load_replotting_settings():
     settings = {}
@@ -45,6 +46,10 @@ def gather_harvesters(db, blockchain):
 def gather_oldest_solo_plots(db, harvester):
     return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
         p.Plot.type == 'solo').order_by(p.Plot.created_at.asc()).limit(20).all()
+
+def gather_uncompressed_plots(db, harvester):
+    return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
+        or_(*[p.Plot.file.like("%-c{0}-%".format(level)) for level in COMPRESSION_LEVELS])).order_by(p.Plot.created_at.asc()).limit(20).all()
 
 def gather_plots_before(db, harvester, delete_before_date):
     return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
@@ -99,11 +104,13 @@ def execute():
                     for harvester in gather_harvesters(db, blockchain):
                         app.logger.debug("Checking {0} harvester {1} for candidate plot deletions. ({2})".format(blockchain, harvester.displayname, harvester.hostname))
                         candidate_plots = []
-                        if settings['delete_solo']:
+                        if 'delete_solo' in settings and settings['delete_solo']:
                             candidate_plots.extend(gather_oldest_solo_plots(db, harvester))
-                        if settings['delete_before']:
+                        if 'delete_uncompressed' in settings and settings['delete_uncompressed']:
+                            candidate_plots.extend(gather_uncompressed_plots(db, harvester))
+                        if 'delete_before' in settings and settings['delete_before']:
                             candidate_plots.extend(gather_plots_before(db, harvester, settings['delete_before_date']))
-                        if settings['delete_by_ksize']:
+                        if 'delete_by_ksize' in settings and settings['delete_by_ksize']:
                             candidate_plots.extend(gather_plots_by_ksize(db, harvester, settings['delete_by_ksizes']))
                         if len(candidate_plots) > 0:
                             candidate_plots = limit_deletes_to_accomodate_ksize(db, candidate_plots, settings['free_ksize'])
