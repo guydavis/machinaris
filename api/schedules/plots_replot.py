@@ -15,7 +15,7 @@ import time
 import traceback
 
 from flask import g
-from sqlalchemy import or_
+from sqlalchemy import and_, or_
 
 from common.models import plots as p, plottings as pl
 from common.models import workers as w
@@ -23,7 +23,8 @@ from common.config import globals
 from api import app, utils
 
 REPLOTTING_CONFIG = '/root/.chia/machinaris/config/replotting.json'
-COMPRESSION_LEVELS = range(1, 10) # Compression levels are 0 thru 9 for Gigahorse
+GIGAHORSE_COMPRESSION_LEVELS = range(1, 10) # Compression levels are 1 thru 9 for Gigahorse (see https://xch.farm/compressed-plots/)
+BLADEBIT_COMPRESSION_LEVELS = range(1, 12) # Compression levels are 01 thru 11 for Bladebit (see https://xch.farm/compressed-plots/)
 
 def load_replotting_settings():
     settings = {}
@@ -49,7 +50,8 @@ def gather_oldest_solo_plots(db, harvester):
 
 def gather_uncompressed_plots(db, harvester):
     return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
-        or_(*[p.Plot.file.like("%-c{0}-%".format(level)) for level in COMPRESSION_LEVELS])).order_by(p.Plot.created_at.asc()).limit(20).all()
+        and_(*[p.Plot.file.notlike("%-c{0}-%".format(level)) for level in GIGAHORSE_COMPRESSION_LEVELS]), 
+        and_(*[p.Plot.file.notlike("%-c0{0}-%".format(level)) for level in BLADEBIT_COMPRESSION_LEVELS])).order_by(p.Plot.created_at.asc()).limit(20).all()
 
 def gather_plots_before(db, harvester, delete_before_date):
     return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
