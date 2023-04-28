@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-03-13 10:29-0600\n"
-"POT-Creation-Date: 2023-03-23 16:07-0600\n"
+"POT-Creation-Date: 2023-04-23 17:03-0600\n"
 "PO-Revision-Date: 2022-03-13 10:29-0600\n"
 "Last-Translator: Bernie Deprez\n"
 "Language: nl_NL\n"
@@ -753,31 +753,31 @@ msgstr ""
 msgid "View Transactions"
 msgstr ""
 
-#: models/chia.py:850
+#: models/chia.py:852
 msgid "Confirmed"
 msgstr ""
 
-#: models/chia.py:862
+#: models/chia.py:864
 msgid "INCOMING_TX"
 msgstr ""
 
-#: models/chia.py:864
+#: models/chia.py:866
 msgid "OUTGOING_TX"
 msgstr ""
 
-#: models/chia.py:866
+#: models/chia.py:868
 msgid "COINBASE_REWARD"
 msgstr ""
 
-#: models/chia.py:868
+#: models/chia.py:870
 msgid "FEE_REWARD"
 msgstr ""
 
-#: models/chia.py:870
+#: models/chia.py:872
 msgid "INCOMING_TRADE"
 msgstr ""
 
-#: models/chia.py:872
+#: models/chia.py:874
 msgid "OUTGOING_TRADE"
 msgstr ""
 

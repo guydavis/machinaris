@@ -112,11 +112,18 @@
                     {% endfor %}
                 </div>
                 <div class="replotting_{{blockchain}} row align-items-center" {% if not loop.first %} style="display:none"{%endif%}>
-                    <label class="col-form-label">{{_('Criteria for selecting plots to delete')}}:</label>
+                    <label class="col-form-label">{{_('Criteria for selecting plots to delete')}} (ORed, not ANDed):</label>
                     <div class="col">
                         <input type="checkbox" id="replotting_{{blockchain}}_delete_solo" name="replotting_{{blockchain}}_delete_solo"
                           {% if settings.replotting[blockchain].delete_solo %} checked="checked" {% endif %} value='true'/>
                         <label for="replotting_{{blockchain}}_delete_solo" class="col-form-label">{{_('Delete Solo Plots - Keep Portable Plots')}}</label>
+                    </div>
+                </div>
+                <div class="replotting_{{blockchain}} row align-items-center" {% if not loop.first %} style="display:none"{%endif%}>
+                    <div class="col">
+                        <input type="checkbox" id="replotting_{{blockchain}}_delete_uncompressed" name="replotting_{{blockchain}}_delete_uncompressed"
+                          {% if settings.replotting[blockchain].delete_uncompressed %} checked="checked" {% endif %} value='true'/>
+                        <label for="replotting_{{blockchain}}_delete_uncompressed" class="col-form-label">{{_('Delete Uncompressed Plots - Keep Compressed Plots')}}</label>
                     </div>
                 </div>
                 <div class="replotting_{{blockchain}} row align-items-start" {% if not loop.first %} style="display:none"{%endif%}>
