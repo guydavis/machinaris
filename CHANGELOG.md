@@ -9,12 +9,12 @@ All notable changes to this project will be documented in this file. The format 
  - Replotting selection (Farming page settings) can now target uncompressed plots for deletion.
 ## Changed
  - Fix for Download button on Settings pages that were providing the wrong config file. Thanks @TuftyBruno.
- - Updated German translations.  Thanks @slowfinger. All contributions are greatly appreciated.
+ - Updated German and Portugese translations.  Thanks to @slowfinger and @antcasq. All contributions are appreciated.
 ## Updated 
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.7.1) to v1.7.1
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.0) to v1.8.0
- - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.7.1.giga9) to v1.7.1.giga9.
- - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.10.1) to (v0.10.1) on `testnet10`. 
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.7.1.giga10) to v1.7.1.giga10.
+ - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.10.2) to (v0.10.2) on `testnet10`. 
 ## Notes
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
 
