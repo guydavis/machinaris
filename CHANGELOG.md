@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file. The format 
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.7.1) to v1.7.1
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.0) to v1.8.0
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.7.1.giga10) to v1.7.1.giga10.
+ - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain/releases/tag/3.0.0-beta.1) to 3.0.0-beta1 based on Chia 1.7.0.
  - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.10.2) to (v0.10.2) on `testnet10`. 
 ## Notes
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
