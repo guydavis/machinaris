@@ -37,7 +37,7 @@ MAX_LOG_LINES = 2000
 WALLET_SETTINGS_FILE = '/root/.chia/machinaris/config/wallet_settings.json'
 
 # Blockchains which dropped compatibility with `show -c` commands around v1.6
-BLOCKCHAINS_USING_PEER_CMD = ['btcgreen', 'cactus', 'chia', 'chinilla', 'flax', 'gigahorse', 'littlelambocoin', 'maize', 'one', 'pipscoin', 'shibgreen', 'tad']
+BLOCKCHAINS_USING_PEER_CMD = ['btcgreen', 'cactus', 'chia', 'chinilla', 'flax', 'gigahorse', 'hddcoin', 'littlelambocoin', 'maize', 'one', 'pipscoin', 'shibgreen', 'tad']
 
 def load_farm_summary(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
