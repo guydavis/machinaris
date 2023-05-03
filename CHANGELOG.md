@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [0.8.9] - 2023-05-04
 ### Added
  - Concurrent plot transfers to both remote and local archive paths. Previously was one plot transferred at a time.
  - Checking for adequate free space on both tmp and dst paths before starting another plotting job.
@@ -16,8 +16,6 @@ All notable changes to this project will be documented in this file. The format 
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.7.1.giga10) to v1.7.1.giga10.
  - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain/releases/tag/3.0.0-beta.1) to 3.0.0-beta1 based on Chia 1.7.0.
  - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.10.2) to (v0.10.2) on `testnet10`. 
-## Notes
- - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
 
 ## [0.8.8] - 2023-03-23
 ### Added

@@ -110,7 +110,9 @@
             {% for worker in workers %}
             hostsMap["{{worker.hostname}}"] = [
                 {% for container in worker.workers %} 
+                  {% if not container.blockchain == 'gigahorse' %}
                     "{{ container.blockchain }}",
+                  {% endif %}
                 {% endfor %}
             ];
             {% endfor %}
