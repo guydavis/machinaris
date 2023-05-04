@@ -489,7 +489,7 @@
                     if (blockchain == gpu_blockchain) {
                         if (gpu_type == 'nvidia') {
                             cmd += '            - OPENCL_GPU=nvidia' + line_end;
-                            cmd += '            - NVIDIA_VISIBLE_DEVICES=0' + line_end;
+                            cmd += '            - NVIDIA_VISIBLE_DEVICES=all' + line_end;
                             cmd += '            - NVIDIA_DRIVER_CAPABILITIES=compute,utility' + line_end;
                             cmd += '        runtime: nvidia' + line_end;
                         }
