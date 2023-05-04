@@ -46,7 +46,7 @@ jobs:
             "MACHINARIS_STREAM=latest"
             "CHIA_BRANCH=latest"
             "MMX_BRANCH=v0.10.2"
-            "MADMAX_BRANCH=v1.7.1.giga10"
+            "MADMAX_BRANCH=v1.8.0.giga10"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:v${{ github.event.inputs.version }}
