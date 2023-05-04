@@ -4,8 +4,8 @@
 #
 
 HDDCOIN_BRANCH=$1
-# On 2022-03-20
-HASH=42403754da1d819632b0442964eabc2962e30484
+# On 2023-05-03
+HASH=6159cf9abaccb5e365c4a5ceebce607fd7254944
 
 if [ -z ${HDDCOIN_BRANCH} ]; then
     echo 'Skipping HDDCoin install as not requested.'
@@ -15,10 +15,6 @@ else
     git submodule update --init mozilla-ca 
     git checkout $HASH
     chmod +x install.sh
-    # 2022-01-30: pip broke due to https://github.com/pypa/pip/issues/10825
-    sed -i 's/upgrade\ pip$/upgrade\ "pip<22.0"/' install.sh
-    # 2022-07-20: Python needs 'packaging==21.3'
-    sed -i 's/packaging==21.0/packaging==21.3/g' setup.py
     /usr/bin/sh ./install.sh
 
     if [ ! -d /chia-blockchain/venv ]; then
