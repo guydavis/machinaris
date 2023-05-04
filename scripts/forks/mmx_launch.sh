@@ -33,11 +33,11 @@ sed -i "s/\"plot_dirs\":.*$/\"plot_dirs\": [ $escaped_plot_dirs ]/g" /root/.chia
 
 /usr/bin/bash /machinaris/scripts/gpu_drivers_setup.sh
 
-echo 'testnet9' > /root/.chia/mmx/NETWORK
+echo 'testnet10' > /root/.chia/mmx/NETWORK
 
-# Symlink the testnet9 folder
-if [ ! -d /root/.chia/mmx/testnet9 ]; then
-    mkdir /root/.chia/mmx/testnet9
+# Symlink the testnet10 folder
+if [ ! -d /root/.chia/mmx/testnet10 ]; then
+    mkdir /root/.chia/mmx/testnet10
 fi
 
 # Create a key if none found from previous runs

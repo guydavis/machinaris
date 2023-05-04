@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris"
 "/issuesCreation-Date: 2022-02-16 15:00-0700\n"
-"POT-Creation-Date: 2023-03-21 10:35-0600\n"
+"POT-Creation-Date: 2023-04-23 17:03-0600\n"
 "PO-Revision-Date: 2022-02-13 13:45-0700\n"
 "Last-Translator: FULL NAME\n"
 "Language: fr\n"
@@ -759,31 +759,31 @@ msgstr ""
 msgid "View Transactions"
 msgstr ""
 
-#: models/chia.py:850
+#: models/chia.py:852
 msgid "Confirmed"
 msgstr ""
 
-#: models/chia.py:862
+#: models/chia.py:864
 msgid "INCOMING_TX"
 msgstr ""
 
-#: models/chia.py:864
+#: models/chia.py:866
 msgid "OUTGOING_TX"
 msgstr ""
 
-#: models/chia.py:866
+#: models/chia.py:868
 msgid "COINBASE_REWARD"
 msgstr ""
 
-#: models/chia.py:868
+#: models/chia.py:870
 msgid "FEE_REWARD"
 msgstr ""
 
-#: models/chia.py:870
+#: models/chia.py:872
 msgid "INCOMING_TRADE"
 msgstr ""
 
-#: models/chia.py:872
+#: models/chia.py:874
 msgid "OUTGOING_TRADE"
 msgstr ""
 
@@ -2318,11 +2318,6 @@ msgid ""
 "blockchain. Please ensure the Chia worker is reporting into the "
 "controller on the Workers page."
 msgstr ""
-"Aucune statistique de disque n'a été enregistrée récemment pour "
-"%(hostname)s avec Chia blockchain. Veuillez vous assurer que tous les "
-"chemins contenant des %(wiki_link_open)s a configuré %(wiki_link_close)s."
-" Assurez-vous également que le worker Chia fait rapport au contrôleur sur"
-" la page Workers."
 
 #: templates/farming/workers.html:154
 #, python-format

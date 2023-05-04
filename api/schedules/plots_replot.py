@@ -15,7 +15,7 @@ import time
 import traceback
 
 from flask import g
-from sqlalchemy import or_
+from sqlalchemy import and_, or_
 
 from common.models import plots as p, plottings as pl
 from common.models import workers as w
@@ -23,6 +23,8 @@ from common.config import globals
 from api import app, utils
 
 REPLOTTING_CONFIG = '/root/.chia/machinaris/config/replotting.json'
+GIGAHORSE_COMPRESSION_LEVELS = range(1, 10) # Compression levels are 1 thru 9 for Gigahorse (see https://xch.farm/compressed-plots/)
+BLADEBIT_COMPRESSION_LEVELS = range(1, 12) # Compression levels are 01 thru 11 for Bladebit (see https://xch.farm/compressed-plots/)
 
 def load_replotting_settings():
     settings = {}
@@ -46,6 +48,11 @@ def gather_oldest_solo_plots(db, harvester):
     return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
         p.Plot.type == 'solo').order_by(p.Plot.created_at.asc()).limit(20).all()
 
+def gather_uncompressed_plots(db, harvester):
+    return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
+        and_(*[p.Plot.file.notlike("%-c{0}-%".format(level)) for level in GIGAHORSE_COMPRESSION_LEVELS]), 
+        and_(*[p.Plot.file.notlike("%-c0{0}-%".format(level)) for level in BLADEBIT_COMPRESSION_LEVELS])).order_by(p.Plot.created_at.asc()).limit(20).all()
+
 def gather_plots_before(db, harvester, delete_before_date):
     return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
         p.Plot.created_at < "{0} 00:00".format(delete_before_date)).order_by(p.Plot.created_at.asc()).limit(20).all()
@@ -59,7 +66,7 @@ def gather_plots_by_ksize(db, harvester, delete_by_ksizes):
             app.logger.error("Invalid target ksize for deletion provided: {0}".format(ksize))
             return []
     return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
-        or_(*[p.Plot.file.like("-k{0}-".format(ksize)) for ksize in delete_by_ksizes])).order_by(p.Plot.created_at.asc()).limit(20).all()
+        or_(*[p.Plot.file.like("%-k{0}-%".format(ksize)) for ksize in delete_by_ksizes])).order_by(p.Plot.created_at.asc()).limit(20).all()
 
 def limit_deletes_to_accomodate_ksize(db, candidate_plots, free_ksize):
     size_bytes_to_delete = 0
@@ -99,11 +106,13 @@ def execute():
                     for harvester in gather_harvesters(db, blockchain):
                         app.logger.debug("Checking {0} harvester {1} for candidate plot deletions. ({2})".format(blockchain, harvester.displayname, harvester.hostname))
                         candidate_plots = []
-                        if settings['delete_solo']:
+                        if 'delete_solo' in settings and settings['delete_solo']:
                             candidate_plots.extend(gather_oldest_solo_plots(db, harvester))
-                        if settings['delete_before']:
+                        if 'delete_uncompressed' in settings and settings['delete_uncompressed']:
+                            candidate_plots.extend(gather_uncompressed_plots(db, harvester))
+                        if 'delete_before' in settings and settings['delete_before']:
                             candidate_plots.extend(gather_plots_before(db, harvester, settings['delete_before_date']))
-                        if settings['delete_by_ksize']:
+                        if 'delete_by_ksize' in settings and settings['delete_by_ksize']:
                             candidate_plots.extend(gather_plots_by_ksize(db, harvester, settings['delete_by_ksizes']))
                         if len(candidate_plots) > 0:
                             candidate_plots = limit_deletes_to_accomodate_ksize(db, candidate_plots, settings['free_ksize'])

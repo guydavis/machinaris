@@ -124,7 +124,7 @@
     <script>
         $(document).ready(function () {
             $("#btnImport").click(function () {
-                var mnemonic = $('#mnemonic').val().trim();
+                var mnemonic = $('#mnemonic').val().trim().toLowerCase();
                 if (!mnemonic) {
                     alert("Please provide a non-empty mnemonic seed phrase to import.");
                     return;

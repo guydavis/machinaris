@@ -25,6 +25,7 @@ RUN apt-get update \
 		openssl \
 		p7zip-full \
 		p7zip-rar \
+		psmisc \
 		python3 \
 		python3.9-distutils \
 		python3.9-venv \

@@ -33,23 +33,16 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient as this takes hours now, but saves days of syncing time later."
   mkdir -p /root/.chia/mainnet/db/chia && cd /root/.chia/mainnet/db/chia
   # Latest Blockchain DB, first try direct download, then fallback to slower torrent
+    # Latest Blockchain DB, first try direct download, then fallback to slower torrent
   torrent=$(curl -s https://www.chia.net/downloads/ | grep -Po "https:.*/blockchain_v2_mainnet.\d{4}-\d{2}-\d{2}.sqlite.gz.torrent")
-  #echo "Please be patient! Downloading blockchain database directly from: "
-  #echo "    ${torrent::-8}"
-  #curl -kLJ -O ${torrent::-8} > /tmp/chiadb_download.log 2>&1
-  #size_at_least=55000000000  # 55 GB
-  #size_actual=$(wc -c <blockchain_v2_mainnet.*.sqlite.gz)
-  #if [ ${size_actual:-0} -lt $size_at_least ]; then # Direct download was not valid, try to torrent it instead
-    #rm -f blockchain_v2_mainnet.*.sqlite.gz
   echo "Please be patient! Downloading blockchain database indirectly (via libtorrent) from: "
   echo "    ${torrent}"
   curl -skLJ -O ${torrent}
   deactivate # Use the system python
   /usr/bin/python /machinaris/scripts/chiadb_download.py $PWD/*.torrent >> /tmp/chiadb_download.log 2>&1
   cd /chia-blockchain && . ./activate # Re-activate
-  #fi
   echo "Now decompressing the blockchain database..."
-  gunzip *.gz
+  cd /root/.chia/mainnet/db/chia && gunzip *.gz
   cd /root/.chia/mainnet/db
   mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.*.sqlite blockchain_v2_mainnet.sqlite
   rm -rf /root/.chia/mainnet/db/chia

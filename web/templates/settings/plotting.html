@@ -281,7 +281,7 @@
         $("#btnDownload").click(function () {
             worker = $("#worker").val()
             blockchain = $("#blockchain").val()
-            window.location.href = '/settings/config/' + worker + '_' + blockchain + 'dog_config.yaml?type=alerts&worker=' + worker + "&blockchain=" + blockchain
+            window.location.href = '/settings/config/' + worker + '_' + blockchain + '_plotting_config.yaml?type=plotting&worker=' + worker + "&blockchain=" + blockchain
         });
         $("#btnSaveSchedule").click(function () {
             $("#btnCancelSchedule").prop("disabled", true);
