@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.8.9] - 2023-05-04
+## [1.8.0] - 2023-05-04
 ### Added
  - Concurrent plot transfers to both remote and local archive paths. Previously was one plot transferred at a time.
  - Checking for adequate free space on both tmp and dst paths before starting another plotting job.
@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file. The format 
 ## Changed
  - Fix for Download button on Settings pages that were providing the wrong config file. Thanks @TuftyBruno.
  - Updated German and Portugese translations.  Thanks to @slowfinger and @antcasq. All contributions are appreciated.
+ - Follow Chia version numbers (like 1.8.0) from now on, as Machinaris is on their release cadence.
 ## Updated 
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.7.1) to v1.7.1
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.0) to v1.8.0
