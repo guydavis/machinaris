@@ -41,7 +41,7 @@ jobs:
           provenance: false
           push: true
           build-args: |
-            "UBUNTU_VER=focal"
+            "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=test"
             "CHIADOG_BRANCH=dev"
             "FLORA_BRANCH=latest"
