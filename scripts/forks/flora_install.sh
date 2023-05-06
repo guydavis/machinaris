@@ -15,7 +15,6 @@ else
     cd /flora-blockchain 
     git submodule update --init mozilla-ca 
     git checkout $HASH
-    chmod +x install.sh
 
     # Log "Added Coins" at info, not debug level.  See: https://github.com/Chia-Network/chia-blockchain/issues/11955
     sed -i -e 's/^        self.log.debug($/        self.log.info(/g' flora/wallet/wallet_state_manager.py
@@ -23,7 +22,6 @@ else
     python -m venv venv
     cd venv/Scripts
     activate
-    python -m pip install --upgrade pip
     pip wheel --use-pep517  --use-deprecated=legacy-resolver --extra-index-url https://pypi.chia.net/simple/  -f . --wheel-dir=.\build ..\..\
     pip install --no-index --find-links=.\build\ flora-blockchain
     ls -al .
