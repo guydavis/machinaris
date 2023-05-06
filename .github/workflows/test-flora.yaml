@@ -44,7 +44,7 @@ jobs:
             "UBUNTU_VER=focal"
             "MACHINARIS_STREAM=test"
             "CHIADOG_BRANCH=dev"
-            "FLORA_BRANCH=main"
+            "FLORA_BRANCH=latest"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-flora:test
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-flora:test

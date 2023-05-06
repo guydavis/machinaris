@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Updated
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.8.0) to v1.8.0
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.1) to v1.8.1
+ - [Flora](https://github.com/ageorge95/flora-blockchain/releases/tag/1.8.0_flora) to v1.8.0, updated by @ageorge95.
 
 ## [1.8.0] - 2023-05-04
 ### Added
