@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 ### Added
+ - 
 ### Changed
+ - By default, exclude Gigahorse plots from automated plot check due to poor performance of the 'ProofOfSpace' binary.
 ### Updated
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.8.0) to v1.8.0
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.1) to v1.8.1
