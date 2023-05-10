@@ -46,7 +46,7 @@ jobs:
             "CHIA_BRANCH=latest"
             "PLOTMAN_BRANCH=development"
             "MMX_BRANCH=v0.10.2"
-            "MADMAX_BRANCH=v1.8.0.giga10"
+            "MADMAX_BRANCH=v1.8.0.giga11"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:test
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:test

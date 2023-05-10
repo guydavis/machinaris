@@ -5,7 +5,7 @@
 
 cd /flora-blockchain
 
-. ./activate
+. ./venv/bin/activate
 
 # Only the /root/.chia folder is volume-mounted so store flora within
 mkdir -p /root/.chia/flora
