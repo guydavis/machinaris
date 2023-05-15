@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 ### Added
- - 
+
 ### Changed
  - By default, exclude Gigahorse plots from automated plot check due to poor performance of the 'ProofOfSpace' binary.
 ### Updated
+ - [Bladebit](https://downloads.chia.net/bladebit/) to 3.0.0-alpha4. Status @ https://github.com/Chia-Network/bladebit/issues
  - [BPX](https://github.com/bpx-network/bpx-blockchain/releases/tag/2.1.0) to v2.1.0
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.8.0) to v1.8.0
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.1) to v1.8.1
