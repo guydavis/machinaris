@@ -2,19 +2,32 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+
+### Changed
+ - By default, exclude Gigahorse plots from automated plot check due to poor performance of the 'ProofOfSpace' binary.
+### Updated
+ - [Bladebit](https://downloads.chia.net/bladebit/) to 3.0.0-alpha4. Status @ https://github.com/Chia-Network/bladebit/issues
+ - [BPX](https://github.com/bpx-network/bpx-blockchain/releases/tag/2.1.0) to v2.1.0
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.8.0) to v1.8.0
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.1) to v1.8.1
+ - [Flora](https://github.com/ageorge95/flora-blockchain/releases/tag/1.8.0_flora) to v1.8.0, updated by @ageorge95.
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.8.0.giga11) to v1.8.0.giga11.
+
 ## [1.8.0] - 2023-05-04
 ### Added
  - Concurrent plot transfers to both remote and local archive paths. Previously was one plot transferred at a time.
  - Checking for adequate free space on both tmp and dst paths before starting another plotting job.
  - Replotting selection (Farming page settings) can now target uncompressed plots for deletion.
-## Changed
+### Changed
  - Fix for Download button on Settings pages that were providing the wrong config file. Thanks @TuftyBruno.
- - Updated German and Portugese translations.  Thanks to @slowfinger and @antcasq. All contributions are appreciated.
+ - Updated German and Portuguese translations.  Thanks to @slowfinger and @antcasq. All contributions are appreciated.
  - Follow Chia version numbers (like 1.8.0) from now on, as Machinaris is on their release cadence.
-## Updated 
+### Updated 
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.7.1) to v1.7.1
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.0) to v1.8.0
- - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.7.1.giga10) to v1.7.1.giga10.
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.8.0.giga10) to v1.8.0.giga10.
  - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain/releases/tag/3.0.0-beta.1) to 3.0.0-beta1 based on Chia 1.7.0.
  - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.10.2) to (v0.10.2) on `testnet10`. 
 
@@ -22,18 +35,18 @@ All notable changes to this project will be documented in this file. The format 
 ### Added
  - Support for running a blockchain timelord with environment variable `mode` set to `fullnode,timelord`.
  - Optional config setting to restart fork fullnodes if they consume too much memory. Looking at you Flora, HDDCoin, N-Chain, etc...
-## Changed
+### Changed
  - On fresh install, optionally download (via libtorrent) a recent [Chia database checkpoint](https://www.chia.net/downloads/).
  - Fixes for Gigahorse GPU plotting including 64 GB RAM mode using the `tmp3` SSD plotting path.
  - Fix for Gigahorse Alerts, please reset [earlier broken settings file](https://github.com/guydavis/machinaris/blob/develop/config/chiadog/gigahorse.sample.yaml).
  - Fix for container stop signal to cleanly shutdown forks too, as was already happening for Chia.
-## Updated 
+### Updated 
  - [Bladebit](https://downloads.chia.net/bladebit/) to 3.0.0-alpha3. Unstable, see: https://github.com/Chia-Network/bladebit/issues
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.7.1) to v1.7.1
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.6.2.giga7) to v1.6.2.giga7 with OpenCL support for AMD GPUs.
  - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.9.14) to (v0.9.14) on `testnet9`.  Supporting the latest AMD GPU driver.
  - [One](https://github.com/xone-network/one-blockchain/releases/tag/1.7.0) to v1.7.0
-## Notes
+### Notes
  - Bladebit has regressed on the ability to `ramplot` and `diskplot` as they try to match Gigahorse's GPU plotting. Still awaiting a fix...
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
 
@@ -44,19 +57,19 @@ All notable changes to this project will be documented in this file. The format 
  - [Gigahorse](https://github.com/guydavis/machinaris/wiki/Gigahorse) - beta GPU plotting and farming support in new Machinaris-Gigahorse image. Set `mode: gpuplot` under `madmax` on Settings | Plotting page.
  - [Ballcoin](https://github.com/ball-network/ballcoin-blockchain) blockchain at version 1.6.0, another slow Silicoin fork.
  - [Pipscoin](https://github.com/Pipscoin-Network/pipscoin-blockchain) blockchain at version 1.7.0.
-## Changed
+### Changed
  - Fix missing Connections listing for Flax and MMX blockchains.  Thanks @ekersey!
  - Fix for Bladebit ramplot relaunching.  Thanks @JoeZotacExperience!
  - Multiple functionality & performance cleanups from excellent code review by @qoole.
  - Display compression level for active plotting jobs on Gigahorse and MMX.
-## Updated 
+### Updated 
  - [BTCGreen](https://github.com/BTCgreen-Network/btcgreen-blockchain/releases/tag/1.7.0b) to v1.7.0b
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.6.2) to v1.6.2
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.7.0) to v1.7.0
  - [Chives](https://github.com/HiveProject2021/chives-blockchain/releases/tag/1.5.4) to v1.5.4, including staking.
  - [SHIBGreen](https://github.com/BTCgreen-Network/shibgreen-blockchain/releases/tag/1.7.0.1) to v1.7.0.1
  - [Staicoin](https://github.com/STATION-I/stai-blockchain/releases/tag/1.3.0) to v1.3.0. Note, they require a fresh `config.yaml`.
-## Notes
+### Notes
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
 
 ## [0.8.6] - 2023-01-03

@@ -5,7 +5,7 @@
 
 cd /flora-blockchain
 
-. ./activate
+. ./venv/bin/activate
 
 # Only the /root/.chia folder is volume-mounted so store flora within
 mkdir -p /root/.chia/flora
@@ -33,12 +33,16 @@ if [ -f /root/.flora/mainnet/config/config.yaml ]; then
 fi
 
 # Loop over provided list of key paths
+label_num=0
 for k in ${keys//:/ }; do
   if [[ "${k}" == "persistent" ]]; then
     echo "Not touching key directories."
   elif [ -s ${k} ]; then
-    echo "Adding key at path: ${k}"
-    flora keys add -f ${k} > /dev/null
+    echo "Adding key #${label_num} at path: ${k}"
+    flora keys add -l "key_${label_num}" -f ${k} > /dev/null
+    ((label_num=label_num+1))
+  elif [[ ${mode} =~ ^fullnode.* ]]; then
+    echo "Skipping 'chia keys add' as no file found at: ${k}"
   fi
 done
 

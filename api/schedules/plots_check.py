@@ -12,7 +12,7 @@ import time
 import traceback
 
 from flask import g
-from sqlalchemy import or_
+from sqlalchemy import and_, or_
 
 from common.models import plots as p, plottings as pl
 from common.models import workers as w
@@ -228,8 +228,8 @@ def execute(plot_id=None):
         if plot_id:
             plots = db.session.query(p.Plot).filter(p.Plot.plot_id == plot_id).all()
         else:    
-            plots = db.session.query(p.Plot).filter(or_(p.Plot.plot_check.is_(None), 
-                p.Plot.plot_analyze.is_(None))).order_by(p.Plot.created_at.desc()).all()
+            plots = db.session.query(p.Plot).filter(and_(or_(p.Plot.plot_check.is_(None), 
+                p.Plot.plot_analyze.is_(None)), p.Plot.blockchain != 'gigahorse')).order_by(p.Plot.created_at.desc()).all()
         status = open_status_json()
         requested_status_count = 0
         #app.logger.info("Querying for plots...")
