@@ -25,7 +25,7 @@ if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "plotter") && (${blockchains} == 'c
             cd / && echo "Bladebit version: "`bladebit --version`
             cd /bladebit/build
             curl -sLJO https://download.chia.net/bladebit/alpha4/bladebit-cuda-plotter/bladebit-cuda-v3.0.0-alpha4-ubuntu-x86-64.tar.gz
-            tar -xzf bladebit-cuda-v3.0.0-alpha4-ubuntu-x86-64.tar.gz
+            tar -xvf bladebit-cuda-v3.0.0-alpha4-ubuntu-x86-64.tar.gz
             chmod 755 bladebit_cuda
             ln -s /bladebit/build/bladebit_cuda /usr/bin/bladebit_cuda
         else
