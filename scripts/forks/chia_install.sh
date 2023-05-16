@@ -14,7 +14,7 @@ else
     /usr/bin/bash /machinaris/scripts/gpu_drivers_install.sh
 
     curl -sLJO https://download.chia.net/bladebit/alpha4/chia-blockchain-cuda/ubuntu/chia-blockchain-cli_1.8.1rc2-dev34-1_amd64.deb
-    apt-get install chia-blockchain*.deb
+    apt-get install ./chia-blockchain*.deb
     ls -al /chia-blockchain
 
     # For testing of new GPU farming binaries, comment out build from source for now.
