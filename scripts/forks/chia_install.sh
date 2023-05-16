@@ -22,6 +22,13 @@ else
     /bin/sh ./install.sh
 
     # Drop GPU-enabled binaries in as well.
-    curl -sLJO https://download.chia.net/bladebit/alpha4/chia-blockchain-cuda/ubuntu/chia-blockchain-cli_1.8.1rc2-dev34-1_amd64.deb
-    apt-get install ./chia-blockchain*.deb
+    arch_name="$(uname -m)"
+    ubuntu_ver=`lsb_release -r -s`
+    echo "Installing Chia CUDA binaries on ${arch_name}..."
+    if [[ "${arch_name}" = "x86_64" ]]; then
+        curl -sLJO https://download.chia.net/bladebit/alpha4/chia-blockchain-cuda/ubuntu/chia-blockchain-cli_1.8.1rc2-dev34-1_amd64.deb
+        apt-get install ./chia-blockchain*.deb
+    else
+        echo "Installing Chia CUDA binaries skipped -> unsupported architecture: ${arch_name}"
+    fi
 fi
