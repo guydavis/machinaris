@@ -2,11 +2,10 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-### Added
-
+## [1.8.1] - 2023-05-17
 ### Changed
  - By default, exclude Gigahorse plots from automated plot check due to poor performance of the 'ProofOfSpace' binary.
+ - Fix for plotting manager issues when plotting with multiple tmp drives.
 ### Updated
  - [Bladebit](https://downloads.chia.net/bladebit/) to 3.0.0-alpha4. Status @ https://github.com/Chia-Network/bladebit/issues
  - [BPX](https://github.com/bpx-network/bpx-blockchain/releases/tag/2.1.0) to v2.1.0
