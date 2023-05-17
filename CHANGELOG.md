@@ -13,6 +13,9 @@ All notable changes to this project will be documented in this file. The format 
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.1) to v1.8.1
  - [Flora](https://github.com/ageorge95/flora-blockchain/releases/tag/1.8.0_flora) to v1.8.0, updated by @ageorge95.
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.8.0.giga11) to v1.8.0.giga11.
+### Notes
+ - Bladebit still broken on ability to `ramplot` and `diskplot` as they try to match Gigahorse's GPU plotting. Still awaiting a fix...
+ - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
 
 ## [1.8.0] - 2023-05-04
 ### Added
