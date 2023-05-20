@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Changed
 
 ### Updated
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.8.1) to v1.8.1
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.2) to v1.8.2
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.8.0.giga12) to v1.8.0.giga12.
 ### Notes
