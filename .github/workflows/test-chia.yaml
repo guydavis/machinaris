@@ -44,7 +44,7 @@ jobs:
             "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=test"
             "CHIADOG_BRANCH=dev"
-            "CHIA_BRANCH=release/1.8.1"
+            "CHIA_BRANCH=release/1.8.2"
             "PLOTMAN_BRANCH=development"
             "BLADEBIT_BRANCH=cuda-compression"
             "MADMAX_BRANCH=v1.8.1.giga13"

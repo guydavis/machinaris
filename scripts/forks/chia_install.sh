@@ -25,8 +25,12 @@ else
     arch_name="$(uname -m)"
     ubuntu_ver=`lsb_release -r -s`
     echo "Installing Chia CUDA binaries on ${arch_name}..."
+    cd /tmp
     if [[ "${arch_name}" = "x86_64" ]]; then
-        curl -sLJO https://download.chia.net/bladebit/alpha4/chia-blockchain-cuda/ubuntu/chia-blockchain-cli_1.8.1rc2-dev34-1_amd64.deb
+        curl -sLJO https://download.chia.net/dev/chia-blockchain-cli-1.8.0rc2-dev31-4d60ba1b-1.x86_64.rpm
+        apt-get install ./chia-blockchain*.deb
+    elif [[ "${arch_name}" = "arm64" ]]; then
+        curl -sLJO https://download.chia.net/dev/chia-blockchain-cli_1.8.0rc2-dev31-4d60ba1b-1_arm64.deb
         apt-get install ./chia-blockchain*.deb
     else
         echo "Installing Chia CUDA binaries skipped -> unsupported architecture: ${arch_name}"
