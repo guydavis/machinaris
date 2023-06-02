@@ -13,9 +13,8 @@ mkdir -p /root/.chia/.chia_keys
 rm -f /root/.chia_keys
 ln -s /root/.chia/.chia_keys /root/.chia_keys
 
-cd /chia-blockchain
-
-. ./activate
+#cd /chia-blockchain
+#. ./activate
 
 if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
@@ -41,9 +40,9 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   echo "Please be patient! Downloading blockchain database indirectly (via libtorrent) from: "
   echo "    ${torrent}"
   curl -skLJ -O ${torrent}
-  deactivate # Use the system python
+  #deactivate # Use the system python
   /usr/bin/python /machinaris/scripts/chiadb_download.py $PWD/*.torrent >> /tmp/chiadb_download.log 2>&1
-  cd /chia-blockchain && . ./activate # Re-activate
+  #cd /chia-blockchain && . ./activate # Re-activate
   echo "Now decompressing the blockchain database..."
   cd /root/.chia/mainnet/db/chia && gunzip *.gz
   cd /root/.chia/mainnet/db
