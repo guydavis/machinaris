@@ -130,7 +130,7 @@
     <div class="fs-4">Plots</div>
     <canvas id="plots_disk" width="400" style="padding-bottom:10px"></canvas>
     {% if plots_disk_usage[worker.hostname]['paths']|length >= MAX_COLUMNS_ON_CHART %}
-        <p class="small text-center text-muted" style="padding-top: 15px">
+        <p class="small text-center" style="padding-top: 15px">
             {{_('For legibility, the chart shows only a random selection of paths when a worker has many of them.')}}
         </p>
     {% endif %}

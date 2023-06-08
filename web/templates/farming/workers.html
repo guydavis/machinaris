@@ -145,7 +145,7 @@
                 {% if disk_usage[farmer.hostname] %}
                 <canvas id="disk_{{farmer.hostname}}" width="400"></canvas>
                 {% if disk_usage[farmer.hostname]['paths']|length >= MAX_COLUMNS_ON_CHART %}
-                    <p class="small text-center text-muted" style="padding-top: 15px">
+                    <p class="small text-center" style="padding-top: 15px">
                         {{_('For legibility, the chart shows only a random selection of paths when a worker has many of them.')}}
                     </p>
                 {% endif %}
