@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. The format 
 ## [Unreleased] - 2023-?-?
 ### Added
  - [Chia](https://docs.google.com/document/d/1MSJ8JzAQGDGrnEzdr4zK4IcTDbokJfpHypn8Dt60Mx8/) - Alpha GPU-farming, requires manual config changes. [Status](https://github.com/Chia-Network/chia-blockchain/issues)
+ - Request a new plot check, via 'Recheck' button added to Check results dialog on Farming page.  
 ### Changed
  - Deprecated stale blockchains, by hiding from Worker wizards: BPX, N-Chain, Silicoin, Stor
 ### Updated
