@@ -20,13 +20,20 @@
 <div class="modal fade" id="checkModal" tabindex="-1" aria-labelledby="checkModalLabel" aria-hidden="true">
     <div class="modal-dialog bg-dark rounded-3 modal-lg">
         <div class="modal-content bg-dark">
-            <div class="modal-header bg-dark">
-                <h5 class="modal-title" id="checkModalLabel">{{_('Plot Check')}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body bg-dark">
-                <pre id="plotCheckContent"></pre>
-            </div>
+            <form method="POST" id="check-form">
+                <div class="modal-header bg-dark">
+                    <h5 class="modal-title" id="checkModalLabel">{{_('Plot Check')}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body bg-dark">
+                    <pre id="plotCheckContent" style="height: 40pc; overflow-y: scroll; white-space: pre-wrap;"></pre>
+                    <input type="hidden" name="plot_id" id="plotCheckId"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="btnCloseSettings" data-bs-dismiss="modal">{{_('Close')}}</button>
+                    <button type="button" class="btn btn-outline-success" id="btnRecheckPlot" data-bs-dismiss="modal">{{_('Recheck')}}</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -303,6 +310,8 @@
         function PlotCheck(plot) {
             var output = document.getElementById('plotCheckContent');
             output.textContent = ""; // Clear any old check before requesting
+            var plotCheckId = document.getElementById('plotCheckId');
+            plotCheckId.value = plot;
             var xhr = new XMLHttpRequest();
             xhr.open('GET', "{{ url_for('farming_plots') }}?check=" + plot);
             xhr.send();
@@ -318,6 +327,13 @@
                     `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...`
                 );
                 $("#settings-form").submit();
+            });
+            $("#btnRecheckPlot").click(function () {
+                var plotCheckId = document.getElementById('plotCheckId');
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', "{{ url_for('farming_plots') }}?check=" + plotCheckId.value + "&force_recheck=true");
+                xhr.send();
+                alert("Plot check initiated. Please refresh in a few minutes.\n\nNote that all plots will be checked slowly in the background so you don't need to check each one individually.  Please be patient.");
             });
             $('#data').DataTable({
                 "stateSave": true,

@@ -384,9 +384,9 @@ def save_cold_wallet_addresses(blockchain, cold_wallet_addresses):
         flash(msg, 'danger')
         return
 
-def check(plot_id):
+def check(plot_id, force_recheck=False):
     check_file = '/root/.chia/plotman/checks/{0}.log'.format(plot_id[:8])
-    if os.path.exists(check_file) and os.path.getsize(check_file):
+    if not force_recheck and os.path.exists(check_file) and os.path.getsize(check_file):
         with open(check_file, 'r+') as fp:
             return fp.read()
     try:
