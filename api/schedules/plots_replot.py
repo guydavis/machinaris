@@ -15,7 +15,7 @@ import time
 import traceback
 
 from flask import g
-from sqlalchemy import and_, or_
+from sqlalchemy import and_, or_, not_
 
 from common.models import plots as p, plottings as pl
 from common.models import workers as w
@@ -23,6 +23,7 @@ from common.config import globals
 from api import app, utils
 
 REPLOTTING_CONFIG = '/root/.chia/machinaris/config/replotting.json'
+REPLOTTING_EXCEPTIONS = '/root/.chia/machinaris/config/replotting_exceptions.json'
 GIGAHORSE_COMPRESSION_LEVELS = range(1, 10) # Compression levels are 1 thru 9 for Gigahorse (see https://xch.farm/compressed-plots/)
 BLADEBIT_COMPRESSION_LEVELS = range(1, 12) # Compression levels are 01 thru 11 for Bladebit (see https://xch.farm/compressed-plots/)
 
@@ -44,20 +45,36 @@ def gather_harvesters(db, blockchain):
             app.logger.error("Found no worker for {0} at {1}".format(blockchain, hostname))
     return workers
 
+def load_plot_dir_exceptions(displayname):
+    exceptions = []
+    if os.path.exists(REPLOTTING_EXCEPTIONS):
+        with open(REPLOTTING_EXCEPTIONS, 'r') as fp:
+            settings = json.loads(fp.read())
+            if displayname in settings:
+                exceptions = settings[displayname]
+                app.logger.info("Replotting exceptions on worker {0} are {1}.".format(displayname, exceptions))
+    return exceptions
+
 def gather_oldest_solo_plots(db, harvester):
-    return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
-        p.Plot.type == 'solo').order_by(p.Plot.created_at.asc()).limit(20).all()
+    dir_exceptions = load_plot_dir_exceptions(harvester.displayname)
+    return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname, 
+                p.Plot.type == 'solo', not_(p.Plot.dir.in_(dir_exceptions)),
+            ).order_by(p.Plot.created_at.asc()).limit(20).all()
 
 def gather_uncompressed_plots(db, harvester):
+    dir_exceptions = load_plot_dir_exceptions(harvester.displayname)
     return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
+        not_(p.Plot.dir.in_(dir_exceptions)),
         and_(*[p.Plot.file.notlike("%-c{0}-%".format(level)) for level in GIGAHORSE_COMPRESSION_LEVELS]), 
         and_(*[p.Plot.file.notlike("%-c0{0}-%".format(level)) for level in BLADEBIT_COMPRESSION_LEVELS])).order_by(p.Plot.created_at.asc()).limit(20).all()
 
 def gather_plots_before(db, harvester, delete_before_date):
+    dir_exceptions = load_plot_dir_exceptions(harvester.displayname)
     return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
-        p.Plot.created_at < "{0} 00:00".format(delete_before_date)).order_by(p.Plot.created_at.asc()).limit(20).all()
+        p.Plot.created_at < "{0} 00:00".format(delete_before_date), not_(p.Plot.dir.in_(dir_exceptions))).order_by(p.Plot.created_at.asc()).limit(20).all()
 
 def gather_plots_by_ksize(db, harvester, delete_by_ksizes):
+    dir_exceptions = load_plot_dir_exceptions(harvester.displayname)
     if len(delete_by_ksizes) == 0:
         app.logger.error("Invalid empty list of ksizes to select plots for deletion.")
         return []
@@ -65,7 +82,7 @@ def gather_plots_by_ksize(db, harvester, delete_by_ksizes):
         if not ksize in p.KSIZES:
             app.logger.error("Invalid target ksize for deletion provided: {0}".format(ksize))
             return []
-    return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname,
+    return db.session.query(p.Plot).filter(p.Plot.blockchain == harvester.blockchain, p.Plot.hostname == harvester.hostname, not_(p.Plot.dir.in_(dir_exceptions)),
         or_(*[p.Plot.file.like("%-k{0}-%".format(ksize)) for ksize in delete_by_ksizes])).order_by(p.Plot.created_at.asc()).limit(20).all()
 
 def limit_deletes_to_accomodate_ksize(db, candidate_plots, free_ksize):

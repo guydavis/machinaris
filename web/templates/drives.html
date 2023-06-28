@@ -216,7 +216,7 @@
                 ({{ drive.serial_number }})
               {% endif %}
             </small>
-            <table class="text-muted" style="width: 100%">
+            <table style="width: 100%">
               <tr>
                 <td>S.M.A.R.T</td>
                 <td>{{_('Temperature')}}</td>
@@ -264,7 +264,7 @@
       </div>
       {% endif %}
       {% endfor %}
-      <small class="text-muted text-center">{{_('Drive status updated')}} {{drives.rows[0].updated_at | datetimefilter}}</small>
+      <small class="text-center">{{_('Drive status updated')}} {{drives.rows[0].updated_at | datetimefilter}}</small>
       {% endif %}
     </fieldset>
   </form>

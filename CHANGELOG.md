@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2023-?-?
+### Added
+ - [Chia](https://docs.google.com/document/d/1MSJ8JzAQGDGrnEzdr4zK4IcTDbokJfpHypn8Dt60Mx8/) - Alpha GPU-farming, requires manual config changes. [Status](https://github.com/Chia-Network/chia-blockchain/issues)
+ - Request a new plot check, via 'Recheck' button added to Check results dialog on Farming page.  
+ - Optionally exclude certain plot directories from replotting check to free disk space. Useful for drives only partially dedicated to holding plots.
+### Changed
+ - Deprecated stale blockchains, by hiding from Worker wizards: BPX, N-Chain, Silicoin, Stor
+### Updated
+ - [Bladebit](https://downloads.chia.net/bladebit/) to 3.0.0-alpha4.3. [Status](https://github.com/Chia-Network/bladebit/issues)
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.8.1) to v1.8.1
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.8.1.giga13) to v1.8.1.giga13.
+ - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.10.6) to v0.10.6. 
+### Notes
+ - Bladebit still broken on ability to `ramplot` and `diskplot` as they try to match Gigahorse's GPU plotting. Still awaiting a fix...
+ - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
+
 ## [1.8.2] - 2023-06-28
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.2) to v1.8.2
 ### Notes
@@ -12,7 +28,7 @@ All notable changes to this project will be documented in this file. The format 
  - By default, exclude Gigahorse plots from automated plot check due to poor performance of the 'ProofOfSpace' binary.
  - Fix for plotting manager issues when plotting with multiple tmp drives.
 ### Updated
- - [Bladebit](https://downloads.chia.net/bladebit/) to 3.0.0-alpha4. Status @ https://github.com/Chia-Network/bladebit/issues
+ - [Bladebit](https://downloads.chia.net/bladebit/) to 3.0.0-alpha4. [Status](https://github.com/Chia-Network/bladebit/issues)
  - [BPX](https://github.com/bpx-network/bpx-blockchain/releases/tag/2.1.0) to v2.1.0
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.8.0) to v1.8.0
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.1) to v1.8.1
