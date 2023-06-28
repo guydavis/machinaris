@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.2] - 2023-06-28
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/1.8.2) to v1.8.2
+### Notes
+ - Bladebit still broken on ability to `ramplot` and `diskplot` as they try to match Gigahorse's GPU plotting. Still awaiting a fix...
+
 ## [1.8.1] - 2023-05-17
 ### Changed
  - By default, exclude Gigahorse plots from automated plot check due to poor performance of the 'ProofOfSpace' binary.
