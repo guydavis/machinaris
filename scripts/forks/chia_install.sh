@@ -27,11 +27,11 @@ else
     echo "Installing Chia CUDA binaries on ${arch_name}..."
     cd /tmp
     if [[ "${arch_name}" = "x86_64" ]]; then
-        curl -sLJO https://download.chia.net/bladebit/alpha4.4/chia-blockchain-cuda/chia-installers-linux-deb-intel.zip
+        curl -sLJO https://download.chia.net/bladebit/alpha4.6/chia-blockchain-cuda/chia-installers-linux-deb-intel.zip
         unzip *.zip
         apt-get install ./chia-blockchain-cli*.deb
     elif [[ "${arch_name}" = "arm64" ]]; then
-        curl -sLJO https://download.chia.net/bladebit/alpha4.4/chia-blockchain-cuda/chia-installers-linux-deb-arm64.zip
+        curl -sLJO https://download.chia.net/bladebit/alpha4.6/chia-blockchain-cuda/chia-installers-linux-deb-arm64.zip
         unzip *.zip
         apt-get install ./chia-blockchain-cli*.deb
     else
