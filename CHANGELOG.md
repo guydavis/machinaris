@@ -15,6 +15,7 @@ All notable changes to this project will be documented in this file. The format 
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.8.1.giga13) to v1.8.1.giga13.
  - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain/releases/tag/3.0.0-beta.2) to 3.0.0-beta2 based on Chia 1.8.2.
  - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.10.6) to v0.10.6. 
+ - [Wheat](https://github.com/wheatnetwork/wheat-blockchain/releases/tag/1.8.2) to v1.8.2.
 ### Notes
  - Bladebit still broken on ability to `ramplot` and `diskplot` as they try to match Gigahorse's GPU plotting. Still awaiting a fix...
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
