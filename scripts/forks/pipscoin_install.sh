@@ -1,6 +1,7 @@
 #!/bin/env bash
 #
-# Installs Pipscoin as per https://github.com/Pipscoin-Network/pipscoin-blockchain"
+# Dead fork, developer removed it from Github.
+# Installs Pipscoin as per https://github.com/Pipscoin-Network/pipscoin-blockchain
 #
 
 PIPSCOIN_BRANCH=$1

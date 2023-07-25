@@ -28,7 +28,7 @@ PLOTMAN_SAMPLE = '/machinaris/config/plotman.sample.yaml'
 
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 MADMAX_BINARY = '/usr/bin/chia_plot'
-BLADEBIT_BINARY = '/usr/bin/bladebit'
+BLADEBIT_BINARY = '/usr/bin/bladebit_cuda'
 CHIADOG_PATH = '/chiadog'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires

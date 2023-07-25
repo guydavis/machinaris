@@ -133,3 +133,5 @@ keyfile
 
 # 3rd party css/js 
 web/static/3rd_party
+
+.github/workflows/.nfs*
