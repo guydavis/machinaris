@@ -4,19 +4,19 @@
 #
 
 # Bootstrap and Icons
-BSI_VERSION=1.10.3
-BOOTSTRAP_VERSION=5.3.0
+BSI_VERSION=1.10.5
+BOOTSTRAP_VERSION=5.3.1
 BASEPATH=${JS_LIBS_BASEPATH:-/machinaris/web/static/3rd_party}
 
 # Mapping library
-LEAFLET_VERSION=1.9.3
+LEAFLET_VERSION=1.9.4
 
 # List of other css/js links
 LIST="
-https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.css
-https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.js
-https://cdn.datatables.net/1.13.2/js/jquery.dataTables.js
-https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js
+https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.css
+https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.js
+https://cdn.datatables.net/1.13.5/js/jquery.dataTables.js
+https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.min.js
 https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js
 https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js
 https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js
