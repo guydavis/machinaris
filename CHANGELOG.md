@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased] - 2023-?-?
 ### Added
- - [Chia](https://docs.google.com/document/d/1MSJ8JzAQGDGrnEzdr4zK4IcTDbokJfpHypn8Dt60Mx8/) - Alpha GPU-farming, requires manual config changes. [Status](https://github.com/Chia-Network/chia-blockchain/issues)
+ - [Chia](https://docs.google.com/document/d/1MSJ8JzAQGDGrnEzdr4zK4IcTDbokJfpHypn8Dt60Mx8/) - Beta GPU-farming, requires manual config changes. [Status](https://github.com/Chia-Network/chia-blockchain/issues)
  - Request a new plot check, via 'Recheck' button added to Check results dialog on Farming page.  
  - Optionally exclude certain plot directories from replotting check to free disk space. Useful for drives only partially dedicated to holding plots.
 ### Changed
@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Updated
  - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v3.0.0-rc1) to 3.0.0rc1.
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.8.1) to v1.8.1
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.0.0-rc3) to v2.0.0.
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.8.1.giga14) to v1.8.1.giga14.
  - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain/releases/tag/3.0.0) to 3.0.0 based on Chia 1.8.2.
  - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.10.6) to v0.10.6. 
