@@ -23,7 +23,8 @@ if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "plotter") && (${blockchains} == 'c
                 curl -sLJO https://github.com/Chia-Network/bladebit/releases/download/v3.0.0/bladebit-v3.0.0-ubuntu-arm64.tar.gz
                 curl -sLJO https://github.com/Chia-Network/bladebit/releases/download/v3.0.0/bladebit-cuda-v3.0.0-ubuntu-arm64.tar.gz
             fi
-            tar -xvf *.tar.gz
+            tar -xvf bladebit-v3.*.tar.gz
+            tar -xvf bladebit-cuda-v3.*.tar.gz
             rm -f *tar.gz
             chmod 755 bladebit*
             chown root.root ./bladebit*
