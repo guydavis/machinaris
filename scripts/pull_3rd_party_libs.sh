@@ -16,7 +16,8 @@ LIST="
 https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.css
 https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.js
 https://cdn.datatables.net/1.13.5/js/jquery.dataTables.js
-https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.min.js
+https://cdn.jsdelivr.net/npm/chart.js@4.3.3/dist/chart.umd.js.map
+https://cdn.jsdelivr.net/npm/chart.js@4.3.3/dist/chart.umd.min.js
 https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js
 https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js
 https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js
@@ -31,6 +32,7 @@ done
 wget -nv -O ${BASEPATH}/bsi-icons.zip "https://github.com/twbs/icons/releases/download/v${BSI_VERSION}/bootstrap-icons-${BSI_VERSION}.zip" && \
 unzip -q -o ${BASEPATH}/bsi-icons.zip -d $BASEPATH/ && \
 mv $BASEPATH/bootstrap-icons-${BSI_VERSION} $BASEPATH/icons && \
+mv ${BASEPATH}/icons/font/* ${BASEPATH}/icons/ && rmdir ${BASEPATH}/icons/font/ && \ 
 rm -f ${BASEPATH}/bsi-icons.zip
 
 # Bootstrap
