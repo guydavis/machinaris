@@ -97,6 +97,7 @@ if [[ ${mode} =~ ^fullnode.* ]]; then
     /chia-gigahorse-farmer/chia.bin start farmer-no-wallet
   else
     /chia-gigahorse-farmer/chia.bin start farmer
+    /chia-gigahorse-farmer/chia.bin start wallet
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   /chia-gigahorse-farmer/chia.bin start farmer-only
