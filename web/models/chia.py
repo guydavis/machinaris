@@ -35,8 +35,6 @@ class Summaries:
                 app.logger.error("No farm summary found for {0}".format(blockchain['blockchain']))
                 continue
             blockhain_for_wallet = blockchain['blockchain']
-            if blockhain_for_wallet == 'gigahorse':
-                blockhain_for_wallet = 'chia' # Same wallet
             wallet = self.find_wallet(wallets, blockhain_for_wallet)
             if not wallet:
                 app.logger.error("No wallet found for {0}".format(blockhain_for_wallet))
