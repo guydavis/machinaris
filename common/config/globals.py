@@ -492,7 +492,10 @@ def wallet_running():
     blockchain = enabled_blockchains()[0]
     if blockchain == 'mmx':
         return True # Always running for MMX
-    chia_binary_short = get_blockchain_binary(blockchain).split('/')[-1]
+    if blockchain == 'gigahorse':
+        chia_binary_short = 'chia' # wallet process is 'chia_wallet'
+    else:
+        chia_binary_short = get_blockchain_binary(blockchain).split('/')[-1]
     try:
         cmd = "pidof {0}_wallet".format(chia_binary_short)
         proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
