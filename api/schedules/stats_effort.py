@@ -72,7 +72,7 @@ def collect():
                     most_recent_block_reward_time = transaction.created_at_time
                     break
             # For Chia only (on the controller), check for a more recently farmed block time in cold wallet transactions
-            if blockchain == 'chia':
+            if blockchain in ['chia', 'gigahorse']:
                 most_recent_block_reward_time_cold_wallet =  websvcs.cold_wallet_farmed_most_recent_date(blockchain) # Order is reversed; newest to oldest
                 if most_recent_block_reward_time < most_recent_block_reward_time_cold_wallet:
                     app.logger.info("At {0}, a more recent cold wallet fee reward was found.".format(readable(most_recent_block_reward_time_cold_wallet)))
