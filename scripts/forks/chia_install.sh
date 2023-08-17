@@ -27,12 +27,10 @@ else
     echo "Installing Chia CUDA binaries on ${arch_name}..."
     cd /tmp
     if [[ "${arch_name}" = "x86_64" ]]; then
-        curl -sLJO https://github.com/Chia-Network/chia-blockchain/releases/download/2.0.0-rc5/chia-blockchain-cli-2.0.0rc5-1.x86_64.rpm
-        unzip *.zip
+        curl -sLJO https://github.com/Chia-Network/chia-blockchain/releases/download/2.0.0-rc5/chia-blockchain-cli_2.0.0rc5-1_amd64.deb
         apt-get install ./chia-blockchain-cli*.deb
     elif [[ "${arch_name}" = "arm64" ]]; then
         curl -sLJO https://github.com/Chia-Network/chia-blockchain/releases/download/2.0.0-rc5/chia-blockchain-cli_2.0.0rc5-1_arm64.deb
-        unzip *.zip
         apt-get install ./chia-blockchain-cli*.deb
     else
         echo "Installing Chia CUDA binaries skipped -> unsupported architecture: ${arch_name}"
