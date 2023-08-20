@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file. The format 
  - Deprecated stale blockchains, by hiding them from Worker wizards: BPX, N-Chain, Silicoin, Stor
 ### Updated
  - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v3.0.0) to 3.0.0.
- - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/1.8.1) to v1.8.1
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/2.0.0) to v2.0.0
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.0.0) to v2.0.0.
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.8.1.giga14) to v1.8.1.giga14.
  - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain/releases/tag/3.0.0) to 3.0.0 based on Chia 1.8.2.
