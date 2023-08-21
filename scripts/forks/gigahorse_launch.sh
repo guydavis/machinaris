@@ -91,9 +91,14 @@ chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
 
 /usr/bin/bash /machinaris/scripts/gpu_drivers_setup.sh
 
-# Start services based on mode selected. Always skip a duplicate Chia wallet launch
+# Start services based on mode selected. 
 if [[ ${mode} =~ ^fullnode.* ]]; then
-  /chia-gigahorse-farmer/chia.bin start farmer-no-wallet
+  if [ -f /root/.chia/machinaris/config/wallet_settings.json ]; then
+    /chia-gigahorse-farmer/chia.bin start farmer-no-wallet
+  else
+    /chia-gigahorse-farmer/chia.bin start farmer
+    /chia-gigahorse-farmer/chia.bin start wallet
+  fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   /chia-gigahorse-farmer/chia.bin start farmer-only
 elif [[ ${mode} =~ ^harvester.* ]]; then

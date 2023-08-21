@@ -226,8 +226,9 @@ def cold_wallet_farmed_balance(blockchain):
 
 # Only for Chia on the controller for now.
 def cold_wallet_farmed_most_recent_date(blockchain):
-    if blockchain != 'chia':
+    if blockchain != 'chia' and blockchain != 'gigahorse':
         raise Exception("Most recent cold wallet farmed block lookup not supported off controller.")
+    blockchain = 'chia' # Treat gigahorse like chia
     most_recent_farmed_block_time = 0 # Seconds since epoch
     addresses_per_blockchain = load_cold_wallet_addresses()
     if blockchain in addresses_per_blockchain:

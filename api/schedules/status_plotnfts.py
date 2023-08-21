@@ -36,7 +36,7 @@ def update():
     with app.app_context():
         try:
             for blockchain in globals.enabled_blockchains():
-                if not blockchain in ['chia', 'chives']:
+                if not blockchain in ['chia', 'chives', 'gigahorse']:
                     continue
                 hostname = utils.get_hostname()
                 plotnfts = pools_cli.load_plotnft_show(blockchain)
