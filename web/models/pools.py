@@ -143,7 +143,7 @@ class PoolConfigs():
 
     def __init__(self, blockchain, plotnfts, wallets):
         self.plotnfts = plotnfts
-        if blockchain == 'chia':
+        if blockchain in ['chia', 'gigahorse']:
             self.links = self.chia_links()
         elif blockchain == 'chives':
             self.links = self.chives_links()
