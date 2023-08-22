@@ -42,7 +42,7 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   curl -skLJ -O ${torrent}
   /usr/bin/python /machinaris/scripts/chiadb_download.py $PWD/*.torrent >> /tmp/chiadb_download.log 2>&1
   echo "Now decompressing the blockchain database..."
-  cd /root/.chia/mainnet/db/chia && gunzip *.gz
+  cd /root/.chia/mainnet/db/chia && tar -xf *.gz
   cd /root/.chia/mainnet/db
   mv /root/.chia/mainnet/db/chia/blockchain_v2_mainnet.*.sqlite blockchain_v2_mainnet.sqlite
   rm -rf /root/.chia/mainnet/db/chia
