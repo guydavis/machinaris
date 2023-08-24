@@ -28,7 +28,7 @@ PLOTMAN_SAMPLE = '/machinaris/config/plotman.sample.yaml'
 
 PLOTMAN_SCRIPT = '/chia-blockchain/venv/bin/plotman'
 MADMAX_BINARY = '/usr/bin/chia_plot'
-BLADEBIT_BINARY = '/usr/bin/bladebit'
+BLADEBIT_BINARY = '/usr/bin/bladebit_cuda'
 CHIADOG_PATH = '/chiadog'
 
 RELOAD_MINIMUM_DAYS = 1  # Don't run binaries for version again until this time expires
@@ -492,7 +492,10 @@ def wallet_running():
     blockchain = enabled_blockchains()[0]
     if blockchain == 'mmx':
         return True # Always running for MMX
-    chia_binary_short = get_blockchain_binary(blockchain).split('/')[-1]
+    if blockchain == 'gigahorse':
+        chia_binary_short = 'chia' # wallet process is 'chia_wallet'
+    else:
+        chia_binary_short = get_blockchain_binary(blockchain).split('/')[-1]
     try:
         cmd = "pidof {0}_wallet".format(chia_binary_short)
         proc = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)

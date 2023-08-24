@@ -83,8 +83,6 @@ def send_request(fullnode, selected_blockchain, launcher_ids, choices, pool_urls
 def get_pool_configs():
     configs = {}
     for blockchain in po.POOLABLE_BLOCKCHAINS:
-        if blockchain == 'gigahorse':
-            continue
         plotnfts = db.session.query(pn.Plotnft).filter(pn.Plotnft.blockchain == blockchain).all()
         wallets = db.session.query(w.Wallet).filter(w.Wallet.blockchain == blockchain).all()
         configs[blockchain] = PoolConfigs(blockchain, plotnfts, wallets)

@@ -226,8 +226,7 @@ def farming_plots():
         plot_id = request.args.get('analyze')
         return plotman.analyze(plot_id[:8])
     elif request.args.get('check'):  # Xhr with a plot_id
-        plot_id = request.args.get('check')
-        return chia.check(plot_id)
+        return chia.check(request.args.get('check'), request.args.get('force_recheck', default=False, type=lambda v: v.lower() == 'true'))
     gc = globals.load()
     farmers = chia.load_farmers()
     plots = chia.load_plots_farming()
@@ -509,8 +508,6 @@ def settings_pools():
     fullnodes_by_blockchain = worker.get_fullnodes_by_blockchain()
     poolable_blockchains = []
     for pb in po.POOLABLE_BLOCKCHAINS:
-        if pb == 'gigahorse':
-            continue
         if pb in fullnodes_by_blockchain:
             poolable_blockchains.append(pb)
     return render_template('settings/pools.html',  global_config=gc, fullnodes_by_blockchain=fullnodes_by_blockchain,

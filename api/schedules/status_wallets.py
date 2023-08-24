@@ -24,9 +24,7 @@ def update():
         try:
             blockchain = globals.enabled_blockchains()[0]
             hostname = utils.get_hostname()
-            if blockchain == 'gigahorse':
-                return # Gigahorse is Chia blockchain with proprietary plot files, no wallet running
-            elif blockchain == 'mmx':
+            if blockchain == 'mmx':
                 public_wallet = mmx_cli.load_wallet_show(blockchain)
             else:
                 public_wallet = chia_cli.load_wallet_show(blockchain)

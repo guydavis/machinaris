@@ -87,7 +87,7 @@
     "chia": {
         "name": "Chia",
         "symbol": "XCH" ,
-        "binary":  "/chia-blockchain/venv/bin/chia",
+        "binary":  "/usr/bin/chia",
         "network_path": "/root/.chia/mainnet",
         "network_name": "mainnet",
         "network_port": 8444,

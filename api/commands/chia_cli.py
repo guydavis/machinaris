@@ -37,7 +37,7 @@ MAX_LOG_LINES = 2000
 WALLET_SETTINGS_FILE = '/root/.chia/machinaris/config/wallet_settings.json'
 
 # Blockchains which dropped compatibility with `show -c` commands around v1.6
-BLOCKCHAINS_USING_PEER_CMD = ['btcgreen', 'cactus', 'chia', 'chinilla', 'flax', 'flora', 'gigahorse', 'hddcoin', 'littlelambocoin', 'maize', 'one', 'pipscoin', 'shibgreen', 'tad']
+BLOCKCHAINS_USING_PEER_CMD = ['btcgreen', 'cactus', 'chia', 'chinilla', 'flax', 'flora', 'gigahorse', 'hddcoin', 'littlelambocoin', 'maize', 'one', 'pipscoin', 'shibgreen', 'tad', 'wheat']
 
 def load_farm_summary(blockchain):
     chia_binary = globals.get_blockchain_binary(blockchain)
@@ -169,9 +169,6 @@ def restart_farmer(blockchain):
     Popen("nohup sh -c '{0}' >/dev/null 2>&1 &".format(cmd), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
 
 def start_wallet(blockchain):
-    if blockchain == 'gigahorse':
-        app.logger.info("Gigahorse doesn't run it's own wallet.  Machinaris uses the wallet of the main Chia container instead.")
-        return
     chia_binary = globals.get_blockchain_binary(blockchain)
     working_dir = globals.get_blockchain_working_dir(blockchain)
     cmd = "{0} start wallet -r".format(chia_binary)
@@ -179,9 +176,6 @@ def start_wallet(blockchain):
     Popen("nohup sh -c '{0}' >/dev/null 2>&1 &".format(cmd), cwd=working_dir, stdout=PIPE, stderr=PIPE, shell=True)
 
 def pause_wallet(blockchain):
-    if blockchain == 'gigahorse':
-        app.logger.info("Gigahorse doesn't run it's own wallet.  Machinaris uses the wallet of the main Chia container instead.")
-        return
     chia_binary = globals.get_blockchain_binary(blockchain)
     working_dir = globals.get_blockchain_working_dir(blockchain)
     if globals.legacy_blockchain(blockchain):  # Old chains will stop fullnode(!) if ask to stop just the wallet...

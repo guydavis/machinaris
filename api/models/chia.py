@@ -24,6 +24,9 @@ class FarmSummary:
                     self.plot_count = line.strip().split(':')[1].strip()
                 elif "Total size of plots" in line:
                     self.plots_size = line.strip().split(':')[1].strip()
+                    if blockchain == 'chia': # Example "68.388 TiB, 68.425 TiBe (effective)"
+                        raw,effective = self.plots_size.strip().split(',')
+                        self.plots_size = effective.strip().removesuffix('e (effective)')
                 elif "status" in line: 
                     self.calc_status(line.split(':')[1].strip())
                 elif re.match("Total.*farmed:.*$", line):

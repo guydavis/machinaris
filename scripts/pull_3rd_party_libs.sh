@@ -4,19 +4,20 @@
 #
 
 # Bootstrap and Icons
-BSI_VERSION=1.10.3
-BOOTSTRAP_VERSION=5.2.3
+BSI_VERSION=1.10.5
+BOOTSTRAP_VERSION=5.3.1
 BASEPATH=${JS_LIBS_BASEPATH:-/machinaris/web/static/3rd_party}
 
 # Mapping library
-LEAFLET_VERSION=1.9.3
+LEAFLET_VERSION=1.9.4
 
 # List of other css/js links
 LIST="
-https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap5.css
-https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap5.js
-https://cdn.datatables.net/1.13.2/js/jquery.dataTables.js
-https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js
+https://cdn.datatables.net/1.13.5/css/dataTables.bootstrap5.css
+https://cdn.datatables.net/1.13.5/js/dataTables.bootstrap5.js
+https://cdn.datatables.net/1.13.5/js/jquery.dataTables.js
+https://cdn.jsdelivr.net/npm/chart.js@4.3.3/dist/chart.umd.js.map
+https://cdn.jsdelivr.net/npm/chart.js@4.3.3/dist/chart.umd.min.js
 https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js
 https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js
 https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.min.js
@@ -31,6 +32,7 @@ done
 wget -nv -O ${BASEPATH}/bsi-icons.zip "https://github.com/twbs/icons/releases/download/v${BSI_VERSION}/bootstrap-icons-${BSI_VERSION}.zip" && \
 unzip -q -o ${BASEPATH}/bsi-icons.zip -d $BASEPATH/ && \
 mv $BASEPATH/bootstrap-icons-${BSI_VERSION} $BASEPATH/icons && \
+mv ${BASEPATH}/icons/font/* ${BASEPATH}/icons/ && rmdir ${BASEPATH}/icons/font/ && \ 
 rm -f ${BASEPATH}/bsi-icons.zip
 
 # Bootstrap
