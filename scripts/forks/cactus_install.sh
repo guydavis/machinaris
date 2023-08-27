@@ -4,8 +4,8 @@
 #
 
 CACTUS_BRANCH=$1
-# On 2023-08-20
-HASH=9144b99fa71baa9ab84c178b0fe0cf539613514f
+# On 2023-08-24
+HASH=5e000ae5c26fd5799a025527720559fb2252b1d3
 
 if [ -z ${CACTUS_BRANCH} ]; then
     echo 'Skipping Cactus install as not requested.'
@@ -16,7 +16,7 @@ else
     git checkout $HASH
     chmod +x install.sh
     # Log "Added Coins" at info, not debug level.  See: https://github.com/Chia-Network/chia-blockchain/issues/11955
-    sed -e 's/^        self.log.debug($/        self.log.info(/g' cactus/wallet/wallet_state_manager.py
+    sed -i 's/^        self.log.debug($/        self.log.info(/g' cactus/wallet/wallet_state_manager.py
     
     /usr/bin/sh ./install.sh
 
