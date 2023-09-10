@@ -109,8 +109,12 @@ class Pools:
         errors = []
         if 'pool_errors_24h' in pool_state:
             for error in pool_state['pool_errors_24h']:
-                if not error['error_message'] in errors:
-                    errors.append(error['error_message'])
+                try:
+                    if not error['error_message'] in errors:
+                        errors.append(error['error_message'])
+                except:# Some errors don't have an 'error_message' for some reason
+                    if not str(error) in errors: 
+                        errors.append(str(error))
         return errors
 
 class PartialsChartData:
