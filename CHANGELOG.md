@@ -6,8 +6,8 @@ All notable changes to this project will be documented in this file. The format 
 ### Added
 ### Changed
 ### Updated
- - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v3.1.0-beta1) to v3.1.0-beta1
- - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.0.1) to v2.0.1. - Patches GUI/CLI plotting error that DID NOT AFFECT MACHINARIS 2.0.0 USERS.
+ - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v3.1.0-beta1) to v3.1.0-beta1 - Supporting hybrid GPU/disk plotting with either 128 GB or 16 GB RAM.
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.1.0-rc1) to v2.1.0 - Patches GUI/CLI plotting error that DID NOT AFFECT MACHINARIS 2.0.0 USERS.
 
 ## [2.0.0] - 2023-08-24
 ### Added
