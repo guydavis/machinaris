@@ -3,12 +3,9 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased] - 2023-?-?
-### Added
-### Changed
 ### Updated
- - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v3.1.0-beta1) to v3.1.0-beta1 - Supporting hybrid GPU/disk plotting with either 128 GB or 16 GB RAM.
- - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.1.0-rc1) to v2.1.0 - Patches GUI/CLI plotting error that DID NOT AFFECT MACHINARIS 2.0.0 USERS.
-
+ - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v3.1.0) to v3.1.0 - Supporting hybrid GPU/disk plotting with either 128 GB or 16 GB RAM.
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.1.0) to v2.1.0 
 ## [2.0.0] - 2023-08-24
 ### Added
  - Request a new plot check, via 'Recheck' button added to Check results dialog on Farming page.  
