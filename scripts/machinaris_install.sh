@@ -9,6 +9,11 @@ cd /chia-blockchain
 
 venv/bin/pip3 install -r /machinaris/docker/requirements.txt
 
+# Issue with stale flask-smorest, force an install
+./venv/bin/pip list installed | grep smorest
+./venv/bin/pip install --force flask-smorest
+./venv/bin/pip list installed | grep smorest
+
 cp -f /machinaris/docker/entrypoint.sh /chia-blockchain/ 
 
 chmod 755 /machinaris/scripts/* /chia-blockchain/entrypoint.sh
