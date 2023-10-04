@@ -2,7 +2,7 @@ apscheduler
 click
 jinja2
 flask
-flask-smorest
+flask-smorest >= 0.42.1
 python-dotenv
 marshmallow
 sqlalchemy
