@@ -17,11 +17,11 @@ if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "plotter") && (${blockchains} == 'c
             cd /opt/chia/bladebit
             rm -f ./bladebit  # Remove stale version bundled in the DEB package.
             if [[ "${arch_name}" = "x86_64" ]]; then
-                curl -sLJO https://github.com/Chia-Network/bladebit/releases/download/v3.0.0/bladebit-v3.0.0-ubuntu-x86-64.tar.gz
-                curl -sLJO https://github.com/Chia-Network/bladebit/releases/download/v3.0.0/bladebit-cuda-v3.0.0-ubuntu-x86-64.tar.gz
+                curl -sLJO https://github.com/Chia-Network/bladebit/releases/download/v3.1.0/bladebit-v3.1.0-ubuntu-x86-64.tar.gz
+                curl -sLJO https://github.com/Chia-Network/bladebit/releases/download/v3.1.0/bladebit-cuda-v3.1.0-ubuntu-x86-64.tar.gz
             else
-                curl -sLJO https://github.com/Chia-Network/bladebit/releases/download/v3.0.0/bladebit-v3.0.0-ubuntu-arm64.tar.gz
-                curl -sLJO https://github.com/Chia-Network/bladebit/releases/download/v3.0.0/bladebit-cuda-v3.0.0-ubuntu-arm64.tar.gz
+                curl -sLJO https://github.com/Chia-Network/bladebit/releases/download/v3.1.0/bladebit-v3.1.0-ubuntu-arm64.tar.gz
+                curl -sLJO https://github.com/Chia-Network/bladebit/releases/download/v3.1.0/bladebit-cuda-v3.1.0-ubuntu-arm64.tar.gz
             fi
             tar -xvf bladebit-v3.*.tar.gz
             tar -xvf bladebit-cuda-v3.*.tar.gz
