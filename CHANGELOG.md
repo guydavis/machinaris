@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2023-?-?
+### Added 
+ - Settings | Plotting | Bladebit now supports "no_direct_io: true" option
+### Changed
+### Updated
+
 ## [2.1.0] - 2023-10-06
 ### Updated
  - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v3.1.0) to v3.1.0 - Supporting hybrid GPU/disk plotting with either 128 GB or 16 GB RAM.
