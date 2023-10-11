@@ -44,7 +44,7 @@ jobs:
           build-args: |
             "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=latest"
-            "CHIA_BRANCH=release/2.1.1"
+            "CHIA_BRANCH=release/2.1.2"
             "MADMAX_BRANCH=v1.8.2.giga14"
             "BLADEBIT_BRANCH=master"
           tags: |
