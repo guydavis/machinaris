@@ -50,7 +50,7 @@ for p in ${plots_dir//:/ }; do
 done
 
 chmod 755 -R /root/.chia/ext9/config/ssl/ &> /dev/null
-chia init --fix-ssl-permissions 2>&1  >/dev/null 
+chia init --fix-ssl-permissions >/dev/null 2>&1   
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} =~ ^fullnode.* ]]; then
@@ -102,7 +102,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     if [[ -f /root/.ext9/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       chia init -c /root/.ext9/farmer_ca 2>&1 > /root/.chia/ext9/log/init.log
       chmod 755 -R /root/.chia/ext9/config/ssl/ &> /dev/null
-      chia init --fix-ssl-permissions 2>&1  >/dev/null 
+      chia init --fix-ssl-permissions >/dev/null 2>&1   
     else
       echo "Did not find your farmer's certificates within /root/.ext9/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"

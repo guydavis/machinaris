@@ -101,7 +101,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     if [[ -f /root/.maize/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       maize init -c /root/.maize/farmer_ca 2>&1 > /root/.maize/mainnet/log/init.log
       #chmod 755 -R /root/.maize/mainnet/config/ssl/ &> /dev/null
-      #maize init --fix-ssl-permissions 2>&1  >/dev/null 
+      #maize init --fix-ssl-permissions >/dev/null 2>&1   
     else
       echo "Did not find your farmer's certificates within /root/.maize/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"

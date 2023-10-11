@@ -84,7 +84,7 @@ for p in ${plots_dir//:/ }; do
 done
 
 chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
-chia init --fix-ssl-permissions 2>&1  >/dev/null
+chia init --fix-ssl-permissions >/dev/null 2>&1  
 
 /usr/bin/bash /machinaris/scripts/gpu_drivers_setup.sh
 
@@ -124,7 +124,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     if [[ -f /root/.chia/farmer_ca/chia_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       chia init -c /root/.chia/farmer_ca 2>&1 > /root/.chia/mainnet/log/init.log
       chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
-      chia init --fix-ssl-permissions 2>&1  >/dev/null 
+      chia init --fix-ssl-permissions >/dev/null 2>&1   
     else
       echo "Did not find your farmer's certificates within /root/.chia/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"

@@ -57,7 +57,7 @@ for p in ${plots_dir//:/ }; do
 done
 
 chmod 755 -R /root/.cactus/mainnet/config/ssl/ &> /dev/null
-cactus init --fix-ssl-permissions 2>&1  >/dev/null 
+cactus init --fix-ssl-permissions >/dev/null 2>&1   
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} =~ ^fullnode.* ]]; then
@@ -109,7 +109,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     if [[ -f /root/.cactus/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       cactus init -c /root/.cactus/farmer_ca 2>&1 > /root/.cactus/mainnet/log/init.log
       chmod 755 -R /root/.cactus/mainnet/config/ssl/ &> /dev/null
-      cactus init --fix-ssl-permissions 2>&1  >/dev/null 
+      cactus init --fix-ssl-permissions >/dev/null 2>&1   
     else
       echo "Did not find your farmer's certificates within /root/.cactus/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
