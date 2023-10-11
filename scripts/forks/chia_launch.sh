@@ -84,7 +84,7 @@ for p in ${plots_dir//:/ }; do
 done
 
 chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
-chia init --fix-ssl-permissions
+chia init --fix-ssl-permissions &> /dev/null
 
 /usr/bin/bash /machinaris/scripts/gpu_drivers_setup.sh
 
