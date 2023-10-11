@@ -50,6 +50,7 @@ fi
 
 mkdir -p /root/.chia/mainnet/log
 chia init >> /root/.chia/mainnet/log/init.log 2>&1
+chia init --fix-ssl-permissions > /dev/null 
 
 echo 'Configuring Chia...'
 if [ ! -f /root/.chia/mainnet/config/config.yaml ]; then
