@@ -50,7 +50,6 @@ fi
 
 mkdir -p /root/.chia/mainnet/log
 chia init >> /root/.chia/mainnet/log/init.log 2>&1
-chia init --fix-ssl-permissions > /dev/null 
 
 echo 'Configuring Chia...'
 if [ ! -f /root/.chia/mainnet/config/config.yaml ]; then
@@ -85,7 +84,7 @@ for p in ${plots_dir//:/ }; do
 done
 
 chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
-chia init --fix-ssl-permissions > /dev/null 
+chia init --fix-ssl-permissions
 
 /usr/bin/bash /machinaris/scripts/gpu_drivers_setup.sh
 
