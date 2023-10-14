@@ -105,6 +105,7 @@ plotting:
                 # BladeBit plotter; see https://github.com/guydavis/machinaris/wiki/Bladebit
                 threads: 4            # Threads per job
                 no_numa: true         # Whether to disable NUMA memory support or not
+                no_direct_io: false   # Whether to disable DirectIO writes to to destination media
                 compression: 0        # Compression level (default = 0, min = 0, max = 6)
                 mode: diskplot        # Either enable ramplot, diskplot, or gpuplot. 
                 diskplot_cache:   4GB # If diskplot, amount of RAM to allocate to caching disk writes

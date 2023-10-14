@@ -53,7 +53,7 @@ for p in ${plots_dir//:/ }; do
 done
 
 chmod 755 -R /root/.chinilla/vanillanet/config/ssl/ &> /dev/null
-chinilla init --fix-ssl-permissions > /dev/null 
+chinilla init --fix-ssl-permissions >/dev/null 2>&1   
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} =~ ^fullnode.* ]]; then
@@ -105,7 +105,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     if [[ -f /root/.chinilla/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       chinilla init -c /root/.chinilla/farmer_ca 2>&1 > /root/.chinilla/vanillanet/log/init.log
       chmod 755 -R /root/.chinilla/vanillanet/config/ssl/ &> /dev/null
-      chinilla init --fix-ssl-permissions > /dev/null 
+      chinilla init --fix-ssl-permissions >/dev/null 2>&1   
     else
       echo "Did not find your farmer's certificates within /root/.chinilla/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"
