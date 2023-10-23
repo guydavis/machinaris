@@ -91,7 +91,6 @@ jobs:
             "CHIVES_REPO=https://github.com/foxypool/chives-blockchain.git"
             "CHIVES_BRANCH=main"
             "PLOTMAN_BRANCH=development"
-            "MADMAX_BRANCH=v1.8.2.giga14"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chivesfoxy:test
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chivesfoxy:test
