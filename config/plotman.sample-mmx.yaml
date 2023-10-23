@@ -107,12 +107,12 @@ plotting:
         type: madmax
 
         madmax:
-                # Madmax plotter: https://github.com/guydavis/machinaris/wiki/MadMax
-                k: 32                 # The minimum K size for mainnet will probably be k30
-                mode: diskplot        # Either enable diskplot or gpuplot. 
-                n_threads: 4          # Default is 4, SLOWLY crank up if you have many cores
-                n_buckets: 256        # Default is 256
-                n_buckets3: 256       # Default is 256
-                n_rmulti2: 1          # Default is 1
+                # Gigahorse plotter: https://github.com/guydavis/machinaris/wiki/Gigahorse
+                k: 32                 # The default size for MMX plot is k32
+                mode: gpuplot         # Either enable diskplot or gpuplot. 
                 network_port: 11337   # Use 11337 for MMX
-                compression: 1        # Compression level (default = 1, min = 1, max = 9)
+                compression: 7        # Compression level (default = 1, min = 1, max = 20)
+                gpu_device: 0         # CUDA device (default = 0)
+                gpu_ndevices: 1       # Number of CUDA devices (default = 1)
+                gpu_streams: 4        # Number of parallel streams (default = 4, must be >= 2)
+                #gpu_shared_memory: 16 # Max shared / pinned memory in GiB (default = unlimited)
