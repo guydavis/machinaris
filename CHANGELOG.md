@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Changed
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.1.1) to v2.1.1 - misc improvements, see their release notes.
- - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v1.8.2.giga22) to v1.8.2.giga22 with C20 compression support.
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.1.giga22) to v2.1.1.giga22 with C20 compression support.
 
 ## [2.1.0] - 2023-10-06
 ### Updated
