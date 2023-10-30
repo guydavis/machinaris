@@ -97,6 +97,10 @@ if [[ ${mode} =~ ^fullnode.* ]]; then
     /chia-gigahorse-farmer/chia.bin start farmer
     /chia-gigahorse-farmer/chia.bin start wallet
   fi
+  if [[ ${gigahorse_recompute_server} == "true" ]]; then
+    echo "Starting Gigahorse recompute_server shortly..."
+    sleep 20 && /chia-gigahorse-farmer/chia_recompute_server 2>&1 > /root/.chia/mainnet/log/recompute.log &
+  fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   /chia-gigahorse-farmer/chia.bin start farmer-only
 elif [[ ${mode} =~ ^harvester.* ]]; then
