@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-03-13 10:29-0600\n"
-"POT-Creation-Date: 2023-04-23 17:03-0600\n"
+"POT-Creation-Date: 2023-11-01 09:25-0600\n"
 "PO-Revision-Date: 2022-03-13 10:29-0600\n"
 "Last-Translator: Bernie Deprez\n"
 "Language: nl_NL\n"
@@ -16,9 +16,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.12.1\n"
+"Generated-By: Babel 2.13.1\n"
 
-#: routes.py:122 routes.py:390
+#: routes.py:122 routes.py:389
 msgid "Saved local currency setting."
 msgstr "Lokale munt instelling opgeslagen."
 
@@ -30,31 +30,31 @@ msgstr "Blockchain download"
 msgid "Unknown plotting form"
 msgstr "Ongekend plottingformaat"
 
-#: routes.py:244
+#: routes.py:243
 msgid "Error! Please see logs."
 msgstr "Error! Controleer de logs."
 
-#: routes.py:285
+#: routes.py:284
 msgid "Unknown alerts form"
 msgstr "Ongekend waarschuwingsformaat"
 
-#: routes.py:302
+#: routes.py:301
 msgid "Saved local currency and wallet sync settings."
 msgstr ""
 
-#: routes.py:311
+#: routes.py:310
 msgid "Starting wallet sync.  Please allow at least 15 minutes..."
 msgstr ""
 
-#: routes.py:314
+#: routes.py:313
 msgid "Pausing wallet sync.  Please allow a few minutes..."
 msgstr ""
 
-#: routes.py:393
+#: routes.py:392
 msgid "Restarting blockchain.  Please allow at least 15 minutes..."
 msgstr ""
 
-#: routes.py:408
+#: routes.py:407
 msgid ""
 "Saved mapping settings.  Please allow 10 minutes to generate location "
 "information for the map."
@@ -62,11 +62,11 @@ msgstr ""
 "Kaart instellingen opgeslagen. Wacht 10 minuten terwijl lokatie "
 "informatie voor de kaart wordt gegenereerd."
 
-#: routes.py:419
+#: routes.py:418
 msgid "Unknown form action"
 msgstr "Ongekende formulier actie"
 
-#: routes.py:543
+#: routes.py:540
 #, python-format
 msgid ""
 "No worker at %(worker)s for blockchain %(blockchain)s. Please select "
@@ -75,7 +75,7 @@ msgstr ""
 "Geen werker op %(worker)s voor blockchain %(blockchain)s. Gelieve een "
 "ander blockchain te kiezen."
 
-#: routes.py:549
+#: routes.py:546
 #, python-format
 msgid ""
 "For Alerts config, found no responding fullnode found for %(blockchain)s."
@@ -84,7 +84,7 @@ msgstr ""
 "Voor Waarschuwingsconfiguratie, geen reagerende fullnode voor "
 "%(blockchain)s gevonden. Gelieve uw werkers te controleren."
 
-#: routes.py:554
+#: routes.py:551
 #, python-format
 msgid ""
 "For Farming config, found no responding fullnode found for "
@@ -93,7 +93,7 @@ msgstr ""
 "Voor Farming configuratie, geen reagerende fullnode voor %(blockchain)s "
 "gevonden. Gelieve uw werkers te controleren."
 
-#: routes.py:561
+#: routes.py:558
 #, python-format
 msgid ""
 "For Plotting config, found no responding fullnode found for "
@@ -102,7 +102,7 @@ msgstr ""
 "Voor Plotting configuratie, geen reagerende fullnode gevonden voor "
 "%(blockchain)s. Gelieve uw werkers te controleren."
 
-#: routes.py:566 routes.py:571 routes.py:576
+#: routes.py:563 routes.py:568 routes.py:573
 #, python-format
 msgid ""
 "No responding fullnode found for %(blockchain)s. Please check your "
@@ -111,7 +111,7 @@ msgstr ""
 "Geen reagerende fullnode gevonden voor %(blockchain)s. Gelieve uw werkers"
 " te controleren."
 
-#: routes.py:595
+#: routes.py:592
 msgid "Unsupported log type"
 msgstr "Log type niet ondersteund"
 
@@ -364,7 +364,7 @@ msgstr ""
 msgid "Idle"
 msgstr "Inactief"
 
-#: actions/plotman.py:47 actions/plotman.py:48 models/chia.py:231
+#: actions/plotman.py:47 actions/plotman.py:48 models/chia.py:229
 #: models/plotman.py:66 templates/index.html:42 templates/index.html:52
 msgid "Active"
 msgstr "Actief"
@@ -417,7 +417,7 @@ msgstr ""
 msgid "Archiver stopped successfully."
 msgstr "Farming niet succesvol gestart."
 
-#: actions/plotman.py:235
+#: actions/plotman.py:233
 #, python-format
 msgid ""
 "Current configuration will plot %(open_b)sSOLO%(close_b)s plots, not "
@@ -425,25 +425,25 @@ msgid ""
 "choice, please see the %(wiki_open)swiki%(wiki_close)s."
 msgstr ""
 
-#: actions/plotman.py:246
+#: actions/plotman.py:244
 msgid "Updated plotman.yaml failed validation! Fix and save or refresh page."
 msgstr ""
 
-#: actions/plotman.py:251
+#: actions/plotman.py:249
 msgid "Failed to save config to plotter. Please check log files."
 msgstr ""
 
-#: actions/plotman.py:255
+#: actions/plotman.py:253
 msgid "Nice! Plotman's plotman.yaml validated and saved successfully."
 msgstr ""
 
-#: actions/plotman.py:265
+#: actions/plotman.py:263
 msgid ""
 "Sorry, no plotting job log found. Perhaps plot was made outside "
 "Machinaris?"
 msgstr ""
 
-#: actions/plotman.py:307
+#: actions/plotman.py:306
 #, python-format
 msgid ""
 "Replotting has been enabled for %(blockchains)s. Please start Plotting "
@@ -451,13 +451,13 @@ msgid ""
 "minutes."
 msgstr ""
 
-#: actions/plotman.py:309
+#: actions/plotman.py:308
 msgid ""
 "Replotting has been DISABLED for all blockchains.  Machinaris will NOT "
 "remove any plots now."
 msgstr ""
 
-#: actions/plotman.py:311
+#: actions/plotman.py:310
 #, python-format
 msgid "Unable to save replotting settings in %(file)s because %(exception)s"
 msgstr ""
@@ -468,14 +468,14 @@ msgid ""
 "page."
 msgstr ""
 
-#: actions/pools.py:154
+#: actions/pools.py:152
 msgid ""
 "Reward recovery for portable plots has been initiated.  Tomorrow, please "
 "check the Total Balance charts below for each blockchain with recoverable"
 " coins."
 msgstr ""
 
-#: actions/pools.py:159
+#: actions/pools.py:157
 msgid "Unconfirmed transaction cleanup has been initiated. Please wait..."
 msgstr ""
 
@@ -488,16 +488,16 @@ msgstr "in voorbije dag."
 msgid "secs"
 msgstr "seconden"
 
-#: actions/stats.py:431 models/chia.py:271
+#: actions/stats.py:431 models/chia.py:269
 msgid "hour"
 msgstr "uur"
 
-#: actions/stats.py:461 templates/index.html:98
+#: actions/stats.py:461 templates/index.html:97
 #: templates/views/index_script_block.js:51
 msgid "Farmed Coins"
 msgstr ""
 
-#: actions/stats.py:478 templates/index.html:90
+#: actions/stats.py:478 templates/index.html:89
 #: templates/views/index_script_block.js:56 templates/wallet.html:184
 msgid "Total Balance"
 msgstr "Totale Saldo"
@@ -514,7 +514,7 @@ msgstr ""
 msgid "Host Memory Usage"
 msgstr ""
 
-#: actions/stats.py:555 templates/index.html:106
+#: actions/stats.py:555 templates/index.html:105
 msgid "Netspace Size"
 msgstr "Netgrootte"
 
@@ -542,7 +542,7 @@ msgstr "ETW"
 msgid "Estimated Time to Win"
 msgstr "Verwachte Tijd om te Winnen"
 
-#: actions/stats.py:683 models/chia.py:154 models/chia.py:265
+#: actions/stats.py:683 models/chia.py:152 models/chia.py:263
 #: models/drives.py:44
 msgid "days"
 msgstr "dagen"
@@ -637,147 +637,147 @@ msgid ""
 "disk usage."
 msgstr ""
 
-#: models/chia.py:233 templates/blockchains.html:136 templates/summary.html:107
+#: models/chia.py:231 templates/blockchains.html:136 templates/summary.html:107
 #: templates/wallet.html:206
 msgid "Syncing"
 msgstr "Synchronisatie"
 
-#: models/chia.py:235 templates/index.html:54
+#: models/chia.py:233 templates/index.html:54
 msgid "Not available"
 msgstr "Niet beschikbaar"
 
-#: models/chia.py:237
+#: models/chia.py:235
 msgid "Not synced"
 msgstr "Niet gesynchroniseerd"
 
-#: models/chia.py:240 templates/blockchains.html:127 templates/index.html:54
+#: models/chia.py:238 templates/blockchains.html:127 templates/index.html:54
 #: templates/plotting/jobs.html:132 templates/plotting/transfers.html:127
 #: templates/summary.html:103 templates/wallet.html:197
 #: templates/worker.html:78 templates/workers.html:83
 msgid "Offline"
 msgstr "Offline"
 
-#: models/chia.py:253 models/drives.py:49
+#: models/chia.py:251 models/drives.py:49
 msgid "years"
 msgstr "jaren"
 
-#: models/chia.py:255
+#: models/chia.py:253
 msgid "year"
 msgstr "jaar"
 
-#: models/chia.py:257 models/drives.py:48
+#: models/chia.py:255 models/drives.py:48
 msgid "months"
 msgstr "maanden"
 
-#: models/chia.py:259
+#: models/chia.py:257
 msgid "month"
 msgstr "maand"
 
-#: models/chia.py:261 models/drives.py:46
+#: models/chia.py:259 models/drives.py:46
 msgid "weeks"
 msgstr "weken"
 
-#: models/chia.py:263
+#: models/chia.py:261
 msgid "week"
 msgstr "week"
 
-#: models/chia.py:267
+#: models/chia.py:265
 msgid "day"
 msgstr "dag"
 
-#: models/chia.py:269 models/drives.py:42
+#: models/chia.py:267 models/drives.py:42
 msgid "hours"
 msgstr "uren"
 
-#: models/chia.py:273
+#: models/chia.py:271
 msgid "minutes"
 msgstr "minuten"
 
-#: models/chia.py:275
+#: models/chia.py:273
 msgid "minute"
 msgstr "minuut"
 
-#: models/chia.py:277
+#: models/chia.py:275
 msgid "Never (no plots)"
 msgstr "Nooit (geen plots)"
 
-#: models/chia.py:279
+#: models/chia.py:277
 msgid "Soon"
 msgstr "Binnenkort"
 
-#: models/chia.py:281
+#: models/chia.py:279
 msgid "and"
 msgstr "en"
 
-#: models/chia.py:288
+#: models/chia.py:286
 msgid "worker"
 msgstr ""
 
-#: models/chia.py:289
+#: models/chia.py:287
 msgid "blockchain"
 msgstr ""
 
-#: models/chia.py:290
+#: models/chia.py:288
 msgid "plot_id"
 msgstr ""
 
-#: models/chia.py:291
+#: models/chia.py:289
 msgid "dir"
 msgstr ""
 
-#: models/chia.py:292
+#: models/chia.py:290
 msgid "plot"
 msgstr ""
 
-#: models/chia.py:293
+#: models/chia.py:291
 msgid "type"
 msgstr ""
 
-#: models/chia.py:294
+#: models/chia.py:292
 msgid "create_date"
 msgstr ""
 
-#: models/chia.py:295
+#: models/chia.py:293
 msgid "size"
 msgstr ""
 
-#: models/chia.py:296
+#: models/chia.py:294
 msgid "c"
 msgstr ""
 
-#: models/chia.py:297
+#: models/chia.py:295
 msgid "a"
 msgstr ""
 
-#: models/chia.py:441 models/chia.py:452 templates/wallet.html:194
+#: models/chia.py:439 models/chia.py:450 templates/wallet.html:194
 msgid "View Transactions"
 msgstr ""
 
-#: models/chia.py:852
+#: models/chia.py:850
 msgid "Confirmed"
 msgstr ""
 
-#: models/chia.py:864
+#: models/chia.py:862
 msgid "INCOMING_TX"
 msgstr ""
 
-#: models/chia.py:866
+#: models/chia.py:864
 msgid "OUTGOING_TX"
 msgstr ""
 
-#: models/chia.py:868
+#: models/chia.py:866
 msgid "COINBASE_REWARD"
 msgstr ""
 
-#: models/chia.py:870
+#: models/chia.py:868
 msgid "FEE_REWARD"
 msgstr ""
 
-#: models/chia.py:872
+#: models/chia.py:870
 msgid "INCOMING_TRADE"
 msgstr ""
 
-#: models/chia.py:874
+#: models/chia.py:872
 msgid "OUTGOING_TRADE"
 msgstr ""
 
@@ -810,12 +810,12 @@ msgid "Worker"
 msgstr "Werker"
 
 #: templates/alerts.html:73 templates/blockchains.html:105
-#: templates/farming/plots.html:76 templates/farming/warnings.html:64
+#: templates/farming/plots.html:83 templates/farming/warnings.html:64
 #: templates/farming/warnings.html:101 templates/farming/warnings.html:138
 #: templates/settings/alerts.html:75 templates/settings/farming.html:46
 #: templates/settings/plotting.html:84 templates/settings/tools.html:45
 #: templates/summary.html:77 templates/wallet.html:180 templates/worker.html:47
-#: templates/worker_launch.html:994 templates/workers.html:53
+#: templates/worker_launch.html:969 templates/workers.html:53
 msgid "Blockchain"
 msgstr "Blockchain"
 
@@ -895,7 +895,7 @@ msgstr "Plotting"
 msgid "Farming"
 msgstr "Farming"
 
-#: templates/base.html:51 templates/index.html:127
+#: templates/base.html:51 templates/index.html:126
 msgid "Wallets"
 msgstr "Portefeuilles"
 
@@ -920,7 +920,7 @@ msgstr "Waarschuwingen"
 msgid "Pools"
 msgstr "Pools"
 
-#: templates/base.html:87 templates/farming/plots.html:194
+#: templates/base.html:87 templates/farming/plots.html:208
 #: templates/farming/warnings.html:28 templates/farming/workers.html:28
 #: templates/plotting/jobs.html:112 templates/plotting/transfers.html:107
 #: templates/plotting/workers.html:28 templates/summary.html:81
@@ -935,8 +935,8 @@ msgstr ""
 #: templates/base.html:97 templates/blockchains.html:25
 #: templates/blockchains.html:75 templates/connections.html:25
 #: templates/connections.html:59 templates/drives.html:67
-#: templates/drives.html:96 templates/farming/plots.html:36
-#: templates/farming/plots.html:68 templates/summary.html:25
+#: templates/drives.html:96 templates/farming/plots.html:43
+#: templates/farming/plots.html:75 templates/summary.html:25
 #: templates/summary.html:53 templates/wallet.html:23 templates/wallet.html:46
 msgid "Settings"
 msgstr "Instellingen"
@@ -977,11 +977,7 @@ msgstr "Credits"
 msgid "Bladebit"
 msgstr "Bladebit"
 
-#: templates/base.html:181
-msgid "Madmax"
-msgstr "Madmax"
-
-#: templates/base.html:185
+#: templates/base.html:180
 msgid "Plotman"
 msgstr "Plotman"
 
@@ -992,7 +988,7 @@ msgstr "Lokale Munt:"
 
 #: templates/blockchains.html:44 templates/blockchains.html:66
 #: templates/connections.html:50 templates/drives.html:84
-#: templates/farming/plots.html:153 templates/farming/plots.html:180
+#: templates/farming/plots.html:167 templates/farming/plots.html:194
 #: templates/plotting/jobs.html:16 templates/plotting/jobs.html:43
 #: templates/plotting/jobs.html:64 templates/plotting/transfers.html:18
 #: templates/plotting/transfers.html:39 templates/settings/alerts.html:25
@@ -1004,8 +1000,8 @@ msgid "Cancel"
 msgstr "Annuleren"
 
 #: templates/blockchains.html:45 templates/connections.html:51
-#: templates/drives.html:85 templates/farming/plots.html:154
-#: templates/farming/plots.html:181 templates/settings/alerts.html:93
+#: templates/drives.html:85 templates/farming/plots.html:168
+#: templates/farming/plots.html:195 templates/settings/alerts.html:93
 #: templates/settings/farming.html:64 templates/settings/plotting.html:44
 #: templates/settings/plotting.html:113 templates/settings/plotting.html:314
 #: templates/settings/pools.html:47 templates/settings/tools.html:63
@@ -1294,31 +1290,31 @@ msgstr "Totaal Aantal Plots"
 msgid "Total Plots Size"
 msgstr "Totale Omvang Plots"
 
-#: templates/index.html:93 templates/wallet.html:185
+#: templates/index.html:92 templates/wallet.html:185
 msgid "Balance"
 msgstr "Saldo"
 
-#: templates/index.html:102
+#: templates/index.html:101
 msgid "Farmed"
 msgstr "Farmed"
 
-#: templates/index.html:112
+#: templates/index.html:111
 msgid "Netspace"
 msgstr "Netgrootte"
 
-#: templates/index.html:146
+#: templates/index.html:144
 msgid "Challenges from Harvesters"
 msgstr "Uitdagingen van Harvesters"
 
-#: templates/index.html:164
+#: templates/index.html:162
 msgid "Partial Proofs for Pools"
 msgstr "Gedeeltelijke bewijzen voor Pools"
 
-#: templates/farming/workers.html:121 templates/index.html:178
+#: templates/farming/workers.html:121 templates/index.html:176
 msgid "Previous"
 msgstr "Vorige"
 
-#: templates/farming/workers.html:125 templates/index.html:182
+#: templates/farming/workers.html:125 templates/index.html:180
 msgid "Next"
 msgstr "Volgende"
 
@@ -1500,7 +1496,7 @@ msgstr ""
 msgid "Height"
 msgstr "Hoogte"
 
-#: templates/farming/plots.html:191 templates/farming/warnings.html:25
+#: templates/farming/plots.html:205 templates/farming/warnings.html:25
 #: templates/farming/workers.html:25 templates/summary.html:80
 msgid "Plots"
 msgstr "Plots"
@@ -1577,12 +1573,12 @@ msgstr ""
 msgid "Sync Wallets:"
 msgstr ""
 
-#: templates/farming/plots.html:164 templates/wallet.html:85
+#: templates/farming/plots.html:178 templates/wallet.html:85
 #: templates/wallet.html:321
 msgid "Wallet Settings"
 msgstr ""
 
-#: templates/farming/plots.html:174 templates/wallet.html:95
+#: templates/farming/plots.html:188 templates/wallet.html:95
 msgid "Cold Wallet Address:"
 msgstr ""
 
@@ -1807,45 +1803,45 @@ msgstr "Gebruikte Schijfruimte (GB)"
 msgid "Disk Space Free (GB)"
 msgstr "Vrije Schijfruimte (GB)"
 
-#: templates/worker_launch.html:50 templates/worker_launch.html:920
-#: templates/worker_launch.html:949
+#: templates/worker_launch.html:50 templates/worker_launch.html:895
+#: templates/worker_launch.html:924
 msgid "Host Path"
 msgstr "Host Pad"
 
-#: templates/worker_launch.html:55 templates/worker_launch.html:925
-#: templates/worker_launch.html:954
+#: templates/worker_launch.html:55 templates/worker_launch.html:900
+#: templates/worker_launch.html:929
 msgid "Container Path"
 msgstr "Container Pad"
 
-#: templates/worker_launch.html:60 templates/worker_launch.html:930
-#: templates/worker_launch.html:959
+#: templates/worker_launch.html:60 templates/worker_launch.html:905
+#: templates/worker_launch.html:934
 msgid "Used for:"
 msgstr "Gebruikt voor:"
 
-#: templates/worker_launch.html:63 templates/worker_launch.html:933
-#: templates/worker_launch.html:962
+#: templates/worker_launch.html:63 templates/worker_launch.html:908
+#: templates/worker_launch.html:937
 msgid "Final Plots"
 msgstr "Finale Plots"
 
-#: templates/worker_launch.html:64 templates/worker_launch.html:934
-#: templates/worker_launch.html:963
+#: templates/worker_launch.html:64 templates/worker_launch.html:909
+#: templates/worker_launch.html:938
 msgid "Plotting Temp"
 msgstr "Plotting Temp"
 
-#: templates/worker_launch.html:65 templates/worker_launch.html:935
-#: templates/worker_launch.html:964
+#: templates/worker_launch.html:65 templates/worker_launch.html:910
+#: templates/worker_launch.html:939
 msgid "Other"
 msgstr "Andere"
 
-#: templates/worker_launch.html:69 templates/worker_launch.html:939
+#: templates/worker_launch.html:69 templates/worker_launch.html:914
 msgid "Location"
 msgstr "Locatie"
 
-#: templates/worker_launch.html:72 templates/worker_launch.html:942
+#: templates/worker_launch.html:72 templates/worker_launch.html:917
 msgid "Local"
 msgstr "Lokaal"
 
-#: templates/worker_launch.html:73 templates/worker_launch.html:943
+#: templates/worker_launch.html:73 templates/worker_launch.html:918
 msgid "Remote"
 msgstr "Extern"
 
@@ -1997,66 +1993,66 @@ msgstr "Werker IP adres"
 msgid "Blockchains to Farm"
 msgstr "Blockchains to Farm"
 
-#: templates/worker_launch.html:916
+#: templates/worker_launch.html:891
 msgid "Volume Mounts"
 msgstr "Volume Mounts"
 
-#: templates/worker_launch.html:973
+#: templates/worker_launch.html:948
 msgid "Add New Volume"
 msgstr "Voeg nieuw volume toe"
 
-#: templates/worker_launch.html:975
+#: templates/worker_launch.html:950
 msgid "Remove Last Volume"
 msgstr "Verwijder laatste volume"
 
-#: templates/worker_launch.html:981
+#: templates/worker_launch.html:956
 msgid "Graphics Devices"
 msgstr ""
 
-#: templates/worker_launch.html:982
+#: templates/worker_launch.html:957
 msgid ""
 "Optionally, if your system has an available and supported GPU, you can "
 "pass it thru to the blockchain's Docker container. Only Chia, Gigahorse, "
 "and MMX blockchains support certain GPUs."
 msgstr ""
 
-#: templates/worker_launch.html:985
+#: templates/worker_launch.html:960
 msgid "GPU Type"
 msgstr ""
 
-#: templates/worker_launch.html:987 templates/worker_launch.html:996
+#: templates/worker_launch.html:962 templates/worker_launch.html:971
 msgid "None"
 msgstr ""
 
-#: templates/worker_launch.html:988
+#: templates/worker_launch.html:963
 msgid "Nvidia"
 msgstr ""
 
-#: templates/worker_launch.html:989
+#: templates/worker_launch.html:964
 msgid "AMD"
 msgstr ""
 
-#: templates/worker_launch.html:990
+#: templates/worker_launch.html:965
 msgid "Intel"
 msgstr ""
 
-#: templates/worker_launch.html:997
+#: templates/worker_launch.html:972
 msgid "Chia"
 msgstr ""
 
-#: templates/worker_launch.html:998
+#: templates/worker_launch.html:973
 msgid "Gigahorse"
 msgstr ""
 
-#: templates/worker_launch.html:999
+#: templates/worker_launch.html:974
 msgid "MMX"
 msgstr ""
 
-#: templates/worker_launch.html:1008
+#: templates/worker_launch.html:983
 msgid "Copy"
 msgstr "Kopieer"
 
-#: templates/worker_launch.html:1012
+#: templates/worker_launch.html:987
 msgid "Docker Compose"
 msgstr "Docker Compose"
 
@@ -2129,81 +2125,93 @@ msgstr "Plotting analyse"
 msgid "Analysis of the plotting job log shows time (seconds) spent in each phase:"
 msgstr "Analyse van de plotting job toont de tijd (seconden) voor iedere fase:"
 
-#: templates/farming/plots.html:24
+#: templates/farming/plots.html:25
 msgid "Plot Check"
 msgstr "Plot Controle"
 
-#: templates/farming/plots.html:86
+#: templates/farming/plots.html:33
+msgid "Close"
+msgstr ""
+
+#: templates/farming/plots.html:34
+msgid "Recheck"
+msgstr ""
+
+#: templates/farming/plots.html:93
 msgid "Replotting"
 msgstr ""
 
-#: templates/farming/plots.html:91 templates/plotting/jobs.html:126
+#: templates/farming/plots.html:98 templates/plotting/jobs.html:126
 #: templates/plotting/transfers.html:121
 msgid "Disabled"
 msgstr ""
 
-#: templates/farming/plots.html:96
+#: templates/farming/plots.html:103
 msgid "Enabled"
 msgstr ""
 
-#: templates/farming/plots.html:105
+#: templates/farming/plots.html:112
 msgid "Free up space for new plots of k-size"
 msgstr ""
 
-#: templates/farming/plots.html:115
+#: templates/farming/plots.html:122
 msgid "Criteria for selecting plots to delete"
 msgstr ""
 
-#: templates/farming/plots.html:119
+#: templates/farming/plots.html:126
 msgid "Delete Solo Plots - Keep Portable Plots"
 msgstr ""
 
-#: templates/farming/plots.html:126
+#: templates/farming/plots.html:133
+msgid "Delete Uncompressed Plots - Keep Compressed Plots"
+msgstr ""
+
+#: templates/farming/plots.html:140
 msgid "Delete Plots Older Than"
 msgstr ""
 
-#: templates/farming/plots.html:137
+#: templates/farming/plots.html:151
 msgid "Delete K-Sizes"
 msgstr ""
 
-#: templates/farming/plots.html:148
+#: templates/farming/plots.html:162
 msgid ""
 "When enabled, this action will repeatedly DELETE a few selected plots "
 "from each folder on all farmers and harvesters, freeing space for new "
 "plots.  Are you sure?"
 msgstr ""
 
-#: templates/farming/plots.html:197 templates/farming/warnings.html:31
+#: templates/farming/plots.html:211 templates/farming/warnings.html:31
 #: templates/farming/workers.html:31
 msgid "Warnings"
 msgstr ""
 
-#: templates/farming/plots.html:214 templates/plotting/jobs.html:146
+#: templates/farming/plots.html:228 templates/plotting/jobs.html:146
 #: templates/plotting/transfers.html:144
 msgid "Worker is offline."
 msgstr "Werker is offline"
 
-#: templates/farming/plots.html:216
+#: templates/farming/plots.html:230
 msgid "Farming not started successfully."
 msgstr "Farming niet succesvol gestart."
 
-#: templates/farming/plots.html:284
+#: templates/farming/plots.html:298
 msgid "Farming Log for "
 msgstr "Farming log voor "
 
-#: templates/farming/plots.html:342
+#: templates/farming/plots.html:365
 msgid "Good Plot"
 msgstr "Goed plot"
 
-#: templates/farming/plots.html:344
+#: templates/farming/plots.html:367
 msgid "Bad Plot"
 msgstr "Slecht plot"
 
-#: templates/farming/plots.html:346
+#: templates/farming/plots.html:369
 msgid "Unknown"
 msgstr ""
 
-#: templates/farming/plots.html:349
+#: templates/farming/plots.html:372
 msgid "Unchecked"
 msgstr ""
 
@@ -2537,7 +2545,7 @@ msgstr "Download"
 
 #: templates/settings/alerts.html:172 templates/settings/farming.html:177
 #: templates/settings/plotting.html:277 templates/settings/plotting.html:290
-#: templates/settings/pools.html:220 templates/settings/tools.html:131
+#: templates/settings/pools.html:220 templates/settings/tools.html:133
 msgid "Saving..."
 msgstr "Opslaan..."
 
