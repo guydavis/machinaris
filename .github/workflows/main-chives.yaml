@@ -46,7 +46,6 @@ jobs:
             "MACHINARIS_STREAM=latest"
             "CHIVES_REPO=https://github.com/HiveProject2021/chives-blockchain.git"
             "CHIVES_BRANCH=1.5.4"
-            "MADMAX_BRANCH=v1.8.2.giga14"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chives:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-chives:v${{ github.event.inputs.version }}
