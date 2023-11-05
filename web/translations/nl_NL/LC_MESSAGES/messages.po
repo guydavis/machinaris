@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Machinaris VERSION\n"
 "Report-Msgid-Bugs-To: https://github.com/guydavis/machinaris/issuesPOT-"
 "Creation-Date: 2022-03-13 10:29-0600\n"
-"POT-Creation-Date: 2023-11-01 09:33-0600\n"
+"POT-Creation-Date: 2023-11-05 07:23-0700\n"
 "PO-Revision-Date: 2022-03-13 10:29-0600\n"
 "Last-Translator: Bernie Deprez\n"
 "Language: nl_NL\n"
@@ -484,89 +484,89 @@ msgstr ""
 msgid "in last day."
 msgstr "in voorbije dag."
 
-#: actions/stats.py:418
+#: actions/stats.py:420
 msgid "secs"
 msgstr "seconden"
 
-#: actions/stats.py:431 models/chia.py:269
+#: actions/stats.py:433 models/chia.py:269
 msgid "hour"
 msgstr "uur"
 
-#: actions/stats.py:461 templates/index.html:97
+#: actions/stats.py:463 templates/index.html:97
 #: templates/views/index_script_block.js:51
 msgid "Farmed Coins"
 msgstr ""
 
-#: actions/stats.py:478 templates/index.html:89
+#: actions/stats.py:480 templates/index.html:89
 #: templates/views/index_script_block.js:56 templates/wallet.html:184
 msgid "Total Balance"
 msgstr "Totale Saldo"
 
-#: actions/stats.py:495
+#: actions/stats.py:497
 msgid "Wallets Total"
 msgstr "Portefeuille Details"
 
-#: actions/stats.py:495
+#: actions/stats.py:497
 msgid "Fiat Currency"
 msgstr ""
 
-#: actions/stats.py:535
+#: actions/stats.py:537
 msgid "Host Memory Usage"
 msgstr ""
 
-#: actions/stats.py:555 templates/index.html:105
+#: actions/stats.py:557 templates/index.html:105
 msgid "Netspace Size"
 msgstr "Netgrootte"
 
-#: actions/stats.py:556 actions/stats.py:616
+#: actions/stats.py:558 actions/stats.py:618
 msgid "Size"
 msgstr ""
 
-#: actions/stats.py:594 templates/farming/workers.html:80
+#: actions/stats.py:596 templates/farming/workers.html:80
 msgid "Plot Counts"
 msgstr ""
 
-#: actions/stats.py:615 templates/index.html:78
+#: actions/stats.py:617 templates/index.html:78
 msgid "Plots Size"
 msgstr "Totale Omvang Plots"
 
-#: actions/stats.py:630 actions/stats.py:631
+#: actions/stats.py:632 actions/stats.py:633
 msgid "Effort"
 msgstr "Poort"
 
-#: actions/stats.py:682 templates/summary.html:84
+#: actions/stats.py:684 templates/summary.html:84
 msgid "ETW"
 msgstr "ETW"
 
-#: actions/stats.py:683
+#: actions/stats.py:685
 msgid "Estimated Time to Win"
 msgstr "Verwachte Tijd om te Winnen"
 
-#: actions/stats.py:683 models/chia.py:152 models/chia.py:263
+#: actions/stats.py:685 models/chia.py:152 models/chia.py:263
 #: models/drives.py:44
 msgid "days"
 msgstr "dagen"
 
-#: actions/stats.py:707 templates/farming/workers.html:310
+#: actions/stats.py:709 templates/farming/workers.html:310
 #: templates/worker.html:259
 msgid "Container Memory Usage"
 msgstr ""
 
-#: actions/stats.py:708
+#: actions/stats.py:710
 msgid "GiB"
 msgstr ""
 
-#: actions/stats.py:714 actions/stats.py:722
+#: actions/stats.py:716 actions/stats.py:724
 msgid "plots"
 msgstr ""
 
-#: actions/stats.py:737 templates/farming/workers.html:197
+#: actions/stats.py:739 templates/farming/workers.html:197
 #: templates/plotting/transfers.html:272 templates/worker.html:290
 #: templates/worker.html:355
 msgid "full"
 msgstr ""
 
-#: actions/stats.py:741
+#: actions/stats.py:743
 msgid "free"
 msgstr ""
 
