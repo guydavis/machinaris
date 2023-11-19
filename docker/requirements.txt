@@ -1,7 +1,7 @@
 apscheduler
 click
 jinja2
-flask == 2.3.3
+flask
 flask-smorest >= 0.42.1
 python-dotenv
 marshmallow

@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.1.1) to v2.1.1 - misc improvements, see their release notes.
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.1.giga24) to v2.1.1.giga24 with C20 compression support.
+ - [Flask](https://flask.palletsprojects.com/en/3.0.x/changes/#version-3-0-0) to v3.0.0 - serves up the Machinaris WebUI.
 
 ## [2.1.0] - 2023-10-06
 ### Updated
