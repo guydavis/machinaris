@@ -8,9 +8,10 @@ import time
 import traceback
 
 from datetime import datetime
-from flask import Flask, flash, redirect, render_template, abort, escape, \
+from flask import Flask, flash, redirect, render_template, abort, \
         request, session, url_for, send_from_directory, make_response
 from flask_babel import _, lazy_gettext as _l
+from markupsafe import escape
 
 from common.config import globals
 from common.utils import fiat

@@ -5,16 +5,23 @@ All notable changes to this project will be documented in this file. The format 
 ## [Unreleased] - 2023-?-?
 ### Added 
  - Settings | Plotting | Bladebit now supports "no_direct_io: true" option
+ - Settings | Plotting | Bladebit now supports "check_plots: 100" option to check at end of plot creation
+ - Settings | Plotting | Bladebit now supports "check_threshold: 0.6" option to delete invalid plots at end of plot creation
 ### Changed
  - Support for [Gigahorse Recompute Server](https://github.com/guydavis/machinaris/wiki/Gigahorse#recompute-server) (single GPU on fullnode/farmer), shared by multiple Gigahorse harvesters.
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.1.1) to v2.1.1 - misc improvements, see their release notes.
- - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.1.giga22) to v2.1.1.giga22 with C20 compression support.
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.1.giga25) to v2.1.1.giga25 with C20 compression support.
+ - [Flask](https://flask.palletsprojects.com/en/3.0.x/changes/#version-3-0-0) to v3.0.0 - serves up the Machinaris WebUI.
+### Notes
+ - Regression in Chia binaries (since v2.0.0) ignoring the "-y" parameter on plotnft changes, has broken pool join/leave thru WebUI.
 
 ## [2.1.0] - 2023-10-06
 ### Updated
  - [Bladebit](https://github.com/Chia-Network/bladebit/releases/tag/v3.1.0) to v3.1.0 - Supporting hybrid GPU/disk plotting with either 128 GB or 16 GB RAM.
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.1.0) to v2.1.0 - misc improvements, see their release notes.
+### Notes
+ - Regression in Chia binaries (since v2.0.0) ignoring the "-y" parameter on plotnft changes, has broken pool join/leave thru WebUI.
 
 ## [2.0.0] - 2023-08-24
 ### Added
@@ -30,6 +37,8 @@ All notable changes to this project will be documented in this file. The format 
  - [HDDCoin](https://github.com/HDDcoin-Network/hddcoin-blockchain/releases/tag/3.0.0) to 3.0.0 based on Chia 1.8.2.
  - [MMX](https://github.com/madMAx43v3r/mmx-node/releases/tag/v0.10.6) to v0.10.6. 
  - [Wheat](https://github.com/wheatnetwork/wheat-blockchain/releases/tag/1.8.2) to v1.8.2.
+### Notes
+ - Regression in Chia binaries ignoring the "-y" parameter on plotnft changes, has broken pool join/leave thru WebUI.
 
 ## [1.8.2] - 2023-06-28
 ## Updated

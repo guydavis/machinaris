@@ -110,6 +110,8 @@ plotting:
                 mode: diskplot        # Either enable ramplot, diskplot, or gpuplot. 
                 diskplot_cache:   4GB # If diskplot, amount of RAM to allocate to caching disk writes
                 diskplot_buckets: 256 # Optionally set a different number of buckets to use for diskplot
+                #check_plots: 100      # For gpuplot only, will optionally perform given number of validations per new plot
+                #check_threshold: 0.6  # For gpuplot only, will optionally delete a new plot failing validity check below threshold level (0 to 1)
 
         madmax:
                 # Classic Madmax plotter; see https://github.com/guydavis/machinaris/wiki/MadMax

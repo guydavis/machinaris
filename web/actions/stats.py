@@ -38,7 +38,7 @@ ALL_TABLES_BY_HOSTNAME = [
     StatPlottingDiskFree,
 ]
 
-# Don't overload the bar chart with tons of plots paths, randomly sample only this amount
+# Don't overload the bar chart with tons of plots paths, show only the first X paths
 MAX_ALLOWED_PATHS_ON_BAR_CHART = 20
 
 # Ignore disk stats that are older than this many minutes ago
@@ -280,9 +280,11 @@ def load_current_disk_usage(disk_type, hostname=None):
                             free.append(free_row.value) # Leave at GB
                         continue
             if len(paths):
-                if len(paths) > MAX_ALLOWED_PATHS_ON_BAR_CHART:
-                    paths = sorted(random.sample(paths, MAX_ALLOWED_PATHS_ON_BAR_CHART))
-                summary_by_worker[host.hostname] = { "paths": paths, "used": used, "free": free}
+                summary_by_worker[host.hostname] = { 
+                    "paths": paths[:MAX_ALLOWED_PATHS_ON_BAR_CHART], 
+                    "used": used[:MAX_ALLOWED_PATHS_ON_BAR_CHART], 
+                    "free": free[:MAX_ALLOWED_PATHS_ON_BAR_CHART]
+                }
     #app.logger.debug(summary_by_worker.keys())
     return summary_by_worker
 
