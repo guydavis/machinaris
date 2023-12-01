@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Changed
  - Support for [Gigahorse Recompute Server](https://github.com/guydavis/machinaris/wiki/Gigahorse#recompute-server) (single GPU on fullnode/farmer), shared by multiple Gigahorse harvesters.
 ### Updated
- - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.1.1) to v2.1.1 - misc improvements, see their release notes.
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.1.2) to v2.1.2 - misc improvements, see their release notes.
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.1.giga25) to v2.1.1.giga25 with C20 compression support.
  - [Flask](https://flask.palletsprojects.com/en/3.0.x/changes/#version-3-0-0) to v3.0.0 - serves up the Machinaris WebUI.
 ### Notes
