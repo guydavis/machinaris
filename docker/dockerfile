@@ -9,7 +9,6 @@ ARG CHIADOG_BRANCH=main
 ARG FDCLI_BRANCH=master
 ARG FORKTOOLS_BRANCH=main
 ARG BLADEBIT_BRANCH=master
-ARG MADMAX_BRANCH=master
 
 ARG APPLE_BRANCH
 ARG BALLCOIN_BRANCH
@@ -103,6 +102,7 @@ ENV plots_dir="/plots"
 # One of fullnode, farmer, harvester, plotter, farmer+plotter, harvester+plotter. Default is fullnode
 ENV mode="fullnode"
 ENV chives_masternode="false"
+ENV gigahorse_recompute_server="false"
 # The single blockchain to run: chia, flax, nchain, hddcoin, chives, etc
 ENV blockchains="chia"
 # If provided then these optional 3 public keys will be set in your plotman.yaml
@@ -144,7 +144,7 @@ ENV CHIADOG_BRANCH=${CHIADOG_BRANCH}
 ENV FDCLI_BRANCH=${FDCLI_BRANCH}
 ENV FORKTOOLS_BRANCH=${FORKTOOLS_BRANCH}
 ENV BLADEBIT_BRANCH=${BLADEBIT_BRANCH}
-ENV MADMAX_BRANCH=${MADMAX_BRANCH}
+ENV GIGAHORSE_BRANCH=${GIGAHORSE_BRANCH}
 ENV MMX_HOME=/root/.mmx/
 
 VOLUME [ "/id_rsa" ]

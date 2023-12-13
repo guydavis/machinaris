@@ -54,7 +54,7 @@ for p in ${plots_dir//:/ }; do
 done
 
 chmod 755 -R /root/.hddcoin/mainnet/config/ssl/ &> /dev/null
-hddcoin init --fix-ssl-permissions > /dev/null 
+hddcoin init --fix-ssl-permissions >/dev/null 2>&1   
 
 # Start services based on mode selected. Default is 'fullnode'
 if [[ ${mode} =~ ^fullnode.* ]]; then
@@ -106,7 +106,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     if [[ -f /root/.hddcoin/farmer_ca/private_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       hddcoin init -c /root/.hddcoin/farmer_ca 2>&1 > /root/.hddcoin/mainnet/log/init.log
       chmod 755 -R /root/.hddcoin/mainnet/config/ssl/ &> /dev/null
-      hddcoin init --fix-ssl-permissions > /dev/null 
+      hddcoin init --fix-ssl-permissions >/dev/null 2>&1   
     else
       echo "Did not find your farmer's certificates within /root/.hddcoin/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"

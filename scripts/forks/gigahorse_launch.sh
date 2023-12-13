@@ -85,7 +85,7 @@ for p in ${plots_dir//:/ }; do
 done
 
 chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
-/chia-gigahorse-farmer/chia.bin init --fix-ssl-permissions > /dev/null 
+/chia-gigahorse-farmer/chia.bin init --fix-ssl-permissions >/dev/null 2>&1   
 
 /usr/bin/bash /machinaris/scripts/gpu_drivers_setup.sh
 
@@ -96,6 +96,10 @@ if [[ ${mode} =~ ^fullnode.* ]]; then
   else
     /chia-gigahorse-farmer/chia.bin start farmer
     /chia-gigahorse-farmer/chia.bin start wallet
+  fi
+  if [[ ${gigahorse_recompute_server} == "true" ]]; then
+    echo "Starting Gigahorse recompute_server shortly..."
+    sleep 20 && /chia-gigahorse-farmer/chia_recompute_server 2>&1 > /root/.chia/mainnet/log/recompute.log &
   fi
 elif [[ ${mode} =~ ^farmer.* ]]; then
   /chia-gigahorse-farmer/chia.bin start farmer-only
@@ -117,7 +121,7 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     if [[ -f /root/.chia/farmer_ca/chia_ca.crt ]] && [[ ! ${keys} == "persistent" ]]; then
       /chia-gigahorse-farmer/chia.bin init -c /root/.chia/farmer_ca 2>&1 > /root/.chia/mainnet/log/init.log
       chmod 755 -R /root/.chia/mainnet/config/ssl/ &> /dev/null
-      /chia-gigahorse-farmer/chia.bin init --fix-ssl-permissions > /dev/null 
+      /chia-gigahorse-farmer/chia.bin init --fix-ssl-permissions >/dev/null 2>&1   
     else
       echo "Did not find your farmer's certificates within /root/.chia/farmer_ca."
       echo "See: https://github.com/guydavis/machinaris/wiki/Workers#harvester"

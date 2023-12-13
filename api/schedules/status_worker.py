@@ -63,10 +63,13 @@ def gather_services_status():
     # Assumes a single blockchain is enabled in this container
     blockchain = globals.enabled_blockchains()[0]
     if gc['farming_enabled'] or gc['harvesting_enabled']:
-        if blockchain == 'mmx':
-            farming_status = mmx_cli.load_farm_info(blockchain).status
-        else:
-            farming_status = chia_cli.load_farm_summary(blockchain).status
+        try: # Deal with Gigahorse users plotting with farming manually disabled due to GPU contention
+            if blockchain == 'mmx':
+                farming_status = mmx_cli.load_farm_info(blockchain).status
+            else:
+                farming_status = chia_cli.load_farm_summary(blockchain).status
+        except Exception as ex:
+            app.logger.error("Skipping farm status for worker due to: {0}".format(str(ex)))
         if chiadog_cli.get_chiadog_pid(blockchain):
             monitoring_status = "running"
         else:
