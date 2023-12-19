@@ -129,6 +129,10 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     /chia-gigahorse-farmer/chia.bin configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.chia/mainnet/log/init.log
     /chia-gigahorse-farmer/chia.bin configure --enable-upnp false  2>&1 >> /root/.chia/mainnet/log/init.log
     /chia-gigahorse-farmer/chia.bin start harvester -r
+    if [[ ${gigahorse_recompute_server} == "true" ]]; then
+      echo "Starting Gigahorse recompute_server shortly..."
+      sleep 20 && /chia-gigahorse-farmer/chia_recompute_server 2>&1 > /root/.chia/mainnet/log/recompute.log &
+    fi
   fi
 elif [[ ${mode} == 'plotter' ]]; then
     echo "Starting in Plotter-only mode.  Run Plotman from either CLI or WebUI."

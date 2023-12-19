@@ -95,6 +95,10 @@ if [[ ${mode} =~ ^fullnode.* ]]; then
   else
     chia start farmer
   fi
+  if [[ ${chia_exporter} == "true" ]]; then
+    echo "Starting Chia Exporter service for Prometheus reporting..."
+    sleep 20 && /usr/local/bin/chia-exporter serve 2>&1 > /root/.chia/mainnet/log/chia-exporter.log &
+  fi
   if [[ ${mode} =~ .*timelord$ ]]; then
     if [ ! -f vdf_bench ]; then
         echo "Building timelord binaries..."
