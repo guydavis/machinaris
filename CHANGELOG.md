@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.1.3] - 2023-12-19
+### Updated
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.1.3) to v2.1.3 - fix for unforunate bug CNI released in 2.1.2
+
 ## [2.1.2] - 2023-12-13
 ### Added 
  - Settings | Plotting | Bladebit now supports "no_direct_io: true" option
