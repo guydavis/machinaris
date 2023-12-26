@@ -26,7 +26,7 @@ else
     ubuntu_ver=`lsb_release -r -s`
     echo "Installing Chia CUDA binaries on ${arch_name}..."
     cd /tmp
-    if [[ "${arch_name}" = "x86_64" ]]; then
+    if [[ "${arch_name}" == "x86_64" ]]; then
         curl -sLJO https://github.com/Chia-Network/chia-blockchain/releases/download/2.1.4-rc1/chia-blockchain-cli_2.1.4rc1-1_amd64.deb
         apt-get install ./chia-blockchain-cli*.deb
     else
