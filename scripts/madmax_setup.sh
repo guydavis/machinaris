@@ -37,7 +37,7 @@ fi
 if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "plotter") && (${blockchains} == 'mmx' || ${blockchains} == 'gigahorse') ]]; then
     if [ ! -f /usr/bin/chia_plot ] && [[ "${madmax_skip_build}" != 'true' ]]; then
         arch_name="$(uname -m)"
-        if [[ "${arch_name}" = "x86_64" ]]; then
+        if [[ "${arch_name}" == "x86_64" ]]; then
             pushd /usr/bin
             curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${GIGAHORSE_BRANCH}/cpu-plotter/linux/x86_64/chia_plot
             curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${GIGAHORSE_BRANCH}/cpu-plotter/linux/x86_64/chia_plot_k34
