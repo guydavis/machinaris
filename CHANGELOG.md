@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Added
  - Optionally launch `chia-exporter` [metrics endpoint](https://github.com/Chia-Network/chia-exporter) for Prometheus reporting if env var `chia_exporter=true` is set.
  - Support for running Gigahorse containers on arm64 architectures such as Raspberry Pi.
+ - Main dashboard page can now be pinned (Pin Icon) to display only a blockchain of interest, rather than rotating through each in turn.
 ### Changed
  - Optionally launch of Gigahorse recompute server when in harvester mode if env var `gigahorse_recompute_server=true` is set.
  - Fix for Bladebit GPU plotting jobs taking a minute to display on Plotting page on job start.  Should now be seconds only.
