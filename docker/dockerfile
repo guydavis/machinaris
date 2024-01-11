@@ -101,6 +101,7 @@ ENV keys="/root/.chia/mnemonic.txt"
 ENV plots_dir="/plots"
 # One of fullnode, farmer, harvester, plotter, farmer+plotter, harvester+plotter. Default is fullnode
 ENV mode="fullnode"
+ENV chia_exporter="false"
 ENV chives_masternode="false"
 ENV gigahorse_recompute_server="false"
 # The single blockchain to run: chia, flax, nchain, hddcoin, chives, etc

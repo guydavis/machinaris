@@ -18,7 +18,7 @@
     {% endwith %}
   </div>
 
-  <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+  <div id="carouselExampleFade" class="carousel slide carousel-fade" {% if carousel_ride_enabled %} data-bs-ride="carousel" {% endif %}>
     <div class="carousel-inner">
       {% for blockchain in farms.keys()|sort(case_sensitive=False) %}
       <div class="carousel-item {% if blockchain == selected_blockchain %} active {% endif %}" data-bs-interval="10000">
@@ -27,9 +27,12 @@
         <div class="row align-items-md-stretch" style="margin-top:0px; margin-bottom:5px;">
           <div class="col-md-12">
             <div class="h-30 p-2 text-white bg-dark rounded-3">
-              <h4 class="text-center">{{ blockchain|capitalize }} - {{_('Expected Time to Win')}}:
+              <h2 class="text-center" style="margin-bottom: 0px">{{ blockchain|capitalize }} - {{_('Expected Time to Win')}}:
                 <span class="text-success">{{ farms[blockchain].expected_time_to_win }}</span>
-              </h4>
+                <a href="{{ url_for('index') }}?selected_blockchain={{blockchain}}" title="{{_('Pin Current Blockchain')}}">
+                  <i class="fs-4 bi-pin"></i>
+                </a>
+              </h2>
             </div>
           </div>
         </div>

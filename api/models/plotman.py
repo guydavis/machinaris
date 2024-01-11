@@ -19,8 +19,11 @@ class PlottingSummary:
                 self.columns[8] = 'size'
             else: # Check for a plotting job row
                 values = line.split()
-                if len(values) > 1 and values[1] in ['chia', 'madmax', 'bladebit']:
-                    if len(values) == len(self.columns):
+                if len(values) > 1:
+                    if len(values) == (len(self.columns) - 1) and values[0] in ['chia', 'madmax', 'bladebit']:
+                        # Sometimes plotman can't find the plot_id on newly started plotting jobs, use a placeholder
+                        values.insert(0, 'xxxxxx')
+                    if len(values) == len(self.columns) and values[1] in ['chia', 'madmax', 'bladebit']:
                         row = {}
                         i = 0
                         for i in range(len(self.columns)):

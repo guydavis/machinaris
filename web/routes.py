@@ -75,14 +75,21 @@ def index():
     workers = worker.load_worker_summary()
     farm_summary = chia.load_farm_summary()
     plotting = plotman.load_plotting_summary_by_blockchains(farm_summary.farms.keys())
-    selected_blockchain = farm_summary.selected_blockchain()
+    if request.args.get('selected_blockchain'):
+        # Check if user has pinned the view to a particular blockchain view on refresh, no rotate
+        selected_blockchain = request.args.get('selected_blockchain')
+        carousel_ride_enabled = False  # Disable automatic carousel rotation on load
+    else: # Default is to rotate every 10 seconds
+        selected_blockchain = farm_summary.selected_blockchain()
+        carousel_ride_enabled = True # Enable automatic carousel rotation on load
     chia.challenges_chart_data(farm_summary)
     p.partials_chart_data(farm_summary)
     stats.load_daily_diff(farm_summary)
     stats.wallet_chart_data(farm_summary)
     warnings.check_warnings(request.args)
     return render_template('index.html', reload_seconds=120, farms=farm_summary.farms, \
-        plotting=plotting, workers=workers, global_config=gc, selected_blockchain=selected_blockchain)
+        plotting=plotting, workers=workers, global_config=gc, \
+        carousel_ride_enabled=carousel_ride_enabled, selected_blockchain=selected_blockchain)
 
 @app.route('/chart')
 def chart():

@@ -10,7 +10,7 @@ if [ -z ${CHIA_BRANCH} ]; then
 else
     cd /tmp
     rm -rf /root/.cache
-    apt-get update && apt-get install -y dialog apt-utils
+    apt-get update && apt-get install -y dialog apt-utils ca-certificates curl gnupg
     /usr/bin/bash /machinaris/scripts/gpu_drivers_install.sh
 
     git clone --branch ${CHIA_BRANCH} --recurse-submodules=mozilla-ca https://github.com/Chia-Network/chia-blockchain.git /chia-blockchain
@@ -26,11 +26,17 @@ else
     ubuntu_ver=`lsb_release -r -s`
     echo "Installing Chia CUDA binaries on ${arch_name}..."
     cd /tmp
-    if [[ "${arch_name}" = "x86_64" ]]; then
-        curl -sLJO https://github.com/Chia-Network/chia-blockchain/releases/download/2.1.3/chia-blockchain-cli_2.1.3-1_amd64.deb
+    if [[ "${arch_name}" == "x86_64" ]]; then
+        curl -sLJO https://github.com/Chia-Network/chia-blockchain/releases/download/2.1.4/chia-blockchain-cli_2.1.4-1_amd64.deb
         apt-get install ./chia-blockchain-cli*.deb
     else
-        curl -sLJO https://github.com/Chia-Network/chia-blockchain/releases/download/2.1.3/chia-blockchain-cli_2.1.3-1_arm64.deb
+        curl -sLJO https://github.com/Chia-Network/chia-blockchain/releases/download/2.1.4/chia-blockchain-cli_2.1.4-1_arm64.deb
         apt-get install ./chia-blockchain-cli*.deb
     fi
+
+    # Also include "chia-exporter" for Prometheus reporting endpoints.
+    curl -sL https://repo.chia.net/FD39E6D3.pubkey.asc | sudo gpg --dearmor -o /usr/share/keyrings/chia.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/chia.gpg] https://repo.chia.net/chia-exporter/debian/ stable main" | tee /etc/apt/sources.list.d/chia-exporter.list > /dev/null
+    apt-get update
+    apt-get install -y chia-exporter
 fi
