@@ -136,6 +136,10 @@ elif [[ ${mode} =~ ^harvester.* ]]; then
     chia configure --set-farmer-peer ${farmer_address}:${farmer_port}  2>&1 >> /root/.chia/mainnet/log/init.log
     chia configure --enable-upnp false  2>&1 >> /root/.chia/mainnet/log/init.log
     chia start harvester -r
+    if [[ ${chia_exporter} == "true" ]]; then
+      echo "Starting Chia Exporter service for Prometheus reporting..."
+      sleep 20 && /usr/local/bin/chia-exporter serve 2>&1 > /root/.chia/mainnet/log/chia-exporter.log &
+    fi
   fi
 elif [[ ${mode} == 'plotter' ]]; then
     echo "Starting in Plotter-only mode.  Run Plotman from either CLI or WebUI."
