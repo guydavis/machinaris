@@ -24,6 +24,8 @@ def extract_wallet_num(plotnft):
     for line in plotnft.split('\n'):
         if line.strip().startswith("Wallet id"):
             return int(line[len('Wallet id '): len(line)-2])
+        if line.strip().startswith("Wallet ID:"):
+            return int(line[len('Wallet ID: '): len(line)])
     return None
 
 def extract_launcher_id(plotnft):
