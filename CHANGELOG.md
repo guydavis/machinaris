@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. The format 
  - Harvester mode will now optionally also run chia-exporter for Prometheus results.
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.1.5) to v2.1.5 - misc improvements, see their release notes.
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/v2.1.4) to v2.1.4.
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.4.giga26) to v2.1.4.giga26.
 
 ## [2.1.4] - 2024-01-11
