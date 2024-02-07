@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Optionally launch Chia Data Layer services (https://docs.chia.net/guides/datalayer-user-guide/) if env var `chia_data=true` is set.
 ### Changed
  - Harvester mode will now optionally also run chia-exporter for Prometheus results.
 ### Updated

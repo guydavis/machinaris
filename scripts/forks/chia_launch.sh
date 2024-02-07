@@ -99,6 +99,11 @@ if [[ ${mode} =~ ^fullnode.* ]]; then
     echo "Starting Chia Exporter service for Prometheus reporting..."
     sleep 20 && /usr/local/bin/chia-exporter serve 2>&1 > /root/.chia/mainnet/log/chia-exporter.log &
   fi
+  if [[ ${chia_data} == "true" ]]; then
+    echo "Starting Chia Data Layer services..."
+    sleep 20 && chia start data 2>&1 > /root/.chia/mainnet/log/chia-data.log &
+    sleep 20 && chia start data_layer_http 2>&1 >> /root/.chia/mainnet/log/chia-data.log &
+  fi
   if [[ ${mode} =~ .*timelord$ ]]; then
     if [ ! -f vdf_bench ]; then
         echo "Building timelord binaries..."
