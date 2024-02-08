@@ -16,14 +16,14 @@ if [[ "${blockchain_db_download}" == 'true' ]] \
   && [[ "${mode}" == 'fullnode' ]] \
   && [[ ! -f /root/.achi/mainnet/db/blockchain_v1_mainnet.sqlite ]] \
   && [[ ! -f /root/.achi/mainnet/db/blockchain_v2_mainnet.sqlite ]]; then
-  echo "Sorry, achi does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
+  echo "Sorry, Achi does not offer a recent blockchain DB for download.  Standard sync will happen over a few days."
   echo "It is recommended to add some peer node connections on the Connections page of Machinaris."
 fi
 
 mkdir -p /root/.achi/mainnet/log
 achi init >> /root/.achi/mainnet/log/init.log 2>&1 
 
-echo 'Configuring achi...'
+echo 'Configuring Achi...'
 if [ -f /root/.achi/mainnet/config/config.yaml ]; then
   sed -i 's/log_stdout: true/log_stdout: false/g' /root/.achi/mainnet/config/config.yaml
   sed -i 's/log_level: WARNING/log_level: INFO/g' /root/.achi/mainnet/config/config.yaml

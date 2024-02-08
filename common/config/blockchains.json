@@ -9,11 +9,11 @@
         "farmer_port": 9977,
         "fullnode_rpc_port": 9965,
         "worker_port": 8960,
-        "reward": 495,
+        "reward": 512.0,
         "mojos_per_coin": 1000000000,
         "blocks_per_day": 4608,
-        "git_url": "https://github.com/Achi-Coin/achi-blockchain/",
-        "discord_url": "https://discord.gg/ZTtQ9922zp",
+        "git_url": "https://github.com/Achi-Coin/achi-blockchain",
+        "discord_url": "https://discord.gg/cnS7fUfwTq",
         "website_url": "https://achicoin.org/"
     },    
     "apple": {
