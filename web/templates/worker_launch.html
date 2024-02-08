@@ -155,6 +155,9 @@
         }
 
         function lookup_worker_port(blockchain) {
+            if (blockchain == 'achi') {
+                return 8960;
+            }
             if (blockchain == 'apple') {
                 return 8947;
             }
@@ -258,6 +261,9 @@
         }
 
         function lookup_farmer_port(blockchain) {
+            if (blockchain == 'achi') {
+                return 9977;
+            }
             if (blockchain == 'apple') {
                 return 26667;
             }
@@ -671,6 +677,13 @@
                 <div class="col offset">
                     <label for="inputState" class="form-label">{{_('Blockchains to Farm')}} <a href="https://alltheblocks.net" target="_blank"><i class="fs-4 bi-box-arrow-up-right text-white"></i></a></label>
                     <div class="row">
+                        <div class="col">
+                            <input class="form-check-input" type="checkbox" name="blockchains"
+                                id="blockchain-achi" onclick="updateDocker()" value="achi">
+                            <label class="form-check-label" for="blockchain-achi" onclick="updateDocker()">
+                                Achi
+                            </label>
+                        </div>                        
                         <div class="col">
                             <input class="form-check-input" type="checkbox" name="blockchains"
                                 id="blockchain-apple" onclick="updateDocker()" value="apple">

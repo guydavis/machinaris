@@ -1,4 +1,21 @@
 {
+    "achi": {
+        "name": "Achi",
+        "symbol": "ACH" ,
+        "binary":  "/achi-blockchain/venv/bin/achi",
+        "network_path": "/root/.achi/mainnet",
+        "network_name": "mainnet",
+        "network_port": 9975,
+        "farmer_port": 9977,
+        "fullnode_rpc_port": 9965,
+        "worker_port": 8960,
+        "reward": 495,
+        "mojos_per_coin": 1000000000,
+        "blocks_per_day": 4608,
+        "git_url": "https://github.com/Achi-Coin/achi-blockchain/",
+        "discord_url": "https://discord.gg/ZTtQ9922zp",
+        "website_url": "https://achicoin.org/"
+    },    
     "apple": {
         "name": "Apple",
         "symbol": "APPLE",
