@@ -5,7 +5,7 @@
 
 GREENBTC_BRANCH=$1
 # On 2023-01-02
-HASH=e14bc12696af1cbcdf89a3e7bea0cdb1dd0e89ad
+HASH=200816a51c24375fadcbcd25a0b1cb7549f61c77
 
 if [ -z ${GREENBTC_BRANCH} ]; then
     echo 'Skipping GreenBTC install as not requested.'
