@@ -10,6 +10,7 @@ ARG FDCLI_BRANCH=master
 ARG FORKTOOLS_BRANCH=main
 ARG BLADEBIT_BRANCH=master
 
+ARG ACHI_BRANCH
 ARG APPLE_BRANCH
 ARG BALLCOIN_BRANCH
 ARG BPX_BRANCH
@@ -53,7 +54,8 @@ WORKDIR /chia-blockchain
 
 # Install specific blockchain fork (based on branch enabled) + tools that depend on the fork
 RUN \
-	/usr/bin/bash /machinaris/scripts/forks/apple_install.sh ${APPLE_BRANCH} \
+    /usr/bin/bash /machinaris/scripts/forks/achi_install.sh ${ACHI_BRANCH} \
+	&& /usr/bin/bash /machinaris/scripts/forks/apple_install.sh ${APPLE_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/ballcoin_install.sh ${BALLCOIN_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/bpx_install.sh ${BPX_BRANCH} \
 	&& /usr/bin/bash /machinaris/scripts/forks/btcgreen_install.sh ${BTCGREEN_BRANCH} \
