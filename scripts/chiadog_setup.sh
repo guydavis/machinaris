@@ -8,9 +8,9 @@ CHIADOG_BRANCH=$1
 
 if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "harvester") && ${blockchains} != 'mmx' ]]; then
     if [[ ! -f /chiadog/main.py ]]; then
-        echo 'Installing Chiadog from https://github.com/priyankub/chiadog using branch: ${CHIADOG_BRANCH}'
+        echo 'Installing Chiadog from https://github.com/guydavis/chiadog using branch: ${CHIADOG_BRANCH}'
         cd /
-        git clone --branch ${CHIADOG_BRANCH} https://github.com/priyankub/chiadog.git
+        git clone --branch ${CHIADOG_BRANCH} https://github.com/guydavis/chiadog.git
         cd /chia-blockchain/
         venv/bin/pip3 install -r /chiadog/requirements.txt
     fi

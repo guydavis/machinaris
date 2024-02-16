@@ -4,7 +4,8 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [Unreleased]
 ### Added
-- Optionally launch Chia Data Layer services (https://docs.chia.net/guides/datalayer-user-guide/) if env var `chia_data=true` is set.
+ - Support for Achi blockchain.  Requires its own plots (like Chives), you'll have to plot separately if interested. Thanks @priyankub
+ - Optionally launch Chia Data Layer services (https://docs.chia.net/guides/datalayer-user-guide/) if env var `chia_data=true` is set.
 ### Changed
  - Harvester mode will now optionally also run chia-exporter for Prometheus results.
 ### Updated

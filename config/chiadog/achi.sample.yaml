@@ -1,0 +1,91 @@
+# This is useful to differentiate multiple
+# instances monitoring multiple harvesters
+notification_title_prefix: '$HOSTNAME-achi'
+log_level: INFO
+coin_name: 'achi'
+coin_symbol: 'achi'
+
+# Only one consumer can be enabled at a time, you can
+# delete the section for the consumer which you aren't using
+# DON'T CHANGE file_path IT'S ALREADY SET IN-CONTAINER FOR MACHINARIS!
+chia_logs:
+  file_log_consumer:
+    enable: true
+    prefix: 'achi'
+    file_path: '~/.chia/achi/mainnet/log/debug.log'
+
+# Enable this and chiadog will ping a remote server every 5 minutes
+# That way you can know that the monitoring is running as expected
+#keep_alive_monitor:
+#  enable_remote_ping: false
+#  ping_url: ''
+
+# Enable this and you'll receive a daily summary notification
+# on your farm performance at the specified time of the day.
+daily_stats:
+  enable: true
+  time_of_day: 21
+
+# We support a lot of notifiers, please check the README for more
+# information. You can delete the sections which you aren't using.
+# You can also enable more than one notifier and send different
+# notifications to each of them. E.g. enable daily_stats only to E-mail.
+# If you enable wallet_events you'll get notifications anytime your
+# wallet receives some XCH (e.g. farming reward).
+notifier:
+  pushover:
+    enable: false
+    daily_stats: true
+    wallet_events: true
+    credentials:
+      api_token: 'dummy_token'
+      user_key: 'dummy_key'
+  telegram:
+    enable: false
+    daily_stats: true
+    wallet_events: true
+    credentials:
+      bot_token: 'dummy_bot_token'
+      chat_id: 'dummy_chat_id'
+  smtp:
+    enable: false
+    daily_stats: true
+    wallet_events: true
+    credentials:
+      sender: 'achi@example.com'
+      sender_name: 'Machinaris'
+      recipient: 'you@example.com'
+      username_smtp: 'username'
+      password_smtp: 'password'
+      host: 'smtp.example.com'
+      port: 587
+  script:
+    # DON'T CHANGE THIS SCRIPT NOTIFIER, IT'S USED BY MACHINARIS!
+    enable: true
+    daily_stats: true
+    wallet_events: true
+    script_path: '/root/.chia/chiadog/notifier.sh'
+  discord:
+    enable: false
+    daily_stats: true
+    wallet_events: true
+    credentials:
+      webhook_url: 'https://discord.com/api/webhooks/...'
+  slack:
+    enable: false
+    daily_stats: true
+    wallet_events: true
+    credentials:
+     webhook_url: 'https://hooks.slack.com/services/...'
+  mqtt:
+    enable: false
+    daily_stats: true
+    wallet_events: true
+    topic: achi/achidog/alert
+    qos: 1
+    retain: false
+    credentials:
+      host: '192.168.0.10'
+      port: 8883
+      username: ''
+      password: ''

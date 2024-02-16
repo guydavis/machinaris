@@ -1,6 +1,6 @@
 #!/bin/env bash
 #
-# Installs Achi as per https://achicoin.org/achipedia/post-1/
+# Installs Achi as per https://github.com/Achi-Coin/achi-blockchain
 #
 
 ACHI_BRANCH=$1

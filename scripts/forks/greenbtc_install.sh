@@ -4,7 +4,7 @@
 #
 
 GREENBTC_BRANCH=$1
-# On 2023-01-02
+# On 2024-02-16
 HASH=200816a51c24375fadcbcd25a0b1cb7549f61c77
 
 if [ -z ${GREENBTC_BRANCH} ]; then
