@@ -26,6 +26,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.1.4) to v2.1.4 - misc improvements, see their release notes.
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.3.giga26) to v2.1.3.giga26.
+ - [Wheat](https://github.com/wheatnetwork/wheat-blockchain/releases/tag/2.1.5) to v2.1.5.
 
 ## [2.1.3] - 2023-12-19
 ### Updated

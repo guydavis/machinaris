@@ -4,8 +4,8 @@
 #
 
 WHEAT_BRANCH=$1
-# On 2023-07-20
-HASH=5185edcd0ae333da6c157783cf4d1f19ee0a252d
+# On 2024-02-19
+HASH=5c8df453677d18609dcbad4b47cbf431feccf79b
 
 if [ -z ${WHEAT_BRANCH} ]; then
     echo 'Skipping Wheat install as not requested.'
