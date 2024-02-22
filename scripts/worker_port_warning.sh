@@ -1,4 +1,7 @@
 # Warn if non-standard worker_api_port is being used, likely default value they did not override properly
+if [[ "${blockchains}"  == "achi" && "${worker_api_port}" != '8960' ]]; then
+  echo "Achi worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8960?"
+fi
 if [[ "${blockchains}"  == "apple" && "${worker_api_port}" != '8947' ]]; then
   echo "Apple worker with non-standard worker_api_port of ${worker_api_port} found.  Did you mean to use 8947?"
 fi
