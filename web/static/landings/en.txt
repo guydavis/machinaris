@@ -65,3 +65,4 @@ Lights out! Lets replot again!
 1337.png
 You said 'Buy Crypto'! No... I said 'Bye Crypto'
 2023: Dust off your GPU, Chia is going PoW! :)
+2024: Sure, everyone has a spare 24GB Nvidia GPU lying around.
