@@ -111,7 +111,7 @@
         "farmer_port": 8447,
         "fullnode_rpc_port": 8555,
         "worker_port": 8927,
-        "reward": 2.0,
+        "reward": 1.0,
         "mojos_per_coin": 1000000000000,
         "blocks_per_day": 4608,
         "git_url": "https://github.com/Chia-Network/chia-blockchain",

@@ -66,3 +66,4 @@ Lights out! Lets replot again!
 You said 'Buy Crypto'! No... I said 'Bye Crypto'
 2023: Dust off your GPU, Chia is going PoW! :)
 2024: Sure, everyone has a spare 24GB Nvidia GPU lying around.
+2024: Wasn't the Chia halving supposed to raise the price of XCH?
