@@ -1,13 +1,14 @@
-name: test-mmx
+name: release-achi
 
-on:
-  push:
-    branches:
-      - 'integration'
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release Version' 
 
 jobs:
   docker:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     steps:
       -
         name: Checkout
@@ -37,16 +38,15 @@ jobs:
         with:
           file: docker/dockerfile
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           provenance: false
           push: true
           build-args: |
-            "UBUNTU_VER=jammy"
-            "MACHINARIS_STREAM=test"
-            "CHIA_BRANCH=latest"
-            "PLOTMAN_BRANCH=development"
-            "MMX_BRANCH=v0.10.6"
-            "GIGAHORSE_BRANCH=v2.1.4.giga26"
+            "UBUNTU_VER=focal"
+            "MACHINARIS_STREAM=latest"
+            "ACHI_BRANCH=master"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:test
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:test
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-achi:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-achi:v${{ github.event.inputs.version }}
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-achi:latest
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-achi:v${{ github.event.inputs.version }}

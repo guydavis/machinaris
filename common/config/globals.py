@@ -159,8 +159,8 @@ def is_setup():
     return foundKey
 
 # On very first launch of the main Chia container, blockchain DB gz is being downloaded via torrent so must wait.
-CHIA_COMPRESSED_DB_SIZE = 56 * 1024 * 1024 * 1024 # Compressed GB in March 2023
-CHIA_BLOCKCHAIN_DB_SIZE = 106 * 1024 * 1024 * 1024 # Uncompressed GB in March 2023
+CHIA_COMPRESSED_DB_SIZE = 75 * 1024 * 1024 * 1024 # Compressed GB in March 2024
+CHIA_BLOCKCHAIN_DB_SIZE = 127 * 1024 * 1024 * 1024 # Uncompressed GB in March 2024
 def blockchain_downloading():
     db_path = '/root/.chia/mainnet/db'
     if path.exists(f"{db_path}/blockchain_v1_mainnet.sqlite") or path.exists(f"{db_path}/blockchain_v2_mainnet.sqlite"):
@@ -460,7 +460,7 @@ def get_alltheblocks_name(blockchain):
     return blockchain
 
 def legacy_blockchain(blockchain):
-    return blockchain in ['ballcoin', 'coffee', 'ecostake', 'greenbtc', 'gold', 'mint', 'nchain', 'petroleum', 'profit', 'silicoin', 'stor']
+    return blockchain in ['achi', 'ballcoin', 'coffee', 'ecostake', 'gold', 'mint', 'nchain', 'petroleum', 'profit', 'silicoin', 'stor']
 
 last_mmx_reward = None
 last_mmx_reward_load_time = None

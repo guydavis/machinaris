@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.0] - 2024-02-29
+### Added
+ - Support for Achi blockchain.  Requires its own plots (like Chives), you'll have to plot separately if interested. Thanks @priyankub
+ - Optionally launch Chia Data Layer services (https://docs.chia.net/guides/datalayer-user-guide/) if env var `chia_data=true` is set.
+### Changed
+ - Harvester mode will now optionally also run chia-exporter for Prometheus results.
+### Updated
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.2.0) to v2.2.0 - misc improvements, see their release notes.
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/v2.1.4) to v2.1.4.
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.4.giga26) to v2.1.4.giga26.
+ - [Wheat](https://github.com/wheatnetwork/wheat-blockchain/releases/tag/2.1.6) to v2.1.6
+### Notes
+ - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
+
 ## [2.1.4] - 2024-01-11
 ### Added
  - Optionally launch `chia-exporter` [metrics endpoint](https://github.com/Chia-Network/chia-exporter) for Prometheus reporting if env var `chia_exporter=true` is set.

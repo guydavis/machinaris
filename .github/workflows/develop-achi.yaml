@@ -1,13 +1,13 @@
-name: test-mmx
+name: develop-achi
 
 on:
   push:
     branches:
-      - 'integration'
+      - 'develop'
 
 jobs:
   docker:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-20.04
     steps:
       -
         name: Checkout
@@ -41,12 +41,11 @@ jobs:
           provenance: false
           push: true
           build-args: |
-            "UBUNTU_VER=jammy"
-            "MACHINARIS_STREAM=test"
-            "CHIA_BRANCH=latest"
-            "PLOTMAN_BRANCH=development"
-            "MMX_BRANCH=v0.10.6"
-            "GIGAHORSE_BRANCH=v2.1.4.giga26"
+            "UBUNTU_VER=focal"
+            "MACHINARIS_STREAM=develop"
+            "CHIADOG_BRANCH=dev"
+            "FDCLI_BRANCH=dev"
+            "ACHI_BRANCH=master"
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:test
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-mmx:test
+            ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-achi:develop
+            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-achi:develop
