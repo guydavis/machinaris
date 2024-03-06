@@ -2,7 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2024-03-06
+### Updated
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.2.1) to v2.2.1 - possible fixes for serious problems in v2.2.0?
+### Notes
+ -  Updated potentially buggy Chia software DOES NOT imply my endorsement.  *Only upgrade when you are comfortable.*
+
 ## [2.2.0] - 2024-02-29
+**NOTE** CNI Corporate pulled retracted their v2.2.0 release after a day due to serious bugs.  Use v2.2.1 instead or just delay upgrading.
 ### Added
  - Support for Achi blockchain.  Requires its own plots (like Chives), you'll have to plot separately if interested. Thanks @priyankub
  - Optionally launch Chia Data Layer services (https://docs.chia.net/guides/datalayer-user-guide/) if env var `chia_data=true` is set.
