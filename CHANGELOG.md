@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+### Added
+### Changed
+### Updated
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.4.giga30) to v2.1.4.giga30.
+### Notes
+ - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
+
+
 ## [2.2.1] - 2024-03-06
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.2.1) to v2.2.1 - possible fixes for serious problems in v2.2.0?
@@ -18,7 +27,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.2.0) to v2.2.0 - misc improvements, see their release notes.
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/v2.1.4) to v2.1.4.
- - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.4.giga26) to v2.1.4.giga26.
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.4.giga30) to v2.1.4.giga30.
  - [Wheat](https://github.com/wheatnetwork/wheat-blockchain/releases/tag/2.1.6) to v2.1.6
 ### Notes
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
@@ -33,7 +42,7 @@ All notable changes to this project will be documented in this file. The format 
  - Fix for Bladebit GPU plotting jobs taking a minute to display on Plotting page on job start.  Should now be seconds only.
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.1.4) to v2.1.4 - misc improvements, see their release notes.
- - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.3.giga26) to v2.1.3.giga26.
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.3.giga30) to v2.1.3.giga30.
 
 ## [2.1.3] - 2023-12-19
 ### Updated
