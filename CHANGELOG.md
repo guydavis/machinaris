@@ -4,9 +4,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ## Unreleased
 ### Added
+ - Gigahorse: Optionally launch `chia-exporter` [metrics endpoint](https://github.com/Chia-Network/chia-exporter) for Prometheus reporting if env var `chia_exporter=true` is set.
 ### Changed
 ### Updated
- - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.4.giga30) to v2.1.4.giga30.
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.4.giga31) to v2.1.4.giga31.
 ### Notes
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
 
@@ -27,14 +28,14 @@ All notable changes to this project will be documented in this file. The format 
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.2.0) to v2.2.0 - misc improvements, see their release notes.
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/v2.1.4) to v2.1.4.
- - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.4.giga30) to v2.1.4.giga30.
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.4.giga31) to v2.1.4.giga31.
  - [Wheat](https://github.com/wheatnetwork/wheat-blockchain/releases/tag/2.1.6) to v2.1.6
 ### Notes
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
 
 ## [2.1.4] - 2024-01-11
 ### Added
- - Optionally launch `chia-exporter` [metrics endpoint](https://github.com/Chia-Network/chia-exporter) for Prometheus reporting if env var `chia_exporter=true` is set.
+ - Chia: Optionally launch `chia-exporter` [metrics endpoint](https://github.com/Chia-Network/chia-exporter) for Prometheus reporting if env var `chia_exporter=true` is set.
  - Support for running Gigahorse containers on arm64 architectures such as Raspberry Pi.
  - Main dashboard page can now be pinned (Pin Icon) to display only a blockchain of interest, rather than rotating through each in turn.
 ### Changed
@@ -42,7 +43,7 @@ All notable changes to this project will be documented in this file. The format 
  - Fix for Bladebit GPU plotting jobs taking a minute to display on Plotting page on job start.  Should now be seconds only.
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.1.4) to v2.1.4 - misc improvements, see their release notes.
- - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.3.giga30) to v2.1.3.giga30.
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.1.3.giga31) to v2.1.3.giga31.
 
 ## [2.1.3] - 2023-12-19
 ### Updated
