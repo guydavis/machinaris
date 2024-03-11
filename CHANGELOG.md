@@ -11,7 +11,6 @@ All notable changes to this project will be documented in this file. The format 
 ### Notes
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
 
-
 ## [2.2.1] - 2024-03-06
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.2.1) to v2.2.1 - possible fixes for serious problems in v2.2.0?

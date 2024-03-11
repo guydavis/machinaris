@@ -31,7 +31,6 @@ if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "plotter") && (${blockchains} == 'c
     fi
 fi
 
-
 # MMX Plotter binaries, https://github.com/madMAx43v3r/chia-gigahorse
 # MMX and Gigahorse container gets the "new" Madmax plotters with compression, only available as binaries
 if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "plotter") && (${blockchains} == 'mmx' || ${blockchains} == 'gigahorse') ]]; then
@@ -47,6 +46,7 @@ if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "plotter") && (${blockchains} == 'm
             curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${GIGAHORSE_BRANCH}/cuda-plotter/linux/x86_64/cuda_plot_k30
             curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${GIGAHORSE_BRANCH}/cuda-plotter/linux/x86_64/cuda_plot_k31
             curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${GIGAHORSE_BRANCH}/cuda-plotter/linux/x86_64/cuda_plot_k32
+            curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${GIGAHORSE_BRANCH}/cuda-plotter/linux/x86_64/cuda_plot_k32_v3
             curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${GIGAHORSE_BRANCH}/cuda-plotter/linux/x86_64/cuda_plot_k33
             chmod 755 cuda_plot*
             curl -sLJO https://github.com/madMAx43v3r/chia-gigahorse/raw/${GIGAHORSE_BRANCH}/chiapos/linux/x86_64/ProofOfSpace
