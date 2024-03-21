@@ -54,7 +54,8 @@ if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "plotter") && (${blockchains} == 'm
             popd
             echo "Completed download of Madmax binaries for plotting:"
             echo "chia_plot @ "`chia_plot --version`
-            echo "cuda_plot @ "`cuda_plot_k32 --version`
+            echo "cuda_plot_k32 @ "`cuda_plot_k32 --version`
+            echo "cuda_plot_k32_v3 @ "`cuda_plot_k32_v3 --version`
         else
             echo "Downloading MMX chia_plot and cuda_plot skipped -> unsupported architecture: ${arch_name}"
         fi
