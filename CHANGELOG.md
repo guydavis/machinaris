@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. The format 
  - Gigahorse: Optionally launch `chia-exporter` [metrics endpoint](https://github.com/Chia-Network/chia-exporter) for Prometheus reporting if env var `chia_exporter=true` is set.
 ### Changed
 ### Updated
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.3.0) to v2.3.0 - misc improvements, see their release notes.
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.2.1.giga35) to v2.2.1.giga35.
 ### Notes
  - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
