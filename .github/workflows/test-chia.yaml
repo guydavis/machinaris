@@ -89,7 +89,7 @@ jobs:
             "UBUNTU_VER=jammy"
             "MACHINARIS_STREAM=test"
             "CHIADOG_BRANCH=dev"
-            "GIGAHORSE_BRANCH=v2.1.4.giga31"
+            "GIGAHORSE_BRANCH=v2.2.1.giga35"
             "CHIA_BRANCH=main"
             "PLOTMAN_BRANCH=development"
           tags: |
