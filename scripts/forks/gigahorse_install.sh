@@ -18,7 +18,7 @@ else
     if [[ "${arch_name}" == "x86_64" ]]; then
         url="https://github.com/madMAx43v3r/chia-gigahorse/releases/download/${GIGAHORSE_BRANCH}/chia-gigahorse-farmer-${GIGAHORSE_VERSION}-x86_64.tar.gz"
     else
-        url="https://github.com/madMAx43v3r/chia-gigahorse/releases/download/${GIGAHORSE_BRANCH}/chia-gigahorse-farmer-${GIGAHORSE_VERSION}-aarch64.tar.gz"
+        url="https://github.com/madMAx43v3r/chia-gigahorse/releases/download/${GIGAHORSE_BRANCH}/chia-gigahorse-farmer-${GIGAHORSE_VERSION}-aarch64.tar.xz"
     fi
     echo "Pulling Madmax closed-source Chia farming binary from..."
     echo ${url}
