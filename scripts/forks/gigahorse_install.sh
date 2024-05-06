@@ -17,12 +17,22 @@ else
     arch_name="$(uname -m)"
     if [[ "${arch_name}" == "x86_64" ]]; then
         url="https://github.com/madMAx43v3r/chia-gigahorse/releases/download/${GIGAHORSE_BRANCH}/chia-gigahorse-farmer-${GIGAHORSE_VERSION}-x86_64.tar.gz"
+        echo "Pulling Madmax closed-source Chia farming binary from..."
+        echo ${url}
+        cd / && curl --retry 5 --retry-max-time 120 -skJLO ${url}
+        du -hsc chia-gigahorse-farmer*
+        tar -xzf chia-gigahorse-farmer*
     else
-        url="https://github.com/madMAx43v3r/chia-gigahorse/releases/download/${GIGAHORSE_BRANCH}/chia-gigahorse-farmer-${GIGAHORSE_VERSION}-aarch64.tar.gz"
+        url="https://github.com/madMAx43v3r/chia-gigahorse/releases/download/${GIGAHORSE_BRANCH}/chia-gigahorse-farmer-${GIGAHORSE_VERSION}-aarch64.tar.xz"
+        echo "Pulling Madmax closed-source Chia farming binary from..."
+        echo ${url}
+        cd / && curl --retry 5 --retry-max-time 120 -skJLO ${url}
+        du -hsc chia-gigahorse-farmer*
+        cksum chia-gigahorse-farmer*
+        tar --version
+        #tar -xzf chia-gigahorse-farmer*  # Fails?
+        which unxz
+        unxz --version
+        unxz chia-gigahorse-farmer*
     fi
-    echo "Pulling Madmax closed-source Chia farming binary from..."
-    echo ${url}
-    cd / && curl --retry 5 --retry-max-time 120 -skJLO ${url}
-    du -hsc chia-gigahorse-farmer*
-    tar -xzf chia-gigahorse-farmer*
 fi
