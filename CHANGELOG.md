@@ -2,14 +2,19 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.4.1] - Unreleased
+## [2.4.2] - Unreleased
+### Added
+### Changed
+### Updated
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.4.2) to v2.4.2 - misc improvements, see their release notes.
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.4.1.giga36) to v2.4.1.giga36.
+
+## [2.4.1] - 2024-07-04
 ### Added
 ### Changed
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.4.1) to v2.4.1 - misc improvements, see their release notes.
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.4.0.giga36) to v2.4.0.giga36.
-### Notes
- - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
 
 ## [2.4.0] - Unreleased
 ### Added
