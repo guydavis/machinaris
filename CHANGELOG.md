@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2024-06-24
+### Added
+### Changed
+### Updated
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.4.0) to v2.4.0 - misc improvements, see their release notes.
+### Notes
+ - Support for new blockchains and tools DOES NOT imply my endorsement for them.  *Only run those you are comfortable with.*
+
 ## [2.3.0] - 2024-05-06
 ### Added
  - Gigahorse: Optionally launch `chia-exporter` [metrics endpoint](https://github.com/Chia-Network/chia-exporter) for Prometheus reporting if env var `chia_exporter=true` is set.
