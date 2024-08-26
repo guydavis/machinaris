@@ -29,10 +29,11 @@ for url in $LIST ; do
 done
 
 # Bootstrap Icons
-wget -nv -O ${BASEPATH}/bsi-icons.zip "https://github.com/twbs/icons/releases/download/v${BSI_VERSION}/bootstrap-icons-${BSI_VERSION}.zip" && \
-unzip -q -o ${BASEPATH}/bsi-icons.zip -d $BASEPATH/ && \
-mv $BASEPATH/bootstrap-icons-${BSI_VERSION} $BASEPATH/icons && \
-mv ${BASEPATH}/icons/font/* ${BASEPATH}/icons/ && rmdir ${BASEPATH}/icons/font/ && \ 
+wget -nv -O ${BASEPATH}/bsi-icons.zip "https://github.com/twbs/icons/releases/download/v${BSI_VERSION}/bootstrap-icons-${BSI_VERSION}.zip"
+unzip -q -o ${BASEPATH}/bsi-icons.zip -d $BASEPATH/
+mv $BASEPATH/bootstrap-icons-${BSI_VERSION} $BASEPATH/icons
+mv ${BASEPATH}/icons/font/* ${BASEPATH}/icons/
+rmdir ${BASEPATH}/icons/font/ 
 rm -f ${BASEPATH}/bsi-icons.zip
 
 # Bootstrap
