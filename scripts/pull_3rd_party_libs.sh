@@ -13,15 +13,15 @@ LEAFLET_VERSION=1.9.4
 
 # List of other css/js links
 LIST="
-https://cdn.datatables.net/2.0.0/css/dataTables.bootstrap5.css
-https://cdn.datatables.net/2.0.0/js/dataTables.bootstrap5.js
-https://cdn.datatables.net/2.0.0/js/dataTables.min.js
-https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js.map
-https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js
+https://cdn.datatables.net/2.1.4/css/dataTables.bootstrap5.css
+https://cdn.datatables.net/2.1.4/js/dataTables.bootstrap5.js
+https://cdn.datatables.net/2.1.4/js/dataTables.min.js
+https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js.map
+https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js
 https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js
 https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js
 https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js
-https://cdn.jsdelivr.net/npm/luxon@3.4.4/build/global/luxon.min.js"
+https://cdn.jsdelivr.net/npm/luxon@3.5.0/build/global/luxon.min.js"
 
 mkdir -p $BASEPATH
 for url in $LIST ; do
@@ -29,10 +29,11 @@ for url in $LIST ; do
 done
 
 # Bootstrap Icons
-wget -nv -O ${BASEPATH}/bsi-icons.zip "https://github.com/twbs/icons/releases/download/v${BSI_VERSION}/bootstrap-icons-${BSI_VERSION}.zip" && \
-unzip -q -o ${BASEPATH}/bsi-icons.zip -d $BASEPATH/ && \
-mv $BASEPATH/bootstrap-icons-${BSI_VERSION} $BASEPATH/icons && \
-mv ${BASEPATH}/icons/font/* ${BASEPATH}/icons/ && rmdir ${BASEPATH}/icons/font/ && \ 
+wget -nv -O ${BASEPATH}/bsi-icons.zip "https://github.com/twbs/icons/releases/download/v${BSI_VERSION}/bootstrap-icons-${BSI_VERSION}.zip"
+unzip -q -o ${BASEPATH}/bsi-icons.zip -d $BASEPATH/
+mv $BASEPATH/bootstrap-icons-${BSI_VERSION} $BASEPATH/icons
+mv ${BASEPATH}/icons/font/* ${BASEPATH}/icons/
+rmdir ${BASEPATH}/icons/font/ 
 rm -f ${BASEPATH}/bsi-icons.zip
 
 # Bootstrap
