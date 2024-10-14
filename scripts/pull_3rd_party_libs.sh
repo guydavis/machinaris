@@ -13,9 +13,9 @@ LEAFLET_VERSION=1.9.4
 
 # List of other css/js links
 LIST="
-https://cdn.datatables.net/2.1.4/css/dataTables.bootstrap5.css
-https://cdn.datatables.net/2.1.4/js/dataTables.bootstrap5.js
-https://cdn.datatables.net/2.1.4/js/dataTables.min.js
+https://cdn.datatables.net/2.1.8/css/dataTables.bootstrap5.css
+https://cdn.datatables.net/2.1.8/js/dataTables.bootstrap5.js
+https://cdn.datatables.net/2.1.8/js/dataTables.min.js
 https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js.map
 https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js
 https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js

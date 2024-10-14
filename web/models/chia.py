@@ -775,7 +775,7 @@ class Connections:
                             'mib_up': float(vals[7].split('|')[0]),
                             'mib_down': float(vals[7].split('|')[1])
                         }
-                        if len(vals) > 9: # HDDCoin keeps SBHeight and Hash on same line
+                        if len(vals) > 9 and vals[8] != '-Trusted:': # HDDCoin keeps SBHeight and Hash on same line
                             connection['height'] = vals[8]
                             connection['hash'] = vals[9]
                         try:
