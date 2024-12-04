@@ -5,7 +5,9 @@
 #
 # Also, if a limit is optionally set, will trigger a blockchain restart if exceeds
 # X GB over a period of time.  Useful for old forks which are memory leakers per day.
-# 
+#
+# Also, if no partial proofs for pools for a while, restart farmer.
+#
 
 import datetime as dt
 import math
@@ -13,11 +15,14 @@ import os
 import subprocess
 import traceback
 
+from web import db
 from api import app
 from common.config import globals
 from api.commands import chia_cli, plotman_cli
+from common.models import partials as pr
 
 RESTART_IF_STUCK_MINUTES = 15
+RESTART_IF_STUCK_NO_PARTIALS_MINUTES = 60
 
 last_peak = None
 last_peak_time = None
@@ -91,3 +96,13 @@ def execute():
         except Exception as ex:
             app.logger.info("Skipping bloated farmer check due to exception: {0}".format(str(ex)))
             traceback.print_exc()
+        # If no partial proofs for pools for a while, restart farmer
+        try:
+            if not globals.wallet_running():  # Only if wallet is not currently being synced
+                partials = db.session.query(pr.Partial).filter(pr.Partial.created_at >= (dt.datetime.now() - dt.timedelta(minutes=RESTART_IF_STUCK_NO_PARTIALS_MINUTES))).all()
+                if len(partials) == 0:
+                    app.logger.info("***************** RESTARTING FARMER DUE TO NO PARTIALS FOR {} MINUTES!!! ******************".format(RESTART_IF_STUCK_MINUTES))
+                    chia_cli.restart_farmer(blockchain)
+                    return
+        except Exception as ex:
+            app.logger.info("Skipping stuck farmer check due to exception: {0}".format(str(ex)))
