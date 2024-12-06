@@ -4,9 +4,10 @@ All notable changes to this project will be documented in this file. The format 
 
 ## [2.4.5] - Unreleased
 ### Added
+ - New check to restart a farmer if pooling and no partials have been observed in the last hour.  Thanks @aweigold!
 ### Changed
 ### Updated
- - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.4.5) to v2.4.5 - misc improvements, see their release notes.
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.5.0) to v2.5.0 - misc improvements, see their release notes.
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.4.4.giga36) to v2.4.4.giga36.
 
 ## [2.4.4] - 2024-10-17

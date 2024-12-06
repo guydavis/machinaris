@@ -20,6 +20,7 @@ from api import app
 from common.config import globals
 from api.commands import chia_cli, plotman_cli
 from common.models import partials as pr
+from common.models import plotnfts as pn
 
 RESTART_IF_STUCK_MINUTES = 15
 RESTART_IF_STUCK_NO_PARTIALS_MINUTES = 60
@@ -99,7 +100,14 @@ def execute():
         # If no partial proofs for pools for a while, restart farmer
         try:
             if not globals.wallet_running():  # Only if wallet is not currently being synced
-                partials = db.session.query(pr.Partial).filter(pr.Partial.created_at >= (dt.datetime.now() - dt.timedelta(minutes=RESTART_IF_STUCK_NO_PARTIALS_MINUTES))).all()
+                plotnfts = db.session.query(pn.Plotnft).filter(pn.Plotnft.blockchain == blockchain).all()
+                is_pooling = False
+                for plotnft in plotnfts:
+                    if not "SELF_POOLING" in plotnft.details:
+                        is_pooling = True
+                if not is_pooling:
+                    return # No plotnft currently pooling (not self-pooling), so don't expect any partials
+                partials = db.session.query(pr.Partial).filter(pr.Partial.blockchain == blockchain, pr.Partial.created_at >= (dt.datetime.now() - dt.timedelta(minutes=RESTART_IF_STUCK_NO_PARTIALS_MINUTES))).all()
                 if len(partials) == 0:
                     app.logger.info("***************** RESTARTING FARMER DUE TO NO PARTIALS FOR {} MINUTES!!! ******************".format(RESTART_IF_STUCK_MINUTES))
                     chia_cli.restart_farmer(blockchain)
