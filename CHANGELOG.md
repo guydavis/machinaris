@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file. The format 
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.5.0) to v2.5.0 - misc improvements, see their release notes.
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.4.4.giga36) to v2.4.4.giga36.  NOTE: Only for AMD64, so ARM64 uses previous version.
+### Notes
+ - Chia X.Y.0 releases have become quite buggy so I'm generally not bothering to release a full Machinaris X.Y.0 to match. 
 
 ## [2.4.4] - 2024-10-17
 ### Added
