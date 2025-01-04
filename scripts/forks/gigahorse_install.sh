@@ -24,7 +24,7 @@ else
         tar -xzf chia-gigahorse-farmer*
     else
         # Max broke ARM64 support in v2.4.4.giga36, have to downgrade to 2.4.1
-        if [[ "${GIGAHORSE_BRANCH}" == "v2.4.4.giga36" ]]; then
+        if [[ "${GIGAHORSE_BRANCH}" == "v2.5.0.giga36" ]]; then
             GIGAHORSE_BRANCH="v2.4.1.giga36"  # old version
             GIGAHORSE_VERSION=${GIGAHORSE_BRANCH#?}
         fi
