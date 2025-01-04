@@ -2,15 +2,15 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.5.0] - Unreleased
+## [2.5.0] - 2025-01-05
 ### Added
  - New check to restart a farmer if pooling and no partials have been observed in the last hour.  Thanks @aweigold!
 ### Changed
 ### Updated
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.5.0) to v2.5.0 - misc improvements, see their release notes.
- - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.4.4.giga36) to v2.4.4.giga36.  NOTE: Only for AMD64, so ARM64 uses previous version.
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.5.0.giga36) to v2.5.0.giga36.  NOTE: Only for AMD64, so ARM64 uses an old version.
 ### Notes
- - Chia X.Y.0 releases have become quite buggy so I'm generally not bothering to release a full Machinaris X.Y.0 to match. 
+ - Chia X.Y.0 releases have become quite buggy, so I am delaying a matching Machinaris release by weeks for additional testing.
 
 ## [2.4.4] - 2024-10-17
 ### Added
