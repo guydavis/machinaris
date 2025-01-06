@@ -23,12 +23,16 @@ else
         du -hsc chia-gigahorse-farmer*
         tar -xzf chia-gigahorse-farmer*
     else
+        # Max broke ARM64 support in v2.4.4.giga36, have to downgrade to 2.4.1
+        if [[ "${GIGAHORSE_BRANCH}" == "v2.5.0.giga36" ]]; then
+            GIGAHORSE_BRANCH="v2.4.1.giga36"  # old version
+            GIGAHORSE_VERSION=${GIGAHORSE_BRANCH#?}
+        fi
         url="https://github.com/madMAx43v3r/chia-gigahorse/releases/download/${GIGAHORSE_BRANCH}/chia-gigahorse-farmer-${GIGAHORSE_VERSION}-aarch64.tar.gz"
         echo "Pulling Madmax closed-source Chia farming binary from..."
         echo ${url}
         cd / && curl --retry 5 --retry-max-time 120 -skJLO ${url}
         du -hsc chia-gigahorse-farmer*
-        cksum chia-gigahorse-farmer*
         tar -xzf chia-gigahorse-farmer*
     fi
 fi
