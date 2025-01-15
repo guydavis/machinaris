@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - ?
+### Added
+### Changed
+### Updated
+ - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/v2.5.0) to v2.5.0
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.5.1) to v2.5.1 - misc improvements, see their release notes.
+
 ## [2.5.0] - 2025-01-04
 ### Added
  - New check to restart a farmer if pooling and no partials have been observed in the last hour.  Thanks @aweigold!
