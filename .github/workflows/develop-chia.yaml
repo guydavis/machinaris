@@ -41,10 +41,10 @@ jobs:
           provenance: false
           push: true
           build-args: |
-            "UBUNTU_VER=jammy"
+            "UBUNTU_VER=noble"
             "MACHINARIS_STREAM=develop"
             "CHIADOG_BRANCH=dev"
-            "CHIA_BRANCH=2.4.3"
+            "CHIA_BRANCH=2.5.1"
             "BLADEBIT_BRANCH=master"
             "PLOTMAN_BRANCH=compress"
           tags: |
@@ -86,7 +86,7 @@ jobs:
           provenance: false
           push: true
           build-args: |
-            "UBUNTU_VER=jammy"
+            "UBUNTU_VER=noble"
             "MACHINARIS_STREAM=develop"
             "CHIADOG_BRANCH=dev"
             "GIGAHORSE_BRANCH=v2.5.0.giga36"
