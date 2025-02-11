@@ -41,7 +41,6 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-base-noble:develop
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-base-noble:develop
 
-jobs:
   docker-jammy:
     runs-on: ubuntu-22.04
     steps:
