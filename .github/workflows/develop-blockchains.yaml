@@ -41,7 +41,7 @@ jobs:
           provenance: false
           push: true
           build-args: |
-            "UBUNTU_VER=jammy"
+            "UBUNTU_VER=noble"
             "MACHINARIS_STREAM=develop"
             "CHIADOG_BRANCH=dev"
             "FDCLI_BRANCH=dev"

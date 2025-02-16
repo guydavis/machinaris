@@ -38,7 +38,7 @@ jobs:
         with:
           file: docker/dockerfile
           context: .
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           provenance: false
           push: true
           build-args: |
@@ -129,7 +129,7 @@ jobs:
           provenance: false
           push: true
           build-args: |
-            "UBUNTU_VER=jammy"
+            "UBUNTU_VER=noble"
             "MACHINARIS_STREAM=latest"
             "GIGAHORSE_BRANCH=v2.5.1.giga36"
             "CHIA_BRANCH=main"
