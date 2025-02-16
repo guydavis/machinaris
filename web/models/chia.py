@@ -416,7 +416,7 @@ class Wallets:
             exclude_wallet = False
             lines = chunk.split('\n')
             for line in lines:
-                if re.match('^\s+-Type:\s+CAT$', line) or re.match('^\s+-Type:\s+DISTRIBUTED_ID$', line) or re.match('^\s+-Type:\s+DECENTRALIZED_ID$', line) or re.match('^\s+-Type:\s+NFT$', line):
+                if re.match(r'^\s+-Type:\s+CAT$', line) or re.match(r'^\s+-Type:\s+DISTRIBUTED_ID$', line) or re.match(r'^\s+-Type:\s+DECENTRALIZED_ID$', line) or re.match(r'^\s+-Type:\s+NFT$', line):
                     exclude_wallet = True
             if exclude_wallet:
                 app.logger.debug("Ignoring balance of wallet named: {0}".format(lines[0][:-1]))
