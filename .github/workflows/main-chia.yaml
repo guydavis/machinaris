@@ -42,9 +42,9 @@ jobs:
           provenance: false
           push: true
           build-args: |
-            "UBUNTU_VER=jammy"
+            "UBUNTU_VER=noble"
             "MACHINARIS_STREAM=latest"
-            "CHIA_BRANCH=2.4.3"
+            "CHIA_BRANCH=2.5.1"
             "BLADEBIT_BRANCH=master"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:latest
