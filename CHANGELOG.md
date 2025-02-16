@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Added
 ### Changed
  - For Chia and Gigahorse, install them on the latest Ubuntu 24.04 (Noble) Docker image.
+ - Deprecate (stop building) all old Chia forks (Apple, Achi, etc) if they've had more than year witout updates.
 ### Updated
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/v2.5.0) to v2.5.0
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.5.1) to v2.5.1 - Upgrade recommended as pooling just broke in Chia v2.5.0
