@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Updated
  - [Cactus](https://github.com/Cactus-Network/cactus-blockchain/releases/tag/v2.5.0) to v2.5.0
  - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.5.1) to v2.5.1 - misc improvements, see their release notes.
+ - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.5.1.giga36) to v2.5.1.giga36.  NOTE: Only for AMD64, so ARM64 uses an old version.
 
 ## [2.5.0] - 2025-01-04
 ### Added
