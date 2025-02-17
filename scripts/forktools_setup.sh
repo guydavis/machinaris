@@ -13,7 +13,7 @@ if [[ "${forktools_skip_build}" != 'true' ]]; then
 		bash installft.sh
 
 		mkdir -p /root/.chia/forktools/ftconfigs
-		cp -n ftconfigs/* /root/.chia/forktools/ftconfigs > /dev/null
+		cp --update=none ftconfigs/* /root/.chia/forktools/ftconfigs > /dev/null
 		rm -rf ftconfigs
 		ln -s /root/.chia/forktools/ftconfigs ftconfigs
 		

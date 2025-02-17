@@ -7,16 +7,16 @@ echo 'Configuring Plotman...'
 mkdir -p /root/.chia/plotman/logs
 if [[ "${blockchains}" == 'chives' ]]; then
     cp -f /machinaris/config/plotman.sample-chives.yaml /root/.chia/plotman/plotman.sample.yaml
-    cp -n /machinaris/config/plotman.sample-chives.yaml /root/.chia/plotman/plotman.yaml
+    cp --update=none /machinaris/config/plotman.sample-chives.yaml /root/.chia/plotman/plotman.yaml
 elif [[ "${blockchains}" == 'mmx' ]]; then
     cp -f /machinaris/config/plotman.sample-mmx.yaml /root/.chia/plotman/plotman.sample.yaml
-    cp -n /machinaris/config/plotman.sample-mmx.yaml /root/.chia/plotman/plotman.yaml
+    cp --update=none /machinaris/config/plotman.sample-mmx.yaml /root/.chia/plotman/plotman.yaml
 elif [[ "${blockchains}" == 'gigahorse' ]]; then
     cp -f /machinaris/config/plotman.sample-gigahorse.yaml /root/.chia/plotman/plotman.sample.yaml
-    cp -n /machinaris/config/plotman.sample-gigahorse.yaml /root/.chia/plotman/plotman.yaml
+    cp --update=none /machinaris/config/plotman.sample-gigahorse.yaml /root/.chia/plotman/plotman.yaml
 else # If Chia
     cp -f /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.sample.yaml
-    cp -n /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.yaml
+    cp --update=none /machinaris/config/plotman.sample.yaml /root/.chia/plotman/plotman.yaml
     if [ ${farmer_pk} != 'null' ]; then
         sed -i "s/^.*farmer_pk: REPLACE_WITH_THE_REAL_VALUE.*$/        farmer_pk: ${farmer_pk}/g" /root/.chia/plotman/plotman.yaml
     fi
