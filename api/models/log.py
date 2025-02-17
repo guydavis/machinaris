@@ -19,19 +19,19 @@ class Challenges:
             try:
                 if blockchain == 'mmx':
                     self.rows.append({
-                        'challenge_id': re.search('eligible for height (\d+)', line, re.IGNORECASE).group(1),
-                        'plots_past_filter': str(re.search('INFO:\s*(\d+) plots were eligible', line, re.IGNORECASE).group(1)),
+                        'challenge_id': re.search(r'eligible for height (\d+)', line, re.IGNORECASE).group(1),
+                        'plots_past_filter': str(re.search(r'INFO:\s*(\d+) plots were eligible', line, re.IGNORECASE).group(1)),
                         'proofs_found': 0, # TODO What does log line with a proof look like?
-                        'time_taken': str(re.search('took ([0-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?) sec', line, re.IGNORECASE).group(1)) + ' secs',
+                        'time_taken': str(re.search(r'took ([0-9]+\.?[0-9]*(?:[Ee]\ *-?\ *[0-9]+)?) sec', line, re.IGNORECASE).group(1)) + ' secs',
                         'created_at': line[:19]  # example at line start: 2022-01-25 10:14:33
                     })
                 else: # All Chia forks
                     self.rows.append({
-                        'challenge_id': re.search('eligible for farming (\w+)', line, re.IGNORECASE).group(1) + '...',
-                        'plots_past_filter': str(re.search('INFO\s*(\d+) plots were eligible', line, re.IGNORECASE).group(1)) + \
-                            '/' + str(re.search('Total (\d+) plots', line, re.IGNORECASE).group(1)),
-                        'proofs_found': int(re.search('Found (\d+) proofs', line, re.IGNORECASE).group(1)),
-                        'time_taken': str(re.search('Time: (\d+\.?\d*) s.', line, re.IGNORECASE).group(1)) + ' secs',
+                        'challenge_id': re.search(r'eligible for farming (\w+)', line, re.IGNORECASE).group(1) + '...',
+                        'plots_past_filter': str(re.search(r'INFO\s*(\d+) plots were eligible', line, re.IGNORECASE).group(1)) + \
+                            '/' + str(re.search(r'Total (\d+) plots', line, re.IGNORECASE).group(1)),
+                        'proofs_found': int(re.search(r'Found (\d+) proofs', line, re.IGNORECASE).group(1)),
+                        'time_taken': str(re.search(r'Time: (\d+\.?\d*) s.', line, re.IGNORECASE).group(1)) + ' secs',
                         'created_at': line.split()[0].replace('T', ' ')
                     })
             except:
@@ -51,8 +51,8 @@ class Partials:
                 if "Submitting partial" in line:
                     app.logger.debug(line)
                     created_at = line.split()[0].replace('T', ' ')
-                    launcher_id = re.search('partial for (\w+) to', line, re.IGNORECASE).group(1)
-                    pool_url = re.search('to (.*)$', line, re.IGNORECASE).group(1)
+                    launcher_id = re.search(r'partial for (\w+) to', line, re.IGNORECASE).group(1)
+                    pool_url = re.search(r'to (.*)$', line, re.IGNORECASE).group(1)
                     self.rows.append({
                         'launcher_id': launcher_id,
                         'pool_url': pool_url.strip(),
@@ -88,20 +88,20 @@ class Blocks:
             try:
                 #app.logger.info(line)
                 if "proofs in" in line:
-                    plot_files.append(re.search('proofs in (.*) in (\d+\.?\d*) s$', line, re.IGNORECASE).group(1))
+                    plot_files.append(re.search(r'proofs in (.*) in (\d+\.?\d*) s$', line, re.IGNORECASE).group(1))
                 elif "eligible for farming" in line:
-                    challenge_id = re.search('eligible for farming (\w+)', line, re.IGNORECASE).group(1)
-                    plots_past_filter = str(re.search('INFO\s*(\d+) plots were eligible', line, re.IGNORECASE).group(1)) + \
-                            '/' + str(re.search('Total (\d+) plots', line, re.IGNORECASE).group(1))
-                    proofs_found = int(re.search('Found (\d+) proofs', line, re.IGNORECASE).group(1))
-                    time_taken = str(re.search('Time: (\d+\.?\d*) s.', line, re.IGNORECASE).group(1)) + ' secs'
+                    challenge_id = re.search(r'eligible for farming (\w+)', line, re.IGNORECASE).group(1)
+                    plots_past_filter = str(re.search(r'INFO\s*(\d+) plots were eligible', line, re.IGNORECASE).group(1)) + \
+                            '/' + str(re.search(r'Total (\d+) plots', line, re.IGNORECASE).group(1))
+                    proofs_found = int(re.search(r'Found (\d+) proofs', line, re.IGNORECASE).group(1))
+                    time_taken = str(re.search(r'Time: (\d+\.?\d*) s.', line, re.IGNORECASE).group(1)) + ' secs'
                 elif "Farmed unfinished_block" in line:
                     created_at =  line[:line.rfind(':')].split()[0].replace('T', ' ')
                     if "debug.log:" in created_at:
                         created_at = created_at[(created_at.index('debug.log:') + len('debug.log:')):]
                     elif "debug.log.1:" in created_at:
                         created_at = created_at[(created_at.index('debug.log.1:') + len('debug.log.1:')):]
-                    farmed_block = re.search('Farmed unfinished_block (\w+)', line, re.IGNORECASE).group(1)
+                    farmed_block = re.search(r'Farmed unfinished_block (\w+)', line, re.IGNORECASE).group(1)
                 elif "--" == line:
                     if challenge_id and plots_past_filter and time_taken and farmed_block:
                         self.rows.append({
@@ -134,9 +134,9 @@ class Blocks:
         for line in cli_stdout:
             try:
                 #app.logger.info(line)
-                time_taken = str(re.search('took (\d+\.?\d*) sec', line, re.IGNORECASE).group(1)) + ' secs'
+                time_taken = str(re.search(r'took (\d+\.?\d*) sec', line, re.IGNORECASE).group(1)) + ' secs'
                 created_at =  "{0}.000".format(line[:19])
-                farmed_block = re.search('Created block at height (\d+)', line, re.IGNORECASE).group(1)
+                farmed_block = re.search(r'Created block at height (\d+)', line, re.IGNORECASE).group(1)
                 self.rows.append({
                     'challenge_id': '',
                     'plot_files': '',
