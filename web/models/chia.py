@@ -426,7 +426,7 @@ class Wallets:
     
     def extract_wallet_id(self, lines):
         for line in lines:
-            wallet_match = re.match("^\s+-Wallet ID:\s+(\d)+$", line)
+            wallet_match = re.match(r"^\s+-Wallet ID:\s+(\d)+$", line)
             if wallet_match:
                 return wallet_match.group(1)
         return None
@@ -796,7 +796,7 @@ class Connections:
         for line in connection.details.split('\n'):
             try:
                 #app.logger.info(line)
-                m = re.match("\[(.+)\]\s+height\s+=\s+(\!?\d+), (\w+) \(\d+\.\d+\), (\d+\.?\d*) (\w)B recv, (\d*\.?\d*) (\w)B sent,.* since (\d+) min, .* (\d+\.?\d?) sec timeout", line.strip(), re.IGNORECASE)
+                m = re.match(r"\[(.+)\]\s+height\s+=\s+(\!?\d+), (\w+) \(\d+\.\d+\), (\d+\.?\d*) (\w)B recv, (\d*\.?\d*) (\w)B sent,.* since (\d+) min, .* (\d+\.?\d?) sec timeout", line.strip(), re.IGNORECASE)
                 if m:
                     connection = {
                         'type': m.group(3),

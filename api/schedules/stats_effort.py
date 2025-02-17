@@ -41,7 +41,7 @@ def get_oldest_plot_file_time():
         for plot_dir in globals.get_disks("plots"):
             plots = [f for f in os.listdir(plot_dir) if os.path.isfile(os.path.join(plot_dir,f))]
             for plot in plots:
-                match = re.match("plot(?:-mmx)?-k(\d+)(?:-c\d+)?-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", plot)
+                match = re.match(r"plot(?:-mmx)?-k(\d+)(?:-c\d+)?-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", plot)
                 if match:
                     created_at_str = "{0}-{1}-{2} {3}:{4}".format( match.group(2),match.group(3),match.group(4),match.group(5),match.group(6))
                     created_at_secs = time.mktime(datetime.datetime.strptime(created_at_str, "%Y-%m-%d %H:%M").timetuple())
