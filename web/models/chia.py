@@ -453,7 +453,7 @@ class Wallets:
         return '\n'.join(lines)
 
     def sum_chia_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
-        numeric_const_pattern = '-Total\sBalance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
+        numeric_const_pattern = r'-Total\sBalance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)'
         rx = re.compile(numeric_const_pattern, re.VERBOSE)
         sum = 0
         for wallet in self.wallets:
@@ -494,9 +494,9 @@ class Wallets:
             if updated_at and updated_at <= (datetime.datetime.now() - datetime.timedelta(minutes=5)):
                 return "Paused"
             if blockchain == 'mmx':
-                pattern = '^Synced:\s+(.*)$'
+                pattern = r'^Synced:\s+(.*)$'
             else:
-                pattern = '^Sync status: (.*)$'
+                pattern = r'^Sync status: (.*)$'
             for line in details.split('\n'):
                 m = re.match(pattern, line)
                 if m:
@@ -614,11 +614,11 @@ class Blockchains:
             if not details:
                 return None
             if blockchain == 'mmx':
-                pattern = '^Synced: (.*)$'
+                pattern = r'^Synced: (.*)$'
             elif blockchain == 'staicoin': # Staicoin being different for no good reason...
-                pattern = '^Current Node Status: (.*)$'
+                pattern = r'^Current Node Status: (.*)$'
             else:
-                pattern = '^Current Blockchain Status: (.*)$'
+                pattern = r'^Current Blockchain Status: (.*)$'
             for line in details.split('\n'):
                 m = re.match(pattern, line)
                 if m: 
@@ -643,9 +643,9 @@ class Blockchains:
         if not details:
             return None
         if blockchain == 'mmx':
-            pattern = '^Height:\s+(\d+)$'
+            pattern = r'^Height:\s+(\d+)$'
         else:
-            pattern = '^.* Height:\s+(\d+)$'
+            pattern = r'^.* Height:\s+(\d+)$'
         for line in details.split('\n'):
             m = re.match(pattern, line)
             if m: 
@@ -657,7 +657,7 @@ class Blockchains:
             return None
         if blockchain == 'mmx':
             return '-' # None for MMX
-        pattern = '^\s+Time:\s+(.*)\sHeight:.*$'
+        pattern = r'^\s+Time:\s+(.*)\sHeight:.*$'
         for line in details.split('\n'):
             m = re.match(pattern, line)
             if m:
@@ -751,7 +751,7 @@ class Connections:
                     self.columns = line.lower().replace('last connect', 'last_connect') \
                         .replace('mib up|down', 'mib_up mib_down').strip().split()
                 elif line.strip().startswith('-SB Height') or line.strip().startswith('-Height'):
-                    groups = re.search("Height:\s+(\d+)\s+-Hash:\s+(\w+)...", line.strip())
+                    groups = re.search(r"Height:\s+(\d+)\s+-Hash:\s+(\w+)...", line.strip())
                     if not groups:
                         app.logger.info("Malformed Height line: {0}".format(line))
                     else:
