@@ -185,15 +185,15 @@ def load_config_replacements(blockchain):
     farmer_pk = load_key_pk('Farmer', blockchain)
     if farmer_pk:
         #app.logger.info("FARMER_PK: {0}".format(farmer_pk))
-        replacements.append([ 'farmer_pk:\s+REPLACE_WITH_THE_REAL_VALUE.*$', 'farmer_pk: '+ farmer_pk])
+        replacements.append([ r'farmer_pk:\s+REPLACE_WITH_THE_REAL_VALUE.*$', 'farmer_pk: '+ farmer_pk ])
     pool_pk = load_key_pk('Pool', blockchain)
     if pool_pk:
         #app.logger.info("POOL_PK: {0}".format(pool_pk))
-        replacements.append([ 'pool_pk:\s+REPLACE_WITH_THE_REAL_VALUE.*$', 'pool_pk: '+ pool_pk])
+        replacements.append([ r'pool_pk:\s+REPLACE_WITH_THE_REAL_VALUE.*$', 'pool_pk: '+ pool_pk])
     pool_contract_address = load_pool_contract_address(blockchain)
     if pool_contract_address:
         #app.logger.info("POOL_CONTRACT_ADDRESS: {0}".format(pool_contract_address))
-        replacements.append([ 'pool_contract_address:\s+REPLACE_WITH_THE_REAL_VALUE.*$', 'pool_contract_address: '+ pool_contract_address])
+        replacements.append([ r'pool_contract_address:\s+REPLACE_WITH_THE_REAL_VALUE.*$', 'pool_contract_address: '+ pool_contract_address])
     return replacements
 
 def load_config(plotter, blockchain):

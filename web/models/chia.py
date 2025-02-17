@@ -470,7 +470,7 @@ class Wallets:
         return sum
 
     def sum_mmx_wallet_balance(self, hostname, blockchain, include_cold_balance=True):
-        numeric_const_pattern = 'Balance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)\sMMX'
+        numeric_const_pattern = r'Balance:\s+((?: (?: \d* \. \d+ ) | (?: \d+ \.? ) )(?: [Ee] [+-]? \d+ )?)\sMMX'
         rx = re.compile(numeric_const_pattern, re.VERBOSE)
         sum = 0
         for wallet in self.wallets:
