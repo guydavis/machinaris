@@ -148,22 +148,22 @@ def etw_to_minutes(etw):
     week_minutes = 7 * day_minutes
     months_minutes = 43800
     year_minutes = 12 * months_minutes
-    match = re.search("(\d+) year", etw)
+    match = re.search(r"(\d+) year", etw)
     if match:
         etw_total_minutes += int(match.group(1)) * year_minutes
-    match = re.search("(\d+) month", etw)
+    match = re.search(r"(\d+) month", etw)
     if match:
         etw_total_minutes += int(match.group(1)) * months_minutes
-    match = re.search("(\d+) week", etw)
+    match = re.search(r"(\d+) week", etw)
     if match:
         etw_total_minutes += int(match.group(1)) * week_minutes
-    match = re.search("(\d+) day", etw)
+    match = re.search(r"(\d+) day", etw)
     if match:
         etw_total_minutes += int(match.group(1)) * day_minutes
-    match = re.search("(\d+) hour", etw)
+    match = re.search(r"(\d+) hour", etw)
     if match:
         etw_total_minutes += int(match.group(1)) * hour_minutes
-    match = re.search("(\d+) minute", etw)
+    match = re.search(r"(\d+) minute", etw)
     if match:
         etw_total_minutes += int(match.group(1))
     return etw_total_minutes

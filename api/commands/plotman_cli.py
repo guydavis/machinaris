@@ -267,7 +267,7 @@ def find_plotting_job_log(plot_id):
     return None
 
 def analyze(plot_file):
-    groups = re.match("plot(?:-mmx)?-k(\d+)(?:-c\d+)?-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", plot_file)
+    groups = re.match(r"plot(?:-mmx)?-k(\d+)(?:-c\d+)?-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", plot_file)
     if not groups:
         return "Invalid plot file name provided: {0}".format(plot_file)
     plot_log_file = find_plotting_job_log(groups[7])

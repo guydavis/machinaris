@@ -13,8 +13,8 @@ if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "plotter") && (${blockchains} == 'c
         cd plotman
         /chia-blockchain/venv/bin/pip install .
         # Workaround for broken dependency ordering
-        /chia-blockchain/venv/bin/pip install pendulum~=2.1
-        /chia-blockchain/venv/bin/pip install packaging~=21.0
+        /chia-blockchain/venv/bin/pip install pendulum~=3.0
+        /chia-blockchain/venv/bin/pip install packaging~=24.2
         /chia-blockchain/venv/bin/pip install attrs~=21.2
         /chia-blockchain/venv/bin/pip install desert~=2020.11.18
         /chia-blockchain/venv/bin/pip install appdirs~=1.4

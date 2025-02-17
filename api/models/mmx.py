@@ -14,7 +14,7 @@ class FarmSummary:
             self.plot_count = 0
             self.plots_size = 0
             for line in cli_stdout:
-                m = re.match('^K(\d+): (\d+) plots$', line)
+                m = re.match(r'^K(\d+): (\d+) plots$', line)
                 if m:
                     self.plot_count += int(m.group(2))
                 elif line.startswith('Total size'):
@@ -82,7 +82,7 @@ class FarmPlots:
                 app.logger.info("Skipping non-plot file named: {0}".format(path))
                 continue
             dir,file=os.path.split(path)
-            groups = re.match("plot-mmx-k(\d+)(-c\d)?-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", file)
+            groups = re.match(r"plot-mmx-k(\d+)(-c\d)?-(\d+)-(\d+)-(\d+)-(\d+)-(\d+)-(\w+).plot", file)
             if not groups:
                 app.logger.info("Invalid plot file name provided: {0}".format(file))
                 continue

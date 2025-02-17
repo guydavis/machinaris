@@ -56,7 +56,7 @@ def get_first_pool_wallet_id():
     for plotnft in load_plotnfts().rows:
         for line in plotnft['details'].splitlines():
             app.logger.info(line)
-            m = re.search("Wallet id (\d+):", line)
+            m = re.search(r"Wallet id (\d+):", line)
             if m:
                 return m.group(1)
     return None
