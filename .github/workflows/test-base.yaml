@@ -42,7 +42,7 @@ jobs:
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-base-noble:test
 
   docker-jammy:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout
@@ -72,7 +72,7 @@ jobs:
         with:
           file: docker/dockerfile-jammy.base
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           provenance: false
           push: true
           tags: |
