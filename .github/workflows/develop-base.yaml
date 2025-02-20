@@ -42,16 +42,14 @@ jobs:
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris-base-noble:develop
 
   docker-jammy:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-22.04
     steps:
       -
         name: Checkout
-        uses: actions/checkout@v3
-      
-      - name: Set up QEMU
+        uses: actions/checkout@v4
+      -
+        name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-        with:
-          image: tonistiigi/binfmt:qemu-v9.2.0
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -74,7 +72,7 @@ jobs:
         with:
           file: docker/dockerfile-jammy.base
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           provenance: false
           push: true
           tags: |
