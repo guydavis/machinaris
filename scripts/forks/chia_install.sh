@@ -27,10 +27,10 @@ else
     echo "Installing Chia CUDA binaries on ${arch_name}..."
     cd /tmp
     if [[ "${arch_name}" == "x86_64" ]]; then
-        curl -sLJO https://github.com/Chia-Network/chia-blockchain/releases/download/2.5.2-rc2/chia-blockchain-cli_2.5.2-rc2-1_amd64.deb
+        curl -sLJO https://github.com/Chia-Network/chia-blockchain/releases/download/2.5.2/chia-blockchain-cli_2.5.2-1_amd64.deb
         apt-get install ./chia-blockchain-cli*.deb
     else
-        curl -sLJO https://github.com/Chia-Network/chia-blockchain/releases/download/2.5.2-rc2/chia-blockchain-cli_2.5.2-rc2-1_arm64.deb
+        curl -sLJO https://github.com/Chia-Network/chia-blockchain/releases/download/2.5.2/chia-blockchain-cli_2.5.2-1_arm64.deb
         apt-get install ./chia-blockchain-cli*.deb
     fi
 
