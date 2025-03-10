@@ -87,7 +87,7 @@ jobs:
             "UBUNTU_VER=noble"
             "MACHINARIS_STREAM=test"
             "CHIADOG_BRANCH=dev"
-            "CHIA_BRANCH=2.5.1"
+            "CHIA_BRANCH=2.5.3"
             "PLOTMAN_BRANCH=development"
             "BLADEBIT_BRANCH=master"
           tags: |
@@ -133,7 +133,7 @@ jobs:
             "MACHINARIS_STREAM=test"
             "CHIADOG_BRANCH=dev"
             "GIGAHORSE_BRANCH=v2.5.2.giga36"
-            "CHIA_BRANCH=main"
+            "CHIA_BRANCH=2.5.2"
             "PLOTMAN_BRANCH=development"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-gigahorse:test
