@@ -87,7 +87,7 @@ jobs:
             "UBUNTU_VER=noble"
             "MACHINARIS_STREAM=test"
             "CHIADOG_BRANCH=dev"
-            "CHIA_BRANCH=release/2.5.3"
+            "CHIA_BRANCH=release/2.5.2"
             "PLOTMAN_BRANCH=development"
             "BLADEBIT_BRANCH=master"
           tags: |
