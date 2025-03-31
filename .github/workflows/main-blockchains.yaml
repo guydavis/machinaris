@@ -131,7 +131,7 @@ jobs:
           build-args: |
             "UBUNTU_VER=noble"
             "MACHINARIS_STREAM=latest"
-            "GIGAHORSE_BRANCH=v2.5.2.giga36"
+            "GIGAHORSE_BRANCH=v2.5.3.giga36"
             "CHIA_BRANCH=2.5.2"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-gigahorse:latest
