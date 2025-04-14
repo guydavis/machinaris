@@ -5,6 +5,8 @@
 #   * Closed source binary for the Madmax Gigahorse farmer image
 #
 
+MADMAX_BRANCH=$1
+
 # MMX Plotter binaries, https://github.com/madMAx43v3r/chia-gigahorse
 # Uses the "new" Madmax plotters with compression, only available as binaries
 if [[ (${mode} =~ ^fullnode.*  || ${mode} =~ "plotter") ]]; then
