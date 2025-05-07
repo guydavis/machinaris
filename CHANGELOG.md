@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. The format 
 ### Changed
  - [Madmax](https://github.com/madMAx43v3r/chia-plotter) - Dropping support for pre-compression Madmax chia plotter, as it won't build on current OS versions.  Using his Gigahorse plotter binaries instead.  Bladebit plotter support remains unchanged.
 ### Updated
+ - [Chia](https://github.com/Chia-Network/chia-blockchain/releases/tag/2.5.4) to v2.5.4 - misc improvements, see their release notes.
  - [Gigahorse](https://github.com/madMAx43v3r/chia-gigahorse/releases/tag/v2.5.3.giga36) to v2.5.3.giga36.  NOTE: Only for AMD64, so ARM64 uses an old version.
 
 ## [2.5.3] - 2025-03-28
