@@ -90,6 +90,7 @@ jobs:
             "CHIA_BRANCH=2.5.2"
             "PLOTMAN_BRANCH=development"
             "BLADEBIT_BRANCH=master"
+            "MADMAX_BRANCH=v2.5.3.giga36"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris:test
             ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/machinaris:test
@@ -132,8 +133,9 @@ jobs:
             "UBUNTU_VER=noble"
             "MACHINARIS_STREAM=test"
             "CHIADOG_BRANCH=dev"
-            "GIGAHORSE_BRANCH=v2.5.2.giga36"
+            "GIGAHORSE_BRANCH=v2.5.3.giga36"
             "CHIA_BRANCH=2.5.2"
+            "MADMAX_BRANCH=v2.5.3.giga36"
             "PLOTMAN_BRANCH=development"
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/machinaris-gigahorse:test
