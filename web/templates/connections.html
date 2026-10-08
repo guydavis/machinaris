@@ -283,6 +283,7 @@
             {% for connection in connections.rows %}
             $('#conns_{{connection.displayname}}_{{connection.blockchain}}').DataTable({
                 "stateSave": true,
+                "pageLength": 25,
                 // Note, without an "order" here, first column of checkboxes still shows as orderable. It's fine...
                 "columnDefs": [{ "orderable": false, targets: [0] }],
                 {% if lang != 'en' %}
