@@ -115,15 +115,17 @@ def disconnect_denied_connections(connections, geoip_cache, deny_countries):
             country = geoip.get('country', {}).get('en', '') if geoip else ''
             if node_id and country.casefold() in denied_countries:
                 key = (connection.hostname, connection.blockchain, country)
-                denied_node_ids.setdefault(key, []).append(node_id)
+                denied_node_ids.setdefault(key, []).append((node_id, ip_address))
 
     if denied_node_ids:
-        for (hostname, blockchain, country), node_ids in denied_node_ids.items():
-            app.logger.info("Disconnecting %s peer connection(s) from denied country %s for %s on %s.",
-                len(node_ids), country, hostname, blockchain)
-            remove_connection(node_ids, hostname, blockchain, country)
+        for (hostname, blockchain, country), denied_peers in denied_node_ids.items():
+            node_ids = [node_id for node_id, ip_address in denied_peers]
+            peer_ips = sorted({ip_address for node_id, ip_address in denied_peers})
+            app.logger.info("Disconnecting %s peer connection(s) at IP(s) %s from denied country %s via worker %s on %s.",
+                len(node_ids), ', '.join(peer_ips), country, hostname, blockchain)
+            remove_connection(node_ids, hostname, blockchain, country, peer_ips)
 
-def remove_connection(node_ids, hostname, blockchain, country):
+def remove_connection(node_ids, hostname, blockchain, country, peer_ips):
     from api import db
 
     try:
@@ -142,11 +144,11 @@ def remove_connection(node_ids, hostname, blockchain, country):
         })
         response.raise_for_status()
     except Exception as ex:
-        app.logger.error("Failed to remove connections from %s for %s on %s: %s",
-            country, hostname, blockchain, str(ex))
+        app.logger.error("Failed to remove peer IP(s) %s from denied country %s via worker %s on %s: %s",
+            ', '.join(peer_ips), country, hostname, blockchain, str(ex))
         return False
-    app.logger.info("Successfully requested removal of %s connection(s) from denied country %s for %s on %s.",
-        len(node_ids), country, hostname, blockchain)
+    app.logger.info("Successfully requested removal of %s connection(s) at IP(s) %s from denied country %s via worker %s on %s.",
+        len(node_ids), ', '.join(peer_ips), country, hostname, blockchain)
     return True
 
 def execute():
