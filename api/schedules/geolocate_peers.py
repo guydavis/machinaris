@@ -11,9 +11,9 @@ import os
 import re
 import traceback
 
-from common.models import connections as co
+from common.models import connections as co, workers as wk
 from common.config import globals
-from api import app
+from api import app, utils
 
 MAXMIND_LICENSE_FILE = '/root/.chia/machinaris/config/maxmind_license.json'
 GEOIP_CACHE_FILE = '/root/.chia/machinaris/cache/geoip_cache.json'
@@ -96,6 +96,61 @@ def geolocate_ip_addresses(ip_addresses):
                 app.logger.info("Failed to query Maxmind city web service for {0} because {1}.".format(ip_address, str(ex)))
     save_geoip_cache(geoip_cache)
 
+def disconnect_denied_connections(connections, geoip_cache, deny_countries):
+    if isinstance(deny_countries, str):
+        deny_countries = deny_countries.split(',')
+    denied_countries = {str(country).strip().casefold() for country in deny_countries if str(country).strip()}
+    if not denied_countries:
+        return
+
+    denied_node_ids = {}
+    for connection in connections:
+        for line in connection.details.split('\n'):
+            values = line.strip().split()
+            if len(values) <= 7:
+                continue
+            ip_address = values[1]
+            node_id = values[3].replace('...', '')
+            geoip = geoip_cache.get(ip_address)
+            country = geoip.get('country', {}).get('en', '') if geoip else ''
+            if node_id and country.casefold() in denied_countries:
+                key = (connection.hostname, connection.blockchain, country)
+                denied_node_ids.setdefault(key, []).append((node_id, ip_address))
+
+    if denied_node_ids:
+        for (hostname, blockchain, country), denied_peers in denied_node_ids.items():
+            node_ids = [node_id for node_id, ip_address in denied_peers]
+            peer_ips = sorted({ip_address for node_id, ip_address in denied_peers})
+            app.logger.info("Disconnecting %s peer connection(s) at IP(s) %s from denied country %s via worker %s on %s.",
+                len(node_ids), ', '.join(peer_ips), country, hostname, blockchain)
+            remove_connection(node_ids, hostname, blockchain, country, peer_ips)
+
+def remove_connection(node_ids, hostname, blockchain, country, peer_ips):
+    from api import db
+
+    try:
+        worker = db.session.query(wk.Worker).filter(
+            wk.Worker.hostname == hostname,
+            wk.Worker.blockchain == blockchain
+        ).first()
+        if not worker:
+            app.logger.error("Unable to remove connections: worker %s for %s was not found.", hostname, blockchain)
+            return False
+        response = utils.send_worker_post(worker, "/actions/", {
+            'service': 'networking',
+            'action': 'remove_connection',
+            'blockchain': blockchain,
+            'node_ids': node_ids
+        })
+        response.raise_for_status()
+    except Exception as ex:
+        app.logger.error("Failed to remove peer IP(s) %s from denied country %s via worker %s on %s: %s",
+            ', '.join(peer_ips), country, hostname, blockchain, str(ex))
+        return False
+    app.logger.info("Successfully requested removal of %s connection(s) at IP(s) %s from denied country %s via worker %s on %s.",
+        len(node_ids), ', '.join(peer_ips), country, hostname, blockchain)
+    return True
+
 def execute():
     with app.app_context():
         from api import db
@@ -103,10 +158,13 @@ def execute():
         if not gc['is_controller']:
             return # Only controller should attempt geolocation
         ip_addresses = []
-        for connection in db.session.query(co.Connection).all():
+        connections = db.session.query(co.Connection).all()
+        for connection in connections:
             for line in connection.details.split('\n'):
                 match = re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', line.strip())
                 if match and match.group() != "127.0.0.1":
                     #app.logger.info("Adding {0}".format(match.group()))
                     ip_addresses.append(match.group())
         geolocate_ip_addresses(ip_addresses)
+        disconnect_denied_connections(connections, load_geoip_cache(),
+            app.config.get('CONNECTION_DENY_COUNTRIES', []))
