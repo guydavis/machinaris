@@ -13,14 +13,14 @@ LEAFLET_VERSION=1.9.4
 
 # List of other css/js links
 LIST="
-https://cdn.datatables.net/2.3.5/css/dataTables.bootstrap5.css
-https://cdn.datatables.net/2.3.5/js/dataTables.bootstrap5.js
-https://cdn.datatables.net/2.3.5/js/dataTables.min.js
+https://cdn.datatables.net/3.1.3/css/dataTables.bootstrap5.css
+https://cdn.datatables.net/3.1.3/js/dataTables.bootstrap5.js
+https://cdn.datatables.net/3.1.3/js/dataTables.min.js
 https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.js.map
 https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js
 https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@1.3.1/dist/chartjs-adapter-luxon.umd.min.js
 https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js
-https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js
+https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js
 https://cdn.jsdelivr.net/npm/luxon@3.7.2/build/global/luxon.min.js"
 
 mkdir -p $BASEPATH

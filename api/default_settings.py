@@ -58,6 +58,7 @@ class DefaultConfig:
     WORKER_PORT = os.environ['worker_api_port'] if 'worker_api_port' in os.environ else '8927'
 
     STATUS_EVERY_X_MINUTES = 2  # Run status collection once every two minutes by default
+    CONNECTION_DENY_COUNTRIES = []
     ALLOW_HARVESTER_CERT_LAN_DOWNLOAD = True
     SELECTED_WALLET_NUM = 1 # Default is read first wallet if multiple are prompted by `chia wallet show`
     RESTART_FARMER_IF_CONTAINER_MEMORY_EXCEEDS_GB = -1 # Default is to allow a fullnode unlimited memory
